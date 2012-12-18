@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="DailyBalance" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <alias>
+        <typeAlias alias="DailyBalance" type="Top4ever.Domain.DailyBalance, Top4ever.Domain" />
+    </alias>
+
+    <parameterMaps>
+        <parameterMap id="InsertDailyBalanceParam" class="DailyBalance">
+            <parameter property="DailyBalanceID"/>
+            <parameter property="SerialNumber"/>
+            <parameter property="Coins"/>
+        </parameterMap>
+    </parameterMaps>
+
+    <!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+    <statements>
+        <select id="SelectDailySerialNum" resultClass="String">
+            SELECT SerialNumber FROM DailyBalance WHERE BelongToDate IS NULL AND IsVoided = 0
+        </select>
+    </statements>
+</sqlMap>

@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="SystemConfig" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <alias>
+        <typeAlias alias="SystemConfig" type="Top4ever.Domain.SystemConfig, Top4ever.Domain" />
+    </alias>
+
+    <resultMaps>
+        <resultMap  id="SystemConfigResult" class="SystemConfig">
+            <result property="IsCutTail" column="IsCutTail"></result>
+            <result property="CutTailType" column="CutTailType"></result>
+            <result property="CutTailDigit" column="CutTailDigit"></result>
+            <result property="IsCycleTranSeq" column="IsCycleTranSeq"></result>
+            <result property="StartTranSeq" column="StartTranSeq"></result>
+            <result property="IntervalTranSeq" column="IntervalTranSeq"></result>
+            <result property="IncludeKitchenPrint" column="IncludeKitchenPrint"></result>
+            <result property="PrintStyle" column="PrintStyle"></result>
+            <result property="FollowStyle" column="FollowStyle"></result>
+			<result property="LastDataSyncTime" column="LastDataSyncTime"></result>
+            <result property="FixedServiceFee" column="FixedServiceFee"></result>
+            <result property="ServiceFeePercent" column="ServiceFeePercent"></result>
+        </resultMap>
+
+    </resultMaps>
+    <!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+    <statements>
+        <select id="GetSysConfigInfo" resultMap="SystemConfigResult">
+            SELECT TOP 1 [IsCutTail]
+            ,[CutTailType]
+            ,[CutTailDigit]
+            ,[IsCycleTranSeq]
+            ,[StartTranSeq]
+            ,[IntervalTranSeq]
+            ,[IncludeKitchenPrint]
+            ,[PrintStyle]
+            ,[FollowStyle]
+            ,[LastDataSyncTime]
+            ,[FixedServiceFee]
+            ,[ServiceFeePercent]
+            FROM SysConfig WITH(NOLOCK)
+        </select>
+    </statements>
+</sqlMap>

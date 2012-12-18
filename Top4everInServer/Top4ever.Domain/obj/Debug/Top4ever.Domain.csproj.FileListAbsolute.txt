@@ -1,0 +1,15 @@
+C:\Users\Vera\Desktop\Project\Top4everInServer\trunk\Top4ever.Domain\bin\Debug\Top4ever.Domain.dll
+C:\Users\Vera\Desktop\Project\Top4everInServer\trunk\Top4ever.Domain\bin\Debug\Top4ever.Domain.pdb
+C:\Users\Vera\Desktop\Project\Top4everInServer\trunk\Top4ever.Domain\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Vera\Desktop\Project\Top4everInServer\trunk\Top4ever.Domain\obj\Debug\Top4ever.Domain.dll
+C:\Users\Vera\Desktop\Project\Top4everInServer\trunk\Top4ever.Domain\obj\Debug\Top4ever.Domain.pdb
+D:\Pos\Top4everInServer\Top4ever.Domain\bin\Debug\Top4ever.Domain.dll
+D:\Pos\Top4everInServer\Top4ever.Domain\bin\Debug\Top4ever.Domain.pdb
+D:\Pos\Top4everInServer\Top4ever.Domain\obj\Debug\ResolveAssemblyReference.cache
+D:\Pos\Top4everInServer\Top4ever.Domain\obj\Debug\Top4ever.Domain.dll
+D:\Pos\Top4everInServer\Top4ever.Domain\obj\Debug\Top4ever.Domain.pdb
+C:\Users\Vera\Desktop\Pos\Top4everInServer\Top4ever.Domain\bin\Debug\Top4ever.Domain.dll
+C:\Users\Vera\Desktop\Pos\Top4everInServer\Top4ever.Domain\bin\Debug\Top4ever.Domain.pdb
+C:\Users\Vera\Desktop\Pos\Top4everInServer\Top4ever.Domain\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Vera\Desktop\Pos\Top4everInServer\Top4ever.Domain\obj\Debug\Top4ever.Domain.dll
+C:\Users\Vera\Desktop\Pos\Top4everInServer\Top4ever.Domain\obj\Debug\Top4ever.Domain.pdb

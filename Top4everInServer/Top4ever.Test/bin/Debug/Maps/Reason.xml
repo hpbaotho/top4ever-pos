@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="Reason" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <alias>
+        <typeAlias alias="Reason" type="Top4ever.Domain.OrderRelated.Reason, Top4ever.Domain" />
+    </alias>
+
+    <resultMaps>
+
+        <resultMap  id="ReasonResult" class="Reason">
+            <result property="ReasonID" column="ReasonID"></result>
+            <result property="ReasonName" column="ReasonName"></result>
+			<result property="ReasonName2nd" column="ReasonName_2nd"></result>
+            <result property="ReasonType" column="ReasonType"></result>
+			<result property="ButtonStyleID" column="ButtonStyleID"></result>
+        </resultMap>
+
+    </resultMaps>
+    <!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+    <statements>
+        <select id="GetReasonList" resultMap="ReasonResult">
+			SELECT ReasonID, ReasonName, ReasonName_2nd, ReasonType, ButtonStyleID
+			FROM Reason
+			WHERE IsVoided = 0
+		</select>
+
+    </statements>
+</sqlMap>

@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="OrderDiscount" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <alias>
+        <typeAlias alias="OrderDiscount" type="Top4ever.Domain.OrderRelated.OrderDiscount, Top4ever.Domain" />
+    </alias>
+
+    <resultMaps>
+        <resultMap  id="OrderDiscountResult" class="OrderDiscount">
+            <result property="OrderDiscountID" column="OrderDiscountID"></result>
+            <result property="OrderID" column="OrderID"></result>
+            <result property="OrderDetailsID" column="OrderDetailsID"></result>
+            <result property="DiscountID" column="DiscountID"></result>
+            <result property="DiscountName" column="DiscountName"></result>
+            <result property="DiscountType" column="DiscountType"></result>
+            <result property="DiscountRate" column="DiscountRate"></result>
+            <result property="OffFixPay" column="OffFixPay"></result>
+            <result property="OffPay" column="OffPay"></result>
+            <result property="EmployeeID" column="LastChangeEmpID"></result>
+        </resultMap>
+
+    </resultMaps>
+    <!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+    <statements>
+        <insert id="InsertOrderDiscount" parameterClass="OrderDiscount">
+            INSERT INTO OrderDiscount
+            (
+                OrderDiscountID,
+                OrderID,
+                OrderDetailsID,
+                DiscountID,
+                DiscountName,
+                DiscountType,
+                DiscountRate,
+                OffFixPay,
+                OffPay,
+                LastChangeEmpID
+            )
+            VALUES
+            (
+                #OrderDiscountID#,
+                #OrderID#,
+                #OrderDetailsID#,
+                #DiscountID#,
+                #DiscountName#,
+                #DiscountType#,
+                #DiscountRate#,
+                #OffFixPay#,
+                #OffPay#,
+                #EmployeeID#
+            )
+        </insert>
+
+        <update id="UpdateDeletedOrderDiscount" parameterClass="Guid">
+            UPDATE OrderDiscount
+            SET IsVoided = 1
+            WHERE OrderID = #value#
+        </update>
+    </statements>
+</sqlMap>

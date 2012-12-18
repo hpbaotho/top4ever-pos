@@ -1,0 +1,5 @@
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.Common\bin\Debug\Top4ever.Common.dll
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.Common\bin\Debug\Top4ever.Common.pdb
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.Common\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.Common\obj\Debug\Top4ever.Common.dll
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.Common\obj\Debug\Top4ever.Common.pdb

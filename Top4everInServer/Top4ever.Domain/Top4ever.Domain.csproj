@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D8EA3645-CE2C-4A83-9D8C-C478B50FB926}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Top4ever.Domain</RootNamespace>
+    <AssemblyName>Top4ever.Domain</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Accounts\Employee.cs" />
+    <Compile Include="BizDesk.cs" />
+    <Compile Include="BizRegion.cs" />
+    <Compile Include="ButtonStyle.cs" />
+    <Compile Include="DailyStatement.cs" />
+    <Compile Include="DailyTurnover.cs" />
+    <Compile Include="DeskRealTimeInfo.cs" />
+    <Compile Include="GoodsRelated\Details.cs" />
+    <Compile Include="GoodsRelated\DetailsGroup.cs" />
+    <Compile Include="GoodsRelated\Goods.cs" />
+    <Compile Include="GoodsRelated\GoodsGroup.cs" />
+    <Compile Include="GoodsRelated\GoodsSetMeal.cs" />
+    <Compile Include="HandoverRecord.cs" />
+    <Compile Include="HandoverTurnover.cs" />
+    <Compile Include="OrderRelated\Discount.cs" />
+    <Compile Include="OrderRelated\Order.cs" />
+    <Compile Include="OrderRelated\OrderDetails.cs" />
+    <Compile Include="OrderRelated\OrderDiscount.cs" />
+    <Compile Include="OrderRelated\OrderPayoff.cs" />
+    <Compile Include="OrderRelated\PayoffWay.cs" />
+    <Compile Include="OrderRelated\Reason.cs" />
+    <Compile Include="PrintTask.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shop.cs" />
+    <Compile Include="SystemConfig.cs" />
+    <Compile Include="SystemDictionary.cs" />
+    <Compile Include="Transfer\BusinessReport.cs" />
+    <Compile Include="Transfer\DailyBalance.cs" />
+    <Compile Include="Transfer\DeletedOrderDetails.cs" />
+    <Compile Include="Transfer\DeletedOrder.cs" />
+    <Compile Include="Transfer\DeletedSingleOrder.cs" />
+    <Compile Include="Transfer\DeskChange.cs" />
+    <Compile Include="Transfer\HandoverInfo.cs" />
+    <Compile Include="Transfer\ItemsPrice.cs" />
+    <Compile Include="Transfer\OrderDiscountSum.cs" />
+    <Compile Include="Transfer\OrderPayoffSum.cs" />
+    <Compile Include="Transfer\PayingOrder.cs" />
+    <Compile Include="Transfer\SalesPriceByDepart.cs" />
+    <Compile Include="Transfer\SalesSplitOrder.cs" />
+    <Compile Include="Transfer\SysBasicData.cs" />
+    <Compile Include="Transfer\SalesOrder.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

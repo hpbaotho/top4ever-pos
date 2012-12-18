@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="GoodsSetMeal" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <alias>
+        <typeAlias alias="GoodsSetMeal" type="Top4ever.Domain.GoodsRelated.GoodsSetMeal, Top4ever.Domain" />
+    </alias>
+
+    <resultMaps>
+        <resultMap  id="GoodsSetMealResult" class="GoodsSetMeal">
+            <result property="GoodsSetMealID" column="GoodsSetMealID"></result>
+            <result property="GoodsID" column="GoodsID"></result>
+            <result property="ParentGoodsID" column="ParentGoodsID"></result>
+            <result property="ItemQty" column="ItemQty"></result>
+            <result property="DiscountRate" column="DiscountRate"></result>
+            <result property="OffFixPay" column="OffFixPay"></result>
+        </resultMap>
+
+    </resultMaps>
+    <!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+    <statements>
+        <select id="GetGoodsSetMealList" resultMap="GoodsSetMealResult">
+            SELECT GoodsSetMealID,GoodsID,ParentGoodsID,ItemQty,DiscountRate,OffFixPay
+            FROM GoodsSetMeal
+            WHERE IsVoided = 0
+            ORDER BY GoodsSetMealID, OrderBy
+        </select>
+
+    </statements>
+</sqlMap>

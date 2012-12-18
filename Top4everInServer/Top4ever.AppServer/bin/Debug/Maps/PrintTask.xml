@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="PrintTask" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <alias>
+        <typeAlias alias="PrintTask" type="Top4ever.Domain.PrintTask, Top4ever.Domain" />
+    </alias>
+
+    <resultMaps>
+        <resultMap  id="PrintTaskResult" class="PrintTask">
+            <result property="PrintTaskID" column="PrintTaskID"></result>
+            <result property="OrderNo" column="OrderNo"></result>
+            <result property="PeopleNum" column="PeopleNum"></result>
+            <result property="EmployeeID" column="EmployeeID"></result>
+            <result property="EmployeeNo" column="EmployeeNo"></result>
+            <result property="TranSequence" column="TranSequence"></result>
+            <result property="EatType" column="EatType"></result>
+            <result property="DeskName" column="DeskName"></result>
+            <result property="SubOrderNo" column="SubOrderNo"></result>
+            <result property="TaskType" column="TaskType"></result>
+            <result property="PrintTime" column="PrintTime"></result>
+            <result property="SrcDeskName" column="SrcDeskName"></result>
+            <result property="Reason" column="Reason"></result>
+            <result property="IsPrinted" column="IsPrinted"></result>
+            <result property="PrintSolutionName" column="PrintSolutionName"></result>
+            <result property="PrintType" column="PrintType"></result>
+            <result property="GoodsName" column="GoodsName"></result>
+            <result property="SubGoodsName" column="SubGoodsName"></result>
+            <result property="DetailsName" column="DetailsName"></result>
+            <result property="Unit" column="Unit"></result>
+            <result property="ItemQty" column="ItemQty"></result>
+            <result property="TotalDetailsName" column="TotalDetailsName"></result>
+        </resultMap>
+
+    </resultMaps>
+    <!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+    <statements>
+        <insert id="InsertPrintTask" parameterClass="PrintTask">
+            INSERT INTO PrintTask
+            (
+            OrderNo,PeopleNum,EmployeeID,EmployeeNo,TranSequence,EatType,DeskName,SubOrderNo,TaskType,PrintTime,
+            SrcDeskName,Reason,IsPrinted,PrintSolutionName,PrintType,GoodsName,SubGoodsName,DetailsName,
+            Unit,ItemQty,TotalDetailsName
+            )
+            VALUES
+            (
+            #OrderNo#,#PeopleNum#,#EmployeeID#,#EmployeeNo#,#TranSequence#,#EatType#,#DeskName#,
+            #SubOrderNo#,#TaskType#,#PrintTime#,#SrcDeskName#,#Reason#,#IsPrinted#,#PrintSolutionName#,
+            #PrintType#,#GoodsName#,#SubGoodsName#,#DetailsName#,#Unit#,#ItemQty#,#TotalDetailsName#
+            )
+        </insert>
+    </statements>
+</sqlMap>

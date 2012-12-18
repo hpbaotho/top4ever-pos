@@ -1,0 +1,12 @@
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.ClientService\bin\Debug\Top4ever.ClientService.dll
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.ClientService\bin\Debug\Top4ever.ClientService.pdb
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.ClientService\bin\Debug\Top4ever.Domain.dll
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.ClientService\bin\Debug\Top4ever.Entity.dll
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.ClientService\bin\Debug\Top4ever.CustomControl.dll
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.ClientService\bin\Debug\Top4ever.Domain.pdb
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.ClientService\bin\Debug\Top4ever.Entity.pdb
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.ClientService\bin\Debug\Top4ever.CustomControl.pdb
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.ClientService\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.ClientService\obj\Debug\Top4ever.ClientService.dll
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.ClientService\obj\Debug\Top4ever.ClientService.pdb
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.ClientService\bin\Debug\Newtonsoft.Json.dll

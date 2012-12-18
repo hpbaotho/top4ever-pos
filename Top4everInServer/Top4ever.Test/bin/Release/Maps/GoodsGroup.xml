@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="GoodsGroup" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <alias>
+        <typeAlias alias="GoodsGroup" type="Top4ever.Domain.GoodsRelated.GoodsGroup, Top4ever.Domain" />
+    </alias>
+
+    <resultMaps>
+        <resultMap  id="GoodsGroupResult" class="GoodsGroup">
+            <result property="GoodsGroupID" column="GoodsGroupID"></result>
+            <result property="GoodsGroupNo" column="GoodsGroupNo"></result>
+            <result property="GoodsGroupName" column="GoodsGroupName"></result>
+            <result property="ButtonStyleID" column="ButtonStyleID"></result>
+        </resultMap>
+
+    </resultMaps>
+    <!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+    <statements>
+        <select id="GetGoodsGroupList" resultMap="GoodsGroupResult">
+            SELECT GoodsGroupID, GoodsGroupNo, GoodsGroupName, ButtonStyleID
+            FROM GoodsGroup
+            WHERE IsVoided = 0
+            ORDER BY OrderBy
+        </select>
+
+    </statements>
+</sqlMap>

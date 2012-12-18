@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9A4D0F1E-8BF5-4B0E-87FC-FC6E4B0A889F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Top4ever.Persistence</RootNamespace>
+    <AssemblyName>Top4ever.Persistence</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="IBatisNet.Common">
+      <HintPath>..\External-bin\IBatisNet.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="IBatisNet.DataAccess">
+      <HintPath>..\External-bin\IBatisNet.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="IBatisNet.DataMapper">
+      <HintPath>..\External-bin\IBatisNet.DataMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Accounts\EmployeeSqlMapDao.cs" />
+    <Compile Include="BaseSqlMapDao.cs" />
+    <Compile Include="BusinessReportSqlMapDao.cs" />
+    <Compile Include="ButtonStyleSqlMapDao.cs" />
+    <Compile Include="DailyStatementSqlMapDao.cs" />
+    <Compile Include="DailyTurnoverSqlMapDao.cs" />
+    <Compile Include="DeskSqlMapDao.cs" />
+    <Compile Include="GoodsRelated\DetailsGroupSqlMapDao.cs" />
+    <Compile Include="GoodsRelated\DetailsSqlMapDao.cs" />
+    <Compile Include="GoodsRelated\GoodsGroupSqlMapDao.cs" />
+    <Compile Include="GoodsRelated\GoodsSetMealSqlMapDao.cs" />
+    <Compile Include="GoodsRelated\GoodsSqlMapDao.cs" />
+    <Compile Include="HandoverRecordSqlMapDao.cs" />
+    <Compile Include="HandoverTurnoverSqlMapDao.cs" />
+    <Compile Include="OrderRelated\DiscountSqlMapDao.cs" />
+    <Compile Include="OrderRelated\OrderDetailsSqlMapDao.cs" />
+    <Compile Include="OrderRelated\OrderDiscountSqlMapDao.cs" />
+    <Compile Include="OrderRelated\OrderPayoffSqlMapDao.cs" />
+    <Compile Include="OrderRelated\OrderSqlMapDao.cs" />
+    <Compile Include="OrderRelated\PayoffWaySqlMapDao.cs" />
+    <Compile Include="OrderRelated\ReasonSqlMapDao.cs" />
+    <Compile Include="PrintTaskSqlMapDao.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegionSqlMapDao.cs" />
+    <Compile Include="ShopSqlMapDao.cs" />
+    <Compile Include="SystemConfigSqlMapDao.cs" />
+    <Compile Include="SystemDictionarySqlMapDao.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Top4ever.Domain\Top4ever.Domain.csproj">
+      <Project>{D8EA3645-CE2C-4A83-9D8C-C478B50FB926}</Project>
+      <Name>Top4ever.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Top4ever.Interface\Top4ever.Interface.csproj">
+      <Project>{AAA27C54-1107-4BC8-8F9E-24DB63A288B1}</Project>
+      <Name>Top4ever.Interface</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

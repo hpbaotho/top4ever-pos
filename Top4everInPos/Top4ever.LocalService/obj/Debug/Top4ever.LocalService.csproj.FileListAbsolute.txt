@@ -1,0 +1,5 @@
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.LocalService\bin\Debug\Top4ever.LocalService.dll
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.LocalService\bin\Debug\Top4ever.LocalService.pdb
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.LocalService\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.LocalService\obj\Debug\Top4ever.LocalService.dll
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.LocalService\obj\Debug\Top4ever.LocalService.pdb

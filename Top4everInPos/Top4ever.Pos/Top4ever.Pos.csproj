@@ -1,0 +1,263 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C4F8E93C-7A3A-462A-A3EF-8E1FEDC0D1A6}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Top4ever.Pos</RootNamespace>
+    <AssemblyName>Top4ever.Pos</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Feature\FormChoseMultiOrder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\FormChoseMultiOrder.Designer.cs">
+      <DependentUpon>FormChoseMultiOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Feature\FormDiscount.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\FormDiscount.designer.cs">
+      <DependentUpon>FormDiscount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Feature\FormNumericKeypad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\FormNumericKeypad.designer.cs">
+      <DependentUpon>FormNumericKeypad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Feature\FormCancelOrder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\FormCancelOrder.Designer.cs">
+      <DependentUpon>FormCancelOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Feature\FormReason.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\FormReason.Designer.cs">
+      <DependentUpon>FormReason.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Feature\FormReminder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\FormReminder.Designer.cs">
+      <DependentUpon>FormReminder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Feature\FormSalesReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\FormSalesReport.designer.cs">
+      <DependentUpon>FormSalesReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Feature\FormSplitBill.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\FormSplitBill.Designer.cs">
+      <DependentUpon>FormSplitBill.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormCheckOut.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormCheckOut.Designer.cs">
+      <DependentUpon>FormCheckOut.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormConfig.Designer.cs">
+      <DependentUpon>FormConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormConfirm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormConfirm.Designer.cs">
+      <DependentUpon>FormConfirm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormDesk.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormDesk.Designer.cs">
+      <DependentUpon>FormDesk.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormLogin.designer.cs">
+      <DependentUpon>FormLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormOrder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormOrder.Designer.cs">
+      <DependentUpon>FormOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormTest.Designer.cs">
+      <DependentUpon>FormTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Feature\FormChoseMultiOrder.resx">
+      <DependentUpon>FormChoseMultiOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Feature\FormDiscount.resx">
+      <DependentUpon>FormDiscount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Feature\FormNumericKeypad.resx">
+      <DependentUpon>FormNumericKeypad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Feature\FormCancelOrder.resx">
+      <DependentUpon>FormCancelOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Feature\FormReason.resx">
+      <DependentUpon>FormReason.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Feature\FormReminder.resx">
+      <DependentUpon>FormReminder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Feature\FormSalesReport.resx">
+      <DependentUpon>FormSalesReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Feature\FormSplitBill.resx">
+      <DependentUpon>FormSplitBill.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormCheckOut.resx">
+      <DependentUpon>FormCheckOut.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormConfig.resx">
+      <DependentUpon>FormConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormConfirm.resx">
+      <DependentUpon>FormConfirm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormDesk.resx">
+      <DependentUpon>FormDesk.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormLogin.resx">
+      <DependentUpon>FormLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormOrder.resx">
+      <DependentUpon>FormOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormTest.resx">
+      <DependentUpon>FormTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Config\AppSetting.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="PrintConfig\InstructionPrintOrderSetting.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="PrintConfig\KitchenPrint.ini" />
+    <None Include="PrintConfig\KitchenPrintSetting.config" />
+    <None Include="PrintConfig\PrintOrder.ini" />
+    <None Include="PrintConfig\PrintOrderSetting.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Top4ever.ClientService\Top4ever.ClientService.csproj">
+      <Project>{323061C8-E303-4FB0-8403-546431BE6124}</Project>
+      <Name>Top4ever.ClientService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Top4ever.Common\Top4ever.Common.csproj">
+      <Project>{A7630CE5-49F7-40A8-9C92-96708201C756}</Project>
+      <Name>Top4ever.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Top4ever.CustomControl\Top4ever.CustomControl.csproj">
+      <Project>{CBD24195-4CD3-4D36-9113-70A3E48745D1}</Project>
+      <Name>Top4ever.CustomControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Top4ever.Domain\Top4ever.Domain.csproj">
+      <Project>{D8EA3645-CE2C-4A83-9D8C-C478B50FB926}</Project>
+      <Name>Top4ever.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Top4ever.Entity\Top4ever.Entity.csproj">
+      <Project>{CBDC6C0D-4A84-4DF9-9E6E-570E4B9542CD}</Project>
+      <Name>Top4ever.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Top4ever.Hardware\Top4ever.Hardware.csproj">
+      <Project>{6A72C1D5-3FD9-4BAD-9040-14949737B60F}</Project>
+      <Name>Top4ever.Hardware</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Top4ever.Print\Top4ever.Print.csproj">
+      <Project>{87C75A48-7827-4053-B141-5BEC2C792E6B}</Project>
+      <Name>Top4ever.Print</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow_right_green.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Membership\" />
+    <Folder Include="StoreSales\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TabButtonBackground.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PrintConfig\PrintPaidOrder.ini" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

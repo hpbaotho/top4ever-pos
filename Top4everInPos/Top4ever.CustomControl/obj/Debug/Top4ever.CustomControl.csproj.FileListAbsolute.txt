@@ -1,0 +1,5 @@
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.CustomControl\bin\Debug\Top4ever.CustomControl.dll
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.CustomControl\bin\Debug\Top4ever.CustomControl.pdb
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.CustomControl\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.CustomControl\obj\Debug\Top4ever.CustomControl.dll
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.CustomControl\obj\Debug\Top4ever.CustomControl.pdb

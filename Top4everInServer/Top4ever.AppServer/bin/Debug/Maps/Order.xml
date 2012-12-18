@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="Order" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <alias>
+        <typeAlias alias="Order" type="Top4ever.Domain.OrderRelated.Order, Top4ever.Domain" />
+        <typeAlias alias="DeletedOrder" type="Top4ever.Domain.Transfer.DeletedOrder, Top4ever.Domain" />
+    </alias>
+
+    <resultMaps>
+        <resultMap  id="OrderResult" class="Order">
+            <result property="OrderID" column="OrderID"></result>
+            <result property="OrderNo" column="OrderNo"></result>
+            <result property="TotalSellPrice" column="TotalSellPrice"></result>
+            <result property="ActualSellPrice" column="ActualSellPrice"></result>
+            <result property="DiscountPrice" column="DiscountPrice"></result>
+            <result property="CutOffPrice" column="CutOffPrice"></result>
+            <result property="ServiceFee" column="ServiceFee"></result>
+            <result property="NeedChangePay" column="NeedChangePay" nullValue="0"></result>
+            <result property="DeviceNo" column="DeviceNo"></result>
+            <result property="DeskName" column="DeskName"></result>
+            <result property="WorkSequence" column="WorkSequence"></result>
+            <result property="TranSequence" column="TranSequence"></result>
+            <result property="EatType" column="EatType"></result>
+            <result property="Status" column="Status"></result>
+            <result property="SubOrderNo" column="SubOrderNo"></result>
+            <result property="PeopleNum" column="PeopleNum"></result>
+            <result property="MembershipCard" column="MembershipCard"></result>
+            <result property="MemberDiscount" column="MemberDiscount"></result>
+            <result property="EmployeeID" column="InputEmployeeID"></result>
+            <result property="EmployeeNo" column="InputEmployeeNo"></result>
+            <result property="PayEmployeeID" column="PayEmployeeID"></result>
+            <result property="PayEmployeeNo" column="PayEmployeeNo"></result>
+            <result property="OrderLastTime" column="OrderLastTime"></result>
+            <result property="PayLastTime" column="PayLastTime"></result>
+            <result property="CheckoutDeviceNo" column="CheckoutDeviceNo"></result>
+        </resultMap>
+
+        <resultMap id="DeletedOrderResult" class="DeletedOrder">
+            <result property="OrderID" column="OrderID"></result>
+            <result property="AuthorisedManager" column="AuthorisedManager"></result>
+            <result property="CancelEmployeeNo" column="CancelEmployeeNo"></result>
+            <result property="CancelReasonName" column="CancelReasonName"></result>
+        </resultMap>
+    </resultMaps>
+
+    <parameterMaps>
+        <parameterMap id="InsertOrderParam" class="Order">
+            <parameter property="OrderID"/>
+            <parameter property="TotalSellPrice"/>
+            <parameter property="ActualSellPrice"/>
+            <parameter property="DiscountPrice"/>
+            <parameter property="CutOffPrice"/>
+            <parameter property="ServiceFee"/>
+            <parameter property="DeviceNo"/>
+            <parameter property="TranSequence"/>
+            <parameter property="EatType"/>
+            <parameter property="Status"/>
+            <parameter property="DeskName"/>
+            <parameter property="SubOrderNo" nullValue="-1" />
+            <parameter property="PeopleNum"/>
+            <parameter property="EmployeeID"/>
+            <parameter property="EmployeeNo"/>
+            <parameter property="OrderLastTime"/>
+            <parameter property="DailyStatementNo"/>
+        </parameterMap>
+
+        <parameterMap id="MergeOrderParam" class="Hashtable">
+            <parameter property="OrderID1st" column="OrderID1st" />
+            <parameter property="OrderID2nd" column="OrderID2nd" />
+            <parameter property="ReturnValue" column="ReturnValue" direction="Output" />
+        </parameterMap>
+    </parameterMaps>
+    <!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+    <statements>
+        <select id="GetOrderByDeskName" parameterClass="String" resultMap="OrderResult">
+            SELECT OrderID,OrderNo,TotalSellPrice,ActualSellPrice,DiscountPrice,CutOffPrice,ServiceFee,NeedChangePay,DeviceNo,DeskName,WorkSequence,TranSequence,EatType,Status,
+                SubOrderNo,PeopleNum,MembershipCard,MemberDiscount,InputEmployeeID,InputEmployeeNo,PayEmployeeID,PayEmployeeNo,OrderLastTime,PayLastTime,CheckoutDeviceNo
+            FROM [Order]
+            WHERE DeskName = #value# AND [Status] = 0 AND IsVoided = 0
+        </select>
+
+        <select id="GetOrderByID" parameterClass="Guid" resultMap="OrderResult">
+            SELECT OrderID,OrderNo,TotalSellPrice,ActualSellPrice,DiscountPrice,CutOffPrice,ServiceFee,NeedChangePay,DeviceNo,DeskName,WorkSequence,TranSequence,EatType,Status,
+                SubOrderNo,PeopleNum,MembershipCard,MemberDiscount,InputEmployeeID,InputEmployeeNo,PayEmployeeID,PayEmployeeNo,OrderLastTime,PayLastTime,CheckoutDeviceNo
+            FROM [Order]
+            WHERE OrderID = #value# AND [Status] = 0 AND IsVoided = 0
+        </select>
+        
+        <procedure id="InsertOrder" parameterMap="InsertOrderParam">
+            proc_CreateNewOrder
+        </procedure>
+
+        <update id="UpdateOrder" parameterClass="Order">
+            UPDATE [Order]
+            SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#, CutOffPrice = #CutOffPrice#, ServiceFee = #ServiceFee#, DeskName = #DeskName#,
+                PeopleNum = #PeopleNum#, InputEmployeeID = #EmployeeID#, InputEmployeeNo = #EmployeeNo#, OrderLastTime = OrderLastTime + #OrderLastTime#
+            WHERE OrderID = #OrderID#
+        </update>
+
+        <update id="UpdatePayingOrder" parameterClass="Order">
+            UPDATE [Order]
+            SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#, CutOffPrice = #CutOffPrice#, ServiceFee = #ServiceFee#, NeedChangePay = #NeedChangePay#, 
+                <![CDATA[ PayTime = getdate() ]]>, [Status] = 1,
+                MembershipCard = #MembershipCard#, MemberDiscount = #MemberDiscount#, PayEmployeeID = #PayEmployeeID#, PayEmployeeNo = #PayEmployeeNo#, PayLastTime = PayLastTime + #PayLastTime#, CheckoutDeviceNo = #CheckoutDeviceNo#
+            WHERE OrderID = #OrderID#
+        </update>
+
+        <update id="UpdateDeletedOrder" parameterClass="DeletedOrder">
+            UPDATE [Order]
+            SET AuthorisedManager = #AuthorisedManager#, CancelEmployeeNo = #CancelEmployeeNo#, CancelReasonName = #CancelReasonName#, IsVoided = 1
+            WHERE OrderID = #OrderID#
+        </update>
+
+        <update id="UpdateOrderPrice" parameterClass="Order">
+            UPDATE [Order]
+            SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#, CutOffPrice = #CutOffPrice#
+            WHERE OrderID = #OrderID#
+        </update>
+
+        <update id="UpdateSplitOrderPrice" parameterClass="Order">
+            UPDATE [Order]
+            SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#,
+                   CutOffPrice = #CutOffPrice#, PeopleNum = #PeopleNum#, OrderLastTime = #OrderLastTime#
+            WHERE OrderID = #OrderID#
+        </update>
+
+        <update id="UpdateOrderDeskName" parameterClass="Order">
+            UPDATE [Order]
+            SET DeskName = #DeskName#, SubOrderNo = #SubOrderNo#
+            WHERE OrderID = #OrderID#
+        </update>
+
+        <select id="SelectMaxSubOrderNo" parameterClass="String" resultClass="Int32">
+            SELECT TOP 1 SubOrderNo
+            FROM [Order]
+            WHERE DeskName = #value# AND [Status] = 0 AND IsVoided = 0
+            ORDER BY SubOrderNo DESC
+        </select>
+
+        <procedure id="MergeSalesOrder" parameterMap="MergeOrderParam">
+            proc_MergeSalesOrder
+        </procedure>
+    </statements>
+</sqlMap>

@@ -1,0 +1,5 @@
+D:\Projects\WinCustomerControl\Top4ever.UserControl\bin\Debug\Top4ever.UserControl.dll
+D:\Projects\WinCustomerControl\Top4ever.UserControl\bin\Debug\Top4ever.UserControl.pdb
+D:\Projects\WinCustomerControl\Top4ever.UserControl\obj\Debug\ResolveAssemblyReference.cache
+D:\Projects\WinCustomerControl\Top4ever.UserControl\obj\Debug\Top4ever.UserControl.dll
+D:\Projects\WinCustomerControl\Top4ever.UserControl\obj\Debug\Top4ever.UserControl.pdb

@@ -1,0 +1,14 @@
+C:\Users\Vera\Desktop\Project\Top4everInServer\trunk\Top4ever.Interface\bin\Release\Top4ever.Interface.dll
+C:\Users\Vera\Desktop\Project\Top4everInServer\trunk\Top4ever.Interface\bin\Release\Top4ever.Interface.pdb
+C:\Users\Vera\Desktop\Project\Top4everInServer\trunk\Top4ever.Interface\bin\Release\Top4ever.Domain.dll
+C:\Users\Vera\Desktop\Project\Top4everInServer\trunk\Top4ever.Interface\bin\Release\Top4ever.Domain.pdb
+C:\Users\Vera\Desktop\Project\Top4everInServer\trunk\Top4ever.Interface\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Vera\Desktop\Project\Top4everInServer\trunk\Top4ever.Interface\obj\Release\Top4ever.Interface.dll
+C:\Users\Vera\Desktop\Project\Top4everInServer\trunk\Top4ever.Interface\obj\Release\Top4ever.Interface.pdb
+C:\Users\Vera\Desktop\Pos\Top4everInServer\Top4ever.Interface\bin\Release\Top4ever.Interface.dll
+C:\Users\Vera\Desktop\Pos\Top4everInServer\Top4ever.Interface\bin\Release\Top4ever.Interface.pdb
+C:\Users\Vera\Desktop\Pos\Top4everInServer\Top4ever.Interface\bin\Release\Top4ever.Domain.dll
+C:\Users\Vera\Desktop\Pos\Top4everInServer\Top4ever.Interface\bin\Release\Top4ever.Domain.pdb
+C:\Users\Vera\Desktop\Pos\Top4everInServer\Top4ever.Interface\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Vera\Desktop\Pos\Top4everInServer\Top4ever.Interface\obj\Release\Top4ever.Interface.dll
+C:\Users\Vera\Desktop\Pos\Top4everInServer\Top4ever.Interface\obj\Release\Top4ever.Interface.pdb

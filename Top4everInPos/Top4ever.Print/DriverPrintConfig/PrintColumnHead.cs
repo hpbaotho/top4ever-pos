@@ -1,0 +1,47 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Text;
+using System.Xml.Serialization;
+
+namespace Top4ever.Print.DriverPrintConfig
+{
+    [XmlRoot("ColumnHead")]
+    public class PrintColumnHead
+    {
+        private string _name;
+        [XmlAttribute("Name")]
+        public string Name
+        {
+            get { return _name; }
+            set { _name = value; }
+        }
+
+        private string _text;
+        [XmlAttribute("Text")]
+        public string Text
+        {
+            get { return _text; }
+            set { _text = value; }
+        }
+
+        /// <summary>
+        /// Left Middle Right; x%; xx
+        /// </summary>
+        private string _align;
+        [XmlAttribute("Align")]
+        public string Align
+        {
+            get { return _align; }
+            set { _align = value; }
+        }
+
+        private PrintFont font;
+        [XmlElement("Font")]
+        public PrintFont Font
+        {
+            get { return font; }
+            set { font = value; }
+        }
+    }
+}

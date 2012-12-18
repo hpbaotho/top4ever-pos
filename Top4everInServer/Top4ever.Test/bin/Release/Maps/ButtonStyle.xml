@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="ButtonStyle" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <alias>
+        <typeAlias alias="ButtonStyle" type="Top4ever.Domain.ButtonStyle, Top4ever.Domain" />
+    </alias>
+
+    <resultMaps>
+        <resultMap  id="ButtonStyleResult" class="ButtonStyle">
+            <result property="ButtonStyleID" column="ButtonStyleID"></result>
+            <result property="BackColor" column="BackColor"></result>
+            <result property="ClickedBackColor" column="ClickedBackColor"></result>
+            <result property="HoverBackColor" column="HoverBackColor"></result>
+            <result property="FontName" column="FontName"></result>
+            <result property="FontSize" column="FontSize"></result>
+            <result property="FontStyle" column="FontStyle"></result>
+            <result property="ForeColor" column="ForeColor"></result>
+        </resultMap>
+
+    </resultMaps>
+    <!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+    <statements>
+        <select id="GetAllButtonStyle" resultMap="ButtonStyleResult">
+            SELECT [ButtonStyleID]
+            ,[BackColor]
+            ,[ClickedBackColor]
+            ,[HoverBackColor]
+            ,[FontName]
+            ,[FontSize]
+            ,[FontStyle]
+            ,[ForeColor]
+            FROM ButtonStyle
+        </select>
+
+    </statements>
+</sqlMap>

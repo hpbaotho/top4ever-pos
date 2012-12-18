@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="HandoverRecord" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<alias>
+		<typeAlias alias="HandoverRecord" type="Top4ever.Domain.HandoverRecord, Top4ever.Domain" />
+	</alias>
+
+	<resultMaps>
+		<resultMap id="HandoverRecordResult" class="HandoverRecord">
+			<parameter property="HandoverRecordID" column="HandoverRecordID"/>
+			<parameter property="DailyStatementNo" column="DailyStatementNo"/>
+			<parameter property="DeviceNo" column="DeviceNo"/>
+			<parameter property="WorkSequence" column="WorkSequence"/>
+			<parameter property="EmployeeID" column="LastChangeEmpID"/>
+		</resultMap>
+	</resultMaps>
+
+	<parameterMaps>
+		<parameterMap id="InsertHandoverRecordParam" class="HandoverRecord">
+			<parameter property="HandoverRecordID"/>
+			<parameter property="DailyStatementNo"/>
+			<parameter property="DeviceNo"/>
+			<parameter property="EmployeeID"/>
+		</parameterMap>
+	</parameterMaps>
+
+	<!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+	<statements>
+		<procedure id="InsertHandoverRecord" parameterMap="InsertHandoverRecordParam">
+			proc_InsertHandoverRecord
+		</procedure>
+	</statements>
+</sqlMap>

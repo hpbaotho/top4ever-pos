@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="PayoffWay" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <alias>
+        <typeAlias alias="PayoffWay" type="Top4ever.Domain.OrderRelated.PayoffWay, Top4ever.Domain" />
+    </alias>
+
+    <resultMaps>
+
+        <resultMap  id="PayoffWayResult" class="PayoffWay">
+            <result property="PayoffID" column="PayoffID"></result>
+            <result property="PayoffName" column="PayoffName"></result>
+			<result property="PayoffName2nd" column="PayoffName_2nd"></result>
+            <result property="PayoffType" column="PayoffType"></result>
+            <result property="AsPay" column="AsPay"></result>
+			<result property="ButtonStyleID" column="ButtonStyleID"></result>
+        </resultMap>
+
+    </resultMaps>
+    <!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+    <statements>
+        <select id="GetPayoffWayList" resultMap="PayoffWayResult">
+			SELECT PayoffID, PayoffName, PayoffName_2nd, PayoffType, AsPay, ButtonStyleID
+			FROM PayoffWay
+			WHERE IsVoided = 0
+			ORDER BY OrderBy
+		</select>
+
+    </statements>
+</sqlMap>

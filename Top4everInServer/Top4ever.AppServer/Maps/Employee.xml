@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<sqlMap namespace="Employee" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <alias>
+        <typeAlias alias="Employee" type="Top4ever.Domain.Accounts.Employee, Top4ever.Domain" />
+    </alias>
+
+    <resultMaps>
+        <resultMap  id="EmployeeResult" class="Employee">
+            <result property="EmployeeID" column="EmployeeID"></result>
+            <result property="EmployeeNo" column="EmployeeNo"></result>
+            <result property="Password" column="Password"></result>
+            <result property="Name" column="Name"></result>
+            <result property="LimitMoney" column="LimitMoney"></result>
+            <result property="MinDiscount" column="MinDiscount"></result>
+            <result property="Birthday" column="Birthday"></result>
+            <result property="IndentifyNo" column="IndentifyNo"></result>
+            <result property="Sex" column="Sex"></result>
+            <result property="Address" column="Address"></result>
+            <result property="Telephone" column="Telephone"></result>
+            <result property="MobilePhone" column="MobilePhone"></result>
+            <result property="EntryDate" column="EntryDate"></result>
+            <result property="LeaveDate" column="LeaveDate"></result>
+        </resultMap>
+
+    </resultMaps>
+    <!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+    <statements>
+        <select id="GetEmployeeByLoginAndPassword" resultMap="EmployeeResult" parameterClass="Employee">
+          SELECT [EmployeeID]
+            ,[EmployeeNo]
+            ,[Password]
+            ,[Name]
+            ,[LimitMoney]
+            ,[MinDiscount]
+            ,[Birthday]
+            ,[IndentifyNo]
+            ,[Sex]
+            ,[Address]
+            ,[Telephone]
+            ,[MobilePhone]
+            ,[EntryDate]
+            ,[LeaveDate]
+          FROM [Employee]
+          WHERE EmployeeNo = #EmployeeNo# AND [Password] = #Password# AND IsVoided = 0
+        </select>
+
+        <select id="GetRightsCodeListByEmployee" parameterClass="Guid" resultClass="String">
+            SELECT r.RightsCode
+            FROM Employee e JOIN RoleRightsMap rrm ON rrm.RoleID = e.RoleID
+              JOIN Rights r ON r.RightsID = rrm.RightsID
+            WHERE e.EmployeeID = #value#
+        </select>
+    </statements>
+</sqlMap>

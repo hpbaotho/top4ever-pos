@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{323061C8-E303-4FB0-8403-546431BE6124}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Top4ever.ClientService</RootNamespace>
+    <AssemblyName>Top4ever.ClientService</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Top4ever.Pos\bin\Debug\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DailyBalanceService.cs" />
+    <Compile Include="DeletedOrderService.cs" />
+    <Compile Include="DeskService.cs" />
+    <Compile Include="EmployeeService.cs" />
+    <Compile Include="Enum\BasicTypeLength.cs" />
+    <Compile Include="Enum\Command.cs" />
+    <Compile Include="Enum\ParamFieldLength.cs" />
+    <Compile Include="Enum\RET_VALUE.cs" />
+    <Compile Include="HandoverService.cs" />
+    <Compile Include="OrderDetailsService.cs" />
+    <Compile Include="OrderService.cs" />
+    <Compile Include="PayingOrderService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SalesOrderService.cs" />
+    <Compile Include="SocketClient.cs" />
+    <Compile Include="SystemBasicData.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Top4ever.Domain\Top4ever.Domain.csproj">
+      <Project>{D8EA3645-CE2C-4A83-9D8C-C478B50FB926}</Project>
+      <Name>Top4ever.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Top4ever.Entity\Top4ever.Entity.csproj">
+      <Project>{CBDC6C0D-4A84-4DF9-9E6E-570E4B9542CD}</Project>
+      <Name>Top4ever.Entity</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{87C75A48-7827-4053-B141-5BEC2C792E6B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Top4ever.Print</RootNamespace>
+    <AssemblyName>Top4ever.Print</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DriverKitchenPrint.cs" />
+    <Compile Include="DriverOrderPrint.cs" />
+    <Compile Include="DriverPrintConfig\DataListConfig.cs" />
+    <Compile Include="DriverPrintConfig\DataListConfigCollection.cs" />
+    <Compile Include="DriverPrintConfig\NormalConfig.cs" />
+    <Compile Include="DriverPrintConfig\NormalConfigCollection.cs" />
+    <Compile Include="DriverPrintConfig\PrintColumn.cs" />
+    <Compile Include="DriverPrintConfig\PrintColumnCollection.cs" />
+    <Compile Include="DriverPrintConfig\PrintColumnHead.cs" />
+    <Compile Include="DriverPrintConfig\PrintColumnHeadCollection.cs" />
+    <Compile Include="DriverPrintConfig\PrintConfig.cs" />
+    <Compile Include="DriverPrintConfig\PrintFont.cs" />
+    <Compile Include="DriverPrintConfig\PrintLine.cs" />
+    <Compile Include="DriverPrintConfig\PrintLineCollection.cs" />
+    <Compile Include="DriverPrintSetting.cs" />
+    <Compile Include="Entity\GoodsOrder.cs" />
+    <Compile Include="Entity\KitchenPrintData.cs" />
+    <Compile Include="Entity\PayingGoodsOrder.cs" />
+    <Compile Include="Entity\PrintData.cs" />
+    <Compile Include="InstructionOrderPrint.cs" />
+    <Compile Include="InstructionOrderPrintSetting.cs" />
+    <Compile Include="InstructionPrintConfig\DataListConfig.cs" />
+    <Compile Include="InstructionPrintConfig\DataListConfigCollection.cs" />
+    <Compile Include="InstructionPrintConfig\NormalConfig.cs" />
+    <Compile Include="InstructionPrintConfig\NormalConfigCollection.cs" />
+    <Compile Include="InstructionPrintConfig\PrintColumn.cs" />
+    <Compile Include="InstructionPrintConfig\PrintColumnCollection.cs" />
+    <Compile Include="InstructionPrintConfig\PrintColumnHead.cs" />
+    <Compile Include="InstructionPrintConfig\PrintColumnHeadCollection.cs" />
+    <Compile Include="InstructionPrintConfig\PrintConfig.cs" />
+    <Compile Include="InstructionPrintConfig\PrintLine.cs" />
+    <Compile Include="InstructionPrintConfig\PrintLineCollection.cs" />
+    <Compile Include="PrintHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Top4ever.Common\Top4ever.Common.csproj">
+      <Project>{A7630CE5-49F7-40A8-9C92-96708201C756}</Project>
+      <Name>Top4ever.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Top4ever.Hardware\Top4ever.Hardware.csproj">
+      <Project>{6A72C1D5-3FD9-4BAD-9040-14949737B60F}</Project>
+      <Name>Top4ever.Hardware</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

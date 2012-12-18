@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BBCE417E-FF89-4213-A2B3-4A6E3115AF46}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Top4ever.AppServer</RootNamespace>
+    <AssemblyName>Top4ever.AppServer</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Top4ever.NetServer\Top4ever.NetServer.csproj">
+      <Project>{860789A4-9B68-46DC-BF9E-3B8A1F925CBE}</Project>
+      <Name>Top4ever.NetServer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app.config" />
+    <Content Include="dao.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Maps\BusinessReport.xml" />
+    <Content Include="Maps\ButtonStyle.xml" />
+    <Content Include="Maps\DailyStatement.xml" />
+    <Content Include="Maps\DailyTurnover.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Maps\Desk.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Maps\Details.xml" />
+    <Content Include="Maps\DetailsGroup.xml" />
+    <Content Include="Maps\Discount.xml" />
+    <Content Include="Maps\Goods.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Maps\GoodsGroup.xml" />
+    <Content Include="Maps\GoodsSetMeal.xml" />
+    <Content Include="Maps\HandoverRecord.xml" />
+    <Content Include="Maps\HandoverTurnover.xml" />
+    <Content Include="Maps\Order.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Maps\OrderDetails.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Maps\OrderDiscount.xml" />
+    <Content Include="Maps\OrderPayoff.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Maps\PayoffWay.xml" />
+    <Content Include="Maps\PrintTask.xml" />
+    <Content Include="Maps\Reason.xml" />
+    <Content Include="Maps\Region.xml" />
+    <Content Include="Maps\Shop.xml" />
+    <Content Include="Maps\SystemConfig.xml" />
+    <Content Include="Maps\SystemDictionary.xml" />
+    <Content Include="providers.config" />
+    <Content Include="SqlMap.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Maps\Employee.xml">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

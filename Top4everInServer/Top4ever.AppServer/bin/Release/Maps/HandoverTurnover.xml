@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="HandoverTurnover" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<alias>
+		<typeAlias alias="HandoverTurnover" type="Top4ever.Domain.HandoverTurnover, Top4ever.Domain" />
+	</alias>
+
+	<parameterMaps>
+		<parameterMap id="HandoverTurnoverResult" class="HandoverTurnover">
+			<parameter property="HandoverRecordID" column="HandoverRecordID"/>
+			<parameter property="DailyStatementNo" column="DailyStatementNo"/>
+			<parameter property="PayoffID" column="PayoffID"/>
+			<parameter property="SalesTurnover" column="SalesTurnover"/>
+		</parameterMap>
+	</parameterMaps>
+
+	<!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+	<statements>
+		<insert id="InsertHandoverTurnover" parameterClass="HandoverTurnover">
+			INSERT INTO HandoverTurnover
+			(
+			HandoverRecordID, DailyStatementNo,
+			PayoffID, SalesTurnover
+			)
+			VALUES
+			(
+			#HandoverRecordID#, #DailyStatementNo#,
+			#PayoffID#, #SalesTurnover#
+			)
+		</insert>
+	</statements>
+</sqlMap>

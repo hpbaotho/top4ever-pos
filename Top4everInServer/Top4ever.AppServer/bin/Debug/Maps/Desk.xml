@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="Desk" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <alias>
+        <typeAlias alias="Desk" type="Top4ever.Domain.BizDesk, Top4ever.Domain" />
+        <typeAlias alias="DeskInfo" type="Top4ever.Domain.DeskRealTimeInfo, Top4ever.Domain" />
+    </alias>
+
+    <resultMaps>
+        <resultMap  id="DeskResult" class="Desk">
+            <result property="DeskID" column="DeskID"></result>
+            <result property="DeskName" column="DeskName"></result>
+            <result property="Status" column="Status"></result>
+            <result property="MinConsumption" column="MinConsumption"></result>
+            <result property="PX" column="PX"></result>
+            <result property="PY" column="PY"></result>
+            <result property="Width" column="Width"></result>
+            <result property="Height" column="Height"></result>
+            <result property="DeviceNo" column="DeviceNo"></result>
+        </resultMap>
+
+        <resultMap  id="DeskInfoResult" class="DeskInfo">
+            <result property="DeskName" column="DeskName"></result>
+            <result property="DeskStatus" column="DeskStatus"></result>
+            <result property="DeviceNo" column="DeviceNo"></result>
+            <result property="IsSplitOrder" column="IsSplitOrder"></result>
+            <result property="PeopleNum" column="PeopleNum"></result>
+            <result property="ConsumptionMoney" column="ConsumptionMoney"></result>
+        </resultMap>
+    </resultMaps>
+
+    <parameterMaps>
+        <parameterMap id="DeskInfoParam">
+            <parameter property="RegionID"/>
+        </parameterMap>
+    </parameterMaps>
+    <!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+    <statements>
+        <select id="GetAllDeskInRegion" parameterClass="Guid" resultMap="DeskResult">
+            SELECT DeskID, DeskName, [Status], MinConsumption, PX, PY, Width, Height, DeviceNo
+            FROM Desk
+            WHERE RegionID = #value# AND IsVoided = 0
+        </select>
+
+        <select id="GetDeskByName" parameterClass="String" resultMap="DeskResult">
+            SELECT DeskID, DeskName, [Status], MinConsumption, PX, PY, Width, Height, DeviceNo
+            FROM Desk
+            WHERE DeskName = #value# AND IsVoided = 0
+        </select>
+
+        <update id="UpdateDeskStatus" parameterClass="Desk">
+            UPDATE Desk
+            SET [Status] = #Status#, DeviceNo = #DeviceNo#
+            WHERE DeskName = #DeskName# AND IsVoided = 0
+        </update>
+
+        <procedure id="GetDeskInfo" parameterMap="DeskInfoParam" resultMap="DeskInfoResult">
+            proc_GetDeskRealTimeInfo
+        </procedure>
+    </statements>
+</sqlMap>

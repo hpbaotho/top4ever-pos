@@ -1,0 +1,10 @@
+D:\Projects\WinCustomerControl\Top4ever.UserControl\obj\Debug\ResolveAssemblyReference.cache
+D:\Projects\WinCustomerControl\Top4ever.UserControl\bin\Debug\Top4ever.CustomControls.dll
+D:\Projects\WinCustomerControl\Top4ever.UserControl\bin\Debug\Top4ever.CustomControls.pdb
+D:\Projects\WinCustomerControl\Top4ever.UserControl\obj\Debug\Top4ever.CustomControls.dll
+D:\Projects\WinCustomerControl\Top4ever.UserControl\obj\Debug\Top4ever.CustomControls.pdb
+C:\Users\Danny\Desktop\WinCustomerControl\Top4ever.UserControl\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Danny\Desktop\WinCustomerControl\Top4ever.UserControl\obj\Debug\Top4ever.CustomControls.dll
+C:\Users\Danny\Desktop\WinCustomerControl\Top4ever.UserControl\obj\Debug\Top4ever.CustomControls.pdb
+C:\Users\Danny\Desktop\WinCustomerControl\Top4ever.UserControl\bin\Debug\Top4ever.CustomControls.dll
+C:\Users\Danny\Desktop\WinCustomerControl\Top4ever.UserControl\bin\Debug\Top4ever.CustomControls.pdb

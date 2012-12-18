@@ -1,0 +1,11 @@
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.LocalService\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.LocalService\bin\Release\Top4ever.LocalService.dll
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.LocalService\bin\Release\Top4ever.LocalService.pdb
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.LocalService\obj\Release\Top4ever.LocalService.dll
+C:\Users\Vera\Desktop\Project\Top4everInPos\Top4everInPos\trunk\Top4ever.LocalService\obj\Release\Top4ever.LocalService.pdb
+D:\Pos\Top4everInPos\Top4ever.LocalService\bin\Release\Top4ever.LocalService.dll
+D:\Pos\Top4everInPos\Top4ever.LocalService\bin\Release\Top4ever.LocalService.pdb
+D:\Pos\Top4everInPos\Top4ever.LocalService\bin\Release\System.Data.SQLite.DLL
+D:\Pos\Top4everInPos\Top4ever.LocalService\obj\Release\ResolveAssemblyReference.cache
+D:\Pos\Top4everInPos\Top4ever.LocalService\obj\Release\Top4ever.LocalService.dll
+D:\Pos\Top4everInPos\Top4ever.LocalService\obj\Release\Top4ever.LocalService.pdb

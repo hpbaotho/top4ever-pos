@@ -1,0 +1,6 @@
+D:\Pos\Top4everInPos\Top4ever.Hardware\bin\Release\Top4ever.Hardware.dll
+D:\Pos\Top4everInPos\Top4ever.Hardware\bin\Release\Top4ever.Hardware.pdb
+D:\Pos\Top4everInPos\Top4ever.Hardware\bin\Release\LibUsbDotNet.dll
+D:\Pos\Top4everInPos\Top4ever.Hardware\obj\Release\ResolveAssemblyReference.cache
+D:\Pos\Top4everInPos\Top4ever.Hardware\obj\Release\Top4ever.Hardware.dll
+D:\Pos\Top4everInPos\Top4ever.Hardware\obj\Release\Top4ever.Hardware.pdb

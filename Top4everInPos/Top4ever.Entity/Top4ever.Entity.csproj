@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{CBDC6C0D-4A84-4DF9-9E6E-570E4B9542CD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Top4ever.Entity</RootNamespace>
+    <AssemblyName>Top4ever.Entity</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Config\BizControl.cs" />
+    <Compile Include="Config\AppSettingConfig.cs" />
+    <Compile Include="Config\BizUIConfig.cs" />
+    <Compile Include="Config\CashBoxConfig.cs" />
+    <Compile Include="Config\ClientShowConfig.cs" />
+    <Compile Include="Config\PrintConfig.cs" />
+    <Compile Include="ConstantValuePool.cs" />
+    <Compile Include="Enum\ButtonOperateType.cs" />
+    <Compile Include="Enum\DeskButtonStatus.cs" />
+    <Compile Include="Enum\DiscountDisplayModel.cs" />
+    <Compile Include="Enum\DiscountItemType.cs" />
+    <Compile Include="Enum\EatWayType.cs" />
+    <Compile Include="Enum\LanguageType.cs" />
+    <Compile Include="Enum\OrderItemType.cs" />
+    <Compile Include="Enum\PayoffWayMode.cs" />
+    <Compile Include="Enum\PortType.cs" />
+    <Compile Include="Enum\ReasonItemType.cs" />
+    <Compile Include="ListItem.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Top4ever.CustomControl\Top4ever.CustomControl.csproj">
+      <Project>{CBD24195-4CD3-4D36-9113-70A3E48745D1}</Project>
+      <Name>Top4ever.CustomControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Top4ever.Domain\Top4ever.Domain.csproj">
+      <Project>{D8EA3645-CE2C-4A83-9D8C-C478B50FB926}</Project>
+      <Name>Top4ever.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Top4ever.Print\Top4ever.Print.csproj">
+      <Project>{87C75A48-7827-4053-B141-5BEC2C792E6B}</Project>
+      <Name>Top4ever.Print</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
