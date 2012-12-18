@@ -14,13 +14,5 @@ namespace Top4ever.Domain.Transfer
         /// 交班金额列表
         /// </summary>
         public IList<HandoverTurnover> handoverTurnoverList { get; set; }
-        /// <summary>
-        /// 支付方式合计
-        /// </summary>
-        public IList<OrderPayoffSum> orderPayoffSumList { get; set; }
-        /// <summary>
-        /// 折扣合计
-        /// </summary>
-        public IList<OrderDiscountSum> orderDiscountSumList { get; set; }
     }
 }

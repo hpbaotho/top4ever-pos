@@ -6,6 +6,9 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
+using Top4ever.ClientService;
+using Top4ever.Domain.Transfer;
+
 namespace Top4ever.Pos.Feature
 {
     public partial class FormSalesReport : Form
@@ -33,6 +36,9 @@ namespace Top4ever.Pos.Feature
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.ClearSelection();
             this.dataGridView1.Rows[dataGridView1.Rows.Count - 1].DefaultCellStyle.BackColor = SystemColors.Control;
+
+            BusinessReportService bizReportService = new BusinessReportService();
+            BusinessReport bizReport = bizReportService.GetReportDataByHandover("P0");
         }
     }
 }

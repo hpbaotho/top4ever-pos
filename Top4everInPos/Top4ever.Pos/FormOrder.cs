@@ -1632,10 +1632,11 @@ namespace Top4ever.Pos
                     }
                     int copies = ConstantValuePool.BizSettingConfig.printConfig.Copies;
                     string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
-                    string configPath = @"PrintConfig\PrintOrderSetting.config";
+                    string configPath = @"PrintConfig\InstructionPrintOrderSetting.config";
                     string layoutPath = @"PrintConfig\PrintOrder.ini";
                     if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
                     {
+                        configPath = @"PrintConfig\PrintOrderSetting.config";
                         string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
                         DriverOrderPrint printer = new DriverOrderPrint(printerName, paperWidth, "SpecimenLabel");
                         for (int i = 0; i < copies; i++)
@@ -2250,10 +2251,11 @@ namespace Top4ever.Pos
                     }
                     int copies = ConstantValuePool.BizSettingConfig.printConfig.Copies;
                     string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
-                    string configPath = @"PrintConfig\PrintOrderSetting.config";
+                    string configPath = @"PrintConfig\InstructionPrintOrderSetting.config";
                     string layoutPath = @"PrintConfig\PrintOrder.ini";
                     if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
                     {
+                        configPath = @"PrintConfig\PrintOrderSetting.config";
                         string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
                         DriverOrderPrint printer = new DriverOrderPrint(printerName, paperWidth, "SpecimenLabel");
                         for (int i = 0; i < copies; i++)
