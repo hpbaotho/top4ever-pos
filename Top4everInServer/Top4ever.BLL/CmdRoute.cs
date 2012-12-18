@@ -64,6 +64,12 @@ namespace Top4ever.BLL
                 case Command.ID_CREATE_DAILYBALANCE:
                     byteRet = DailyBalanceBLL.CreateDailyBalance(itemBuffer);
                     break;
+                case Command.ID_GET_REPORTDATABYHANDOVER:
+                    byteRet = BusinessReportBLL.GetReportDataByHandover(itemBuffer);
+                    break;
+                case Command.ID_GET_REPORTDATABYDAILYSTATEMENT:
+                    byteRet = BusinessReportBLL.GetReportDataByDailyStatement(itemBuffer);
+                    break;
 
                 default:
                     byteRet = null;
