@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using IBatisNet.DataAccess;
-
 using Top4ever.Domain;
 using Top4ever.Domain.OrderRelated;
 using Top4ever.Domain.Transfer;
@@ -15,25 +13,10 @@ namespace Top4ever.Service
     /// </summary>
     public class PrintTaskService
     {
-        #region Private Fields
-
         private static PrintTaskService _instance = new PrintTaskService();
-        private IDaoManager _daoManager = null;
-        private IPrintTaskDao _printTaskDao = null;
-
-        #endregion
-
-        #region Constructor
 
         private PrintTaskService()
-        {
-            _daoManager = ServiceConfig.GetInstance().DaoManager;
-            _printTaskDao = _daoManager.GetDao(typeof(IPrintTaskDao)) as IPrintTaskDao;
-        }
-
-        #endregion
-
-        #region Public methods
+        { }
 
         public static PrintTaskService GetInstance()
         {
@@ -41,29 +24,12 @@ namespace Top4ever.Service
         }
 
         /// <summary>
-        /// 添加打印任务到数据库
-        /// </summary>
-        /// <param name="salesOrder">订单实例</param>
-        /// <param name="printStyle">1 堂吃, 2 外卖, 3 堂吃兼外卖</param>
-        /// <param name="followStyle">1 细跟主, 2 主跟细</param>
-        public void AddPrintTaskToDB(SalesOrder salesOrder, int printStyle, int followStyle)
-        {
-            IList<PrintTask> printTaskList = GetPrintTaskList(salesOrder, printStyle, followStyle);
-            foreach (PrintTask printTask in printTaskList)
-            {
-                _printTaskDao.InsertPrintTask(printTask);
-            }
-        }
-
-        #endregion
-
-        /// <summary>
         /// 获取打印任务列表
         /// </summary>
         /// <param name="salesOrder">订单实例</param>
         /// <param name="printStyle">1 堂吃, 2 外卖, 3 堂吃兼外卖</param>
         /// <param name="followStyle">1 细跟主, 2 主跟细</param>
-        private IList<PrintTask> GetPrintTaskList(SalesOrder salesOrder, int printStyle, int followStyle)
+        public IList<PrintTask> GetPrintTaskList(SalesOrder salesOrder, int printStyle, int followStyle)
         {
             if (salesOrder == null || salesOrder.orderDetailsList.Count == 0) return null;
             IList<PrintTask> printTaskList = new List<PrintTask>();

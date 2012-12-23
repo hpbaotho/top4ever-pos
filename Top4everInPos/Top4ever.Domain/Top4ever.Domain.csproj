@@ -65,6 +65,7 @@
     <Compile Include="Shop.cs" />
     <Compile Include="SystemConfig.cs" />
     <Compile Include="SystemDictionary.cs" />
+    <Compile Include="Transfer\BusinessReport.cs" />
     <Compile Include="Transfer\DailyBalance.cs" />
     <Compile Include="Transfer\DeletedOrder.cs" />
     <Compile Include="Transfer\DeletedOrderDetails.cs" />

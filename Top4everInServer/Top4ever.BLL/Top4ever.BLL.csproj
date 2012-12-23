@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BizDeskBLL.cs" />
+    <Compile Include="BusinessReportBLL.cs" />
     <Compile Include="CmdRoute.cs" />
     <Compile Include="DailyBalanceBLL.cs" />
     <Compile Include="DeletedOrderBLL.cs" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using IBatisNet.DataAccess;
 
+using Top4ever.Domain;
 using Top4ever.Domain.OrderRelated;
 using Top4ever.Domain.Transfer;
 using Top4ever.Interface;
@@ -21,7 +22,9 @@ namespace Top4ever.Service
         private IOrderDetailsDao _orderDetailsDao = null;
         private IOrderDiscountDao _orderDiscountDao = null;
         private IDailyStatementDao _dailyStatementDao = null;
+        private ISystemConfigDao _sysConfigDao = null;
         private ISystemDictionaryDao _sysDictionary = null;
+        private IPrintTaskDao _printTaskDao = null;
 
         #endregion
 
@@ -34,7 +37,9 @@ namespace Top4ever.Service
             _orderDetailsDao = _daoManager.GetDao(typeof(IOrderDetailsDao)) as IOrderDetailsDao;
             _orderDiscountDao = _daoManager.GetDao(typeof(IOrderDiscountDao)) as IOrderDiscountDao;
             _dailyStatementDao = _daoManager.GetDao(typeof(IDailyStatementDao)) as IDailyStatementDao;
+            _sysConfigDao = _daoManager.GetDao(typeof(ISystemConfigDao)) as ISystemConfigDao;
             _sysDictionary = _daoManager.GetDao(typeof(ISystemDictionaryDao)) as ISystemDictionaryDao;
+            _printTaskDao = _daoManager.GetDao(typeof(IPrintTaskDao)) as IPrintTaskDao;
         }
 
         #endregion
@@ -52,7 +57,7 @@ namespace Top4ever.Service
             _daoManager.BeginTransaction();
             try
             {
-                //日结
+                //日结号
                 string dailyStatementNo = _dailyStatementDao.GetCurrentDailyStatementNo();
                 if (!string.IsNullOrEmpty(dailyStatementNo))
                 {
@@ -73,7 +78,6 @@ namespace Top4ever.Service
                     order.TranSequence = _sysDictionary.GetCurrentTranSequence();
                     string orderNo = _orderDao.CreateOrder(order);
                     order.OrderNo = orderNo;
-
                     //菜单品项序号
                     int seqNumber = _orderDetailsDao.GetSequenceNum(order.OrderID);
                     foreach (OrderDetails item in salesOrder.orderDetailsList)
@@ -83,7 +87,6 @@ namespace Top4ever.Service
                         _orderDetailsDao.CreateOrderDetails(item);
                         seqNumber++;
                     }
-
                     //折扣信息
                     if (salesOrder.orderDiscountList != null && salesOrder.orderDiscountList.Count > 0)
                     {
@@ -92,6 +95,13 @@ namespace Top4ever.Service
                             item.DailyStatementNo = dailyStatementNo;
                             _orderDiscountDao.CreateOrderDiscount(item);
                         }
+                    }
+                    //添加打印任务
+                    SystemConfig systemConfig = _sysConfigDao.GetSystemConfigInfo();
+                    IList<PrintTask> printTaskList = PrintTaskService.GetInstance().GetPrintTaskList(salesOrder, systemConfig.PrintStyle, systemConfig.FollowStyle);
+                    foreach (PrintTask printTask in printTaskList)
+                    {
+                        _printTaskDao.InsertPrintTask(printTask);
                     }
                     returnValue = true;
                 }
@@ -108,33 +118,45 @@ namespace Top4ever.Service
         public bool UpdateSalesOrder(SalesOrder salesOrder)
         {
             bool returnValue = false;
-            _daoManager.OpenConnection();
-
-            Order order = salesOrder.order;
-            if (_orderDao.UpdateOrder(order))
-            {
-                //菜单品项序号
-                int seqNumber = _orderDetailsDao.GetSequenceNum(order.OrderID);
-                foreach (OrderDetails item in salesOrder.orderDetailsList)
-                {
-                    item.OrderBy = seqNumber;
-                    _orderDetailsDao.UpdateOrderDetails(item);
-                    seqNumber++;
-                }
-
-                //折扣信息
-                if (salesOrder.orderDiscountList != null && salesOrder.orderDiscountList.Count > 0)
-                {
-                    foreach (OrderDiscount item in salesOrder.orderDiscountList)
-                    {
-                        _orderDiscountDao.UpdateOrderDiscount(item);
-                    }
-                }
-                returnValue = true;
-            }
-
-            _daoManager.CloseConnection();
-            return returnValue;
+           _daoManager.BeginTransaction();
+           try
+           {
+               Order order = salesOrder.order;
+               if (_orderDao.UpdateOrder(order))
+               {
+                   //菜单品项序号
+                   int seqNumber = _orderDetailsDao.GetSequenceNum(order.OrderID);
+                   foreach (OrderDetails item in salesOrder.orderDetailsList)
+                   {
+                       item.OrderBy = seqNumber;
+                       _orderDetailsDao.UpdateOrderDetails(item);
+                       seqNumber++;
+                   }
+                   //折扣信息
+                   if (salesOrder.orderDiscountList != null && salesOrder.orderDiscountList.Count > 0)
+                   {
+                       foreach (OrderDiscount item in salesOrder.orderDiscountList)
+                       {
+                           _orderDiscountDao.UpdateOrderDiscount(item);
+                       }
+                   }
+                   //添加打印任务
+                   SystemConfig systemConfig = _sysConfigDao.GetSystemConfigInfo();
+                   IList<PrintTask> printTaskList = PrintTaskService.GetInstance().GetPrintTaskList(salesOrder, systemConfig.PrintStyle, systemConfig.FollowStyle);
+                   foreach (PrintTask printTask in printTaskList)
+                   {
+                       _printTaskDao.InsertPrintTask(printTask);
+                   }
+                   returnValue = true;
+               }
+               _daoManager.CommitTransaction();
+           }
+           catch
+           {
+               returnValue = false;
+               _daoManager.RollBackTransaction();
+           }
+           return returnValue;
         }
 
         public SalesOrder GetSalesOrder(Guid orderID)
