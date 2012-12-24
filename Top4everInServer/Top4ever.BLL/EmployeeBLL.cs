@@ -18,16 +18,11 @@ namespace Top4ever.BLL
             string userPassword = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.USER_NO, ParamFieldLength.USER_PWD).Trim('\0');
             
             //Employee
-            Employee employee = EmployeeService.GetInstance().GetEmployee(userName, userPassword);
-            if (employee == null || employee.RightsCodeList == null || employee.RightsCodeList.Count == 0)
+            Employee employee = null;
+            int result = EmployeeService.GetInstance().GetEmployee(userName, userPassword, out employee);
+            if (result == 1)
             {
-                //认证失败
-                objRet = new byte[ParamFieldLength.PACKAGE_HEAD];
-                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.ERROR_AUTHENTICATION), 0, objRet, 0, BasicTypeLength.INT32);
-                Array.Copy(BitConverter.GetBytes(ParamFieldLength.PACKAGE_HEAD), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
-            }
-            else
-            {
+                //获取成功
                 string json = JsonConvert.SerializeObject(employee);
                 byte[] jsonByte = Encoding.UTF8.GetBytes(json);
 
@@ -36,6 +31,20 @@ namespace Top4ever.BLL
                 Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
                 Array.Copy(BitConverter.GetBytes(transCount), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
                 Array.Copy(jsonByte, 0, objRet, 2 * BasicTypeLength.INT32, jsonByte.Length);
+            }
+            else if (result == 2)
+            {
+                //账号或者密码错误
+                objRet = new byte[ParamFieldLength.PACKAGE_HEAD];
+                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.ERROR_AUTHENTICATION), 0, objRet, 0, BasicTypeLength.INT32);
+                Array.Copy(BitConverter.GetBytes(ParamFieldLength.PACKAGE_HEAD), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            }
+            else
+            {
+                //数据库操作失败
+                objRet = new byte[ParamFieldLength.PACKAGE_HEAD];
+                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.ERROR_DB), 0, objRet, 0, BasicTypeLength.INT32);
+                Array.Copy(BitConverter.GetBytes(ParamFieldLength.PACKAGE_HEAD), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
             }
             return objRet;
         }

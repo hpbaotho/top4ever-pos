@@ -24,8 +24,9 @@ namespace Top4ever.Test
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Employee employee = EmployeeService.GetInstance().GetEmployee(this.textBox1.Text, this.textBox2.Text);
-            if (employee != null)
+            Employee employee = null;
+            int result = EmployeeService.GetInstance().GetEmployee(this.textBox1.Text, this.textBox2.Text, out employee);
+            if (result == 1)
             { 
                 
             }
