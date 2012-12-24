@@ -43,6 +43,7 @@
     <Compile Include="CopyExtension.cs" />
     <Compile Include="CutOffDecimal.cs" />
     <Compile Include="DEncrypt.cs" />
+    <Compile Include="MailService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XmlUtil.cs" />
   </ItemGroup>

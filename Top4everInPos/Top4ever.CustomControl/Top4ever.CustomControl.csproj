@@ -63,6 +63,11 @@
     <Compile Include="ExTabControl.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Properties\Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
     <Compile Include="ScrollingText.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -72,6 +77,24 @@
     <Compile Include="VistaButton.Designer.cs">
       <DependentUpon>VistaButton.cs</DependentUpon>
     </Compile>
+    <Compile Include="WaitingBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WaitingBox.designer.cs">
+      <DependentUpon>WaitingBox.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\waiting.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\_return.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

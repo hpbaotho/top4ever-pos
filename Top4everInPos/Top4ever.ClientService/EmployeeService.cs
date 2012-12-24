@@ -14,6 +14,9 @@ namespace Top4ever.ClientService
         public EmployeeService()
         { }
 
+        /// <summary>
+        /// 获取用户信息 0:数据库操作失败, 1:成功, 2:账号或者密码错误
+        /// </summary>
         public int EmployeeLogin(string userName, string userPassword, ref Employee employee)
         {
             int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.USER_NO + ParamFieldLength.USER_PWD;
@@ -34,21 +37,30 @@ namespace Top4ever.ClientService
             Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
             byteOffset += ParamFieldLength.USER_PWD;
 
-            Int32 operCode = 0;
+            int result = 0;
             employee = null;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
                 socket.Connect();
                 Byte[] receiveData = null;
-                operCode = socket.SendReceive(sendByte, out receiveData);
+                Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
                 {
                     string strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD, receiveData.Length - ParamFieldLength.PACKAGE_HEAD);
                     employee = JsonConvert.DeserializeObject<Employee>(strReceive);
+                    result = 1;
+                }
+                else if (operCode == (int)RET_VALUE.ERROR_AUTHENTICATION)
+                {
+                    result = 2;
+                }
+                else
+                {
+                    result = 0;
                 }
                 socket.Disconnect();
             }
-            return operCode;
+            return result;
         }
     }
 }
