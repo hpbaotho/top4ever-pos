@@ -38,19 +38,29 @@ namespace Top4ever.Service
             return _instance;
         }
 
-        public Employee GetEmployee(string login, string password)
+        /// <summary>
+        /// 获取用户信息 0:数据库操作失败, 1:成功, 2:账号或者密码错误
+        /// </summary>
+        public int GetEmployee(string login, string password, out Employee employee)
         {
-            Employee employee = null;
+            int result = 0;
 
             _daoManager.OpenConnection();
-            employee = _employeeDao.GetEmployee(login, password);
-            if (employee != null)
+            if (_employeeDao.GetEmployee(login, password, out employee))
             {
-                employee.RightsCodeList = _employeeDao.GetRightsCodeList(employee.EmployeeID);
+                if (employee == null)
+                {
+                    result = 2;
+                }
+                else
+                {
+                    employee.RightsCodeList = _employeeDao.GetRightsCodeList(employee.EmployeeID);
+                    result = 1;
+                }
             }
             _daoManager.CloseConnection();
 
-            return employee;
+            return result;
         }
 
         #endregion

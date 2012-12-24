@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using IBatisNet.Common.Logging;
+
 using Top4ever.Domain.Accounts;
 using Top4ever.Interface.Accounts;
 
@@ -11,24 +13,28 @@ namespace Top4ever.Persistence.Accounts
     /// </summary>
     public class EmployeeSqlMapDao : BaseSqlMapDao, IEmployeeDao
     {
+        private static readonly ILog logger = LogManager.GetLogger(typeof(EmployeeSqlMapDao));
+
         #region IEmployeeDao Members
 
-        public Employee GetEmployee(string login, string password)
+        public bool GetEmployee(string login, string password, out Employee employee)
         {
-            Employee employee = new Employee();
-            employee.EmployeeNo = login;
-            employee.Password = password;
-
-            Employee returnVal = null;
+            bool result = false;
+            Employee emp = new Employee();
+            emp.EmployeeNo = login;
+            emp.Password = password;
             try
             {
-                returnVal = ExecuteQueryForObject("GetEmployeeByLoginAndPassword", employee) as Employee;
+                employee = ExecuteQueryForObject("GetEmployeeByLoginAndPassword", emp) as Employee;
+                result = true;
             }
             catch(Exception ex)
             {
-                throw ex;
+                result = false;
+                employee = null;
+                logger.Error("Database operation failed !", ex);
             }
-            return returnVal;
+            return result;
         }
 
         public IList<String> GetRightsCodeList(Guid employeeID)
