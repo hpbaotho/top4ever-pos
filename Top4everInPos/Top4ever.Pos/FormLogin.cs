@@ -85,8 +85,8 @@ namespace Top4ever.Pos
 
             Employee employee = null;
             EmployeeService employeeService = new EmployeeService();
-            int operCode = employeeService.EmployeeLogin(this.txtName.Text.Trim(), this.txtPassword.Text.Trim(), ref employee);
-            if (operCode == (int)RET_VALUE.SUCCEEDED)
+            int result = employeeService.EmployeeLogin(this.txtName.Text.Trim(), this.txtPassword.Text.Trim(), ref employee);
+            if (result == 1)
             {
                 //保存静态池内
                 ConstantValuePool.CurrentEmployee = employee;
@@ -111,13 +111,28 @@ namespace Top4ever.Pos
                     loginCount++;
                     if (loginCount == MAX_LOGIN_COUNT)
                     {
+                        MessageBox.Show("超出登录次数限制，请重新运行系统！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         this.DialogResult = DialogResult.Cancel;
                     }
                     else
                     {
-                        MessageBox.Show("获取的数据为空，请重新操作！");
+                        MessageBox.Show("获取的数据为空，请重新操作！", "错误提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
+                }
+            }
+            else if (result == 2)
+            {
+                loginCount++;
+                if (loginCount == MAX_LOGIN_COUNT)
+                {
+                    MessageBox.Show("超出登录次数限制，请重新运行系统！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.DialogResult = DialogResult.Cancel;
+                }
+                else
+                {
+                    MessageBox.Show("您输入的用户名或者密码错误，请重新输入！", "错误提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
             }
             else
@@ -125,11 +140,12 @@ namespace Top4ever.Pos
                 loginCount++;
                 if (loginCount == MAX_LOGIN_COUNT)
                 {
+                    MessageBox.Show("超出登录次数限制，请重新运行系统！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.DialogResult = DialogResult.Cancel;
                 }
                 else
                 {
-                    MessageBox.Show("您输入的用户名或者密码错误，请重新输入！");
+                    MessageBox.Show("数据库操作失败，请重新输入！", "错误提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
             }

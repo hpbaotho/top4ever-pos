@@ -72,10 +72,12 @@
     <Compile Include="Transfer\DeletedSingleOrder.cs" />
     <Compile Include="Transfer\DeskChange.cs" />
     <Compile Include="Transfer\HandoverInfo.cs" />
+    <Compile Include="Transfer\ItemsPrice.cs" />
     <Compile Include="Transfer\OrderDiscountSum.cs" />
     <Compile Include="Transfer\OrderPayoffSum.cs" />
     <Compile Include="Transfer\PayingOrder.cs" />
     <Compile Include="Transfer\SalesOrder.cs" />
+    <Compile Include="Transfer\SalesPriceByDepart.cs" />
     <Compile Include="Transfer\SalesSplitOrder.cs" />
     <Compile Include="Transfer\SysBasicData.cs" />
   </ItemGroup>
