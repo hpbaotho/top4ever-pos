@@ -782,6 +782,21 @@ namespace Top4ever.Pos
                 }
                 else
                 {
+                    if (Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                    {
+                        for (int i = selectIndex + 1; i < dgvGoodsOrder.RowCount; i++)
+                        {
+                            int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[i].Cells["ItemType"].Value);
+                            if (itemType == (int)OrderItemType.Goods)
+                            {
+                                break;
+                            }
+                            else 
+                            {
+                                rowIndex++;
+                            }
+                        }
+                    }
                     dgvGoodsOrder.Rows.Insert(rowIndex, dgr);
                 }
                 //统计
@@ -1018,122 +1033,95 @@ namespace Top4ever.Pos
                 int selectIndex = dgvGoodsOrder.CurrentRow.Index;
                 if (dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value == null)
                 {
-                    int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value);
-                    if (itemType == (int)OrderItemType.Goods)   //goods change number
+                    decimal quantity = 0;
+                    CrystalButton btnNumber = sender as CrystalButton;
+                    if (string.IsNullOrEmpty(m_GoodsNum))
                     {
-                        CrystalButton btnNumber = sender as CrystalButton;
-                        Goods goods = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Goods;
-                        if (string.IsNullOrEmpty(m_GoodsNum))
+                        m_GoodsNum = btnNumber.Text;
+                        if (!decimal.TryParse(m_GoodsNum, out quantity))
                         {
-                            m_GoodsNum = btnNumber.Text;
-                            decimal originalGoodsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
-                            decimal originalGoodsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value);
-                            
-                            dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value = Convert.ToDecimal(m_GoodsNum);
-                            dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value = goods.SellPrice * Convert.ToDecimal(m_GoodsNum);
-                            if (Math.Abs(originalGoodsDiscount) > 0 && originalGoodsNum > 0)
-                            {
-                                dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value = originalGoodsDiscount / originalGoodsNum  * Convert.ToDecimal(m_GoodsNum);
-                            }
-                            //更新细项
-                            if (selectIndex < dgvGoodsOrder.Rows.Count - 1)
-                            {
-                                for (int index = selectIndex + 1; index < dgvGoodsOrder.Rows.Count; index++)
-                                {
-                                    if (Convert.ToInt32(dgvGoodsOrder.Rows[index].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
-                                    {
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        decimal originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value);
-                                        decimal originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value);
-                                        dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = Convert.ToDecimal(m_GoodsNum);
-                                        if (Math.Abs(originalDetailsDiscount) > 0 && originalDetailsNum > 0)
-                                        {
-                                            dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = originalDetailsDiscount / originalDetailsNum * Convert.ToDecimal(m_GoodsNum);
-                                        }
-                                        object item = dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag;
-                                        if (item is Goods)
-                                        {
-                                            Goods subGoods = item as Goods;
-                                            dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = subGoods.SellPrice * Convert.ToDecimal(m_GoodsNum);
-                                        }
-                                        if (item is Details)
-                                        {
-                                            Details details = item as Details;
-                                            dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = details.SellPrice * Convert.ToDecimal(m_GoodsNum);
-                                        }
-                                    }
-                                }
-                            }
+                            MessageBox.Show("输入数量格式不正确！", "错误信息", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        if (m_GoodsNum.IndexOf('.') > 0)
+                        {
+                            m_GoodsNum += btnNumber.Text;
                         }
                         else
                         {
-                            if (m_GoodsNum.IndexOf('.') > 0)
+                            m_GoodsNum = btnNumber.Text;
+                        }
+                        if (!decimal.TryParse(m_GoodsNum, out quantity))
+                        {
+                            MessageBox.Show("输入数量格式不正确！", "错误信息", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        //初始化
+                        m_GoodsNum = string.Empty;
+                    }
+                    int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value);
+                    if (itemType == (int)OrderItemType.Goods)
+                    {
+                        Goods goods = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Goods;
+                        decimal originalGoodsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
+                        decimal originalGoodsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value);
+                        dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value = quantity;
+                        dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value = goods.SellPrice * quantity;
+                        if (Math.Abs(originalGoodsDiscount) > 0 && originalGoodsNum > 0)
+                        {
+                            dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value = originalGoodsDiscount / originalGoodsNum * quantity;
+                        }
+                        //更新细项
+                        if (selectIndex < dgvGoodsOrder.Rows.Count - 1)
+                        {
+                            for (int index = selectIndex + 1; index < dgvGoodsOrder.Rows.Count; index++)
                             {
-                                m_GoodsNum += btnNumber.Text;
-                            }
-                            else
-                            {
-                                m_GoodsNum = btnNumber.Text;
-                            }
-                            decimal quantity = 0;
-                            if (decimal.TryParse(m_GoodsNum, out quantity))
-                            {
-                                decimal originalGoodsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
-                                decimal originalGoodsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value);
-                                dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value = quantity;
-                                dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value = goods.SellPrice * quantity;
-                                if (Math.Abs(originalGoodsDiscount) > 0 && quantity > 0)
+                                if (Convert.ToInt32(dgvGoodsOrder.Rows[index].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
                                 {
-                                    dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value = originalGoodsDiscount / originalGoodsNum * Convert.ToDecimal(m_GoodsNum);
+                                    break;
                                 }
-                                //更新细项
-                                if (selectIndex < dgvGoodsOrder.Rows.Count - 1)
+                                else
                                 {
-                                    for (int index = selectIndex + 1; index < dgvGoodsOrder.Rows.Count; index++)
+                                    decimal originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value);
+                                    decimal originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value);
+                                    decimal currentQty = originalDetailsNum / originalGoodsNum * quantity;
+                                    dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = currentQty;
+                                    if (Math.Abs(originalDetailsDiscount) > 0 && originalDetailsNum > 0)
                                     {
-                                        if (Convert.ToInt32(dgvGoodsOrder.Rows[index].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
-                                        {
-                                            break;
-                                        }
-                                        else
-                                        {
-                                            decimal originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value);
-                                            decimal originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value);
-                                            dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = Convert.ToDecimal(m_GoodsNum);
-                                            if (Math.Abs(originalDetailsDiscount) > 0 && originalDetailsNum > 0)
-                                            {
-                                                dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = originalDetailsDiscount / originalDetailsNum * Convert.ToDecimal(m_GoodsNum);
-                                            }
-                                            object item = dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag;
-                                            if (item is Goods)
-                                            {
-                                                Goods subGoods = item as Goods;
-                                                dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = subGoods.SellPrice * Convert.ToDecimal(m_GoodsNum);
-                                            }
-                                            if (item is Details)
-                                            {
-                                                Details details = item as Details;
-                                                dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = details.SellPrice * Convert.ToDecimal(m_GoodsNum);
-                                            }
-                                        }
+                                        dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = originalDetailsDiscount / originalDetailsNum * currentQty;
+                                    }
+                                    object item = dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag;
+                                    if (item is Goods)
+                                    {
+                                        Goods subGoods = item as Goods;
+                                        dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = subGoods.SellPrice * currentQty;
+                                    }
+                                    if (item is Details)
+                                    {
+                                        Details details = item as Details;
+                                        dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = details.SellPrice * currentQty;
                                     }
                                 }
                             }
-                            else
-                            {
-                                dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value = 0;
-                                dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value = 0;
-                                dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value = 0;
-                            }
-                            //初始化
-                            m_GoodsNum = string.Empty;
                         }
-                        //统计
-                        BindOrderInfoSum();
                     }
+                    if (itemType == (int)OrderItemType.Details)
+                    {
+                        Details details = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Details;
+                        decimal originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
+                        decimal originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value);
+                        dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value = quantity;
+                        dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value = details.SellPrice * quantity;
+                        if (Math.Abs(originalDetailsDiscount) > 0 && originalDetailsNum > 0)
+                        {
+                            dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value = originalDetailsDiscount / originalDetailsNum * quantity;
+                        }
+                    }
+                    //统计
+                    BindOrderInfoSum();
                 }
             }
         }
@@ -1144,7 +1132,7 @@ namespace Top4ever.Pos
             if (dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value == null)
             {
                 int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value);
-                if (itemType == (int)OrderItemType.Goods)   //goods change number
+                if (itemType == (int)OrderItemType.Goods || itemType == (int)OrderItemType.Details)
                 {
                     if (string.IsNullOrEmpty(m_GoodsNum))
                     {
@@ -1160,6 +1148,84 @@ namespace Top4ever.Pos
                         {
                             m_GoodsNum += ".";
                         }
+                    }
+                }
+            }
+        }
+
+        private void btnManual_Click(object sender, EventArgs e)
+        {
+            Feature.FormNumericKeypad keyForm = new Feature.FormNumericKeypad();
+            keyForm.DisplayText = "请输入品项数量";
+            keyForm.ShowDialog();
+            decimal quantity = 0;
+            if (!string.IsNullOrEmpty(keyForm.KeypadValue) && decimal.TryParse(keyForm.KeypadValue, out quantity))
+            {
+                if (dgvGoodsOrder.CurrentRow != null)
+                {
+                    int selectIndex = dgvGoodsOrder.CurrentRow.Index;
+                    if (dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value == null)
+                    {
+                        int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value);
+                        if (itemType == (int)OrderItemType.Goods)
+                        {
+                            Goods goods = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Goods;
+                            decimal originalGoodsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
+                            decimal originalGoodsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value);
+                            dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value = quantity;
+                            dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value = goods.SellPrice * quantity;
+                            if (Math.Abs(originalGoodsDiscount) > 0 && originalGoodsNum > 0)
+                            {
+                                dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value = originalGoodsDiscount / originalGoodsNum * quantity;
+                            }
+                            //更新细项
+                            if (selectIndex < dgvGoodsOrder.Rows.Count - 1)
+                            {
+                                for (int index = selectIndex + 1; index < dgvGoodsOrder.Rows.Count; index++)
+                                {
+                                    if (Convert.ToInt32(dgvGoodsOrder.Rows[index].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        decimal originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value);
+                                        decimal originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value);
+                                        decimal currentQty = originalDetailsNum / originalGoodsNum * quantity;
+                                        dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = currentQty;
+                                        if (Math.Abs(originalDetailsDiscount) > 0 && originalDetailsNum > 0)
+                                        {
+                                            dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = originalDetailsDiscount / originalDetailsNum * currentQty;
+                                        }
+                                        object item = dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag;
+                                        if (item is Goods)
+                                        {
+                                            Goods subGoods = item as Goods;
+                                            dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = subGoods.SellPrice * currentQty;
+                                        }
+                                        if (item is Details)
+                                        {
+                                            Details details = item as Details;
+                                            dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = details.SellPrice * currentQty;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (itemType == (int)OrderItemType.Details)
+                        {
+                            Details details = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Details;
+                            decimal originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
+                            decimal originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value);
+                            dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value = quantity;
+                            dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value = details.SellPrice * quantity;
+                            if (Math.Abs(originalDetailsDiscount) > 0 && originalDetailsNum > 0)
+                            {
+                                dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value = originalDetailsDiscount / originalDetailsNum * quantity;
+                            }
+                        }
+                        //统计
+                        BindOrderInfoSum();
                     }
                 }
             }

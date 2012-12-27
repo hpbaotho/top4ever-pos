@@ -60,7 +60,7 @@
             this.pnlToolBar = new System.Windows.Forms.Panel();
             this.btnCancel = new Top4ever.CustomControl.CrystalButton();
             this.btnDot = new Top4ever.CustomControl.CrystalButton();
-            this.btnZero = new Top4ever.CustomControl.CrystalButton();
+            this.btnManual = new Top4ever.CustomControl.CrystalButton();
             this.btnAdd9 = new Top4ever.CustomControl.CrystalButton();
             this.btnAdd8 = new Top4ever.CustomControl.CrystalButton();
             this.btnAdd7 = new Top4ever.CustomControl.CrystalButton();
@@ -90,6 +90,8 @@
             this.btnReminder = new Top4ever.CustomControl.CrystalButton();
             this.btnPriceCode = new Top4ever.CustomControl.CrystalButton();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.btnDailyStatement = new Top4ever.CustomControl.CrystalButton();
+            this.btnHandover = new Top4ever.CustomControl.CrystalButton();
             this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.pnlBasicInfo = new System.Windows.Forms.Panel();
             this.btnPersonNum = new Top4ever.CustomControl.CrystalButton();
@@ -105,8 +107,6 @@
             this.txtServiceTime = new System.Windows.Forms.TextBox();
             this.txtDeviceNo = new System.Windows.Forms.TextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.btnHandover = new Top4ever.CustomControl.CrystalButton();
-            this.btnDailyStatement = new Top4ever.CustomControl.CrystalButton();
             this.pnlContainer.SuspendLayout();
             this.pnlRight.SuspendLayout();
             this.pnlItem.SuspendLayout();
@@ -384,7 +384,7 @@
             // 
             this.pnlToolBar.Controls.Add(this.btnCancel);
             this.pnlToolBar.Controls.Add(this.btnDot);
-            this.pnlToolBar.Controls.Add(this.btnZero);
+            this.pnlToolBar.Controls.Add(this.btnManual);
             this.pnlToolBar.Controls.Add(this.btnAdd9);
             this.pnlToolBar.Controls.Add(this.btnAdd8);
             this.pnlToolBar.Controls.Add(this.btnAdd7);
@@ -419,7 +419,7 @@
             this.btnDot.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnDot.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
             this.btnDot.ForeColor = System.Drawing.Color.White;
-            this.btnDot.Location = new System.Drawing.Point(322, 204);
+            this.btnDot.Location = new System.Drawing.Point(387, 204);
             this.btnDot.Name = "btnDot";
             this.btnDot.Size = new System.Drawing.Size(62, 67);
             this.btnDot.TabIndex = 33;
@@ -427,18 +427,18 @@
             this.btnDot.UseVisualStyleBackColor = false;
             this.btnDot.Click += new System.EventHandler(this.btnDot_Click);
             // 
-            // btnZero
+            // btnManual
             // 
-            this.btnZero.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.btnZero.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
-            this.btnZero.ForeColor = System.Drawing.Color.White;
-            this.btnZero.Location = new System.Drawing.Point(387, 204);
-            this.btnZero.Name = "btnZero";
-            this.btnZero.Size = new System.Drawing.Size(62, 67);
-            this.btnZero.TabIndex = 32;
-            this.btnZero.Text = "0";
-            this.btnZero.UseVisualStyleBackColor = false;
-            this.btnZero.Click += new System.EventHandler(this.btnAddNumber_Click);
+            this.btnManual.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.btnManual.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
+            this.btnManual.ForeColor = System.Drawing.Color.White;
+            this.btnManual.Location = new System.Drawing.Point(322, 204);
+            this.btnManual.Name = "btnManual";
+            this.btnManual.Size = new System.Drawing.Size(62, 67);
+            this.btnManual.TabIndex = 32;
+            this.btnManual.Text = "手动";
+            this.btnManual.UseVisualStyleBackColor = false;
+            this.btnManual.Click += new System.EventHandler(this.btnManual_Click);
             // 
             // btnAdd9
             // 
@@ -831,6 +831,32 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "维护";
             // 
+            // btnDailyStatement
+            // 
+            this.btnDailyStatement.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.btnDailyStatement.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDailyStatement.ForeColor = System.Drawing.Color.White;
+            this.btnDailyStatement.Location = new System.Drawing.Point(91, 2);
+            this.btnDailyStatement.Name = "btnDailyStatement";
+            this.btnDailyStatement.Size = new System.Drawing.Size(82, 85);
+            this.btnDailyStatement.TabIndex = 2;
+            this.btnDailyStatement.Text = "日结";
+            this.btnDailyStatement.UseVisualStyleBackColor = false;
+            this.btnDailyStatement.Click += new System.EventHandler(this.btnDailyStatement_Click);
+            // 
+            // btnHandover
+            // 
+            this.btnHandover.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.btnHandover.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnHandover.ForeColor = System.Drawing.Color.White;
+            this.btnHandover.Location = new System.Drawing.Point(5, 2);
+            this.btnHandover.Name = "btnHandover";
+            this.btnHandover.Size = new System.Drawing.Size(82, 85);
+            this.btnHandover.TabIndex = 2;
+            this.btnHandover.Text = "交班";
+            this.btnHandover.UseVisualStyleBackColor = false;
+            this.btnHandover.Click += new System.EventHandler(this.btnHandover_Click);
+            // 
             // imageList
             // 
             this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
@@ -989,32 +1015,6 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // btnHandover
-            // 
-            this.btnHandover.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.btnHandover.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnHandover.ForeColor = System.Drawing.Color.White;
-            this.btnHandover.Location = new System.Drawing.Point(5, 2);
-            this.btnHandover.Name = "btnHandover";
-            this.btnHandover.Size = new System.Drawing.Size(82, 85);
-            this.btnHandover.TabIndex = 2;
-            this.btnHandover.Text = "交班";
-            this.btnHandover.UseVisualStyleBackColor = false;
-            this.btnHandover.Click += new System.EventHandler(this.btnHandover_Click);
-            // 
-            // btnDailyStatement
-            // 
-            this.btnDailyStatement.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.btnDailyStatement.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDailyStatement.ForeColor = System.Drawing.Color.White;
-            this.btnDailyStatement.Location = new System.Drawing.Point(91, 2);
-            this.btnDailyStatement.Name = "btnDailyStatement";
-            this.btnDailyStatement.Size = new System.Drawing.Size(82, 85);
-            this.btnDailyStatement.TabIndex = 2;
-            this.btnDailyStatement.Text = "日结";
-            this.btnDailyStatement.UseVisualStyleBackColor = false;
-            this.btnDailyStatement.Click += new System.EventHandler(this.btnDailyStatement_Click);
-            // 
             // FormOrder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
@@ -1080,7 +1080,7 @@
         private System.Windows.Forms.DataGridView dgvGoodsOrder;
         private CustomControl.CrystalButton btnCancel;
         private CustomControl.CrystalButton btnDot;
-        private CustomControl.CrystalButton btnZero;
+        private CustomControl.CrystalButton btnManual;
         private CustomControl.CrystalButton btnAdd9;
         private CustomControl.CrystalButton btnAdd8;
         private CustomControl.CrystalButton btnAdd7;
