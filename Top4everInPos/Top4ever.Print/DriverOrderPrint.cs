@@ -178,6 +178,7 @@ namespace Top4ever.Print
             }
             //处理每一项
             float maxHeight = 0f;
+            float px = MarginLeft;
             foreach (string str in itemArr)
             {
                 if (str.Contains("Line"))
@@ -241,37 +242,47 @@ namespace Top4ever.Print
                             Brush brush = new SolidBrush(color);
                             string itemName = item.ValuePrefix + GetPropertyValue(printData, item.Name).ToString();
                             SizeF size = m_Graphics.MeasureString(itemName, font);//测量字体的大小
-                            if (size.Height > maxHeight)
+                            float itemWidth = 0f;
+                            if (item.Width.IndexOf('%') > 0)
                             {
-                                maxHeight = size.Height;
-                            }
-                            if (item.Align == "Left")
-                            {
-                                float px = MarginLeft;
-                                m_Graphics.DrawString(itemName, font, brush, px, PY);
-                            }
-                            else if (item.Align == "Center")
-                            {
-                                float px = (m_PageBounds.Width - size.Width) / 2;
-                                m_Graphics.DrawString(itemName, font, brush, px, PY);
-                            }
-                            else if (item.Align == "Right")
-                            {
-                                float px = m_PageBounds.Width - size.Width - MarginLeft;
-                                m_Graphics.DrawString(itemName, font, brush, px, PY);
-                            }
-                            else if (item.Align.IndexOf('%') > 0)
-                            {
-                                string strAlign = item.Align.Trim();
-                                string number = strAlign.Substring(0, strAlign.Length - 1);
-                                float px = MarginLeft + float.Parse(number) / 100 * (m_PageBounds.Width - 2 * MarginLeft);
-                                m_Graphics.DrawString(itemName, font, brush, px, PY);
+                                string strWidth = item.Width.Trim();
+                                string number = strWidth.Substring(0, strWidth.Length - 1);
+                                itemWidth = float.Parse(number) / 100 * (m_PageBounds.Width - 2 * MarginLeft);
                             }
                             else
                             {
-                                float px = MarginLeft + float.Parse(item.Align.Trim());
-                                m_Graphics.DrawString(itemName, font, brush, px, PY);
+                                itemWidth = float.Parse(item.Width.Trim());
                             }
+                            float itemHeight = 0f;
+                            if (size.Width > itemWidth)
+                            {
+                                itemHeight = (float)Math.Ceiling(Convert.ToDecimal(size.Width) / Convert.ToDecimal(itemWidth)) * size.Height;
+                            }
+                            else
+                            {
+                                itemHeight = size.Height;
+                            }
+                            if (itemHeight > maxHeight)
+                            {
+                                maxHeight = itemHeight;
+                            }
+                            RectangleF drawRect = new RectangleF(px, PY, itemWidth, itemHeight);
+                             StringFormat sf = new StringFormat();
+                             sf.LineAlignment = StringAlignment.Center;
+                            if (item.Align == "Left")
+                            {
+                                sf.Alignment = StringAlignment.Near;
+                            }
+                            else if (item.Align == "Center")
+                            {
+                                sf.Alignment = StringAlignment.Center;
+                            }
+                            else if (item.Align == "Right")
+                            {
+                                sf.Alignment = StringAlignment.Far;
+                            }
+                            m_Graphics.DrawString(itemName, font, brush, drawRect, sf);
+                            px += itemWidth;
                             break;
                         }
                     }
@@ -308,6 +319,7 @@ namespace Top4ever.Print
                         //columnHead
                         foreach (List<string> propertyList in propertyArrList)
                         {
+                            float px = MarginLeft;
                             foreach (string property in propertyList)
                             {
                                 foreach (PrintColumnHead columnHead in item.PrintColumnHeads.ColumnHeadList)
@@ -319,37 +331,47 @@ namespace Top4ever.Print
                                         Brush brush = new SolidBrush(color);
                                         string itemName = columnHead.Text;
                                         SizeF size = m_Graphics.MeasureString(itemName, font);//测量字体的大小
-                                        if (size.Height > maxHeight)
+                                        float itemWidth = 0f;
+                                        if (columnHead.Width.IndexOf('%') > 0)
                                         {
-                                            maxHeight = size.Height;
-                                        }
-                                        if (columnHead.Align == "Left")
-                                        {
-                                            float px = MarginLeft;
-                                            m_Graphics.DrawString(itemName, font, brush, px, PY);
-                                        }
-                                        else if (columnHead.Align == "Center")
-                                        {
-                                            float px = (m_PageBounds.Width - size.Width) / 2;
-                                            m_Graphics.DrawString(itemName, font, brush, px, PY);
-                                        }
-                                        else if (columnHead.Align == "Right")
-                                        {
-                                            float px = m_PageBounds.Width - size.Width - MarginLeft;
-                                            m_Graphics.DrawString(itemName, font, brush, px, PY);
-                                        }
-                                        else if (columnHead.Align.IndexOf('%') > 0)
-                                        {
-                                            string strAlign = columnHead.Align.Trim();
-                                            string number = strAlign.Substring(0, strAlign.Length - 1);
-                                            float px = MarginLeft + float.Parse(number) / 100 * (m_PageBounds.Width - 2 * MarginLeft);
-                                            m_Graphics.DrawString(itemName, font, brush, px, PY);
+                                            string strWidth = columnHead.Width.Trim();
+                                            string number = strWidth.Substring(0, strWidth.Length - 1);
+                                            itemWidth = float.Parse(number) / 100 * (m_PageBounds.Width - 2 * MarginLeft);
                                         }
                                         else
                                         {
-                                            float px = MarginLeft + float.Parse(columnHead.Align.Trim());
-                                            m_Graphics.DrawString(itemName, font, brush, px, PY);
+                                            itemWidth = float.Parse(columnHead.Width.Trim());
                                         }
+                                        float itemHeight = 0f;
+                                        if (size.Width > itemWidth)
+                                        {
+                                            itemHeight = (float)Math.Ceiling(Convert.ToDecimal(size.Width) / Convert.ToDecimal(itemWidth)) * size.Height;
+                                        }
+                                        else
+                                        {
+                                            itemHeight = size.Height;
+                                        }
+                                        if (itemHeight > maxHeight)
+                                        {
+                                            maxHeight = itemHeight;
+                                        }
+                                        RectangleF drawRect = new RectangleF(px, PY, itemWidth, itemHeight);
+                                        StringFormat sf = new StringFormat();
+                                        sf.LineAlignment = StringAlignment.Center;
+                                        if (columnHead.Align == "Left")
+                                        {
+                                            sf.Alignment = StringAlignment.Near;
+                                        }
+                                        else if (columnHead.Align == "Center")
+                                        {
+                                            sf.Alignment = StringAlignment.Center;
+                                        }
+                                        else if (columnHead.Align == "Right")
+                                        {
+                                            sf.Alignment = StringAlignment.Far;
+                                        }
+                                        m_Graphics.DrawString(itemName, font, brush, drawRect, sf);
+                                        px += itemWidth;
                                         break;
                                     }
                                 }
@@ -362,6 +384,7 @@ namespace Top4ever.Print
                             maxHeight = 0f;
                             foreach (List<string> propertyList in propertyArrList)
                             {
+                                float px = MarginLeft;
                                 foreach (string property in propertyList)
                                 {
                                     string itemValue = GetPropertyValue(goodsItem, property).ToString();
@@ -373,41 +396,47 @@ namespace Top4ever.Print
                                             Brush brush = new SolidBrush(color);
                                             Font font = new Font(column.Font.FontName, column.Font.FontSize, column.Font.FontStyle);
                                             SizeF size = m_Graphics.MeasureString(itemValue, font);//测量字体的大小
-                                            if (size.Height > maxHeight)
+                                            float itemWidth = 0f;
+                                            if (column.Width.IndexOf('%') > 0)
                                             {
-                                                maxHeight = size.Height;
-                                            }
-                                            if (column.Align == "Left")
-                                            {
-                                                float px = MarginLeft;
-                                                m_Graphics.DrawString(itemValue, font, brush, px, PY);
-                                            }
-                                            else if (column.Align == "Center")
-                                            {
-                                                float px = (m_PageBounds.Width - size.Width) / 2;
-                                                m_Graphics.DrawString(itemValue, font, brush, px, PY);
-                                            }
-                                            else if (column.Align == "Right")
-                                            {
-                                                float px = m_PageBounds.Width - size.Width - MarginLeft;
-                                                m_Graphics.DrawString(itemValue, font, brush, px, PY);
-                                            }
-                                            else if (column.Align.IndexOf('%') > 0)
-                                            {
-                                                string strAlign = column.Align.Trim();
-                                                string number = strAlign.Substring(0, strAlign.Length - 1);
-                                                float px = MarginLeft + float.Parse(number) / 100 * (m_PageBounds.Width - 2 * MarginLeft);
-                                                if (column.IsRight)
-                                                {
-                                                    px -= size.Width;
-                                                }
-                                                m_Graphics.DrawString(itemValue, font, brush, px, PY);
+                                                string strWidth = column.Width.Trim();
+                                                string number = strWidth.Substring(0, strWidth.Length - 1);
+                                                itemWidth = float.Parse(number) / 100 * (m_PageBounds.Width - 2 * MarginLeft);
                                             }
                                             else
                                             {
-                                                float px = MarginLeft + float.Parse(column.Align.Trim());
-                                                m_Graphics.DrawString(itemValue, font, brush, px, PY);
+                                                itemWidth = float.Parse(column.Width.Trim());
                                             }
+                                            float itemHeight = 0f;
+                                            if (size.Width > itemWidth)
+                                            {
+                                                itemHeight = (float)Math.Ceiling(Convert.ToDecimal(size.Width) / Convert.ToDecimal(itemWidth)) * size.Height;
+                                            }
+                                            else
+                                            {
+                                                itemHeight = size.Height;
+                                            }
+                                            if (itemHeight > maxHeight)
+                                            {
+                                                maxHeight = itemHeight;
+                                            }
+                                            RectangleF drawRect = new RectangleF(px, PY, itemWidth, itemHeight);
+                                            StringFormat sf = new StringFormat();
+                                            sf.LineAlignment = StringAlignment.Center;
+                                            if (column.Align == "Left")
+                                            {
+                                                sf.Alignment = StringAlignment.Near;
+                                            }
+                                            else if (column.Align == "Center")
+                                            {
+                                                sf.Alignment = StringAlignment.Center;
+                                            }
+                                            else if (column.Align == "Right")
+                                            {
+                                                sf.Alignment = StringAlignment.Far;
+                                            }
+                                            m_Graphics.DrawString(itemValue, font, brush, drawRect, sf);
+                                            px += itemWidth;
                                             break;
                                         }
                                     }
@@ -429,6 +458,7 @@ namespace Top4ever.Print
                         //columnHead
                         foreach (List<string> propertyList in propertyArrList)
                         {
+                            float px = MarginLeft;
                             foreach (string property in propertyList)
                             {
                                 foreach (PrintColumnHead columnHead in item.PrintColumnHeads.ColumnHeadList)
@@ -440,37 +470,47 @@ namespace Top4ever.Print
                                         Brush brush = new SolidBrush(color);
                                         string itemName = columnHead.Text;
                                         SizeF size = m_Graphics.MeasureString(itemName, font);//测量字体的大小
-                                        if (size.Height > maxHeight)
+                                        float itemWidth = 0f;
+                                        if (columnHead.Width.IndexOf('%') > 0)
                                         {
-                                            maxHeight = size.Height;
-                                        }
-                                        if (columnHead.Align == "Left")
-                                        {
-                                            float px = MarginLeft;
-                                            m_Graphics.DrawString(itemName, font, brush, px, PY);
-                                        }
-                                        else if (columnHead.Align == "Center")
-                                        {
-                                            float px = (m_PageBounds.Width - size.Width) / 2;
-                                            m_Graphics.DrawString(itemName, font, brush, px, PY);
-                                        }
-                                        else if (columnHead.Align == "Right")
-                                        {
-                                            float px = m_PageBounds.Width - size.Width - MarginLeft;
-                                            m_Graphics.DrawString(itemName, font, brush, px, PY);
-                                        }
-                                        else if (columnHead.Align.IndexOf('%') > 0)
-                                        {
-                                            string strAlign = columnHead.Align.Trim();
-                                            string number = strAlign.Substring(0, strAlign.Length - 1);
-                                            float px = MarginLeft + float.Parse(number) / 100 * (m_PageBounds.Width - 2 * MarginLeft);
-                                            m_Graphics.DrawString(itemName, font, brush, px, PY);
+                                            string strWidth = columnHead.Width.Trim();
+                                            string number = strWidth.Substring(0, strWidth.Length - 1);
+                                            itemWidth = float.Parse(number) / 100 * (m_PageBounds.Width - 2 * MarginLeft);
                                         }
                                         else
                                         {
-                                            float px = MarginLeft + float.Parse(columnHead.Align.Trim());
-                                            m_Graphics.DrawString(itemName, font, brush, px, PY);
+                                            itemWidth = float.Parse(columnHead.Width.Trim());
                                         }
+                                        float itemHeight = 0f;
+                                        if (size.Width > itemWidth)
+                                        {
+                                            itemHeight = (float)Math.Ceiling(Convert.ToDecimal(size.Width) / Convert.ToDecimal(itemWidth)) * size.Height;
+                                        }
+                                        else
+                                        {
+                                            itemHeight = size.Height;
+                                        }
+                                        if (itemHeight > maxHeight)
+                                        {
+                                            maxHeight = itemHeight;
+                                        }
+                                        RectangleF drawRect = new RectangleF(px, PY, itemWidth, itemHeight);
+                                        StringFormat sf = new StringFormat();
+                                        sf.LineAlignment = StringAlignment.Center;
+                                        if (columnHead.Align == "Left")
+                                        {
+                                            sf.Alignment = StringAlignment.Near;
+                                        }
+                                        else if (columnHead.Align == "Center")
+                                        {
+                                            sf.Alignment = StringAlignment.Center;
+                                        }
+                                        else if (columnHead.Align == "Right")
+                                        {
+                                            sf.Alignment = StringAlignment.Far;
+                                        }
+                                        m_Graphics.DrawString(itemName, font, brush, drawRect, sf);
+                                        px += itemWidth;
                                         break;
                                     }
                                 }
@@ -483,6 +523,7 @@ namespace Top4ever.Print
                             maxHeight = 0f;
                             foreach (List<string> propertyList in propertyArrList)
                             {
+                                float px = MarginLeft;
                                 foreach (string property in propertyList)
                                 {
                                     string itemValue = GetPropertyValue(payingOrder, property).ToString();
@@ -494,41 +535,47 @@ namespace Top4ever.Print
                                             Brush brush = new SolidBrush(color);
                                             Font font = new Font(column.Font.FontName, column.Font.FontSize, column.Font.FontStyle);
                                             SizeF size = m_Graphics.MeasureString(itemValue, font);//测量字体的大小
-                                            if (size.Height > maxHeight)
+                                            float itemWidth = 0f;
+                                            if (column.Width.IndexOf('%') > 0)
                                             {
-                                                maxHeight = size.Height;
-                                            }
-                                            if (column.Align == "Left")
-                                            {
-                                                float px = MarginLeft;
-                                                m_Graphics.DrawString(itemValue, font, brush, px, PY);
-                                            }
-                                            else if (column.Align == "Center")
-                                            {
-                                                float px = (m_PageBounds.Width - size.Width) / 2;
-                                                m_Graphics.DrawString(itemValue, font, brush, px, PY);
-                                            }
-                                            else if (column.Align == "Right")
-                                            {
-                                                float px = m_PageBounds.Width - size.Width - MarginLeft;
-                                                m_Graphics.DrawString(itemValue, font, brush, px, PY);
-                                            }
-                                            else if (column.Align.IndexOf('%') > 0)
-                                            {
-                                                string strAlign = column.Align.Trim();
-                                                string number = strAlign.Substring(0, strAlign.Length - 1);
-                                                float px = MarginLeft + float.Parse(number) / 100 * (m_PageBounds.Width - 2 * MarginLeft);
-                                                if (column.IsRight)
-                                                {
-                                                    px -= size.Width;
-                                                }
-                                                m_Graphics.DrawString(itemValue, font, brush, px, PY);
+                                                string strWidth = column.Width.Trim();
+                                                string number = strWidth.Substring(0, strWidth.Length - 1);
+                                                itemWidth = float.Parse(number) / 100 * (m_PageBounds.Width - 2 * MarginLeft);
                                             }
                                             else
                                             {
-                                                float px = MarginLeft + float.Parse(column.Align.Trim());
-                                                m_Graphics.DrawString(itemValue, font, brush, px, PY);
+                                                itemWidth = float.Parse(column.Width.Trim());
                                             }
+                                            float itemHeight = 0f;
+                                            if (size.Width > itemWidth)
+                                            {
+                                                itemHeight = (float)Math.Ceiling(Convert.ToDecimal(size.Width) / Convert.ToDecimal(itemWidth)) * size.Height;
+                                            }
+                                            else
+                                            {
+                                                itemHeight = size.Height;
+                                            }
+                                            if (itemHeight > maxHeight)
+                                            {
+                                                maxHeight = itemHeight;
+                                            }
+                                            RectangleF drawRect = new RectangleF(px, PY, itemWidth, itemHeight);
+                                            StringFormat sf = new StringFormat();
+                                            sf.LineAlignment = StringAlignment.Center;
+                                            if (column.Align == "Left")
+                                            {
+                                                sf.Alignment = StringAlignment.Near;
+                                            }
+                                            else if (column.Align == "Center")
+                                            {
+                                                sf.Alignment = StringAlignment.Center;
+                                            }
+                                            else if (column.Align == "Right")
+                                            {
+                                                sf.Alignment = StringAlignment.Far;
+                                            }
+                                            m_Graphics.DrawString(itemValue, font, brush, drawRect, sf);
+                                            px += itemWidth;
                                             break;
                                         }
                                     }

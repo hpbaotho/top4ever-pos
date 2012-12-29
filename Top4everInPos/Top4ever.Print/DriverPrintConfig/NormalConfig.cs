@@ -24,8 +24,16 @@ namespace Top4ever.Print.DriverPrintConfig
             set { _prefix = value; }
         }
 
+        private string _width;
+        [XmlAttribute("Width")]
+        public string Width
+        {
+            get { return _width; }
+            set { _width = value; }
+        }
+
         /// <summary>
-        /// Left Middle Right; x%; xx
+        /// Left Center Right;
         /// </summary>
         private string _align;
         [XmlAttribute("Align")]
