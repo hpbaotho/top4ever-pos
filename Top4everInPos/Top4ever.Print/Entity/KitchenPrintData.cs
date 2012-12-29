@@ -14,7 +14,11 @@ namespace Top4ever.Print.Entity
         /// </summary>
         public string OrderNo { get; set; }
         /// <summary>
-        /// Eat类型名称
+        /// 业务类型 (店用,外带,外送)
+        /// </summary>
+        public int EatType { get; set; }
+        /// <summary>
+        /// 业务类型名称
         /// </summary>
         public string EatTypeName { get; set; }
         /// <summary>

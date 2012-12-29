@@ -17,8 +17,16 @@ namespace Top4ever.Print.DriverPrintConfig
             set { _name = value; }
         }
 
+        private string _width;
+        [XmlAttribute("Width")]
+        public string Width
+        {
+            get { return _width; }
+            set { _width = value; }
+        }
+
         /// <summary>
-        /// Left Middle Right; x%; xx
+        /// Left Center Right;
         /// </summary>
         private string _align;
         [XmlAttribute("Align")]
@@ -26,17 +34,6 @@ namespace Top4ever.Print.DriverPrintConfig
         {
             get { return _align; }
             set { _align = value; }
-        }
-
-        /// <summary>
-        /// Text align is right or not
-        /// </summary>
-        private bool _IsRight;
-        [XmlAttribute("IsRight")]
-        public bool IsRight
-        {
-            get { return _IsRight; }
-            set { _IsRight = value; }
         }
 
         private PrintFont font;
