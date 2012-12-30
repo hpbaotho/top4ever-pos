@@ -196,7 +196,7 @@ namespace Top4ever.Print
                             {
                                 string strAlign = line.StartPX;
                                 string number = strAlign.Substring(0, strAlign.Length - 1);
-                                startPX = float.Parse(number) / 100f * m_PageBounds.Width;
+                                startPX = float.Parse(number) / 100 * (m_PageBounds.Width - 2 * MarginLeft);
                             }
                             else
                             {
@@ -206,7 +206,7 @@ namespace Top4ever.Print
                             {
                                 string strAlign = line.EndPX;
                                 string number = strAlign.Substring(0, strAlign.Length - 1);
-                                endPX = float.Parse(number) / 100f * (m_PageBounds.Width);
+                                endPX = float.Parse(number) / 100 * (m_PageBounds.Width - 2 * MarginLeft);
                             }
                             else
                             {
@@ -225,7 +225,7 @@ namespace Top4ever.Print
                                 sbLine.Append(line.LineText);
                                 size = m_Graphics.MeasureString(sbLine.ToString(), font);//测量分割线的大小
                             } while (size.Width < endPX - startPX);
-                            m_Graphics.DrawString(sbLine.ToString(), font, brush, startPX, PY);
+                            m_Graphics.DrawString(sbLine.ToString(), font, brush, MarginLeft + startPX, PY);
                             maxHeight = size.Height;
                             break;
                         }
