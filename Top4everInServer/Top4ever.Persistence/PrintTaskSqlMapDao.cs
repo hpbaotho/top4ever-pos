@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using Top4ever.Domain;
+using Top4ever.Domain.Transfer;
 using Top4ever.Interface;
 
 namespace Top4ever.Persistence
@@ -19,6 +20,14 @@ namespace Top4ever.Persistence
             ExecuteInsert("InsertPrintTask", printTask);
         }
 
+        public void InsertDeskOperatePrint(DeskChange deskChange)
+        {
+            Hashtable htParam = new Hashtable();
+            htParam["SrcOrderID"] = deskChange.OrderID1st;
+            htParam["DeskName"] = deskChange.DeskName;
+
+            ExecuteInsert("InsertDeskPrint", htParam);
+        }
         #endregion
     }
 }

@@ -5,6 +5,7 @@ using IBatisNet.DataAccess;
 
 using Top4ever.Domain.OrderRelated;
 using Top4ever.Domain.Transfer;
+using Top4ever.Interface;
 using Top4ever.Interface.OrderRelated;
 
 namespace Top4ever.Service
@@ -16,6 +17,7 @@ namespace Top4ever.Service
         private static OrderService _instance = new OrderService();
         private IDaoManager _daoManager = null;
         private IOrderDao _orderDao = null;
+        private IPrintTaskDao _printTaskDao = null;
 
         #endregion
 
@@ -25,6 +27,7 @@ namespace Top4ever.Service
         {
             _daoManager = ServiceConfig.GetInstance().DaoManager;
             _orderDao = _daoManager.GetDao(typeof(IOrderDao)) as IOrderDao;
+            _printTaskDao = _daoManager.GetDao(typeof(IPrintTaskDao)) as IPrintTaskDao;
         }
 
         #endregion
@@ -78,32 +81,44 @@ namespace Top4ever.Service
 
         public bool OrderDeskOperate(DeskChange deskChange)
         {
-            bool result = false;
-            // 转台
-            if (deskChange.OrderID1st != Guid.Empty && deskChange.OrderID2nd == Guid.Empty)
+            bool returnValue = false;
+            _daoManager.BeginTransaction();
+            try
             {
-                //分单号
-                Int32 curSubOrderNo = _orderDao.GetCurrentSubOrderNo(deskChange.DeskName);
-                if (curSubOrderNo > 0)
+                //添加打印任务
+                _printTaskDao.InsertDeskOperatePrint(deskChange);
+                // 转台
+                if (deskChange.OrderID1st != Guid.Empty && deskChange.OrderID2nd == Guid.Empty)
                 {
-                    curSubOrderNo++;
+                    //分单号
+                    Int32 curSubOrderNo = _orderDao.GetCurrentSubOrderNo(deskChange.DeskName);
+                    if (curSubOrderNo > 0)
+                    {
+                        curSubOrderNo++;
+                    }
+                    else
+                    {
+                        curSubOrderNo = 1;
+                    }
+                    Order order = new Order();
+                    order.OrderID = deskChange.OrderID1st;
+                    order.DeskName = deskChange.DeskName;
+                    order.SubOrderNo = curSubOrderNo;
+                    returnValue = _orderDao.UpdateOrderDeskName(order);
                 }
-                else
+                // 合并
+                if (deskChange.OrderID1st != Guid.Empty && deskChange.OrderID2nd != Guid.Empty)
                 {
-                    curSubOrderNo = 1;
+                    returnValue = _orderDao.MergeSalesOrder(deskChange);
                 }
-                Order order = new Order();
-                order.OrderID = deskChange.OrderID1st;
-                order.DeskName = deskChange.DeskName;
-                order.SubOrderNo = curSubOrderNo;
-                result = _orderDao.UpdateOrderDeskName(order);
+                _daoManager.CommitTransaction();
             }
-            // 合并
-            if (deskChange.OrderID1st != Guid.Empty && deskChange.OrderID2nd != Guid.Empty)
+            catch
             {
-                result = _orderDao.MergeSalesOrder(deskChange);
+                _daoManager.RollBackTransaction();
+                returnValue = false;
             }
-            return result;
+            return returnValue;
         }
 
         public Int32 GetCurrentSubOrderNo(string deskName)
