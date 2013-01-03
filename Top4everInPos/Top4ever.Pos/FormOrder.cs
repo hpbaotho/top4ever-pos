@@ -1273,7 +1273,11 @@ namespace Top4ever.Pos
                             {
                                 for (int index = selectIndex + 1; index < dgvGoodsOrder.Rows.Count; index++)
                                 {
-                                    if (Convert.ToInt32(dgvGoodsOrder.Rows[index].Cells["ItemType"].Value) == (int)OrderItemType.Details)
+                                    if (Convert.ToInt32(dgvGoodsOrder.Rows[index].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                                    {
+                                        break;
+                                    }
+                                    else
                                     {
                                         dicRemainNum.Add(index, remainNum);
                                         orderDetailsID = new Guid(dgvGoodsOrder.Rows[index].Cells["OrderDetailsID"].Value.ToString());
@@ -1287,10 +1291,6 @@ namespace Top4ever.Pos
                                         item.CancelEmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
                                         item.CancelReasonName = form.CurrentReason.ReasonName;
                                         deletedOrderDetailsList.Add(item);
-                                    }
-                                    else
-                                    {
-                                        break;
                                     }
                                 }
                             }
@@ -1992,6 +1992,36 @@ namespace Top4ever.Pos
                         if (form.CurrentReason != null)
                         { 
                             //催单
+                            IList<Guid> orderDetailsIdList = new List<Guid>();
+                            Guid orderDetailsID = new Guid(dgr.Cells["OrderDetailsID"].Value.ToString());
+                            orderDetailsIdList.Add(orderDetailsID);
+                            if (seletedIndex < dgvGoodsOrder.Rows.Count - 1)
+                            {
+                                for (int index = seletedIndex + 1; index < dgvGoodsOrder.Rows.Count; index++)
+                                {
+                                    if (Convert.ToInt32(dgvGoodsOrder.Rows[index].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        orderDetailsID = new Guid(dgvGoodsOrder.Rows[index].Cells["OrderDetailsID"].Value.ToString());
+                                        orderDetailsIdList.Add(orderDetailsID);
+                                    }
+                                }
+                            }
+                            ReminderOrder reminder = new ReminderOrder();
+                            reminder.OrderID = m_SalesOrder.order.OrderID;
+                            reminder.OrderDetailsIDList = orderDetailsIdList;
+                            reminder.ReasonName = form.CurrentReason.ReasonName;
+                            reminder.EmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
+                            ReminderService reminderService = new ReminderService();
+                            bool result = reminderService.CreateReminderOrder(reminder);
+                            if (!result)
+                            {
+                                MessageBox.Show("催单失败，请重新操作！", "错误提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                return;
+                            }
                         }
                     }
                 }
