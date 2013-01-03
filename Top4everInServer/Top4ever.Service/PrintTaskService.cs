@@ -29,7 +29,7 @@ namespace Top4ever.Service
         /// <param name="salesOrder">订单实例</param>
         /// <param name="printStyle">1 堂吃, 2 外卖, 3 堂吃兼外卖</param>
         /// <param name="followStyle">1 细跟主, 2 主跟细</param>
-        public IList<PrintTask> GetPrintTaskList(SalesOrder salesOrder, int printStyle, int followStyle)
+        public IList<PrintTask> GetPrintTaskList(SalesOrder salesOrder, int printStyle, int followStyle, int taskType)
         {
             if (salesOrder == null || salesOrder.orderDetailsList.Count == 0) return null;
             IList<PrintTask> printTaskList = new List<PrintTask>();
@@ -71,7 +71,7 @@ namespace Top4ever.Service
                                             printTask.EatType = order.EatType;
                                             printTask.DeskName = order.DeskName;
                                             printTask.SubOrderNo = order.SubOrderNo;
-                                            printTask.TaskType = 1;
+                                            printTask.TaskType = taskType;
                                             printTask.PrintTime = printTime;
                                             printTask.IsPrinted = false;
                                             printTask.PrintSolutionName = printerName;
@@ -90,7 +90,7 @@ namespace Top4ever.Service
                                             printTask.EatType = order.EatType;
                                             printTask.DeskName = order.DeskName;
                                             printTask.SubOrderNo = order.SubOrderNo;
-                                            printTask.TaskType = 1;
+                                            printTask.TaskType = taskType;
                                             printTask.PrintTime = printTime;
                                             printTask.IsPrinted = false;
                                             printTask.PrintSolutionName = printerName;
@@ -126,7 +126,7 @@ namespace Top4ever.Service
                                 printTask.EatType = order.EatType;
                                 printTask.DeskName = order.DeskName;
                                 printTask.SubOrderNo = order.SubOrderNo;
-                                printTask.TaskType = 1;
+                                printTask.TaskType = taskType;
                                 printTask.PrintTime = printTime;
                                 printTask.IsPrinted = false;
                                 printTask.PrintSolutionName = printerName;
@@ -156,7 +156,7 @@ namespace Top4ever.Service
                                             printTask.EatType = order.EatType;
                                             printTask.DeskName = order.DeskName;
                                             printTask.SubOrderNo = order.SubOrderNo;
-                                            printTask.TaskType = 1;
+                                            printTask.TaskType = taskType;
                                             printTask.PrintTime = printTime;
                                             printTask.IsPrinted = false;
                                             printTask.PrintSolutionName = printerName;
@@ -221,7 +221,7 @@ namespace Top4ever.Service
                                                 printTask.EatType = order.EatType;
                                                 printTask.DeskName = order.DeskName;
                                                 printTask.SubOrderNo = order.SubOrderNo;
-                                                printTask.TaskType = 1;
+                                                printTask.TaskType = taskType;
                                                 printTask.PrintTime = printTime;
                                                 printTask.IsPrinted = false;
                                                 printTask.PrintSolutionName = printerName;
@@ -292,7 +292,7 @@ namespace Top4ever.Service
                                             printTask.EatType = order.EatType;
                                             printTask.DeskName = order.DeskName;
                                             printTask.SubOrderNo = order.SubOrderNo;
-                                            printTask.TaskType = 1;
+                                            printTask.TaskType = taskType;
                                             printTask.PrintTime = printTime;
                                             printTask.IsPrinted = false;
                                             printTask.PrintSolutionName = printerName;
@@ -324,7 +324,7 @@ namespace Top4ever.Service
                                         printTask.EatType = order.EatType;
                                         printTask.DeskName = order.DeskName;
                                         printTask.SubOrderNo = order.SubOrderNo;
-                                        printTask.TaskType = 1;
+                                        printTask.TaskType = taskType;
                                         printTask.PrintTime = printTime;
                                         printTask.IsPrinted = false;
                                         printTask.PrintSolutionName = printerName;
@@ -343,8 +343,363 @@ namespace Top4ever.Service
                                         printTask.EatType = order.EatType;
                                         printTask.DeskName = order.DeskName;
                                         printTask.SubOrderNo = order.SubOrderNo;
-                                        printTask.TaskType = 1;
+                                        printTask.TaskType = taskType;
                                         printTask.PrintTime = printTime;
+                                        printTask.IsPrinted = false;
+                                        printTask.PrintSolutionName = printerName;
+                                        printTask.PrintType = 0;
+                                        if (nextDetails.ItemType == (int)OrderItemType.Details)
+                                        {
+                                            printTask.DetailsName = nextDetails.GoodsName;
+                                        }
+                                        if (nextDetails.ItemType == (int)OrderItemType.SetMeal)
+                                        {
+                                            printTask.SubGoodsName = nextDetails.GoodsName;
+                                        }
+                                        printTask.Unit = nextDetails.Unit;
+                                        printTask.ItemQty = nextDetails.ItemQty;
+                                        printTaskList.Add(printTask);
+                                    }
+                                    onlyMainItem = false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return printTaskList;
+        }
+
+        /// <summary>
+        /// 获取打印任务列表
+        /// </summary>
+        /// <param name="salesOrder">订单实例</param>
+        /// <param name="printStyle">1 堂吃, 2 外卖, 3 堂吃兼外卖</param>
+        /// <param name="followStyle">1 细跟主, 2 主跟细</param>
+        public IList<PrintTask> GetPrintTaskList(SalesOrder salesOrder, int printStyle, int followStyle, int taskType, string reason)
+        {
+            if (salesOrder == null || salesOrder.orderDetailsList.Count == 0) return null;
+            IList<PrintTask> printTaskList = new List<PrintTask>();
+            DateTime printTime = DateTime.Now;
+            Order order = salesOrder.order;
+            for (int index = 0; index < salesOrder.orderDetailsList.Count; index++)
+            {
+                OrderDetails details = salesOrder.orderDetailsList[index];
+                if (details.ItemType == (int)OrderItemType.Goods)
+                {
+                    //1 细跟主, 2 主跟细
+                    if (followStyle == 1)
+                    {
+                        if (string.IsNullOrEmpty(details.PrintSolutionName))
+                        {
+                            //类似主跟细
+                            for (int i = index + 1; i < salesOrder.orderDetailsList.Count; i++)
+                            {
+                                OrderDetails nextDetails = salesOrder.orderDetailsList[i];
+                                if (nextDetails.ItemType == (int)OrderItemType.Goods)
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    if (!string.IsNullOrEmpty(nextDetails.PrintSolutionName))
+                                    {
+                                        string[] printerNameArr = nextDetails.PrintSolutionName.Split(',');
+                                        foreach (string printerName in printerNameArr)
+                                        {
+                                            //打印解决方案
+                                            //主项
+                                            PrintTask printTask = new PrintTask();
+                                            printTask.OrderNo = order.OrderNo;
+                                            printTask.PeopleNum = order.PeopleNum;
+                                            printTask.EmployeeNo = order.EmployeeNo;
+                                            printTask.EmployeeID = order.EmployeeID;
+                                            printTask.TranSequence = order.TranSequence;
+                                            printTask.EatType = order.EatType;
+                                            printTask.DeskName = order.DeskName;
+                                            printTask.SubOrderNo = order.SubOrderNo;
+                                            printTask.TaskType = taskType;
+                                            printTask.PrintTime = printTime;
+                                            printTask.Reason = reason;
+                                            printTask.IsPrinted = false;
+                                            printTask.PrintSolutionName = printerName;
+                                            printTask.PrintType = 1;
+                                            printTask.GoodsName = details.GoodsName;
+                                            printTask.Unit = details.Unit;
+                                            printTask.ItemQty = details.ItemQty;
+                                            printTaskList.Add(printTask);
+                                            //细项或者套餐
+                                            printTask = new PrintTask();
+                                            printTask.OrderNo = order.OrderNo;
+                                            printTask.PeopleNum = order.PeopleNum;
+                                            printTask.EmployeeNo = order.EmployeeNo;
+                                            printTask.EmployeeID = order.EmployeeID;
+                                            printTask.TranSequence = order.TranSequence;
+                                            printTask.EatType = order.EatType;
+                                            printTask.DeskName = order.DeskName;
+                                            printTask.SubOrderNo = order.SubOrderNo;
+                                            printTask.TaskType = taskType;
+                                            printTask.PrintTime = printTime;
+                                            printTask.Reason = reason;
+                                            printTask.IsPrinted = false;
+                                            printTask.PrintSolutionName = printerName;
+                                            printTask.PrintType = 0;
+                                            if (nextDetails.ItemType == (int)OrderItemType.Details)
+                                            {
+                                                printTask.DetailsName = nextDetails.GoodsName;
+                                            }
+                                            if (nextDetails.ItemType == (int)OrderItemType.SetMeal)
+                                            {
+                                                printTask.SubGoodsName = nextDetails.GoodsName;
+                                            }
+                                            printTask.Unit = nextDetails.Unit;
+                                            printTask.ItemQty = nextDetails.ItemQty;
+                                            printTaskList.Add(printTask);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            string[] printerNameArr = details.PrintSolutionName.Split(',');
+                            foreach (string printerName in printerNameArr)
+                            {
+                                //打印解决方案
+                                PrintTask printTask = new PrintTask();
+                                printTask.OrderNo = order.OrderNo;
+                                printTask.PeopleNum = order.PeopleNum;
+                                printTask.EmployeeNo = order.EmployeeNo;
+                                printTask.EmployeeID = order.EmployeeID;
+                                printTask.TranSequence = order.TranSequence;
+                                printTask.EatType = order.EatType;
+                                printTask.DeskName = order.DeskName;
+                                printTask.SubOrderNo = order.SubOrderNo;
+                                printTask.TaskType = taskType;
+                                printTask.PrintTime = printTime;
+                                printTask.Reason = reason;
+                                printTask.IsPrinted = false;
+                                printTask.PrintSolutionName = printerName;
+                                printTask.PrintType = details.PrintType;
+                                printTask.GoodsName = details.GoodsName;
+                                printTask.Unit = details.Unit;
+                                printTask.ItemQty = details.ItemQty;
+                                if (printStyle == 1)    //1 堂吃, 2 外卖, 3堂吃兼外卖
+                                {
+                                    printTaskList.Add(printTask);
+                                    for (int i = index + 1; i < salesOrder.orderDetailsList.Count; i++)
+                                    {
+                                        OrderDetails nextDetails = salesOrder.orderDetailsList[i];
+                                        if (nextDetails.ItemType == (int)OrderItemType.Goods)
+                                        {
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            //打印解决方案
+                                            printTask = new PrintTask();
+                                            printTask.OrderNo = order.OrderNo;
+                                            printTask.PeopleNum = order.PeopleNum;
+                                            printTask.EmployeeNo = order.EmployeeNo;
+                                            printTask.EmployeeID = order.EmployeeID;
+                                            printTask.TranSequence = order.TranSequence;
+                                            printTask.EatType = order.EatType;
+                                            printTask.DeskName = order.DeskName;
+                                            printTask.SubOrderNo = order.SubOrderNo;
+                                            printTask.TaskType = taskType;
+                                            printTask.PrintTime = printTime;
+                                            printTask.Reason = reason;
+                                            printTask.IsPrinted = false;
+                                            printTask.PrintSolutionName = printerName;
+                                            printTask.PrintType = 0;
+                                            if (nextDetails.ItemType == (int)OrderItemType.Details)
+                                            {
+                                                printTask.DetailsName = nextDetails.GoodsName;
+                                            }
+                                            if (nextDetails.ItemType == (int)OrderItemType.SetMeal)
+                                            {
+                                                printTask.SubGoodsName = nextDetails.GoodsName;
+                                            }
+                                            printTask.Unit = nextDetails.Unit;
+                                            printTask.ItemQty = nextDetails.ItemQty;
+                                            printTaskList.Add(printTask);
+                                        }
+                                    }
+                                }
+                                if (printStyle == 2)    //1 堂吃, 2 外卖, 3堂吃兼外卖
+                                {
+                                    string totalDetailsName = string.Empty;
+                                    for (int i = index + 1; i < salesOrder.orderDetailsList.Count; i++)
+                                    {
+                                        OrderDetails nextDetails = salesOrder.orderDetailsList[i];
+                                        if (nextDetails.ItemType == (int)OrderItemType.Goods)
+                                        {
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            totalDetailsName += "," + nextDetails.GoodsName + "*" + nextDetails.ItemQty;
+                                        }
+                                    }
+                                    if (!string.IsNullOrEmpty(totalDetailsName))
+                                    {
+                                        totalDetailsName = totalDetailsName.Substring(1);
+                                    }
+                                    printTask.TotalDetailsName = totalDetailsName;
+                                    printTaskList.Add(printTask);
+                                }
+                                if (printStyle == 3)    //1 堂吃, 2 外卖, 3堂吃兼外卖
+                                {
+                                    if (order.EatType == (int)EatWayType.DineIn)
+                                    {
+                                        printTaskList.Add(printTask);
+                                        for (int i = index + 1; i < salesOrder.orderDetailsList.Count; i++)
+                                        {
+                                            OrderDetails nextDetails = salesOrder.orderDetailsList[i];
+                                            if (nextDetails.ItemType == (int)OrderItemType.Goods)
+                                            {
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                //打印解决方案
+                                                printTask = new PrintTask();
+                                                printTask.OrderNo = order.OrderNo;
+                                                printTask.PeopleNum = order.PeopleNum;
+                                                printTask.EmployeeNo = order.EmployeeNo;
+                                                printTask.EmployeeID = order.EmployeeID;
+                                                printTask.TranSequence = order.TranSequence;
+                                                printTask.EatType = order.EatType;
+                                                printTask.DeskName = order.DeskName;
+                                                printTask.SubOrderNo = order.SubOrderNo;
+                                                printTask.TaskType = taskType;
+                                                printTask.PrintTime = printTime;
+                                                printTask.Reason = reason;
+                                                printTask.IsPrinted = false;
+                                                printTask.PrintSolutionName = printerName;
+                                                printTask.PrintType = 0;
+                                                if (nextDetails.ItemType == (int)OrderItemType.Details)
+                                                {
+                                                    printTask.DetailsName = nextDetails.GoodsName;
+                                                }
+                                                if (nextDetails.ItemType == (int)OrderItemType.SetMeal)
+                                                {
+                                                    printTask.SubGoodsName = nextDetails.GoodsName;
+                                                }
+                                                printTask.Unit = nextDetails.Unit;
+                                                printTask.ItemQty = nextDetails.ItemQty;
+                                                printTaskList.Add(printTask);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        string totalDetailsName = string.Empty;
+                                        for (int i = index + 1; i < salesOrder.orderDetailsList.Count; i++)
+                                        {
+                                            OrderDetails nextDetails = salesOrder.orderDetailsList[i];
+                                            if (nextDetails.ItemType == (int)OrderItemType.Goods)
+                                            {
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                totalDetailsName += "," + nextDetails.GoodsName + "*" + nextDetails.ItemQty;
+                                            }
+                                        }
+                                        if (!string.IsNullOrEmpty(totalDetailsName))
+                                        {
+                                            totalDetailsName = totalDetailsName.Substring(1);
+                                        }
+                                        printTask.TotalDetailsName = totalDetailsName;
+                                        printTaskList.Add(printTask);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    //1 细跟主, 2 主跟细
+                    if (followStyle == 2)
+                    {
+                        bool onlyMainItem = true;
+                        for (int i = index + 1; i < salesOrder.orderDetailsList.Count; i++)
+                        {
+                            OrderDetails nextDetails = salesOrder.orderDetailsList[i];
+                            if (nextDetails.ItemType == (int)OrderItemType.Goods)
+                            {
+                                if (onlyMainItem)
+                                {
+                                    if (!string.IsNullOrEmpty(details.PrintSolutionName))
+                                    {
+                                        string[] printerNameArr = details.PrintSolutionName.Split(',');
+                                        foreach (string printerName in printerNameArr)
+                                        {
+                                            //打印解决方案
+                                            PrintTask printTask = new PrintTask();
+                                            printTask.OrderNo = order.OrderNo;
+                                            printTask.PeopleNum = order.PeopleNum;
+                                            printTask.EmployeeNo = order.EmployeeNo;
+                                            printTask.EmployeeID = order.EmployeeID;
+                                            printTask.TranSequence = order.TranSequence;
+                                            printTask.EatType = order.EatType;
+                                            printTask.DeskName = order.DeskName;
+                                            printTask.SubOrderNo = order.SubOrderNo;
+                                            printTask.TaskType = taskType;
+                                            printTask.PrintTime = printTime;
+                                            printTask.Reason = reason;
+                                            printTask.IsPrinted = false;
+                                            printTask.PrintSolutionName = printerName;
+                                            printTask.PrintType = details.PrintType;
+                                            printTask.GoodsName = details.GoodsName;
+                                            printTask.Unit = details.Unit;
+                                            printTask.ItemQty = details.ItemQty;
+                                            printTaskList.Add(printTask);
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                            else
+                            {
+                                if (!string.IsNullOrEmpty(nextDetails.PrintSolutionName))
+                                {
+                                    string[] printerNameArr = nextDetails.PrintSolutionName.Split(',');
+                                    foreach (string printerName in printerNameArr)
+                                    {
+                                        //打印解决方案
+                                        //主项
+                                        PrintTask printTask = new PrintTask();
+                                        printTask.OrderNo = order.OrderNo;
+                                        printTask.PeopleNum = order.PeopleNum;
+                                        printTask.EmployeeNo = order.EmployeeNo;
+                                        printTask.EmployeeID = order.EmployeeID;
+                                        printTask.TranSequence = order.TranSequence;
+                                        printTask.EatType = order.EatType;
+                                        printTask.DeskName = order.DeskName;
+                                        printTask.SubOrderNo = order.SubOrderNo;
+                                        printTask.TaskType = taskType;
+                                        printTask.PrintTime = printTime;
+                                        printTask.Reason = reason;
+                                        printTask.IsPrinted = false;
+                                        printTask.PrintSolutionName = printerName;
+                                        printTask.PrintType = 1;
+                                        printTask.GoodsName = details.GoodsName;
+                                        printTask.Unit = details.Unit;
+                                        printTask.ItemQty = details.ItemQty;
+                                        printTaskList.Add(printTask);
+                                        //细项或者套餐
+                                        printTask = new PrintTask();
+                                        printTask.OrderNo = order.OrderNo;
+                                        printTask.PeopleNum = order.PeopleNum;
+                                        printTask.EmployeeNo = order.EmployeeNo;
+                                        printTask.EmployeeID = order.EmployeeID;
+                                        printTask.TranSequence = order.TranSequence;
+                                        printTask.EatType = order.EatType;
+                                        printTask.DeskName = order.DeskName;
+                                        printTask.SubOrderNo = order.SubOrderNo;
+                                        printTask.TaskType = taskType;
+                                        printTask.PrintTime = printTime;
+                                        printTask.Reason = reason;
                                         printTask.IsPrinted = false;
                                         printTask.PrintSolutionName = printerName;
                                         printTask.PrintType = 0;

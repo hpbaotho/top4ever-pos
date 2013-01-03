@@ -76,6 +76,7 @@
     <Compile Include="Transfer\OrderDiscountSum.cs" />
     <Compile Include="Transfer\OrderPayoffSum.cs" />
     <Compile Include="Transfer\PayingOrder.cs" />
+    <Compile Include="Transfer\ReminderOrder.cs" />
     <Compile Include="Transfer\SalesPriceByDepart.cs" />
     <Compile Include="Transfer\SalesSplitOrder.cs" />
     <Compile Include="Transfer\SysBasicData.cs" />

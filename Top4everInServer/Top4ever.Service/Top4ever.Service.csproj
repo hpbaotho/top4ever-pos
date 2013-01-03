@@ -57,6 +57,7 @@
     <Compile Include="PrintTaskService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegionService.cs" />
+    <Compile Include="ReminderOrderService.cs" />
     <Compile Include="SalesOrderService.cs" />
     <Compile Include="ServiceConfig.cs" />
     <Compile Include="ShopService.cs" />

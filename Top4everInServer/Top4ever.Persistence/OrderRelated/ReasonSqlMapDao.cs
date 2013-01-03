@@ -19,6 +19,10 @@ namespace Top4ever.Persistence.OrderRelated
             return ExecuteQueryForList<Reason>("GetReasonList", null);
         }
 
+        public Reason GetReason(Guid reasonID)
+        {
+            return ExecuteQueryForObject("GetReasonByID", reasonID) as Reason;
+        }
         #endregion
     }
 }

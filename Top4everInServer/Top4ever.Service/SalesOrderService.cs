@@ -98,7 +98,7 @@ namespace Top4ever.Service
                     }
                     //添加打印任务
                     SystemConfig systemConfig = _sysConfigDao.GetSystemConfigInfo();
-                    IList<PrintTask> printTaskList = PrintTaskService.GetInstance().GetPrintTaskList(salesOrder, systemConfig.PrintStyle, systemConfig.FollowStyle);
+                    IList<PrintTask> printTaskList = PrintTaskService.GetInstance().GetPrintTaskList(salesOrder, systemConfig.PrintStyle, systemConfig.FollowStyle, 1);
                     foreach (PrintTask printTask in printTaskList)
                     {
                         _printTaskDao.InsertPrintTask(printTask);
@@ -140,13 +140,6 @@ namespace Top4ever.Service
                            _orderDiscountDao.UpdateOrderDiscount(item);
                        }
                    }
-                   //添加打印任务
-                   SystemConfig systemConfig = _sysConfigDao.GetSystemConfigInfo();
-                   IList<PrintTask> printTaskList = PrintTaskService.GetInstance().GetPrintTaskList(salesOrder, systemConfig.PrintStyle, systemConfig.FollowStyle);
-                   foreach (PrintTask printTask in printTaskList)
-                   {
-                       _printTaskDao.InsertPrintTask(printTask);
-                   }
                    returnValue = true;
                }
                _daoManager.CommitTransaction();
@@ -167,7 +160,7 @@ namespace Top4ever.Service
             Order order = _orderDao.GetOrder(orderID);
             if (order != null)
             {
-                IList<OrderDetails> orderDetailsList = _orderDetailsDao.GetOrderDetails(orderID);
+                IList<OrderDetails> orderDetailsList = _orderDetailsDao.GetOrderDetailsList(orderID);
                 salesOrder = new SalesOrder();
                 salesOrder.order = order;
                 salesOrder.orderDetailsList = orderDetailsList;

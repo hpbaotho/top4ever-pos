@@ -69,7 +69,7 @@ namespace Top4ever.Service
             IList<OrderDetails> orderDetailsList = null;
 
             _daoManager.OpenConnection();
-            orderDetailsList = _orderDetailsDao.GetOrderDetails(orderID);
+            orderDetailsList = _orderDetailsDao.GetOrderDetailsList(orderID);
             _daoManager.CloseConnection();
 
             return orderDetailsList;

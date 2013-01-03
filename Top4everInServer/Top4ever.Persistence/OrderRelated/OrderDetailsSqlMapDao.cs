@@ -34,9 +34,14 @@ namespace Top4ever.Persistence.OrderRelated
             return result > 0;
         }
 
-        public IList<OrderDetails> GetOrderDetails(Guid orderID)
+        public IList<OrderDetails> GetOrderDetailsList(Guid orderID)
         {
             return ExecuteQueryForList<OrderDetails>("GetOrderDetailsByOrderID", orderID);
+        }
+
+        public OrderDetails GetOrderDetails(Guid orderDetailsID)
+        {
+            return ExecuteQueryForObject("GetOrderDetailsByOrderDetailsID", orderDetailsID) as OrderDetails;
         }
 
         public Int32 GetSequenceNum(Guid orderID)
