@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using IBatisNet.DataAccess;
 
+using Top4ever.Domain;
 using Top4ever.Domain.OrderRelated;
 using Top4ever.Domain.Transfer;
 using Top4ever.Interface;
@@ -18,6 +19,8 @@ namespace Top4ever.Service
         private IOrderDao _orderDao = null;
         private IOrderDetailsDao _orderDetailsDao = null;
         private IOrderDiscountDao _orderDiscountDao = null;
+        private ISystemConfigDao _sysConfigDao = null;
+        private IPrintTaskDao _printTaskDao = null;
 
         #endregion
 
@@ -29,6 +32,8 @@ namespace Top4ever.Service
             _orderDao = _daoManager.GetDao(typeof(IOrderDao)) as IOrderDao;
             _orderDetailsDao = _daoManager.GetDao(typeof(IOrderDetailsDao)) as IOrderDetailsDao;
             _orderDiscountDao = _daoManager.GetDao(typeof(IOrderDiscountDao)) as IOrderDiscountDao;
+            _sysConfigDao = _daoManager.GetDao(typeof(ISystemConfigDao)) as ISystemConfigDao;
+            _printTaskDao = _daoManager.GetDao(typeof(IPrintTaskDao)) as IPrintTaskDao;
         }
 
         #endregion
@@ -52,6 +57,21 @@ namespace Top4ever.Service
                     {
                         //该订单可能不包含折扣
                         _orderDiscountDao.DeleteOrderDiscount(deletedOrder.OrderID);
+                        //获取打印任务列表
+                        Order order = _orderDao.GetOrder(deletedOrder.OrderID);
+                        if (order != null)
+                        {
+                            IList<OrderDetails> orderDetailsList = _orderDetailsDao.GetOrderDetailsList(deletedOrder.OrderID);
+                            SalesOrder salesOrder = new SalesOrder();
+                            salesOrder.order = order;
+                            salesOrder.orderDetailsList = orderDetailsList;
+                            SystemConfig systemConfig = _sysConfigDao.GetSystemConfigInfo();
+                            IList<PrintTask> printTaskList = PrintTaskService.GetInstance().GetPrintTaskList(salesOrder, systemConfig.PrintStyle, systemConfig.FollowStyle, 2);
+                            foreach (PrintTask printTask in printTaskList)
+                            {
+                                _printTaskDao.InsertPrintTask(printTask);
+                            }
+                        }
                         returnValue = true;
                     }
                 }
@@ -82,6 +102,26 @@ namespace Top4ever.Service
                     foreach (DeletedOrderDetails item in deletedSingleOrder.deletedOrderDetailsList)
                     {
                         _orderDetailsDao.DeleteSingleOrderDetails(item);
+                    }
+                    //获取打印任务列表
+                    Order tempOrder = _orderDao.GetOrder(deletedSingleOrder.OrderID);
+                    if (tempOrder != null)
+                    {
+                        SalesOrder salesOrder = new SalesOrder();
+                        salesOrder.order = tempOrder;
+                        IList<OrderDetails> tempOrderDetailsList = new List<OrderDetails>();
+                        foreach (DeletedOrderDetails item in deletedSingleOrder.deletedOrderDetailsList)
+                        {
+                            OrderDetails orderDetails = _orderDetailsDao.GetOrderDetails(item.OrderDetailsID);
+                            tempOrderDetailsList.Add(orderDetails);
+                        }
+                        salesOrder.orderDetailsList = tempOrderDetailsList;
+                        SystemConfig systemConfig = _sysConfigDao.GetSystemConfigInfo();
+                        IList<PrintTask> printTaskList = PrintTaskService.GetInstance().GetPrintTaskList(salesOrder, systemConfig.PrintStyle, systemConfig.FollowStyle, 2);
+                        foreach (PrintTask printTask in printTaskList)
+                        {
+                            _printTaskDao.InsertPrintTask(printTask);
+                        }
                     }
                     returnValue = true;
                 }

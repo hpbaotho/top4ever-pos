@@ -42,7 +42,7 @@ namespace Top4ever.Domain
         /// </summary>
         public int SubOrderNo { get; set; }
         /// <summary>
-        /// 任务类别
+        /// 任务类别 1,加单 2,删单 3,催单 4,转台
         /// </summary>
         public int TaskType { get; set; }
         /// <summary>

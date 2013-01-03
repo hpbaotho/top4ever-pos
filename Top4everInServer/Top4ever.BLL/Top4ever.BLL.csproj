@@ -55,6 +55,7 @@
     <Compile Include="PayingOrderBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EmployeeBLL.cs" />
+    <Compile Include="ReminderBLL.cs" />
     <Compile Include="SalesOrderBLL.cs" />
     <Compile Include="SysBasicDataBLL.cs" />
   </ItemGroup>

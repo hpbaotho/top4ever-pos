@@ -70,6 +70,9 @@ namespace Top4ever.BLL
                 case Command.ID_GET_REPORTDATABYDAILYSTATEMENT:
                     byteRet = BusinessReportBLL.GetReportDataByDailyStatement(itemBuffer);
                     break;
+                case Command.ID_CREATE_REMINDERORDER:
+                    byteRet = ReminderBLL.CreateReminderOrder(itemBuffer);
+                    break;
 
                 default:
                     byteRet = null;

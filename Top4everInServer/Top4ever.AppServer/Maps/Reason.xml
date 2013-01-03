@@ -27,5 +27,10 @@
 			WHERE IsVoided = 0
 		</select>
 
+        <select id="GetReasonByID" parameterClass="Guid" resultMap="ReasonResult">
+            SELECT ReasonID, ReasonName, ReasonName_2nd, ReasonType, ButtonStyleID
+            FROM Reason
+            WHERE ReasonID = #value# AND IsVoided = 0
+        </select>
     </statements>
 </sqlMap>

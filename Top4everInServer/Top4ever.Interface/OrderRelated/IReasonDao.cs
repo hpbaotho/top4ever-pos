@@ -11,5 +11,7 @@ namespace Top4ever.Interface.OrderRelated
     public interface IReasonDao
     {
         IList<Reason> GetAllReason();
+
+        Reason GetReason(Guid reasonID);
     }
 }

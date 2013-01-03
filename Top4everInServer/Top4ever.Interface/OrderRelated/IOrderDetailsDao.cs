@@ -17,7 +17,9 @@ namespace Top4ever.Interface.OrderRelated
 
         bool UpdateOrderDetailsDiscount(OrderDetails orderDetails);
 
-        IList<OrderDetails> GetOrderDetails(Guid orderID);
+        IList<OrderDetails> GetOrderDetailsList(Guid orderID);
+
+        OrderDetails GetOrderDetails(Guid orderDetailsID);
 
         Int32 GetSequenceNum(Guid orderID);
 
