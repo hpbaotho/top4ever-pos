@@ -30,6 +30,10 @@ namespace Top4ever.Print.Entity
         /// </summary>
         public string TaskTypeName { get; set; }
         /// <summary>
+        /// 转台
+        /// </summary>
+        public string DeskOperateText { get; set; }
+        /// <summary>
         /// 打印方案名称
         /// </summary>
         public string PrintSolutionName { get; set; }
@@ -49,6 +53,18 @@ namespace Top4ever.Print.Entity
         /// 桌号
         /// </summary>
         public string DeskName { get; set; }
+        /// <summary>
+        /// 子桌号
+        /// </summary>
+        public int SubOrderNo { get; set; }
+        /// <summary>
+        /// 原桌号
+        /// </summary>
+        public string SrcDeskName { get; set; }
+        /// <summary>
+        /// 原因
+        /// </summary>
+        public string Reason { get; set; }
         /// <summary>
         /// 流水号
         /// </summary>
