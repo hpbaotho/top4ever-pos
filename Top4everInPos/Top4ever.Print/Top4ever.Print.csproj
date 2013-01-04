@@ -56,6 +56,7 @@
     <Compile Include="Entity\KitchenPrintData.cs" />
     <Compile Include="Entity\PayingGoodsOrder.cs" />
     <Compile Include="Entity\PrintData.cs" />
+    <Compile Include="Entity\PrintTaskType.cs" />
     <Compile Include="InstructionOrderPrint.cs" />
     <Compile Include="InstructionOrderPrintSetting.cs" />
     <Compile Include="InstructionPrintConfig\DataListConfig.cs" />

@@ -98,7 +98,7 @@ namespace Top4ever.Service
                     }
                     //添加打印任务
                     SystemConfig systemConfig = _sysConfigDao.GetSystemConfigInfo();
-                    IList<PrintTask> printTaskList = PrintTaskService.GetInstance().GetPrintTaskList(salesOrder, systemConfig.PrintStyle, systemConfig.FollowStyle, 1);
+                    IList<PrintTask> printTaskList = PrintTaskService.GetInstance().GetPrintTaskList(salesOrder, systemConfig.PrintStyle, systemConfig.FollowStyle, 1, string.Empty);
                     foreach (PrintTask printTask in printTaskList)
                     {
                         _printTaskDao.InsertPrintTask(printTask);

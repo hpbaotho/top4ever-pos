@@ -66,7 +66,7 @@ namespace Top4ever.Service
                             salesOrder.order = order;
                             salesOrder.orderDetailsList = orderDetailsList;
                             SystemConfig systemConfig = _sysConfigDao.GetSystemConfigInfo();
-                            IList<PrintTask> printTaskList = PrintTaskService.GetInstance().GetPrintTaskList(salesOrder, systemConfig.PrintStyle, systemConfig.FollowStyle, 2);
+                            IList<PrintTask> printTaskList = PrintTaskService.GetInstance().GetPrintTaskList(salesOrder, systemConfig.PrintStyle, systemConfig.FollowStyle, 2, deletedOrder.CancelReasonName);
                             foreach (PrintTask printTask in printTaskList)
                             {
                                 _printTaskDao.InsertPrintTask(printTask);
@@ -110,14 +110,19 @@ namespace Top4ever.Service
                         SalesOrder salesOrder = new SalesOrder();
                         salesOrder.order = tempOrder;
                         IList<OrderDetails> tempOrderDetailsList = new List<OrderDetails>();
+                        string cancelReason = string.Empty;
                         foreach (DeletedOrderDetails item in deletedSingleOrder.deletedOrderDetailsList)
                         {
                             OrderDetails orderDetails = _orderDetailsDao.GetOrderDetails(item.OrderDetailsID);
                             tempOrderDetailsList.Add(orderDetails);
+                            if (string.IsNullOrEmpty(cancelReason) && !string.IsNullOrEmpty(item.CancelReasonName))
+                            {
+                                cancelReason = item.CancelReasonName;
+                            }
                         }
                         salesOrder.orderDetailsList = tempOrderDetailsList;
                         SystemConfig systemConfig = _sysConfigDao.GetSystemConfigInfo();
-                        IList<PrintTask> printTaskList = PrintTaskService.GetInstance().GetPrintTaskList(salesOrder, systemConfig.PrintStyle, systemConfig.FollowStyle, 2);
+                        IList<PrintTask> printTaskList = PrintTaskService.GetInstance().GetPrintTaskList(salesOrder, systemConfig.PrintStyle, systemConfig.FollowStyle, 2, cancelReason);
                         foreach (PrintTask printTask in printTaskList)
                         {
                             _printTaskDao.InsertPrintTask(printTask);
