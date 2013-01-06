@@ -57,6 +57,7 @@
     <Compile Include="Enum\ReasonItemType.cs" />
     <Compile Include="ListItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RightsItemCode.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Top4ever.CustomControl\Top4ever.CustomControl.csproj">

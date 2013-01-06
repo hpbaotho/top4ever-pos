@@ -581,6 +581,12 @@ namespace Top4ever.Pos
             this.Close();
         }
 
+        private void btnManager_Click(object sender, EventArgs e)
+        {
+            Feature.FormFunctionPanel form = new Feature.FormFunctionPanel();
+            form.ShowDialog();
+        }
+
         private void btnOrder_Click(object sender, EventArgs e)
         {
             prevPressedButton.BackColor = prevPressedButton.DisplayColor;
