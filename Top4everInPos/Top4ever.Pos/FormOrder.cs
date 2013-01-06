@@ -2046,25 +2046,27 @@ namespace Top4ever.Pos
 
         private void btnDailyStatement_Click(object sender, EventArgs e)
         {
-            DailyBalance dailyBalance = new DailyBalance();
-            DailyBalanceService dailyBalanceService = new DailyBalanceService();
-            int result = dailyBalanceService.CreateDailyBalance(dailyBalance);
-            if (result == 1)
-            {
-                MessageBox.Show("日结成功！");
-            }
-            else if (result == 2)
-            {
-                MessageBox.Show("存在未结账单据，请先结完账！");
-            }
-            else if (result == 3)
-            {
-                MessageBox.Show("存在未交班的POS，请先交班！");
-            }
-            else
-            {
-                MessageBox.Show("出现异常错误，请重新日结！");
-            }
+            Feature.FormSalesReport formReport = new FormSalesReport();
+            formReport.ShowDialog();
+            //DailyBalance dailyBalance = new DailyBalance();
+            //DailyBalanceService dailyBalanceService = new DailyBalanceService();
+            //int result = dailyBalanceService.CreateDailyBalance(dailyBalance);
+            //if (result == 1)
+            //{
+            //    MessageBox.Show("日结成功！");
+            //}
+            //else if (result == 2)
+            //{
+            //    MessageBox.Show("存在未结账单据，请先结完账！");
+            //}
+            //else if (result == 3)
+            //{
+            //    MessageBox.Show("存在未交班的POS，请先交班！");
+            //}
+            //else
+            //{
+            //    MessageBox.Show("出现异常错误，请重新日结！");
+            //}
         }
 
         private void timer1_Tick(object sender, EventArgs e)

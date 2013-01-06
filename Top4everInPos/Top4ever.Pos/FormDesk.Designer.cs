@@ -29,12 +29,8 @@
         private void InitializeComponent()
         {
             this.pnlToolBar = new System.Windows.Forms.Panel();
+            this.scrollingText1 = new Top4ever.CustomControl.ScrollingText();
             this.pnlSysTools = new System.Windows.Forms.Panel();
-            this.pnlDesk = new System.Windows.Forms.Panel();
-            this.pnlRegion = new System.Windows.Forms.Panel();
-            this.btnLookColor = new Top4ever.CustomControl.CrystalButton();
-            this.btnTakeColor = new Top4ever.CustomControl.CrystalButton();
-            this.btnFreeColor = new Top4ever.CustomControl.CrystalButton();
             this.btnExit = new Top4ever.CustomControl.CrystalButton();
             this.btnSetting = new Top4ever.CustomControl.CrystalButton();
             this.btnTakeOut = new Top4ever.CustomControl.CrystalButton();
@@ -43,7 +39,11 @@
             this.btnClear = new Top4ever.CustomControl.CrystalButton();
             this.btnOrder = new Top4ever.CustomControl.CrystalButton();
             this.btnManager = new Top4ever.CustomControl.CrystalButton();
-            this.scrollingText1 = new Top4ever.CustomControl.ScrollingText();
+            this.pnlDesk = new System.Windows.Forms.Panel();
+            this.btnLookColor = new Top4ever.CustomControl.CrystalButton();
+            this.btnTakeColor = new Top4ever.CustomControl.CrystalButton();
+            this.btnFreeColor = new Top4ever.CustomControl.CrystalButton();
+            this.pnlRegion = new System.Windows.Forms.Panel();
             this.pnlToolBar.SuspendLayout();
             this.pnlSysTools.SuspendLayout();
             this.pnlDesk.SuspendLayout();
@@ -59,6 +59,28 @@
             this.pnlToolBar.Size = new System.Drawing.Size(1024, 108);
             this.pnlToolBar.TabIndex = 0;
             // 
+            // scrollingText1
+            // 
+            this.scrollingText1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(108)))), ((int)(((byte)(128)))));
+            this.scrollingText1.BorderColor = System.Drawing.Color.Black;
+            this.scrollingText1.Cursor = System.Windows.Forms.Cursors.Default;
+            this.scrollingText1.Font = new System.Drawing.Font("SimSun", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.scrollingText1.ForeColor = System.Drawing.Color.White;
+            this.scrollingText1.ForegroundBrush = null;
+            this.scrollingText1.Location = new System.Drawing.Point(0, 73);
+            this.scrollingText1.Name = "scrollingText1";
+            this.scrollingText1.ScrollDirection = Top4ever.CustomControl.ScrollDirection.RightToLeft;
+            this.scrollingText1.ScrollText = "新版本测试使用，请在每天22点前结束营业";
+            this.scrollingText1.ShowBorder = false;
+            this.scrollingText1.Size = new System.Drawing.Size(1024, 35);
+            this.scrollingText1.StopScrollOnMouseOver = true;
+            this.scrollingText1.TabIndex = 2;
+            this.scrollingText1.Text = "scrollingText1";
+            this.scrollingText1.TextScrollDistance = 2;
+            this.scrollingText1.TextScrollSpeed = 50;
+            this.scrollingText1.VerticleTextPosition = Top4ever.CustomControl.VerticleTextPosition.Center;
+            this.scrollingText1.TextClicked += new Top4ever.CustomControl.ScrollingText.TextClickEventHandler(this.scrollingText1_TextClicked);
+            // 
             // pnlSysTools
             // 
             this.pnlSysTools.Controls.Add(this.btnExit);
@@ -73,61 +95,6 @@
             this.pnlSysTools.Name = "pnlSysTools";
             this.pnlSysTools.Size = new System.Drawing.Size(1024, 72);
             this.pnlSysTools.TabIndex = 1;
-            // 
-            // pnlDesk
-            // 
-            this.pnlDesk.Controls.Add(this.btnLookColor);
-            this.pnlDesk.Controls.Add(this.btnTakeColor);
-            this.pnlDesk.Controls.Add(this.btnFreeColor);
-            this.pnlDesk.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlDesk.Location = new System.Drawing.Point(0, 108);
-            this.pnlDesk.Name = "pnlDesk";
-            this.pnlDesk.Size = new System.Drawing.Size(1024, 553);
-            this.pnlDesk.TabIndex = 2;
-            // 
-            // pnlRegion
-            // 
-            this.pnlRegion.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlRegion.Location = new System.Drawing.Point(0, 661);
-            this.pnlRegion.Name = "pnlRegion";
-            this.pnlRegion.Size = new System.Drawing.Size(1024, 89);
-            this.pnlRegion.TabIndex = 3;
-            // 
-            // btnLookColor
-            // 
-            this.btnLookColor.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.btnLookColor.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnLookColor.ForeColor = System.Drawing.Color.White;
-            this.btnLookColor.Location = new System.Drawing.Point(937, 510);
-            this.btnLookColor.Name = "btnLookColor";
-            this.btnLookColor.Size = new System.Drawing.Size(75, 28);
-            this.btnLookColor.TabIndex = 0;
-            this.btnLookColor.Text = "锁定";
-            this.btnLookColor.UseVisualStyleBackColor = false;
-            // 
-            // btnTakeColor
-            // 
-            this.btnTakeColor.BackColor = System.Drawing.Color.Red;
-            this.btnTakeColor.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnTakeColor.ForeColor = System.Drawing.Color.White;
-            this.btnTakeColor.Location = new System.Drawing.Point(856, 510);
-            this.btnTakeColor.Name = "btnTakeColor";
-            this.btnTakeColor.Size = new System.Drawing.Size(75, 28);
-            this.btnTakeColor.TabIndex = 0;
-            this.btnTakeColor.Text = "已占";
-            this.btnTakeColor.UseVisualStyleBackColor = false;
-            // 
-            // btnFreeColor
-            // 
-            this.btnFreeColor.BackColor = System.Drawing.Color.Green;
-            this.btnFreeColor.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnFreeColor.ForeColor = System.Drawing.Color.White;
-            this.btnFreeColor.Location = new System.Drawing.Point(775, 510);
-            this.btnFreeColor.Name = "btnFreeColor";
-            this.btnFreeColor.Size = new System.Drawing.Size(75, 28);
-            this.btnFreeColor.TabIndex = 0;
-            this.btnFreeColor.Text = "空闲";
-            this.btnFreeColor.UseVisualStyleBackColor = false;
             // 
             // btnExit
             // 
@@ -230,28 +197,62 @@
             this.btnManager.TabIndex = 4;
             this.btnManager.Text = "功能面板";
             this.btnManager.UseVisualStyleBackColor = false;
+            this.btnManager.Click += new System.EventHandler(this.btnManager_Click);
             // 
-            // scrollingText1
+            // pnlDesk
             // 
-            this.scrollingText1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(108)))), ((int)(((byte)(128)))));
-            this.scrollingText1.BorderColor = System.Drawing.Color.Black;
-            this.scrollingText1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.scrollingText1.Font = new System.Drawing.Font("SimSun", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.scrollingText1.ForeColor = System.Drawing.Color.White;
-            this.scrollingText1.ForegroundBrush = null;
-            this.scrollingText1.Location = new System.Drawing.Point(0, 73);
-            this.scrollingText1.Name = "scrollingText1";
-            this.scrollingText1.ScrollDirection = Top4ever.CustomControl.ScrollDirection.RightToLeft;
-            this.scrollingText1.ScrollText = "新版本测试使用，请在每天22点前结束营业";
-            this.scrollingText1.ShowBorder = false;
-            this.scrollingText1.Size = new System.Drawing.Size(1024, 35);
-            this.scrollingText1.StopScrollOnMouseOver = true;
-            this.scrollingText1.TabIndex = 2;
-            this.scrollingText1.Text = "scrollingText1";
-            this.scrollingText1.TextScrollDistance = 2;
-            this.scrollingText1.TextScrollSpeed = 50;
-            this.scrollingText1.VerticleTextPosition = Top4ever.CustomControl.VerticleTextPosition.Center;
-            this.scrollingText1.TextClicked += new Top4ever.CustomControl.ScrollingText.TextClickEventHandler(this.scrollingText1_TextClicked);
+            this.pnlDesk.Controls.Add(this.btnLookColor);
+            this.pnlDesk.Controls.Add(this.btnTakeColor);
+            this.pnlDesk.Controls.Add(this.btnFreeColor);
+            this.pnlDesk.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlDesk.Location = new System.Drawing.Point(0, 108);
+            this.pnlDesk.Name = "pnlDesk";
+            this.pnlDesk.Size = new System.Drawing.Size(1024, 553);
+            this.pnlDesk.TabIndex = 2;
+            // 
+            // btnLookColor
+            // 
+            this.btnLookColor.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.btnLookColor.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnLookColor.ForeColor = System.Drawing.Color.White;
+            this.btnLookColor.Location = new System.Drawing.Point(937, 510);
+            this.btnLookColor.Name = "btnLookColor";
+            this.btnLookColor.Size = new System.Drawing.Size(75, 28);
+            this.btnLookColor.TabIndex = 0;
+            this.btnLookColor.Text = "锁定";
+            this.btnLookColor.UseVisualStyleBackColor = false;
+            // 
+            // btnTakeColor
+            // 
+            this.btnTakeColor.BackColor = System.Drawing.Color.Red;
+            this.btnTakeColor.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnTakeColor.ForeColor = System.Drawing.Color.White;
+            this.btnTakeColor.Location = new System.Drawing.Point(856, 510);
+            this.btnTakeColor.Name = "btnTakeColor";
+            this.btnTakeColor.Size = new System.Drawing.Size(75, 28);
+            this.btnTakeColor.TabIndex = 0;
+            this.btnTakeColor.Text = "已占";
+            this.btnTakeColor.UseVisualStyleBackColor = false;
+            // 
+            // btnFreeColor
+            // 
+            this.btnFreeColor.BackColor = System.Drawing.Color.Green;
+            this.btnFreeColor.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnFreeColor.ForeColor = System.Drawing.Color.White;
+            this.btnFreeColor.Location = new System.Drawing.Point(775, 510);
+            this.btnFreeColor.Name = "btnFreeColor";
+            this.btnFreeColor.Size = new System.Drawing.Size(75, 28);
+            this.btnFreeColor.TabIndex = 0;
+            this.btnFreeColor.Text = "空闲";
+            this.btnFreeColor.UseVisualStyleBackColor = false;
+            // 
+            // pnlRegion
+            // 
+            this.pnlRegion.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pnlRegion.Location = new System.Drawing.Point(0, 661);
+            this.pnlRegion.Name = "pnlRegion";
+            this.pnlRegion.Size = new System.Drawing.Size(1024, 89);
+            this.pnlRegion.TabIndex = 3;
             // 
             // FormDesk
             // 
