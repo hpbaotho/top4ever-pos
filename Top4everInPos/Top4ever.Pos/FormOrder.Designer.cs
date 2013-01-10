@@ -29,10 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormOrder));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             this.pnlContainer = new System.Windows.Forms.Panel();
             this.pnlRight = new System.Windows.Forms.Panel();
             this.pnlItem = new System.Windows.Forms.Panel();
@@ -47,16 +48,6 @@
             this.btnSearch = new Top4ever.CustomControl.CrystalButton();
             this.pnlLeft = new System.Windows.Forms.Panel();
             this.dgvGoodsOrder = new System.Windows.Forms.DataGridView();
-            this.ItemID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.GoodsNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.GoodsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.GoodsPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.GoodsDiscount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ItemType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CanDiscount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ItemUnit = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Wait = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.OrderDetailsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlToolBar = new System.Windows.Forms.Panel();
             this.btnCancel = new Top4ever.CustomControl.CrystalButton();
             this.btnDot = new Top4ever.CustomControl.CrystalButton();
@@ -107,6 +98,16 @@
             this.txtServiceTime = new System.Windows.Forms.TextBox();
             this.txtDeviceNo = new System.Windows.Forms.TextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.ItemID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GoodsNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GoodsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GoodsPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GoodsDiscount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ItemType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CanDiscount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ItemUnit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Wait = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.OrderDetailsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlContainer.SuspendLayout();
             this.pnlRight.SuspendLayout();
             this.pnlItem.SuspendLayout();
@@ -130,7 +131,7 @@
             this.pnlContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlContainer.Location = new System.Drawing.Point(0, 0);
             this.pnlContainer.Name = "pnlContainer";
-            this.pnlContainer.Size = new System.Drawing.Size(1024, 715);
+            this.pnlContainer.Size = new System.Drawing.Size(1024, 733);
             this.pnlContainer.TabIndex = 0;
             // 
             // pnlRight
@@ -141,7 +142,7 @@
             this.pnlRight.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlRight.Location = new System.Drawing.Point(520, 0);
             this.pnlRight.Name = "pnlRight";
-            this.pnlRight.Size = new System.Drawing.Size(504, 715);
+            this.pnlRight.Size = new System.Drawing.Size(504, 733);
             this.pnlRight.TabIndex = 1;
             // 
             // pnlItem
@@ -151,7 +152,7 @@
             this.pnlItem.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlItem.Location = new System.Drawing.Point(0, 352);
             this.pnlItem.Name = "pnlItem";
-            this.pnlItem.Size = new System.Drawing.Size(504, 363);
+            this.pnlItem.Size = new System.Drawing.Size(504, 381);
             this.pnlItem.TabIndex = 3;
             // 
             // btnBack
@@ -264,7 +265,7 @@
             this.pnlLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlLeft.Location = new System.Drawing.Point(0, 0);
             this.pnlLeft.Name = "pnlLeft";
-            this.pnlLeft.Size = new System.Drawing.Size(520, 715);
+            this.pnlLeft.Size = new System.Drawing.Size(520, 733);
             this.pnlLeft.TabIndex = 0;
             // 
             // dgvGoodsOrder
@@ -274,7 +275,16 @@
             this.dgvGoodsOrder.AllowUserToResizeColumns = false;
             this.dgvGoodsOrder.AllowUserToResizeRows = false;
             this.dgvGoodsOrder.BackgroundColor = System.Drawing.Color.White;
-            this.dgvGoodsOrder.ColumnHeadersHeight = 30;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvGoodsOrder.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
+            this.dgvGoodsOrder.ColumnHeadersHeight = 35;
+            this.dgvGoodsOrder.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvGoodsOrder.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ItemID,
             this.GoodsNum,
@@ -293,92 +303,9 @@
             this.dgvGoodsOrder.RowHeadersVisible = false;
             this.dgvGoodsOrder.RowTemplate.Height = 23;
             this.dgvGoodsOrder.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvGoodsOrder.Size = new System.Drawing.Size(520, 298);
+            this.dgvGoodsOrder.Size = new System.Drawing.Size(520, 350);
             this.dgvGoodsOrder.TabIndex = 4;
             this.dgvGoodsOrder.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgvGoodsOrder_MouseDown);
-            // 
-            // ItemID
-            // 
-            this.ItemID.HeaderText = "ItemID";
-            this.ItemID.Name = "ItemID";
-            this.ItemID.ReadOnly = true;
-            this.ItemID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.ItemID.Visible = false;
-            // 
-            // GoodsNum
-            // 
-            dataGridViewCellStyle4.Format = "N1";
-            this.GoodsNum.DefaultCellStyle = dataGridViewCellStyle4;
-            this.GoodsNum.HeaderText = "数量";
-            this.GoodsNum.Name = "GoodsNum";
-            this.GoodsNum.ReadOnly = true;
-            this.GoodsNum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.GoodsNum.Width = 76;
-            // 
-            // GoodsName
-            // 
-            this.GoodsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.GoodsName.HeaderText = "品名";
-            this.GoodsName.Name = "GoodsName";
-            this.GoodsName.ReadOnly = true;
-            this.GoodsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // GoodsPrice
-            // 
-            dataGridViewCellStyle5.Format = "N2";
-            this.GoodsPrice.DefaultCellStyle = dataGridViewCellStyle5;
-            this.GoodsPrice.HeaderText = "价格";
-            this.GoodsPrice.Name = "GoodsPrice";
-            this.GoodsPrice.ReadOnly = true;
-            this.GoodsPrice.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.GoodsPrice.Width = 111;
-            // 
-            // GoodsDiscount
-            // 
-            dataGridViewCellStyle6.Format = "N2";
-            dataGridViewCellStyle6.NullValue = null;
-            this.GoodsDiscount.DefaultCellStyle = dataGridViewCellStyle6;
-            this.GoodsDiscount.HeaderText = "折扣";
-            this.GoodsDiscount.Name = "GoodsDiscount";
-            this.GoodsDiscount.ReadOnly = true;
-            this.GoodsDiscount.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.GoodsDiscount.Width = 110;
-            // 
-            // ItemType
-            // 
-            this.ItemType.HeaderText = "ItemType";
-            this.ItemType.Name = "ItemType";
-            this.ItemType.ReadOnly = true;
-            this.ItemType.Visible = false;
-            // 
-            // CanDiscount
-            // 
-            this.CanDiscount.HeaderText = "CanDiscount";
-            this.CanDiscount.Name = "CanDiscount";
-            this.CanDiscount.ReadOnly = true;
-            this.CanDiscount.Visible = false;
-            // 
-            // ItemUnit
-            // 
-            this.ItemUnit.HeaderText = "ItemUnit";
-            this.ItemUnit.Name = "ItemUnit";
-            this.ItemUnit.ReadOnly = true;
-            this.ItemUnit.Visible = false;
-            // 
-            // Wait
-            // 
-            this.Wait.HeaderText = "Wait";
-            this.Wait.Name = "Wait";
-            this.Wait.ReadOnly = true;
-            this.Wait.Visible = false;
-            // 
-            // OrderDetailsID
-            // 
-            this.OrderDetailsID.HeaderText = "OrderDetailsID";
-            this.OrderDetailsID.Name = "OrderDetailsID";
-            this.OrderDetailsID.ReadOnly = true;
-            this.OrderDetailsID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.OrderDetailsID.Visible = false;
             // 
             // pnlToolBar
             // 
@@ -396,9 +323,9 @@
             this.pnlToolBar.Controls.Add(this.btnAdd1);
             this.pnlToolBar.Controls.Add(this.exTabControl1);
             this.pnlToolBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlToolBar.Location = new System.Drawing.Point(0, 433);
+            this.pnlToolBar.Location = new System.Drawing.Point(0, 485);
             this.pnlToolBar.Name = "pnlToolBar";
-            this.pnlToolBar.Size = new System.Drawing.Size(520, 282);
+            this.pnlToolBar.Size = new System.Drawing.Size(520, 248);
             this.pnlToolBar.TabIndex = 1;
             // 
             // btnCancel
@@ -406,9 +333,9 @@
             this.btnCancel.BackColor = System.Drawing.Color.Red;
             this.btnCancel.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
             this.btnCancel.ForeColor = System.Drawing.Color.White;
-            this.btnCancel.Location = new System.Drawing.Point(452, 204);
+            this.btnCancel.Location = new System.Drawing.Point(449, 185);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(62, 67);
+            this.btnCancel.Size = new System.Drawing.Size(68, 58);
             this.btnCancel.TabIndex = 34;
             this.btnCancel.Text = "X";
             this.btnCancel.UseVisualStyleBackColor = false;
@@ -419,9 +346,9 @@
             this.btnDot.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnDot.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
             this.btnDot.ForeColor = System.Drawing.Color.White;
-            this.btnDot.Location = new System.Drawing.Point(387, 204);
+            this.btnDot.Location = new System.Drawing.Point(378, 185);
             this.btnDot.Name = "btnDot";
-            this.btnDot.Size = new System.Drawing.Size(62, 67);
+            this.btnDot.Size = new System.Drawing.Size(68, 58);
             this.btnDot.TabIndex = 33;
             this.btnDot.Text = ".";
             this.btnDot.UseVisualStyleBackColor = false;
@@ -432,9 +359,9 @@
             this.btnManual.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnManual.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
             this.btnManual.ForeColor = System.Drawing.Color.White;
-            this.btnManual.Location = new System.Drawing.Point(322, 204);
+            this.btnManual.Location = new System.Drawing.Point(307, 185);
             this.btnManual.Name = "btnManual";
-            this.btnManual.Size = new System.Drawing.Size(62, 67);
+            this.btnManual.Size = new System.Drawing.Size(68, 58);
             this.btnManual.TabIndex = 32;
             this.btnManual.Text = "手动";
             this.btnManual.UseVisualStyleBackColor = false;
@@ -445,9 +372,9 @@
             this.btnAdd9.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnAdd9.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
             this.btnAdd9.ForeColor = System.Drawing.Color.White;
-            this.btnAdd9.Location = new System.Drawing.Point(452, 138);
+            this.btnAdd9.Location = new System.Drawing.Point(449, 125);
             this.btnAdd9.Name = "btnAdd9";
-            this.btnAdd9.Size = new System.Drawing.Size(62, 63);
+            this.btnAdd9.Size = new System.Drawing.Size(68, 58);
             this.btnAdd9.TabIndex = 37;
             this.btnAdd9.Text = "9";
             this.btnAdd9.UseVisualStyleBackColor = false;
@@ -458,9 +385,9 @@
             this.btnAdd8.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnAdd8.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
             this.btnAdd8.ForeColor = System.Drawing.Color.White;
-            this.btnAdd8.Location = new System.Drawing.Point(387, 138);
+            this.btnAdd8.Location = new System.Drawing.Point(378, 125);
             this.btnAdd8.Name = "btnAdd8";
-            this.btnAdd8.Size = new System.Drawing.Size(62, 63);
+            this.btnAdd8.Size = new System.Drawing.Size(68, 58);
             this.btnAdd8.TabIndex = 36;
             this.btnAdd8.Text = "8";
             this.btnAdd8.UseVisualStyleBackColor = false;
@@ -471,9 +398,9 @@
             this.btnAdd7.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnAdd7.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
             this.btnAdd7.ForeColor = System.Drawing.Color.White;
-            this.btnAdd7.Location = new System.Drawing.Point(322, 138);
+            this.btnAdd7.Location = new System.Drawing.Point(307, 125);
             this.btnAdd7.Name = "btnAdd7";
-            this.btnAdd7.Size = new System.Drawing.Size(62, 63);
+            this.btnAdd7.Size = new System.Drawing.Size(68, 58);
             this.btnAdd7.TabIndex = 35;
             this.btnAdd7.Text = "7";
             this.btnAdd7.UseVisualStyleBackColor = false;
@@ -484,9 +411,9 @@
             this.btnAdd6.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnAdd6.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
             this.btnAdd6.ForeColor = System.Drawing.Color.White;
-            this.btnAdd6.Location = new System.Drawing.Point(452, 72);
+            this.btnAdd6.Location = new System.Drawing.Point(449, 65);
             this.btnAdd6.Name = "btnAdd6";
-            this.btnAdd6.Size = new System.Drawing.Size(62, 63);
+            this.btnAdd6.Size = new System.Drawing.Size(68, 58);
             this.btnAdd6.TabIndex = 28;
             this.btnAdd6.Text = "6";
             this.btnAdd6.UseVisualStyleBackColor = false;
@@ -497,9 +424,9 @@
             this.btnAdd5.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnAdd5.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
             this.btnAdd5.ForeColor = System.Drawing.Color.White;
-            this.btnAdd5.Location = new System.Drawing.Point(387, 72);
+            this.btnAdd5.Location = new System.Drawing.Point(378, 65);
             this.btnAdd5.Name = "btnAdd5";
-            this.btnAdd5.Size = new System.Drawing.Size(62, 63);
+            this.btnAdd5.Size = new System.Drawing.Size(68, 58);
             this.btnAdd5.TabIndex = 27;
             this.btnAdd5.Text = "5";
             this.btnAdd5.UseVisualStyleBackColor = false;
@@ -510,9 +437,9 @@
             this.btnAdd4.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnAdd4.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
             this.btnAdd4.ForeColor = System.Drawing.Color.White;
-            this.btnAdd4.Location = new System.Drawing.Point(322, 72);
+            this.btnAdd4.Location = new System.Drawing.Point(307, 65);
             this.btnAdd4.Name = "btnAdd4";
-            this.btnAdd4.Size = new System.Drawing.Size(62, 63);
+            this.btnAdd4.Size = new System.Drawing.Size(68, 58);
             this.btnAdd4.TabIndex = 26;
             this.btnAdd4.Text = "4";
             this.btnAdd4.UseVisualStyleBackColor = false;
@@ -523,9 +450,9 @@
             this.btnAdd3.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnAdd3.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
             this.btnAdd3.ForeColor = System.Drawing.Color.White;
-            this.btnAdd3.Location = new System.Drawing.Point(452, 6);
+            this.btnAdd3.Location = new System.Drawing.Point(449, 5);
             this.btnAdd3.Name = "btnAdd3";
-            this.btnAdd3.Size = new System.Drawing.Size(62, 63);
+            this.btnAdd3.Size = new System.Drawing.Size(68, 58);
             this.btnAdd3.TabIndex = 31;
             this.btnAdd3.Text = "3";
             this.btnAdd3.UseVisualStyleBackColor = false;
@@ -536,9 +463,9 @@
             this.btnAdd2.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnAdd2.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
             this.btnAdd2.ForeColor = System.Drawing.Color.White;
-            this.btnAdd2.Location = new System.Drawing.Point(387, 6);
+            this.btnAdd2.Location = new System.Drawing.Point(378, 5);
             this.btnAdd2.Name = "btnAdd2";
-            this.btnAdd2.Size = new System.Drawing.Size(62, 63);
+            this.btnAdd2.Size = new System.Drawing.Size(68, 58);
             this.btnAdd2.TabIndex = 30;
             this.btnAdd2.Text = "2";
             this.btnAdd2.UseVisualStyleBackColor = false;
@@ -549,9 +476,9 @@
             this.btnAdd1.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnAdd1.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAdd1.ForeColor = System.Drawing.Color.White;
-            this.btnAdd1.Location = new System.Drawing.Point(322, 6);
+            this.btnAdd1.Location = new System.Drawing.Point(307, 5);
             this.btnAdd1.Name = "btnAdd1";
-            this.btnAdd1.Size = new System.Drawing.Size(62, 63);
+            this.btnAdd1.Size = new System.Drawing.Size(68, 58);
             this.btnAdd1.TabIndex = 29;
             this.btnAdd1.Text = "1";
             this.btnAdd1.UseVisualStyleBackColor = false;
@@ -570,7 +497,7 @@
             this.exTabControl1.Multiline = true;
             this.exTabControl1.Name = "exTabControl1";
             this.exTabControl1.SelectedIndex = 0;
-            this.exTabControl1.Size = new System.Drawing.Size(325, 282);
+            this.exTabControl1.Size = new System.Drawing.Size(309, 248);
             this.exTabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.exTabControl1.TabBackgroundImage = global::Top4ever.Pos.Properties.Resources.TabButtonBackground;
             this.exTabControl1.TabIndex = 1;
@@ -589,7 +516,7 @@
             this.tabPage1.Location = new System.Drawing.Point(59, 4);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(262, 274);
+            this.tabPage1.Size = new System.Drawing.Size(246, 240);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "常规";
             // 
@@ -598,9 +525,9 @@
             this.btnCheckOut.BackColor = System.Drawing.Color.Green;
             this.btnCheckOut.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
             this.btnCheckOut.ForeColor = System.Drawing.Color.White;
-            this.btnCheckOut.Location = new System.Drawing.Point(125, 180);
+            this.btnCheckOut.Location = new System.Drawing.Point(121, 162);
             this.btnCheckOut.Name = "btnCheckOut";
-            this.btnCheckOut.Size = new System.Drawing.Size(134, 88);
+            this.btnCheckOut.Size = new System.Drawing.Size(122, 77);
             this.btnCheckOut.TabIndex = 1;
             this.btnCheckOut.Text = "结帐";
             this.btnCheckOut.UseVisualStyleBackColor = false;
@@ -611,9 +538,9 @@
             this.btnDiscount.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnDiscount.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDiscount.ForeColor = System.Drawing.Color.White;
-            this.btnDiscount.Location = new System.Drawing.Point(5, 91);
+            this.btnDiscount.Location = new System.Drawing.Point(3, 82);
             this.btnDiscount.Name = "btnDiscount";
-            this.btnDiscount.Size = new System.Drawing.Size(82, 85);
+            this.btnDiscount.Size = new System.Drawing.Size(78, 77);
             this.btnDiscount.TabIndex = 1;
             this.btnDiscount.Text = "单品折扣";
             this.btnDiscount.UseVisualStyleBackColor = false;
@@ -624,9 +551,9 @@
             this.btnShowDetails.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnShowDetails.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnShowDetails.ForeColor = System.Drawing.Color.White;
-            this.btnShowDetails.Location = new System.Drawing.Point(91, 91);
+            this.btnShowDetails.Location = new System.Drawing.Point(84, 82);
             this.btnShowDetails.Name = "btnShowDetails";
-            this.btnShowDetails.Size = new System.Drawing.Size(82, 85);
+            this.btnShowDetails.Size = new System.Drawing.Size(78, 77);
             this.btnShowDetails.TabIndex = 1;
             this.btnShowDetails.Text = "细项";
             this.btnShowDetails.UseVisualStyleBackColor = false;
@@ -637,9 +564,9 @@
             this.btnPrintBill.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnPrintBill.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPrintBill.ForeColor = System.Drawing.Color.White;
-            this.btnPrintBill.Location = new System.Drawing.Point(177, 2);
+            this.btnPrintBill.Location = new System.Drawing.Point(165, 2);
             this.btnPrintBill.Name = "btnPrintBill";
-            this.btnPrintBill.Size = new System.Drawing.Size(82, 85);
+            this.btnPrintBill.Size = new System.Drawing.Size(78, 77);
             this.btnPrintBill.TabIndex = 1;
             this.btnPrintBill.Text = "印单";
             this.btnPrintBill.UseVisualStyleBackColor = false;
@@ -650,9 +577,9 @@
             this.btnPlaceOrder.BackColor = System.Drawing.Color.Black;
             this.btnPlaceOrder.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPlaceOrder.ForeColor = System.Drawing.Color.White;
-            this.btnPlaceOrder.Location = new System.Drawing.Point(5, 180);
+            this.btnPlaceOrder.Location = new System.Drawing.Point(3, 162);
             this.btnPlaceOrder.Name = "btnPlaceOrder";
-            this.btnPlaceOrder.Size = new System.Drawing.Size(115, 88);
+            this.btnPlaceOrder.Size = new System.Drawing.Size(115, 77);
             this.btnPlaceOrder.TabIndex = 1;
             this.btnPlaceOrder.Text = "落单";
             this.btnPlaceOrder.UseVisualStyleBackColor = false;
@@ -663,9 +590,9 @@
             this.btnTurnBack.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnTurnBack.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnTurnBack.ForeColor = System.Drawing.Color.White;
-            this.btnTurnBack.Location = new System.Drawing.Point(177, 91);
+            this.btnTurnBack.Location = new System.Drawing.Point(165, 82);
             this.btnTurnBack.Name = "btnTurnBack";
-            this.btnTurnBack.Size = new System.Drawing.Size(82, 85);
+            this.btnTurnBack.Size = new System.Drawing.Size(78, 77);
             this.btnTurnBack.TabIndex = 1;
             this.btnTurnBack.Text = "返回";
             this.btnTurnBack.UseVisualStyleBackColor = false;
@@ -676,9 +603,9 @@
             this.btnExit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnExit.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExit.ForeColor = System.Drawing.Color.White;
-            this.btnExit.Location = new System.Drawing.Point(5, 2);
+            this.btnExit.Location = new System.Drawing.Point(3, 2);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(82, 85);
+            this.btnExit.Size = new System.Drawing.Size(78, 77);
             this.btnExit.TabIndex = 1;
             this.btnExit.Text = "关闭";
             this.btnExit.UseVisualStyleBackColor = false;
@@ -689,9 +616,9 @@
             this.btnCancelOrder.BackColor = System.Drawing.Color.Red;
             this.btnCancelOrder.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
             this.btnCancelOrder.ForeColor = System.Drawing.Color.White;
-            this.btnCancelOrder.Location = new System.Drawing.Point(91, 2);
+            this.btnCancelOrder.Location = new System.Drawing.Point(84, 2);
             this.btnCancelOrder.Name = "btnCancelOrder";
-            this.btnCancelOrder.Size = new System.Drawing.Size(82, 85);
+            this.btnCancelOrder.Size = new System.Drawing.Size(78, 77);
             this.btnCancelOrder.TabIndex = 1;
             this.btnCancelOrder.Text = "取消账单";
             this.btnCancelOrder.UseVisualStyleBackColor = false;
@@ -711,7 +638,7 @@
             this.tabPage2.Location = new System.Drawing.Point(59, 4);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(262, 274);
+            this.tabPage2.Size = new System.Drawing.Size(246, 240);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "功能";
             // 
@@ -720,9 +647,9 @@
             this.btnSplitBill.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnSplitBill.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSplitBill.ForeColor = System.Drawing.Color.White;
-            this.btnSplitBill.Location = new System.Drawing.Point(5, 2);
+            this.btnSplitBill.Location = new System.Drawing.Point(3, 2);
             this.btnSplitBill.Name = "btnSplitBill";
-            this.btnSplitBill.Size = new System.Drawing.Size(82, 85);
+            this.btnSplitBill.Size = new System.Drawing.Size(78, 77);
             this.btnSplitBill.TabIndex = 1;
             this.btnSplitBill.Text = "分单";
             this.btnSplitBill.UseVisualStyleBackColor = false;
@@ -733,9 +660,9 @@
             this.btnLadeOrder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.btnLadeOrder.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLadeOrder.ForeColor = System.Drawing.Color.White;
-            this.btnLadeOrder.Location = new System.Drawing.Point(91, 180);
+            this.btnLadeOrder.Location = new System.Drawing.Point(84, 162);
             this.btnLadeOrder.Name = "btnLadeOrder";
-            this.btnLadeOrder.Size = new System.Drawing.Size(82, 85);
+            this.btnLadeOrder.Size = new System.Drawing.Size(78, 77);
             this.btnLadeOrder.TabIndex = 1;
             this.btnLadeOrder.Text = "整单提单";
             this.btnLadeOrder.UseVisualStyleBackColor = false;
@@ -746,9 +673,9 @@
             this.btnLadeGoods.BackColor = System.Drawing.Color.Teal;
             this.btnLadeGoods.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLadeGoods.ForeColor = System.Drawing.Color.White;
-            this.btnLadeGoods.Location = new System.Drawing.Point(5, 180);
+            this.btnLadeGoods.Location = new System.Drawing.Point(3, 162);
             this.btnLadeGoods.Name = "btnLadeGoods";
-            this.btnLadeGoods.Size = new System.Drawing.Size(82, 85);
+            this.btnLadeGoods.Size = new System.Drawing.Size(78, 77);
             this.btnLadeGoods.TabIndex = 1;
             this.btnLadeGoods.Text = "单品提单";
             this.btnLadeGoods.UseVisualStyleBackColor = false;
@@ -759,9 +686,9 @@
             this.btnRestOrder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.btnRestOrder.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRestOrder.ForeColor = System.Drawing.Color.White;
-            this.btnRestOrder.Location = new System.Drawing.Point(91, 91);
+            this.btnRestOrder.Location = new System.Drawing.Point(84, 82);
             this.btnRestOrder.Name = "btnRestOrder";
-            this.btnRestOrder.Size = new System.Drawing.Size(82, 85);
+            this.btnRestOrder.Size = new System.Drawing.Size(78, 77);
             this.btnRestOrder.TabIndex = 1;
             this.btnRestOrder.Text = "整单挂单";
             this.btnRestOrder.UseVisualStyleBackColor = false;
@@ -772,9 +699,9 @@
             this.btnRestGoods.BackColor = System.Drawing.Color.Teal;
             this.btnRestGoods.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRestGoods.ForeColor = System.Drawing.Color.White;
-            this.btnRestGoods.Location = new System.Drawing.Point(5, 91);
+            this.btnRestGoods.Location = new System.Drawing.Point(3, 82);
             this.btnRestGoods.Name = "btnRestGoods";
-            this.btnRestGoods.Size = new System.Drawing.Size(82, 85);
+            this.btnRestGoods.Size = new System.Drawing.Size(78, 77);
             this.btnRestGoods.TabIndex = 1;
             this.btnRestGoods.Text = "单品挂单";
             this.btnRestGoods.UseVisualStyleBackColor = false;
@@ -785,9 +712,9 @@
             this.btnReform.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnReform.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnReform.ForeColor = System.Drawing.Color.White;
-            this.btnReform.Location = new System.Drawing.Point(91, 2);
+            this.btnReform.Location = new System.Drawing.Point(84, 2);
             this.btnReform.Name = "btnReform";
-            this.btnReform.Size = new System.Drawing.Size(82, 85);
+            this.btnReform.Size = new System.Drawing.Size(78, 77);
             this.btnReform.TabIndex = 1;
             this.btnReform.Text = "重整";
             this.btnReform.UseVisualStyleBackColor = false;
@@ -798,9 +725,9 @@
             this.btnReminder.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnReminder.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnReminder.ForeColor = System.Drawing.Color.White;
-            this.btnReminder.Location = new System.Drawing.Point(177, 91);
+            this.btnReminder.Location = new System.Drawing.Point(165, 82);
             this.btnReminder.Name = "btnReminder";
-            this.btnReminder.Size = new System.Drawing.Size(82, 85);
+            this.btnReminder.Size = new System.Drawing.Size(78, 77);
             this.btnReminder.TabIndex = 1;
             this.btnReminder.Text = "催单";
             this.btnReminder.UseVisualStyleBackColor = false;
@@ -811,9 +738,9 @@
             this.btnPriceCode.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnPriceCode.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPriceCode.ForeColor = System.Drawing.Color.White;
-            this.btnPriceCode.Location = new System.Drawing.Point(177, 2);
+            this.btnPriceCode.Location = new System.Drawing.Point(165, 2);
             this.btnPriceCode.Name = "btnPriceCode";
-            this.btnPriceCode.Size = new System.Drawing.Size(82, 85);
+            this.btnPriceCode.Size = new System.Drawing.Size(78, 77);
             this.btnPriceCode.TabIndex = 1;
             this.btnPriceCode.Text = "银码";
             this.btnPriceCode.UseVisualStyleBackColor = false;
@@ -827,7 +754,7 @@
             this.tabPage3.Location = new System.Drawing.Point(59, 4);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(262, 274);
+            this.tabPage3.Size = new System.Drawing.Size(246, 240);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "维护";
             // 
@@ -836,9 +763,9 @@
             this.btnDailyStatement.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnDailyStatement.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDailyStatement.ForeColor = System.Drawing.Color.White;
-            this.btnDailyStatement.Location = new System.Drawing.Point(91, 2);
+            this.btnDailyStatement.Location = new System.Drawing.Point(84, 2);
             this.btnDailyStatement.Name = "btnDailyStatement";
-            this.btnDailyStatement.Size = new System.Drawing.Size(82, 85);
+            this.btnDailyStatement.Size = new System.Drawing.Size(78, 77);
             this.btnDailyStatement.TabIndex = 2;
             this.btnDailyStatement.Text = "日结";
             this.btnDailyStatement.UseVisualStyleBackColor = false;
@@ -849,9 +776,9 @@
             this.btnHandover.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnHandover.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnHandover.ForeColor = System.Drawing.Color.White;
-            this.btnHandover.Location = new System.Drawing.Point(5, 2);
+            this.btnHandover.Location = new System.Drawing.Point(3, 2);
             this.btnHandover.Name = "btnHandover";
-            this.btnHandover.Size = new System.Drawing.Size(82, 85);
+            this.btnHandover.Size = new System.Drawing.Size(78, 77);
             this.btnHandover.TabIndex = 2;
             this.btnHandover.Text = "交班";
             this.btnHandover.UseVisualStyleBackColor = false;
@@ -885,9 +812,9 @@
             // btnPersonNum
             // 
             this.btnPersonNum.BackColor = System.Drawing.Color.Orchid;
-            this.btnPersonNum.Location = new System.Drawing.Point(373, 99);
+            this.btnPersonNum.Location = new System.Drawing.Point(373, 93);
             this.btnPersonNum.Name = "btnPersonNum";
-            this.btnPersonNum.Size = new System.Drawing.Size(141, 33);
+            this.btnPersonNum.Size = new System.Drawing.Size(141, 38);
             this.btnPersonNum.TabIndex = 2;
             this.btnPersonNum.Text = "人数：";
             this.btnPersonNum.UseVisualStyleBackColor = false;
@@ -906,10 +833,10 @@
             // 
             // btnEmployee
             // 
-            this.btnEmployee.BackColor = System.Drawing.Color.Orchid;
-            this.btnEmployee.Location = new System.Drawing.Point(166, 99);
+            this.btnEmployee.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(228)))), ((int)(((byte)(44)))));
+            this.btnEmployee.Location = new System.Drawing.Point(154, 93);
             this.btnEmployee.Name = "btnEmployee";
-            this.btnEmployee.Size = new System.Drawing.Size(185, 33);
+            this.btnEmployee.Size = new System.Drawing.Size(214, 38);
             this.btnEmployee.TabIndex = 1;
             this.btnEmployee.Text = "服务员：";
             this.btnEmployee.UseVisualStyleBackColor = false;
@@ -927,10 +854,10 @@
             // 
             // btnDeskNo
             // 
-            this.btnDeskNo.BackColor = System.Drawing.Color.Orchid;
-            this.btnDeskNo.Location = new System.Drawing.Point(12, 99);
+            this.btnDeskNo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(148)))), ((int)(((byte)(91)))));
+            this.btnDeskNo.Location = new System.Drawing.Point(4, 93);
             this.btnDeskNo.Name = "btnDeskNo";
-            this.btnDeskNo.Size = new System.Drawing.Size(127, 33);
+            this.btnDeskNo.Size = new System.Drawing.Size(144, 38);
             this.btnDeskNo.TabIndex = 0;
             this.btnDeskNo.Text = "桌号：";
             this.btnDeskNo.UseVisualStyleBackColor = false;
@@ -964,7 +891,7 @@
             this.pnlBottom.Controls.Add(this.txtServiceTime);
             this.pnlBottom.Controls.Add(this.txtDeviceNo);
             this.pnlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlBottom.Location = new System.Drawing.Point(0, 715);
+            this.pnlBottom.Location = new System.Drawing.Point(0, 733);
             this.pnlBottom.Name = "pnlBottom";
             this.pnlBottom.Size = new System.Drawing.Size(1024, 35);
             this.pnlBottom.TabIndex = 1;
@@ -1015,11 +942,96 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // ItemID
+            // 
+            this.ItemID.HeaderText = "ItemID";
+            this.ItemID.Name = "ItemID";
+            this.ItemID.ReadOnly = true;
+            this.ItemID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ItemID.Visible = false;
+            // 
+            // GoodsNum
+            // 
+            dataGridViewCellStyle14.Format = "N1";
+            this.GoodsNum.DefaultCellStyle = dataGridViewCellStyle14;
+            this.GoodsNum.HeaderText = "数量";
+            this.GoodsNum.Name = "GoodsNum";
+            this.GoodsNum.ReadOnly = true;
+            this.GoodsNum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.GoodsNum.Width = 76;
+            // 
+            // GoodsName
+            // 
+            this.GoodsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.GoodsName.HeaderText = "品名";
+            this.GoodsName.Name = "GoodsName";
+            this.GoodsName.ReadOnly = true;
+            this.GoodsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // GoodsPrice
+            // 
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle15.Format = "N2";
+            dataGridViewCellStyle15.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.GoodsPrice.DefaultCellStyle = dataGridViewCellStyle15;
+            this.GoodsPrice.HeaderText = "价格";
+            this.GoodsPrice.Name = "GoodsPrice";
+            this.GoodsPrice.ReadOnly = true;
+            this.GoodsPrice.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // GoodsDiscount
+            // 
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle16.Format = "N2";
+            dataGridViewCellStyle16.NullValue = null;
+            dataGridViewCellStyle16.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.GoodsDiscount.DefaultCellStyle = dataGridViewCellStyle16;
+            this.GoodsDiscount.HeaderText = "折扣";
+            this.GoodsDiscount.Name = "GoodsDiscount";
+            this.GoodsDiscount.ReadOnly = true;
+            this.GoodsDiscount.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ItemType
+            // 
+            this.ItemType.HeaderText = "ItemType";
+            this.ItemType.Name = "ItemType";
+            this.ItemType.ReadOnly = true;
+            this.ItemType.Visible = false;
+            // 
+            // CanDiscount
+            // 
+            this.CanDiscount.HeaderText = "CanDiscount";
+            this.CanDiscount.Name = "CanDiscount";
+            this.CanDiscount.ReadOnly = true;
+            this.CanDiscount.Visible = false;
+            // 
+            // ItemUnit
+            // 
+            this.ItemUnit.HeaderText = "ItemUnit";
+            this.ItemUnit.Name = "ItemUnit";
+            this.ItemUnit.ReadOnly = true;
+            this.ItemUnit.Visible = false;
+            // 
+            // Wait
+            // 
+            this.Wait.HeaderText = "Wait";
+            this.Wait.Name = "Wait";
+            this.Wait.ReadOnly = true;
+            this.Wait.Visible = false;
+            // 
+            // OrderDetailsID
+            // 
+            this.OrderDetailsID.HeaderText = "OrderDetailsID";
+            this.OrderDetailsID.Name = "OrderDetailsID";
+            this.OrderDetailsID.ReadOnly = true;
+            this.OrderDetailsID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.OrderDetailsID.Visible = false;
+            // 
             // FormOrder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1024, 750);
+            this.ClientSize = new System.Drawing.Size(1024, 768);
             this.Controls.Add(this.pnlContainer);
             this.Controls.Add(this.pnlBottom);
             this.DoubleBuffered = true;
@@ -1029,6 +1041,7 @@
             this.Name = "FormOrder";
             this.Text = "FormOrder";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.FormOrder_Load);
             this.VisibleChanged += new System.EventHandler(this.FormOrder_VisibleChanged);
             this.pnlContainer.ResumeLayout(false);
             this.pnlRight.ResumeLayout(false);
@@ -1115,6 +1128,8 @@
         private System.Windows.Forms.TextBox txtSoftwareProvider;
         private System.Windows.Forms.TextBox txtCurrentDateTime;
         private System.Windows.Forms.Timer timer1;
+        private CustomControl.CrystalButton btnHandover;
+        private CustomControl.CrystalButton btnDailyStatement;
         private System.Windows.Forms.DataGridViewTextBoxColumn ItemID;
         private System.Windows.Forms.DataGridViewTextBoxColumn GoodsNum;
         private System.Windows.Forms.DataGridViewTextBoxColumn GoodsName;
@@ -1125,7 +1140,5 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ItemUnit;
         private System.Windows.Forms.DataGridViewTextBoxColumn Wait;
         private System.Windows.Forms.DataGridViewTextBoxColumn OrderDetailsID;
-        private CustomControl.CrystalButton btnHandover;
-        private CustomControl.CrystalButton btnDailyStatement;
     }
 }

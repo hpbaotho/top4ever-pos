@@ -24,6 +24,7 @@ namespace Top4ever.Pos
 {
     public partial class FormOrder : Form
     {
+        private const int m_Space = 2;
         private int m_GoodsGroupPageIndex = 0;
         private int m_GoodsPageIndex = 0;
         private int m_DetailsGroupPageIndex = 0;
@@ -103,11 +104,11 @@ namespace Top4ever.Pos
                     {
                         if (control.Name == "GoodsGroup")
                         {
-                            int width = this.pnlGroup.Width / control.ColumnsCount;
-                            int height = this.pnlGroup.Height / control.RowsCount;
+                            int width = (this.pnlGroup.Width - m_Space * control.ColumnsCount) / control.ColumnsCount;
+                            int height = (this.pnlGroup.Height - m_Space * control.RowsCount) / control.RowsCount;
                             int pageSize = control.ColumnsCount * control.RowsCount - 2;    //扣除向前、向后两个按钮
                             //坐标
-                            int px = 0, py = 0, times = 0, pageCount = 0;
+                            int px = m_Space, py = 0, times = 0, pageCount = 0;
                             foreach (GoodsGroup item in ConstantValuePool.GoodsGroupList)
                             {
                                 //实例化Button
@@ -134,17 +135,17 @@ namespace Top4ever.Pos
                                 //计算Button位置
                                 times++;
                                 pageCount++;
-                                px += width;
+                                px += m_Space + width;
                                 if (times == control.ColumnsCount)
                                 {
-                                    px = 0;
+                                    px = m_Space;
                                     times = 0;
-                                    py += height;
+                                    py += m_Space + height;
                                 }
                                 if (pageCount == pageSize)
                                 {
                                     //new page 初始化
-                                    px = 0;
+                                    px = m_Space;
                                     py = 0;
                                     times = 0;
                                     pageCount = 0;
@@ -169,11 +170,11 @@ namespace Top4ever.Pos
                     {
                         if (control.Name == "Goods")
                         {
-                            int width = this.pnlItem.Width / control.ColumnsCount;
-                            int height = this.pnlItem.Height / control.RowsCount;
+                            int width = (this.pnlItem.Width - m_Space * control.ColumnsCount) / control.ColumnsCount;
+                            int height = (this.pnlItem.Height - m_Space * control.RowsCount) / control.RowsCount;
                             int pageSize = control.ColumnsCount * control.RowsCount - 2;    //扣除向前、向后两个按钮
                             //坐标
-                            int px = 0, py = 0, times = 0, pageCount = 0;
+                            int px = m_Space, py = 0, times = 0, pageCount = 0;
                             foreach (GoodsGroup goodsGroupItem in ConstantValuePool.GoodsGroupList)
                             {
                                 if (goodsGroupItem.GoodsList != null && goodsGroupItem.GoodsList.Count > 0)
@@ -206,17 +207,17 @@ namespace Top4ever.Pos
                                         //计算Button位置
                                         times++;
                                         pageCount++;
-                                        px += width;
+                                        px += m_Space + width;
                                         if (times == control.ColumnsCount)
                                         {
-                                            px = 0;
+                                            px = m_Space;
                                             times = 0;
-                                            py += height;
+                                            py += m_Space + height;
                                         }
                                         if (pageCount == pageSize)
                                         {
                                             //new page 初始化
-                                            px = 0;
+                                            px = m_Space;
                                             py = 0;
                                             times = 0;
                                             pageCount = 0;
@@ -224,7 +225,7 @@ namespace Top4ever.Pos
                                     }
                                     dicGoodsButton.Add(goodsGroupID, btnGoods);
                                     //new button 初始化
-                                    px = 0;
+                                    px = m_Space;
                                     py = 0;
                                     times = 0;
                                     pageCount = 0;
@@ -249,11 +250,11 @@ namespace Top4ever.Pos
                     {
                         if (control.Name == "Details")
                         {
-                            int width = this.pnlItem.Width / control.ColumnsCount;
-                            int height = this.pnlItem.Height / control.RowsCount;
+                            int width = (this.pnlItem.Width - m_Space * control.ColumnsCount) / control.ColumnsCount;
+                            int height = (this.pnlItem.Height - m_Space * control.RowsCount) / control.RowsCount;
                             int pageSize = control.ColumnsCount * control.RowsCount - 2;    //扣除向前、向后两个按钮
                             //坐标
-                            int px = 0, py = 0, times = 0, pageCount = 0;
+                            int px = m_Space, py = 0, times = 0, pageCount = 0;
                             foreach (DetailsGroup detailsGroupItem in ConstantValuePool.DetailsGroupList)
                             {
                                 if (detailsGroupItem.DetailsList != null && detailsGroupItem.DetailsList.Count > 0)
@@ -286,17 +287,17 @@ namespace Top4ever.Pos
                                         //计算Button位置
                                         times++;
                                         pageCount++;
-                                        px += width;
+                                        px += m_Space + width;
                                         if (times == control.ColumnsCount)
                                         {
-                                            px = 0;
+                                            px = m_Space;
                                             times = 0;
-                                            py += height;
+                                            py += m_Space + height;
                                         }
                                         if (pageCount == pageSize)
                                         {
                                             //new page 初始化
-                                            px = 0;
+                                            px = m_Space;
                                             py = 0;
                                             times = 0;
                                             pageCount = 0;
@@ -304,7 +305,7 @@ namespace Top4ever.Pos
                                     }
                                     DicDetailsButton.Add(detailGroupID, btnDetails);
                                     //new button 初始化
-                                    px = 0;
+                                    px = m_Space;
                                     py = 0;
                                     times = 0;
                                     pageCount = 0;
@@ -336,8 +337,8 @@ namespace Top4ever.Pos
                 {
                     if (control.Name == "GoodsGroup")
                     {
-                        width = this.pnlGroup.Width / control.ColumnsCount;
-                        height = this.pnlGroup.Height / control.RowsCount;
+                        width = (this.pnlGroup.Width - m_Space * control.ColumnsCount) / control.ColumnsCount;
+                        height = (this.pnlGroup.Height - m_Space * control.RowsCount) / control.RowsCount;
                         columnsCount = control.ColumnsCount;
                         rowsCount = control.RowsCount;
                         pageSize = control.ColumnsCount * control.RowsCount - 2;    //扣除向前、向后两个按钮
@@ -358,8 +359,8 @@ namespace Top4ever.Pos
                     this.pnlGroup.Controls.Add(btnGoodsGroup);
                 }
                 //设置页码按钮的位置
-                int px = (columnsCount - 2) * width;
-                int py = (rowsCount - 1) * height;
+                int px = (columnsCount - 2) * width + (columnsCount - 2 + 1) * m_Space;
+                int py = (rowsCount - 1) * (height + m_Space);
                 btnPageUp.Width = width;
                 btnPageUp.Height = height;
                 btnPageUp.Location = new Point(px, py);
@@ -373,8 +374,8 @@ namespace Top4ever.Pos
                     btnPageUp.Enabled = true;
                     btnPageUp.BackColor = btnPageUp.DisplayColor;
                 }
-                px = (columnsCount - 1) * width;
-                py = (rowsCount - 1) * height;
+                px = (columnsCount - 1) * width + (columnsCount - 1 + 1) * m_Space;
+                py = (rowsCount - 1) * (height + m_Space);
                 btnPageDown.Width = width;
                 btnPageDown.Height = height;
                 btnPageDown.Location = new Point(px, py);
@@ -418,8 +419,8 @@ namespace Top4ever.Pos
                         {
                             if (control.Name == "Goods")
                             {
-                                width = this.pnlItem.Width / control.ColumnsCount;
-                                height = this.pnlItem.Height / control.RowsCount;
+                                width = (this.pnlItem.Width - m_Space * control.ColumnsCount) / control.ColumnsCount;
+                                height = (this.pnlItem.Height - m_Space * control.RowsCount) / control.RowsCount;
                                 columnsCount = control.ColumnsCount;
                                 rowsCount = control.RowsCount;
                                 pageSize = control.ColumnsCount * control.RowsCount - 2;    //扣除向前、向后两个按钮
@@ -441,8 +442,8 @@ namespace Top4ever.Pos
                             this.pnlItem.Controls.Add(btnGoods);
                         }
                         //设置页码按钮的位置
-                        int px = (columnsCount - 2) * width;
-                        int py = (rowsCount - 1) * height;
+                        int px = (columnsCount - 2) * width + (columnsCount - 2 + 1) * m_Space;
+                        int py = (rowsCount - 1) * (height + m_Space);
                         btnHead.Width = width;
                         btnHead.Height = height;
                         btnHead.Location = new Point(px, py);
@@ -456,8 +457,8 @@ namespace Top4ever.Pos
                             btnHead.Enabled = true;
                             btnHead.BackColor = btnHead.DisplayColor;
                         }
-                        px = (columnsCount - 1) * width;
-                        py = (rowsCount - 1) * height;
+                        px = (columnsCount - 1) * width + (columnsCount - 1 + 1) * m_Space;
+                        py = (rowsCount - 1) * (height + m_Space);
                         btnBack.Width = width;
                         btnBack.Height = height;
                         btnBack.Location = new Point(px, py);
@@ -508,8 +509,8 @@ namespace Top4ever.Pos
                     {
                         if (control.Name == "DetailsGroup")
                         {
-                            width = this.pnlGroup.Width / control.ColumnsCount;
-                            height = this.pnlGroup.Height / control.RowsCount;
+                            width = (this.pnlGroup.Width - m_Space * control.ColumnsCount) / control.ColumnsCount;
+                            height = (this.pnlGroup.Height - m_Space * control.RowsCount) / control.RowsCount;
                             columnsCount = control.ColumnsCount;
                             rowsCount = control.RowsCount;
                             pageSize = control.ColumnsCount * control.RowsCount - 2;    //扣除向前、向后两个按钮
@@ -523,7 +524,7 @@ namespace Top4ever.Pos
                         endIndex = detailGroupList.Count;
                     }
                     //坐标
-                    int px = 0, py = 0, times = 0;
+                    int px = m_Space, py = 0, times = 0;
                     for (int i = startIndex; i < endIndex; i++)
                     {
                         //实例化Button
@@ -550,17 +551,17 @@ namespace Top4ever.Pos
                         this.pnlGroup.Controls.Add(btn);
                         //计算Button位置
                         times++;
-                        px += width;
+                        px += m_Space + width;
                         if (times == columnsCount)
                         {
-                            px = 0;
+                            px = m_Space;
                             times = 0;
-                            py += height;
+                            py += m_Space + height;
                         }
                     }
                     //设置页码按钮的位置
-                    px = (columnsCount - 2) * width;
-                    py = (rowsCount - 1) * height;
+                    px = (columnsCount - 2) * width + (columnsCount - 2 + 1) * m_Space;
+                    py = (rowsCount - 1) * (height + m_Space);
                     btnPageUp.Width = width;
                     btnPageUp.Height = height;
                     btnPageUp.Location = new Point(px, py);
@@ -574,8 +575,8 @@ namespace Top4ever.Pos
                         btnPageUp.Enabled = true;
                         btnPageUp.BackColor = btnPageUp.DisplayColor;
                     }
-                    px = (columnsCount - 1) * width;
-                    py = (rowsCount - 1) * height;
+                    px = (columnsCount - 1) * width + (columnsCount - 1 + 1) * m_Space;
+                    py = (rowsCount - 1) * (height + m_Space);
                     btnPageDown.Width = width;
                     btnPageDown.Height = height;
                     btnPageDown.Location = new Point(px, py);
@@ -620,8 +621,8 @@ namespace Top4ever.Pos
                         {
                             if (control.Name == "Details")
                             {
-                                width = this.pnlItem.Width / control.ColumnsCount;
-                                height = this.pnlItem.Height / control.RowsCount;
+                                width = (this.pnlItem.Width - m_Space * control.ColumnsCount) / control.ColumnsCount;
+                                height = (this.pnlItem.Height - m_Space * control.RowsCount) / control.RowsCount;
                                 columnsCount = control.ColumnsCount;
                                 rowsCount = control.RowsCount;
                                 pageSize = control.ColumnsCount * control.RowsCount - 2;    //扣除向前、向后两个按钮
@@ -643,8 +644,8 @@ namespace Top4ever.Pos
                             this.pnlItem.Controls.Add(btnDetails);
                         }
                         //设置页码按钮的位置
-                        int px = (columnsCount - 2) * width;
-                        int py = (rowsCount - 1) * height;
+                        int px = (columnsCount - 2) * width + (columnsCount - 2 + 1) * m_Space;
+                        int py = (rowsCount - 1) * (height + m_Space);
                         btnHead.Width = width;
                         btnHead.Height = height;
                         btnHead.Location = new Point(px, py);
@@ -658,8 +659,8 @@ namespace Top4ever.Pos
                             btnHead.Enabled = true;
                             btnHead.BackColor = btnHead.DisplayColor;
                         }
-                        px = (columnsCount - 1) * width;
-                        py = (rowsCount - 1) * height;
+                        px = (columnsCount - 1) * width + (columnsCount - 1 + 1) * m_Space;
+                        py = (rowsCount - 1) * (height + m_Space);
                         btnBack.Width = width;
                         btnBack.Height = height;
                         btnBack.Location = new Point(px, py);
@@ -865,6 +866,11 @@ namespace Top4ever.Pos
         }
 
         #endregion
+
+        private void FormOrder_Load(object sender, EventArgs e)
+        {
+            ResizeSearchPad();
+        }
 
         private void FormOrder_VisibleChanged(object sender, EventArgs e)
         {
@@ -2438,6 +2444,25 @@ namespace Top4ever.Pos
             return result;
         }
 
+        private void ResizeSearchPad()
+        {
+            if (this.Width > 1024 && pnlSearch.Visible)
+            {
+                double widthRate = Convert.ToDouble(this.Width - this.pnlLeft.Width) / 504;
+                double heightRate = Convert.ToDouble(this.Height) / 768;
+                foreach (Control c in this.pnlSearch.Controls)
+                {
+                    SetControlSize(c, widthRate, heightRate);
+                }
+            }
+        }
+
+        private void SetControlSize(Control ctl, double widthRate, double heightRate)
+        {
+            ctl.Width = Convert.ToInt32(ctl.Width * widthRate);
+            ctl.Height = Convert.ToInt32(ctl.Height * heightRate);
+            ctl.Location = new Point(Convert.ToInt32(ctl.Location.X * widthRate), Convert.ToInt32(ctl.Location.Y * heightRate));
+        }
         #endregion
     }
 }
