@@ -23,7 +23,7 @@ namespace Top4ever.Pos
 {
     public partial class FormCheckOut : Form
     {
-        private int m_Space = 2;
+        private const int m_Space = 5;
         private int m_Width = 0;
         private int m_Height = 0;
         private int m_ColumnsCount = 0;
@@ -78,6 +78,7 @@ namespace Top4ever.Pos
             DisplayPayoffButton();
             BindGoodsOrderInfo();
             BindOrderInfoSum();
+            ResizeNumericPad();
             this.btnDeskNo.Text = "桌号：" + m_CurrentDeskName;
             this.btnEmployee.Text = "服务员：" + ConstantValuePool.CurrentEmployee.EmployeeNo;
             this.btnPersonNum.Text = "人数：" + m_SalesOrder.order.PeopleNum;
@@ -93,8 +94,8 @@ namespace Top4ever.Pos
                     {
                         m_ColumnsCount = control.ColumnsCount;
                         m_RowsCount = control.RowsCount;
-                        m_Width = (this.pnlPayoffWay.Width - m_Space * (control.ColumnsCount - 1)) / control.ColumnsCount;
-                        m_Height = (this.pnlPayoffWay.Height - m_Space * (control.RowsCount - 1)) / control.RowsCount;
+                        m_Width = (this.pnlPayoffWay.Width - m_Space * (control.ColumnsCount + 1)) / control.ColumnsCount;
+                        m_Height = (this.pnlPayoffWay.Height - m_Space * (control.RowsCount + 1)) / control.RowsCount;
                         m_PageSize = control.ColumnsCount * control.RowsCount - 2;    //扣除向前、向后两个按钮
                     }
                 }
@@ -129,15 +130,15 @@ namespace Top4ever.Pos
                 endIndex = payoffButtonList.Count;
             }
             int index = 1;
-            int px = 0, py = 0;
+            int px = m_Space, py = m_Space;
             for (int i = startIndex; i < endIndex; i++)
             {
                 CrystalButton btn = payoffButtonList[i];
                 btn.Location = new Point(px, py);
                 this.pnlPayoffWay.Controls.Add(btn);
-                if (index % 5 == 0)
+                if (index % m_ColumnsCount == 0)
                 {
-                    px = 0;
+                    px = m_Space;
                     py += m_Height + m_Space;
                 }
                 else
@@ -146,13 +147,17 @@ namespace Top4ever.Pos
                 }
                 index++;
             }
+            px = (m_ColumnsCount - 2) * m_Width + (m_ColumnsCount - 2 + 1) * m_Space;
+            py = (m_RowsCount - 1) * m_Height + (m_RowsCount - 1 + 1) * m_Space;
             btnPageUp.Width = m_Width;
             btnPageUp.Height = m_Height;
-            btnPageUp.Location = new Point((m_ColumnsCount - 2) * (m_Width + m_Space), (m_RowsCount - 1) * (m_Height + m_Space));
+            btnPageUp.Location = new Point(px, py);
             this.pnlPayoffWay.Controls.Add(btnPageUp);
+            px = (m_ColumnsCount - 1) * m_Width + (m_ColumnsCount - 1 + 1) * m_Space;
+            py = (m_RowsCount - 1) * m_Height + (m_RowsCount - 1 + 1) * m_Space;
             btnPageDown.Width = m_Width;
             btnPageDown.Height = m_Height;
-            btnPageDown.Location = new Point((m_ColumnsCount - 1) * (m_Width + m_Space), (m_RowsCount - 1) * (m_Height + m_Space));
+            btnPageDown.Location = new Point(px, py);
             this.pnlPayoffWay.Controls.Add(btnPageDown);
         }
 
@@ -728,6 +733,34 @@ namespace Top4ever.Pos
             payingOrder.orderPayoffList = orderPayoffList;
             PayingOrderService payingOrderService = new PayingOrderService();
             return payingOrderService.PayForOrder(payingOrder);
+        }
+
+        private void ResizeNumericPad()
+        {
+            if (this.Width > 1024)
+            {
+                double widthRate = Convert.ToDouble(this.Width - this.pnlLeft.Width - this.panel2.Width - this.panel4.Width) / 526;
+                double heightRate = Convert.ToDouble(this.Height) / 768;
+                foreach (Control c in this.pnlNumericPad.Controls)
+                {
+                    SetControlSize(c, widthRate, heightRate);
+                }
+                foreach (Control c in this.pnlBigNumeric.Controls)
+                {
+                    SetControlSize(c, widthRate, heightRate);
+                }
+                foreach (Control c in this.pnlNumeric.Controls)
+                {
+                    SetControlSize(c, widthRate, heightRate);
+                }
+            }
+        }
+
+        private void SetControlSize(Control ctl, double widthRate, double heightRate)
+        {
+            ctl.Width = Convert.ToInt32(ctl.Width * widthRate);
+            ctl.Height = Convert.ToInt32(ctl.Height * heightRate);
+            ctl.Location = new Point(Convert.ToInt32(ctl.Location.X * widthRate), Convert.ToInt32(ctl.Location.Y * heightRate));
         }
     }
 }
