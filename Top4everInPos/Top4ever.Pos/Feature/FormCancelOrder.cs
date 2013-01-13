@@ -107,6 +107,7 @@ namespace Top4ever.Pos.Feature
                         btn.Width = width;
                         btn.Height = height;
                         btn.Location = new Point(px, py);
+                        btn.BackColor = btn.DisplayColor = Color.Teal;
                         foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
                         {
                             if (item.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
@@ -166,6 +167,10 @@ namespace Top4ever.Pos.Feature
                 {
                     m_DelItemNum = decimal.Parse(keyForm.KeypadValue);
                     this.txtItemNun.Text = m_ItemName + "*" + m_DelItemNum.ToString("f1");
+                }
+                else
+                {
+                    MessageBox.Show("删除品项的数量不能超过原始数量！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
         }

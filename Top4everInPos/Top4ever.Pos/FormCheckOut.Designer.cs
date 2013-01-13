@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
@@ -165,14 +165,14 @@
             this.dgvGoodsOrder.AllowUserToResizeColumns = false;
             this.dgvGoodsOrder.AllowUserToResizeRows = false;
             this.dgvGoodsOrder.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvGoodsOrder.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("微软雅黑", 9.75F);
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvGoodsOrder.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.dgvGoodsOrder.ColumnHeadersHeight = 35;
             this.dgvGoodsOrder.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvGoodsOrder.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -203,8 +203,8 @@
             // 
             // GoodsNum
             // 
-            dataGridViewCellStyle2.Format = "N1";
-            this.GoodsNum.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Format = "N1";
+            this.GoodsNum.DefaultCellStyle = dataGridViewCellStyle6;
             this.GoodsNum.HeaderText = "数量";
             this.GoodsNum.Name = "GoodsNum";
             this.GoodsNum.ReadOnly = true;
@@ -221,10 +221,10 @@
             // 
             // GoodsPrice
             // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.GoodsPrice.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle7.Format = "N2";
+            dataGridViewCellStyle7.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.GoodsPrice.DefaultCellStyle = dataGridViewCellStyle7;
             this.GoodsPrice.HeaderText = "价格";
             this.GoodsPrice.Name = "GoodsPrice";
             this.GoodsPrice.ReadOnly = true;
@@ -232,11 +232,11 @@
             // 
             // GoodsDiscount
             // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle4.Format = "N2";
-            dataGridViewCellStyle4.NullValue = null;
-            dataGridViewCellStyle4.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.GoodsDiscount.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle8.Format = "N2";
+            dataGridViewCellStyle8.NullValue = null;
+            dataGridViewCellStyle8.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.GoodsDiscount.DefaultCellStyle = dataGridViewCellStyle8;
             this.GoodsDiscount.HeaderText = "折扣";
             this.GoodsDiscount.Name = "GoodsDiscount";
             this.GoodsDiscount.ReadOnly = true;
@@ -274,7 +274,7 @@
             // btnExit
             // 
             this.btnExit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(43)))), ((int)(((byte)(59)))));
-            this.btnExit.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnExit.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnExit.ForeColor = System.Drawing.Color.White;
             this.btnExit.Location = new System.Drawing.Point(0, 2);
             this.btnExit.Name = "btnExit";
@@ -287,20 +287,20 @@
             // btnConfirm
             // 
             this.btnConfirm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(148)))), ((int)(((byte)(91)))));
-            this.btnConfirm.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnConfirm.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnConfirm.ForeColor = System.Drawing.Color.White;
             this.btnConfirm.Location = new System.Drawing.Point(378, 2);
             this.btnConfirm.Name = "btnConfirm";
             this.btnConfirm.Size = new System.Drawing.Size(102, 82);
             this.btnConfirm.TabIndex = 3;
-            this.btnConfirm.Text = "结账";
+            this.btnConfirm.Text = "支付";
             this.btnConfirm.UseVisualStyleBackColor = false;
             this.btnConfirm.Click += new System.EventHandler(this.btnConfirm_Click);
             // 
             // btnDiscount
             // 
             this.btnDiscount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(80)))));
-            this.btnDiscount.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnDiscount.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnDiscount.ForeColor = System.Drawing.Color.White;
             this.btnDiscount.Location = new System.Drawing.Point(283, 2);
             this.btnDiscount.Name = "btnDiscount";
@@ -313,7 +313,7 @@
             // btnPreCheck
             // 
             this.btnPreCheck.BackColor = System.Drawing.Color.Teal;
-            this.btnPreCheck.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnPreCheck.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnPreCheck.ForeColor = System.Drawing.Color.White;
             this.btnPreCheck.Location = new System.Drawing.Point(93, 2);
             this.btnPreCheck.Name = "btnPreCheck";
@@ -321,11 +321,12 @@
             this.btnPreCheck.TabIndex = 1;
             this.btnPreCheck.Text = "预结";
             this.btnPreCheck.UseVisualStyleBackColor = false;
+            this.btnPreCheck.Click += new System.EventHandler(this.btnPreCheck_Click);
             // 
             // btnMember
             // 
             this.btnMember.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(146)))), ((int)(((byte)(51)))));
-            this.btnMember.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnMember.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnMember.ForeColor = System.Drawing.Color.White;
             this.btnMember.Location = new System.Drawing.Point(190, 2);
             this.btnMember.Name = "btnMember";
@@ -333,6 +334,7 @@
             this.btnMember.TabIndex = 4;
             this.btnMember.Text = "会员折扣";
             this.btnMember.UseVisualStyleBackColor = false;
+            this.btnMember.Click += new System.EventHandler(this.btnMember_Click);
             // 
             // pnlBasicInfo
             // 
@@ -383,7 +385,7 @@
             // lbNeedPayMoney
             // 
             this.lbNeedPayMoney.AutoSize = true;
-            this.lbNeedPayMoney.Font = new System.Drawing.Font("Microsoft YaHei", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbNeedPayMoney.Font = new System.Drawing.Font("微软雅黑", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbNeedPayMoney.ForeColor = System.Drawing.Color.Chocolate;
             this.lbNeedPayMoney.Location = new System.Drawing.Point(7, 59);
             this.lbNeedPayMoney.Name = "lbNeedPayMoney";
@@ -394,7 +396,7 @@
             // lbDiscount
             // 
             this.lbDiscount.AutoSize = true;
-            this.lbDiscount.Font = new System.Drawing.Font("Microsoft YaHei", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbDiscount.Font = new System.Drawing.Font("微软雅黑", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbDiscount.ForeColor = System.Drawing.Color.Chocolate;
             this.lbDiscount.Location = new System.Drawing.Point(259, 59);
             this.lbDiscount.Name = "lbDiscount";
@@ -405,7 +407,7 @@
             // lbCutOff
             // 
             this.lbCutOff.AutoSize = true;
-            this.lbCutOff.Font = new System.Drawing.Font("Microsoft YaHei", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbCutOff.Font = new System.Drawing.Font("微软雅黑", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbCutOff.ForeColor = System.Drawing.Color.Chocolate;
             this.lbCutOff.Location = new System.Drawing.Point(259, 17);
             this.lbCutOff.Name = "lbCutOff";
@@ -416,7 +418,7 @@
             // lbTotalPrice
             // 
             this.lbTotalPrice.AutoSize = true;
-            this.lbTotalPrice.Font = new System.Drawing.Font("Microsoft YaHei", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbTotalPrice.Font = new System.Drawing.Font("微软雅黑", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbTotalPrice.ForeColor = System.Drawing.Color.Chocolate;
             this.lbTotalPrice.Location = new System.Drawing.Point(7, 15);
             this.lbTotalPrice.Name = "lbTotalPrice";
@@ -451,7 +453,7 @@
             // btnPageDown
             // 
             this.btnPageDown.BackColor = System.Drawing.Color.Teal;
-            this.btnPageDown.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnPageDown.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnPageDown.ForeColor = System.Drawing.Color.White;
             this.btnPageDown.Location = new System.Drawing.Point(440, 106);
             this.btnPageDown.Name = "btnPageDown";
@@ -464,7 +466,7 @@
             // btnPageUp
             // 
             this.btnPageUp.BackColor = System.Drawing.Color.Tomato;
-            this.btnPageUp.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnPageUp.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnPageUp.ForeColor = System.Drawing.Color.White;
             this.btnPageUp.Location = new System.Drawing.Point(354, 106);
             this.btnPageUp.Name = "btnPageUp";
@@ -489,7 +491,7 @@
             // txtAmount
             // 
             this.txtAmount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(78)))), ((int)(((byte)(116)))), ((int)(((byte)(155)))));
-            this.txtAmount.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtAmount.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtAmount.ForeColor = System.Drawing.Color.White;
             this.txtAmount.Location = new System.Drawing.Point(277, 7);
             this.txtAmount.Multiline = true;
@@ -511,7 +513,7 @@
             // txtPayoff
             // 
             this.txtPayoff.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(78)))), ((int)(((byte)(116)))), ((int)(((byte)(155)))));
-            this.txtPayoff.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPayoff.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtPayoff.ForeColor = System.Drawing.Color.White;
             this.txtPayoff.Location = new System.Drawing.Point(26, 7);
             this.txtPayoff.Multiline = true;
@@ -553,7 +555,7 @@
             // btnNumeric8
             // 
             this.btnNumeric8.BackColor = System.Drawing.Color.Black;
-            this.btnNumeric8.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F);
+            this.btnNumeric8.Font = new System.Drawing.Font("微软雅黑", 21.75F);
             this.btnNumeric8.ForeColor = System.Drawing.Color.White;
             this.btnNumeric8.Location = new System.Drawing.Point(104, 6);
             this.btnNumeric8.Name = "btnNumeric8";
@@ -566,7 +568,7 @@
             // btnNumeric5
             // 
             this.btnNumeric5.BackColor = System.Drawing.Color.Black;
-            this.btnNumeric5.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F);
+            this.btnNumeric5.Font = new System.Drawing.Font("微软雅黑", 21.75F);
             this.btnNumeric5.ForeColor = System.Drawing.Color.White;
             this.btnNumeric5.Location = new System.Drawing.Point(104, 83);
             this.btnNumeric5.Name = "btnNumeric5";
@@ -579,7 +581,7 @@
             // btnDot
             // 
             this.btnDot.BackColor = System.Drawing.Color.Black;
-            this.btnDot.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnDot.Font = new System.Drawing.Font("微软雅黑", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnDot.ForeColor = System.Drawing.Color.White;
             this.btnDot.Location = new System.Drawing.Point(104, 237);
             this.btnDot.Name = "btnDot";
@@ -592,7 +594,7 @@
             // btnNumeric2
             // 
             this.btnNumeric2.BackColor = System.Drawing.Color.Black;
-            this.btnNumeric2.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F);
+            this.btnNumeric2.Font = new System.Drawing.Font("微软雅黑", 21.75F);
             this.btnNumeric2.ForeColor = System.Drawing.Color.White;
             this.btnNumeric2.Location = new System.Drawing.Point(104, 160);
             this.btnNumeric2.Name = "btnNumeric2";
@@ -605,7 +607,7 @@
             // btnNumeric9
             // 
             this.btnNumeric9.BackColor = System.Drawing.Color.Black;
-            this.btnNumeric9.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F);
+            this.btnNumeric9.Font = new System.Drawing.Font("微软雅黑", 21.75F);
             this.btnNumeric9.ForeColor = System.Drawing.Color.White;
             this.btnNumeric9.Location = new System.Drawing.Point(203, 6);
             this.btnNumeric9.Name = "btnNumeric9";
@@ -618,7 +620,7 @@
             // btnNumeric6
             // 
             this.btnNumeric6.BackColor = System.Drawing.Color.Black;
-            this.btnNumeric6.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F);
+            this.btnNumeric6.Font = new System.Drawing.Font("微软雅黑", 21.75F);
             this.btnNumeric6.ForeColor = System.Drawing.Color.White;
             this.btnNumeric6.Location = new System.Drawing.Point(203, 83);
             this.btnNumeric6.Name = "btnNumeric6";
@@ -631,7 +633,7 @@
             // btnClear
             // 
             this.btnClear.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(123)))), ((int)(((byte)(31)))));
-            this.btnClear.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnClear.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnClear.ForeColor = System.Drawing.Color.White;
             this.btnClear.Location = new System.Drawing.Point(203, 237);
             this.btnClear.Name = "btnClear";
@@ -644,7 +646,7 @@
             // btnNumeric3
             // 
             this.btnNumeric3.BackColor = System.Drawing.Color.Black;
-            this.btnNumeric3.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F);
+            this.btnNumeric3.Font = new System.Drawing.Font("微软雅黑", 21.75F);
             this.btnNumeric3.ForeColor = System.Drawing.Color.White;
             this.btnNumeric3.Location = new System.Drawing.Point(203, 160);
             this.btnNumeric3.Name = "btnNumeric3";
@@ -657,7 +659,7 @@
             // btnNumeric7
             // 
             this.btnNumeric7.BackColor = System.Drawing.Color.Black;
-            this.btnNumeric7.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnNumeric7.Font = new System.Drawing.Font("微软雅黑", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnNumeric7.ForeColor = System.Drawing.Color.White;
             this.btnNumeric7.Location = new System.Drawing.Point(5, 6);
             this.btnNumeric7.Name = "btnNumeric7";
@@ -670,7 +672,7 @@
             // btnZero
             // 
             this.btnZero.BackColor = System.Drawing.Color.Black;
-            this.btnZero.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F);
+            this.btnZero.Font = new System.Drawing.Font("微软雅黑", 21.75F);
             this.btnZero.ForeColor = System.Drawing.Color.White;
             this.btnZero.Location = new System.Drawing.Point(5, 237);
             this.btnZero.Name = "btnZero";
@@ -683,7 +685,7 @@
             // btnNumeric4
             // 
             this.btnNumeric4.BackColor = System.Drawing.Color.Black;
-            this.btnNumeric4.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F);
+            this.btnNumeric4.Font = new System.Drawing.Font("微软雅黑", 21.75F);
             this.btnNumeric4.ForeColor = System.Drawing.Color.White;
             this.btnNumeric4.Location = new System.Drawing.Point(5, 83);
             this.btnNumeric4.Name = "btnNumeric4";
@@ -696,7 +698,7 @@
             // btnNumeric1
             // 
             this.btnNumeric1.BackColor = System.Drawing.Color.Black;
-            this.btnNumeric1.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F);
+            this.btnNumeric1.Font = new System.Drawing.Font("微软雅黑", 21.75F);
             this.btnNumeric1.ForeColor = System.Drawing.Color.White;
             this.btnNumeric1.Location = new System.Drawing.Point(5, 160);
             this.btnNumeric1.Name = "btnNumeric1";
@@ -725,7 +727,7 @@
             // btnReal
             // 
             this.btnReal.BackColor = System.Drawing.Color.SeaGreen;
-            this.btnReal.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F);
+            this.btnReal.Font = new System.Drawing.Font("微软雅黑", 14.25F);
             this.btnReal.ForeColor = System.Drawing.Color.White;
             this.btnReal.Location = new System.Drawing.Point(113, 237);
             this.btnReal.Name = "btnReal";
@@ -738,7 +740,7 @@
             // btnAdd5
             // 
             this.btnAdd5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(97)))), ((int)(((byte)(105)))), ((int)(((byte)(118)))));
-            this.btnAdd5.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnAdd5.Font = new System.Drawing.Font("微软雅黑", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnAdd5.ForeColor = System.Drawing.Color.White;
             this.btnAdd5.Location = new System.Drawing.Point(113, 160);
             this.btnAdd5.Name = "btnAdd5";
@@ -751,7 +753,7 @@
             // btnAdd10
             // 
             this.btnAdd10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(97)))), ((int)(((byte)(105)))), ((int)(((byte)(118)))));
-            this.btnAdd10.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnAdd10.Font = new System.Drawing.Font("微软雅黑", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnAdd10.ForeColor = System.Drawing.Color.White;
             this.btnAdd10.Location = new System.Drawing.Point(113, 83);
             this.btnAdd10.Name = "btnAdd10";
@@ -764,7 +766,7 @@
             // btnAdd20
             // 
             this.btnAdd20.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(97)))), ((int)(((byte)(105)))), ((int)(((byte)(118)))));
-            this.btnAdd20.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnAdd20.Font = new System.Drawing.Font("微软雅黑", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnAdd20.ForeColor = System.Drawing.Color.White;
             this.btnAdd20.Location = new System.Drawing.Point(113, 6);
             this.btnAdd20.Name = "btnAdd20";
@@ -777,7 +779,7 @@
             // btnAdd50
             // 
             this.btnAdd50.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(97)))), ((int)(((byte)(105)))), ((int)(((byte)(118)))));
-            this.btnAdd50.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnAdd50.Font = new System.Drawing.Font("微软雅黑", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnAdd50.ForeColor = System.Drawing.Color.White;
             this.btnAdd50.Location = new System.Drawing.Point(6, 237);
             this.btnAdd50.Name = "btnAdd50";
@@ -790,7 +792,7 @@
             // btnAdd100
             // 
             this.btnAdd100.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(97)))), ((int)(((byte)(105)))), ((int)(((byte)(118)))));
-            this.btnAdd100.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnAdd100.Font = new System.Drawing.Font("微软雅黑", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnAdd100.ForeColor = System.Drawing.Color.White;
             this.btnAdd100.Location = new System.Drawing.Point(6, 160);
             this.btnAdd100.Name = "btnAdd100";
@@ -803,7 +805,7 @@
             // btnAdd200
             // 
             this.btnAdd200.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(97)))), ((int)(((byte)(105)))), ((int)(((byte)(118)))));
-            this.btnAdd200.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnAdd200.Font = new System.Drawing.Font("微软雅黑", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnAdd200.ForeColor = System.Drawing.Color.White;
             this.btnAdd200.Location = new System.Drawing.Point(6, 83);
             this.btnAdd200.Name = "btnAdd200";
@@ -816,7 +818,7 @@
             // btnAdd500
             // 
             this.btnAdd500.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(97)))), ((int)(((byte)(105)))), ((int)(((byte)(118)))));
-            this.btnAdd500.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnAdd500.Font = new System.Drawing.Font("微软雅黑", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnAdd500.ForeColor = System.Drawing.Color.White;
             this.btnAdd500.Location = new System.Drawing.Point(6, 6);
             this.btnAdd500.Name = "btnAdd500";
@@ -839,7 +841,7 @@
             // 
             this.txtPayoffWay.BackColor = System.Drawing.Color.White;
             this.txtPayoffWay.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtPayoffWay.Font = new System.Drawing.Font("Microsoft YaHei", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPayoffWay.Font = new System.Drawing.Font("微软雅黑", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtPayoffWay.Location = new System.Drawing.Point(0, 0);
             this.txtPayoffWay.Multiline = true;
             this.txtPayoffWay.Name = "txtPayoffWay";
@@ -869,7 +871,7 @@
             // lbPaidInMoney
             // 
             this.lbPaidInMoney.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbPaidInMoney.Font = new System.Drawing.Font("Microsoft YaHei", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbPaidInMoney.Font = new System.Drawing.Font("微软雅黑", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbPaidInMoney.ForeColor = System.Drawing.Color.White;
             this.lbPaidInMoney.Location = new System.Drawing.Point(399, 36);
             this.lbPaidInMoney.Name = "lbPaidInMoney";
@@ -881,7 +883,7 @@
             // lbUnpaidAmount
             // 
             this.lbUnpaidAmount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbUnpaidAmount.Font = new System.Drawing.Font("Microsoft YaHei", 18F);
+            this.lbUnpaidAmount.Font = new System.Drawing.Font("微软雅黑", 18F);
             this.lbUnpaidAmount.ForeColor = System.Drawing.Color.DarkRed;
             this.lbUnpaidAmount.Location = new System.Drawing.Point(399, 99);
             this.lbUnpaidAmount.Name = "lbUnpaidAmount";
@@ -893,7 +895,7 @@
             // lbServerMoney
             // 
             this.lbServerMoney.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbServerMoney.Font = new System.Drawing.Font("Microsoft YaHei", 18F);
+            this.lbServerMoney.Font = new System.Drawing.Font("微软雅黑", 18F);
             this.lbServerMoney.ForeColor = System.Drawing.Color.White;
             this.lbServerMoney.Location = new System.Drawing.Point(399, 69);
             this.lbServerMoney.Name = "lbServerMoney";
@@ -905,7 +907,7 @@
             // lbReceMoney
             // 
             this.lbReceMoney.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbReceMoney.Font = new System.Drawing.Font("Microsoft YaHei", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbReceMoney.Font = new System.Drawing.Font("微软雅黑", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbReceMoney.ForeColor = System.Drawing.Color.White;
             this.lbReceMoney.Location = new System.Drawing.Point(399, 4);
             this.lbReceMoney.Name = "lbReceMoney";
@@ -917,7 +919,7 @@
             // lbPaidInAmount
             // 
             this.lbPaidInAmount.AutoSize = true;
-            this.lbPaidInAmount.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbPaidInAmount.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbPaidInAmount.Location = new System.Drawing.Point(21, 41);
             this.lbPaidInAmount.Name = "lbPaidInAmount";
             this.lbPaidInAmount.Size = new System.Drawing.Size(107, 25);
@@ -927,7 +929,7 @@
             // lbReceivableAmount
             // 
             this.lbReceivableAmount.AutoSize = true;
-            this.lbReceivableAmount.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbReceivableAmount.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbReceivableAmount.Location = new System.Drawing.Point(21, 9);
             this.lbReceivableAmount.Name = "lbReceivableAmount";
             this.lbReceivableAmount.Size = new System.Drawing.Size(107, 25);
@@ -937,7 +939,7 @@
             // lbUnpaidMoney
             // 
             this.lbUnpaidMoney.AutoSize = true;
-            this.lbUnpaidMoney.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbUnpaidMoney.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbUnpaidMoney.Location = new System.Drawing.Point(21, 104);
             this.lbUnpaidMoney.Name = "lbUnpaidMoney";
             this.lbUnpaidMoney.Size = new System.Drawing.Size(107, 25);
@@ -947,7 +949,7 @@
             // lbServerFee
             // 
             this.lbServerFee.AutoSize = true;
-            this.lbServerFee.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbServerFee.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbServerFee.Location = new System.Drawing.Point(40, 74);
             this.lbServerFee.Name = "lbServerFee";
             this.lbServerFee.Size = new System.Drawing.Size(88, 25);
@@ -966,7 +968,7 @@
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F);
+            this.Font = new System.Drawing.Font("微软雅黑", 9.75F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "FormCheckOut";

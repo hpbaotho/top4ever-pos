@@ -79,6 +79,11 @@ namespace Top4ever.Pos
             BindGoodsOrderInfo();
             BindOrderInfoSum();
             ResizeNumericPad();
+            if (!RightsItemCode.FindRights(RightsItemCode.PAYMENT))
+            {
+                btnConfirm.Enabled = false;
+                btnConfirm.BackColor = ConstantValuePool.DisabledColor;
+            }
             this.btnDeskNo.Text = "桌号：" + m_CurrentDeskName;
             this.btnEmployee.Text = "服务员：" + ConstantValuePool.CurrentEmployee.EmployeeNo;
             this.btnPersonNum.Text = "人数：" + m_SalesOrder.order.PeopleNum;
@@ -214,7 +219,7 @@ namespace Top4ever.Pos
             m_CutOff = wholePayMoney - actualPayMoney;
             this.lbNeedPayMoney.Text = "实际应付：" + actualPayMoney.ToString("f2");
             this.lbReceMoney.Text = actualPayMoney.ToString("f2");
-            this.lbCutOff.Text = "去零：" + m_CutOff.ToString("f2");
+            this.lbCutOff.Text = "去零：" + (-m_CutOff).ToString("f2");
         }
 
         private void btnPayoff_Click(object sender, EventArgs e)
@@ -464,6 +469,29 @@ namespace Top4ever.Pos
         {
             if (dgvGoodsOrder.Rows.Count > 0)
             {
+                //权限验证
+                bool hasRights = false;
+                if (RightsItemCode.FindRights(RightsItemCode.WHOLEDISCOUNT))
+                {
+                    hasRights = true;
+                }
+                else
+                {
+                    FormRightsCode form = new FormRightsCode();
+                    form.ShowDialog();
+                    if (form.ReturnValue)
+                    {
+                        IList<string> rightsCodeList = form.RightsCodeList;
+                        if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.WHOLEDISCOUNT))
+                        {
+                            hasRights = true;
+                        }
+                    }
+                }
+                if (!hasRights)
+                {
+                    return;
+                }
                 FormDiscount formDiscount = new FormDiscount(DiscountDisplayModel.WholeDiscount);
                 formDiscount.ShowDialog();
                 if (formDiscount.CurrentDiscount != null)
@@ -740,7 +768,7 @@ namespace Top4ever.Pos
             if (this.Width > 1024)
             {
                 double widthRate = Convert.ToDouble(this.Width - this.pnlLeft.Width - this.panel2.Width - this.panel4.Width) / 526;
-                double heightRate = Convert.ToDouble(this.Height) / 768;
+                double heightRate = 1;
                 foreach (Control c in this.pnlNumericPad.Controls)
                 {
                     SetControlSize(c, widthRate, heightRate);
@@ -761,6 +789,60 @@ namespace Top4ever.Pos
             ctl.Width = Convert.ToInt32(ctl.Width * widthRate);
             ctl.Height = Convert.ToInt32(ctl.Height * heightRate);
             ctl.Location = new Point(Convert.ToInt32(ctl.Location.X * widthRate), Convert.ToInt32(ctl.Location.Y * heightRate));
+        }
+
+        private void btnPreCheck_Click(object sender, EventArgs e)
+        {
+            //权限验证
+            bool hasRights = false;
+            if (RightsItemCode.FindRights(RightsItemCode.PRECHECKOUT))
+            {
+                hasRights = true;
+            }
+            else
+            {
+                FormRightsCode form = new FormRightsCode();
+                form.ShowDialog();
+                if (form.ReturnValue)
+                {
+                    IList<string> rightsCodeList = form.RightsCodeList;
+                    if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.PRECHECKOUT))
+                    {
+                        hasRights = true;
+                    }
+                }
+            }
+            if (!hasRights)
+            {
+                return;
+            }
+        }
+
+        private void btnMember_Click(object sender, EventArgs e)
+        {
+            //权限验证
+            bool hasRights = false;
+            if (RightsItemCode.FindRights(RightsItemCode.MEMBERDISCOUNT))
+            {
+                hasRights = true;
+            }
+            else
+            {
+                FormRightsCode form = new FormRightsCode();
+                form.ShowDialog();
+                if (form.ReturnValue)
+                {
+                    IList<string> rightsCodeList = form.RightsCodeList;
+                    if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.MEMBERDISCOUNT))
+                    {
+                        hasRights = true;
+                    }
+                }
+            }
+            if (!hasRights)
+            {
+                return;
+            }
         }
     }
 }

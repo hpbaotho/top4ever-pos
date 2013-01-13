@@ -96,6 +96,12 @@
     <Compile Include="Feature\FormSplitBill.Designer.cs">
       <DependentUpon>FormSplitBill.cs</DependentUpon>
     </Compile>
+    <Compile Include="Feature\FormRightsCode.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\FormRightsCode.designer.cs">
+      <DependentUpon>FormRightsCode.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormCheckOut.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -166,6 +172,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\FormSplitBill.resx">
       <DependentUpon>FormSplitBill.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Feature\FormRightsCode.resx">
+      <DependentUpon>FormRightsCode.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormCheckOut.resx">
       <DependentUpon>FormCheckOut.cs</DependentUpon>

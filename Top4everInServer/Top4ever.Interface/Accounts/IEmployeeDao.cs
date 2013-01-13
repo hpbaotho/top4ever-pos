@@ -12,6 +12,6 @@ namespace Top4ever.Interface.Accounts
     {
         bool GetEmployee(string login, string password, out Employee employee);
 
-        IList<String> GetRightsCodeList(Guid employeeID);
+        IList<String> GetRightsCodeList(string userName, string password);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Top4ever.Entity
 {
@@ -15,10 +16,41 @@ namespace Top4ever.Entity
         public static readonly string PUNCHINREPORT = "MA8";                //打卡报表
         public static readonly string LOGSEARCH = "MA9";                        //日志查询
 
+        public static readonly string CANCELBILL = "BA0";           //取消账单
+        public static readonly string SINGLEDISCOUNT = "BA1";       //单品折扣
+        public static readonly string CHECKOUT = "BA2";             //结账
+        public static readonly string PRECHECKOUT = "BA3";          //预结
+        public static readonly string MEMBERDISCOUNT = "BA4";       //会员折扣
+        public static readonly string WHOLEDISCOUNT = "BA5";        //整单折扣
+        public static readonly string CUTSERVICEFEE = "BA6";        //去服务费
+        public static readonly string CANCELGOODS = "BA7";          //退菜
+
+        public static readonly string TAKEORDER = "RA0";        //点单
+        public static readonly string CLEARDESK = "RA1";        //清空
+        public static readonly string TURNTABLE = "RA2";        //转台
+        public static readonly string REFORM = "RA3";           //重整
+        public static readonly string SPLITBILL = "RA4";        //分单
+        public static readonly string PLACEORDER = "RA5";       //落单
+        public static readonly string PAYMENT = "RA6";          //支付
+
         public static bool FindRights(string rightsCode)
         {
             bool hasRights = false;
             foreach (string item in ConstantValuePool.CurrentEmployee.RightsCodeList)
+            {
+                if (rightsCode == item)
+                {
+                    hasRights = true;
+                    break;
+                }
+            }
+            return hasRights;
+        }
+
+        public static bool FindRights(IList<string> rightsCodeList, string rightsCode)
+        {
+            bool hasRights = false;
+            foreach (string item in rightsCodeList)
             {
                 if (rightsCode == item)
                 {

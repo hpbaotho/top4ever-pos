@@ -73,6 +73,9 @@ namespace Top4ever.BLL
                 case Command.ID_CREATE_REMINDERORDER:
                     byteRet = ReminderBLL.CreateReminderOrder(itemBuffer);
                     break;
+                case Command.ID_GET_RIGHTSCODELIST:
+                    byteRet = EmployeeBLL.GetRightsCodeList(itemBuffer);
+                    break;
 
                 default:
                     byteRet = null;

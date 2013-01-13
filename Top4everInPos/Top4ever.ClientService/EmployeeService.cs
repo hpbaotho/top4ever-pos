@@ -62,5 +62,41 @@ namespace Top4ever.ClientService
             }
             return result;
         }
+
+        public IList<String> GetRightsCodeList(string userName, string userPassword)
+        {
+            int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.USER_NO + ParamFieldLength.USER_PWD;
+            byte[] sendByte = new byte[cByte];
+            int byteOffset = 0;
+            Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_RIGHTSCODELIST), sendByte, BasicTypeLength.INT32);
+            byteOffset = BasicTypeLength.INT32;
+            Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
+            byteOffset += BasicTypeLength.INT32;
+
+            byte[] tempByte = null;
+            //UserName
+            tempByte = Encoding.UTF8.GetBytes(userName);
+            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
+            byteOffset += ParamFieldLength.USER_NO;
+            //UserPassword
+            tempByte = Encoding.UTF8.GetBytes(userPassword);
+            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
+            byteOffset += ParamFieldLength.USER_PWD;
+
+            IList<String> rightsCodeList = null;
+            using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
+            {
+                socket.Connect();
+                Byte[] receiveData = null;
+                Int32 operCode = socket.SendReceive(sendByte, out receiveData);
+                if (operCode == (int)RET_VALUE.SUCCEEDED)
+                {
+                    string strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD, receiveData.Length - ParamFieldLength.PACKAGE_HEAD);
+                    rightsCodeList = JsonConvert.DeserializeObject<IList<String>>(strReceive);
+                }
+                socket.Disconnect();
+            }
+            return rightsCodeList;
+        }
     }
 }

@@ -97,9 +97,33 @@ namespace Top4ever.Pos
             btnTurnTable.DisplayColor = btnTurnTable.BackColor;
             btnCheckOut.DisplayColor = btnCheckOut.BackColor;
 
-            btnOrder.BackColor = ConstantValuePool.PressedColor;
-            m_OperateType = ButtonOperateType.ORDER;
-            prevPressedButton = btnOrder;
+            if (RightsItemCode.FindRights(RightsItemCode.TAKEORDER))
+            {
+                btnOrder.BackColor = ConstantValuePool.PressedColor;
+                m_OperateType = ButtonOperateType.ORDER;
+                prevPressedButton = btnOrder;
+            }
+            else
+            {
+                btnOrder.Enabled = false;
+                btnOrder.BackColor = ConstantValuePool.DisabledColor;
+                m_OperateType = ButtonOperateType.NONE;
+            }
+            if (!RightsItemCode.FindRights(RightsItemCode.CLEARDESK))
+            {
+                btnClear.Enabled = false;
+                btnClear.BackColor = ConstantValuePool.DisabledColor;
+            }
+            if (!RightsItemCode.FindRights(RightsItemCode.TURNTABLE))
+            {
+                btnTurnTable.Enabled = false;
+                btnTurnTable.BackColor = ConstantValuePool.DisabledColor;
+            }
+            if (!RightsItemCode.FindRights(RightsItemCode.CHECKOUT))
+            {
+                btnCheckOut.Enabled = false;
+                btnCheckOut.BackColor = ConstantValuePool.DisabledColor;
+            }
 
             Thread backWork = new Thread(new ThreadStart(doWork));
             backWork.IsBackground = true;
@@ -307,6 +331,10 @@ namespace Top4ever.Pos
 
         private void btnDesk_Click(object sender, EventArgs e)
         {
+            if (m_OperateType == ButtonOperateType.NONE)
+            {
+                return;
+            }
             currentFormActivate = false;
             CrystalButton btnDesk = sender as CrystalButton;
             BizDesk tempDesk = btnDesk.Tag as BizDesk;
@@ -589,7 +617,10 @@ namespace Top4ever.Pos
 
         private void btnOrder_Click(object sender, EventArgs e)
         {
-            prevPressedButton.BackColor = prevPressedButton.DisplayColor;
+            if (prevPressedButton != null)
+            {
+                prevPressedButton.BackColor = prevPressedButton.DisplayColor;
+            }
             CrystalButton btn = sender as CrystalButton;
             btn.BackColor = ConstantValuePool.PressedColor;
             m_OperateType = ButtonOperateType.ORDER;
@@ -598,7 +629,10 @@ namespace Top4ever.Pos
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            prevPressedButton.BackColor = prevPressedButton.DisplayColor;
+            if (prevPressedButton != null)
+            {
+                prevPressedButton.BackColor = prevPressedButton.DisplayColor;
+            }
             CrystalButton btn = sender as CrystalButton;
             btn.BackColor = ConstantValuePool.PressedColor;
             m_OperateType = ButtonOperateType.CLEAR;
@@ -611,8 +645,10 @@ namespace Top4ever.Pos
             orderID1st = Guid.Empty;
             orderID2nd = Guid.Empty;
             firstDeskSingleOrder = false;
-
-            prevPressedButton.BackColor = prevPressedButton.DisplayColor;
+            if (prevPressedButton != null)
+            {
+                prevPressedButton.BackColor = prevPressedButton.DisplayColor;
+            }
             CrystalButton btn = sender as CrystalButton;
             btn.BackColor = ConstantValuePool.PressedColor;
             m_OperateType = ButtonOperateType.CHANGE_DESK;
@@ -621,7 +657,10 @@ namespace Top4ever.Pos
 
         private void btnCheckOut_Click(object sender, EventArgs e)
         {
-            prevPressedButton.BackColor = prevPressedButton.DisplayColor;
+            if (prevPressedButton != null)
+            {
+                prevPressedButton.BackColor = prevPressedButton.DisplayColor;
+            }
             CrystalButton btn = sender as CrystalButton;
             btn.BackColor = ConstantValuePool.PressedColor;
             m_OperateType = ButtonOperateType.CHECKOUT;
