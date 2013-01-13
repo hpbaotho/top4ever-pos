@@ -37,9 +37,22 @@ namespace Top4ever.Persistence.Accounts
             return result;
         }
 
-        public IList<String> GetRightsCodeList(Guid employeeID)
+        public IList<String> GetRightsCodeList(string userName, string password)
         {
-            return ExecuteQueryForList<String>("GetRightsCodeListByEmployee", employeeID);
+            IList<String> rightsCodeList = null;
+            Employee emp = new Employee();
+            emp.EmployeeNo = userName;
+            emp.Password = password;
+            try
+            {
+                rightsCodeList = ExecuteQueryForList<String>("GetRightsCodeListByEmployee", emp);
+            }
+            catch (Exception ex)
+            {
+                rightsCodeList = null;
+                logger.Error("Database operation failed !", ex);
+            }
+            return rightsCodeList;
         }
 
         #endregion

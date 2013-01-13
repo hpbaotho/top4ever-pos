@@ -869,6 +869,21 @@ namespace Top4ever.Pos
 
         private void FormOrder_Load(object sender, EventArgs e)
         {
+            if (!RightsItemCode.FindRights(RightsItemCode.SPLITBILL))
+            {
+                btnSplitBill.Enabled = false;
+                btnSplitBill.BackColor = ConstantValuePool.DisabledColor;
+            }
+            if (!RightsItemCode.FindRights(RightsItemCode.REFORM))
+            {
+                btnReform.Enabled = false;
+                btnReform.BackColor = ConstantValuePool.DisabledColor;
+            }
+            if (!RightsItemCode.FindRights(RightsItemCode.PLACEORDER))
+            {
+                btnPlaceOrder.Enabled = false;
+                btnPlaceOrder.BackColor = ConstantValuePool.DisabledColor;
+            }
             ResizeSearchPad();
         }
 
@@ -980,7 +995,7 @@ namespace Top4ever.Pos
             m_ActualPayMoney = actualPayMoney;
             m_CutOff = wholePayMoney - actualPayMoney;
             this.lbNeedPayMoney.Text = "实际应付：" + actualPayMoney.ToString("f2");
-            this.lbCutOff.Text = "去零：" + m_CutOff.ToString("f2");
+            this.lbCutOff.Text = "去零：" + (-m_CutOff).ToString("f2");
         }
 
         private void btnShowDetails_Click(object sender, EventArgs e)
@@ -1244,14 +1259,62 @@ namespace Top4ever.Pos
                 int selectIndex = dgvGoodsOrder.CurrentRow.Index;
                 if (dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value != null)
                 {
-                    if (Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value) == (int)OrderItemType.Details)
+                    Guid orderDetailsID = new Guid(dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value.ToString());
+                    decimal itemNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
+                    string itemName = dgvGoodsOrder.Rows[selectIndex].Cells["GoodsName"].Value.ToString();
+                    decimal itemPrice = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value);
+                    int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value);
+
+                    if (itemType == (int)OrderItemType.Details)
                     {
                         MessageBox.Show("细项不能单独删除！");
                         return;
                     }
-                    Guid orderDetailsID = new Guid(dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value.ToString());
-                    decimal itemNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
-                    string itemName = dgvGoodsOrder.Rows[selectIndex].Cells["GoodsName"].Value.ToString();
+                    if (!RightsItemCode.FindRights(RightsItemCode.CANCELGOODS))
+                    {
+                        decimal singleItemPriceSum = itemPrice / itemNum;
+                        if (itemType == (int)OrderItemType.Goods && selectIndex < dgvGoodsOrder.Rows.Count - 1)
+                        {
+                            for (int index = selectIndex + 1; index < dgvGoodsOrder.Rows.Count; index++)
+                            {
+                                if (Convert.ToInt32(dgvGoodsOrder.Rows[index].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    singleItemPriceSum += Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value) / Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value);
+                                }
+                            }
+                            if (singleItemPriceSum > ConstantValuePool.CurrentEmployee.LimitMoney)
+                            {
+                                if (DialogResult.Yes == MessageBox.Show("当前用户不具备该权限，并且超过最高退菜限额，是否更换用户？", "信息提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                                {
+                                    //权限验证
+                                    bool hasRights = false;
+                                    FormRightsCode formRightsCode = new FormRightsCode();
+                                    formRightsCode.ShowDialog();
+                                    if (formRightsCode.ReturnValue)
+                                    {
+                                        IList<string> rightsCodeList = formRightsCode.RightsCodeList;
+                                        if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.CANCELGOODS))
+                                        {
+                                            hasRights = true;
+                                        }
+                                    }
+                                    if (!hasRights)
+                                    {
+                                        return;
+                                    }
+                                }
+                                else
+                                {
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                    
                     FormCancelOrder form = new FormCancelOrder(itemName, itemNum);
                     form.ShowDialog();
                     if (form.DelItemNum > 0 && form.CurrentReason != null)
@@ -1542,6 +1605,29 @@ namespace Top4ever.Pos
         {
             if (dgvGoodsOrder.Rows.Count > 0)
             {
+                //权限验证
+                bool hasRights = false;
+                if (RightsItemCode.FindRights(RightsItemCode.SINGLEDISCOUNT))
+                {
+                    hasRights = true;
+                }
+                else
+                {
+                    FormRightsCode form = new FormRightsCode();
+                    form.ShowDialog();
+                    if (form.ReturnValue)
+                    {
+                        IList<string> rightsCodeList = form.RightsCodeList;
+                        if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.SINGLEDISCOUNT))
+                        {
+                            hasRights = true;
+                        }
+                    }
+                }
+                if (!hasRights)
+                {
+                    return;
+                }
                 int selectIndex = dgvGoodsOrder.SelectedRows[0].Index;
                 int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value);
                 if (itemType == (int)OrderItemType.Goods)   //主项才能打折
@@ -1598,6 +1684,29 @@ namespace Top4ever.Pos
         {
             if (dgvGoodsOrder.Rows.Count > 0)
             {
+                //权限验证
+                bool hasRights = false;
+                if (RightsItemCode.FindRights(RightsItemCode.CHECKOUT))
+                {
+                    hasRights = true;
+                }
+                else
+                {
+                    FormRightsCode form = new FormRightsCode();
+                    form.ShowDialog();
+                    if (form.ReturnValue)
+                    {
+                        IList<string> rightsCodeList = form.RightsCodeList;
+                        if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.CHECKOUT))
+                        {
+                            hasRights = true;
+                        }
+                    }
+                }
+                if (!hasRights)
+                {
+                    return;
+                }
                 if (SubmitSalesOrder())
                 {
                     //转入结账页面
@@ -1621,6 +1730,29 @@ namespace Top4ever.Pos
         {
             if (m_SalesOrder != null)
             {
+                //权限验证
+                bool hasRights = false;
+                if (RightsItemCode.FindRights(RightsItemCode.CANCELBILL))
+                {
+                    hasRights = true;
+                }
+                else
+                {
+                    FormRightsCode formRightsCode = new FormRightsCode();
+                    formRightsCode.ShowDialog();
+                    if (formRightsCode.ReturnValue)
+                    {
+                        IList<string> rightsCodeList = formRightsCode.RightsCodeList;
+                        if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.CANCELBILL))
+                        {
+                            hasRights = true;
+                        }
+                    }
+                }
+                if (!hasRights)
+                {
+                    return;
+                }
                 FormCancelOrder form = new FormCancelOrder();
                 form.ShowDialog();
                 if (form.CurrentReason != null)
@@ -2449,7 +2581,7 @@ namespace Top4ever.Pos
             if (this.Width > 1024 && pnlSearch.Visible)
             {
                 double widthRate = Convert.ToDouble(this.Width - this.pnlLeft.Width) / 504;
-                double heightRate = Convert.ToDouble(this.Height) / 768;
+                double heightRate = 1;
                 foreach (Control c in this.pnlSearch.Controls)
                 {
                     SetControlSize(c, widthRate, heightRate);
