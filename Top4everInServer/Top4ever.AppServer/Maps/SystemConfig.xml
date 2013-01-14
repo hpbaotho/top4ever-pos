@@ -19,6 +19,10 @@
 			<result property="LastDataSyncTime" column="LastDataSyncTime"></result>
             <result property="FixedServiceFee" column="FixedServiceFee"></result>
             <result property="ServiceFeePercent" column="ServiceFeePercent"></result>
+            <result property="ServiceFeeBeginTime1" column="ServiceFeeBeginTime1"></result>
+            <result property="ServiceFeeEndTime1" column="ServiceFeeEndTime1"></result>
+            <result property="ServiceFeeBeginTime2" column="ServiceFeeBeginTime2"></result>
+            <result property="ServiceFeeEndTime2" column="ServiceFeeEndTime2"></result>
         </resultMap>
 
     </resultMaps>
@@ -40,6 +44,10 @@
             ,[LastDataSyncTime]
             ,[FixedServiceFee]
             ,[ServiceFeePercent]
+            ,[ServiceFeeBeginTime1]
+            ,[ServiceFeeEndTime1]
+            ,[ServiceFeeBeginTime2]
+            ,[ServiceFeeEndTime2]
             FROM SysConfig WITH(NOLOCK)
         </select>
     </statements>
