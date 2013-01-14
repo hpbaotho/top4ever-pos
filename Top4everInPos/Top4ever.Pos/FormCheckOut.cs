@@ -53,6 +53,14 @@ namespace Top4ever.Pos
         /// 前一个按钮
         /// </summary>
         private CrystalButton m_PrePayoffButton = null;
+        /// <summary>
+        /// 去服务费
+        /// </summary>
+        private bool m_CutServiceFee = false;
+        /// <summary>
+        /// 服务费
+        /// </summary>
+        private decimal m_ServiceFee = 0;
 
         #region output
 
@@ -220,6 +228,45 @@ namespace Top4ever.Pos
             this.lbNeedPayMoney.Text = "实际应付：" + actualPayMoney.ToString("f2");
             this.lbReceMoney.Text = actualPayMoney.ToString("f2");
             this.lbCutOff.Text = "去零：" + (-m_CutOff).ToString("f2");
+            if (m_CutServiceFee)
+            {
+                this.lbServerMoney.Text = "0.00";
+            }
+            else
+            {
+                decimal serviceFee = ConstantValuePool.SysConfig.FixedServiceFee;
+                if (serviceFee == 0)
+                {
+                    decimal serviceFeePercent = 0;
+                    if (string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime1) && string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime1)
+                        && string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime2) && string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime2))
+                    {
+                        serviceFeePercent = ConstantValuePool.SysConfig.ServiceFeePercent;
+                    }
+                    else
+                    {
+                        DateTime curTime = Convert.ToDateTime(DateTime.Now.ToString("T"));
+                        if (!string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime1) && !string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime1))
+                        {
+                            if (curTime > Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeBeginTime1) && curTime < Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeEndTime1))
+                            {
+                                serviceFeePercent = ConstantValuePool.SysConfig.ServiceFeePercent;
+                            }
+                        }
+                        if (!string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime2) && !string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime2))
+                        {
+                            if (curTime > Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeBeginTime2) && curTime < Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeEndTime2))
+                            {
+                                serviceFeePercent = ConstantValuePool.SysConfig.ServiceFeePercent;
+                            }
+                        }
+                    }
+                    decimal tempServiceFee = actualPayMoney * serviceFeePercent / 100;
+                    serviceFee = CutOffDecimal.HandleCutOff(tempServiceFee, CutOffType.ROUND_OFF, 0);
+                }
+                m_ServiceFee = serviceFee;
+                this.lbServerMoney.Text = serviceFee.ToString("f2");
+            }
         }
 
         private void btnPayoff_Click(object sender, EventArgs e)
@@ -843,6 +890,21 @@ namespace Top4ever.Pos
             {
                 return;
             }
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            if (m_CutServiceFee)
+            {
+                m_CutServiceFee = false;
+                this.pictureBox1.Image = Properties.Resources.cut;
+            }
+            else
+            {
+                m_CutServiceFee = true;
+                this.pictureBox1.Image = Properties.Resources.add;
+            }
+            BindOrderInfoSum();
         }
     }
 }

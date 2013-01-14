@@ -52,5 +52,21 @@ namespace Top4ever.Domain
         /// 按百分比收取服务费
         /// </summary>
         public decimal ServiceFeePercent { get; set; }
+        /// <summary>
+        /// 服务费开始时间段1
+        /// </summary>
+        public string ServiceFeeBeginTime1 { get; set; }
+        /// <summary>
+        /// 服务费结束时间段1
+        /// </summary>
+        public string ServiceFeeEndTime1 { get; set; }
+        /// <summary>
+        /// 服务费开始时间段2
+        /// </summary>
+        public string ServiceFeeBeginTime2 { get; set; }
+        /// <summary>
+        /// 服务费结束时间段2
+        /// </summary>
+        public string ServiceFeeEndTime2 { get; set; }
     }
 }

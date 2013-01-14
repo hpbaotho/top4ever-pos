@@ -42,6 +42,8 @@ namespace Top4ever.Entity
 
         public static Shop CurrentShop { get; set; }
 
+        public static SystemConfig SysConfig { get; set; }
+
         public static IList<BizRegion> RegionList { get; set; }
 
         public static IList<Discount> DiscountList { get; set; }

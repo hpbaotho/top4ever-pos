@@ -28,42 +28,42 @@ namespace Top4ever.Pos.Feature
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lbEmployeeNo = new System.Windows.Forms.Label();
             this.lbBizDay = new System.Windows.Forms.Label();
             this.lbShopNo = new System.Windows.Forms.Label();
             this.lbShopName = new System.Windows.Forms.Label();
+            this.dataGridView3 = new System.Windows.Forms.DataGridView();
+            this.ColumnDiscountName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnDiscountMoney = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lbDiscountDetail = new System.Windows.Forms.Label();
+            this.lbMoneyCheck = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.lbReportName = new System.Windows.Forms.Label();
-            this.lbMoneyCheck = new System.Windows.Forms.Label();
-            this.lbDiscountDetail = new System.Windows.Forms.Label();
-            this.dataGridView3 = new System.Windows.Forms.DataGridView();
             this.ColumnPayoffName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnTimes = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnPayoffMoney = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnDiscountName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnDiscountMoney = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -131,6 +131,56 @@ namespace Top4ever.Pos.Feature
             this.lbShopName.TabIndex = 9;
             this.lbShopName.Text = "测试门店";
             // 
+            // dataGridView3
+            // 
+            this.dataGridView3.AllowUserToAddRows = false;
+            this.dataGridView3.AllowUserToDeleteRows = false;
+            this.dataGridView3.AllowUserToResizeColumns = false;
+            this.dataGridView3.AllowUserToResizeRows = false;
+            this.dataGridView3.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView3.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView3.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridView3.ColumnHeadersHeight = 35;
+            this.dataGridView3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dataGridView3.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColumnDiscountName,
+            this.ColumnDiscountMoney});
+            this.dataGridView3.EnableHeadersVisualStyles = false;
+            this.dataGridView3.Location = new System.Drawing.Point(0, 511);
+            this.dataGridView3.Name = "dataGridView3";
+            this.dataGridView3.RowHeadersVisible = false;
+            this.dataGridView3.RowTemplate.Height = 32;
+            this.dataGridView3.Size = new System.Drawing.Size(516, 164);
+            this.dataGridView3.TabIndex = 8;
+            // 
+            // ColumnDiscountName
+            // 
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle2.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.ColumnDiscountName.DefaultCellStyle = dataGridViewCellStyle2;
+            this.ColumnDiscountName.FillWeight = 50F;
+            this.ColumnDiscountName.HeaderText = "折扣名称";
+            this.ColumnDiscountName.Name = "ColumnDiscountName";
+            this.ColumnDiscountName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ColumnDiscountMoney
+            // 
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(0, 0, 30, 0);
+            this.ColumnDiscountMoney.DefaultCellStyle = dataGridViewCellStyle3;
+            this.ColumnDiscountMoney.FillWeight = 50F;
+            this.ColumnDiscountMoney.HeaderText = "折扣金额";
+            this.ColumnDiscountMoney.Name = "ColumnDiscountMoney";
+            this.ColumnDiscountMoney.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // dataGridView2
             // 
             this.dataGridView2.AllowUserToAddRows = false;
@@ -139,14 +189,14 @@ namespace Top4ever.Pos.Feature
             this.dataGridView2.AllowUserToResizeRows = false;
             this.dataGridView2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView2.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView2.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridView2.ColumnHeadersHeight = 35;
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -179,6 +229,45 @@ namespace Top4ever.Pos.Feature
             this.dataGridView1.RowTemplate.Height = 32;
             this.dataGridView1.Size = new System.Drawing.Size(516, 129);
             this.dataGridView1.TabIndex = 7;
+            // 
+            // Column1
+            // 
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle8.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle8;
+            this.Column1.FillWeight = 50F;
+            this.Column1.HeaderText = "Column1";
+            this.Column1.Name = "Column1";
+            // 
+            // Column2
+            // 
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle9.Padding = new System.Windows.Forms.Padding(0, 0, 30, 0);
+            this.Column2.DefaultCellStyle = dataGridViewCellStyle9;
+            this.Column2.FillWeight = 50F;
+            this.Column2.HeaderText = "Column2";
+            this.Column2.Name = "Column2";
+            // 
+            // lbDiscountDetail
+            // 
+            this.lbDiscountDetail.AutoSize = true;
+            this.lbDiscountDetail.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbDiscountDetail.Location = new System.Drawing.Point(5, 486);
+            this.lbDiscountDetail.Name = "lbDiscountDetail";
+            this.lbDiscountDetail.Size = new System.Drawing.Size(106, 21);
+            this.lbDiscountDetail.TabIndex = 6;
+            this.lbDiscountDetail.Text = "折扣详细资料";
+            // 
+            // lbMoneyCheck
+            // 
+            this.lbMoneyCheck.AutoSize = true;
+            this.lbMoneyCheck.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbMoneyCheck.Location = new System.Drawing.Point(5, 282);
+            this.lbMoneyCheck.Name = "lbMoneyCheck";
+            this.lbMoneyCheck.Size = new System.Drawing.Size(74, 21);
+            this.lbMoneyCheck.TabIndex = 6;
+            this.lbMoneyCheck.Text = "现金核数";
             // 
             // label6
             // 
@@ -241,125 +330,36 @@ namespace Top4ever.Pos.Feature
             this.lbReportName.TabIndex = 0;
             this.lbReportName.Text = "营  业  日  报  表";
             // 
-            // lbMoneyCheck
-            // 
-            this.lbMoneyCheck.AutoSize = true;
-            this.lbMoneyCheck.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbMoneyCheck.Location = new System.Drawing.Point(5, 282);
-            this.lbMoneyCheck.Name = "lbMoneyCheck";
-            this.lbMoneyCheck.Size = new System.Drawing.Size(74, 21);
-            this.lbMoneyCheck.TabIndex = 6;
-            this.lbMoneyCheck.Text = "现金核数";
-            // 
-            // lbDiscountDetail
-            // 
-            this.lbDiscountDetail.AutoSize = true;
-            this.lbDiscountDetail.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbDiscountDetail.Location = new System.Drawing.Point(5, 486);
-            this.lbDiscountDetail.Name = "lbDiscountDetail";
-            this.lbDiscountDetail.Size = new System.Drawing.Size(106, 21);
-            this.lbDiscountDetail.TabIndex = 6;
-            this.lbDiscountDetail.Text = "折扣详细资料";
-            // 
-            // dataGridView3
-            // 
-            this.dataGridView3.AllowUserToAddRows = false;
-            this.dataGridView3.AllowUserToDeleteRows = false;
-            this.dataGridView3.AllowUserToResizeColumns = false;
-            this.dataGridView3.AllowUserToResizeRows = false;
-            this.dataGridView3.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView3.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView3.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle14;
-            this.dataGridView3.ColumnHeadersHeight = 35;
-            this.dataGridView3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.dataGridView3.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ColumnDiscountName,
-            this.ColumnDiscountMoney});
-            this.dataGridView3.EnableHeadersVisualStyles = false;
-            this.dataGridView3.Location = new System.Drawing.Point(0, 511);
-            this.dataGridView3.Name = "dataGridView3";
-            this.dataGridView3.RowHeadersVisible = false;
-            this.dataGridView3.RowTemplate.Height = 32;
-            this.dataGridView3.Size = new System.Drawing.Size(516, 164);
-            this.dataGridView3.TabIndex = 8;
-            // 
             // ColumnPayoffName
             // 
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle11.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.ColumnPayoffName.DefaultCellStyle = dataGridViewCellStyle11;
-            this.ColumnPayoffName.FillWeight = 45F;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle5.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.ColumnPayoffName.DefaultCellStyle = dataGridViewCellStyle5;
+            this.ColumnPayoffName.FillWeight = 50F;
             this.ColumnPayoffName.HeaderText = "支付名称";
             this.ColumnPayoffName.Name = "ColumnPayoffName";
             this.ColumnPayoffName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // ColumnTimes
             // 
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ColumnTimes.DefaultCellStyle = dataGridViewCellStyle12;
-            this.ColumnTimes.FillWeight = 20F;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ColumnTimes.DefaultCellStyle = dataGridViewCellStyle6;
+            this.ColumnTimes.FillWeight = 18F;
             this.ColumnTimes.HeaderText = "次数";
             this.ColumnTimes.Name = "ColumnTimes";
             this.ColumnTimes.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // ColumnPayoffMoney
             // 
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft YaHei", 12F);
-            dataGridViewCellStyle13.Padding = new System.Windows.Forms.Padding(0, 0, 30, 0);
-            this.ColumnPayoffMoney.DefaultCellStyle = dataGridViewCellStyle13;
-            this.ColumnPayoffMoney.FillWeight = 35F;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft YaHei", 12F);
+            dataGridViewCellStyle7.Padding = new System.Windows.Forms.Padding(0, 0, 30, 0);
+            this.ColumnPayoffMoney.DefaultCellStyle = dataGridViewCellStyle7;
+            this.ColumnPayoffMoney.FillWeight = 32F;
             this.ColumnPayoffMoney.HeaderText = "支付金额";
             this.ColumnPayoffMoney.Name = "ColumnPayoffMoney";
             this.ColumnPayoffMoney.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ColumnDiscountName
-            // 
-            dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle15.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.ColumnDiscountName.DefaultCellStyle = dataGridViewCellStyle15;
-            this.ColumnDiscountName.FillWeight = 50F;
-            this.ColumnDiscountName.HeaderText = "折扣名称";
-            this.ColumnDiscountName.Name = "ColumnDiscountName";
-            this.ColumnDiscountName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ColumnDiscountMoney
-            // 
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle16.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle16.Padding = new System.Windows.Forms.Padding(0, 0, 30, 0);
-            this.ColumnDiscountMoney.DefaultCellStyle = dataGridViewCellStyle16;
-            this.ColumnDiscountMoney.FillWeight = 50F;
-            this.ColumnDiscountMoney.HeaderText = "折扣金额";
-            this.ColumnDiscountMoney.Name = "ColumnDiscountMoney";
-            this.ColumnDiscountMoney.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Column1
-            // 
-            dataGridViewCellStyle17.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle17.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle17;
-            this.Column1.FillWeight = 50F;
-            this.Column1.HeaderText = "Column1";
-            this.Column1.Name = "Column1";
-            // 
-            // Column2
-            // 
-            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle18.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle18.Padding = new System.Windows.Forms.Padding(0, 0, 30, 0);
-            this.Column2.DefaultCellStyle = dataGridViewCellStyle18;
-            this.Column2.FillWeight = 50F;
-            this.Column2.HeaderText = "Column2";
-            this.Column2.Name = "Column2";
             // 
             // FormSalesReport
             // 
@@ -375,9 +375,9 @@ namespace Top4ever.Pos.Feature
             this.Load += new System.EventHandler(this.FormSalesReport_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -402,11 +402,11 @@ namespace Top4ever.Pos.Feature
         private System.Windows.Forms.Label lbDiscountDetail;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDiscountName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDiscountMoney;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPayoffName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTimes;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPayoffMoney;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
 
 
     }

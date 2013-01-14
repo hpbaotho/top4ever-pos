@@ -96,6 +96,7 @@ namespace Top4ever.Pos
                 if (sysBasicData != null)
                 {
                     ConstantValuePool.CurrentShop = sysBasicData.CurrentShop;
+                    ConstantValuePool.SysConfig = sysBasicData.SysConfig;
                     ConstantValuePool.RegionList = sysBasicData.RegionList;
                     ConstantValuePool.DiscountList = sysBasicData.DiscountList;
                     ConstantValuePool.PayoffWayList = sysBasicData.PayoffWayList;
