@@ -2169,42 +2169,18 @@ namespace Top4ever.Pos
 
         private void btnHandover_Click(object sender, EventArgs e)
         {
-            HandoverInfo handover = new HandoverInfo();
-            HandoverService handoverService = new HandoverService();
-            bool result = handoverService.CreateHandover(handover);
-            if (result)
-            {
-                MessageBox.Show("交班成功！");
-            }
-            else
-            {
-                MessageBox.Show("出现异常错误，请重新交班！");
-            }
+            int modelType = 1;
+            Feature.FormSalesReport formReport = new FormSalesReport(modelType);
+            formReport.ShowDialog();
+            this.exTabControl1.SelectedIndex = 0;
         }
 
         private void btnDailyStatement_Click(object sender, EventArgs e)
         {
-            Feature.FormSalesReport formReport = new FormSalesReport();
+            int modelType = 2;
+            Feature.FormSalesReport formReport = new FormSalesReport(modelType);
             formReport.ShowDialog();
-            //DailyBalance dailyBalance = new DailyBalance();
-            //DailyBalanceService dailyBalanceService = new DailyBalanceService();
-            //int result = dailyBalanceService.CreateDailyBalance(dailyBalance);
-            //if (result == 1)
-            //{
-            //    MessageBox.Show("日结成功！");
-            //}
-            //else if (result == 2)
-            //{
-            //    MessageBox.Show("存在未结账单据，请先结完账！");
-            //}
-            //else if (result == 3)
-            //{
-            //    MessageBox.Show("存在未交班的POS，请先交班！");
-            //}
-            //else
-            //{
-            //    MessageBox.Show("出现异常错误，请重新日结！");
-            //}
+            this.exTabControl1.SelectedIndex = 0;
         }
 
         private void timer1_Tick(object sender, EventArgs e)

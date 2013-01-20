@@ -42,5 +42,11 @@
 		<procedure id="UpdateDailyStatement" parameterMap="DailyStatementParam">
 			proc_UpdateDailyStatement
 		</procedure>
+
+        <select id="SelectDailyStatementTimeInterval" parameterClass="String" resultClass="String">
+          SELECT CONVERT(VARCHAR(10),MIN(PayTime),120) + ',' + CONVERT(VARCHAR(10),MAX(PayTime),120) AS DailyStatementTime
+          FROM [Order]
+          WHERE DailyStatementNo = #value#
+        </select>
     </statements>
 </sqlMap>

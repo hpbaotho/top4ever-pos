@@ -36,6 +36,16 @@ namespace Top4ever.Persistence
             return result;
         }
 
+        public string GetDailyStatementTimeInterval(string dailyStatementNo)
+        {
+            string timeInterval = string.Empty;
+            object objValue = ExecuteQueryForObject("SelectDailyStatementTimeInterval", dailyStatementNo);
+            if (objValue != null)
+            {
+                timeInterval = Convert.ToString(objValue);
+            }
+            return timeInterval;
+        }
         #endregion
     }
 }

@@ -57,7 +57,7 @@ namespace Top4ever.Service
                     _dailyTurnoverDao.CreateDailyTurnover(dailyTurnover);
                     //创建新的日结
                     DailyStatement item = new DailyStatement();
-                    item.DailyStatementID = new Guid();
+                    item.DailyStatementID = Guid.NewGuid();
                     item.DailyStatementNo = DateTime.Now.ToString("yyMMddHHmmssff");
                     _dailyStatementDao.CreateDailyStatement(item);
                 }
@@ -68,6 +68,18 @@ namespace Top4ever.Service
                 returnValue = 0;
             }
             return returnValue;
+        }
+
+        public string GetDailyStatementTimeInterval()
+        {
+            string timeInterval = string.Empty;
+            //日结号
+            string dailyStatementNo = _dailyStatementDao.GetCurrentDailyStatementNo();
+            if (!string.IsNullOrEmpty(dailyStatementNo))
+            {
+                timeInterval = _dailyStatementDao.GetDailyStatementTimeInterval(dailyStatementNo);
+            }
+            return timeInterval;
         }
 
         #endregion

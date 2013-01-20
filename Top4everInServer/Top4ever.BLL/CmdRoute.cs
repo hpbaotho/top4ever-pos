@@ -76,6 +76,9 @@ namespace Top4ever.BLL
                 case Command.ID_GET_RIGHTSCODELIST:
                     byteRet = EmployeeBLL.GetRightsCodeList(itemBuffer);
                     break;
+                case Command.ID_GET_DAILYTIMEINTERVAL:
+                    byteRet = DailyBalanceBLL.GetDailyStatementTimeInterval(itemBuffer);
+                    break;
 
                 default:
                     byteRet = null;

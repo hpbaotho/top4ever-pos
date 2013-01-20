@@ -26,5 +26,19 @@ namespace Top4ever.BLL
             Array.Copy(BitConverter.GetBytes(result), 0, objRet, 2 * BasicTypeLength.INT32, BasicTypeLength.INT32);
             return objRet;
         }
+
+        public static byte[] GetDailyStatementTimeInterval(byte[] itemBuffer)
+        {
+            byte[] objRet = null;
+            string timeInterval = DailyBalanceService.GetInstance().GetDailyStatementTimeInterval();
+
+            byte[] byteArr = Encoding.UTF8.GetBytes(timeInterval);
+            int transCount = BasicTypeLength.INT32 + BasicTypeLength.INT32 + byteArr.Length;
+            objRet = new byte[transCount];
+            Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes(transCount), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            Array.Copy(byteArr, 0, objRet, 2 * BasicTypeLength.INT32, byteArr.Length);
+            return objRet;
+        }
     }
 }
