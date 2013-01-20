@@ -26,6 +26,10 @@ namespace Top4ever.Domain
         /// </summary>
         public decimal ActualTotalIncome { get; set; }
         /// <summary>
+        /// 服务费
+        /// </summary>
+        public decimal TotalServiceFee { get; set; }
+        /// <summary>
         /// 储值金额
         /// </summary>
         public decimal StoredTotalPrice { get; set; }
