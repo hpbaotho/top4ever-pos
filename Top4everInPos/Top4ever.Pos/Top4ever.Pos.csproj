@@ -42,6 +42,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Feature\FormBillManagement.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\FormBillManagement.Designer.cs">
+      <DependentUpon>FormBillManagement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Feature\FormChooseDate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\FormChooseDate.Designer.cs">
+      <DependentUpon>FormChooseDate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Feature\FormChoseMultiOrder.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -146,6 +158,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Feature\FormBillManagement.resx">
+      <DependentUpon>FormBillManagement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Feature\FormChooseDate.resx">
+      <DependentUpon>FormChooseDate.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Feature\FormChoseMultiOrder.resx">
       <DependentUpon>FormChoseMultiOrder.cs</DependentUpon>
     </EmbeddedResource>

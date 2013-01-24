@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormOrder));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             this.pnlContainer = new System.Windows.Forms.Panel();
             this.pnlRight = new System.Windows.Forms.Panel();
             this.pnlItem = new System.Windows.Forms.Panel();
@@ -48,6 +48,16 @@
             this.btnSearch = new Top4ever.CustomControl.CrystalButton();
             this.pnlLeft = new System.Windows.Forms.Panel();
             this.dgvGoodsOrder = new System.Windows.Forms.DataGridView();
+            this.ItemID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GoodsNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GoodsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GoodsPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GoodsDiscount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ItemType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CanDiscount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ItemUnit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Wait = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.OrderDetailsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlToolBar = new System.Windows.Forms.Panel();
             this.btnCancel = new Top4ever.CustomControl.CrystalButton();
             this.btnDot = new Top4ever.CustomControl.CrystalButton();
@@ -98,16 +108,6 @@
             this.txtServiceTime = new System.Windows.Forms.TextBox();
             this.txtDeviceNo = new System.Windows.Forms.TextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.ItemID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.GoodsNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.GoodsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.GoodsPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.GoodsDiscount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ItemType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CanDiscount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ItemUnit = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Wait = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.OrderDetailsID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlContainer.SuspendLayout();
             this.pnlRight.SuspendLayout();
             this.pnlItem.SuspendLayout();
@@ -131,7 +131,7 @@
             this.pnlContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlContainer.Location = new System.Drawing.Point(0, 0);
             this.pnlContainer.Name = "pnlContainer";
-            this.pnlContainer.Size = new System.Drawing.Size(1024, 733);
+            this.pnlContainer.Size = new System.Drawing.Size(1024, 718);
             this.pnlContainer.TabIndex = 0;
             // 
             // pnlRight
@@ -142,7 +142,7 @@
             this.pnlRight.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlRight.Location = new System.Drawing.Point(520, 0);
             this.pnlRight.Name = "pnlRight";
-            this.pnlRight.Size = new System.Drawing.Size(504, 733);
+            this.pnlRight.Size = new System.Drawing.Size(504, 718);
             this.pnlRight.TabIndex = 1;
             // 
             // pnlItem
@@ -152,7 +152,7 @@
             this.pnlItem.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlItem.Location = new System.Drawing.Point(0, 352);
             this.pnlItem.Name = "pnlItem";
-            this.pnlItem.Size = new System.Drawing.Size(504, 381);
+            this.pnlItem.Size = new System.Drawing.Size(504, 366);
             this.pnlItem.TabIndex = 3;
             // 
             // btnBack
@@ -265,7 +265,7 @@
             this.pnlLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlLeft.Location = new System.Drawing.Point(0, 0);
             this.pnlLeft.Name = "pnlLeft";
-            this.pnlLeft.Size = new System.Drawing.Size(520, 733);
+            this.pnlLeft.Size = new System.Drawing.Size(520, 718);
             this.pnlLeft.TabIndex = 0;
             // 
             // dgvGoodsOrder
@@ -275,14 +275,14 @@
             this.dgvGoodsOrder.AllowUserToResizeColumns = false;
             this.dgvGoodsOrder.AllowUserToResizeRows = false;
             this.dgvGoodsOrder.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvGoodsOrder.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvGoodsOrder.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvGoodsOrder.ColumnHeadersHeight = 35;
             this.dgvGoodsOrder.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvGoodsOrder.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -303,9 +303,94 @@
             this.dgvGoodsOrder.RowHeadersVisible = false;
             this.dgvGoodsOrder.RowTemplate.Height = 23;
             this.dgvGoodsOrder.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvGoodsOrder.Size = new System.Drawing.Size(520, 350);
+            this.dgvGoodsOrder.Size = new System.Drawing.Size(520, 335);
             this.dgvGoodsOrder.TabIndex = 4;
             this.dgvGoodsOrder.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgvGoodsOrder_MouseDown);
+            // 
+            // ItemID
+            // 
+            this.ItemID.HeaderText = "ItemID";
+            this.ItemID.Name = "ItemID";
+            this.ItemID.ReadOnly = true;
+            this.ItemID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ItemID.Visible = false;
+            // 
+            // GoodsNum
+            // 
+            dataGridViewCellStyle2.Format = "N1";
+            this.GoodsNum.DefaultCellStyle = dataGridViewCellStyle2;
+            this.GoodsNum.HeaderText = "数量";
+            this.GoodsNum.Name = "GoodsNum";
+            this.GoodsNum.ReadOnly = true;
+            this.GoodsNum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.GoodsNum.Width = 76;
+            // 
+            // GoodsName
+            // 
+            this.GoodsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.GoodsName.HeaderText = "品名";
+            this.GoodsName.Name = "GoodsName";
+            this.GoodsName.ReadOnly = true;
+            this.GoodsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // GoodsPrice
+            // 
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Format = "N2";
+            dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.GoodsPrice.DefaultCellStyle = dataGridViewCellStyle3;
+            this.GoodsPrice.HeaderText = "价格";
+            this.GoodsPrice.Name = "GoodsPrice";
+            this.GoodsPrice.ReadOnly = true;
+            this.GoodsPrice.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // GoodsDiscount
+            // 
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N2";
+            dataGridViewCellStyle4.NullValue = null;
+            dataGridViewCellStyle4.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.GoodsDiscount.DefaultCellStyle = dataGridViewCellStyle4;
+            this.GoodsDiscount.HeaderText = "折扣";
+            this.GoodsDiscount.Name = "GoodsDiscount";
+            this.GoodsDiscount.ReadOnly = true;
+            this.GoodsDiscount.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ItemType
+            // 
+            this.ItemType.HeaderText = "ItemType";
+            this.ItemType.Name = "ItemType";
+            this.ItemType.ReadOnly = true;
+            this.ItemType.Visible = false;
+            // 
+            // CanDiscount
+            // 
+            this.CanDiscount.HeaderText = "CanDiscount";
+            this.CanDiscount.Name = "CanDiscount";
+            this.CanDiscount.ReadOnly = true;
+            this.CanDiscount.Visible = false;
+            // 
+            // ItemUnit
+            // 
+            this.ItemUnit.HeaderText = "ItemUnit";
+            this.ItemUnit.Name = "ItemUnit";
+            this.ItemUnit.ReadOnly = true;
+            this.ItemUnit.Visible = false;
+            // 
+            // Wait
+            // 
+            this.Wait.HeaderText = "Wait";
+            this.Wait.Name = "Wait";
+            this.Wait.ReadOnly = true;
+            this.Wait.Visible = false;
+            // 
+            // OrderDetailsID
+            // 
+            this.OrderDetailsID.HeaderText = "OrderDetailsID";
+            this.OrderDetailsID.Name = "OrderDetailsID";
+            this.OrderDetailsID.ReadOnly = true;
+            this.OrderDetailsID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.OrderDetailsID.Visible = false;
             // 
             // pnlToolBar
             // 
@@ -323,7 +408,7 @@
             this.pnlToolBar.Controls.Add(this.btnAdd1);
             this.pnlToolBar.Controls.Add(this.exTabControl1);
             this.pnlToolBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlToolBar.Location = new System.Drawing.Point(0, 485);
+            this.pnlToolBar.Location = new System.Drawing.Point(0, 470);
             this.pnlToolBar.Name = "pnlToolBar";
             this.pnlToolBar.Size = new System.Drawing.Size(520, 248);
             this.pnlToolBar.TabIndex = 1;
@@ -891,7 +976,7 @@
             this.pnlBottom.Controls.Add(this.txtServiceTime);
             this.pnlBottom.Controls.Add(this.txtDeviceNo);
             this.pnlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlBottom.Location = new System.Drawing.Point(0, 733);
+            this.pnlBottom.Location = new System.Drawing.Point(0, 718);
             this.pnlBottom.Name = "pnlBottom";
             this.pnlBottom.Size = new System.Drawing.Size(1024, 35);
             this.pnlBottom.TabIndex = 1;
@@ -942,96 +1027,11 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // ItemID
-            // 
-            this.ItemID.HeaderText = "ItemID";
-            this.ItemID.Name = "ItemID";
-            this.ItemID.ReadOnly = true;
-            this.ItemID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.ItemID.Visible = false;
-            // 
-            // GoodsNum
-            // 
-            dataGridViewCellStyle14.Format = "N1";
-            this.GoodsNum.DefaultCellStyle = dataGridViewCellStyle14;
-            this.GoodsNum.HeaderText = "数量";
-            this.GoodsNum.Name = "GoodsNum";
-            this.GoodsNum.ReadOnly = true;
-            this.GoodsNum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.GoodsNum.Width = 76;
-            // 
-            // GoodsName
-            // 
-            this.GoodsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.GoodsName.HeaderText = "品名";
-            this.GoodsName.Name = "GoodsName";
-            this.GoodsName.ReadOnly = true;
-            this.GoodsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // GoodsPrice
-            // 
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle15.Format = "N2";
-            dataGridViewCellStyle15.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.GoodsPrice.DefaultCellStyle = dataGridViewCellStyle15;
-            this.GoodsPrice.HeaderText = "价格";
-            this.GoodsPrice.Name = "GoodsPrice";
-            this.GoodsPrice.ReadOnly = true;
-            this.GoodsPrice.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // GoodsDiscount
-            // 
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle16.Format = "N2";
-            dataGridViewCellStyle16.NullValue = null;
-            dataGridViewCellStyle16.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.GoodsDiscount.DefaultCellStyle = dataGridViewCellStyle16;
-            this.GoodsDiscount.HeaderText = "折扣";
-            this.GoodsDiscount.Name = "GoodsDiscount";
-            this.GoodsDiscount.ReadOnly = true;
-            this.GoodsDiscount.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ItemType
-            // 
-            this.ItemType.HeaderText = "ItemType";
-            this.ItemType.Name = "ItemType";
-            this.ItemType.ReadOnly = true;
-            this.ItemType.Visible = false;
-            // 
-            // CanDiscount
-            // 
-            this.CanDiscount.HeaderText = "CanDiscount";
-            this.CanDiscount.Name = "CanDiscount";
-            this.CanDiscount.ReadOnly = true;
-            this.CanDiscount.Visible = false;
-            // 
-            // ItemUnit
-            // 
-            this.ItemUnit.HeaderText = "ItemUnit";
-            this.ItemUnit.Name = "ItemUnit";
-            this.ItemUnit.ReadOnly = true;
-            this.ItemUnit.Visible = false;
-            // 
-            // Wait
-            // 
-            this.Wait.HeaderText = "Wait";
-            this.Wait.Name = "Wait";
-            this.Wait.ReadOnly = true;
-            this.Wait.Visible = false;
-            // 
-            // OrderDetailsID
-            // 
-            this.OrderDetailsID.HeaderText = "OrderDetailsID";
-            this.OrderDetailsID.Name = "OrderDetailsID";
-            this.OrderDetailsID.ReadOnly = true;
-            this.OrderDetailsID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.OrderDetailsID.Visible = false;
-            // 
             // FormOrder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1024, 768);
+            this.ClientSize = new System.Drawing.Size(1024, 753);
             this.Controls.Add(this.pnlContainer);
             this.Controls.Add(this.pnlBottom);
             this.DoubleBuffered = true;
