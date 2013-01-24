@@ -10,6 +10,7 @@ namespace Top4ever.Pos.Feature
 {
     public partial class FormNumericKeypad : Form
     {
+        private bool m_IsNaN = false;
         private string m_DisplayText = string.Empty;
         private string m_DefaultValue = string.Empty;
         private string m_KeypadValue = string.Empty;
@@ -38,6 +39,12 @@ namespace Top4ever.Pos.Feature
             InitializeComponent();
         }
 
+        public FormNumericKeypad(bool IsNumeric)
+        {
+            m_IsNaN = !IsNumeric;
+            InitializeComponent();
+        }
+
         private void FormNumericKeypad_Load(object sender, EventArgs e)
         {
             this.lbInput.Text = m_DisplayText;
@@ -45,32 +52,44 @@ namespace Top4ever.Pos.Feature
             {
                 txtNumeric.Text = m_DefaultValue;
             }
+            if (m_IsNaN)
+            {
+                btnDot.Enabled = false;
+                btnDot.BackColor = Entity.ConstantValuePool.DisabledColor;
+            }
         }
 
         private void btnNumeric_Click(object sender, EventArgs e)
         {
             Button btn = sender as Button;
-            if (this.txtNumeric.Text.Trim() == ".")
-            {
-                this.txtNumeric.Text = btn.Text;
-            }
-            else if (this.txtNumeric.Text.Trim() == "0" && btn.Text == ".")
+            if (m_IsNaN)
             {
                 this.txtNumeric.Text += btn.Text;
             }
-            else if (this.txtNumeric.Text.Trim() == "0" && btn.Text != ".")
-            {
-                this.txtNumeric.Text = btn.Text;
-            }
             else
             {
-                if (this.txtNumeric.Text.IndexOf('.') > 0 && btn.Text == ".")
+                if (this.txtNumeric.Text.Trim() == ".")
                 {
-                    //do nothing
+                    this.txtNumeric.Text = btn.Text;
+                }
+                else if (this.txtNumeric.Text.Trim() == "0" && btn.Text == ".")
+                {
+                    this.txtNumeric.Text += btn.Text;
+                }
+                else if (this.txtNumeric.Text.Trim() == "0" && btn.Text != ".")
+                {
+                    this.txtNumeric.Text = btn.Text;
                 }
                 else
                 {
-                    this.txtNumeric.Text += btn.Text;
+                    if (this.txtNumeric.Text.IndexOf('.') > 0 && btn.Text == ".")
+                    {
+                        //do nothing
+                    }
+                    else
+                    {
+                        this.txtNumeric.Text += btn.Text;
+                    }
                 }
             }
             this.txtNumeric.Focus();

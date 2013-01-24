@@ -2399,6 +2399,7 @@ namespace Top4ever.Pos
                     order.DiscountPrice = m_Discount;
                     order.CutOffPrice = m_CutOff;
                     order.ServiceFee = 0;
+                    order.DeviceNo = ConstantValuePool.BizSettingConfig.DeviceNo;
                     order.DeskName = m_CurrentDeskName;
                     order.PeopleNum = m_PersonNum;
                     order.EmployeeID = m_EmployeeID;
@@ -2410,8 +2411,8 @@ namespace Top4ever.Pos
                     salesOrder.orderDetailsList = newOrderDetailsList;
                     salesOrder.orderDiscountList = newOrderDiscountList;
                     SalesOrderService orderService = new SalesOrderService();
-                    bool result = orderService.UpdateSalesOrder(salesOrder);
-                    if (result)
+                    Int32 result = orderService.UpdateSalesOrder(salesOrder);
+                    if (result == 1)
                     {
                         //重新加载
                         SalesOrderService salesOrderService = new SalesOrderService();
@@ -2419,9 +2420,14 @@ namespace Top4ever.Pos
                         BindGoodsOrderInfo();   //绑定订单信息
                         BindOrderInfoSum();
                     }
+                    if (result == 2)
+                    {
+                        MessageBox.Show("当前桌号被其他设备占用，请退出后重试！");
+                        return false;
+                    }
                     else
                     {
-                        MessageBox.Show("结账提交失败！");
+                        MessageBox.Show("结账提交失败，请重新操作！");
                         return false;
                     }
                 }
