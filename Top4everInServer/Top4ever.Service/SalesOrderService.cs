@@ -24,6 +24,7 @@ namespace Top4ever.Service
         private IDailyStatementDao _dailyStatementDao = null;
         private ISystemConfigDao _sysConfigDao = null;
         private ISystemDictionaryDao _sysDictionary = null;
+        private IDeskDao _deskDao = null;
         private IPrintTaskDao _printTaskDao = null;
 
         #endregion
@@ -39,6 +40,7 @@ namespace Top4ever.Service
             _dailyStatementDao = _daoManager.GetDao(typeof(IDailyStatementDao)) as IDailyStatementDao;
             _sysConfigDao = _daoManager.GetDao(typeof(ISystemConfigDao)) as ISystemConfigDao;
             _sysDictionary = _daoManager.GetDao(typeof(ISystemDictionaryDao)) as ISystemDictionaryDao;
+            _deskDao = _daoManager.GetDao(typeof(IDeskDao)) as IDeskDao;
             _printTaskDao = _daoManager.GetDao(typeof(IPrintTaskDao)) as IPrintTaskDao;
         }
 
@@ -115,41 +117,53 @@ namespace Top4ever.Service
             return returnValue;
         }
 
-        public bool UpdateSalesOrder(SalesOrder salesOrder)
+        /// <summary>
+        /// 更新单据
+        /// </summary>
+        /// <returns>0:更新失败 1:更新成功 2:单据被其他设备占用</returns>
+        public Int32 UpdateSalesOrder(SalesOrder salesOrder)
         {
-            bool returnValue = false;
-           _daoManager.BeginTransaction();
-           try
-           {
-               Order order = salesOrder.order;
-               if (_orderDao.UpdateOrder(order))
-               {
-                   //菜单品项序号
-                   int seqNumber = _orderDetailsDao.GetSequenceNum(order.OrderID);
-                   foreach (OrderDetails item in salesOrder.orderDetailsList)
-                   {
-                       item.OrderBy = seqNumber;
-                       _orderDetailsDao.UpdateOrderDetails(item);
-                       seqNumber++;
-                   }
-                   //折扣信息
-                   if (salesOrder.orderDiscountList != null && salesOrder.orderDiscountList.Count > 0)
-                   {
-                       foreach (OrderDiscount item in salesOrder.orderDiscountList)
-                       {
-                           _orderDiscountDao.UpdateOrderDiscount(item);
-                       }
-                   }
-                   returnValue = true;
-               }
-               _daoManager.CommitTransaction();
-           }
-           catch
-           {
-               returnValue = false;
-               _daoManager.RollBackTransaction();
-           }
-           return returnValue;
+            int result = 0;
+            _daoManager.BeginTransaction();
+            try
+            {
+                Order order = salesOrder.order;
+                BizDesk desk = _deskDao.GetBizDeskByName(order.DeskName);
+                if (order.DeviceNo != desk.DeviceNo)
+                {
+                    result = 2;
+                }
+                else
+                {
+                    if (_orderDao.UpdateOrder(order))
+                    {
+                        //菜单品项序号
+                        int seqNumber = _orderDetailsDao.GetSequenceNum(order.OrderID);
+                        foreach (OrderDetails item in salesOrder.orderDetailsList)
+                        {
+                            item.OrderBy = seqNumber;
+                            _orderDetailsDao.UpdateOrderDetails(item);
+                            seqNumber++;
+                        }
+                        //折扣信息
+                        if (salesOrder.orderDiscountList != null && salesOrder.orderDiscountList.Count > 0)
+                        {
+                            foreach (OrderDiscount item in salesOrder.orderDiscountList)
+                            {
+                                _orderDiscountDao.UpdateOrderDiscount(item);
+                            }
+                        }
+                        result = 1;
+                    }
+                }
+                _daoManager.CommitTransaction();
+            }
+            catch
+            {
+                result = 0;
+                _daoManager.RollBackTransaction();
+            }
+            return result;
         }
 
         public SalesOrder GetSalesOrder(Guid orderID)
@@ -171,7 +185,7 @@ namespace Top4ever.Service
         }
 
         public bool SplitSalesOrder(SalesSplitOrder salesSplitOrder)
-        { 
+        {
             bool returnValue = false;
             _daoManager.BeginTransaction();
             try
