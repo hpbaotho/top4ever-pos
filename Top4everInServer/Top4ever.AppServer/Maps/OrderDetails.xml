@@ -94,15 +94,15 @@
         <insert id="InsertOrderDetails" parameterClass="OrderDetails">
 			    INSERT INTO OrderDetails
 			    (
-			    [OrderDetailsID],[OrderID],[DeviceNo],[OrderBy],[ItemType],[GoodsID],[GoodsNo],[GoodsName],[Unit],[CanDiscount],
-			    [ItemLevel],[PrintSolutionName],[DepartID],[TotalSellPrice],[TotalDiscount],[ItemQty],[SellPrice],[Wait],[DailyStatementNo],[InputEmployeeID]
+			    [OrderDetailsID],[OrderID],[DeviceNo],[OrderBy],[ItemType],[GoodsID],[GoodsNo],[GoodsName],[Unit],[CanDiscount],[ItemLevel],[PrintSolutionName],
+				[DepartID],[TotalSellPrice],[TotalDiscount],[ItemQty],[SellPrice],[Wait],[DailyStatementNo],[InputEmployeeID],[LastModifiedEmployeeID]
 			    )
 			    VALUES
 			    (
-			    #OrderDetailsID#,#OrderID#,#DeviceNo#,#OrderBy#,#ItemType#,#GoodsID#,#GoodsNo#,#GoodsName#,#Unit#,#CanDiscount#,
-			    #ItemLevel#,#PrintSolutionName#,#DepartID#,#TotalSellPrice#,#TotalDiscount#,#ItemQty#,#SellPrice#,#Wait#,#DailyStatementNo#,#EmployeeID#
+			    #OrderDetailsID#,#OrderID#,#DeviceNo#,#OrderBy#,#ItemType#,#GoodsID#,#GoodsNo#,#GoodsName#,#Unit#,#CanDiscount#,#ItemLevel#,#PrintSolutionName#,
+				#DepartID#,#TotalSellPrice#,#TotalDiscount#,#ItemQty#,#SellPrice#,#Wait#,#DailyStatementNo#,#EmployeeID#,#EmployeeID#
 			    )
-		    </insert>
+		</insert>
 
         <procedure id="UpdateOrderDetails" parameterMap="UpdateOrderDetailsParam">
             proc_UpdateOrderDetails
@@ -116,7 +116,8 @@
 
         <update id="UpdateDeletedOrderDetails" parameterClass="DeletedOrder">
             UPDATE OrderDetails
-            SET AuthorisedManager = #AuthorisedManager#, CancelEmployeeNo = #CancelEmployeeNo#, CancelReasonName = #CancelReasonName#, IsVoided = 1
+            SET AuthorisedManager = #AuthorisedManager#, CancelEmployeeNo = #CancelEmployeeNo#, CancelReasonName = #CancelReasonName#,
+			IsVoided = 1, <![CDATA[ LastModifiedTime = getdate() ]]>, LastModifiedEmployeeID = #AuthorisedManager#
             WHERE OrderID = #OrderID#
         </update>
 
