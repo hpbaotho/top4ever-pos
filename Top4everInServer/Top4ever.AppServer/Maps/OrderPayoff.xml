@@ -38,7 +38,8 @@
 				    NeedChangePay,
 				    CardNo,
 				    DailyStatementNo,
-				    LastChangeEmpID
+				    InputEmployeeID,
+					LastModifiedEmployeeID
 			    )
 			    VALUES
 			    (
@@ -52,7 +53,8 @@
 				    #NeedChangePay#,
 				    #CardNo#,
 				    #DailyStatementNo#,
-				    #EmployeeID#
+				    #EmployeeID#,
+					#EmployeeID#
 			    )
 		</insert>
     </statements>

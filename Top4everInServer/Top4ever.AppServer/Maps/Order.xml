@@ -96,21 +96,22 @@
         <update id="UpdateOrder" parameterClass="Order">
             UPDATE [Order]
             SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#, CutOffPrice = #CutOffPrice#, ServiceFee = #ServiceFee#, DeskName = #DeskName#,
-                PeopleNum = #PeopleNum#, InputEmployeeID = #EmployeeID#, InputEmployeeNo = #EmployeeNo#, OrderLastTime = OrderLastTime + #OrderLastTime#
+                PeopleNum = #PeopleNum#, InputEmployeeID = #EmployeeID#, InputEmployeeNo = #EmployeeNo#, OrderLastTime = OrderLastTime + #OrderLastTime#, <![CDATA[ LastModifiedTime = getdate() ]]>, LastModifiedEmployeeID = #EmployeeID#
             WHERE OrderID = #OrderID#
         </update>
 
         <update id="UpdatePayingOrder" parameterClass="Order">
             UPDATE [Order]
             SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#, CutOffPrice = #CutOffPrice#, ServiceFee = #ServiceFee#, NeedChangePay = #NeedChangePay#, 
-                <![CDATA[ PayTime = getdate() ]]>, [Status] = 1,
-                MembershipCard = #MembershipCard#, MemberDiscount = #MemberDiscount#, PayEmployeeID = #PayEmployeeID#, PayEmployeeNo = #PayEmployeeNo#, PayLastTime = PayLastTime + #PayLastTime#, CheckoutDeviceNo = #CheckoutDeviceNo#
+                <![CDATA[ PayTime = getdate(), LastModifiedTime = getdate() ]]>, PayEmployeeID = #PayEmployeeID#, PayEmployeeNo = #PayEmployeeNo#, LastModifiedEmployeeID = #PayEmployeeID#, [Status] = 1,
+                MembershipCard = #MembershipCard#, MemberDiscount = #MemberDiscount#, PayLastTime = PayLastTime + #PayLastTime#, CheckoutDeviceNo = #CheckoutDeviceNo#
             WHERE OrderID = #OrderID#
         </update>
 
         <update id="UpdateDeletedOrder" parameterClass="DeletedOrder">
             UPDATE [Order]
-            SET AuthorisedManager = #AuthorisedManager#, CancelEmployeeNo = #CancelEmployeeNo#, CancelReasonName = #CancelReasonName#, IsVoided = 1
+            SET AuthorisedManager = #AuthorisedManager#, CancelEmployeeNo = #CancelEmployeeNo#, CancelReasonName = #CancelReasonName#,
+				IsVoided = 1, <![CDATA[ LastModifiedTime = getdate() ]]>, LastModifiedEmployeeID = #AuthorisedManager#
             WHERE OrderID = #OrderID#
         </update>
 
