@@ -15,6 +15,7 @@
             <result property="DiscountPrice" column="DiscountPrice"></result>
             <result property="CutOffPrice" column="CutOffPrice"></result>
             <result property="ServiceFee" column="ServiceFee"></result>
+            <result property="PaymentMoney" column="PaymentMoney"></result>
             <result property="NeedChangePay" column="NeedChangePay" nullValue="0"></result>
             <result property="DeviceNo" column="DeviceNo"></result>
             <result property="DeskName" column="DeskName"></result>
@@ -69,6 +70,12 @@
             <parameter property="OrderID2nd" column="OrderID2nd" />
             <parameter property="ReturnValue" column="ReturnValue" direction="Output" />
         </parameterMap>
+
+        <parameterMap id="OrderListByPageParam" class="Hashtable">
+            <parameter property="strWhere" column="strWhere" />
+            <parameter property="PageIndex" column="PageIndex" />
+            <parameter property="PageSize" column="PageSize" />
+        </parameterMap>
     </parameterMaps>
     <!-- =============================================
         MAPPED STATEMENTS 
@@ -88,6 +95,10 @@
             FROM [Order]
             WHERE OrderID = #value# AND [Status] = 0 AND IsVoided = 0
         </select>
+
+        <procedure id="GetOrderListBySearch" parameterMap="OrderListByPageParam">
+            proc_GetOrderListBySearch
+        </procedure>
         
         <procedure id="InsertOrder" parameterMap="InsertOrderParam">
             proc_CreateNewOrder
@@ -102,7 +113,7 @@
 
         <update id="UpdatePayingOrder" parameterClass="Order">
             UPDATE [Order]
-            SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#, CutOffPrice = #CutOffPrice#, ServiceFee = #ServiceFee#, NeedChangePay = #NeedChangePay#, 
+            SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#, CutOffPrice = #CutOffPrice#, ServiceFee = #ServiceFee#, PaymentMoney = #PaymentMoney#, NeedChangePay = #NeedChangePay#,
                 <![CDATA[ PayTime = getdate(), LastModifiedTime = getdate() ]]>, PayEmployeeID = #PayEmployeeID#, PayEmployeeNo = #PayEmployeeNo#, LastModifiedEmployeeID = #PayEmployeeID#, [Status] = 1,
                 MembershipCard = #MembershipCard#, MemberDiscount = #MemberDiscount#, PayLastTime = PayLastTime + #PayLastTime#, CheckoutDeviceNo = #CheckoutDeviceNo#
             WHERE OrderID = #OrderID#

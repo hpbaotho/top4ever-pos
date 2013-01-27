@@ -19,6 +19,8 @@ namespace Top4ever.Interface.OrderRelated
 
         IList<Order> GetOrderList(string deskName);
 
+        IList<Order> GetOrderListBySearch(string strWhere, int pageIndex, int pageSize);
+
         Order GetOrder(Guid orderID);
 
         Int32 GetCurrentSubOrderNo(string deskName);

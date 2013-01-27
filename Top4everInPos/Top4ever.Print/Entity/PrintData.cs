@@ -43,6 +43,10 @@ namespace Top4ever.Print.Entity
         /// </summary>
         public string ReceivableMoney { get; set; }
         /// <summary>
+        /// 服务费
+        /// </summary>
+        public string ServiceFee { get; set; } 
+        /// <summary>
         /// 实收金额
         /// </summary>
         public string PaidInMoney { get; set; }
