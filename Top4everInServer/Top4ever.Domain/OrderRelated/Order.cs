@@ -35,6 +35,10 @@ namespace Top4ever.Domain.OrderRelated
         /// </summary>
         public decimal ServiceFee { get; set; }
         /// <summary>
+        /// 支付金额
+        /// </summary>
+        public decimal PaymentMoney { get; set; }
+        /// <summary>
         /// 找零
         /// </summary>
         public decimal NeedChangePay { get; set; }

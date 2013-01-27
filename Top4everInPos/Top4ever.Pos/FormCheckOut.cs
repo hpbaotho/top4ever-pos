@@ -230,7 +230,7 @@ namespace Top4ever.Pos
             this.lbCutOff.Text = "去零：" + (-m_CutOff).ToString("f2");
             if (m_CutServiceFee)
             {
-                this.lbServerMoney.Text = "0.00";
+                this.lbServiceFee.Text = "0.00";
             }
             else
             {
@@ -265,7 +265,7 @@ namespace Top4ever.Pos
                     serviceFee = CutOffDecimal.HandleCutOff(tempServiceFee, CutOffType.ROUND_OFF, 0);
                 }
                 m_ServiceFee = serviceFee;
-                this.lbServerMoney.Text = serviceFee.ToString("f2");
+                this.lbServiceFee.Text = serviceFee.ToString("f2");
             }
         }
 
@@ -492,11 +492,11 @@ namespace Top4ever.Pos
                 decimal remainNeedPay = 0;
                 if (string.IsNullOrEmpty(lbPaidInMoney.Text))
                 {
-                    remainNeedPay = decimal.Parse(lbReceMoney.Text);
+                    remainNeedPay = decimal.Parse(lbReceMoney.Text) + m_ServiceFee;
                 }
                 else
                 {
-                    remainNeedPay = decimal.Parse(lbReceMoney.Text) - decimal.Parse(lbPaidInMoney.Text);
+                    remainNeedPay = decimal.Parse(lbReceMoney.Text) + m_ServiceFee - decimal.Parse(lbPaidInMoney.Text);
                 }
                 if (remainNeedPay > 0)
                 {
@@ -578,7 +578,7 @@ namespace Top4ever.Pos
             decimal needChangePay = 0;  //找零
             decimal receMoney = decimal.Parse(lbReceMoney.Text);    //应收
             decimal paidInMoney = decimal.Parse(lbPaidInMoney.Text);    //实收
-            if (receMoney < paidInMoney)
+            if (receMoney + m_ServiceFee < paidInMoney)
             {
                 decimal cash = 0, noCash = 0;
                 List<OrderPayoff> tempPayoffList = new List<OrderPayoff>();
@@ -594,7 +594,7 @@ namespace Top4ever.Pos
                     }
                     tempPayoffList.Add(item.Value);
                 }
-                if (noCash > receMoney)
+                if (noCash > receMoney + m_ServiceFee)
                 {
                     List<OrderPayoff> cashPayoff = new List<OrderPayoff>();
                     List<OrderPayoff> noCashPayoff = new List<OrderPayoff>();
@@ -623,7 +623,7 @@ namespace Top4ever.Pos
                             }
                         }
                     }
-                    if (noCash - noCashPayoffArr[noCashPayoffArr.Length - 1].AsPay < receMoney)
+                    if (noCash - noCashPayoffArr[noCashPayoffArr.Length - 1].AsPay < receMoney + m_ServiceFee)
                     {
                         if (cashPayoff.Count > 0)
                         {
@@ -640,7 +640,7 @@ namespace Top4ever.Pos
                 else
                 {
                     //由全部非现金及部分现金来支付
-                    needChangePay = paidInMoney - receMoney;
+                    needChangePay = paidInMoney - (receMoney + m_ServiceFee);
                     foreach (KeyValuePair<string, OrderPayoff> item in dic)
                     {
                         if (item.Value.PayoffType == (int)PayoffWayMode.Cash)
@@ -651,7 +651,7 @@ namespace Top4ever.Pos
                     }
                 }
             }
-            if (receMoney > paidInMoney)
+            if (receMoney + m_ServiceFee > paidInMoney)
             {
                 // 支付的金额不足, 现金补足
                 foreach (PayoffWay temp in ConstantValuePool.PayoffWayList)
@@ -661,7 +661,7 @@ namespace Top4ever.Pos
                         if (dic.ContainsKey(temp.PayoffID.ToString()))
                         {
                             OrderPayoff orderPayoff = dic[temp.PayoffID.ToString()];
-                            orderPayoff.Quantity += (receMoney - paidInMoney) / temp.AsPay;
+                            orderPayoff.Quantity += (receMoney + m_ServiceFee - paidInMoney) / temp.AsPay;
                         }
                         else
                         {
@@ -672,7 +672,7 @@ namespace Top4ever.Pos
                             orderPayoff.PayoffName = temp.PayoffName;
                             orderPayoff.PayoffType = temp.PayoffType;
                             orderPayoff.AsPay = temp.AsPay;
-                            orderPayoff.Quantity = (receMoney - paidInMoney) / temp.AsPay;
+                            orderPayoff.Quantity = (receMoney + m_ServiceFee - paidInMoney) / temp.AsPay;
                             orderPayoff.CardNo = "";
                             orderPayoff.EmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
                             dic.Add(temp.PayoffID.ToString(), orderPayoff);
@@ -682,16 +682,19 @@ namespace Top4ever.Pos
                 }
             }
             
-            //填充OrderPayoff
+            //计算支付的金额并填充OrderPayoff
+            decimal paymentMoney = 0;
             List<OrderPayoff> orderPayoffList = new List<OrderPayoff>();
             foreach (KeyValuePair<string, OrderPayoff> item in dic)
             {
                 if (item.Value.Quantity > 0)
                 {
-                    orderPayoffList.Add(item.Value);
+                    OrderPayoff orderPayoff = item.Value;
+                    paymentMoney += orderPayoff.AsPay * orderPayoff.Quantity;
+                    orderPayoffList.Add(orderPayoff);
                 }
             }
-            bool result = PayForOrder(orderPayoffList, needChangePay);
+            bool result = PayForOrder(orderPayoffList, paymentMoney, needChangePay);
             if (result)
             {
                 //打印小票
@@ -705,7 +708,8 @@ namespace Top4ever.Pos
                 printData.ShopAddress = ConstantValuePool.CurrentShop.RunAddress;
                 printData.Telephone = ConstantValuePool.CurrentShop.Telephone;
                 printData.ReceivableMoney = this.lbReceMoney.Text;
-                printData.PaidInMoney = this.lbPaidInMoney.Text;
+                printData.ServiceFee = m_ServiceFee.ToString("f2");
+                printData.PaidInMoney = paymentMoney.ToString("f2");
                 printData.NeedChangePay = needChangePay.ToString("f2");
                 printData.GoodsOrderList = new List<GoodsOrder>();
                 printData.PayingOrderList = new List<PayingGoodsOrder>();
@@ -744,7 +748,7 @@ namespace Top4ever.Pos
                 int status = (int)DeskButtonStatus.IDLE_MODE;
                 DeskService deskService = new DeskService();
                 deskService.UpdateDeskStatus(m_CurrentDeskName, string.Empty, status);
-                FormConfirm form = new FormConfirm(receMoney, paidInMoney, needChangePay, orderPayoffList);
+                FormConfirm form = new FormConfirm(receMoney + m_ServiceFee, paidInMoney, needChangePay, orderPayoffList);
                 form.ShowDialog();
                 this.Close();
             }
@@ -755,7 +759,7 @@ namespace Top4ever.Pos
             }
         }
 
-        private bool PayForOrder(List<OrderPayoff> orderPayoffList, decimal needChangePay)
+        private bool PayForOrder(List<OrderPayoff> orderPayoffList, decimal paymentMoney, decimal needChangePay)
         {
             //填充Order
             Order order = new Order();
@@ -765,6 +769,7 @@ namespace Top4ever.Pos
             order.DiscountPrice = m_Discount;
             order.CutOffPrice = m_CutOff;
             order.ServiceFee = 0;
+            order.PaymentMoney = paymentMoney;
             order.NeedChangePay = needChangePay;
             order.MembershipCard = string.Empty;
             order.MemberDiscount = 0;

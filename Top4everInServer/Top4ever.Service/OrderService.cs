@@ -68,6 +68,17 @@ namespace Top4ever.Service
             return orderList;
         }
 
+        public IList<Order> GetOrderListBySearch(string strWhere, int pageIndex, int pageSize)
+        {
+            IList<Order> orderList = null;
+
+            _daoManager.OpenConnection();
+            orderList = _orderDao.GetOrderListBySearch(strWhere, pageIndex, pageSize);
+            _daoManager.CloseConnection();
+
+            return orderList;
+        }
+
         public Order GetOrder(Guid orderID)
         {
             Order order = null;

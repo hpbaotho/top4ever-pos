@@ -47,6 +47,43 @@ namespace Top4ever.ClientService
             return orderList;
         }
 
+        public IList<Order> GetOrderListBySearch(string strWhere, int pageIndex, int pageSize)
+        {
+            int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.SQL_WHERE + BasicTypeLength.INT32 + BasicTypeLength.INT32;
+            byte[] sendByte = new byte[cByte];
+            int byteOffset = 0;
+            Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_ORDERLISTBYSEARCH), sendByte, BasicTypeLength.INT32);
+            byteOffset = BasicTypeLength.INT32;
+            Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
+            byteOffset += BasicTypeLength.INT32;
+            //strWhere
+            byte[] tempByte = Encoding.UTF8.GetBytes(strWhere);
+            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
+            byteOffset += ParamFieldLength.SQL_WHERE;
+            //PageIndex
+            Array.Copy(BitConverter.GetBytes(pageIndex), 0, sendByte, byteOffset, BasicTypeLength.INT32);
+            byteOffset += BasicTypeLength.INT32;
+            //PageSize
+            Array.Copy(BitConverter.GetBytes(pageSize), 0, sendByte, byteOffset, BasicTypeLength.INT32);
+            byteOffset += BasicTypeLength.INT32;
+
+            Int32 operCode = 0;
+            IList<Order> orderList = null;
+            using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
+            {
+                socket.Connect();
+                Byte[] receiveData = null;
+                operCode = socket.SendReceive(sendByte, out receiveData);
+                if (operCode == (int)RET_VALUE.SUCCEEDED)
+                {
+                    string strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD, receiveData.Length - ParamFieldLength.PACKAGE_HEAD);
+                    orderList = JsonConvert.DeserializeObject<IList<Order>>(strReceive);
+                }
+                socket.Disconnect();
+            }
+            return orderList;
+        }
+
         public bool OrderDeskOperate(DeskChange deskChange)
         {
             string json = JsonConvert.SerializeObject(deskChange);
