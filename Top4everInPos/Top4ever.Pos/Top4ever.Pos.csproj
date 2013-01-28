@@ -99,7 +99,7 @@
     <Compile Include="Feature\FormSalesReport.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Feature\FormSalesReport.designer.cs">
+    <Compile Include="Feature\FormSalesReport.Designer.cs">
       <DependentUpon>FormSalesReport.cs</DependentUpon>
     </Compile>
     <Compile Include="Feature\FormSplitBill.cs">

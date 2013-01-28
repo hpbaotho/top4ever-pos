@@ -1,16 +1,16 @@
-namespace Top4ever.Pos.Feature
+Ôªønamespace Top4ever.Pos.Feature
 {
     partial class FormSalesReport
     {
         /// <summary>
-        /// ±ÿ–Ëµƒ…Ëº∆∆˜±‰¡ø°£
+        /// ÂøÖÈúÄÁöÑËÆæËÆ°Âô®ÂèòÈáè„ÄÇ
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        /// «Â¿ÌÀ˘”–’˝‘⁄ π”√µƒ◊ ‘¥°£
+        /// Ê∏ÖÁêÜÊâÄÊúâÊ≠£Âú®‰ΩøÁî®ÁöÑËµÑÊ∫ê„ÄÇ
         /// </summary>
-        /// <param name="disposing">»Áπ˚”¶ Õ∑≈Õ–π‹◊ ‘¥£¨Œ™ true£ª∑Ò‘ÚŒ™ false°£</param>
+        /// <param name="disposing">Â¶ÇÊûúÂ∫îÈáäÊîæÊâòÁÆ°ËµÑÊ∫êÔºå‰∏∫ trueÔºõÂê¶Âàô‰∏∫ false„ÄÇ</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,394 +20,145 @@ namespace Top4ever.Pos.Feature
             base.Dispose(disposing);
         }
 
-        #region Windows ¥∞ÃÂ…Ëº∆∆˜…˙≥…µƒ¥˙¬Î
+        #region Windows Á™ó‰ΩìËÆæËÆ°Âô®ÁîüÊàêÁöÑ‰ª£Á†Å
 
         /// <summary>
-        /// …Ëº∆∆˜÷ß≥÷À˘–Ëµƒ∑Ω∑® - ≤ª“™
-        ///  π”√¥˙¬Î±‡º≠∆˜–ﬁ∏ƒ¥À∑Ω∑®µƒƒ⁄»›°£
+        /// ËÆæËÆ°Âô®ÊîØÊåÅÊâÄÈúÄÁöÑÊñπÊ≥ï - ‰∏çË¶Å
+        /// ‰ΩøÁî®‰ª£Á†ÅÁºñËæëÂô®‰øÆÊîπÊ≠§ÊñπÊ≥ïÁöÑÂÜÖÂÆπ„ÄÇ
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.lbEmployeeNo = new System.Windows.Forms.Label();
-            this.lbBizDay = new System.Windows.Forms.Label();
-            this.lbShopNo = new System.Windows.Forms.Label();
-            this.lbShopName = new System.Windows.Forms.Label();
-            this.dataGridView3 = new System.Windows.Forms.DataGridView();
-            this.ColumnDiscountName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnDiscountMoney = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dgvSalesReport = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lbDiscountDetail = new System.Windows.Forms.Label();
-            this.lbMoneyCheck = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.lbReportName = new System.Windows.Forms.Label();
-            this.ColumnPayoffName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnTimes = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnPayoffMoney = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.lbWeather = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.btnPrint = new Top4ever.CustomControl.CrystalButton();
+            this.btnCancel = new Top4ever.CustomControl.CrystalButton();
+            this.btnSalesReport = new Top4ever.CustomControl.CrystalButton();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSalesReport)).BeginInit();
             this.SuspendLayout();
             // 
-            // panel1
+            // dgvSalesReport
             // 
-            this.panel1.BackColor = System.Drawing.Color.White;
-            this.panel1.Controls.Add(this.lbEmployeeNo);
-            this.panel1.Controls.Add(this.lbBizDay);
-            this.panel1.Controls.Add(this.lbShopNo);
-            this.panel1.Controls.Add(this.lbShopName);
-            this.panel1.Controls.Add(this.dataGridView3);
-            this.panel1.Controls.Add(this.dataGridView2);
-            this.panel1.Controls.Add(this.dataGridView1);
-            this.panel1.Controls.Add(this.lbDiscountDetail);
-            this.panel1.Controls.Add(this.lbMoneyCheck);
-            this.panel1.Controls.Add(this.label6);
-            this.panel1.Controls.Add(this.label5);
-            this.panel1.Controls.Add(this.label4);
-            this.panel1.Controls.Add(this.label3);
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Controls.Add(this.lbReportName);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(516, 750);
-            this.panel1.TabIndex = 0;
-            // 
-            // lbEmployeeNo
-            // 
-            this.lbEmployeeNo.AutoSize = true;
-            this.lbEmployeeNo.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbEmployeeNo.Location = new System.Drawing.Point(391, 79);
-            this.lbEmployeeNo.Name = "lbEmployeeNo";
-            this.lbEmployeeNo.Size = new System.Drawing.Size(64, 21);
-            this.lbEmployeeNo.TabIndex = 12;
-            this.lbEmployeeNo.Text = "123456";
-            // 
-            // lbBizDay
-            // 
-            this.lbBizDay.AutoSize = true;
-            this.lbBizDay.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbBizDay.Location = new System.Drawing.Point(391, 47);
-            this.lbBizDay.Name = "lbBizDay";
-            this.lbBizDay.Size = new System.Drawing.Size(96, 21);
-            this.lbBizDay.TabIndex = 11;
-            this.lbBizDay.Text = "2000-01-01";
-            // 
-            // lbShopNo
-            // 
-            this.lbShopNo.AutoSize = true;
-            this.lbShopNo.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbShopNo.Location = new System.Drawing.Point(119, 79);
-            this.lbShopNo.Name = "lbShopNo";
-            this.lbShopNo.Size = new System.Drawing.Size(64, 21);
-            this.lbShopNo.TabIndex = 10;
-            this.lbShopNo.Text = "010001";
-            // 
-            // lbShopName
-            // 
-            this.lbShopName.AutoSize = true;
-            this.lbShopName.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbShopName.Location = new System.Drawing.Point(119, 47);
-            this.lbShopName.Name = "lbShopName";
-            this.lbShopName.Size = new System.Drawing.Size(74, 21);
-            this.lbShopName.TabIndex = 9;
-            this.lbShopName.Text = "≤‚ ‘√≈µÍ";
-            // 
-            // dataGridView3
-            // 
-            this.dataGridView3.AllowUserToAddRows = false;
-            this.dataGridView3.AllowUserToDeleteRows = false;
-            this.dataGridView3.AllowUserToResizeColumns = false;
-            this.dataGridView3.AllowUserToResizeRows = false;
-            this.dataGridView3.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView3.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView3.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridView3.ColumnHeadersHeight = 35;
-            this.dataGridView3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.dataGridView3.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ColumnDiscountName,
-            this.ColumnDiscountMoney});
-            this.dataGridView3.EnableHeadersVisualStyles = false;
-            this.dataGridView3.Location = new System.Drawing.Point(0, 511);
-            this.dataGridView3.Name = "dataGridView3";
-            this.dataGridView3.RowHeadersVisible = false;
-            this.dataGridView3.RowTemplate.Height = 32;
-            this.dataGridView3.Size = new System.Drawing.Size(516, 164);
-            this.dataGridView3.TabIndex = 8;
-            // 
-            // ColumnDiscountName
-            // 
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle2.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.ColumnDiscountName.DefaultCellStyle = dataGridViewCellStyle2;
-            this.ColumnDiscountName.FillWeight = 50F;
-            this.ColumnDiscountName.HeaderText = "’€ø€√˚≥∆";
-            this.ColumnDiscountName.Name = "ColumnDiscountName";
-            this.ColumnDiscountName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ColumnDiscountMoney
-            // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(0, 0, 30, 0);
-            this.ColumnDiscountMoney.DefaultCellStyle = dataGridViewCellStyle3;
-            this.ColumnDiscountMoney.FillWeight = 50F;
-            this.ColumnDiscountMoney.HeaderText = "’€ø€Ω∂Ó";
-            this.ColumnDiscountMoney.Name = "ColumnDiscountMoney";
-            this.ColumnDiscountMoney.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // dataGridView2
-            // 
-            this.dataGridView2.AllowUserToAddRows = false;
-            this.dataGridView2.AllowUserToDeleteRows = false;
-            this.dataGridView2.AllowUserToResizeColumns = false;
-            this.dataGridView2.AllowUserToResizeRows = false;
-            this.dataGridView2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView2.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
-            this.dataGridView2.ColumnHeadersHeight = 35;
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ColumnPayoffName,
-            this.ColumnTimes,
-            this.ColumnPayoffMoney});
-            this.dataGridView2.EnableHeadersVisualStyles = false;
-            this.dataGridView2.Location = new System.Drawing.Point(0, 307);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.RowHeadersVisible = false;
-            this.dataGridView2.RowTemplate.Height = 32;
-            this.dataGridView2.Size = new System.Drawing.Size(516, 164);
-            this.dataGridView2.TabIndex = 8;
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AllowUserToResizeColumns = false;
-            this.dataGridView1.AllowUserToResizeRows = false;
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dataGridView1.ColumnHeadersVisible = false;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Column1,
-            this.Column2});
-            this.dataGridView1.Location = new System.Drawing.Point(0, 141);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.RowTemplate.Height = 32;
-            this.dataGridView1.Size = new System.Drawing.Size(516, 129);
-            this.dataGridView1.TabIndex = 7;
+            this.dgvSalesReport.AllowUserToAddRows = false;
+            this.dgvSalesReport.AllowUserToDeleteRows = false;
+            this.dgvSalesReport.AllowUserToResizeColumns = false;
+            this.dgvSalesReport.AllowUserToResizeRows = false;
+            this.dgvSalesReport.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvSalesReport.ColumnHeadersVisible = false;
+            this.dgvSalesReport.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column1});
+            this.dgvSalesReport.Dock = System.Windows.Forms.DockStyle.Left;
+            this.dgvSalesReport.Location = new System.Drawing.Point(0, 0);
+            this.dgvSalesReport.Name = "dgvSalesReport";
+            this.dgvSalesReport.RowHeadersVisible = false;
+            this.dgvSalesReport.RowTemplate.Height = 23;
+            this.dgvSalesReport.Size = new System.Drawing.Size(568, 617);
+            this.dgvSalesReport.TabIndex = 0;
             // 
             // Column1
             // 
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle8.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle8;
-            this.Column1.FillWeight = 50F;
             this.Column1.HeaderText = "Column1";
             this.Column1.Name = "Column1";
             // 
-            // Column2
+            // lbWeather
             // 
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle9.Padding = new System.Windows.Forms.Padding(0, 0, 30, 0);
-            this.Column2.DefaultCellStyle = dataGridViewCellStyle9;
-            this.Column2.FillWeight = 50F;
-            this.Column2.HeaderText = "Column2";
-            this.Column2.Name = "Column2";
+            this.lbWeather.AutoSize = true;
+            this.lbWeather.Font = new System.Drawing.Font("ÂæÆËΩØÈõÖÈªë", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbWeather.Location = new System.Drawing.Point(585, 12);
+            this.lbWeather.Name = "lbWeather";
+            this.lbWeather.Size = new System.Drawing.Size(107, 25);
+            this.lbWeather.TabIndex = 1;
+            this.lbWeather.Text = "Â§©Ê∞îÊÉÖÂÜµÔºö";
             // 
-            // lbDiscountDetail
+            // comboBox1
             // 
-            this.lbDiscountDetail.AutoSize = true;
-            this.lbDiscountDetail.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbDiscountDetail.Location = new System.Drawing.Point(5, 486);
-            this.lbDiscountDetail.Name = "lbDiscountDetail";
-            this.lbDiscountDetail.Size = new System.Drawing.Size(106, 21);
-            this.lbDiscountDetail.TabIndex = 6;
-            this.lbDiscountDetail.Text = "’€ø€œÍœ∏◊ ¡œ";
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.Font = new System.Drawing.Font("ÂæÆËΩØÈõÖÈªë", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Êô¥",
+            "Èò¥",
+            "Èõ®",
+            "Â§ö‰∫ë"});
+            this.comboBox1.Location = new System.Drawing.Point(580, 40);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(112, 29);
+            this.comboBox1.TabIndex = 2;
             // 
-            // lbMoneyCheck
+            // btnPrint
             // 
-            this.lbMoneyCheck.AutoSize = true;
-            this.lbMoneyCheck.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbMoneyCheck.Location = new System.Drawing.Point(5, 282);
-            this.lbMoneyCheck.Name = "lbMoneyCheck";
-            this.lbMoneyCheck.Size = new System.Drawing.Size(74, 21);
-            this.lbMoneyCheck.TabIndex = 6;
-            this.lbMoneyCheck.Text = "œ÷Ω∫À ˝";
+            this.btnPrint.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(146)))), ((int)(((byte)(51)))));
+            this.btnPrint.Font = new System.Drawing.Font("ÂæÆËΩØÈõÖÈªë", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnPrint.ForeColor = System.Drawing.Color.White;
+            this.btnPrint.Location = new System.Drawing.Point(580, 155);
+            this.btnPrint.Name = "btnPrint";
+            this.btnPrint.Size = new System.Drawing.Size(112, 58);
+            this.btnPrint.TabIndex = 3;
+            this.btnPrint.Text = "ÊâìÂç∞";
+            this.btnPrint.UseVisualStyleBackColor = false;
+            this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
             // 
-            // label6
+            // btnCancel
             // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label6.Location = new System.Drawing.Point(5, 116);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(106, 21);
-            this.label6.TabIndex = 6;
-            this.label6.Text = "”™“µ ’»ÎÕ≥º∆";
+            this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(43)))), ((int)(((byte)(59)))));
+            this.btnCancel.Font = new System.Drawing.Font("ÂæÆËΩØÈõÖÈªë", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnCancel.ForeColor = System.Drawing.Color.White;
+            this.btnCancel.Location = new System.Drawing.Point(580, 277);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(112, 58);
+            this.btnCancel.TabIndex = 3;
+            this.btnCancel.Text = "ÂÖ≥Èó≠";
+            this.btnCancel.UseVisualStyleBackColor = false;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // label5
+            // btnSalesReport
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label5.Location = new System.Drawing.Point(295, 79);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(90, 21);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "»’Ω·»À‘±£∫";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label4.Location = new System.Drawing.Point(311, 47);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(74, 21);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "”™“µ»’£∫";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label3.Location = new System.Drawing.Point(25, 79);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(90, 21);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "µÍ∆Ã±‡∫≈£∫";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label2.Location = new System.Drawing.Point(25, 47);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(90, 21);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "µÍ∆Ã√˚≥∆£∫";
-            // 
-            // lbReportName
-            // 
-            this.lbReportName.AutoSize = true;
-            this.lbReportName.Font = new System.Drawing.Font("Microsoft YaHei", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbReportName.Location = new System.Drawing.Point(158, 9);
-            this.lbReportName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lbReportName.Name = "lbReportName";
-            this.lbReportName.Size = new System.Drawing.Size(165, 28);
-            this.lbReportName.TabIndex = 0;
-            this.lbReportName.Text = "”™  “µ  »’  ±®  ±Ì";
-            // 
-            // ColumnPayoffName
-            // 
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle5.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.ColumnPayoffName.DefaultCellStyle = dataGridViewCellStyle5;
-            this.ColumnPayoffName.FillWeight = 50F;
-            this.ColumnPayoffName.HeaderText = "÷ß∏∂√˚≥∆";
-            this.ColumnPayoffName.Name = "ColumnPayoffName";
-            this.ColumnPayoffName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ColumnTimes
-            // 
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ColumnTimes.DefaultCellStyle = dataGridViewCellStyle6;
-            this.ColumnTimes.FillWeight = 18F;
-            this.ColumnTimes.HeaderText = "¥Œ ˝";
-            this.ColumnTimes.Name = "ColumnTimes";
-            this.ColumnTimes.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ColumnPayoffMoney
-            // 
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft YaHei", 12F);
-            dataGridViewCellStyle7.Padding = new System.Windows.Forms.Padding(0, 0, 30, 0);
-            this.ColumnPayoffMoney.DefaultCellStyle = dataGridViewCellStyle7;
-            this.ColumnPayoffMoney.FillWeight = 32F;
-            this.ColumnPayoffMoney.HeaderText = "÷ß∏∂Ω∂Ó";
-            this.ColumnPayoffMoney.Name = "ColumnPayoffMoney";
-            this.ColumnPayoffMoney.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.btnSalesReport.BackColor = System.Drawing.Color.Teal;
+            this.btnSalesReport.Font = new System.Drawing.Font("ÂæÆËΩØÈõÖÈªë", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnSalesReport.ForeColor = System.Drawing.Color.White;
+            this.btnSalesReport.Location = new System.Drawing.Point(580, 83);
+            this.btnSalesReport.Name = "btnSalesReport";
+            this.btnSalesReport.Size = new System.Drawing.Size(112, 58);
+            this.btnSalesReport.TabIndex = 3;
+            this.btnSalesReport.Text = "Êó•Áªì";
+            this.btnSalesReport.UseVisualStyleBackColor = false;
+            this.btnSalesReport.Click += new System.EventHandler(this.btnSalesReport_Click);
             // 
             // FormSalesReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(516, 750);
-            this.Controls.Add(this.panel1);
-            this.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ClientSize = new System.Drawing.Size(704, 617);
+            this.Controls.Add(this.btnPrint);
+            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.btnSalesReport);
+            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.lbWeather);
+            this.Controls.Add(this.dgvSalesReport);
+            this.Font = new System.Drawing.Font("ÂæÆËΩØÈõÖÈªë", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FormSalesReport";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form3";
+            this.Text = "FormSalesReport";
             this.Load += new System.EventHandler(this.FormSalesReport_Load);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSalesReport)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label lbReportName;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridView dataGridView2;
-        private System.Windows.Forms.Label lbEmployeeNo;
-        private System.Windows.Forms.Label lbBizDay;
-        private System.Windows.Forms.Label lbShopNo;
-        private System.Windows.Forms.Label lbShopName;
-        private System.Windows.Forms.Label lbMoneyCheck;
-        private System.Windows.Forms.DataGridView dataGridView3;
-        private System.Windows.Forms.Label lbDiscountDetail;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDiscountName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDiscountMoney;
+        private System.Windows.Forms.DataGridView dgvSalesReport;
+        private System.Windows.Forms.Label lbWeather;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private CustomControl.CrystalButton btnSalesReport;
+        private CustomControl.CrystalButton btnCancel;
+        private CustomControl.CrystalButton btnPrint;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPayoffName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTimes;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPayoffMoney;
-
-
     }
 }
