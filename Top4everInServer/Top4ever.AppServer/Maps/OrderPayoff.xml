@@ -16,7 +16,7 @@
             <result property="Quantity" column="Quantity"></result>
             <result property="NeedChangePay" column="NeedChangePay"></result>
             <result property="CardNo" column="CardNo"></result>
-            <result property="EmployeeID" column="LastChangeEmpID"></result>
+            <result property="EmployeeID" column="LastModifiedEmployeeID"></result>
         </resultMap>
       
     </resultMaps>

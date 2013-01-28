@@ -15,6 +15,7 @@
             <result property="DiscountPrice" column="DiscountPrice"></result>
             <result property="CutOffPrice" column="CutOffPrice"></result>
             <result property="ServiceFee" column="ServiceFee"></result>
+            <result property="PaymentMoney" column="PaymentMoney"></result>
             <result property="NeedChangePay" column="NeedChangePay" nullValue="0"></result>
             <result property="DeviceNo" column="DeviceNo"></result>
             <result property="DeskName" column="DeskName"></result>
@@ -69,6 +70,12 @@
             <parameter property="OrderID2nd" column="OrderID2nd" />
             <parameter property="ReturnValue" column="ReturnValue" direction="Output" />
         </parameterMap>
+
+        <parameterMap id="OrderListByPageParam" class="Hashtable">
+            <parameter property="strWhere" column="strWhere" />
+            <parameter property="PageIndex" column="PageIndex" />
+            <parameter property="PageSize" column="PageSize" />
+        </parameterMap>
     </parameterMaps>
     <!-- =============================================
         MAPPED STATEMENTS 
@@ -76,18 +83,22 @@
     -->
     <statements>
         <select id="GetOrderByDeskName" parameterClass="String" resultMap="OrderResult">
-            SELECT OrderID,OrderNo,TotalSellPrice,ActualSellPrice,DiscountPrice,CutOffPrice,ServiceFee,NeedChangePay,DeviceNo,DeskName,WorkSequence,TranSequence,EatType,Status,
-                SubOrderNo,PeopleNum,MembershipCard,MemberDiscount,InputEmployeeID,InputEmployeeNo,PayEmployeeID,PayEmployeeNo,OrderLastTime,PayLastTime,CheckoutDeviceNo
+            SELECT OrderID,OrderNo,TotalSellPrice,ActualSellPrice,DiscountPrice,CutOffPrice,ServiceFee,PaymentMoney,NeedChangePay,DeviceNo,DeskName,WorkSequence,TranSequence,EatType,Status,
+            SubOrderNo,PeopleNum,MembershipCard,MemberDiscount,InputEmployeeID,InputEmployeeNo,PayEmployeeID,PayEmployeeNo,OrderLastTime,PayLastTime,CheckoutDeviceNo
             FROM [Order]
             WHERE DeskName = #value# AND [Status] = 0 AND IsVoided = 0
         </select>
 
         <select id="GetOrderByID" parameterClass="Guid" resultMap="OrderResult">
-            SELECT OrderID,OrderNo,TotalSellPrice,ActualSellPrice,DiscountPrice,CutOffPrice,ServiceFee,NeedChangePay,DeviceNo,DeskName,WorkSequence,TranSequence,EatType,Status,
-                SubOrderNo,PeopleNum,MembershipCard,MemberDiscount,InputEmployeeID,InputEmployeeNo,PayEmployeeID,PayEmployeeNo,OrderLastTime,PayLastTime,CheckoutDeviceNo
+            SELECT OrderID,OrderNo,TotalSellPrice,ActualSellPrice,DiscountPrice,CutOffPrice,ServiceFee,PaymentMoney,NeedChangePay,DeviceNo,DeskName,WorkSequence,TranSequence,EatType,Status,
+            SubOrderNo,PeopleNum,MembershipCard,MemberDiscount,InputEmployeeID,InputEmployeeNo,PayEmployeeID,PayEmployeeNo,OrderLastTime,PayLastTime,CheckoutDeviceNo
             FROM [Order]
             WHERE OrderID = #value# AND [Status] = 0 AND IsVoided = 0
         </select>
+
+        <procedure id="GetOrderListBySearch" parameterMap="OrderListByPageParam">
+            proc_GetOrderListBySearch
+        </procedure>
         
         <procedure id="InsertOrder" parameterMap="InsertOrderParam">
             proc_CreateNewOrder
@@ -96,21 +107,22 @@
         <update id="UpdateOrder" parameterClass="Order">
             UPDATE [Order]
             SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#, CutOffPrice = #CutOffPrice#, ServiceFee = #ServiceFee#, DeskName = #DeskName#,
-                PeopleNum = #PeopleNum#, InputEmployeeID = #EmployeeID#, InputEmployeeNo = #EmployeeNo#, OrderLastTime = OrderLastTime + #OrderLastTime#
+                PeopleNum = #PeopleNum#, InputEmployeeID = #EmployeeID#, InputEmployeeNo = #EmployeeNo#, OrderLastTime = OrderLastTime + #OrderLastTime#, <![CDATA[ LastModifiedTime = getdate() ]]>, LastModifiedEmployeeID = #EmployeeID#
             WHERE OrderID = #OrderID#
         </update>
 
         <update id="UpdatePayingOrder" parameterClass="Order">
             UPDATE [Order]
-            SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#, CutOffPrice = #CutOffPrice#, ServiceFee = #ServiceFee#, NeedChangePay = #NeedChangePay#, 
-                <![CDATA[ PayTime = getdate() ]]>, [Status] = 1,
-                MembershipCard = #MembershipCard#, MemberDiscount = #MemberDiscount#, PayEmployeeID = #PayEmployeeID#, PayEmployeeNo = #PayEmployeeNo#, PayLastTime = PayLastTime + #PayLastTime#, CheckoutDeviceNo = #CheckoutDeviceNo#
+            SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#, CutOffPrice = #CutOffPrice#, ServiceFee = #ServiceFee#, PaymentMoney = #PaymentMoney#, NeedChangePay = #NeedChangePay#,
+                <![CDATA[ PayTime = getdate(), LastModifiedTime = getdate() ]]>, PayEmployeeID = #PayEmployeeID#, PayEmployeeNo = #PayEmployeeNo#, LastModifiedEmployeeID = #PayEmployeeID#, [Status] = 1,
+                MembershipCard = #MembershipCard#, MemberDiscount = #MemberDiscount#, PayLastTime = PayLastTime + #PayLastTime#, CheckoutDeviceNo = #CheckoutDeviceNo#
             WHERE OrderID = #OrderID#
         </update>
 
         <update id="UpdateDeletedOrder" parameterClass="DeletedOrder">
             UPDATE [Order]
-            SET AuthorisedManager = #AuthorisedManager#, CancelEmployeeNo = #CancelEmployeeNo#, CancelReasonName = #CancelReasonName#, IsVoided = 1
+            SET AuthorisedManager = #AuthorisedManager#, CancelEmployeeNo = #CancelEmployeeNo#, CancelReasonName = #CancelReasonName#,
+				IsVoided = 1, <![CDATA[ LastModifiedTime = getdate() ]]>, LastModifiedEmployeeID = #AuthorisedManager#
             WHERE OrderID = #OrderID#
         </update>
 

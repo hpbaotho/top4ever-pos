@@ -48,11 +48,11 @@
           WHERE EmployeeNo = #EmployeeNo# AND [Password] = #Password# AND IsVoided = 0
         </select>
 
-        <select id="GetRightsCodeListByEmployee" parameterClass="Guid" resultClass="String">
-            SELECT r.RightsCode
-            FROM Employee e JOIN RoleRightsMap rrm ON rrm.RoleID = e.RoleID
-              JOIN Rights r ON r.RightsID = rrm.RightsID
-            WHERE e.EmployeeID = #value#
+        <select id="GetRightsCodeListByEmployee" resultClass="String" parameterClass="Employee">
+          SELECT r.RightsCode
+          FROM Employee e JOIN RoleRightsMap rrm ON rrm.RoleID = e.RoleID
+          JOIN Rights r ON r.RightsID = rrm.RightsID
+          WHERE e.EmployeeNo = #EmployeeNo# AND e.[Password] = #Password# AND r.IsVoided = 0 AND e.IsVoided = 0
         </select>
     </statements>
 </sqlMap>

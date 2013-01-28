@@ -15,7 +15,7 @@
             <result property="DiscountPrice" column="DiscountPrice"></result>
             <result property="CutOffPrice" column="CutOffPrice"></result>
             <result property="ServiceFee" column="ServiceFee"></result>
-            <result property="PaymentMoney" column="PaymentMoney"></result>
+            <result property="PaymentMoney" column="PaymentMoney" nullValue="0"></result>
             <result property="NeedChangePay" column="NeedChangePay" nullValue="0"></result>
             <result property="DeviceNo" column="DeviceNo"></result>
             <result property="DeskName" column="DeskName"></result>
@@ -83,15 +83,15 @@
     -->
     <statements>
         <select id="GetOrderByDeskName" parameterClass="String" resultMap="OrderResult">
-            SELECT OrderID,OrderNo,TotalSellPrice,ActualSellPrice,DiscountPrice,CutOffPrice,ServiceFee,NeedChangePay,DeviceNo,DeskName,WorkSequence,TranSequence,EatType,Status,
-                SubOrderNo,PeopleNum,MembershipCard,MemberDiscount,InputEmployeeID,InputEmployeeNo,PayEmployeeID,PayEmployeeNo,OrderLastTime,PayLastTime,CheckoutDeviceNo
+            SELECT OrderID,OrderNo,TotalSellPrice,ActualSellPrice,DiscountPrice,CutOffPrice,ServiceFee,PaymentMoney,NeedChangePay,DeviceNo,DeskName,WorkSequence,TranSequence,EatType,Status,
+            SubOrderNo,PeopleNum,MembershipCard,MemberDiscount,InputEmployeeID,InputEmployeeNo,PayEmployeeID,PayEmployeeNo,OrderLastTime,PayLastTime,CheckoutDeviceNo
             FROM [Order]
             WHERE DeskName = #value# AND [Status] = 0 AND IsVoided = 0
         </select>
 
         <select id="GetOrderByID" parameterClass="Guid" resultMap="OrderResult">
-            SELECT OrderID,OrderNo,TotalSellPrice,ActualSellPrice,DiscountPrice,CutOffPrice,ServiceFee,NeedChangePay,DeviceNo,DeskName,WorkSequence,TranSequence,EatType,Status,
-                SubOrderNo,PeopleNum,MembershipCard,MemberDiscount,InputEmployeeID,InputEmployeeNo,PayEmployeeID,PayEmployeeNo,OrderLastTime,PayLastTime,CheckoutDeviceNo
+            SELECT OrderID,OrderNo,TotalSellPrice,ActualSellPrice,DiscountPrice,CutOffPrice,ServiceFee,PaymentMoney,NeedChangePay,DeviceNo,DeskName,WorkSequence,TranSequence,EatType,Status,
+            SubOrderNo,PeopleNum,MembershipCard,MemberDiscount,InputEmployeeID,InputEmployeeNo,PayEmployeeID,PayEmployeeNo,OrderLastTime,PayLastTime,CheckoutDeviceNo
             FROM [Order]
             WHERE OrderID = #value# AND [Status] = 0 AND IsVoided = 0
         </select>
