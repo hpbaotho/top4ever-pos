@@ -230,6 +230,7 @@ namespace Top4ever.Pos
             this.lbCutOff.Text = "去零：" + (-m_CutOff).ToString("f2");
             if (m_CutServiceFee)
             {
+                m_ServiceFee = 0;
                 this.lbServiceFee.Text = "0.00";
             }
             else

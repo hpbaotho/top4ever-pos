@@ -241,7 +241,8 @@ namespace Top4ever.Pos.Feature
 
         private void btnBillManage_Click(object sender, EventArgs e)
         {
-
+            FormBillManagement form = new FormBillManagement();
+            form.ShowDialog();
         }
 
         private void btnHandover_Click(object sender, EventArgs e)
