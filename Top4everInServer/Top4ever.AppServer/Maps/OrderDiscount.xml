@@ -16,7 +16,7 @@
             <result property="DiscountRate" column="DiscountRate"></result>
             <result property="OffFixPay" column="OffFixPay"></result>
             <result property="OffPay" column="OffPay"></result>
-            <result property="EmployeeID" column="LastChangeEmpID"></result>
+            <result property="EmployeeID" column="LastModifiedEmployeeID"></result>
         </resultMap>
 
     </resultMaps>
@@ -32,7 +32,7 @@
             <parameter property="DiscountRate"/>
             <parameter property="OffFixPay"/>
             <parameter property="OffPay"/>
-            <parameter property="EmployeeID" column="LastChangeEmpID"/>
+            <parameter property="EmployeeID" column="LastModifiedEmployeeID"/>
         </parameterMap>
     </parameterMaps>
     <!-- =============================================

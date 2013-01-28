@@ -30,9 +30,8 @@
             ,[Width]
             ,[Height]
             ,[ButtonStyleID]
-            FROM Region
+            FROM RegionButton
             WHERE IsVoided = 0
-            ORDER BY OrderBy
         </select>
 
     </statements>

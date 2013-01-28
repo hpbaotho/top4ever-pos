@@ -41,18 +41,18 @@
     <statements>
         <select id="GetAllDeskInRegion" parameterClass="Guid" resultMap="DeskResult">
             SELECT DeskID, DeskName, [Status], MinConsumption, PX, PY, Width, Height, DeviceNo
-            FROM Desk
+            FROM DeskButton
             WHERE RegionID = #value# AND IsVoided = 0
         </select>
 
         <select id="GetDeskByName" parameterClass="String" resultMap="DeskResult">
             SELECT DeskID, DeskName, [Status], MinConsumption, PX, PY, Width, Height, DeviceNo
-            FROM Desk
+            FROM DeskButton
             WHERE DeskName = #value# AND IsVoided = 0
         </select>
 
         <update id="UpdateDeskStatus" parameterClass="Desk">
-            UPDATE Desk
+            UPDATE DeskButton
             SET [Status] = #Status#, DeviceNo = #DeviceNo#
             WHERE DeskName = #DeskName# AND IsVoided = 0
         </update>

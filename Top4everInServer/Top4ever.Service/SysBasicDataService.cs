@@ -146,7 +146,7 @@ namespace Top4ever.Service
 
                 _daoManager.CommitTransaction();
             }
-            catch
+            catch(Exception ex)
             {
                 _daoManager.RollBackTransaction();
                 basicData = null;
