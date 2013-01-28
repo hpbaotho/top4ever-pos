@@ -108,10 +108,10 @@ namespace Top4ever.Pos.Feature
             else
             {
                 this.dataGridView1.Rows.Clear();
-                this.lbShopName.Text = string.Empty;
                 this.lbOrderNo.Text = string.Empty;
                 this.lbBillType.Text = string.Empty;
                 this.lbDeskNo.Text = string.Empty;
+                this.lbEatType.Text = string.Empty;
                 this.lbEmployeeNo.Text = string.Empty;
                 this.lbCashier.Text = string.Empty;
                 this.lbDelEmployeeNo.Text = string.Empty;
@@ -182,10 +182,10 @@ namespace Top4ever.Pos.Feature
                 }
                 else
                 {
-                    this.lbShopName.Text = string.Empty;
                     this.lbOrderNo.Text = string.Empty;
                     this.lbBillType.Text = string.Empty;
                     this.lbDeskNo.Text = string.Empty;
+                    this.lbEatType.Text = string.Empty;
                     this.lbEmployeeNo.Text = string.Empty;
                     this.lbCashier.Text = string.Empty;
                     this.lbDelEmployeeNo.Text = string.Empty;
@@ -193,6 +193,16 @@ namespace Top4ever.Pos.Feature
                     this.dataGridView3.Rows.Clear();
                 }
             }
+        }
+
+        private void btnPrint_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

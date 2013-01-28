@@ -27,7 +27,7 @@ namespace Top4ever.Pos
                 string singlePay = string.Empty;
                 if (item.PayoffType == (int)PayoffWayMode.GiftVoucher)
                 {
-                    singlePay = string.Format("{0} : {1} 张(合 {2} 元)", item.PayoffName, item.Quantity.ToString("f2"), totalPrice.ToString("f2"));
+                    singlePay = string.Format("{0} : {1} 张(合 {2} 元)", item.PayoffName, item.Quantity, totalPrice.ToString("f2"));
                 }
                 else
                 {
