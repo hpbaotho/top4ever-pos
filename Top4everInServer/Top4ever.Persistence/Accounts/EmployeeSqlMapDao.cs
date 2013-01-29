@@ -37,6 +37,23 @@ namespace Top4ever.Persistence.Accounts
             return result;
         }
 
+        public bool GetEmployee(string attendanceCard, out Employee employee)
+        {
+            bool result = false;
+            try
+            {
+                employee = ExecuteQueryForObject("GetEmployeeBySwipeCard", attendanceCard) as Employee;
+                result = true;
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                employee = null;
+                logger.Error("Database operation failed !", ex);
+            }
+            return result;
+        }
+
         public IList<String> GetRightsCodeList(string userName, string password)
         {
             IList<String> rightsCodeList = null;
