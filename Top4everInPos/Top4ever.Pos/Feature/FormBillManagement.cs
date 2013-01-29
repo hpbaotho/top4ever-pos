@@ -19,7 +19,7 @@ namespace Top4ever.Pos.Feature
         /// </summary>
         private int m_SeachType = 0;
         private int m_PageIndex = 0;
-        private int m_PageSize = 0;
+        private int m_PageSize = 25;
 
         public FormBillManagement()
         {
@@ -79,7 +79,7 @@ namespace Top4ever.Pos.Feature
                 strWhere += " AND (PayTime >= '" + currentDate + "' AND PayTime < DATEADD(DAY,1,'" + currentDate + "') )";
             }
             OrderService orderService = new OrderService();
-            IList<Order> orderList = orderService.GetOrderListBySearch(strWhere, m_PageIndex, m_PageSize);
+            IList<Order> orderList = orderService.GetOrderListBySearch(strWhere, string.Empty, m_PageIndex, m_PageSize);
             if (m_PageIndex > 0)
             {
                 this.btnPageUp.Enabled = true;
@@ -122,6 +122,7 @@ namespace Top4ever.Pos.Feature
 
         private void BindDataGridView1(IList<Order> orderList)
         {
+            this.dataGridView1.Rows.Clear();
             if (orderList != null && orderList.Count > 0)
             {
                 foreach (Order order in orderList)
@@ -140,18 +141,17 @@ namespace Top4ever.Pos.Feature
                         billType = "已删除";
                     }
                     int index = dataGridView1.Rows.Add();
-                    dataGridView1.Rows[index].Cells["TranSequence"].Value = FillWithZero(order.TranSequence.ToString(), 5);
+                    dataGridView1.Rows[index].Cells["TranSequence"].Value = order.TranSequence.ToString();
                     dataGridView1.Rows[index].Cells["BillType"].Value = billType;
                     dataGridView1.Rows[index].Cells["TotalSellPrice"].Value = order.TotalSellPrice.ToString("f2");
-                    dataGridView1.Rows[index].Cells["ActualSellPrice"].Value = order.ActualSellPrice;
-                    dataGridView1.Rows[index].Cells["DiscountPrice"].Value = order.DiscountPrice;
-                    dataGridView1.Rows[index].Cells["CutOffPrice"].Value = order.CutOffPrice;
-                    dataGridView1.Rows[index].Cells["ServiceFee"].Value = order.ServiceFee;
-                    dataGridView1.Rows[index].Cells["PaymentMoney"].Value = order.PaymentMoney;
-                    dataGridView1.Rows[index].Cells["NeedChangePay"].Value = order.NeedChangePay;
+                    dataGridView1.Rows[index].Cells["ActualSellPrice"].Value = order.ActualSellPrice.ToString("f2");
+                    dataGridView1.Rows[index].Cells["DiscountPrice"].Value = order.DiscountPrice.ToString("f2");
+                    dataGridView1.Rows[index].Cells["CutOffPrice"].Value = order.CutOffPrice.ToString("f2");
+                    dataGridView1.Rows[index].Cells["ServiceFee"].Value = order.ServiceFee.ToString("f2");
+                    dataGridView1.Rows[index].Cells["PaymentMoney"].Value = order.PaymentMoney.ToString("f2");
+                    dataGridView1.Rows[index].Cells["NeedChangePay"].Value = order.NeedChangePay.ToString("f2");
                     dataGridView1.Rows[index].Cells["MoreOrLess"].Value = (order.ActualSellPrice + order.ServiceFee - (order.PaymentMoney - order.NeedChangePay)).ToString("f2");
                     dataGridView1.Rows[index].Cells["OrderID"].Value = order.OrderID;
-                    dataGridView1.Rows[index].Cells["OrderID"].Tag = order;
                 }
             }
         }

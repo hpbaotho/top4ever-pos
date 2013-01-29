@@ -41,5 +41,9 @@ namespace Top4ever.Domain
         /// 占用的设备编号
         /// </summary>
         public string DeviceNo { get; set; }
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string Remark { get; set; }
     }
 }
