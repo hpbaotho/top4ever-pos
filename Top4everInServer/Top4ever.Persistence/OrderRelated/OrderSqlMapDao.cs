@@ -47,10 +47,11 @@ namespace Top4ever.Persistence.OrderRelated
             return ExecuteQueryForList<Order>("GetOrderByDeskName", deskName);
         }
 
-        public IList<Order> GetOrderListBySearch(string strWhere, int pageIndex, int pageSize)
+        public IList<Order> GetOrderListBySearch(string strWhere, string orderBy, int pageIndex, int pageSize)
         {
             Hashtable htParam = new Hashtable();
             htParam["strWhere"] = strWhere;
+            htParam["orderBy"] = orderBy;
             htParam["PageIndex"] = pageIndex;
             htParam["PageSize"] = pageSize;
             return ExecuteQueryForList<Order>("GetOrderListBySearch", htParam);

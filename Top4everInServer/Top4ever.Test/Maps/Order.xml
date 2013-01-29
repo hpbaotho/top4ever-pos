@@ -15,7 +15,7 @@
             <result property="DiscountPrice" column="DiscountPrice"></result>
             <result property="CutOffPrice" column="CutOffPrice"></result>
             <result property="ServiceFee" column="ServiceFee"></result>
-            <result property="PaymentMoney" column="PaymentMoney"></result>
+            <result property="PaymentMoney" column="PaymentMoney" nullValue="0"></result>
             <result property="NeedChangePay" column="NeedChangePay" nullValue="0"></result>
             <result property="DeviceNo" column="DeviceNo"></result>
             <result property="DeskName" column="DeskName"></result>
@@ -122,7 +122,7 @@
         <update id="UpdateDeletedOrder" parameterClass="DeletedOrder">
             UPDATE [Order]
             SET AuthorisedManager = #AuthorisedManager#, CancelEmployeeNo = #CancelEmployeeNo#, CancelReasonName = #CancelReasonName#,
-				IsVoided = 1, <![CDATA[ LastModifiedTime = getdate() ]]>, LastModifiedEmployeeID = #AuthorisedManager#
+				[Status] = 2, IsVoided = 1, <![CDATA[ LastModifiedTime = getdate() ]]>, LastModifiedEmployeeID = #AuthorisedManager#
             WHERE OrderID = #OrderID#
         </update>
 
