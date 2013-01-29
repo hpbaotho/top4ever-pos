@@ -47,9 +47,9 @@ namespace Top4ever.ClientService
             return orderList;
         }
 
-        public IList<Order> GetOrderListBySearch(string strWhere, int pageIndex, int pageSize)
+        public IList<Order> GetOrderListBySearch(string strWhere, string orderBy, int pageIndex, int pageSize)
         {
-            int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.SQL_WHERE + BasicTypeLength.INT32 + BasicTypeLength.INT32;
+            int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.SQL_WHERE + ParamFieldLength.SQL_ORDERBY + BasicTypeLength.INT32 + BasicTypeLength.INT32;
             byte[] sendByte = new byte[cByte];
             int byteOffset = 0;
             Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_ORDERLISTBYSEARCH), sendByte, BasicTypeLength.INT32);
@@ -60,6 +60,10 @@ namespace Top4ever.ClientService
             byte[] tempByte = Encoding.UTF8.GetBytes(strWhere);
             Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
             byteOffset += ParamFieldLength.SQL_WHERE;
+            //orderBy
+            tempByte = Encoding.UTF8.GetBytes(orderBy);
+            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
+            byteOffset += ParamFieldLength.SQL_ORDERBY;
             //PageIndex
             Array.Copy(BitConverter.GetBytes(pageIndex), 0, sendByte, byteOffset, BasicTypeLength.INT32);
             byteOffset += BasicTypeLength.INT32;

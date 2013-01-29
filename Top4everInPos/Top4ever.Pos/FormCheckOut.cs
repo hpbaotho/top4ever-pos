@@ -287,7 +287,7 @@ namespace Top4ever.Pos
                 decimal totalPrice = orderPayoff.Quantity * orderPayoff.AsPay;
                 if (curPayoffWay.PayoffType == (int)PayoffWayMode.GiftVoucher)
                 {
-                    this.txtAmount.Text = string.Format("{0} 张(合 {1} 元)", orderPayoff.Quantity.ToString("f2"), totalPrice.ToString("f2"));
+                    this.txtAmount.Text = string.Format("{0} 张(合 {1} 元)", orderPayoff.Quantity, totalPrice.ToString("f2"));
                 }
                 else
                 {
@@ -465,7 +465,7 @@ namespace Top4ever.Pos
                     string singlePay = string.Empty;
                     if (item.Value.PayoffType == (int)PayoffWayMode.GiftVoucher)
                     {
-                        singlePay = string.Format("[{0} : {1} 张(合 {2} 元)]", item.Value.PayoffName, item.Value.Quantity.ToString("f2"), totalPrice.ToString("f2"));
+                        singlePay = string.Format("[{0} : {1} 张(合 {2} 元)]", item.Value.PayoffName, item.Value.Quantity, totalPrice.ToString("f2"));
                     }
                     else
                     {
@@ -483,6 +483,15 @@ namespace Top4ever.Pos
             {
                 this.lbPaidInMoney.Text = "0.00";
                 this.txtPayoffWay.Text = string.Empty;
+            }
+            decimal unPaidPrice = m_ActualPayMoney + m_ServiceFee - realPay;
+            if (unPaidPrice > 0)
+            {
+                this.lbUnpaidAmount.Text = unPaidPrice.ToString("f2");
+            }
+            else
+            {
+                this.lbUnpaidAmount.Text = "0.00";
             }
         }
 
@@ -769,7 +778,7 @@ namespace Top4ever.Pos
             order.ActualSellPrice = m_ActualPayMoney;
             order.DiscountPrice = m_Discount;
             order.CutOffPrice = m_CutOff;
-            order.ServiceFee = 0;
+            order.ServiceFee = m_ServiceFee;
             order.PaymentMoney = paymentMoney;
             order.NeedChangePay = needChangePay;
             order.MembershipCard = string.Empty;
