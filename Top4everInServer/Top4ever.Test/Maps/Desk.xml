@@ -17,6 +17,7 @@
             <result property="Width" column="Width"></result>
             <result property="Height" column="Height"></result>
             <result property="DeviceNo" column="DeviceNo"></result>
+            <result property="Remark" column="Remark"></result>
         </resultMap>
 
         <resultMap  id="DeskInfoResult" class="DeskInfo">
@@ -40,13 +41,13 @@
     -->
     <statements>
         <select id="GetAllDeskInRegion" parameterClass="Guid" resultMap="DeskResult">
-            SELECT DeskID, DeskName, [Status], MinConsumption, PX, PY, Width, Height, DeviceNo
+            SELECT DeskID, DeskName, [Status], MinConsumption, PX, PY, Width, Height, DeviceNo, Remark
             FROM DeskButton
             WHERE RegionID = #value# AND IsVoided = 0
         </select>
 
         <select id="GetDeskByName" parameterClass="String" resultMap="DeskResult">
-            SELECT DeskID, DeskName, [Status], MinConsumption, PX, PY, Width, Height, DeviceNo
+            SELECT DeskID, DeskName, [Status], MinConsumption, PX, PY, Width, Height, DeviceNo, Remark
             FROM DeskButton
             WHERE DeskName = #value# AND IsVoided = 0
         </select>

@@ -46,11 +46,13 @@ namespace Top4ever.BLL
             int index = ParamFieldLength.PACKAGE_HEAD;
             string strWhere = Encoding.UTF8.GetString(itemBuffer, index, ParamFieldLength.SQL_WHERE).Trim('\0');
             index += ParamFieldLength.SQL_WHERE;
+            string orderBy = Encoding.UTF8.GetString(itemBuffer, index, ParamFieldLength.SQL_ORDERBY).Trim('\0');
+            index += ParamFieldLength.SQL_ORDERBY;
             int pageIndex = BitConverter.ToInt32(itemBuffer, index);
             index += BasicTypeLength.INT32;
             int pageSize = BitConverter.ToInt32(itemBuffer, index);
 
-            IList<Order> orderList = OrderService.GetInstance().GetOrderListBySearch(strWhere, pageIndex, pageSize);
+            IList<Order> orderList = OrderService.GetInstance().GetOrderListBySearch(strWhere, orderBy, pageIndex, pageSize);
             if (orderList == null || orderList.Count == 0)
             {
                 //获取单子失败

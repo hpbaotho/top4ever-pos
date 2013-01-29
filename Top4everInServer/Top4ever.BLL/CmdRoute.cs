@@ -79,6 +79,9 @@ namespace Top4ever.BLL
                 case Command.ID_GET_DAILYTIMEINTERVAL:
                     byteRet = DailyBalanceBLL.GetDailyStatementTimeInterval(itemBuffer);
                     break;
+                case Command.ID_GET_ORDERLISTBYSEARCH:
+                    byteRet = OrderBLL.GetOrderListBySearch(itemBuffer);
+                    break;
 
                 default:
                     byteRet = null;
