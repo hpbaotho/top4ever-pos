@@ -64,6 +64,31 @@ namespace Top4ever.Service
             return result;
         }
 
+        /// <summary>
+        /// 获取用户信息 0:数据库操作失败, 1:成功, 2:账号或者密码错误
+        /// </summary>
+        public int GetEmployee(string attendanceCard, out Employee employee)
+        {
+            int result = 0;
+
+            _daoManager.OpenConnection();
+            if (_employeeDao.GetEmployee(attendanceCard, out employee))
+            {
+                if (employee == null)
+                {
+                    result = 2;
+                }
+                else
+                {
+                    employee.RightsCodeList = _employeeDao.GetRightsCodeList(employee.EmployeeNo, employee.Password);
+                    result = 1;
+                }
+            }
+            _daoManager.CloseConnection();
+
+            return result;
+        }
+
         public IList<String> GetRightsCodeList(string userName, string password)
         {
             _daoManager.OpenConnection();
