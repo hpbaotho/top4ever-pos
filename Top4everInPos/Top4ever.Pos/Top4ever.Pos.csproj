@@ -114,6 +114,12 @@
     <Compile Include="Feature\FormRightsCode.designer.cs">
       <DependentUpon>FormRightsCode.cs</DependentUpon>
     </Compile>
+    <Compile Include="Feature\FormSwipeCard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\FormSwipeCard.designer.cs">
+      <DependentUpon>FormSwipeCard.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormCheckOut.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -193,6 +199,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\FormRightsCode.resx">
       <DependentUpon>FormRightsCode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Feature\FormSwipeCard.resx">
+      <DependentUpon>FormSwipeCard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormCheckOut.resx">
       <DependentUpon>FormCheckOut.cs</DependentUpon>

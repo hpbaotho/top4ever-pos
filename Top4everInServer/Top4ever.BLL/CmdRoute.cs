@@ -82,6 +82,9 @@ namespace Top4ever.BLL
                 case Command.ID_GET_ORDERLISTBYSEARCH:
                     byteRet = OrderBLL.GetOrderListBySearch(itemBuffer);
                     break;
+                case Command.ID_SWIPINGCARDTOLOGIN:
+                    byteRet = EmployeeBLL.SwipingCardToLogin(itemBuffer);
+                    break;
 
                 default:
                     byteRet = null;

@@ -29,15 +29,6 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -48,6 +39,15 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
             this.pnlTop = new System.Windows.Forms.Panel();
             this.btnPrint = new Top4ever.CustomControl.CrystalButton();
             this.btnExit = new Top4ever.CustomControl.CrystalButton();
@@ -60,14 +60,25 @@
             this.btnDeskNo = new Top4ever.CustomControl.CrystalButton();
             this.txtSearchValue = new System.Windows.Forms.TextBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.TranSequence = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.BillType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TotalSellPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ActualSellPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DiscountPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CutOffPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ServiceFee = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PaymentMoney = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NeedChangePay = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MoreOrLess = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.OrderID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlInformation = new System.Windows.Forms.Panel();
-            this.lbDelEmployeeNo = new System.Windows.Forms.Label();
+            this.lbDeviceNo = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.lbCashier = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.lbEmployeeNo = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.lbDeskNo = new System.Windows.Forms.Label();
+            this.lbDeskName = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.lbOrderNo = new System.Windows.Forms.Label();
             this.lbBillType = new System.Windows.Forms.Label();
@@ -91,17 +102,6 @@
             this.lbPage = new System.Windows.Forms.Label();
             this.lbBill = new System.Windows.Forms.Label();
             this.lbBillIndex = new System.Windows.Forms.Label();
-            this.TranSequence = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.BillType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TotalSellPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ActualSellPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DiscountPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CutOffPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ServiceFee = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PaymentMoney = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NeedChangePay = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MoreOrLess = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.OrderID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.pnlInformation.SuspendLayout();
@@ -278,16 +278,112 @@
             this.dataGridView1.TabIndex = 1;
             this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
             // 
+            // TranSequence
+            // 
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft YaHei", 12F);
+            this.TranSequence.DefaultCellStyle = dataGridViewCellStyle2;
+            this.TranSequence.HeaderText = "流水号";
+            this.TranSequence.Name = "TranSequence";
+            this.TranSequence.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.TranSequence.Width = 68;
+            // 
+            // BillType
+            // 
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BillType.DefaultCellStyle = dataGridViewCellStyle3;
+            this.BillType.HeaderText = "状态";
+            this.BillType.Name = "BillType";
+            this.BillType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.BillType.Width = 68;
+            // 
+            // TotalSellPrice
+            // 
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.TotalSellPrice.DefaultCellStyle = dataGridViewCellStyle4;
+            this.TotalSellPrice.HeaderText = "金额合计";
+            this.TotalSellPrice.Name = "TotalSellPrice";
+            // 
+            // ActualSellPrice
+            // 
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.ActualSellPrice.DefaultCellStyle = dataGridViewCellStyle5;
+            this.ActualSellPrice.HeaderText = "实际金额";
+            this.ActualSellPrice.Name = "ActualSellPrice";
+            // 
+            // DiscountPrice
+            // 
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.DiscountPrice.DefaultCellStyle = dataGridViewCellStyle6;
+            this.DiscountPrice.HeaderText = "折扣金额";
+            this.DiscountPrice.Name = "DiscountPrice";
+            // 
+            // CutOffPrice
+            // 
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft YaHei", 12F);
+            dataGridViewCellStyle7.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.CutOffPrice.DefaultCellStyle = dataGridViewCellStyle7;
+            this.CutOffPrice.HeaderText = "去零金额";
+            this.CutOffPrice.Name = "CutOffPrice";
+            // 
+            // ServiceFee
+            // 
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.ServiceFee.DefaultCellStyle = dataGridViewCellStyle8;
+            this.ServiceFee.HeaderText = "服务费";
+            this.ServiceFee.Name = "ServiceFee";
+            // 
+            // PaymentMoney
+            // 
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle9.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.PaymentMoney.DefaultCellStyle = dataGridViewCellStyle9;
+            this.PaymentMoney.HeaderText = "付款金额";
+            this.PaymentMoney.Name = "PaymentMoney";
+            // 
+            // NeedChangePay
+            // 
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle10.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.NeedChangePay.DefaultCellStyle = dataGridViewCellStyle10;
+            this.NeedChangePay.HeaderText = "找零金额";
+            this.NeedChangePay.Name = "NeedChangePay";
+            // 
+            // MoreOrLess
+            // 
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle11.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.MoreOrLess.DefaultCellStyle = dataGridViewCellStyle11;
+            this.MoreOrLess.HeaderText = "溢短金额";
+            this.MoreOrLess.Name = "MoreOrLess";
+            // 
+            // OrderID
+            // 
+            this.OrderID.HeaderText = "OrderID";
+            this.OrderID.Name = "OrderID";
+            this.OrderID.Visible = false;
+            // 
             // pnlInformation
             // 
             this.pnlInformation.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlInformation.Controls.Add(this.lbDelEmployeeNo);
+            this.pnlInformation.Controls.Add(this.lbDeviceNo);
             this.pnlInformation.Controls.Add(this.label7);
             this.pnlInformation.Controls.Add(this.lbCashier);
             this.pnlInformation.Controls.Add(this.label6);
             this.pnlInformation.Controls.Add(this.lbEmployeeNo);
             this.pnlInformation.Controls.Add(this.label5);
-            this.pnlInformation.Controls.Add(this.lbDeskNo);
+            this.pnlInformation.Controls.Add(this.lbDeskName);
             this.pnlInformation.Controls.Add(this.label4);
             this.pnlInformation.Controls.Add(this.lbOrderNo);
             this.pnlInformation.Controls.Add(this.lbBillType);
@@ -300,25 +396,25 @@
             this.pnlInformation.Size = new System.Drawing.Size(500, 133);
             this.pnlInformation.TabIndex = 2;
             // 
-            // lbDelEmployeeNo
+            // lbDeviceNo
             // 
-            this.lbDelEmployeeNo.AutoSize = true;
-            this.lbDelEmployeeNo.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbDelEmployeeNo.Location = new System.Drawing.Point(390, 72);
-            this.lbDelEmployeeNo.Name = "lbDelEmployeeNo";
-            this.lbDelEmployeeNo.Size = new System.Drawing.Size(64, 21);
-            this.lbDelEmployeeNo.TabIndex = 5;
-            this.lbDelEmployeeNo.Text = "999999";
+            this.lbDeviceNo.AutoSize = true;
+            this.lbDeviceNo.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbDeviceNo.Location = new System.Drawing.Point(390, 72);
+            this.lbDeviceNo.Name = "lbDeviceNo";
+            this.lbDeviceNo.Size = new System.Drawing.Size(38, 21);
+            this.lbDeviceNo.TabIndex = 5;
+            this.lbDeviceNo.Text = "P02";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label7.Location = new System.Drawing.Point(314, 72);
+            this.label7.Location = new System.Drawing.Point(330, 72);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(74, 21);
+            this.label7.Size = new System.Drawing.Size(58, 21);
             this.label7.TabIndex = 4;
-            this.label7.Text = "删单员：";
+            this.label7.Text = "设备：";
             // 
             // lbCashier
             // 
@@ -360,15 +456,15 @@
             this.label5.TabIndex = 4;
             this.label5.Text = "点单员：";
             // 
-            // lbDeskNo
+            // lbDeskName
             // 
-            this.lbDeskNo.AutoSize = true;
-            this.lbDeskNo.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbDeskNo.Location = new System.Drawing.Point(100, 40);
-            this.lbDeskNo.Name = "lbDeskNo";
-            this.lbDeskNo.Size = new System.Drawing.Size(37, 21);
-            this.lbDeskNo.TabIndex = 3;
-            this.lbDeskNo.Text = "502";
+            this.lbDeskName.AutoSize = true;
+            this.lbDeskName.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbDeskName.Location = new System.Drawing.Point(100, 40);
+            this.lbDeskName.Name = "lbDeskName";
+            this.lbDeskName.Size = new System.Drawing.Size(37, 21);
+            this.lbDeskName.TabIndex = 3;
+            this.lbDeskName.Text = "502";
             // 
             // label4
             // 
@@ -606,102 +702,6 @@
             this.lbBillIndex.TabIndex = 7;
             this.lbBillIndex.Text = "37/52";
             // 
-            // TranSequence
-            // 
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft YaHei", 12F);
-            this.TranSequence.DefaultCellStyle = dataGridViewCellStyle2;
-            this.TranSequence.HeaderText = "流水号";
-            this.TranSequence.Name = "TranSequence";
-            this.TranSequence.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.TranSequence.Width = 68;
-            // 
-            // BillType
-            // 
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BillType.DefaultCellStyle = dataGridViewCellStyle3;
-            this.BillType.HeaderText = "状态";
-            this.BillType.Name = "BillType";
-            this.BillType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.BillType.Width = 68;
-            // 
-            // TotalSellPrice
-            // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.TotalSellPrice.DefaultCellStyle = dataGridViewCellStyle4;
-            this.TotalSellPrice.HeaderText = "金额合计";
-            this.TotalSellPrice.Name = "TotalSellPrice";
-            // 
-            // ActualSellPrice
-            // 
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle5.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.ActualSellPrice.DefaultCellStyle = dataGridViewCellStyle5;
-            this.ActualSellPrice.HeaderText = "实际金额";
-            this.ActualSellPrice.Name = "ActualSellPrice";
-            // 
-            // DiscountPrice
-            // 
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle6.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.DiscountPrice.DefaultCellStyle = dataGridViewCellStyle6;
-            this.DiscountPrice.HeaderText = "折扣金额";
-            this.DiscountPrice.Name = "DiscountPrice";
-            // 
-            // CutOffPrice
-            // 
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft YaHei", 12F);
-            dataGridViewCellStyle7.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.CutOffPrice.DefaultCellStyle = dataGridViewCellStyle7;
-            this.CutOffPrice.HeaderText = "去零金额";
-            this.CutOffPrice.Name = "CutOffPrice";
-            // 
-            // ServiceFee
-            // 
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle8.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.ServiceFee.DefaultCellStyle = dataGridViewCellStyle8;
-            this.ServiceFee.HeaderText = "服务费";
-            this.ServiceFee.Name = "ServiceFee";
-            // 
-            // PaymentMoney
-            // 
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle9.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.PaymentMoney.DefaultCellStyle = dataGridViewCellStyle9;
-            this.PaymentMoney.HeaderText = "付款金额";
-            this.PaymentMoney.Name = "PaymentMoney";
-            // 
-            // NeedChangePay
-            // 
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle10.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.NeedChangePay.DefaultCellStyle = dataGridViewCellStyle10;
-            this.NeedChangePay.HeaderText = "找零金额";
-            this.NeedChangePay.Name = "NeedChangePay";
-            // 
-            // MoreOrLess
-            // 
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle11.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.MoreOrLess.DefaultCellStyle = dataGridViewCellStyle11;
-            this.MoreOrLess.HeaderText = "溢短金额";
-            this.MoreOrLess.Name = "MoreOrLess";
-            // 
-            // OrderID
-            // 
-            this.OrderID.HeaderText = "OrderID";
-            this.OrderID.Name = "OrderID";
-            this.OrderID.Visible = false;
-            // 
             // FormBillManagement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
@@ -765,11 +765,11 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn HeadOffPay;
         private System.Windows.Forms.Label lbBillType;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label lbDeskNo;
+        private System.Windows.Forms.Label lbDeskName;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label lbOrderNo;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label lbDelEmployeeNo;
+        private System.Windows.Forms.Label lbDeviceNo;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label lbCashier;
         private System.Windows.Forms.Label label6;
