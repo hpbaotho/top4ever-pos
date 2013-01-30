@@ -152,6 +152,98 @@ namespace Top4ever.Pos
             }
         }
 
+        private void btnSwipeCard_Click(object sender, EventArgs e)
+        {
+            Feature.FormSwipeCard form = new Feature.FormSwipeCard();
+            form.ShowDialog();
+            if (string.IsNullOrEmpty(form.CardNumber))
+            {
+                return;
+            }
+            string attendanceCard = form.CardNumber;
+
+            //读取程序的配置文件
+            string appSettingPath = "Config/AppSetting.config";
+            if (File.Exists(appSettingPath))
+            {
+                AppSettingConfig appSettingConfig = XmlUtil.Deserialize<AppSettingConfig>(appSettingPath);
+                ConstantValuePool.BizSettingConfig = appSettingConfig;
+            }
+            else
+            {
+                MessageBox.Show("找不到程序的配置文件！");
+                this.Close();
+            }
+
+            Employee employee = null;
+            EmployeeService employeeService = new EmployeeService();
+            int result = employeeService.EmployeeLogin(attendanceCard, ref employee);
+            if (result == 1)
+            {
+                //保存静态池内
+                ConstantValuePool.CurrentEmployee = employee;
+                //获取基础数据
+                SystemBasicData basicDataService = new SystemBasicData();
+                SysBasicData sysBasicData = basicDataService.GetSysBasicData();
+                if (sysBasicData != null)
+                {
+                    ConstantValuePool.CurrentShop = sysBasicData.CurrentShop;
+                    ConstantValuePool.SysConfig = sysBasicData.SysConfig;
+                    ConstantValuePool.RegionList = sysBasicData.RegionList;
+                    ConstantValuePool.DiscountList = sysBasicData.DiscountList;
+                    ConstantValuePool.PayoffWayList = sysBasicData.PayoffWayList;
+                    ConstantValuePool.ReasonList = sysBasicData.ReasonList;
+                    ConstantValuePool.GoodsGroupList = sysBasicData.GoodsGroupList;
+                    ConstantValuePool.DetailsGroupList = sysBasicData.DetailsGroupList;
+                    ConstantValuePool.ButtonStyleList = sysBasicData.ButtonStyleList;
+
+                    this.DialogResult = DialogResult.OK;
+                }
+                else
+                {
+                    loginCount++;
+                    if (loginCount == MAX_LOGIN_COUNT)
+                    {
+                        MessageBox.Show("超出登录次数限制，请重新运行系统！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        this.DialogResult = DialogResult.Cancel;
+                    }
+                    else
+                    {
+                        MessageBox.Show("获取的数据为空，请重新操作！", "错误提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+            }
+            else if (result == 2)
+            {
+                loginCount++;
+                if (loginCount == MAX_LOGIN_COUNT)
+                {
+                    MessageBox.Show("超出登录次数限制，请重新运行系统！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.DialogResult = DialogResult.Cancel;
+                }
+                else
+                {
+                    MessageBox.Show("获取不到用户信息，请检查是否是本系统的卡号！", "错误提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+            }
+            else
+            {
+                loginCount++;
+                if (loginCount == MAX_LOGIN_COUNT)
+                {
+                    MessageBox.Show("超出登录次数限制，请重新运行系统！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.DialogResult = DialogResult.Cancel;
+                }
+                else
+                {
+                    MessageBox.Show("数据库操作失败，请重新输入！", "错误提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+            }
+        }
+
         private void txtName_MouseDown(object sender, MouseEventArgs e)
         {
             m_ActiveTextBox = this.ActiveControl as TextBox;

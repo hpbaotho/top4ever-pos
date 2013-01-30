@@ -7,6 +7,7 @@ namespace Top4ever.ClientService.Enum
         public const int PACKAGE_HEAD = 8;
         public const int USER_NO = 36;
         public const int USER_PWD = 20;
+        public const int ATTENDANCE_CARD = 32;
         public const int SHOP_NO = 30;
         public const int DESK_ID = 36;
         public const int DESK_NAME = 40;

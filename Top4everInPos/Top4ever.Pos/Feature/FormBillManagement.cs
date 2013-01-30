@@ -8,7 +8,9 @@ using System.Windows.Forms;
 
 using Top4ever.ClientService;
 using Top4ever.Domain.OrderRelated;
+using Top4ever.Domain.Transfer;
 using Top4ever.Entity;
+using Top4ever.Entity.Enum;
 
 namespace Top4ever.Pos.Feature
 {
@@ -110,11 +112,11 @@ namespace Top4ever.Pos.Feature
                 this.dataGridView1.Rows.Clear();
                 this.lbOrderNo.Text = string.Empty;
                 this.lbBillType.Text = string.Empty;
-                this.lbDeskNo.Text = string.Empty;
+                this.lbDeskName.Text = string.Empty;
                 this.lbEatType.Text = string.Empty;
                 this.lbEmployeeNo.Text = string.Empty;
                 this.lbCashier.Text = string.Empty;
-                this.lbDelEmployeeNo.Text = string.Empty;
+                this.lbDeviceNo.Text = string.Empty;
                 this.lbPage.Text = "第 1 页";
                 this.lbBillIndex.Text = "0/0";
             }
@@ -156,6 +158,16 @@ namespace Top4ever.Pos.Feature
             }
         }
 
+        private void BindDataGridView2(IList<OrderDetails> orderDetailsList)
+        {
+            
+        }
+
+        private void BindDataGridView3(SalesOrder salesOrder)
+        {
+            
+        }
+
         private string FillWithZero(string inputData, int dataLength)
         {
             inputData = inputData.Trim();
@@ -178,17 +190,56 @@ namespace Top4ever.Pos.Feature
                 int selectedIndex = dataGridView1.CurrentRow.Index;
                 if (dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value != null)
                 {
-
+                    Guid orderID = new Guid(dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value.ToString());
+                    SalesOrderService salesOrderService = new SalesOrderService();
+                    SalesOrder salesOrder = salesOrderService.GetSalesOrder(orderID);
+                    //更新账单信息
+                    Order order = salesOrder.order;
+                    this.lbOrderNo.Text = order.OrderNo;
+                    this.lbDeskName.Text = order.DeskName;
+                    string billType = string.Empty;
+                    if (order.Status == 0)
+                    {
+                        billType = "未结账";
+                    }
+                    else if (order.Status == 1)
+                    {
+                        billType = "已结账";
+                    }
+                    else if (order.Status == 2)
+                    {
+                        billType = "已删除";
+                    }
+                    this.lbBillType.Text = billType;
+                    string eatType = string.Empty;
+                    if (order.EatType == (int)EatWayType.DineIn)
+                    {
+                        eatType = "堂食";
+                    }
+                    else if (order.EatType == (int)EatWayType.Takeout)
+                    {
+                        eatType = "外卖";
+                    }
+                    else if (order.EatType == (int)EatWayType.OutsideOrder)
+                    {
+                        eatType = "外送";
+                    }
+                    this.lbEatType.Text = eatType;
+                    this.lbEmployeeNo.Text = order.EmployeeNo;
+                    this.lbCashier.Text = order.PayEmployeeNo;
+                    this.lbDeviceNo.Text = order.DeviceNo;
+                    BindDataGridView2(salesOrder.orderDetailsList);
+                    BindDataGridView3(salesOrder);
                 }
                 else
                 {
                     this.lbOrderNo.Text = string.Empty;
                     this.lbBillType.Text = string.Empty;
-                    this.lbDeskNo.Text = string.Empty;
+                    this.lbDeskName.Text = string.Empty;
                     this.lbEatType.Text = string.Empty;
                     this.lbEmployeeNo.Text = string.Empty;
                     this.lbCashier.Text = string.Empty;
-                    this.lbDelEmployeeNo.Text = string.Empty;
+                    this.lbDeviceNo.Text = string.Empty;
                     this.dataGridView2.Rows.Clear();
                     this.dataGridView3.Rows.Clear();
                 }

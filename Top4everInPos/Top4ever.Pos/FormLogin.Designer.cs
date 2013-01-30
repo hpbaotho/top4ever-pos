@@ -38,7 +38,6 @@
             this.btnExit = new Top4ever.CustomControl.CrystalButton();
             this.btnLogin = new Top4ever.CustomControl.CrystalButton();
             this.btnBackspace = new Top4ever.CustomControl.CrystalButton();
-            this.btnClear = new Top4ever.CustomControl.CrystalButton();
             this.btnZero = new Top4ever.CustomControl.CrystalButton();
             this.btnSeven = new Top4ever.CustomControl.CrystalButton();
             this.btnFour = new Top4ever.CustomControl.CrystalButton();
@@ -48,12 +47,14 @@
             this.lbPassword = new System.Windows.Forms.Label();
             this.lbName = new System.Windows.Forms.Label();
             this.lbSystemName = new System.Windows.Forms.Label();
+            this.btnSwipeCard = new Top4ever.CustomControl.CrystalButton();
             this.pnlSystemLogin.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlSystemLogin
             // 
             this.pnlSystemLogin.BackColor = System.Drawing.Color.Black;
+            this.pnlSystemLogin.Controls.Add(this.btnSwipeCard);
             this.pnlSystemLogin.Controls.Add(this.btnThree);
             this.pnlSystemLogin.Controls.Add(this.btnTwo);
             this.pnlSystemLogin.Controls.Add(this.btnSix);
@@ -63,7 +64,6 @@
             this.pnlSystemLogin.Controls.Add(this.btnExit);
             this.pnlSystemLogin.Controls.Add(this.btnLogin);
             this.pnlSystemLogin.Controls.Add(this.btnBackspace);
-            this.pnlSystemLogin.Controls.Add(this.btnClear);
             this.pnlSystemLogin.Controls.Add(this.btnZero);
             this.pnlSystemLogin.Controls.Add(this.btnSeven);
             this.pnlSystemLogin.Controls.Add(this.btnFour);
@@ -73,19 +73,19 @@
             this.pnlSystemLogin.Controls.Add(this.lbPassword);
             this.pnlSystemLogin.Controls.Add(this.lbName);
             this.pnlSystemLogin.Controls.Add(this.lbSystemName);
-            this.pnlSystemLogin.Location = new System.Drawing.Point(305, 102);
+            this.pnlSystemLogin.Location = new System.Drawing.Point(194, 99);
             this.pnlSystemLogin.Name = "pnlSystemLogin";
-            this.pnlSystemLogin.Size = new System.Drawing.Size(415, 564);
+            this.pnlSystemLogin.Size = new System.Drawing.Size(654, 564);
             this.pnlSystemLogin.TabIndex = 1;
             // 
             // btnThree
             // 
             this.btnThree.BackColor = System.Drawing.Color.Black;
-            this.btnThree.Font = new System.Drawing.Font("微软雅黑", 21.75F);
+            this.btnThree.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F);
             this.btnThree.ForeColor = System.Drawing.Color.White;
-            this.btnThree.Location = new System.Drawing.Point(249, 164);
+            this.btnThree.Location = new System.Drawing.Point(292, 194);
             this.btnThree.Name = "btnThree";
-            this.btnThree.Size = new System.Drawing.Size(77, 62);
+            this.btnThree.Size = new System.Drawing.Size(98, 62);
             this.btnThree.TabIndex = 1;
             this.btnThree.Text = "3";
             this.btnThree.UseVisualStyleBackColor = false;
@@ -94,11 +94,11 @@
             // btnTwo
             // 
             this.btnTwo.BackColor = System.Drawing.Color.Black;
-            this.btnTwo.Font = new System.Drawing.Font("微软雅黑", 21.75F);
+            this.btnTwo.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F);
             this.btnTwo.ForeColor = System.Drawing.Color.White;
-            this.btnTwo.Location = new System.Drawing.Point(166, 164);
+            this.btnTwo.Location = new System.Drawing.Point(189, 194);
             this.btnTwo.Name = "btnTwo";
-            this.btnTwo.Size = new System.Drawing.Size(77, 62);
+            this.btnTwo.Size = new System.Drawing.Size(98, 62);
             this.btnTwo.TabIndex = 1;
             this.btnTwo.Text = "2";
             this.btnTwo.UseVisualStyleBackColor = false;
@@ -107,11 +107,11 @@
             // btnSix
             // 
             this.btnSix.BackColor = System.Drawing.Color.Black;
-            this.btnSix.Font = new System.Drawing.Font("微软雅黑", 21.75F);
+            this.btnSix.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F);
             this.btnSix.ForeColor = System.Drawing.Color.White;
-            this.btnSix.Location = new System.Drawing.Point(249, 232);
+            this.btnSix.Location = new System.Drawing.Point(292, 262);
             this.btnSix.Name = "btnSix";
-            this.btnSix.Size = new System.Drawing.Size(77, 62);
+            this.btnSix.Size = new System.Drawing.Size(98, 62);
             this.btnSix.TabIndex = 1;
             this.btnSix.Text = "6";
             this.btnSix.UseVisualStyleBackColor = false;
@@ -120,11 +120,11 @@
             // btnFive
             // 
             this.btnFive.BackColor = System.Drawing.Color.Black;
-            this.btnFive.Font = new System.Drawing.Font("微软雅黑", 21.75F);
+            this.btnFive.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F);
             this.btnFive.ForeColor = System.Drawing.Color.White;
-            this.btnFive.Location = new System.Drawing.Point(166, 232);
+            this.btnFive.Location = new System.Drawing.Point(189, 262);
             this.btnFive.Name = "btnFive";
-            this.btnFive.Size = new System.Drawing.Size(77, 62);
+            this.btnFive.Size = new System.Drawing.Size(98, 62);
             this.btnFive.TabIndex = 1;
             this.btnFive.Text = "5";
             this.btnFive.UseVisualStyleBackColor = false;
@@ -133,11 +133,11 @@
             // btnNine
             // 
             this.btnNine.BackColor = System.Drawing.Color.Black;
-            this.btnNine.Font = new System.Drawing.Font("微软雅黑", 21.75F);
+            this.btnNine.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F);
             this.btnNine.ForeColor = System.Drawing.Color.White;
-            this.btnNine.Location = new System.Drawing.Point(249, 300);
+            this.btnNine.Location = new System.Drawing.Point(292, 330);
             this.btnNine.Name = "btnNine";
-            this.btnNine.Size = new System.Drawing.Size(77, 62);
+            this.btnNine.Size = new System.Drawing.Size(98, 62);
             this.btnNine.TabIndex = 1;
             this.btnNine.Text = "9";
             this.btnNine.UseVisualStyleBackColor = false;
@@ -146,11 +146,11 @@
             // btnEight
             // 
             this.btnEight.BackColor = System.Drawing.Color.Black;
-            this.btnEight.Font = new System.Drawing.Font("微软雅黑", 21.75F);
+            this.btnEight.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F);
             this.btnEight.ForeColor = System.Drawing.Color.White;
-            this.btnEight.Location = new System.Drawing.Point(166, 300);
+            this.btnEight.Location = new System.Drawing.Point(189, 330);
             this.btnEight.Name = "btnEight";
-            this.btnEight.Size = new System.Drawing.Size(77, 62);
+            this.btnEight.Size = new System.Drawing.Size(98, 62);
             this.btnEight.TabIndex = 1;
             this.btnEight.Text = "8";
             this.btnEight.UseVisualStyleBackColor = false;
@@ -159,11 +159,11 @@
             // btnExit
             // 
             this.btnExit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(43)))), ((int)(((byte)(59)))));
-            this.btnExit.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnExit.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnExit.ForeColor = System.Drawing.Color.White;
-            this.btnExit.Location = new System.Drawing.Point(83, 457);
+            this.btnExit.Location = new System.Drawing.Point(86, 398);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(108, 62);
+            this.btnExit.Size = new System.Drawing.Size(98, 62);
             this.btnExit.TabIndex = 1;
             this.btnExit.Text = "退出系统";
             this.btnExit.UseVisualStyleBackColor = false;
@@ -172,11 +172,11 @@
             // btnLogin
             // 
             this.btnLogin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(148)))), ((int)(((byte)(91)))));
-            this.btnLogin.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnLogin.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnLogin.ForeColor = System.Drawing.Color.White;
-            this.btnLogin.Location = new System.Drawing.Point(217, 457);
+            this.btnLogin.Location = new System.Drawing.Point(403, 194);
             this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Size = new System.Drawing.Size(108, 62);
+            this.btnLogin.Size = new System.Drawing.Size(151, 198);
             this.btnLogin.TabIndex = 1;
             this.btnLogin.Text = "登录";
             this.btnLogin.UseVisualStyleBackColor = false;
@@ -185,37 +185,24 @@
             // btnBackspace
             // 
             this.btnBackspace.BackColor = System.Drawing.Color.Teal;
-            this.btnBackspace.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnBackspace.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnBackspace.ForeColor = System.Drawing.Color.White;
-            this.btnBackspace.Location = new System.Drawing.Point(248, 368);
+            this.btnBackspace.Location = new System.Drawing.Point(292, 398);
             this.btnBackspace.Name = "btnBackspace";
-            this.btnBackspace.Size = new System.Drawing.Size(77, 62);
+            this.btnBackspace.Size = new System.Drawing.Size(98, 62);
             this.btnBackspace.TabIndex = 1;
             this.btnBackspace.Text = "退格";
             this.btnBackspace.UseVisualStyleBackColor = false;
             this.btnBackspace.Click += new System.EventHandler(this.btnBackspace_Click);
             // 
-            // btnClear
-            // 
-            this.btnClear.BackColor = System.Drawing.Color.OrangeRed;
-            this.btnClear.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnClear.ForeColor = System.Drawing.Color.White;
-            this.btnClear.Location = new System.Drawing.Point(83, 368);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(77, 62);
-            this.btnClear.TabIndex = 1;
-            this.btnClear.Text = "清空";
-            this.btnClear.UseVisualStyleBackColor = false;
-            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
-            // 
             // btnZero
             // 
             this.btnZero.BackColor = System.Drawing.Color.Black;
-            this.btnZero.Font = new System.Drawing.Font("微软雅黑", 21.75F);
+            this.btnZero.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F);
             this.btnZero.ForeColor = System.Drawing.Color.White;
-            this.btnZero.Location = new System.Drawing.Point(166, 368);
+            this.btnZero.Location = new System.Drawing.Point(189, 398);
             this.btnZero.Name = "btnZero";
-            this.btnZero.Size = new System.Drawing.Size(77, 62);
+            this.btnZero.Size = new System.Drawing.Size(98, 62);
             this.btnZero.TabIndex = 1;
             this.btnZero.Text = "0";
             this.btnZero.UseVisualStyleBackColor = false;
@@ -224,11 +211,11 @@
             // btnSeven
             // 
             this.btnSeven.BackColor = System.Drawing.Color.Black;
-            this.btnSeven.Font = new System.Drawing.Font("微软雅黑", 21.75F);
+            this.btnSeven.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F);
             this.btnSeven.ForeColor = System.Drawing.Color.White;
-            this.btnSeven.Location = new System.Drawing.Point(83, 300);
+            this.btnSeven.Location = new System.Drawing.Point(86, 330);
             this.btnSeven.Name = "btnSeven";
-            this.btnSeven.Size = new System.Drawing.Size(77, 62);
+            this.btnSeven.Size = new System.Drawing.Size(98, 62);
             this.btnSeven.TabIndex = 1;
             this.btnSeven.Text = "7";
             this.btnSeven.UseVisualStyleBackColor = false;
@@ -237,11 +224,11 @@
             // btnFour
             // 
             this.btnFour.BackColor = System.Drawing.Color.Black;
-            this.btnFour.Font = new System.Drawing.Font("微软雅黑", 21.75F);
+            this.btnFour.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F);
             this.btnFour.ForeColor = System.Drawing.Color.White;
-            this.btnFour.Location = new System.Drawing.Point(83, 232);
+            this.btnFour.Location = new System.Drawing.Point(86, 262);
             this.btnFour.Name = "btnFour";
-            this.btnFour.Size = new System.Drawing.Size(77, 62);
+            this.btnFour.Size = new System.Drawing.Size(98, 62);
             this.btnFour.TabIndex = 1;
             this.btnFour.Text = "4";
             this.btnFour.UseVisualStyleBackColor = false;
@@ -250,11 +237,11 @@
             // btnOne
             // 
             this.btnOne.BackColor = System.Drawing.Color.Black;
-            this.btnOne.Font = new System.Drawing.Font("微软雅黑", 21.75F);
+            this.btnOne.Font = new System.Drawing.Font("Microsoft YaHei", 21.75F);
             this.btnOne.ForeColor = System.Drawing.Color.White;
-            this.btnOne.Location = new System.Drawing.Point(83, 164);
+            this.btnOne.Location = new System.Drawing.Point(86, 194);
             this.btnOne.Name = "btnOne";
-            this.btnOne.Size = new System.Drawing.Size(77, 62);
+            this.btnOne.Size = new System.Drawing.Size(98, 62);
             this.btnOne.TabIndex = 1;
             this.btnOne.Text = "1";
             this.btnOne.UseVisualStyleBackColor = false;
@@ -263,20 +250,20 @@
             // txtName
             // 
             this.txtName.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtName.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtName.Location = new System.Drawing.Point(159, 66);
+            this.txtName.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtName.Location = new System.Drawing.Point(162, 139);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(166, 26);
+            this.txtName.Size = new System.Drawing.Size(136, 26);
             this.txtName.TabIndex = 0;
             this.txtName.MouseDown += new System.Windows.Forms.MouseEventHandler(this.txtName_MouseDown);
             // 
             // txtPassword
             // 
             this.txtPassword.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtPassword.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtPassword.Location = new System.Drawing.Point(159, 115);
+            this.txtPassword.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtPassword.Location = new System.Drawing.Point(418, 139);
             this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(166, 26);
+            this.txtPassword.Size = new System.Drawing.Size(136, 26);
             this.txtPassword.TabIndex = 1;
             this.txtPassword.MouseDown += new System.Windows.Forms.MouseEventHandler(this.txtPassword_MouseDown);
             // 
@@ -284,9 +271,9 @@
             // 
             this.lbPassword.AutoSize = true;
             this.lbPassword.BackColor = System.Drawing.Color.Transparent;
-            this.lbPassword.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbPassword.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbPassword.ForeColor = System.Drawing.Color.White;
-            this.lbPassword.Location = new System.Drawing.Point(95, 120);
+            this.lbPassword.Location = new System.Drawing.Point(354, 142);
             this.lbPassword.Name = "lbPassword";
             this.lbPassword.Size = new System.Drawing.Size(58, 21);
             this.lbPassword.TabIndex = 1;
@@ -297,9 +284,9 @@
             // 
             this.lbName.AutoSize = true;
             this.lbName.BackColor = System.Drawing.Color.Transparent;
-            this.lbName.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbName.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbName.ForeColor = System.Drawing.Color.White;
-            this.lbName.Location = new System.Drawing.Point(79, 69);
+            this.lbName.Location = new System.Drawing.Point(82, 142);
             this.lbName.Name = "lbName";
             this.lbName.Size = new System.Drawing.Size(74, 21);
             this.lbName.TabIndex = 0;
@@ -310,22 +297,35 @@
             // 
             this.lbSystemName.AutoSize = true;
             this.lbSystemName.BackColor = System.Drawing.Color.Transparent;
-            this.lbSystemName.Font = new System.Drawing.Font("微软雅黑", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbSystemName.Font = new System.Drawing.Font("Microsoft YaHei", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbSystemName.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.lbSystemName.Location = new System.Drawing.Point(101, 14);
+            this.lbSystemName.Location = new System.Drawing.Point(222, 58);
             this.lbSystemName.Name = "lbSystemName";
             this.lbSystemName.Size = new System.Drawing.Size(207, 31);
             this.lbSystemName.TabIndex = 0;
             this.lbSystemName.Text = "POS前台登录系统";
+            // 
+            // btnSwipeCard
+            // 
+            this.btnSwipeCard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(20)))));
+            this.btnSwipeCard.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F);
+            this.btnSwipeCard.ForeColor = System.Drawing.Color.White;
+            this.btnSwipeCard.Location = new System.Drawing.Point(403, 398);
+            this.btnSwipeCard.Name = "btnSwipeCard";
+            this.btnSwipeCard.Size = new System.Drawing.Size(151, 62);
+            this.btnSwipeCard.TabIndex = 1;
+            this.btnSwipeCard.Text = "刷卡登录";
+            this.btnSwipeCard.UseVisualStyleBackColor = false;
+            this.btnSwipeCard.Click += new System.EventHandler(this.btnSwipeCard_Click);
             // 
             // FormLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(193)))), ((int)(((byte)(212)))), ((int)(((byte)(229)))));
-            this.ClientSize = new System.Drawing.Size(1024, 768);
+            this.ClientSize = new System.Drawing.Size(1024, 753);
             this.Controls.Add(this.pnlSystemLogin);
-            this.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "FormLogin";
@@ -349,7 +349,6 @@
         private CustomControl.CrystalButton btnExit;
         private CustomControl.CrystalButton btnLogin;
         private CustomControl.CrystalButton btnBackspace;
-        private CustomControl.CrystalButton btnClear;
         private CustomControl.CrystalButton btnZero;
         private CustomControl.CrystalButton btnSeven;
         private CustomControl.CrystalButton btnFour;
@@ -359,6 +358,7 @@
         private System.Windows.Forms.Label lbPassword;
         private System.Windows.Forms.Label lbName;
         private System.Windows.Forms.Label lbSystemName;
+        private CustomControl.CrystalButton btnSwipeCard;
 
     }
 }
