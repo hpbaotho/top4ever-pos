@@ -11,6 +11,8 @@ using Top4ever.Domain.OrderRelated;
 using Top4ever.Domain.Transfer;
 using Top4ever.Entity;
 using Top4ever.Entity.Enum;
+using Top4ever.Print;
+using Top4ever.Print.Entity;
 
 namespace Top4ever.Pos.Feature
 {
@@ -22,12 +24,20 @@ namespace Top4ever.Pos.Feature
         private int m_SeachType = 0;
         private int m_PageIndex = 0;
         private int m_PageSize = 25;
+        private SalesOrder m_SalesOrder = null;
 
         public FormBillManagement()
         {
             InitializeComponent();
             this.btnPageUp.DisplayColor = this.btnPageUp.BackColor;
             this.btnPageDown.DisplayColor = this.btnPageDown.BackColor;
+        }
+
+        private void FormBillManagement_Load(object sender, EventArgs e)
+        {
+            btnBillModify.BackColor = btnBillModify.DisplayColor = Color.SteelBlue;
+            btnSingleDelete.BackColor = btnSingleDelete.DisplayColor = Color.SteelBlue;
+            btnWholeDelete.BackColor = btnWholeDelete.DisplayColor = Color.SteelBlue;
         }
 
         private void btnDeskNo_Click(object sender, EventArgs e)
@@ -65,6 +75,18 @@ namespace Top4ever.Pos.Feature
             m_PageIndex = 0;
             m_SeachType = 0;
             this.txtSearchValue.Text = string.Empty;
+            this.lbOrderNo.Text = string.Empty;
+            this.lbBillType.Text = string.Empty;
+            this.lbDeskName.Text = string.Empty;
+            this.lbEatType.Text = string.Empty;
+            this.lbEmployeeNo.Text = string.Empty;
+            this.lbCashier.Text = string.Empty;
+            this.lbDeviceNo.Text = string.Empty;
+            this.lbPage.Text = "第 1 页";
+            this.lbBillIndex.Text = "0/0";
+            this.dataGridView1.Rows.Clear();
+            this.dataGridView2.Rows.Clear();
+            this.dataGridView3.Rows.Clear();
         }
 
         private void SearchSalesOrder()
@@ -104,7 +126,10 @@ namespace Top4ever.Pos.Feature
             }
             if (orderList.Count > 0)
             {
-                this.lbPage.Text = string.Format("第 {0} 页", m_PageIndex);
+                this.lbPage.Text = string.Format("第 {0} 页", m_PageIndex + 1);
+                int startIndex = m_PageIndex * m_PageSize + 1;
+                int endIndex = (m_PageIndex + 1) * m_PageSize;
+                this.lbBillIndex.Text = startIndex + "/" + endIndex;
                 BindDataGridView1(orderList);
             }
             else
@@ -155,17 +180,109 @@ namespace Top4ever.Pos.Feature
                     dataGridView1.Rows[index].Cells["MoreOrLess"].Value = (order.ActualSellPrice + order.ServiceFee - (order.PaymentMoney - order.NeedChangePay)).ToString("f2");
                     dataGridView1.Rows[index].Cells["OrderID"].Value = order.OrderID;
                 }
+                //设置第一行选中
+                if (dataGridView1.RowCount > 0)
+                {
+                    dataGridView1.Rows[0].Selected = true;
+                }
             }
         }
 
-        private void BindDataGridView2(IList<OrderDetails> orderDetailsList)
+        private void BindDataGridView2(SalesOrder salesOrder)
         {
-            
+            this.dataGridView2.Rows.Clear();
+            IList<OrderDetails> orderDetailsList = salesOrder.orderDetailsList;
+            if (orderDetailsList != null && orderDetailsList.Count > 0)
+            {
+                foreach (OrderDetails orderDetails in orderDetailsList)
+                {
+                    int index = dataGridView2.Rows.Add();
+                    dataGridView2.Rows[index].Cells["GoodsName"].Value = orderDetails.GoodsName;
+                    dataGridView2.Rows[index].Cells["ItemQty"].Value = orderDetails.ItemQty;
+                    dataGridView2.Rows[index].Cells["SellPrice"].Value = orderDetails.TotalSellPrice.ToString("f2");
+                    dataGridView2.Rows[index].Cells["Discount"].Value = orderDetails.TotalDiscount.ToString("f2");
+                }
+            }
         }
 
         private void BindDataGridView3(SalesOrder salesOrder)
         {
-            
+            this.dataGridView3.Rows.Clear();
+            Order order = salesOrder.order;
+            IList<OrderPayoff> orderPayoffList = salesOrder.orderPayoffList;
+            if (orderPayoffList != null && orderPayoffList.Count > 0)
+            {
+                //售价总计
+                int index = dataGridView3.Rows.Add();
+                dataGridView3.Rows[index].Cells[0].Value = "售价总计";
+                dataGridView3.Rows[index].Cells[1].Value = string.Empty;
+                dataGridView3.Rows[index].Cells[2].Value = string.Empty;
+                dataGridView3.Rows[index].Cells[3].Value = order.TotalSellPrice.ToString("f2");
+                //去零金额
+                if (Math.Abs(order.CutOffPrice) > 0)
+                {
+                    index = dataGridView3.Rows.Add();
+                    dataGridView3.Rows[index].Cells[0].Value = "去零金额";
+                    dataGridView3.Rows[index].Cells[1].Value = string.Empty;
+                    dataGridView3.Rows[index].Cells[2].Value = string.Empty;
+                    dataGridView3.Rows[index].Cells[3].Value = string.Empty;
+                    dataGridView3.Rows[index].Cells[4].Value = (-order.CutOffPrice).ToString("f2");
+                }
+                //折扣金额
+                if (Math.Abs(order.DiscountPrice) > 0)
+                {
+                    index = dataGridView3.Rows.Add();
+                    dataGridView3.Rows[index].Cells[0].Value = "折扣金额";
+                    dataGridView3.Rows[index].Cells[1].Value = string.Empty;
+                    dataGridView3.Rows[index].Cells[2].Value = string.Empty;
+                    dataGridView3.Rows[index].Cells[3].Value = (-order.DiscountPrice).ToString("f2");
+                    dataGridView3.Rows[index].Cells[4].Value = string.Empty;
+                }
+                //实际金额
+                index = dataGridView3.Rows.Add();
+                dataGridView3.Rows[index].Cells[0].Value = "实际金额";
+                dataGridView3.Rows[index].Cells[1].Value = string.Empty;
+                dataGridView3.Rows[index].Cells[2].Value = string.Empty;
+                dataGridView3.Rows[index].Cells[3].Value = order.ActualSellPrice.ToString("f2");
+                dataGridView3.Rows[index].Cells[4].Value = string.Empty;
+                //服务费
+                if (order.ServiceFee > 0)
+                {
+                    index = dataGridView3.Rows.Add();
+                    dataGridView3.Rows[index].Cells[0].Value = "服务费";
+                    dataGridView3.Rows[index].Cells[1].Value = string.Empty;
+                    dataGridView3.Rows[index].Cells[2].Value = string.Empty;
+                    dataGridView3.Rows[index].Cells[3].Value = order.ServiceFee.ToString("f2");
+                    dataGridView3.Rows[index].Cells[4].Value = string.Empty;
+                }
+                //空行
+                dataGridView3.Rows.Add();
+                //支付金额
+                index = dataGridView3.Rows.Add();
+                dataGridView3.Rows[index].Cells[0].Value = "支付金额";
+                dataGridView3.Rows[index].Cells[1].Value = order.PaymentMoney.ToString("f2");
+                dataGridView3.Rows[index].Cells[2].Value = order.NeedChangePay.ToString("f2");
+                dataGridView3.Rows[index].Cells[3].Value = order.ActualSellPrice.ToString("f2");
+                dataGridView3.Rows[index].Cells[4].Value = (order.ActualSellPrice + order.ServiceFee - (order.PaymentMoney - order.NeedChangePay)).ToString("f2");
+                //空行
+                dataGridView3.Rows.Add();
+                //支付方式明细
+                foreach (OrderPayoff orderPayoff in orderPayoffList)
+                {
+                    index = dataGridView3.Rows.Add();
+                    dataGridView3.Rows[index].Cells[0].Value = orderPayoff.PayoffName;
+                    if (orderPayoff.PayoffType == (int)PayoffWayMode.GiftVoucher)
+                    {
+                        dataGridView3.Rows[index].Cells[1].Value = string.Format("{0} 张", orderPayoff.Quantity);
+                    }
+                    if (orderPayoff.NeedChangePay > 0)
+                    {
+                        dataGridView3.Rows[index].Cells[2].Value = (-orderPayoff.NeedChangePay).ToString("f2");
+                    }
+                    dataGridView3.Rows[index].Cells[3].Value = (orderPayoff.AsPay * orderPayoff.Quantity - orderPayoff.NeedChangePay).ToString("f2");
+                    dataGridView3.Rows[index].Cells[4].Value = string.Empty;
+                }
+            }
         }
 
         private string FillWithZero(string inputData, int dataLength)
@@ -192,7 +309,8 @@ namespace Top4ever.Pos.Feature
                 {
                     Guid orderID = new Guid(dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value.ToString());
                     SalesOrderService salesOrderService = new SalesOrderService();
-                    SalesOrder salesOrder = salesOrderService.GetSalesOrder(orderID);
+                    SalesOrder salesOrder = salesOrderService.GetPaidSalesOrder(orderID);
+                    m_SalesOrder = salesOrder;
                     //更新账单信息
                     Order order = salesOrder.order;
                     this.lbOrderNo.Text = order.OrderNo;
@@ -228,11 +346,12 @@ namespace Top4ever.Pos.Feature
                     this.lbEmployeeNo.Text = order.EmployeeNo;
                     this.lbCashier.Text = order.PayEmployeeNo;
                     this.lbDeviceNo.Text = order.DeviceNo;
-                    BindDataGridView2(salesOrder.orderDetailsList);
+                    BindDataGridView2(salesOrder);
                     BindDataGridView3(salesOrder);
                 }
                 else
                 {
+                    m_SalesOrder = null;
                     this.lbOrderNo.Text = string.Empty;
                     this.lbBillType.Text = string.Empty;
                     this.lbDeskName.Text = string.Empty;
@@ -248,12 +367,150 @@ namespace Top4ever.Pos.Feature
 
         private void btnPrint_Click(object sender, EventArgs e)
         {
-
+            if (dataGridView1.CurrentRow != null)
+            {
+                int selectedIndex = dataGridView1.CurrentRow.Index;
+                if (dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value != null)
+                {
+                    Order order = m_SalesOrder.order;
+                    //打印小票
+                    PrintData printData = new PrintData();
+                    printData.ShopName = ConstantValuePool.CurrentShop.ShopName;
+                    printData.DeskName = order.DeskName;
+                    printData.PersonNum = order.PeopleNum.ToString();
+                    printData.PrintTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+                    printData.EmployeeNo = order.EmployeeNo;
+                    printData.TranSequence = order.TranSequence.ToString();
+                    printData.ShopAddress = ConstantValuePool.CurrentShop.RunAddress;
+                    printData.Telephone = ConstantValuePool.CurrentShop.Telephone;
+                    printData.ReceivableMoney = order.ActualSellPrice.ToString("f2");
+                    printData.ServiceFee = order.ServiceFee.ToString("f2");
+                    printData.PaidInMoney = order.PaymentMoney.ToString("f2");
+                    printData.NeedChangePay = order.NeedChangePay.ToString("f2");
+                    printData.GoodsOrderList = new List<GoodsOrder>();
+                    printData.PayingOrderList = new List<PayingGoodsOrder>();
+                    foreach (OrderDetails item in m_SalesOrder.orderDetailsList)
+                    {
+                        string strLevelFlag = string.Empty;
+                        int levelCount = item.ItemLevel * 2;
+                        for (int i = 0; i < levelCount; i++)
+                        {
+                            strLevelFlag += "-";
+                        }
+                        GoodsOrder goodsOrder = new GoodsOrder();
+                        goodsOrder.GoodsName = strLevelFlag + item.GoodsName;
+                        goodsOrder.GoodsNum = item.ItemQty.ToString("f1");
+                        goodsOrder.SellPrice = item.SellPrice.ToString("f2");
+                        goodsOrder.TotalSellPrice = item.TotalSellPrice.ToString("f2");
+                        goodsOrder.TotalDiscount = item.TotalDiscount.ToString("f2");
+                        goodsOrder.Unit = item.Unit;
+                        printData.GoodsOrderList.Add(goodsOrder);
+                    }
+                    foreach (OrderPayoff orderPayoff in m_SalesOrder.orderPayoffList)
+                    {
+                        PayingGoodsOrder payingOrder = new PayingGoodsOrder();
+                        payingOrder.PayoffName = orderPayoff.PayoffName;
+                        payingOrder.PayoffMoney = (orderPayoff.AsPay * orderPayoff.Quantity).ToString("f2");
+                        payingOrder.NeedChangePay = orderPayoff.NeedChangePay.ToString("f2");
+                        printData.PayingOrderList.Add(payingOrder);
+                    }
+                    string configPath = @"PrintConfig\PrintOrderSetting.config";
+                    string layoutPath = @"PrintConfig\PrintPaidOrder.ini";
+                    DriverOrderPrint printer = new DriverOrderPrint("Microsoft XPS Document Writer", "76mm", "SpecimenLabel");
+                    printer.DoPrint(printData, layoutPath, configPath);
+                }
+            }
         }
 
         private void btnExit_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnPageDown_Click(object sender, EventArgs e)
+        {
+            m_PageIndex++;
+            SearchSalesOrder();
+        }
+
+        private void btnPageUp_Click(object sender, EventArgs e)
+        {
+            m_PageIndex--;
+            SearchSalesOrder();
+        }
+
+        private void btnWholeDelete_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.CurrentRow != null)
+            {
+                int selectedIndex = dataGridView1.CurrentRow.Index;
+                if (dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value != null)
+                {
+                    //权限验证
+                    bool hasRights = false;
+                    if (RightsItemCode.FindRights(RightsItemCode.CANCELBILL))
+                    {
+                        hasRights = true;
+                    }
+                    else
+                    {
+                        FormRightsCode formRightsCode = new FormRightsCode();
+                        formRightsCode.ShowDialog();
+                        if (formRightsCode.ReturnValue)
+                        {
+                            IList<string> rightsCodeList = formRightsCode.RightsCodeList;
+                            if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.CANCELBILL))
+                            {
+                                hasRights = true;
+                            }
+                        }
+                    }
+                    if (!hasRights)
+                    {
+                        return;
+                    }
+                    FormCancelOrder form = new FormCancelOrder();
+                    form.ShowDialog();
+                    if (form.CurrentReason != null)
+                    {
+                        //删除订单
+                        DeletedOrder deletedOrder = new DeletedOrder();
+                        deletedOrder.OrderID = m_SalesOrder.order.OrderID;
+                        deletedOrder.AuthorisedManager = ConstantValuePool.CurrentEmployee.EmployeeID;
+                        deletedOrder.CancelEmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
+                        deletedOrder.CancelReasonName = form.CurrentReason.ReasonName;
+
+                        DeletedOrderService orderService = new DeletedOrderService();
+                        if (orderService.DeletePaidWholeOrder(deletedOrder))
+                        {
+                            dataGridView1.Rows[selectedIndex].Cells["BillType"].Value = "已删除";
+                            dataGridView1.Rows[selectedIndex].Cells["TotalSellPrice"].Value = string.Empty;
+                            dataGridView1.Rows[selectedIndex].Cells["ActualSellPrice"].Value = string.Empty;
+                            dataGridView1.Rows[selectedIndex].Cells["DiscountPrice"].Value = string.Empty;
+                            dataGridView1.Rows[selectedIndex].Cells["CutOffPrice"].Value = string.Empty;
+                            dataGridView1.Rows[selectedIndex].Cells["ServiceFee"].Value = string.Empty;
+                            dataGridView1.Rows[selectedIndex].Cells["PaymentMoney"].Value = string.Empty;
+                            dataGridView1.Rows[selectedIndex].Cells["NeedChangePay"].Value = string.Empty;
+                            dataGridView1.Rows[selectedIndex].Cells["MoreOrLess"].Value = string.Empty;
+                            btnBillModify.Enabled = false;
+                            btnBillModify.BackColor = ConstantValuePool.DisabledColor;
+                            btnSingleDelete.Enabled = false;
+                            btnSingleDelete.BackColor = ConstantValuePool.DisabledColor;
+                            btnWholeDelete.Enabled = false;
+                            btnWholeDelete.BackColor = ConstantValuePool.DisabledColor;
+                        }
+                        else
+                        {
+                            MessageBox.Show("删除账单失败！");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+            }
         }
     }
 }

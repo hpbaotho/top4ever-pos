@@ -21,6 +21,7 @@ namespace Top4ever.Service
         private IOrderDao _orderDao = null;
         private IOrderDetailsDao _orderDetailsDao = null;
         private IOrderDiscountDao _orderDiscountDao = null;
+        private IOrderPayoffDao _orderPayoffDao = null;
         private IDailyStatementDao _dailyStatementDao = null;
         private ISystemConfigDao _sysConfigDao = null;
         private ISystemDictionaryDao _sysDictionary = null;
@@ -37,6 +38,7 @@ namespace Top4ever.Service
             _orderDao = _daoManager.GetDao(typeof(IOrderDao)) as IOrderDao;
             _orderDetailsDao = _daoManager.GetDao(typeof(IOrderDetailsDao)) as IOrderDetailsDao;
             _orderDiscountDao = _daoManager.GetDao(typeof(IOrderDiscountDao)) as IOrderDiscountDao;
+            _orderPayoffDao = _daoManager.GetDao(typeof(IOrderPayoffDao)) as IOrderPayoffDao;
             _dailyStatementDao = _daoManager.GetDao(typeof(IDailyStatementDao)) as IDailyStatementDao;
             _sysConfigDao = _daoManager.GetDao(typeof(ISystemConfigDao)) as ISystemConfigDao;
             _sysDictionary = _daoManager.GetDao(typeof(ISystemDictionaryDao)) as ISystemDictionaryDao;
@@ -235,6 +237,28 @@ namespace Top4ever.Service
                 returnValue = false;
             }
             return returnValue;
+        }
+
+        public SalesOrder GetPaidSalesOrder(Guid orderID)
+        {
+            SalesOrder salesOrder = null;
+            _daoManager.OpenConnection();
+
+            Order order = _orderDao.GetOrder(orderID);
+            if (order != null)
+            {
+                IList<OrderDetails> orderDetailsList = _orderDetailsDao.GetOrderDetailsList(orderID);
+                IList<OrderDiscount> orderDiscountList = _orderDiscountDao.GetOrderDiscountList(orderID);
+                IList<OrderPayoff> orderPayoffList = _orderPayoffDao.GetOrderPayoffList(orderID);
+                salesOrder = new SalesOrder();
+                salesOrder.order = order;
+                salesOrder.orderDetailsList = orderDetailsList;
+                salesOrder.orderDiscountList = orderDiscountList;
+                salesOrder.orderPayoffList = orderPayoffList;
+            }
+
+            _daoManager.CloseConnection();
+            return salesOrder;
         }
 
         #endregion

@@ -7,8 +7,6 @@
 
     <resultMaps>
         <resultMap  id="OrderDiscountResult" class="OrderDiscount">
-            <result property="OrderDiscountID" column="OrderDiscountID"></result>
-            <result property="OrderID" column="OrderID"></result>
             <result property="OrderDetailsID" column="OrderDetailsID"></result>
             <result property="DiscountID" column="DiscountID"></result>
             <result property="DiscountName" column="DiscountName"></result>
@@ -16,7 +14,6 @@
             <result property="DiscountRate" column="DiscountRate"></result>
             <result property="OffFixPay" column="OffFixPay"></result>
             <result property="OffPay" column="OffPay"></result>
-            <result property="EmployeeID" column="LastModifiedEmployeeID"></result>
         </resultMap>
 
     </resultMaps>
@@ -79,8 +76,14 @@
         
         <update id="UpdateDeletedOrderDiscount" parameterClass="Guid">
             UPDATE OrderDiscount
-            SET IsVoided = 1
+            SET IsVoided = 1, <![CDATA[ LastModifiedTime = getdate(), Transfered = 0 ]]>
             WHERE OrderID = #value#
         </update>
+
+        <select id="GetOrderDiscountList" parameterClass="Guid" resultMap="OrderDiscountResult">
+            SELECT OrderDetailsID, DiscountID, DiscountName, DiscountType, DiscountRate, OffFixPay, OffPay
+            FROM OrderDiscount
+            WHERE OrderID = #value# AND IsVoided = 0
+        </select>
     </statements>
 </sqlMap>

@@ -42,6 +42,28 @@ namespace Top4ever.Service
             _daoManager.CloseConnection();
         }
 
+        public bool DeleteOrderPayoff(Guid orderID)
+        {
+            bool result = false;
+
+            _daoManager.OpenConnection();
+            result = _orderPayoffDao.DeleteOrderPayoff(orderID);
+            _daoManager.CloseConnection();
+
+            return result;
+        }
+
+        public IList<OrderPayoff> GetOrderPayoffList(Guid orderID)
+        {
+            IList<OrderPayoff> orderPayoffList = null;
+
+            _daoManager.OpenConnection();
+            orderPayoffList = _orderPayoffDao.GetOrderPayoffList(orderID);
+            _daoManager.CloseConnection();
+
+            return orderPayoffList;
+        }
+
         #endregion
     }
 }

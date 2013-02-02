@@ -115,10 +115,10 @@
         </update>
 
         <update id="UpdateDeletedOrderDetails" parameterClass="DeletedOrder">
-            UPDATE OrderDetails
-            SET AuthorisedManager = #AuthorisedManager#, CancelEmployeeNo = #CancelEmployeeNo#, CancelReasonName = #CancelReasonName#,
-			IsVoided = 1, <![CDATA[ LastModifiedTime = getdate() ]]>, LastModifiedEmployeeID = #AuthorisedManager#
-            WHERE OrderID = #OrderID#
+          UPDATE OrderDetails
+          SET AuthorisedManager = #AuthorisedManager#, CancelEmployeeNo = #CancelEmployeeNo#, CancelReasonName = #CancelReasonName#,
+            IsVoided = 1, LastModifiedEmployeeID = #AuthorisedManager#, <![CDATA[ LastModifiedTime = getdate(), Transfered = 0 ]]>
+          WHERE OrderID = #OrderID#
         </update>
 
         <procedure id="DeleteSingleOrderDetails" parameterMap="DeleteSingleOrderDetailsParam">

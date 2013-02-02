@@ -24,6 +24,9 @@ namespace Top4ever.Entity
         public static readonly string WHOLEDISCOUNT = "BA5";        //整单折扣
         public static readonly string CUTSERVICEFEE = "BA6";        //去服务费
         public static readonly string CANCELGOODS = "BA7";          //退菜
+        public static readonly string PAIDBILLMODIFY = "BA8";       //账单修改
+        public static readonly string DELETEPAIDGOODS = "BA9";      //单品删除
+        public static readonly string DELETEPAIDBILL = "BAA";       //整单删除
 
         public static readonly string TAKEORDER = "RA0";        //点单
         public static readonly string CLEARDESK = "RA1";        //清空

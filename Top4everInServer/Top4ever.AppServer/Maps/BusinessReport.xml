@@ -84,7 +84,7 @@
     </select>
 
     <select id="GetPayoffSumByDailyStatement" parameterClass="String" resultMap="OrderPayoffSumResult">
-      SELECT PayoffID, PayoffName, COUNT(PayoffID) AS Times, SUM(Quantity * AsPay) - SUM(op.NeedChangePay) AS PayoffMoney
+      SELECT PayoffID, PayoffName, COUNT(PayoffName) AS Times, SUM(Quantity * AsPay) - SUM(op.NeedChangePay) AS PayoffMoney
       FROM OrderPayoff op JOIN [Order] o ON o.OrderID = op.OrderID
       WHERE op.DailyStatementNo = #value# AND o.[Status] = 1 AND op.IsVoided = 0
       GROUP BY PayoffID, PayoffName

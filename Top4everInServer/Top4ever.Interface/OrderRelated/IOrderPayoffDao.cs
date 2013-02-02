@@ -11,8 +11,10 @@ namespace Top4ever.Interface.OrderRelated
     /// </summary>
     public interface IOrderPayoffDao
     {
-        IList<OrderPayoffSum> GetOrderPayoffSumList(string dailyStatementNo);
-
         void CreateOrderPayoff(OrderPayoff orderPayoff);
+
+        bool DeleteOrderPayoff(Guid orderID);
+
+        IList<OrderPayoff> GetOrderPayoffList(Guid orderID);
     }
 }
