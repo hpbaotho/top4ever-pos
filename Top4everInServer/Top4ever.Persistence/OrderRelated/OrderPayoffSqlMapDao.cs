@@ -15,14 +15,21 @@ namespace Top4ever.Persistence.OrderRelated
     {
         #region IOrderPayoffDao Members
 
-        public IList<OrderPayoffSum> GetOrderPayoffSumList(string dailyStatementNo)
-        {
-            return ExecuteQueryForList<OrderPayoffSum>("GetOrderPayoffSum", dailyStatementNo);
-        }
-
         public void CreateOrderPayoff(OrderPayoff orderPayoff)
         {
             ExecuteInsert("InsertOrderPayoff", orderPayoff);
+        }
+
+        public bool DeleteOrderPayoff(Guid orderID)
+        {
+            int result = 0;
+            result = ExecuteUpdate("UpdateDeletedOrderPayoff", orderID);
+            return result > 0;
+        }
+
+        public IList<OrderPayoff> GetOrderPayoffList(Guid orderID)
+        {
+            return ExecuteQueryForList<OrderPayoff>("GetOrderPayoffList", orderID);
         }
 
         #endregion

@@ -22,5 +22,10 @@ namespace Top4ever.Domain.Transfer
         /// 账单折扣列表
         /// </summary>
         public IList<OrderDiscount> orderDiscountList { get; set; }
+
+        /// <summary>
+        /// 账单支付方式列表
+        /// </summary>
+        public IList<OrderPayoff> orderPayoffList { get; set; }
     }
 }

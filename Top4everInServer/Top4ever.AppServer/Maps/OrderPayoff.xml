@@ -7,8 +7,6 @@
 
     <resultMaps>
         <resultMap  id="OrderPayoffResult" class="OrderPayoff">
-            <result property="OrderPayoffID" column="OrderPayoffID"></result>
-            <result property="OrderID" column="OrderID"></result>
             <result property="PayoffID" column="PayoffID"></result>
             <result property="PayoffName" column="PayoffName"></result>
             <result property="PayoffType" column="PayoffType"></result>
@@ -16,7 +14,6 @@
             <result property="Quantity" column="Quantity"></result>
             <result property="NeedChangePay" column="NeedChangePay"></result>
             <result property="CardNo" column="CardNo"></result>
-            <result property="EmployeeID" column="LastModifiedEmployeeID"></result>
         </resultMap>
       
     </resultMaps>
@@ -57,5 +54,17 @@
 					#EmployeeID#
 			    )
 		</insert>
+
+      <select id="GetOrderPayoffList" parameterClass="Guid" resultMap="OrderPayoffResult">
+        SELECT PayoffID, PayoffName,PayoffType, AsPay, Quantity, NeedChangePay, CardNo
+        FROM OrderPayoff
+        WHERE OrderID = #value# AND IsVoided = 0
+      </select>
+
+      <update id="UpdateDeletedOrderPayoff" parameterClass="Guid">
+        UPDATE OrderPayoff
+        SET IsVoided = 1, <![CDATA[ LastModifiedTime = getdate(), Transfered = 0 ]]>
+        WHERE OrderID = #value#
+      </update>
     </statements>
 </sqlMap>

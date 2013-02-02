@@ -121,10 +121,10 @@
         </update>
 
         <update id="UpdateDeletedOrder" parameterClass="DeletedOrder">
-            UPDATE [Order]
-            SET AuthorisedManager = #AuthorisedManager#, CancelEmployeeNo = #CancelEmployeeNo#, CancelReasonName = #CancelReasonName#,
-				[Status] = 2, IsVoided = 1, <![CDATA[ LastModifiedTime = getdate() ]]>, LastModifiedEmployeeID = #AuthorisedManager#
-            WHERE OrderID = #OrderID#
+          UPDATE [Order]
+          SET AuthorisedManager = #AuthorisedManager#, CancelEmployeeNo = #CancelEmployeeNo#, CancelReasonName = #CancelReasonName#,
+            [Status] = 2, IsVoided = 1, LastModifiedEmployeeID = #AuthorisedManager#, <![CDATA[ LastModifiedTime = getdate(), Transfered = 0 ]]>
+          WHERE OrderID = #OrderID#
         </update>
 
         <update id="UpdateOrderPrice" parameterClass="Order">
@@ -156,5 +156,6 @@
         <procedure id="MergeSalesOrder" parameterMap="MergeOrderParam">
             proc_MergeSalesOrder
         </procedure>
+      
     </statements>
 </sqlMap>

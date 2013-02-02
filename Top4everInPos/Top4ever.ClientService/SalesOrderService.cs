@@ -135,5 +135,37 @@ namespace Top4ever.ClientService
             }
             return result;
         }
+
+        public SalesOrder GetPaidSalesOrder(Guid orderID)
+        {
+            int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.ORDER_ID;
+            byte[] sendByte = new byte[cByte];
+            int byteOffset = 0;
+            Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_PAIDORDERLIST), sendByte, BasicTypeLength.INT32);
+            byteOffset = BasicTypeLength.INT32;
+            Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
+            byteOffset += BasicTypeLength.INT32;
+
+            //orderID
+            byte[] tempByte = Encoding.UTF8.GetBytes(orderID.ToString());
+            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
+            byteOffset += ParamFieldLength.ORDER_ID;
+
+            Int32 operCode = 0;
+            SalesOrder salesOrder = null;
+            using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
+            {
+                socket.Connect();
+                Byte[] receiveData = null;
+                operCode = socket.SendReceive(sendByte, out receiveData);
+                if (operCode == (int)RET_VALUE.SUCCEEDED)
+                {
+                    string strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD, receiveData.Length - ParamFieldLength.PACKAGE_HEAD);
+                    salesOrder = JsonConvert.DeserializeObject<SalesOrder>(strReceive);
+                }
+                socket.Disconnect();
+            }
+            return salesOrder;
+        }
     }
 }
