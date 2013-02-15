@@ -29,12 +29,26 @@ namespace Top4ever.Pos.Feature
         public FormBillManagement()
         {
             InitializeComponent();
-            this.btnPageUp.DisplayColor = this.btnPageUp.BackColor;
-            this.btnPageDown.DisplayColor = this.btnPageDown.BackColor;
         }
 
         private void FormBillManagement_Load(object sender, EventArgs e)
         {
+            this.txtSearchValue.Text = string.Empty;
+            this.lbOrderNo.Text = string.Empty;
+            this.lbBillType.Text = string.Empty;
+            this.lbDeskName.Text = string.Empty;
+            this.lbEatType.Text = string.Empty;
+            this.lbEmployeeNo.Text = string.Empty;
+            this.lbCashier.Text = string.Empty;
+            this.lbDeviceNo.Text = string.Empty;
+            this.lbPage.Text = "第 1 页";
+            this.lbBillIndex.Text = "0/0";
+            this.btnPageUp.DisplayColor = this.btnPageUp.BackColor;
+            this.btnPageDown.DisplayColor = this.btnPageDown.BackColor;
+            this.btnPageUp.Enabled = false;
+            this.btnPageUp.BackColor = ConstantValuePool.DisabledColor;
+            this.btnPageDown.Enabled = false;
+            this.btnPageDown.BackColor = ConstantValuePool.DisabledColor;
             btnBillModify.BackColor = btnBillModify.DisplayColor = Color.SteelBlue;
             btnSingleDelete.BackColor = btnSingleDelete.DisplayColor = Color.SteelBlue;
             btnWholeDelete.BackColor = btnWholeDelete.DisplayColor = Color.SteelBlue;
@@ -84,6 +98,10 @@ namespace Top4ever.Pos.Feature
             this.lbDeviceNo.Text = string.Empty;
             this.lbPage.Text = "第 1 页";
             this.lbBillIndex.Text = "0/0";
+            this.btnPageUp.Enabled = false;
+            this.btnPageUp.BackColor = ConstantValuePool.DisabledColor;
+            this.btnPageDown.Enabled = false;
+            this.btnPageDown.BackColor = ConstantValuePool.DisabledColor;
             this.dataGridView1.SelectionChanged -= new System.EventHandler(this.dataGridView1_SelectionChanged);
             this.dataGridView1.Rows.Clear();
             this.dataGridView2.Rows.Clear();

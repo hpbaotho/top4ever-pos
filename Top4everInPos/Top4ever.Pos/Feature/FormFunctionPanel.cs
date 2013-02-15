@@ -247,7 +247,14 @@ namespace Top4ever.Pos.Feature
 
         private void btnHandover_Click(object sender, EventArgs e)
         {
-
+            int modelType = 1;
+            FormSalesReport formReport = new FormSalesReport(modelType);
+            formReport.ShowDialog();
+            if (formReport.HandleSuccess)
+            {
+                this.Close();
+                ConstantValuePool.DeskForm.Close();
+            }
         }
 
         private void btnMemberStored_Click(object sender, EventArgs e)
@@ -292,7 +299,14 @@ namespace Top4ever.Pos.Feature
 
         private void btnDailyStatement_Click(object sender, EventArgs e)
         {
-
+            int modelType = 2;
+            FormSalesReport formReport = new FormSalesReport(modelType);
+            formReport.ShowDialog();
+            if (formReport.HandleSuccess)
+            {
+                this.Close();
+                ConstantValuePool.DeskForm.Close();
+            }
         }
 
         private void btnPettyCashModify_Click(object sender, EventArgs e)

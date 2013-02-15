@@ -33,8 +33,6 @@ namespace Top4ever.Pos
 
         private void FormLogin_Load(object sender, EventArgs e)
         {
-            this.AcceptButton = this.btnLogin;
-            this.CancelButton = this.btnExit;
             m_ActiveTextBox = this.txtName;
             int px = (this.Width - this.pnlSystemLogin.Width) / 2;
             int py = (this.Height - this.pnlSystemLogin.Height) / 2;
@@ -44,14 +42,12 @@ namespace Top4ever.Pos
         private void btnNumber_Click(object sender, EventArgs e)
         {
             CrystalButton btn = sender as CrystalButton;
-            if (string.IsNullOrEmpty(m_ActiveTextBox.Text))
-            {
-                m_ActiveTextBox.Text = btn.Text;
-            }
-            else
-            {
-                m_ActiveTextBox.Text += btn.Text;
-            }
+            int index = m_ActiveTextBox.SelectionStart;
+            string text = m_ActiveTextBox.Text;
+            text = text.Insert(index, btn.Text);
+            m_ActiveTextBox.Text = text;
+            //光标移动到下一位
+            m_ActiveTextBox.Select(index + 1, 0);
         }
 
         private void btnBackspace_Click(object sender, EventArgs e)
@@ -59,7 +55,8 @@ namespace Top4ever.Pos
             string inputString = m_ActiveTextBox.Text;
             if (!string.IsNullOrEmpty(inputString))
             {
-                m_ActiveTextBox.Text = m_ActiveTextBox.Text.Substring(0, inputString.Length - 1);
+                m_ActiveTextBox.Select();
+                SendKeys.Send("{BACKSPACE}");
             }
         }
 
@@ -105,7 +102,11 @@ namespace Top4ever.Pos
                     ConstantValuePool.DetailsGroupList = sysBasicData.DetailsGroupList;
                     ConstantValuePool.ButtonStyleList = sysBasicData.ButtonStyleList;
 
-                    this.DialogResult = DialogResult.OK;
+                    FormDesk deskForm = new FormDesk();
+                    ConstantValuePool.DeskForm = deskForm;
+                    txtPassword.Text = string.Empty;
+                    txtPassword.Focus();
+                    deskForm.ShowDialog();
                 }
                 else
                 {
@@ -197,7 +198,12 @@ namespace Top4ever.Pos
                     ConstantValuePool.DetailsGroupList = sysBasicData.DetailsGroupList;
                     ConstantValuePool.ButtonStyleList = sysBasicData.ButtonStyleList;
 
-                    this.DialogResult = DialogResult.OK;
+                    FormDesk deskForm = new FormDesk();
+                    ConstantValuePool.DeskForm = deskForm;
+                    txtName.Text = employee.EmployeeNo;
+                    txtPassword.Text = string.Empty;
+                    txtPassword.Focus();
+                    deskForm.ShowDialog();
                 }
                 else
                 {
@@ -256,7 +262,7 @@ namespace Top4ever.Pos
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.Cancel;
+            this.Close();
         }
     }
 }

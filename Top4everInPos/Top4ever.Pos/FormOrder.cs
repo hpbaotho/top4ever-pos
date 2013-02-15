@@ -354,6 +354,7 @@ namespace Top4ever.Pos
                 for (int i = startIndex; i < endIndex; i++)
                 {
                     CrystalButton btnGoodsGroup = ConstantValuePool.GoodsGroupButton[i];
+                    btnGoodsGroup.BackColor = btnGoodsGroup.DisplayColor;
                     btnGoodsGroup.Click -= new System.EventHandler(this.btnGoodsGroup_Click);
                     btnGoodsGroup.Click += new System.EventHandler(this.btnGoodsGroup_Click);
                     this.pnlGroup.Controls.Add(btnGoodsGroup);
@@ -692,8 +693,6 @@ namespace Top4ever.Pos
 
         private void btnGoodsGroup_Click(object sender, EventArgs e)
         {
-            prevPressedButton.BackColor = prevPressedButton.DisplayColor;
-
             CrystalButton btnGoodsGroup = sender as CrystalButton;
             m_CurrentGoodsGroup = btnGoodsGroup.Tag as GoodsGroup;
             Color pressedColor = ConstantValuePool.PressedColor;
@@ -706,7 +705,15 @@ namespace Top4ever.Pos
                 }
             }
             btnGoodsGroup.BackColor = pressedColor;
-            prevPressedButton = btnGoodsGroup;
+            if (prevPressedButton == null)
+            {
+                prevPressedButton = btnGoodsGroup;
+            }
+            else
+            {
+                prevPressedButton.BackColor = prevPressedButton.DisplayColor;
+                prevPressedButton = btnGoodsGroup;
+            }
 
             m_GoodsPageIndex = 0;
             DisplayGoodsButton();
@@ -2172,7 +2179,11 @@ namespace Top4ever.Pos
             int modelType = 1;
             Feature.FormSalesReport formReport = new FormSalesReport(modelType);
             formReport.ShowDialog();
-            this.exTabControl1.SelectedIndex = 0;
+            if (formReport.HandleSuccess)
+            {
+                this.Close();
+                ConstantValuePool.DeskForm.Close();
+            }
         }
 
         private void btnDailyStatement_Click(object sender, EventArgs e)
@@ -2180,7 +2191,11 @@ namespace Top4ever.Pos
             int modelType = 2;
             Feature.FormSalesReport formReport = new FormSalesReport(modelType);
             formReport.ShowDialog();
-            this.exTabControl1.SelectedIndex = 0;
+            if (formReport.HandleSuccess)
+            {
+                this.Close();
+                ConstantValuePool.DeskForm.Close();
+            }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -2295,18 +2310,22 @@ namespace Top4ever.Pos
                     Discount discount = dr.Cells["GoodsDiscount"].Tag as Discount;
                     if (discount != null)
                     {
-                        OrderDiscount orderDiscount = new OrderDiscount();
-                        orderDiscount.OrderDiscountID = Guid.NewGuid();
-                        orderDiscount.OrderID = orderID;
-                        orderDiscount.OrderDetailsID = orderDetailsID;
-                        orderDiscount.DiscountID = discount.DiscountID;
-                        orderDiscount.DiscountName = discount.DiscountName;
-                        orderDiscount.DiscountType = discount.DiscountType;
-                        orderDiscount.DiscountRate = discount.DiscountRate;
-                        orderDiscount.OffFixPay = discount.OffFixPay;
-                        orderDiscount.OffPay = Math.Abs(Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value));
-                        orderDiscount.EmployeeID = m_EmployeeID;
-                        newOrderDiscountList.Add(orderDiscount);
+                        decimal offPay = Math.Abs(Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value));
+                        if (offPay > 0)
+                        {
+                            OrderDiscount orderDiscount = new OrderDiscount();
+                            orderDiscount.OrderDiscountID = Guid.NewGuid();
+                            orderDiscount.OrderID = orderID;
+                            orderDiscount.OrderDetailsID = orderDetailsID;
+                            orderDiscount.DiscountID = discount.DiscountID;
+                            orderDiscount.DiscountName = discount.DiscountName;
+                            orderDiscount.DiscountType = discount.DiscountType;
+                            orderDiscount.DiscountRate = discount.DiscountRate;
+                            orderDiscount.OffFixPay = discount.OffFixPay;
+                            orderDiscount.OffPay = offPay;
+                            orderDiscount.EmployeeID = m_EmployeeID;
+                            newOrderDiscountList.Add(orderDiscount);
+                        }
                     }
                 }
                 else
@@ -2335,18 +2354,22 @@ namespace Top4ever.Pos
                         }
                         newOrderDetailsList.Add(orderDetails);
                         //填充OrderDiscount
-                        OrderDiscount orderDiscount = new OrderDiscount();
-                        orderDiscount.OrderDiscountID = Guid.NewGuid();
-                        orderDiscount.OrderID = orderID;
-                        orderDiscount.OrderDetailsID = orderDetailsID;
-                        orderDiscount.DiscountID = discount.DiscountID;
-                        orderDiscount.DiscountName = discount.DiscountName;
-                        orderDiscount.DiscountType = discount.DiscountType;
-                        orderDiscount.DiscountRate = discount.DiscountRate;
-                        orderDiscount.OffFixPay = discount.OffFixPay;
-                        orderDiscount.OffPay = Math.Abs(Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value));
-                        orderDiscount.EmployeeID = m_EmployeeID;
-                        newOrderDiscountList.Add(orderDiscount);
+                        decimal offPay = Math.Abs(Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value));
+                        if (offPay > 0)
+                        {
+                            OrderDiscount orderDiscount = new OrderDiscount();
+                            orderDiscount.OrderDiscountID = Guid.NewGuid();
+                            orderDiscount.OrderID = orderID;
+                            orderDiscount.OrderDetailsID = orderDetailsID;
+                            orderDiscount.DiscountID = discount.DiscountID;
+                            orderDiscount.DiscountName = discount.DiscountName;
+                            orderDiscount.DiscountType = discount.DiscountType;
+                            orderDiscount.DiscountRate = discount.DiscountRate;
+                            orderDiscount.OffFixPay = discount.OffFixPay;
+                            orderDiscount.OffPay = offPay;
+                            orderDiscount.EmployeeID = m_EmployeeID;
+                            newOrderDiscountList.Add(orderDiscount);
+                        }
                     }
                 }
             }
@@ -2526,22 +2549,23 @@ namespace Top4ever.Pos
             m_GoodsGroupPageIndex = 0;
             m_GoodsPageIndex = 0;
             DisplayGoodsGroupButton();
-            m_CurrentGoodsGroup = ConstantValuePool.GoodsGroupList[0];
-            // begin 设置颜色
-            CrystalButton btnGoodsGroup = ConstantValuePool.GoodsGroupButton[0];
-            Color pressedColor = ConstantValuePool.PressedColor;
-            foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
-            {
-                if (m_CurrentGoodsGroup.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
-                {
-                    pressedColor = ColorConvert.RGB(btnStyle.ClickedBackColor);
-                    break;
-                }
-            }
-            btnGoodsGroup.BackColor = pressedColor;
-            prevPressedButton = btnGoodsGroup;
-            // end
-            DisplayGoodsButton();
+            this.pnlItem.Controls.Clear();
+            //m_CurrentGoodsGroup = ConstantValuePool.GoodsGroupList[0];
+            //// begin 设置颜色
+            //CrystalButton btnGoodsGroup = ConstantValuePool.GoodsGroupButton[0];
+            //Color pressedColor = ConstantValuePool.PressedColor;
+            //foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
+            //{
+            //    if (m_CurrentGoodsGroup.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
+            //    {
+            //        pressedColor = ColorConvert.RGB(btnStyle.ClickedBackColor);
+            //        break;
+            //    }
+            //}
+            //btnGoodsGroup.BackColor = pressedColor;
+            //prevPressedButton = btnGoodsGroup;
+            //// end
+            //DisplayGoodsButton();
         }
 
         private string formateTime(int time)

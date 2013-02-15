@@ -146,16 +146,6 @@ namespace Top4ever.Pos.Feature
                 MessageBox.Show("用户名或者密码不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            //int punchType = 1; //上班;
-            //if (PunchCard(userName, password, FrmConfig.strShopNo, punchType, ref message))
-            //{
-            //    MessageBox.Show(language.FNK_PUNCHCARDSECCESS, "InfoPos", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //    this.Close();
-            //}
-            //else
-            //{
-            //    MessageBox.Show(message, "InfoPos", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
         }
 
         private void btnPunchOut_Click(object sender, EventArgs e)
@@ -167,16 +157,6 @@ namespace Top4ever.Pos.Feature
                 MessageBox.Show("用户名或者密码不能为空！", "InfoPos", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            //int punchType = 2; //下班;
-            //if (PunchCard(userName, password, FrmConfig.strShopNo, punchType, ref message))
-            //{
-            //    MessageBox.Show(language.FNK_PUNCHCARDSECCESS, "InfoPos", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //    this.Close();
-            //}
-            //else
-            //{
-            //    MessageBox.Show(message, "InfoPos", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
         }
     }
 }

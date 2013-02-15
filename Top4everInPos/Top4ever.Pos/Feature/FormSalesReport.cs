@@ -21,9 +21,16 @@ namespace Top4ever.Pos.Feature
         private int m_ModelType;
         private BusinessReport bizReport = null;
 
+        private bool m_HandleSuccess = false;
+        public bool HandleSuccess
+        {
+            get { return m_HandleSuccess; }
+        }
+
         public FormSalesReport(int modelType)
         {
             InitializeComponent();
+            this.dgvSalesReport.BackgroundColor = SystemColors.ButtonFace;
             m_ModelType = modelType;
             if (modelType == 1)
             {
@@ -81,7 +88,7 @@ namespace Top4ever.Pos.Feature
                 InsertNewDataGridViewItem(str);
                 str = GetDataType2Ex("营业总额：", bizReport.TotalRevenue.ToString("f2"));
                 InsertNewDataGridViewItem(str);
-                str = GetDataType2Ex("- 去尾折扣：", bizReport.CutOffTotalPrice.ToString("f2"));
+                str = GetDataType2Ex("- 去尾折扣：", (-bizReport.CutOffTotalPrice).ToString("f2"));
                 InsertNewDataGridViewItem(str);
                 str = GetDataType2Ex("- 折扣金额：", bizReport.DiscountTotalPrice.ToString("f2"));
                 InsertNewDataGridViewItem(str);
@@ -254,7 +261,7 @@ namespace Top4ever.Pos.Feature
 
             string strNull = string.Empty;
             int len1st = CheckTextLength(strText);
-            for (int i = 0; i < (20 - len1st); i++)
+            for (int i = 0; i < (22 - len1st); i++)
                 strNull += " ";
             result += strText + strNull;
 
@@ -322,6 +329,8 @@ namespace Top4ever.Pos.Feature
                     if (result)
                     {
                         MessageBox.Show("交班成功！");
+                        m_HandleSuccess = true;
+                        this.Close();
                     }
                     else
                     {
@@ -334,11 +343,17 @@ namespace Top4ever.Pos.Feature
                     form.ShowDialog();
                     if (form.DailyStatementDate != null)
                     {
+                        string weather = this.comboBox1.Text;
+                        if (string.IsNullOrEmpty(weather))
+                        {
+                            MessageBox.Show("请先选择当天天气情况！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            return;
+                        }
                         DateTime belongToDate = (DateTime)form.DailyStatementDate;
                         DailyStatement dailyStatement = new DailyStatement();
                         dailyStatement.DeviceNo = ConstantValuePool.BizSettingConfig.DeviceNo;
                         dailyStatement.BelongToDate = belongToDate;
-                        dailyStatement.Weather = this.comboBox1.Text;
+                        dailyStatement.Weather = weather;
                         dailyStatement.EmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
                         DailyTurnover dailyTurnover = new DailyTurnover();
                         dailyTurnover.TotalRevenue = bizReport.TotalRevenue;
@@ -356,6 +371,7 @@ namespace Top4ever.Pos.Feature
                         if (result == 1)
                         {
                             MessageBox.Show("日结成功！");
+                            m_HandleSuccess = true;
                         }
                         else if (result == 2)
                         {
