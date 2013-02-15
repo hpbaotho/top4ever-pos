@@ -32,7 +32,12 @@ namespace Top4ever.Persistence
 
         public int UpdateDailyStatement(DailyStatement dailyStatement)
         {
-            int result = ExecuteUpdate("UpdateDailyStatement", dailyStatement);
+            int result = 0;
+            object objValue = ExecuteQueryForObject("UpdateDailyStatement", dailyStatement);
+            if (objValue != null)
+            {
+                result = Convert.ToInt32(objValue);
+            }
             return result;
         }
 

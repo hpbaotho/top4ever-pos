@@ -10,18 +10,18 @@
             <parameter property="DailyStatementID" column="DailyStatementID"/>
             <parameter property="DailyStatementNo" column="DailyStatementNo"/>
             <parameter property="DeviceNo" column="DeviceNo"/>
-			<parameter property="BelongToDate" column="BelongToDate"/>
-			<parameter property="Weather" column="Weather"/>
-			<parameter property="EmployeeID" column="LastChangeEmpID"/>
+			      <parameter property="BelongToDate" column="BelongToDate"/>
+			      <parameter property="Weather" column="Weather"/>
+            <parameter property="EmployeeID" column="LastChangeEmpID"/>
         </parameterMap>
 
-		<parameterMap id="DailyStatementParam" class="DailyStatement">
-			<parameter property="DailyStatementNo"/>
-			<parameter property="DeviceNo"/>
-			<parameter property="BelongToDate"/>
-			<parameter property="Weather"/>
-			<parameter property="EmployeeID"/>
-		</parameterMap>
+		    <parameterMap id="DailyStatementParam" class="DailyStatement">
+			    <parameter property="DailyStatementNo"/>
+			    <parameter property="DeviceNo"/>
+			    <parameter property="BelongToDate"/>
+			    <parameter property="Weather"/>
+			    <parameter property="EmployeeID"/>
+		    </parameterMap>
 
 	</parameterMaps>
 
@@ -34,19 +34,19 @@
             SELECT DailyStatementNo FROM DailyStatement WHERE BelongToDate IS NULL AND IsVoided = 0
         </select>
 
-		<insert id="InsertDailyStatement" parameterClass="DailyStatement">
-			INSERT INTO DailyStatement(DailyStatementID, DailyStatementNo)
-			VALUES(#DailyStatementID#, #DailyStatementNo#)
-		</insert>
+		    <insert id="InsertDailyStatement" parameterClass="DailyStatement">
+			      INSERT INTO DailyStatement(DailyStatementID, DailyStatementNo)
+			      VALUES(#DailyStatementID#, #DailyStatementNo#)
+		    </insert>
 
-		<procedure id="UpdateDailyStatement" parameterMap="DailyStatementParam">
-			proc_UpdateDailyStatement
-		</procedure>
+		    <procedure id="UpdateDailyStatement" parameterMap="DailyStatementParam">
+			      proc_UpdateDailyStatement
+		    </procedure>
 
         <select id="SelectDailyStatementTimeInterval" parameterClass="String" resultClass="String">
-          SELECT CONVERT(VARCHAR(10),MIN(PayTime),120) + ',' + CONVERT(VARCHAR(10),MAX(PayTime),120) AS DailyStatementTime
-          FROM [Order]
-          WHERE DailyStatementNo = #value#
+            SELECT CONVERT(VARCHAR(10),MIN(PayTime),120) + ',' + CONVERT(VARCHAR(10),MAX(PayTime),120) AS DailyStatementTime
+            FROM [Order]
+            WHERE DailyStatementNo = #value#
         </select>
     </statements>
 </sqlMap>

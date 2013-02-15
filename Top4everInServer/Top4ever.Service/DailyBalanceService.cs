@@ -61,6 +61,7 @@ namespace Top4ever.Service
                     item.DailyStatementNo = DateTime.Now.ToString("yyMMddHHmmssff");
                     _dailyStatementDao.CreateDailyStatement(item);
                 }
+                _daoManager.CommitTransaction();
             }
             catch
             {
