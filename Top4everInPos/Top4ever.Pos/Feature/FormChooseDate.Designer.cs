@@ -44,7 +44,7 @@
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(179, 129);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(209, 33);
+            this.comboBox1.Size = new System.Drawing.Size(226, 33);
             this.comboBox1.TabIndex = 29;
             // 
             // txtLastTime
@@ -53,7 +53,7 @@
             this.txtLastTime.Location = new System.Drawing.Point(179, 70);
             this.txtLastTime.Name = "txtLastTime";
             this.txtLastTime.ReadOnly = true;
-            this.txtLastTime.Size = new System.Drawing.Size(209, 33);
+            this.txtLastTime.Size = new System.Drawing.Size(226, 33);
             this.txtLastTime.TabIndex = 28;
             // 
             // label2
@@ -114,7 +114,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(428, 271);
+            this.ClientSize = new System.Drawing.Size(457, 271);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnConfirm);
             this.Controls.Add(this.comboBox1);

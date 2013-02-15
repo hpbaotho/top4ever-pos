@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 
 using Top4ever.CustomControl;
 using Top4ever.Domain;
@@ -75,5 +76,10 @@ namespace Top4ever.Entity
         /// 程序的配置
         /// </summary>
         public static AppSettingConfig BizSettingConfig { get; set; }
+
+        /// <summary>
+        /// 桌况对象
+        /// </summary>
+        public static Form DeskForm { get; set; }
     }
 }

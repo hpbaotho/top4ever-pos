@@ -237,6 +237,7 @@
     <None Include="Config\AppSetting.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Config\log4net.config" />
     <None Include="PrintConfig\InstructionPrintOrderSetting.config">
       <SubType>Designer</SubType>
     </None>
