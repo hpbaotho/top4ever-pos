@@ -84,6 +84,7 @@ namespace Top4ever.Pos.Feature
             this.lbDeviceNo.Text = string.Empty;
             this.lbPage.Text = "第 1 页";
             this.lbBillIndex.Text = "0/0";
+            this.dataGridView1.SelectionChanged -= new System.EventHandler(this.dataGridView1_SelectionChanged);
             this.dataGridView1.Rows.Clear();
             this.dataGridView2.Rows.Clear();
             this.dataGridView3.Rows.Clear();
@@ -94,12 +95,12 @@ namespace Top4ever.Pos.Feature
             string strWhere = string.Empty;
             if (m_SeachType == 1)
             {
-                strWhere = " AND DeskName = '" + this.txtSearchValue.Text + "'";
+                strWhere = " DeskName = '" + this.txtSearchValue.Text + "'";
             }
             if (m_SeachType == 2)
             {
                 string currentDate = DateTime.Now.ToString("yyyy-MM-dd");
-                strWhere = " AND TranSequence = " + this.txtSearchValue.Text;
+                strWhere = " TranSequence = " + this.txtSearchValue.Text;
                 strWhere += " AND (PayTime >= '" + currentDate + "' AND PayTime < DATEADD(DAY,1,'" + currentDate + "') )";
             }
             OrderService orderService = new OrderService();
@@ -114,7 +115,7 @@ namespace Top4ever.Pos.Feature
                 this.btnPageUp.Enabled = false;
                 this.btnPageUp.BackColor = ConstantValuePool.DisabledColor;
             }
-            if (orderList.Count < m_PageSize)
+            if (orderList == null || orderList.Count < m_PageSize)
             {
                 this.btnPageDown.Enabled = false;
                 this.btnPageDown.BackColor = ConstantValuePool.DisabledColor;
@@ -124,17 +125,24 @@ namespace Top4ever.Pos.Feature
                 this.btnPageDown.Enabled = true;
                 this.btnPageDown.BackColor = this.btnPageDown.DisplayColor;
             }
-            if (orderList.Count > 0)
+            if (orderList != null && orderList.Count > 0)
             {
                 this.lbPage.Text = string.Format("第 {0} 页", m_PageIndex + 1);
                 int startIndex = m_PageIndex * m_PageSize + 1;
                 int endIndex = (m_PageIndex + 1) * m_PageSize;
+                if (orderList.Count < endIndex)
+                {
+                    endIndex = orderList.Count;
+                }
                 this.lbBillIndex.Text = startIndex + "/" + endIndex;
                 BindDataGridView1(orderList);
             }
             else
             {
+                this.dataGridView1.SelectionChanged -= new System.EventHandler(this.dataGridView1_SelectionChanged);
                 this.dataGridView1.Rows.Clear();
+                this.dataGridView2.Rows.Clear();
+                this.dataGridView3.Rows.Clear();
                 this.lbOrderNo.Text = string.Empty;
                 this.lbBillType.Text = string.Empty;
                 this.lbDeskName.Text = string.Empty;
@@ -149,6 +157,7 @@ namespace Top4ever.Pos.Feature
 
         private void BindDataGridView1(IList<Order> orderList)
         {
+            this.dataGridView1.SelectionChanged -= new System.EventHandler(this.dataGridView1_SelectionChanged);
             this.dataGridView1.Rows.Clear();
             if (orderList != null && orderList.Count > 0)
             {
@@ -181,10 +190,40 @@ namespace Top4ever.Pos.Feature
                     dataGridView1.Rows[index].Cells["OrderID"].Value = order.OrderID;
                 }
                 //设置第一行选中
+                int selectedIndex = 0;
                 if (dataGridView1.RowCount > 0)
                 {
-                    dataGridView1.Rows[0].Selected = true;
+                    dataGridView1.Rows[selectedIndex].Selected = true;
                 }
+                this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
+                //默认加载第一行数据
+                Guid orderID = new Guid(dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value.ToString());
+                SalesOrderService salesOrderService = new SalesOrderService();
+                SalesOrder salesOrder = salesOrderService.GetPaidSalesOrder(orderID);
+                m_SalesOrder = salesOrder;
+                //更新账单信息
+                this.lbOrderNo.Text = salesOrder.order.OrderNo;
+                this.lbDeskName.Text = salesOrder.order.DeskName;
+                this.lbBillType.Text = dataGridView1.Rows[selectedIndex].Cells["BillType"].Value.ToString();
+                string eatType = string.Empty;
+                if (salesOrder.order.EatType == (int)EatWayType.DineIn)
+                {
+                    eatType = "堂食";
+                }
+                else if (salesOrder.order.EatType == (int)EatWayType.Takeout)
+                {
+                    eatType = "外卖";
+                }
+                else if (salesOrder.order.EatType == (int)EatWayType.OutsideOrder)
+                {
+                    eatType = "外送";
+                }
+                this.lbEatType.Text = eatType;
+                this.lbEmployeeNo.Text = salesOrder.order.EmployeeNo;
+                this.lbCashier.Text = salesOrder.order.PayEmployeeNo;
+                this.lbDeviceNo.Text = salesOrder.order.DeviceNo;
+                BindDataGridView2(salesOrder);
+                BindDataGridView3(salesOrder);
             }
         }
 
@@ -226,7 +265,7 @@ namespace Top4ever.Pos.Feature
                     dataGridView3.Rows[index].Cells[1].Value = string.Empty;
                     dataGridView3.Rows[index].Cells[2].Value = string.Empty;
                     dataGridView3.Rows[index].Cells[3].Value = string.Empty;
-                    dataGridView3.Rows[index].Cells[4].Value = (-order.CutOffPrice).ToString("f2");
+                    dataGridView3.Rows[index].Cells[4].Value = order.CutOffPrice.ToString("f2");
                 }
                 //折扣金额
                 if (Math.Abs(order.DiscountPrice) > 0)
@@ -260,10 +299,13 @@ namespace Top4ever.Pos.Feature
                 //支付金额
                 index = dataGridView3.Rows.Add();
                 dataGridView3.Rows[index].Cells[0].Value = "支付金额";
-                dataGridView3.Rows[index].Cells[1].Value = order.PaymentMoney.ToString("f2");
-                dataGridView3.Rows[index].Cells[2].Value = order.NeedChangePay.ToString("f2");
-                dataGridView3.Rows[index].Cells[3].Value = order.ActualSellPrice.ToString("f2");
-                dataGridView3.Rows[index].Cells[4].Value = (order.ActualSellPrice + order.ServiceFee - (order.PaymentMoney - order.NeedChangePay)).ToString("f2");
+                dataGridView3.Rows[index].Cells[1].Value = (order.ActualSellPrice + order.ServiceFee).ToString("f2");
+                dataGridView3.Rows[index].Cells[3].Value = (order.PaymentMoney - order.NeedChangePay).ToString("f2");
+                decimal moreOrLess = order.ActualSellPrice + order.ServiceFee - (order.PaymentMoney - order.NeedChangePay);
+                if (Math.Abs(moreOrLess) > 0)
+                {
+                    dataGridView3.Rows[index].Cells[4].Value = (moreOrLess).ToString("f2");
+                }
                 //空行
                 dataGridView3.Rows.Add();
                 //支付方式明细
@@ -273,7 +315,11 @@ namespace Top4ever.Pos.Feature
                     dataGridView3.Rows[index].Cells[0].Value = orderPayoff.PayoffName;
                     if (orderPayoff.PayoffType == (int)PayoffWayMode.GiftVoucher)
                     {
-                        dataGridView3.Rows[index].Cells[1].Value = string.Format("{0} 张", orderPayoff.Quantity);
+                        dataGridView3.Rows[index].Cells[1].Value = string.Format("{0} 张", orderPayoff.Quantity.ToString("f1"));
+                    }
+                    else
+                    {
+                        dataGridView3.Rows[index].Cells[1].Value = (orderPayoff.AsPay * orderPayoff.Quantity).ToString("f2");
                     }
                     if (orderPayoff.NeedChangePay > 0)
                     {
@@ -346,6 +392,9 @@ namespace Top4ever.Pos.Feature
                     this.lbEmployeeNo.Text = order.EmployeeNo;
                     this.lbCashier.Text = order.PayEmployeeNo;
                     this.lbDeviceNo.Text = order.DeviceNo;
+                    int startIndex = selectedIndex + 1;
+                    int index = this.lbBillIndex.Text.IndexOf('/');
+                    this.lbBillIndex.Text = startIndex + this.lbBillIndex.Text.Substring(index);
                     BindDataGridView2(salesOrder);
                     BindDataGridView3(salesOrder);
                 }

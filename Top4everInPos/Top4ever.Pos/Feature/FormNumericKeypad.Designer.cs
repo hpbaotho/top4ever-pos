@@ -63,7 +63,6 @@
             this.txtNumeric.Name = "txtNumeric";
             this.txtNumeric.Size = new System.Drawing.Size(236, 35);
             this.txtNumeric.TabIndex = 0;
-            this.txtNumeric.Text = "0";
             // 
             // btnConfirm
             // 

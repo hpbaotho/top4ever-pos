@@ -37,7 +37,7 @@ namespace Top4ever.ClientService
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
                 {
-                    result = BitConverter.ToInt32(receiveData, receiveData.Length - ParamFieldLength.PACKAGE_HEAD);
+                    result = BitConverter.ToInt32(receiveData, ParamFieldLength.PACKAGE_HEAD);
                 }
                 socket.Disconnect();
             }
