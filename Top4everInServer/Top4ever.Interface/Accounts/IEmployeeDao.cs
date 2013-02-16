@@ -10,9 +10,9 @@ namespace Top4ever.Interface.Accounts
     /// </summary>
     public interface IEmployeeDao
     {
-        bool GetEmployee(string login, string password, out Employee employee);
+        Employee GetEmployee(string login, string password);
 
-        bool GetEmployee(string attendanceCard, out Employee employee);
+        Employee GetEmployee(string attendanceCard);
 
         IList<String> GetRightsCodeList(string userName, string password);
     }

@@ -48,5 +48,11 @@
             FROM [Order]
             WHERE DailyStatementNo = #value#
         </select>
+
+        <select id="SelectLastDailyStatementDate" resultClass="DateTime">
+            SELECT TOP 1 ISNULL(BelongToDate, DATEADD(DAY,-1,GETDATE())) AS LastBelongDate
+            FROM DailyStatement
+            ORDER BY BelongToDate DESC
+        </select>
     </statements>
 </sqlMap>

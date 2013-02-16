@@ -77,7 +77,7 @@ namespace Top4ever.BLL
                     byteRet = EmployeeBLL.GetRightsCodeList(itemBuffer);
                     break;
                 case Command.ID_GET_DAILYTIMEINTERVAL:
-                    byteRet = DailyBalanceBLL.GetDailyStatementTimeInterval(itemBuffer);
+                    byteRet = DailyBalanceBLL.GetDailyStatementTimeInterval();
                     break;
                 case Command.ID_GET_ORDERLISTBYSEARCH:
                     byteRet = OrderBLL.GetOrderListBySearch(itemBuffer);
@@ -90,6 +90,9 @@ namespace Top4ever.BLL
                     break;
                 case Command.ID_DELETE_PAIDWHOLEORDER:
                     byteRet = DeletedOrderBLL.DeletePaidWholeOrder(itemBuffer);
+                    break;
+                case Command.ID_CHECK_LASTDAILYSTATEMENT:
+                    byteRet = DailyBalanceBLL.CheckLastDailyStatement();
                     break;
 
                 default:

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using IBatisNet.Common.Logging;
-
 using Top4ever.Domain.Accounts;
 using Top4ever.Interface.Accounts;
 
@@ -13,63 +11,27 @@ namespace Top4ever.Persistence.Accounts
     /// </summary>
     public class EmployeeSqlMapDao : BaseSqlMapDao, IEmployeeDao
     {
-        private static readonly ILog logger = LogManager.GetLogger(typeof(EmployeeSqlMapDao));
-
         #region IEmployeeDao Members
 
-        public bool GetEmployee(string login, string password, out Employee employee)
+        public Employee GetEmployee(string login, string password)
         {
-            bool result = false;
             Employee emp = new Employee();
             emp.EmployeeNo = login;
             emp.Password = password;
-            try
-            {
-                employee = ExecuteQueryForObject("GetEmployeeByLoginAndPassword", emp) as Employee;
-                result = true;
-            }
-            catch(Exception ex)
-            {
-                result = false;
-                employee = null;
-                logger.Error("Database operation failed !", ex);
-            }
-            return result;
+            return ExecuteQueryForObject("GetEmployeeByLoginAndPassword", emp) as Employee;
         }
 
-        public bool GetEmployee(string attendanceCard, out Employee employee)
+        public Employee GetEmployee(string attendanceCard)
         {
-            bool result = false;
-            try
-            {
-                employee = ExecuteQueryForObject("GetEmployeeBySwipeCard", attendanceCard) as Employee;
-                result = true;
-            }
-            catch (Exception ex)
-            {
-                result = false;
-                employee = null;
-                logger.Error("Database operation failed !", ex);
-            }
-            return result;
+            return ExecuteQueryForObject("GetEmployeeBySwipeCard", attendanceCard) as Employee;
         }
 
         public IList<String> GetRightsCodeList(string userName, string password)
         {
-            IList<String> rightsCodeList = null;
             Employee emp = new Employee();
             emp.EmployeeNo = userName;
             emp.Password = password;
-            try
-            {
-                rightsCodeList = ExecuteQueryForList<String>("GetRightsCodeListByEmployee", emp);
-            }
-            catch (Exception ex)
-            {
-                rightsCodeList = null;
-                logger.Error("Database operation failed !", ex);
-            }
-            return rightsCodeList;
+            return ExecuteQueryForList<String>("GetRightsCodeListByEmployee", emp); ;
         }
 
         #endregion

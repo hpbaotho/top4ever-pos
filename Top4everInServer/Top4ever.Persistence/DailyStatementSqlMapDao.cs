@@ -51,6 +51,12 @@ namespace Top4ever.Persistence
             }
             return timeInterval;
         }
+
+        public DateTime GetLastDailyStatementDate()
+        {
+            object objValue = ExecuteQueryForObject("SelectLastDailyStatementDate", null);
+            return Convert.ToDateTime(objValue);
+        }
         #endregion
     }
 }

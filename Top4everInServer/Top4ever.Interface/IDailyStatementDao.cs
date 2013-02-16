@@ -17,5 +17,7 @@ namespace Top4ever.Interface
         int UpdateDailyStatement(DailyStatement dailyStatement);
 
         string GetDailyStatementTimeInterval(string dailyStatementNo);
+
+        DateTime GetLastDailyStatementDate();
     }
 }

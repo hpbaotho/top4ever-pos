@@ -24,7 +24,7 @@ namespace Top4ever.Persistence.OrderRelated
             }
             else
             {
-                return null;
+                return string.Empty;
             }
         }
 
@@ -116,6 +116,27 @@ namespace Top4ever.Persistence.OrderRelated
                 result = true;
             }
             return result;
+        }
+
+        public bool IsExistOrderInTimeInterval(DateTime beginTime, DateTime endTime)
+        {
+            Hashtable htParam = new Hashtable();
+            htParam["BeginTime"] = beginTime;
+            htParam["EndTime"] = endTime;
+            object objValue = ExecuteQueryForObject("IsExistOrderInTime", htParam);
+            bool IsExist = true;
+            if (objValue != null)
+            {
+                if (Convert.ToInt32(objValue) > 0)
+                {
+                    IsExist = true;
+                }
+                else
+                {
+                    IsExist = false;
+                }
+            }
+            return IsExist;
         }
 
         #endregion
