@@ -85,6 +85,30 @@ namespace Top4ever.Pos
             int result = employeeService.EmployeeLogin(this.txtName.Text.Trim(), this.txtPassword.Text.Trim(), ref employee);
             if (result == 1)
             {
+                bool haveDailyClose = true;
+                if (DateTime.Now.Hour > 5)
+                {
+                    DailyBalanceService dailyBalanceService = new DailyBalanceService();
+                    int status = dailyBalanceService.CheckLastDailyStatement();
+                    if (status == 0)
+                    {
+                        MessageBox.Show("获取最后日结时间出错，请重新登录！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    else if (status == 2)    //未日结
+                    {
+                        haveDailyClose = false;
+                        MessageBox.Show("警告，上次未日结，请联系店长处理！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        haveDailyClose = true;
+                        if (status == 3)
+                        {
+                            MessageBox.Show("警告，营业日期出现异常，请联系店长处理！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                    }
+                }
                 //保存静态池内
                 ConstantValuePool.CurrentEmployee = employee;
                 //获取基础数据
@@ -101,8 +125,8 @@ namespace Top4ever.Pos
                     ConstantValuePool.GoodsGroupList = sysBasicData.GoodsGroupList;
                     ConstantValuePool.DetailsGroupList = sysBasicData.DetailsGroupList;
                     ConstantValuePool.ButtonStyleList = sysBasicData.ButtonStyleList;
-
-                    FormDesk deskForm = new FormDesk();
+                    
+                    FormDesk deskForm = new FormDesk(haveDailyClose);
                     ConstantValuePool.DeskForm = deskForm;
                     txtPassword.Text = string.Empty;
                     txtPassword.Focus();
@@ -181,6 +205,30 @@ namespace Top4ever.Pos
             int result = employeeService.EmployeeLogin(attendanceCard, ref employee);
             if (result == 1)
             {
+                bool haveDailyClose = true;
+                if (DateTime.Now.Hour > 5)
+                {
+                    DailyBalanceService dailyBalanceService = new DailyBalanceService();
+                    int status = dailyBalanceService.CheckLastDailyStatement();
+                    if (status == 0)
+                    {
+                        MessageBox.Show("获取最后日结时间出错，请重新登录！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    else if (status == 2)    //未日结
+                    {
+                        haveDailyClose = false;
+                        MessageBox.Show("警告，上次未日结，请联系店长处理！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        haveDailyClose = true;
+                        if (status == 3)
+                        {
+                            MessageBox.Show("警告，营业日期出现异常，请联系店长处理！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                    }
+                }
                 //保存静态池内
                 ConstantValuePool.CurrentEmployee = employee;
                 //获取基础数据
@@ -198,7 +246,7 @@ namespace Top4ever.Pos
                     ConstantValuePool.DetailsGroupList = sysBasicData.DetailsGroupList;
                     ConstantValuePool.ButtonStyleList = sysBasicData.ButtonStyleList;
 
-                    FormDesk deskForm = new FormDesk();
+                    FormDesk deskForm = new FormDesk(haveDailyClose);
                     ConstantValuePool.DeskForm = deskForm;
                     txtName.Text = employee.EmployeeNo;
                     txtPassword.Text = string.Empty;

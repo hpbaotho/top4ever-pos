@@ -64,7 +64,7 @@
             this.scrollingText1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(108)))), ((int)(((byte)(128)))));
             this.scrollingText1.BorderColor = System.Drawing.Color.Black;
             this.scrollingText1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.scrollingText1.Font = new System.Drawing.Font("SimSun", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.scrollingText1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.scrollingText1.ForeColor = System.Drawing.Color.White;
             this.scrollingText1.ForegroundBrush = null;
             this.scrollingText1.Location = new System.Drawing.Point(0, 73);
@@ -99,7 +99,7 @@
             // btnExit
             // 
             this.btnExit.BackColor = System.Drawing.Color.Red;
-            this.btnExit.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
+            this.btnExit.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.btnExit.ForeColor = System.Drawing.Color.White;
             this.btnExit.Location = new System.Drawing.Point(831, 0);
             this.btnExit.Name = "btnExit";
@@ -112,7 +112,7 @@
             // btnSetting
             // 
             this.btnSetting.BackColor = System.Drawing.Color.MidnightBlue;
-            this.btnSetting.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnSetting.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnSetting.ForeColor = System.Drawing.Color.White;
             this.btnSetting.Location = new System.Drawing.Point(721, 0);
             this.btnSetting.Name = "btnSetting";
@@ -125,7 +125,7 @@
             // btnTakeOut
             // 
             this.btnTakeOut.BackColor = System.Drawing.Color.MidnightBlue;
-            this.btnTakeOut.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnTakeOut.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnTakeOut.ForeColor = System.Drawing.Color.White;
             this.btnTakeOut.Location = new System.Drawing.Point(615, 0);
             this.btnTakeOut.Name = "btnTakeOut";
@@ -133,11 +133,12 @@
             this.btnTakeOut.TabIndex = 9;
             this.btnTakeOut.Text = "外卖";
             this.btnTakeOut.UseVisualStyleBackColor = false;
+            this.btnTakeOut.Click += new System.EventHandler(this.btnTakeOut_Click);
             // 
             // btnCheckOut
             // 
             this.btnCheckOut.BackColor = System.Drawing.Color.Green;
-            this.btnCheckOut.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
+            this.btnCheckOut.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.btnCheckOut.ForeColor = System.Drawing.Color.White;
             this.btnCheckOut.Location = new System.Drawing.Point(505, 0);
             this.btnCheckOut.Name = "btnCheckOut";
@@ -150,7 +151,7 @@
             // btnTurnTable
             // 
             this.btnTurnTable.BackColor = System.Drawing.Color.Olive;
-            this.btnTurnTable.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
+            this.btnTurnTable.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.btnTurnTable.ForeColor = System.Drawing.Color.White;
             this.btnTurnTable.Location = new System.Drawing.Point(383, 0);
             this.btnTurnTable.Name = "btnTurnTable";
@@ -163,7 +164,7 @@
             // btnClear
             // 
             this.btnClear.BackColor = System.Drawing.Color.Red;
-            this.btnClear.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
+            this.btnClear.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.btnClear.ForeColor = System.Drawing.Color.White;
             this.btnClear.Location = new System.Drawing.Point(278, 0);
             this.btnClear.Name = "btnClear";
@@ -176,7 +177,7 @@
             // btnOrder
             // 
             this.btnOrder.BackColor = System.Drawing.Color.MidnightBlue;
-            this.btnOrder.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
+            this.btnOrder.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.btnOrder.ForeColor = System.Drawing.Color.White;
             this.btnOrder.Location = new System.Drawing.Point(173, 0);
             this.btnOrder.Name = "btnOrder";
@@ -189,7 +190,7 @@
             // btnManager
             // 
             this.btnManager.BackColor = System.Drawing.Color.MidnightBlue;
-            this.btnManager.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnManager.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnManager.ForeColor = System.Drawing.Color.White;
             this.btnManager.Location = new System.Drawing.Point(72, 0);
             this.btnManager.Name = "btnManager";
@@ -213,7 +214,7 @@
             // btnLookColor
             // 
             this.btnLookColor.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.btnLookColor.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnLookColor.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnLookColor.ForeColor = System.Drawing.Color.White;
             this.btnLookColor.Location = new System.Drawing.Point(937, 510);
             this.btnLookColor.Name = "btnLookColor";
@@ -225,7 +226,7 @@
             // btnTakeColor
             // 
             this.btnTakeColor.BackColor = System.Drawing.Color.Red;
-            this.btnTakeColor.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnTakeColor.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnTakeColor.ForeColor = System.Drawing.Color.White;
             this.btnTakeColor.Location = new System.Drawing.Point(856, 510);
             this.btnTakeColor.Name = "btnTakeColor";
@@ -237,7 +238,7 @@
             // btnFreeColor
             // 
             this.btnFreeColor.BackColor = System.Drawing.Color.Green;
-            this.btnFreeColor.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnFreeColor.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnFreeColor.ForeColor = System.Drawing.Color.White;
             this.btnFreeColor.Location = new System.Drawing.Point(775, 510);
             this.btnFreeColor.Name = "btnFreeColor";
@@ -263,7 +264,7 @@
             this.Controls.Add(this.pnlRegion);
             this.Controls.Add(this.pnlToolBar);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "FormDesk";

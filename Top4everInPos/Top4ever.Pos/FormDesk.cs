@@ -30,7 +30,8 @@ namespace Top4ever.Pos
         private int threadSleepTime = 1000;
         private DeskService deskService = new DeskService();
         private Dictionary<Guid, List<CrystalButton>> dicDeskInRegion = new Dictionary<Guid, List<CrystalButton>>();
-        
+        private bool haveDailyClose;
+
         #region 转台局部变量
         private string deskName1st = string.Empty;
         private Guid orderID1st = Guid.Empty;
@@ -38,8 +39,9 @@ namespace Top4ever.Pos
         private bool firstDeskSingleOrder = false;
         #endregion
 
-        public FormDesk()
+        public FormDesk(bool haveDailyClose)
         {
+            this.haveDailyClose = haveDailyClose;
             InitializeComponent();
         }
 
@@ -99,9 +101,18 @@ namespace Top4ever.Pos
 
             if (RightsItemCode.FindRights(RightsItemCode.TAKEORDER))
             {
-                btnOrder.BackColor = ConstantValuePool.PressedColor;
-                m_OperateType = ButtonOperateType.ORDER;
-                prevPressedButton = btnOrder;
+                if (haveDailyClose)
+                {
+                    btnOrder.BackColor = ConstantValuePool.PressedColor;
+                    m_OperateType = ButtonOperateType.ORDER;
+                    prevPressedButton = btnOrder;
+                }
+                else
+                {
+                    btnOrder.Enabled = false;
+                    btnOrder.BackColor = ConstantValuePool.DisabledColor;
+                    m_OperateType = ButtonOperateType.NONE;
+                }
             }
             else
             {
@@ -671,6 +682,18 @@ namespace Top4ever.Pos
         {
             FormConfig form = new FormConfig();
             form.ShowDialog();
+        }
+
+        private void btnTakeOut_Click(object sender, EventArgs e)
+        {
+            if (haveDailyClose)
+            {
+
+            }
+            else
+            {
+                MessageBox.Show("上次未日结，请先进行日结操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private Color GetColorByStatus(int deskStatus, string deviceNo)
