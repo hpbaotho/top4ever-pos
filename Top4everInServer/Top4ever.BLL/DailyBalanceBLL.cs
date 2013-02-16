@@ -27,7 +27,7 @@ namespace Top4ever.BLL
             return objRet;
         }
 
-        public static byte[] GetDailyStatementTimeInterval(byte[] itemBuffer)
+        public static byte[] GetDailyStatementTimeInterval()
         {
             byte[] objRet = null;
             string timeInterval = DailyBalanceService.GetInstance().GetDailyStatementTimeInterval();
@@ -38,6 +38,20 @@ namespace Top4ever.BLL
             Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
             Array.Copy(BitConverter.GetBytes(transCount), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
             Array.Copy(byteArr, 0, objRet, 2 * BasicTypeLength.INT32, byteArr.Length);
+            return objRet;
+        }
+
+        public static byte[] CheckLastDailyStatement()
+        {
+            byte[] objRet = null;
+
+            int result = DailyBalanceService.GetInstance().CheckLastDailyStatement();
+
+            int transCount = BasicTypeLength.INT32 + BasicTypeLength.INT32 + BasicTypeLength.INT32;
+            objRet = new byte[transCount];
+            Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes(transCount), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes(result), 0, objRet, 2 * BasicTypeLength.INT32, BasicTypeLength.INT32);
             return objRet;
         }
     }

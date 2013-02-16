@@ -156,6 +156,9 @@
         <procedure id="MergeSalesOrder" parameterMap="MergeOrderParam">
             proc_MergeSalesOrder
         </procedure>
-      
+
+        <select id="IsExistOrderInTime" parameterClass="System.Collections.Hashtable" resultClass="Int32">
+           SELECT COUNT(1) FROM [Order] <![CDATA[ WHERE PayTime BETWEEN #BeginTime# AND #EndTime# ]]>
+        </select>
     </statements>
 </sqlMap>

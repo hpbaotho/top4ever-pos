@@ -140,6 +140,15 @@ namespace Top4ever.Service
 
             return result;
         }
+
+        public bool IsExistOrderInTimeInterval(DateTime beginTime, DateTime endTime)
+        {
+            _daoManager.OpenConnection();
+            bool result = _orderDao.IsExistOrderInTimeInterval(beginTime, endTime);
+            _daoManager.CloseConnection();
+
+            return result;
+        }
         #endregion
     }
 }
