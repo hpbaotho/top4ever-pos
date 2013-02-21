@@ -35,6 +35,7 @@ namespace Top4ever.Service
         private IGoodsDao _goodsDao = null;
         private IDetailsGroupDao _detailsGroupDao = null;
         private IDetailsDao _detailsDao = null;
+        private IGoodsSetMealDao _goodsSetMealDao = null;
         private IButtonStyleDao _buttonStyleDao = null;
         private ISystemConfigDao _sysConfigDao = null;
 
@@ -55,6 +56,7 @@ namespace Top4ever.Service
             _goodsDao = _daoManager.GetDao(typeof(IGoodsDao)) as IGoodsDao;
             _detailsGroupDao = _daoManager.GetDao(typeof(IDetailsGroupDao)) as IDetailsGroupDao;
             _detailsDao = _daoManager.GetDao(typeof(IDetailsDao)) as IDetailsDao;
+            _goodsSetMealDao = _daoManager.GetDao(typeof(IGoodsSetMealDao)) as IGoodsSetMealDao;
             _buttonStyleDao = _daoManager.GetDao(typeof(IButtonStyleDao)) as IButtonStyleDao;
             _sysConfigDao = _daoManager.GetDao(typeof(ISystemConfigDao)) as ISystemConfigDao;
         }
@@ -129,6 +131,8 @@ namespace Top4ever.Service
                         item.DetailsList = detailsList;
                     }
                 }
+                IList<GoodsSetMeal> goodsSetMealList = _goodsSetMealDao.GetAllGoodsSetMeal();
+                IList<GoodsSetMeal> detailsSetMealList = _goodsSetMealDao.GetAllDetailsSetMeal();
                 //ButtonStyle
                 IList<ButtonStyle> buttonStyleList = _buttonStyleDao.GetButtonStyleList();
                 //SystemConfig
@@ -141,6 +145,8 @@ namespace Top4ever.Service
                 basicData.ReasonList = reasonList;
                 basicData.GoodsGroupList = goodsGroupList;
                 basicData.DetailsGroupList = detailsGroupList;
+                basicData.GoodsSetMealList = goodsSetMealList;
+                basicData.DetailsSetMealList = detailsSetMealList;
                 basicData.ButtonStyleList = buttonStyleList;
                 basicData.SysConfig = systemConfig;
 

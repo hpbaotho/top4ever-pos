@@ -7,14 +7,38 @@
 
     <resultMaps>
         <resultMap  id="GoodsSetMealResult" class="GoodsSetMeal">
-            <result property="GoodsSetMealID" column="GoodsSetMealID"></result>
-            <result property="GoodsID" column="GoodsID"></result>
             <result property="ParentGoodsID" column="ParentGoodsID"></result>
             <result property="ItemQty" column="ItemQty"></result>
             <result property="DiscountRate" column="DiscountRate"></result>
             <result property="OffFixPay" column="OffFixPay"></result>
+            <result property="ItemID" column="GoodsID"></result>
+            <result property="ItemNo" column="GoodsNo"></result>
+            <result property="ItemName" column="GoodsName"></result>
+            <result property="ItemName2nd" column="GoodsName_2nd"></result>
+            <result property="Unit" column="Unit"></result>
+            <result property="SellPrice" column="SellPrice"></result>
+            <result property="CanDiscount" column="CanDiscount"></result>
+            <result property="AutoShowDetails" column="AutoShowDetails"></result>
+            <result property="PrintSolutionName" column="PrintSolutionName"></result>
+            <result property="DepartID" column="DepartID"></result>
         </resultMap>
 
+        <resultMap  id="DetailsSetMealResult" class="GoodsSetMeal">
+          <result property="ParentGoodsID" column="ParentGoodsID"></result>
+          <result property="ItemQty" column="ItemQty"></result>
+          <result property="DiscountRate" column="DiscountRate"></result>
+          <result property="OffFixPay" column="OffFixPay"></result>
+          <result property="ItemID" column="DetailsID"></result>
+          <result property="ItemNo" column="DetailsNo"></result>
+          <result property="ItemName" column="DetailsName"></result>
+          <result property="ItemName2nd" column="DetailsName_2nd"></result>
+          <result property="Unit" column="Unit"></result>
+          <result property="SellPrice" column="SellPrice"></result>
+          <result property="CanDiscount" column="CanDiscount"></result>
+          <result property="AutoShowDetails" column="AutoShowDetails"></result>
+          <result property="PrintSolutionName" column="PrintSolutionName"></result>
+          <result property="DepartID" column="DepartID"></result>
+        </resultMap>
     </resultMaps>
     <!-- =============================================
         MAPPED STATEMENTS 
@@ -22,11 +46,19 @@
     -->
     <statements>
         <select id="GetGoodsSetMealList" resultMap="GoodsSetMealResult">
-            SELECT GoodsSetMealID,GoodsID,ParentGoodsID,ItemQty,DiscountRate,OffFixPay
-            FROM GoodsSetMeal
-            WHERE IsVoided = 0
-            ORDER BY GoodsSetMealID, OrderBy
+            SELECT ParentGoodsID,ItemQty,DiscountRate,OffFixPay,gs.GoodsID,g.GoodsNo,g.GoodsName,g.GoodsName_2nd,
+                g.Unit,g.SellPrice,g.CanDiscount,g.AutoShowDetails,g.PrintSolutionName,g.DepartID
+            FROM GoodsSetMeal gs JOIN Goods g ON gs.GoodsID = g.GoodsID
+            WHERE gs.IsVoided = 0 AND g.IsVoided = 0
+            ORDER BY ParentGoodsID, OrderBy
         </select>
 
+        <select id="GetDetailsSetMealList" resultMap="DetailsSetMealResult">
+            SELECT ParentGoodsID,ItemQty,DiscountRate,OffFixPay, d.DetailsID,d.DetailsNo,d.DetailsName,d.DetailsName_2nd,
+                <![CDATA[ '' AS Unit ]]>, d.SellPrice,d.CanDiscount,d.AutoShowDetails,d.PrintSolutionName,d.DepartID
+            FROM GoodsSetMeal gs JOIN Details d ON gs.GoodsID = d.DetailsID
+            WHERE gs.IsVoided = 0 AND d.IsVoided = 0
+            ORDER BY ParentGoodsID, gs.OrderBy
+        </select>
     </statements>
 </sqlMap>

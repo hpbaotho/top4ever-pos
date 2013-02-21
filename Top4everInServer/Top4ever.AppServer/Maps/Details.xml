@@ -10,7 +10,7 @@
             <result property="DetailsID" column="DetailsID"></result>
             <result property="DetailsNo" column="DetailsNo"></result>
             <result property="DetailsName" column="DetailsName"></result>
-			<result property="DetailsName2nd" column="DetailsName_2nd"></result>
+			      <result property="DetailsName2nd" column="DetailsName_2nd"></result>
             <result property="SellPrice" column="SellPrice"></result>
             <result property="CanDiscount" column="CanDiscount"></result>
             <result property="AutoShowDetails" column="AutoShowDetails"></result>
@@ -26,20 +26,20 @@
     -->
     <statements>
         <select id="GetDetailsListByGroup" parameterClass="Guid" resultMap="DetailsResult">
-			SELECT DetailsID
-			, DetailsNo
-			, DetailsName
-			, DetailsName_2nd
-			, SellPrice
-			, CanDiscount
-			, AutoShowDetails
-			, PrintSolutionName
-			, DepartID
-			, ButtonStyleID
-			FROM Details
-			WHERE DetailsGroupID = #value# AND IsVoided = 0
-			ORDER BY OrderBy
-		</select>
+			    SELECT DetailsID
+			    , DetailsNo
+			    , DetailsName
+			    , DetailsName_2nd
+			    , SellPrice
+			    , CanDiscount
+			    , AutoShowDetails
+			    , PrintSolutionName
+			    , DepartID
+			    , ButtonStyleID
+			    FROM Details
+			    WHERE DetailsGroupID = #value# AND IsVoided = 0
+			    ORDER BY OrderBy
+		    </select>
 
         <select id="GetDetailsGroupIDListByDetailsID" parameterClass="Guid" resultClass="Guid">
             SELECT DetailsGroupID FROM DetailsDetailsGroup WHERE DetailsID = #value#
