@@ -124,6 +124,8 @@ namespace Top4ever.Pos
                     ConstantValuePool.ReasonList = sysBasicData.ReasonList;
                     ConstantValuePool.GoodsGroupList = sysBasicData.GoodsGroupList;
                     ConstantValuePool.DetailsGroupList = sysBasicData.DetailsGroupList;
+                    ConstantValuePool.GoodsSetMealList = sysBasicData.GoodsSetMealList;
+                    ConstantValuePool.DetailsSetMealList = sysBasicData.DetailsSetMealList;
                     ConstantValuePool.ButtonStyleList = sysBasicData.ButtonStyleList;
                     
                     FormDesk deskForm = new FormDesk(haveDailyClose);
@@ -244,6 +246,8 @@ namespace Top4ever.Pos
                     ConstantValuePool.ReasonList = sysBasicData.ReasonList;
                     ConstantValuePool.GoodsGroupList = sysBasicData.GoodsGroupList;
                     ConstantValuePool.DetailsGroupList = sysBasicData.DetailsGroupList;
+                    ConstantValuePool.GoodsSetMealList = sysBasicData.GoodsSetMealList;
+                    ConstantValuePool.DetailsSetMealList = sysBasicData.DetailsSetMealList;
                     ConstantValuePool.ButtonStyleList = sysBasicData.ButtonStyleList;
 
                     FormDesk deskForm = new FormDesk(haveDailyClose);

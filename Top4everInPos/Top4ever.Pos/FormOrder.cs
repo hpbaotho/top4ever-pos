@@ -723,7 +723,8 @@ namespace Top4ever.Pos
         {
             CrystalButton btnGoods = sender as CrystalButton;
             Goods goods = btnGoods.Tag as Goods;
-            int index = dgvGoodsOrder.Rows.Add(new DataGridViewRow());
+            int index, selectedIndex;
+            index = selectedIndex = dgvGoodsOrder.Rows.Add(new DataGridViewRow());
             dgvGoodsOrder.Rows[index].Cells["ItemID"].Value = goods.GoodsID;
             dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag = goods;
             dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = 1;
@@ -733,9 +734,117 @@ namespace Top4ever.Pos
             dgvGoodsOrder.Rows[index].Cells["ItemType"].Value = OrderItemType.Goods;
             dgvGoodsOrder.Rows[index].Cells["CanDiscount"].Value = goods.CanDiscount;
             dgvGoodsOrder.Rows[index].Cells["ItemUnit"].Value = goods.Unit;
+            
+            #region 判断是否套餐
+            bool haveCirculate = false;
+            foreach (GoodsSetMeal item in ConstantValuePool.GoodsSetMealList)
+            {
+                if (item.ParentGoodsID.Equals(goods.GoodsID))
+                {
+                    Goods temp = new Goods();
+                    temp.GoodsID = item.ItemID;
+                    temp.GoodsNo = item.ItemNo;
+                    temp.GoodsName = item.ItemName;
+                    temp.GoodsName2nd = item.ItemName2nd;
+                    temp.Unit = item.Unit;
+                    temp.SellPrice = item.SellPrice;
+                    temp.CanDiscount = item.CanDiscount;
+                    temp.AutoShowDetails = item.AutoShowDetails;
+                    temp.PrintSolutionName = item.PrintSolutionName;
+                    temp.DepartID = item.DepartID;
+                    //更新列表
+                    index = dgvGoodsOrder.Rows.Add(new DataGridViewRow());
+                    dgvGoodsOrder.Rows[index].Cells["ItemID"].Value = item.ItemID;
+                    dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag = temp;
+                    dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = item.ItemQty;
+                    dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = "--" + item.ItemName;
+                    dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = item.SellPrice;
+                    decimal discount = 0;
+                    if (item.DiscountRate > 0)
+                    {
+                        discount = item.SellPrice * item.ItemQty * item.DiscountRate;
+                    }
+                    else
+                    {
+                        discount = item.OffFixPay;
+                    }
+                    dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = (-discount).ToString("f2");
+                    dgvGoodsOrder.Rows[index].Cells["ItemType"].Value = OrderItemType.SetMeal;
+                    dgvGoodsOrder.Rows[index].Cells["CanDiscount"].Value = item.CanDiscount;
+                    dgvGoodsOrder.Rows[index].Cells["ItemUnit"].Value = item.Unit;
+                    
+                    #region 判断套餐项是否含细项
+                    bool haveDetails = false;
+                    foreach (GoodsSetMeal detailsSetMeal in ConstantValuePool.DetailsSetMealList)
+                    {
+                        if (detailsSetMeal.ParentGoodsID.Equals(temp.GoodsID))
+                        {
+                            Details details = new Details();
+                            details.DetailsID = detailsSetMeal.ItemID;
+                            details.DetailsNo = detailsSetMeal.ItemNo;
+                            details.DetailsName = detailsSetMeal.ItemName;
+                            details.DetailsName2nd = detailsSetMeal.ItemName2nd;
+                            details.SellPrice = detailsSetMeal.SellPrice;
+                            details.CanDiscount = detailsSetMeal.CanDiscount;
+                            details.AutoShowDetails = detailsSetMeal.AutoShowDetails;
+                            details.PrintSolutionName = detailsSetMeal.PrintSolutionName;
+                            details.DepartID = detailsSetMeal.DepartID;
+                            //更新列表
+                            index = dgvGoodsOrder.Rows.Add(new DataGridViewRow());
+                            dgvGoodsOrder.Rows[index].Cells["ItemID"].Value = detailsSetMeal.ItemID;
+                            dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag = details;
+                            dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = detailsSetMeal.ItemQty;
+                            dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = "----" + detailsSetMeal.ItemName;
+                            dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = detailsSetMeal.SellPrice;
+                            decimal detailsDiscount = 0;
+                            if (detailsSetMeal.DiscountRate > 0)
+                            {
+                                detailsDiscount = detailsSetMeal.SellPrice * detailsSetMeal.ItemQty * detailsSetMeal.DiscountRate;
+                            }
+                            else
+                            {
+                                detailsDiscount = detailsSetMeal.OffFixPay;
+                            }
+                            dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = (-detailsDiscount).ToString("f2");
+                            dgvGoodsOrder.Rows[index].Cells["ItemType"].Value = OrderItemType.SetMeal;
+                            dgvGoodsOrder.Rows[index].Cells["CanDiscount"].Value = detailsSetMeal.CanDiscount;
+                            haveDetails = true;
+                        }
+                        else
+                        {
+                            if (haveDetails) break;
+                        }
+                    }
+                    #endregion
+
+                    haveCirculate = true;
+                }
+                else
+                {
+                    if (haveCirculate) break;
+                }
+            }
+            #endregion
+
+            #region 判断是否自动显示细项组
+            if (goods.AutoShowDetails)
+            {
+                m_DetailsGroupPageIndex = 0;
+                m_DetailsPageIndex = 0;
+                if (goods.DetailsGroupIDList != null && goods.DetailsGroupIDList.Count > 0)
+                {
+                    m_GoodsOrDetails = false;    //状态为细项
+                    m_CurrentDetailsGroupIDList = goods.DetailsGroupIDList;
+                    DisplayDetailGroupButton();
+                    this.pnlItem.Controls.Clear();
+                    m_DetailsPrefix = "--";
+                }
+            }
+            #endregion
+
             //datagridview滚动条定位
-            dgvGoodsOrder.Rows[index].Selected = true;
-            dgvGoodsOrder.CurrentCell = dgvGoodsOrder.Rows[index].Cells["GoodsNum"];
+            dgvGoodsOrder.Rows[selectedIndex].Selected = true;
+            dgvGoodsOrder.CurrentCell = dgvGoodsOrder.Rows[selectedIndex].Cells["GoodsNum"];
             //统计
             BindOrderInfoSum();
         }
@@ -1274,7 +1383,12 @@ namespace Top4ever.Pos
 
                     if (itemType == (int)OrderItemType.Details)
                     {
-                        MessageBox.Show("细项不能单独删除！");
+                        MessageBox.Show("细项不能单独删除！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                    if (itemType == (int)OrderItemType.SetMeal)
+                    {
+                        MessageBox.Show("套餐项不能单独删除！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
                     }
                     if (!RightsItemCode.FindRights(RightsItemCode.CANCELGOODS))
@@ -1416,7 +1530,7 @@ namespace Top4ever.Pos
                             }
                             else
                             {
-                                MessageBox.Show("删除品项失败！");
+                                MessageBox.Show("删除品项失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 return;
                             }
                         }
@@ -1496,7 +1610,7 @@ namespace Top4ever.Pos
                             }
                             else
                             {
-                                MessageBox.Show("删除品项失败！");
+                                MessageBox.Show("删除品项失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 return;
                             }
                         }
@@ -1508,6 +1622,11 @@ namespace Top4ever.Pos
                     {
                         dgvGoodsOrder.Rows.RemoveAt(selectIndex);
                     }
+                    else if (Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value) == (int)OrderItemType.SetMeal)
+                    {
+                        MessageBox.Show("套餐项不能单独删除！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
                     else
                     {
                         List<int> deletedIndexList = new List<int>();
@@ -1517,13 +1636,13 @@ namespace Top4ever.Pos
                         {
                             for (int index = selectIndex + 1; index < dgvGoodsOrder.Rows.Count; index++)
                             {
-                                if (Convert.ToInt32(dgvGoodsOrder.Rows[index].Cells["ItemType"].Value) == (int)OrderItemType.Details)
+                                if (Convert.ToInt32(dgvGoodsOrder.Rows[index].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
                                 {
-                                    deletedIndexList.Add(index);
+                                    break;
                                 }
                                 else
                                 {
-                                    break;
+                                    deletedIndexList.Add(index);
                                 }
                             }
                         }
@@ -1610,7 +1729,7 @@ namespace Top4ever.Pos
 
         private void btnDiscount_Click(object sender, EventArgs e)
         {
-            if (dgvGoodsOrder.Rows.Count > 0)
+            if (dgvGoodsOrder.Rows.Count > 0 && dgvGoodsOrder.CurrentRow != null)
             {
                 //权限验证
                 bool hasRights = false;
@@ -1635,7 +1754,7 @@ namespace Top4ever.Pos
                 {
                     return;
                 }
-                int selectIndex = dgvGoodsOrder.SelectedRows[0].Index;
+                int selectIndex = dgvGoodsOrder.CurrentRow.Index;
                 int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value);
                 if (itemType == (int)OrderItemType.Goods)   //主项才能打折
                 {

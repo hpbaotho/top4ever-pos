@@ -579,5 +579,19 @@ namespace Top4ever.Pos.Feature
                 }
             }
         }
+
+        private void btnSingleDelete_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnBillModify_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.CurrentRow != null)
+            {
+                FormBackGoods form = new FormBackGoods(m_SalesOrder);
+                form.ShowDialog();
+            }
+        }
     }
 }
