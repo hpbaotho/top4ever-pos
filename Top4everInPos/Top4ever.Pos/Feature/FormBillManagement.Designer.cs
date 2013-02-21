@@ -173,6 +173,7 @@
             this.btnSingleDelete.TabIndex = 1;
             this.btnSingleDelete.Text = "单品删除";
             this.btnSingleDelete.UseVisualStyleBackColor = false;
+            this.btnSingleDelete.Click += new System.EventHandler(this.btnSingleDelete_Click);
             // 
             // btnBillModify
             // 
@@ -184,6 +185,7 @@
             this.btnBillModify.TabIndex = 1;
             this.btnBillModify.Text = "账单修改";
             this.btnBillModify.UseVisualStyleBackColor = false;
+            this.btnBillModify.Click += new System.EventHandler(this.btnBillModify_Click);
             // 
             // btnClear
             // 

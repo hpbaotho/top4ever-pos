@@ -57,6 +57,10 @@ namespace Top4ever.Entity
 
         public static IList<DetailsGroup> DetailsGroupList { get; set; }
 
+        public static IList<GoodsSetMeal> GoodsSetMealList { get; set; }
+
+        public static IList<GoodsSetMeal> DetailsSetMealList { get; set; }
+
         public static IList<ButtonStyle> ButtonStyleList { get; set; }
 
         /// <summary>
