@@ -149,6 +149,17 @@ namespace Top4ever.Service
 
             return result;
         }
+
+        public bool UpdateOrderStatus(Guid orderID, int status)
+        {
+            bool result = false;
+
+            _daoManager.OpenConnection();
+            result = _orderDao.UpdateOrderStatus(orderID, status);
+            _daoManager.CloseConnection();
+
+            return result;
+        }
         #endregion
     }
 }

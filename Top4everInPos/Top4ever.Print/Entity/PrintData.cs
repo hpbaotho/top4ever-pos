@@ -45,7 +45,11 @@ namespace Top4ever.Print.Entity
         /// <summary>
         /// 服务费
         /// </summary>
-        public string ServiceFee { get; set; } 
+        public string ServiceFee { get; set; }
+        /// <summary>
+        /// 合计金额
+        /// </summary>
+        public string TotalAmount { get; set; }
         /// <summary>
         /// 实收金额
         /// </summary>

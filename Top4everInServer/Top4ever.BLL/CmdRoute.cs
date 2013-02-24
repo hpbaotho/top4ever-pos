@@ -94,6 +94,9 @@ namespace Top4ever.BLL
                 case Command.ID_CHECK_LASTDAILYSTATEMENT:
                     byteRet = DailyBalanceBLL.CheckLastDailyStatement();
                     break;
+                case Command.ID_UPDATE_ORDERSTATUS:
+                    byteRet = OrderBLL.UpdateOrderStatus(itemBuffer);
+                    break;
 
                 default:
                     byteRet = null;

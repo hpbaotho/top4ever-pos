@@ -50,10 +50,6 @@ namespace Top4ever.Pos
         /// </summary>
         private string m_InputNumber = "0";
         /// <summary>
-        /// 前一个按钮
-        /// </summary>
-        private CrystalButton m_PrePayoffButton = null;
-        /// <summary>
         /// 去服务费
         /// </summary>
         private bool m_CutServiceFee = false;
@@ -68,6 +64,12 @@ namespace Top4ever.Pos
         public bool IsPaidOrder
         {
             get { return m_IsPaidOrder; }
+        }
+
+        private bool m_IsPreCheckOut = false;
+        public bool IsPreCheckOut
+        {
+            get { return m_IsPreCheckOut; }
         }
 
         #endregion
@@ -91,6 +93,14 @@ namespace Top4ever.Pos
             {
                 btnConfirm.Enabled = false;
                 btnConfirm.BackColor = ConstantValuePool.DisabledColor;
+            }
+            if (m_SalesOrder.order.Status == 0)
+            {
+                btnPreCheck.Text = "预结";
+            }
+            else if (m_SalesOrder.order.Status == 3)
+            {
+                btnPreCheck.Text = "解锁";
             }
             this.btnDeskNo.Text = "桌号：" + m_CurrentDeskName;
             this.btnEmployee.Text = "服务员：" + ConstantValuePool.CurrentEmployee.EmployeeNo;
@@ -190,16 +200,13 @@ namespace Top4ever.Pos
                     }
                     else
                     {
-                        if (dgvGoodsOrder.Rows[index - 1].Cells["GoodsName"].Value.ToString().IndexOf('-') >= 0)
+                        string strLevelFlag = string.Empty;
+                        int levelCount = orderDetails.ItemLevel * 2;
+                        for (int i = 0; i < levelCount; i++)
                         {
-                            int lastIndex = dgvGoodsOrder.Rows[index - 1].Cells["GoodsName"].Value.ToString().LastIndexOf('-');
-                            string strDetailFlag = dgvGoodsOrder.Rows[index - 1].Cells["GoodsName"].Value.ToString().Substring(0, lastIndex + 1);
-                            dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = strDetailFlag + "--" + orderDetails.GoodsName;
+                            strLevelFlag += "-";
                         }
-                        else
-                        {
-                            dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = "--" + orderDetails.GoodsName;
-                        }
+                        dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = strLevelFlag + orderDetails.GoodsName;
                     }
                     dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = orderDetails.TotalSellPrice;
                     dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = orderDetails.TotalDiscount;
@@ -272,13 +279,23 @@ namespace Top4ever.Pos
 
         private void btnPayoff_Click(object sender, EventArgs e)
         {
-            CrystalButton btn = sender as CrystalButton;
-            if (m_PrePayoffButton != null)
+            if (dic.Count > 0)
             {
-                m_PrePayoffButton.BackColor = m_PrePayoffButton.DisplayColor;
+                foreach (CrystalButton button in payoffButtonList)
+                {
+                    PayoffWay temp = button.Tag as PayoffWay;
+                    if (dic.ContainsKey(temp.PayoffID.ToString()))
+                    {
+                        button.BackColor = ConstantValuePool.PressedColor;
+                    }
+                    else
+                    {
+                        button.BackColor = button.DisplayColor;
+                    }
+                }
             }
+            CrystalButton btn = sender as CrystalButton;
             btn.BackColor = ConstantValuePool.PressedColor;
-            m_PrePayoffButton = btn;
             curPayoffWay = btn.Tag as PayoffWay;
             this.txtPayoff.Text = curPayoffWay.PayoffName + "(1:" + curPayoffWay.AsPay.ToString("f2") + ")";
             if (dic.ContainsKey(curPayoffWay.PayoffID.ToString()))
@@ -748,10 +765,16 @@ namespace Top4ever.Pos
                     payingOrder.NeedChangePay = orderPayoff.NeedChangePay.ToString("f2");
                     printData.PayingOrderList.Add(payingOrder);
                 }
-                string configPath = @"PrintConfig\PrintOrderSetting.config";
+                string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
+                string configPath = @"PrintConfig\InstructionPrintOrderSetting.config";
                 string layoutPath = @"PrintConfig\PrintPaidOrder.ini";
-                DriverOrderPrint printer = new DriverOrderPrint("Microsoft XPS Document Writer", "76mm", "SpecimenLabel");
-                printer.DoPrint(printData, layoutPath, configPath);
+                if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
+                {
+                    configPath = @"PrintConfig\PrintOrderSetting.config";
+                    string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                    DriverOrderPrint printer = new DriverOrderPrint(printerName, paperWidth, "SpecimenLabel");
+                    printer.DoPrint(printData, layoutPath, configPath);
+                }
 
                 m_IsPaidOrder = true;
                 //更新桌况为空闲状态
@@ -855,28 +878,151 @@ namespace Top4ever.Pos
 
         private void btnPreCheck_Click(object sender, EventArgs e)
         {
-            //权限验证
-            bool hasRights = false;
-            if (RightsItemCode.FindRights(RightsItemCode.PRECHECKOUT))
+            CrystalButton btn = sender as CrystalButton;
+            Order order = m_SalesOrder.order;
+            if (order.Status == 0)
             {
-                hasRights = true;
-            }
-            else
-            {
-                FormRightsCode form = new FormRightsCode();
-                form.ShowDialog();
-                if (form.ReturnValue)
+                //存在整单折扣则先提交
+                //填充Order
+                Order submitOrder = new Order();
+                submitOrder.OrderID = order.OrderID;
+                submitOrder.TotalSellPrice = m_TotalPrice;
+                submitOrder.ActualSellPrice = m_ActualPayMoney;
+                submitOrder.DiscountPrice = m_Discount;
+                submitOrder.CutOffPrice = m_CutOff;
+                submitOrder.ServiceFee = m_ServiceFee;
+                submitOrder.MembershipCard = string.Empty;
+                submitOrder.MemberDiscount = 0;
+                //填充OrderDetails\OrderDiscount
+                List<OrderDetails> orderDetailsList = new List<OrderDetails>();
+                List<OrderDiscount> newOrderDiscountList = new List<OrderDiscount>();
+                foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
                 {
-                    IList<string> rightsCodeList = form.RightsCodeList;
-                    if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.PRECHECKOUT))
+                    OrderDetails orderDetails = dr.Cells["OrderDetailsID"].Tag as OrderDetails;
+                    if (orderDetails != null)
                     {
-                        hasRights = true;
+                        Discount itemDiscount = dr.Cells["GoodsDiscount"].Tag as Discount;
+                        decimal itemDiscountPrice = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value);
+                        if (orderDetails.CanDiscount && itemDiscount != null && Math.Abs(itemDiscountPrice) > 0)
+                        {
+                            orderDetailsList.Add(orderDetails);
+                            //OrderDiscount
+                            OrderDiscount orderDiscount = new OrderDiscount();
+                            orderDiscount.OrderDiscountID = Guid.NewGuid();
+                            orderDiscount.OrderID = order.OrderID;
+                            orderDiscount.OrderDetailsID = orderDetails.OrderDetailsID;
+                            orderDiscount.DiscountID = itemDiscount.DiscountID;
+                            orderDiscount.DiscountName = itemDiscount.DiscountName;
+                            orderDiscount.DiscountType = itemDiscount.DiscountType;
+                            orderDiscount.DiscountRate = itemDiscount.DiscountRate;
+                            orderDiscount.OffFixPay = itemDiscount.OffFixPay;
+                            orderDiscount.OffPay = Math.Abs(Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value));
+                            orderDiscount.EmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
+                            newOrderDiscountList.Add(orderDiscount);
+                        }
                     }
                 }
+                if (orderDetailsList.Count > 0 && newOrderDiscountList.Count > 0)
+                {
+                    SalesOrder salesOrder = new SalesOrder();
+                    salesOrder.order = submitOrder;
+                    salesOrder.orderDetailsList = orderDetailsList;
+                    salesOrder.orderDiscountList = newOrderDiscountList;
+                }
+                //打印预结小票
+                PrintData printData = new PrintData();
+                printData.ShopName = ConstantValuePool.CurrentShop.ShopName;
+                printData.DeskName = m_CurrentDeskName;
+                printData.PersonNum = m_SalesOrder.order.PeopleNum.ToString();
+                printData.PrintTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+                printData.EmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
+                printData.TranSequence = m_SalesOrder.order.TranSequence.ToString();
+                printData.ShopAddress = ConstantValuePool.CurrentShop.RunAddress;
+                printData.Telephone = ConstantValuePool.CurrentShop.Telephone;
+                printData.ReceivableMoney = this.lbReceMoney.Text;
+                printData.ServiceFee = m_ServiceFee.ToString("f2");
+                printData.TotalAmount = (m_ActualPayMoney + m_ServiceFee).ToString("f2");
+                printData.GoodsOrderList = new List<GoodsOrder>();
+                foreach (OrderDetails item in m_SalesOrder.orderDetailsList)
+                {
+                    string strLevelFlag = string.Empty;
+                    int levelCount = item.ItemLevel * 2;
+                    for (int i = 0; i < levelCount; i++)
+                    {
+                        strLevelFlag += "-";
+                    }
+                    GoodsOrder goodsOrder = new GoodsOrder();
+                    goodsOrder.GoodsName = strLevelFlag + item.GoodsName;
+                    goodsOrder.GoodsNum = item.ItemQty.ToString("f1");
+                    goodsOrder.SellPrice = item.SellPrice.ToString("f2");
+                    goodsOrder.TotalSellPrice = item.TotalSellPrice.ToString("f2");
+                    goodsOrder.TotalDiscount = item.TotalDiscount.ToString("f2");
+                    goodsOrder.Unit = item.Unit;
+                    printData.GoodsOrderList.Add(goodsOrder);
+                }
+                string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
+                string configPath = @"PrintConfig\InstructionPrintOrderSetting.config";
+                string layoutPath = @"PrintConfig\PrintPrePayOrder.ini";
+                if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
+                {
+                    configPath = @"PrintConfig\PrintOrderSetting.config";
+                    string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                    DriverOrderPrint printer = new DriverOrderPrint(printerName, paperWidth, "SpecimenLabel");
+                    printer.DoPrint(printData, layoutPath, configPath);
+                }
+                //更新状态
+                int status = 3;
+                OrderService orderService = new OrderService();
+                if (orderService.UpdateOrderStatus(order.OrderID, status))
+                {
+                    btn.Text = "解锁";
+                    order.Status = status;
+                    m_IsPreCheckOut = true;
+                }
+                else
+                {
+                    MessageBox.Show("更新预结状态失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
-            if (!hasRights)
+            else if (order.Status == 3)
             {
-                return;
+                //权限验证
+                bool hasRights = false;
+                if (RightsItemCode.FindRights(RightsItemCode.PRECHECKOUT))
+                {
+                    hasRights = true;
+                }
+                else
+                {
+                    FormRightsCode form = new FormRightsCode();
+                    form.ShowDialog();
+                    if (form.ReturnValue)
+                    {
+                        IList<string> rightsCodeList = form.RightsCodeList;
+                        if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.PRECHECKOUT))
+                        {
+                            hasRights = true;
+                        }
+                    }
+                }
+                if (!hasRights)
+                {
+                    return;
+                }
+                int status = 0;
+                OrderService orderService = new OrderService();
+                if (orderService.UpdateOrderStatus(order.OrderID, status))
+                {
+                    btn.Text = "预结";
+                    order.Status = status;
+                    m_IsPreCheckOut = false;
+                }
+                else
+                {
+                    MessageBox.Show("预结状态解锁失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
         }
 

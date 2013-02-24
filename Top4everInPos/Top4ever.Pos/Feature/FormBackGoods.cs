@@ -38,10 +38,6 @@ namespace Top4ever.Pos.Feature
         /// </summary>
         private string m_InputNumber = "0";
         /// <summary>
-        /// 前一个按钮
-        /// </summary>
-        private CrystalButton m_PrePayoffButton = null;
-        /// <summary>
         /// 去服务费
         /// </summary>
         private bool m_CutServiceFee = false;
@@ -150,29 +146,26 @@ namespace Top4ever.Pos.Feature
                 foreach (OrderDetails orderDetails in m_SalesOrder.orderDetailsList)
                 {
                     int index = dgvGoodsOrder.Rows.Add(new DataGridViewRow());
-                    dgvGoodsOrder.Rows[index].Cells["ColQty"].Value = orderDetails.ItemQty;
+                    dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = orderDetails.ItemQty;
                     if (orderDetails.ItemType == (int)OrderItemType.Goods)
                     {
-                        dgvGoodsOrder.Rows[index].Cells["ColGoodsName"].Value = orderDetails.GoodsName;
+                        dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = orderDetails.GoodsName;
                     }
                     else
                     {
-                        if (dgvGoodsOrder.Rows[index - 1].Cells["ColGoodsName"].Value.ToString().IndexOf('-') >= 0)
+                        string strLevelFlag = string.Empty;
+                        int levelCount = orderDetails.ItemLevel * 2;
+                        for (int i = 0; i < levelCount; i++)
                         {
-                            int lastIndex = dgvGoodsOrder.Rows[index - 1].Cells["ColGoodsName"].Value.ToString().LastIndexOf('-');
-                            string strDetailFlag = dgvGoodsOrder.Rows[index - 1].Cells["ColGoodsName"].Value.ToString().Substring(0, lastIndex + 1);
-                            dgvGoodsOrder.Rows[index].Cells["ColGoodsName"].Value = strDetailFlag + "--" + orderDetails.GoodsName;
+                            strLevelFlag += "-";
                         }
-                        else
-                        {
-                            dgvGoodsOrder.Rows[index].Cells["ColGoodsName"].Value = "--" + orderDetails.GoodsName;
-                        }
+                        dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = strLevelFlag + orderDetails.GoodsName;
                     }
-                    dgvGoodsOrder.Rows[index].Cells["ColPrice"].Value = orderDetails.TotalSellPrice;
-                    dgvGoodsOrder.Rows[index].Cells["ColDiscount"].Value = orderDetails.TotalDiscount;
-                    dgvGoodsOrder.Rows[index].Cells["ColFlag"].Value = "-0.0";
-                    dgvGoodsOrder.Rows[index].Cells["ColOrderDetailsID"].Value = orderDetails.OrderDetailsID;
-                    dgvGoodsOrder.Rows[index].Cells["ColOrderDetailsID"].Tag = orderDetails;
+                    dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = orderDetails.TotalSellPrice;
+                    dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = orderDetails.TotalDiscount;
+                    dgvGoodsOrder.Rows[index].Cells["DelFlag"].Value = "-0.0";
+                    dgvGoodsOrder.Rows[index].Cells["OrderDetailsID"].Value = orderDetails.OrderDetailsID;
+                    dgvGoodsOrder.Rows[index].Cells["OrderDetailsID"].Tag = orderDetails;
                 }
             }
         }
@@ -197,13 +190,23 @@ namespace Top4ever.Pos.Feature
 
         private void btnPayoff_Click(object sender, EventArgs e)
         {
-            CrystalButton btn = sender as CrystalButton;
-            if (m_PrePayoffButton != null)
+            if (dic.Count > 0)
             {
-                m_PrePayoffButton.BackColor = m_PrePayoffButton.DisplayColor;
+                foreach (CrystalButton button in payoffButtonList)
+                {
+                    PayoffWay temp = button.Tag as PayoffWay;
+                    if (dic.ContainsKey(temp.PayoffID.ToString()))
+                    {
+                        button.BackColor = ConstantValuePool.PressedColor;
+                    }
+                    else
+                    {
+                        button.BackColor = button.DisplayColor;
+                    }
+                }
             }
+            CrystalButton btn = sender as CrystalButton;
             btn.BackColor = ConstantValuePool.PressedColor;
-            m_PrePayoffButton = btn;
             curPayoffWay = btn.Tag as PayoffWay;
             this.txtPayoff.Text = curPayoffWay.PayoffName + "(1:" + curPayoffWay.AsPay.ToString("f2") + ")";
             if (dic.ContainsKey(curPayoffWay.PayoffID.ToString()))
@@ -460,7 +463,7 @@ namespace Top4ever.Pos.Feature
                     return;
                 }
                 int selectIndex = dgvGoodsOrder.CurrentRow.Index;
-                OrderDetails orderDetails = dgvGoodsOrder.Rows[selectIndex].Cells["ColOrderDetailsID"].Tag as OrderDetails;
+                OrderDetails orderDetails = dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Tag as OrderDetails;
                 if (orderDetails.ItemType == (int)OrderItemType.Goods)   //主项才能打折
                 {
                     if (orderDetails.CanDiscount)
@@ -472,19 +475,19 @@ namespace Top4ever.Pos.Feature
                             Discount discount = formDiscount.CurrentDiscount;
                             if (discount.DiscountType == (int)DiscountItemType.DiscountRate)
                             {
-                                dgvGoodsOrder.Rows[selectIndex].Cells["ColDiscount"].Value = -Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["ColPrice"].Value) * discount.DiscountRate;
+                                dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value = -Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value) * discount.DiscountRate;
                             }
                             else
                             {
-                                dgvGoodsOrder.Rows[selectIndex].Cells["ColDiscount"].Value = -discount.OffFixPay;
+                                dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value = -discount.OffFixPay;
                             }
-                            dgvGoodsOrder.Rows[selectIndex].Cells["ColDiscount"].Tag = discount;
+                            dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Tag = discount;
                             //更新细项
                             if (selectIndex < dgvGoodsOrder.Rows.Count - 1)
                             {
                                 for (int index = selectIndex + 1; index < dgvGoodsOrder.Rows.Count; index++)
                                 {
-                                    orderDetails = dgvGoodsOrder.Rows[index].Cells["ColOrderDetailsID"].Tag as OrderDetails;
+                                    orderDetails = dgvGoodsOrder.Rows[index].Cells["OrderDetailsID"].Tag as OrderDetails;
                                     if (orderDetails.ItemType == (int)OrderItemType.Goods)
                                     {
                                         break;
@@ -493,13 +496,13 @@ namespace Top4ever.Pos.Feature
                                     {
                                         if (discount.DiscountType == (int)DiscountItemType.DiscountRate)
                                         {
-                                            dgvGoodsOrder.Rows[index].Cells["ColDiscount"].Value = -Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["ColPrice"].Value) * discount.DiscountRate;
+                                            dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = -Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value) * discount.DiscountRate;
                                         }
                                         else
                                         {
-                                            dgvGoodsOrder.Rows[index].Cells["ColDiscount"].Value = -discount.OffFixPay;
+                                            dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = -discount.OffFixPay;
                                         }
-                                        dgvGoodsOrder.Rows[index].Cells["ColDiscount"].Tag = discount;
+                                        dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Tag = discount;
                                     }
                                 }
                             }
@@ -542,22 +545,22 @@ namespace Top4ever.Pos.Feature
                 Discount discount = formDiscount.CurrentDiscount;
                 foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
                 {
-                    OrderDetails orderDetails = dr.Cells["ColOrderDetailsID"].Tag as OrderDetails;
+                    OrderDetails orderDetails = dr.Cells["OrderDetailsID"].Tag as OrderDetails;
                     if (orderDetails != null)
                     {
                         if (orderDetails.CanDiscount)
                         {
                             if (discount.DiscountType == (int)DiscountItemType.DiscountRate)
                             {
-                                dr.Cells["ColDiscount"].Value = -Convert.ToDecimal(dr.Cells["ColPrice"].Value) * discount.DiscountRate;
+                                dr.Cells["GoodsDiscount"].Value = -Convert.ToDecimal(dr.Cells["GoodsPrice"].Value) * discount.DiscountRate;
                             }
                             else
                             {
-                                dr.Cells["ColDiscount"].Value = -discount.OffFixPay;
+                                dr.Cells["GoodsDiscount"].Value = -discount.OffFixPay;
                             }
-                            orderDetails.TotalDiscount = Convert.ToDecimal(dr.Cells["ColDiscount"].Value);
-                            dr.Cells["ColOrderDetailsID"].Tag = orderDetails;
-                            dr.Cells["ColDiscount"].Tag = discount;
+                            orderDetails.TotalDiscount = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value);
+                            dr.Cells["OrderDetailsID"].Tag = orderDetails;
+                            dr.Cells["GoodsDiscount"].Tag = discount;
                         }
                     }
                 }
