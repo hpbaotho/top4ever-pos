@@ -36,5 +36,7 @@ namespace Top4ever.Interface.OrderRelated
         bool MergeSalesOrder(DeskChange deskChange);
 
         bool IsExistOrderInTimeInterval(DateTime beginTime, DateTime endTime);
+
+        bool UpdateOrderStatus(Guid orderID, int status);
     }
 }

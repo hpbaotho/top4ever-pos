@@ -117,5 +117,39 @@ namespace Top4ever.ClientService
             }
             return result;
         }
+
+        public bool UpdateOrderStatus(Guid orderID, int status)
+        {
+            int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.ORDER_ID + BasicTypeLength.INT32;
+            byte[] sendByte = new byte[cByte];
+            int byteOffset = 0;
+            Array.Copy(BitConverter.GetBytes((int)Command.ID_UPDATE_ORDERSTATUS), sendByte, BasicTypeLength.INT32);
+            byteOffset = BasicTypeLength.INT32;
+            Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
+            byteOffset += BasicTypeLength.INT32;
+
+            byte[] tempByte = null;
+            //orderID
+            tempByte = Encoding.UTF8.GetBytes(orderID.ToString());
+            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
+            byteOffset += ParamFieldLength.ORDER_ID;
+            //status
+            Array.Copy(BitConverter.GetBytes(status), 0, sendByte, byteOffset, BasicTypeLength.INT32);
+            byteOffset += BasicTypeLength.INT32;
+
+            bool result = false;
+            using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
+            {
+                socket.Connect();
+                Byte[] receiveData = null;
+                Int32 operCode = socket.SendReceive(sendByte, out receiveData);
+                if (operCode == (int)RET_VALUE.SUCCEEDED)
+                {
+                    result = true;
+                }
+                socket.Disconnect();
+            }
+            return result;
+        }
     }
 }

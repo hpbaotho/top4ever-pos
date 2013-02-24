@@ -182,7 +182,7 @@ namespace Top4ever.Pos.Feature
                 foreach (Order order in orderList)
                 {
                     string billType = string.Empty;
-                    if (order.Status == 0)
+                    if (order.Status == 0 || order.Status == 3)
                     {
                         billType = "未结账";
                     }
@@ -254,7 +254,20 @@ namespace Top4ever.Pos.Feature
                 foreach (OrderDetails orderDetails in orderDetailsList)
                 {
                     int index = dataGridView2.Rows.Add();
-                    dataGridView2.Rows[index].Cells["GoodsName"].Value = orderDetails.GoodsName;
+                    if (orderDetails.ItemType == (int)OrderItemType.Goods)
+                    {
+                        dataGridView2.Rows[index].Cells["GoodsName"].Value = orderDetails.GoodsName;
+                    }
+                    else
+                    {
+                        string strLevelFlag = string.Empty;
+                        int levelCount = orderDetails.ItemLevel * 2;
+                        for (int i = 0; i < levelCount; i++)
+                        {
+                            strLevelFlag += "-";
+                        }
+                        dataGridView2.Rows[index].Cells["GoodsName"].Value = strLevelFlag + orderDetails.GoodsName;
+                    }
                     dataGridView2.Rows[index].Cells["ItemQty"].Value = orderDetails.ItemQty;
                     dataGridView2.Rows[index].Cells["SellPrice"].Value = orderDetails.TotalSellPrice.ToString("f2");
                     dataGridView2.Rows[index].Cells["Discount"].Value = orderDetails.TotalDiscount.ToString("f2");
@@ -380,7 +393,7 @@ namespace Top4ever.Pos.Feature
                     this.lbOrderNo.Text = order.OrderNo;
                     this.lbDeskName.Text = order.DeskName;
                     string billType = string.Empty;
-                    if (order.Status == 0)
+                    if (order.Status == 0 || order.Status == 3)
                     {
                         billType = "未结账";
                     }

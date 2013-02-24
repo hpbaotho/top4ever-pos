@@ -56,6 +56,7 @@ namespace Top4ever.Pos
         private Guid m_EmployeeID = Guid.Empty;
         private string m_EmployeeNo = string.Empty;
         private CrystalButton prevPressedButton = null;
+        private bool m_ShowSilverCode = false;
 
         #region input
         public int PersonNum
@@ -440,6 +441,29 @@ namespace Top4ever.Pos
                             CrystalButton btnGoods = btnGoodsList[i];
                             btnGoods.Click -= new System.EventHandler(this.btnGoods_Click);
                             btnGoods.Click += new System.EventHandler(this.btnGoods_Click);
+                            if (m_ShowSilverCode)
+                            {
+                                if (btnGoods.Text.IndexOf("￥") > 0)
+                                {
+                                    //do nothing
+                                }
+                                else
+                                {
+                                    Goods temp = btnGoods.Tag as Goods;
+                                    btnGoods.Text += "\r\n ￥" + temp.SellPrice.ToString("f2");
+                                }
+                            }
+                            else
+                            {
+                                if (btnGoods.Text.IndexOf("￥") > 0)
+                                {
+                                    btnGoods.Text = btnGoods.Text.Substring(0, btnGoods.Text.IndexOf("￥") - 3);
+                                }
+                                else
+                                {
+                                    //do nothing
+                                }
+                            }
                             this.pnlItem.Controls.Add(btnGoods);
                         }
                         //设置页码按钮的位置
@@ -1375,12 +1399,7 @@ namespace Top4ever.Pos
                 int selectIndex = dgvGoodsOrder.CurrentRow.Index;
                 if (dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value != null)
                 {
-                    Guid orderDetailsID = new Guid(dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value.ToString());
-                    decimal itemNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
-                    string itemName = dgvGoodsOrder.Rows[selectIndex].Cells["GoodsName"].Value.ToString();
-                    decimal itemPrice = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value);
                     int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value);
-
                     if (itemType == (int)OrderItemType.Details)
                     {
                         MessageBox.Show("细项不能单独删除！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1391,12 +1410,16 @@ namespace Top4ever.Pos
                         MessageBox.Show("套餐项不能单独删除！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
                     }
+                    Guid orderDetailsID = new Guid(dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value.ToString());
+                    decimal goodsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
+                    string goodsName = dgvGoodsOrder.Rows[selectIndex].Cells["GoodsName"].Value.ToString();
+                    decimal goodsPrice = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value);
                     if (!RightsItemCode.FindRights(RightsItemCode.CANCELGOODS))
                     {
-                        decimal singleItemPriceSum = itemPrice / itemNum;
+                        decimal singleItemPriceSum = goodsPrice / goodsNum;
                         if (itemType == (int)OrderItemType.Goods && selectIndex < dgvGoodsOrder.Rows.Count - 1)
                         {
-                            for (int index = selectIndex + 1; index < dgvGoodsOrder.Rows.Count; index++)
+                            for (int index = selectIndex + 1; index < dgvGoodsOrder.RowCount; index++)
                             {
                                 if (Convert.ToInt32(dgvGoodsOrder.Rows[index].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
                                 {
@@ -1435,18 +1458,17 @@ namespace Top4ever.Pos
                             }
                         }
                     }
-                    
-                    FormCancelOrder form = new FormCancelOrder(itemName, itemNum);
+                    FormCancelOrder form = new FormCancelOrder(goodsName, goodsNum);
                     form.ShowDialog();
                     if (form.DelItemNum > 0 && form.CurrentReason != null)
                     {
-                        if (form.DelItemNum < itemNum)
+                        if (form.DelItemNum < goodsNum)
                         {
                             //Key:Index, Value:RemainNum
                             Dictionary<int, decimal> dicRemainNum = new Dictionary<int, decimal>();
                             List<DeletedOrderDetails> deletedOrderDetailsList = new List<DeletedOrderDetails>();
                             //主项
-                            decimal remainNum = itemNum - form.DelItemNum;
+                            decimal remainNum = goodsNum - form.DelItemNum;
                             dicRemainNum.Add(selectIndex, remainNum);
                             decimal originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
                             decimal originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value);
@@ -1461,7 +1483,7 @@ namespace Top4ever.Pos
                             //细项
                             if (selectIndex < dgvGoodsOrder.Rows.Count - 1)
                             {
-                                for (int index = selectIndex + 1; index < dgvGoodsOrder.Rows.Count; index++)
+                                for (int index = selectIndex + 1; index < dgvGoodsOrder.RowCount; index++)
                                 {
                                     if (Convert.ToInt32(dgvGoodsOrder.Rows[index].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
                                     {
@@ -1469,10 +1491,12 @@ namespace Top4ever.Pos
                                     }
                                     else
                                     {
-                                        dicRemainNum.Add(index, remainNum);
                                         orderDetailsID = new Guid(dgvGoodsOrder.Rows[index].Cells["OrderDetailsID"].Value.ToString());
                                         originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value);
                                         originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value);
+                                        decimal delItemNum = originalDetailsNum / goodsNum * form.DelItemNum;
+                                        remainNum = originalDetailsNum - delItemNum;
+                                        dicRemainNum.Add(index, remainNum);
                                         DeletedOrderDetails item = new DeletedOrderDetails();
                                         item.OrderDetailsID = orderDetailsID;
                                         item.RemainQuantity = remainNum;
@@ -1486,7 +1510,7 @@ namespace Top4ever.Pos
                             }
                             //计算价格信息
                             decimal totalPrice = 0, totalDiscount = 0;
-                            for (int i = 0; i < dgvGoodsOrder.Rows.Count; i++)
+                            for (int i = 0; i < dgvGoodsOrder.RowCount; i++)
                             {
                                 if (dicRemainNum.ContainsKey(i))
                                 {
@@ -1549,11 +1573,15 @@ namespace Top4ever.Pos
                             orderDetails.CancelReasonName = form.CurrentReason.ReasonName;
                             deletedOrderDetailsList.Add(orderDetails);
                             //细项
-                            if (selectIndex < dgvGoodsOrder.Rows.Count - 1)
+                            if (selectIndex < dgvGoodsOrder.RowCount - 1)
                             {
-                                for (int index = selectIndex + 1; index < dgvGoodsOrder.Rows.Count; index++)
+                                for (int index = selectIndex + 1; index < dgvGoodsOrder.RowCount; index++)
                                 {
-                                    if (Convert.ToInt32(dgvGoodsOrder.Rows[index].Cells["ItemType"].Value) == (int)OrderItemType.Details)
+                                    if (Convert.ToInt32(dgvGoodsOrder.Rows[index].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                                    {
+                                        break;
+                                    }
+                                    else
                                     {
                                         deletedIndexList.Add(index);
                                         orderDetailsID = new Guid(dgvGoodsOrder.Rows[index].Cells["OrderDetailsID"].Value.ToString());
@@ -1566,15 +1594,11 @@ namespace Top4ever.Pos
                                         item.CancelReasonName = form.CurrentReason.ReasonName;
                                         deletedOrderDetailsList.Add(item);
                                     }
-                                    else
-                                    {
-                                        break;
-                                    }
                                 }
                             }
                             //计算价格信息
                             decimal totalPrice = 0, totalDiscount = 0;
-                            for (int i = 0; i < dgvGoodsOrder.Rows.Count; i++)
+                            for (int i = 0; i < dgvGoodsOrder.RowCount; i++)
                             {
                                 bool hasDeleted = false;
                                 foreach (int deletedIndex in deletedIndexList)
@@ -1629,26 +1653,21 @@ namespace Top4ever.Pos
                     }
                     else
                     {
-                        List<int> deletedIndexList = new List<int>();
-                        deletedIndexList.Add(selectIndex);
-                        //细项
-                        if (selectIndex < dgvGoodsOrder.Rows.Count - 1)
+                        dgvGoodsOrder.Rows.RemoveAt(selectIndex);
+                        if (selectIndex < dgvGoodsOrder.RowCount - 1)
                         {
-                            for (int index = selectIndex + 1; index < dgvGoodsOrder.Rows.Count; index++)
+                            for (int i = selectIndex; i < dgvGoodsOrder.RowCount; i++)
                             {
-                                if (Convert.ToInt32(dgvGoodsOrder.Rows[index].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                                if (Convert.ToInt32(dgvGoodsOrder.Rows[i].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
                                 {
                                     break;
                                 }
                                 else
                                 {
-                                    deletedIndexList.Add(index);
+                                    dgvGoodsOrder.Rows.RemoveAt(i);
+                                    i--;
                                 }
                             }
-                        }
-                        for (int i = deletedIndexList.Count - 1; i >= 0; i--)
-                        {
-                            dgvGoodsOrder.Rows.RemoveAt(deletedIndexList[i]);
                         }
                     }
                 }
@@ -1843,6 +1862,14 @@ namespace Top4ever.Pos
                     {
                         m_OnShow = false;
                         this.Hide();
+                    }
+                    else
+                    {
+                        if (checkForm.IsPreCheckOut)
+                        {
+                            m_OnShow = false;
+                            this.Hide();
+                        }
                     }
                 }
             }
@@ -2237,6 +2264,8 @@ namespace Top4ever.Pos
 
         private void btnPriceCode_Click(object sender, EventArgs e)
         {
+            m_ShowSilverCode = !m_ShowSilverCode;
+            DisplayGoodsButton();
             this.exTabControl1.SelectedIndex = 0;
         }
 
@@ -2562,7 +2591,7 @@ namespace Top4ever.Pos
                         BindGoodsOrderInfo();   //绑定订单信息
                         BindOrderInfoSum();
                     }
-                    if (result == 2)
+                    else if (result == 2)
                     {
                         MessageBox.Show("当前桌号被其他设备占用，请退出后重试！");
                         return false;

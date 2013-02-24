@@ -139,6 +139,16 @@ namespace Top4ever.Persistence.OrderRelated
             return IsExist;
         }
 
+        public bool UpdateOrderStatus(Guid orderID, int status)
+        {
+            int result = 0;
+            Hashtable htParam = new Hashtable();
+            htParam["OrderID"] = orderID;
+            htParam["Status"] = status;
+            result = ExecuteUpdate("UpdateOrderStatus", htParam);
+            return result > 0;
+        }
+
         #endregion
     }
 }

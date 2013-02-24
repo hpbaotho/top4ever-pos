@@ -98,5 +98,29 @@ namespace Top4ever.BLL
             }
             return objRet;
         }
+
+        public static byte[] UpdateOrderStatus(byte[] itemBuffer)
+        {
+            byte[] objRet = null;
+            string orderID = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, ParamFieldLength.ORDER_ID).Trim('\0');
+            int status = BitConverter.ToInt32(itemBuffer, ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.ORDER_ID);
+
+            bool result = OrderService.GetInstance().UpdateOrderStatus(new Guid(orderID), status);
+            if (result)
+            {
+                //更新状态成功
+                objRet = new byte[ParamFieldLength.PACKAGE_HEAD];
+                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
+                Array.Copy(BitConverter.GetBytes(ParamFieldLength.PACKAGE_HEAD), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            }
+            else
+            {
+                //更新状态失败
+                objRet = new byte[ParamFieldLength.PACKAGE_HEAD];
+                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.ERROR_DB), 0, objRet, 0, BasicTypeLength.INT32);
+                Array.Copy(BitConverter.GetBytes(ParamFieldLength.PACKAGE_HEAD), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            }
+            return objRet;
+        }
     }
 }

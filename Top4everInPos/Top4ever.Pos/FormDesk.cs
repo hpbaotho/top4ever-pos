@@ -392,19 +392,12 @@ namespace Top4ever.Pos
                             IList<Order> orderList = orderService.GetOrderList(desk.DeskName);
                             if (orderList != null && orderList.Count > 0)
                             {
+                                SalesOrder salesOrder = null;
                                 if (orderList.Count == 1)
                                 {
                                     Guid orderID = orderList[0].OrderID;
                                     SalesOrderService salesOrderService = new SalesOrderService();
-                                    SalesOrder salesOrder = salesOrderService.GetSalesOrder(orderID);
-                                    if (salesOrder != null)
-                                    {
-                                        //open order form
-                                        m_FormOrder.CurrentDeskName = desk.DeskName;
-                                        m_FormOrder.PlaceSalesOrder = salesOrder;
-                                        m_FormOrder.VisibleShow = true;
-                                        m_FormOrder.ShowDialog();
-                                    }
+                                    salesOrder = salesOrderService.GetSalesOrder(orderID);
                                 }
                                 else
                                 {
@@ -414,15 +407,24 @@ namespace Top4ever.Pos
                                     {
                                         Guid orderID = form.SelectedOrder.OrderID;
                                         SalesOrderService salesOrderService = new SalesOrderService();
-                                        SalesOrder salesOrder = salesOrderService.GetSalesOrder(orderID);
-                                        if (salesOrder != null)
-                                        {
-                                            //open order form
-                                            m_FormOrder.CurrentDeskName = desk.DeskName;
-                                            m_FormOrder.PlaceSalesOrder = salesOrder;
-                                            m_FormOrder.VisibleShow = true;
-                                            m_FormOrder.ShowDialog();
-                                        }
+                                        salesOrder = salesOrderService.GetSalesOrder(orderID);
+                                    }
+                                }
+                                if (salesOrder != null)
+                                {
+                                    if (salesOrder.order.Status == 3)   //已预结
+                                    {
+                                        //open check out form
+                                        FormCheckOut checkForm = new FormCheckOut(salesOrder, desk.DeskName);
+                                        checkForm.ShowDialog();
+                                    }
+                                    else
+                                    {
+                                        //open order form
+                                        m_FormOrder.CurrentDeskName = desk.DeskName;
+                                        m_FormOrder.PlaceSalesOrder = salesOrder;
+                                        m_FormOrder.VisibleShow = true;
+                                        m_FormOrder.ShowDialog();
                                     }
                                 }
                             }
@@ -580,16 +582,12 @@ namespace Top4ever.Pos
                             IList<Order> orderList = orderService.GetOrderList(desk.DeskName);
                             if (orderList != null && orderList.Count > 0)
                             {
+                                SalesOrder salesOrder = null;
                                 if (orderList.Count == 1)
                                 {
                                     Guid orderID = orderList[0].OrderID;
                                     SalesOrderService salesOrderService = new SalesOrderService();
-                                    SalesOrder salesOrder = salesOrderService.GetSalesOrder(orderID);
-                                    if (salesOrder != null)
-                                    {
-                                        FormCheckOut checkForm = new FormCheckOut(salesOrder, desk.DeskName);
-                                        checkForm.ShowDialog();
-                                    }
+                                    salesOrder = salesOrderService.GetSalesOrder(orderID);
                                 }
                                 else
                                 {
@@ -599,13 +597,13 @@ namespace Top4ever.Pos
                                     {
                                         Guid orderID = form.SelectedOrder.OrderID;
                                         SalesOrderService salesOrderService = new SalesOrderService();
-                                        SalesOrder salesOrder = salesOrderService.GetSalesOrder(orderID);
-                                        if (salesOrder != null)
-                                        {
-                                            FormCheckOut checkForm = new FormCheckOut(salesOrder, desk.DeskName);
-                                            checkForm.ShowDialog();
-                                        }
+                                        salesOrder = salesOrderService.GetSalesOrder(orderID);
                                     }
+                                }
+                                if (salesOrder != null)
+                                {
+                                    FormCheckOut checkForm = new FormCheckOut(salesOrder, desk.DeskName);
+                                    checkForm.ShowDialog();
                                 }
                             }
                         }
