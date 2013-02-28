@@ -5,18 +5,20 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using Top4ever.Entity;
-using Top4ever.Domain.OrderRelated;
-using Top4ever.CustomControl;
-using Top4ever.Entity.Enum;
-using Top4ever.Domain.Transfer;
+
 using Top4ever.Common;
+using Top4ever.CustomControl;
+using Top4ever.Domain;
+using Top4ever.Domain.Transfer;
+using Top4ever.Domain.OrderRelated;
+using Top4ever.Entity;
+using Top4ever.Entity.Enum;
 
 namespace Top4ever.Pos.Feature
 {
     public partial class FormBackGoods : Form
     {
-        private const int m_Space = 5;
+        private const int m_Space = 2;
         private int m_Width = 0;
         private int m_Height = 0;
         private int m_ColumnsCount = 0;
@@ -25,6 +27,10 @@ namespace Top4ever.Pos.Feature
         private int m_PageIndex = 0;
         private List<CrystalButton> payoffButtonList = new List<CrystalButton>();
         private SalesOrder m_SalesOrder = null;
+        private decimal m_TotalPrice = 0;
+        private decimal m_ActualPayMoney = 0;
+        private decimal m_Discount = 0;
+        private decimal m_CutOff = 0;
         /// <summary>
         /// 当前选中的付款方式
         /// </summary>
@@ -45,11 +51,21 @@ namespace Top4ever.Pos.Feature
         /// 服务费
         /// </summary>
         private decimal m_ServiceFee = 0;
+        /// <summary>
+        /// 账单是否修改
+        /// </summary>
+        private bool m_IsChanged = false;
+        public bool IsChanged
+        {
+            get { return m_IsChanged; }
+        }
 
         public FormBackGoods(SalesOrder salesOrder)
         {
             InitializeComponent();
             m_SalesOrder = salesOrder;
+            btnPageUp.BackColor = btnPageUp.DisplayColor = Color.Tomato;
+            btnPageDown.BackColor = btnPageDown.DisplayColor = Color.Teal;
         }
 
         private void FormBackGoods_Load(object sender, EventArgs e)
@@ -59,6 +75,7 @@ namespace Top4ever.Pos.Feature
             DisplayPayoffButton();
             BindGoodsOrderInfo();
             BindPayoffWay();
+            txtReceAmount.Text = (m_SalesOrder.order.ActualSellPrice + m_SalesOrder.order.ServiceFee).ToString("f2");
         }
 
         private void CalculateButtonSize()
@@ -71,8 +88,8 @@ namespace Top4ever.Pos.Feature
                     {
                         m_ColumnsCount = control.ColumnsCount;
                         m_RowsCount = control.RowsCount;
-                        m_Width = (this.pnlPayoffWay.Width - m_Space * (control.ColumnsCount + 1)) / control.ColumnsCount;
-                        m_Height = (this.pnlPayoffWay.Height - m_Space * (control.RowsCount + 1)) / control.RowsCount;
+                        m_Width = (this.pnlPayoffWay.Width - m_Space * (control.ColumnsCount - 1)) / control.ColumnsCount;
+                        m_Height = (this.pnlPayoffWay.Height - m_Space * (control.RowsCount - 1)) / control.RowsCount;
                         m_PageSize = control.ColumnsCount * control.RowsCount - 2;    //扣除向前、向后两个按钮
                     }
                 }
@@ -88,9 +105,20 @@ namespace Top4ever.Pos.Feature
                 btn.Text = payoff.PayoffName;
                 btn.Width = m_Width;
                 btn.Height = m_Height;
-                btn.BackColor = Color.Blue;
-                btn.DisplayColor = btn.BackColor;
+                btn.BackColor = btn.DisplayColor = Color.Blue;
                 btn.Font = new Font("Microsoft YaHei", 12F, FontStyle.Regular);
+                foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
+                {
+                    if (payoff.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
+                    {
+                        float emSize = (float)btnStyle.FontSize;
+                        FontStyle style = FontStyle.Regular;
+                        btn.Font = new Font(btnStyle.FontName, emSize, style);
+                        btn.ForeColor = ColorConvert.RGB(btnStyle.ForeColor);
+                        btn.BackColor = btn.DisplayColor = ColorConvert.RGB(btnStyle.BackColor);
+                        break;
+                    }
+                }
                 btn.Tag = payoff;
                 btn.Click += new System.EventHandler(this.btnPayoff_Click);
                 payoffButtonList.Add(btn);
@@ -107,7 +135,7 @@ namespace Top4ever.Pos.Feature
                 endIndex = payoffButtonList.Count;
             }
             int index = 1;
-            int px = m_Space, py = m_Space;
+            int px = 0, py = 0;
             for (int i = startIndex; i < endIndex; i++)
             {
                 CrystalButton btn = payoffButtonList[i];
@@ -115,7 +143,7 @@ namespace Top4ever.Pos.Feature
                 this.pnlPayoffWay.Controls.Add(btn);
                 if (index % m_ColumnsCount == 0)
                 {
-                    px = m_Space;
+                    px = 0;
                     py += m_Height + m_Space;
                 }
                 else
@@ -124,17 +152,37 @@ namespace Top4ever.Pos.Feature
                 }
                 index++;
             }
-            px = (m_ColumnsCount - 2) * m_Width + (m_ColumnsCount - 2 + 1) * m_Space;
-            py = (m_RowsCount - 1) * m_Height + (m_RowsCount - 1 + 1) * m_Space;
+            px = (m_ColumnsCount - 2) * m_Width + (m_ColumnsCount - 2) * m_Space;
+            py = (m_RowsCount - 1) * m_Height + (m_RowsCount - 1) * m_Space;
             btnPageUp.Width = m_Width;
             btnPageUp.Height = m_Height;
             btnPageUp.Location = new Point(px, py);
+            if (m_PageIndex <= 0)
+            {
+                btnPageUp.Enabled = false;
+                btnPageUp.BackColor = ConstantValuePool.DisabledColor;
+            }
+            else
+            {
+                btnPageUp.Enabled = true;
+                btnPageUp.BackColor = btnPageUp.DisplayColor;
+            }
             this.pnlPayoffWay.Controls.Add(btnPageUp);
-            px = (m_ColumnsCount - 1) * m_Width + (m_ColumnsCount - 1 + 1) * m_Space;
-            py = (m_RowsCount - 1) * m_Height + (m_RowsCount - 1 + 1) * m_Space;
+            px = (m_ColumnsCount - 1) * m_Width + (m_ColumnsCount - 1) * m_Space;
+            py = (m_RowsCount - 1) * m_Height + (m_RowsCount - 1) * m_Space;
             btnPageDown.Width = m_Width;
             btnPageDown.Height = m_Height;
             btnPageDown.Location = new Point(px, py);
+            if ((m_PageIndex + 1) * m_PageSize >= payoffButtonList.Count)
+            {
+                btnPageDown.Enabled = false;
+                btnPageDown.BackColor = ConstantValuePool.DisabledColor;
+            }
+            else
+            {
+                btnPageDown.Enabled = true;
+                btnPageDown.BackColor = btnPageDown.DisplayColor;
+            }
             this.pnlPayoffWay.Controls.Add(btnPageDown);
         }
 
@@ -184,25 +232,23 @@ namespace Top4ever.Pos.Feature
                     {
                         dgvPayoffWay.Rows[index].Cells["ColChangePay"].Value = (-orderPayoff.NeedChangePay).ToString("f2");
                     }
+                    dgvPayoffWay.Rows[index].Cells["ColStatus"].Value = "删除";
                 }
             }
         }
 
         private void btnPayoff_Click(object sender, EventArgs e)
         {
-            if (dic.Count > 0)
+            foreach (CrystalButton button in payoffButtonList)
             {
-                foreach (CrystalButton button in payoffButtonList)
+                PayoffWay temp = button.Tag as PayoffWay;
+                if (dic.ContainsKey(temp.PayoffID.ToString()))
                 {
-                    PayoffWay temp = button.Tag as PayoffWay;
-                    if (dic.ContainsKey(temp.PayoffID.ToString()))
-                    {
-                        button.BackColor = ConstantValuePool.PressedColor;
-                    }
-                    else
-                    {
-                        button.BackColor = button.DisplayColor;
-                    }
+                    button.BackColor = ConstantValuePool.PressedColor;
+                }
+                else
+                {
+                    button.BackColor = button.DisplayColor;
                 }
             }
             CrystalButton btn = sender as CrystalButton;
@@ -380,28 +426,28 @@ namespace Top4ever.Pos.Feature
             }
             if (!string.IsNullOrEmpty(strPayoffWay))
             {
-                this.txtRealPay.Text = realPay.ToString("f2");
+                this.txtPaidInAmount.Text = realPay.ToString("f2");
                 this.txtPayoffWay.Text = strPayoffWay.Substring(1);
             }
             else
             {
-                this.txtRealPay.Text = "0.00";
+                this.txtPaidInAmount.Text = "0.00";
                 this.txtPayoffWay.Text = string.Empty;
             }
         }
 
         private void btnReal_Click(object sender, EventArgs e)
         {
-            if (curPayoffWay != null && !string.IsNullOrEmpty(txtNeedPay.Text))
+            if (curPayoffWay != null && !string.IsNullOrEmpty(txtReceAmount.Text))
             {
                 decimal remainNeedPay = 0;
-                if (string.IsNullOrEmpty(txtRealPay.Text))
+                if (string.IsNullOrEmpty(txtPaidInAmount.Text))
                 {
-                    remainNeedPay = decimal.Parse(txtNeedPay.Text) + m_ServiceFee;
+                    remainNeedPay = decimal.Parse(txtReceAmount.Text) + m_ServiceFee;
                 }
                 else
                 {
-                    remainNeedPay = decimal.Parse(txtNeedPay.Text) + m_ServiceFee - decimal.Parse(txtRealPay.Text);
+                    remainNeedPay = decimal.Parse(txtReceAmount.Text) + m_ServiceFee - decimal.Parse(txtPaidInAmount.Text);
                 }
                 if (remainNeedPay > 0)
                 {
@@ -507,6 +553,8 @@ namespace Top4ever.Pos.Feature
                                 }
                             }
                             //重新计算
+                            CalculateOrderPrice();
+                            txtReceAmount.Text = (m_ActualPayMoney + m_ServiceFee).ToString("f2");
                         }
                     }
                 }
@@ -565,6 +613,8 @@ namespace Top4ever.Pos.Feature
                     }
                 }
                 //重新计算
+                CalculateOrderPrice();
+                txtReceAmount.Text = (m_ActualPayMoney + m_ServiceFee).ToString("f2");
             }
         }
 
@@ -582,6 +632,179 @@ namespace Top4ever.Pos.Feature
                 btn.Text = "加服务费";
             }
             //重新计算
+            CalculateOrderPrice();
+            txtReceAmount.Text = (m_ActualPayMoney + m_ServiceFee).ToString("f2");
+        }
+
+        private void btnDeleteNumber_Click(object sender, EventArgs e)
+        {
+            if (dgvGoodsOrder.CurrentRow != null)
+            {
+                int selectIndex = dgvGoodsOrder.CurrentRow.Index;
+                OrderDetails orderDetails = dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Tag as OrderDetails;
+                if (orderDetails.ItemType == (int)OrderItemType.Details)
+                {
+                    MessageBox.Show("细项不能单独删除！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                if (orderDetails.ItemType == (int)OrderItemType.SetMeal)
+                {
+                    MessageBox.Show("套餐项不能单独删除！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                CrystalButton btn = sender as CrystalButton;
+                decimal goodsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
+                decimal deletedNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["DelFlag"].Value);
+                decimal delNum = Math.Abs(decimal.Parse(btn.Text));
+                if (delNum > goodsNum + deletedNum)
+                {
+                    MessageBox.Show("删除的品项数量不能超过剩余数量！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                else
+                {
+                    int goodsTotalCount = 0; //菜品主项数量合计
+                    for (int i = 0; i < dgvGoodsOrder.RowCount; i++)
+                    {
+                        OrderDetails tempOrderDetails = dgvGoodsOrder.Rows[i].Cells["OrderDetailsID"].Tag as OrderDetails;
+                        if (tempOrderDetails.ItemType == (int)OrderItemType.Goods)
+                        {
+                            decimal tempGoodsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsNum"].Value);
+                            decimal tempDeletedNum = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["DelFlag"].Value);
+                            if (tempGoodsNum + tempDeletedNum > 0)
+                            {
+                                goodsTotalCount++;
+                            }
+                        }
+                    }
+                    if (goodsTotalCount == 1 && delNum >= goodsNum + deletedNum)
+                    {
+                        MessageBox.Show("如果您要进行退单操作，请整单删除！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                    FormCancelOrder form = new FormCancelOrder();
+                    form.ShowDialog();
+                    if (form.CurrentReason != null)
+                    {
+                        dgvGoodsOrder.Rows[selectIndex].Cells["DelFlag"].Value = deletedNum - delNum;
+                        dgvGoodsOrder.Rows[selectIndex].Cells["DelReasonID"].Value = form.CurrentReason.ReasonID;
+                        //细项和套餐
+                        for (int i = selectIndex + 1; i < dgvGoodsOrder.RowCount; i++)
+                        {
+                            OrderDetails tempOrderDetails = dgvGoodsOrder.Rows[i].Cells["OrderDetailsID"].Tag as OrderDetails;
+                            if (tempOrderDetails.ItemType == (int)OrderItemType.Goods)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                decimal detailsDeletedNum = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["DelFlag"].Value);
+                                decimal detailsDelNum = tempOrderDetails.ItemQty / goodsNum * delNum;
+                                dgvGoodsOrder.Rows[i].Cells["DelFlag"].Value = detailsDeletedNum - detailsDelNum;
+                                dgvGoodsOrder.Rows[i].Cells["DelReasonID"].Value = form.CurrentReason.ReasonID;
+                            }
+                        }
+                        CalculateOrderPrice();
+                        txtReceAmount.Text = (m_ActualPayMoney + m_ServiceFee).ToString("f2");
+                    }
+                }
+            }
+        }
+
+        private void btnUndo_Click(object sender, EventArgs e)
+        {
+            if (dgvGoodsOrder.CurrentRow != null)
+            {
+                int selectIndex = dgvGoodsOrder.CurrentRow.Index;
+                dgvGoodsOrder.Rows[selectIndex].Cells["DelFlag"].Value = "-0.0";
+                dgvGoodsOrder.Rows[selectIndex].Cells["DelReasonID"].Value = null;
+                //细项和套餐
+                for (int i = selectIndex + 1; i < dgvGoodsOrder.RowCount; i++)
+                {
+                    OrderDetails tempOrderDetails = dgvGoodsOrder.Rows[i].Cells["OrderDetailsID"].Tag as OrderDetails;
+                    if (tempOrderDetails.ItemType == (int)OrderItemType.Goods)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        dgvGoodsOrder.Rows[i].Cells["DelFlag"].Value = "-0.0";
+                        dgvGoodsOrder.Rows[i].Cells["DelReasonID"].Value = null;
+                    }
+                }
+                CalculateOrderPrice();
+                txtReceAmount.Text = (m_ActualPayMoney + m_ServiceFee).ToString("f2");
+            }
+        }
+
+        private void CalculateOrderPrice()
+        {
+            decimal totalPrice = 0, totalDiscount = 0;
+            for (int i = 0; i < dgvGoodsOrder.Rows.Count; i++)
+            {
+                decimal itemNum = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsNum"].Value);
+                decimal deletedNum = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["DelFlag"].Value);
+                OrderDetails orderDetails = dgvGoodsOrder.Rows[i].Cells["OrderDetailsID"].Tag as OrderDetails;
+                totalPrice += (itemNum + deletedNum) * orderDetails.SellPrice;
+                totalDiscount += Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsDiscount"].Value) / itemNum * (itemNum + deletedNum);
+            }
+            m_TotalPrice = totalPrice;
+            m_Discount = totalDiscount;
+            decimal wholePayMoney = totalPrice + totalDiscount;
+            decimal actualPayMoney = CutOffDecimal.HandleCutOff(wholePayMoney, CutOffType.ROUND_OFF, 0);
+            m_ActualPayMoney = actualPayMoney;
+            m_CutOff = wholePayMoney - actualPayMoney;
+            if (m_CutServiceFee)
+            {
+                m_ServiceFee = 0;
+            }
+            else
+            {
+                decimal serviceFee = ConstantValuePool.SysConfig.FixedServiceFee;
+                if (serviceFee == 0)
+                {
+                    decimal serviceFeePercent = 0;
+                    if (string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime1) && string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime1)
+                        && string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime2) && string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime2))
+                    {
+                        serviceFeePercent = ConstantValuePool.SysConfig.ServiceFeePercent;
+                    }
+                    else
+                    {
+                        DateTime curTime = Convert.ToDateTime(DateTime.Now.ToString("T"));
+                        if (!string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime1) && !string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime1))
+                        {
+                            if (curTime > Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeBeginTime1) && curTime < Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeEndTime1))
+                            {
+                                serviceFeePercent = ConstantValuePool.SysConfig.ServiceFeePercent;
+                            }
+                        }
+                        if (!string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime2) && !string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime2))
+                        {
+                            if (curTime > Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeBeginTime2) && curTime < Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeEndTime2))
+                            {
+                                serviceFeePercent = ConstantValuePool.SysConfig.ServiceFeePercent;
+                            }
+                        }
+                    }
+                    decimal tempServiceFee = actualPayMoney * serviceFeePercent / 100;
+                    serviceFee = CutOffDecimal.HandleCutOff(tempServiceFee, CutOffType.ROUND_OFF, 0);
+                }
+                m_ServiceFee = serviceFee;
+            }
+        }
+
+        private void btnCheckOut_Click(object sender, EventArgs e)
+        {
+            //修改账单
+            m_IsChanged = true;
+            this.Close();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            m_IsChanged = false;
+            this.Close();
         }
     }
 }

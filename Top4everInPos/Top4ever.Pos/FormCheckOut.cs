@@ -79,6 +79,8 @@ namespace Top4ever.Pos
             InitializeComponent();
             m_SalesOrder = salesOrder;
             m_CurrentDeskName = currentDeskName;
+            btnPageUp.BackColor = btnPageUp.DisplayColor = Color.Tomato;
+            btnPageDown.BackColor = btnPageDown.DisplayColor = Color.Teal;
         }
 
         private void FormCheckOut_Load(object sender, EventArgs e)
@@ -134,9 +136,20 @@ namespace Top4ever.Pos
                 btn.Text = payoff.PayoffName;
                 btn.Width = m_Width;
                 btn.Height = m_Height;
-                btn.BackColor = Color.Blue;
-                btn.DisplayColor = btn.BackColor;
+                btn.BackColor = btn.DisplayColor = Color.Blue;
                 btn.Font = new Font("Microsoft YaHei", 12F, FontStyle.Regular);
+                foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
+                {
+                    if (payoff.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
+                    {
+                        float emSize = (float)btnStyle.FontSize;
+                        FontStyle style = FontStyle.Regular;
+                        btn.Font = new Font(btnStyle.FontName, emSize, style);
+                        btn.ForeColor = ColorConvert.RGB(btnStyle.ForeColor);
+                        btn.BackColor = btn.DisplayColor = ColorConvert.RGB(btnStyle.BackColor);
+                        break;
+                    }
+                }
                 btn.Tag = payoff;
                 btn.Click += new System.EventHandler(this.btnPayoff_Click);
                 payoffButtonList.Add(btn);
@@ -175,12 +188,32 @@ namespace Top4ever.Pos
             btnPageUp.Width = m_Width;
             btnPageUp.Height = m_Height;
             btnPageUp.Location = new Point(px, py);
+            if (m_PageIndex <= 0)
+            {
+                btnPageUp.Enabled = false;
+                btnPageUp.BackColor = ConstantValuePool.DisabledColor;
+            }
+            else
+            { 
+                btnPageUp.Enabled = true;
+                btnPageUp.BackColor = btnPageUp.DisplayColor;
+            }
             this.pnlPayoffWay.Controls.Add(btnPageUp);
             px = (m_ColumnsCount - 1) * m_Width + (m_ColumnsCount - 1 + 1) * m_Space;
             py = (m_RowsCount - 1) * m_Height + (m_RowsCount - 1 + 1) * m_Space;
             btnPageDown.Width = m_Width;
             btnPageDown.Height = m_Height;
             btnPageDown.Location = new Point(px, py);
+            if ((m_PageIndex + 1) * m_PageSize >= payoffButtonList.Count)
+            {
+                btnPageDown.Enabled = false;
+                btnPageDown.BackColor = ConstantValuePool.DisabledColor;
+            }
+            else
+            {
+                btnPageDown.Enabled = true;
+                btnPageDown.BackColor = btnPageDown.DisplayColor;
+            }
             this.pnlPayoffWay.Controls.Add(btnPageDown);
         }
 
@@ -279,19 +312,16 @@ namespace Top4ever.Pos
 
         private void btnPayoff_Click(object sender, EventArgs e)
         {
-            if (dic.Count > 0)
+            foreach (CrystalButton button in payoffButtonList)
             {
-                foreach (CrystalButton button in payoffButtonList)
+                PayoffWay temp = button.Tag as PayoffWay;
+                if (dic.ContainsKey(temp.PayoffID.ToString()))
                 {
-                    PayoffWay temp = button.Tag as PayoffWay;
-                    if (dic.ContainsKey(temp.PayoffID.ToString()))
-                    {
-                        button.BackColor = ConstantValuePool.PressedColor;
-                    }
-                    else
-                    {
-                        button.BackColor = button.DisplayColor;
-                    }
+                    button.BackColor = ConstantValuePool.PressedColor;
+                }
+                else
+                {
+                    button.BackColor = button.DisplayColor;
                 }
             }
             CrystalButton btn = sender as CrystalButton;

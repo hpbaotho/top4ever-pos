@@ -131,7 +131,7 @@
             this.pnlContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlContainer.Location = new System.Drawing.Point(0, 0);
             this.pnlContainer.Name = "pnlContainer";
-            this.pnlContainer.Size = new System.Drawing.Size(1024, 715);
+            this.pnlContainer.Size = new System.Drawing.Size(1024, 733);
             this.pnlContainer.TabIndex = 0;
             // 
             // pnlRight
@@ -142,7 +142,7 @@
             this.pnlRight.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlRight.Location = new System.Drawing.Point(520, 0);
             this.pnlRight.Name = "pnlRight";
-            this.pnlRight.Size = new System.Drawing.Size(504, 715);
+            this.pnlRight.Size = new System.Drawing.Size(504, 733);
             this.pnlRight.TabIndex = 1;
             // 
             // pnlItem
@@ -152,7 +152,7 @@
             this.pnlItem.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlItem.Location = new System.Drawing.Point(0, 352);
             this.pnlItem.Name = "pnlItem";
-            this.pnlItem.Size = new System.Drawing.Size(504, 363);
+            this.pnlItem.Size = new System.Drawing.Size(504, 381);
             this.pnlItem.TabIndex = 3;
             // 
             // btnBack
@@ -265,7 +265,7 @@
             this.pnlLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlLeft.Location = new System.Drawing.Point(0, 0);
             this.pnlLeft.Name = "pnlLeft";
-            this.pnlLeft.Size = new System.Drawing.Size(520, 715);
+            this.pnlLeft.Size = new System.Drawing.Size(520, 733);
             this.pnlLeft.TabIndex = 0;
             // 
             // dgvGoodsOrder
@@ -303,7 +303,7 @@
             this.dgvGoodsOrder.RowHeadersVisible = false;
             this.dgvGoodsOrder.RowTemplate.Height = 23;
             this.dgvGoodsOrder.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvGoodsOrder.Size = new System.Drawing.Size(520, 332);
+            this.dgvGoodsOrder.Size = new System.Drawing.Size(520, 350);
             this.dgvGoodsOrder.TabIndex = 4;
             this.dgvGoodsOrder.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgvGoodsOrder_MouseDown);
             // 
@@ -408,7 +408,7 @@
             this.pnlToolBar.Controls.Add(this.btnAdd1);
             this.pnlToolBar.Controls.Add(this.exTabControl1);
             this.pnlToolBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlToolBar.Location = new System.Drawing.Point(0, 467);
+            this.pnlToolBar.Location = new System.Drawing.Point(0, 485);
             this.pnlToolBar.Name = "pnlToolBar";
             this.pnlToolBar.Size = new System.Drawing.Size(520, 248);
             this.pnlToolBar.TabIndex = 1;
@@ -976,7 +976,7 @@
             this.pnlBottom.Controls.Add(this.txtServiceTime);
             this.pnlBottom.Controls.Add(this.txtDeviceNo);
             this.pnlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlBottom.Location = new System.Drawing.Point(0, 715);
+            this.pnlBottom.Location = new System.Drawing.Point(0, 733);
             this.pnlBottom.Name = "pnlBottom";
             this.pnlBottom.Size = new System.Drawing.Size(1024, 35);
             this.pnlBottom.TabIndex = 1;
@@ -1031,7 +1031,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1024, 750);
+            this.ClientSize = new System.Drawing.Size(1024, 768);
             this.Controls.Add(this.pnlContainer);
             this.Controls.Add(this.pnlBottom);
             this.DoubleBuffered = true;
