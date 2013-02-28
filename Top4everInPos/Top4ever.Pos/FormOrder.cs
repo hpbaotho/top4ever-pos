@@ -408,99 +408,102 @@ namespace Top4ever.Pos
             this.SuspendLayout();
             //清除pnlItem内所有控件
             this.pnlItem.Controls.Clear();
-            string goodsGroupID = m_CurrentGoodsGroup.GoodsGroupID.ToString();
-            if (ConstantValuePool.DicGoodsButton.ContainsKey(goodsGroupID))
+            if (m_CurrentGoodsGroup != null)
             {
-                List<CrystalButton> btnGoodsList = ConstantValuePool.DicGoodsButton[goodsGroupID];
-                if (btnGoodsList != null && btnGoodsList.Count > 0)
+                string goodsGroupID = m_CurrentGoodsGroup.GoodsGroupID.ToString();
+                if (ConstantValuePool.DicGoodsButton.ContainsKey(goodsGroupID))
                 {
-                    if (ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls != null && ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls.Count > 0)
+                    List<CrystalButton> btnGoodsList = ConstantValuePool.DicGoodsButton[goodsGroupID];
+                    if (btnGoodsList != null && btnGoodsList.Count > 0)
                     {
-                        int width = 0, height = 0, columnsCount = 0, rowsCount = 0, pageSize = 0;
-                        foreach (BizControl control in ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls)
+                        if (ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls != null && ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls.Count > 0)
                         {
-                            if (control.Name == "Goods")
+                            int width = 0, height = 0, columnsCount = 0, rowsCount = 0, pageSize = 0;
+                            foreach (BizControl control in ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls)
                             {
-                                width = (this.pnlItem.Width - m_Space * control.ColumnsCount) / control.ColumnsCount;
-                                height = (this.pnlItem.Height - m_Space * control.RowsCount) / control.RowsCount;
-                                columnsCount = control.ColumnsCount;
-                                rowsCount = control.RowsCount;
-                                pageSize = control.ColumnsCount * control.RowsCount - 2;    //扣除向前、向后两个按钮
-                                break;
-                            }
-                        }
-                        //显示控件
-                        int startIndex = m_GoodsPageIndex * pageSize;
-                        int endIndex = (m_GoodsPageIndex + 1) * pageSize;
-                        if (endIndex > btnGoodsList.Count)
-                        {
-                            endIndex = btnGoodsList.Count;
-                        }
-                        for (int i = startIndex; i < endIndex; i++)
-                        {
-                            CrystalButton btnGoods = btnGoodsList[i];
-                            btnGoods.Click -= new System.EventHandler(this.btnGoods_Click);
-                            btnGoods.Click += new System.EventHandler(this.btnGoods_Click);
-                            if (m_ShowSilverCode)
-                            {
-                                if (btnGoods.Text.IndexOf("￥") > 0)
+                                if (control.Name == "Goods")
                                 {
-                                    //do nothing
+                                    width = (this.pnlItem.Width - m_Space * control.ColumnsCount) / control.ColumnsCount;
+                                    height = (this.pnlItem.Height - m_Space * control.RowsCount) / control.RowsCount;
+                                    columnsCount = control.ColumnsCount;
+                                    rowsCount = control.RowsCount;
+                                    pageSize = control.ColumnsCount * control.RowsCount - 2;    //扣除向前、向后两个按钮
+                                    break;
+                                }
+                            }
+                            //显示控件
+                            int startIndex = m_GoodsPageIndex * pageSize;
+                            int endIndex = (m_GoodsPageIndex + 1) * pageSize;
+                            if (endIndex > btnGoodsList.Count)
+                            {
+                                endIndex = btnGoodsList.Count;
+                            }
+                            for (int i = startIndex; i < endIndex; i++)
+                            {
+                                CrystalButton btnGoods = btnGoodsList[i];
+                                btnGoods.Click -= new System.EventHandler(this.btnGoods_Click);
+                                btnGoods.Click += new System.EventHandler(this.btnGoods_Click);
+                                if (m_ShowSilverCode)
+                                {
+                                    if (btnGoods.Text.IndexOf("￥") > 0)
+                                    {
+                                        //do nothing
+                                    }
+                                    else
+                                    {
+                                        Goods temp = btnGoods.Tag as Goods;
+                                        btnGoods.Text += "\r\n ￥" + temp.SellPrice.ToString("f2");
+                                    }
                                 }
                                 else
                                 {
-                                    Goods temp = btnGoods.Tag as Goods;
-                                    btnGoods.Text += "\r\n ￥" + temp.SellPrice.ToString("f2");
+                                    if (btnGoods.Text.IndexOf("￥") > 0)
+                                    {
+                                        btnGoods.Text = btnGoods.Text.Substring(0, btnGoods.Text.IndexOf("￥") - 3);
+                                    }
+                                    else
+                                    {
+                                        //do nothing
+                                    }
                                 }
+                                this.pnlItem.Controls.Add(btnGoods);
+                            }
+                            //设置页码按钮的位置
+                            int px = (columnsCount - 2) * width + (columnsCount - 2 + 1) * m_Space;
+                            int py = (rowsCount - 1) * (height + m_Space);
+                            btnHead.Width = width;
+                            btnHead.Height = height;
+                            btnHead.Location = new Point(px, py);
+                            if (startIndex <= 0)
+                            {
+                                btnHead.Enabled = false;
+                                btnHead.BackColor = ConstantValuePool.DisabledColor;
                             }
                             else
                             {
-                                if (btnGoods.Text.IndexOf("￥") > 0)
-                                {
-                                    btnGoods.Text = btnGoods.Text.Substring(0, btnGoods.Text.IndexOf("￥") - 3);
-                                }
-                                else
-                                {
-                                    //do nothing
-                                }
+                                btnHead.Enabled = true;
+                                btnHead.BackColor = btnHead.DisplayColor;
                             }
-                            this.pnlItem.Controls.Add(btnGoods);
+                            px = (columnsCount - 1) * width + (columnsCount - 1 + 1) * m_Space;
+                            py = (rowsCount - 1) * (height + m_Space);
+                            btnBack.Width = width;
+                            btnBack.Height = height;
+                            btnBack.Location = new Point(px, py);
+                            if (endIndex >= btnGoodsList.Count)
+                            {
+                                btnBack.Enabled = false;
+                                btnBack.BackColor = ConstantValuePool.DisabledColor;
+                            }
+                            else
+                            {
+                                btnBack.Enabled = true;
+                                btnBack.BackColor = btnBack.DisplayColor;
+                            }
+                            //向前
+                            this.pnlItem.Controls.Add(btnHead);
+                            //向后
+                            this.pnlItem.Controls.Add(btnBack);
                         }
-                        //设置页码按钮的位置
-                        int px = (columnsCount - 2) * width + (columnsCount - 2 + 1) * m_Space;
-                        int py = (rowsCount - 1) * (height + m_Space);
-                        btnHead.Width = width;
-                        btnHead.Height = height;
-                        btnHead.Location = new Point(px, py);
-                        if (startIndex <= 0)
-                        {
-                            btnHead.Enabled = false;
-                            btnHead.BackColor = ConstantValuePool.DisabledColor;
-                        }
-                        else
-                        {
-                            btnHead.Enabled = true;
-                            btnHead.BackColor = btnHead.DisplayColor;
-                        }
-                        px = (columnsCount - 1) * width + (columnsCount - 1 + 1) * m_Space;
-                        py = (rowsCount - 1) * (height + m_Space);
-                        btnBack.Width = width;
-                        btnBack.Height = height;
-                        btnBack.Location = new Point(px, py);
-                        if (endIndex >= btnGoodsList.Count)
-                        {
-                            btnBack.Enabled = false;
-                            btnBack.BackColor = ConstantValuePool.DisabledColor;
-                        }
-                        else
-                        {
-                            btnBack.Enabled = true;
-                            btnBack.BackColor = btnBack.DisplayColor;
-                        }
-                        //向前
-                        this.pnlItem.Controls.Add(btnHead);
-                        //向后
-                        this.pnlItem.Controls.Add(btnBack);
                     }
                 }
             }

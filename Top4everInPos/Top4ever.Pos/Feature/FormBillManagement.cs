@@ -494,10 +494,16 @@ namespace Top4ever.Pos.Feature
                         payingOrder.NeedChangePay = orderPayoff.NeedChangePay.ToString("f2");
                         printData.PayingOrderList.Add(payingOrder);
                     }
-                    string configPath = @"PrintConfig\PrintOrderSetting.config";
+                    string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
+                    string configPath = @"PrintConfig\InstructionPrintOrderSetting.config";
                     string layoutPath = @"PrintConfig\PrintPaidOrder.ini";
-                    DriverOrderPrint printer = new DriverOrderPrint("Microsoft XPS Document Writer", "76mm", "SpecimenLabel");
-                    printer.DoPrint(printData, layoutPath, configPath);
+                    if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
+                    {
+                        configPath = @"PrintConfig\PrintOrderSetting.config";
+                        string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                        DriverOrderPrint printer = new DriverOrderPrint(printerName, paperWidth, "SpecimenLabel");
+                        printer.DoPrint(printData, layoutPath, configPath);
+                    }
                 }
             }
         }
@@ -595,15 +601,69 @@ namespace Top4ever.Pos.Feature
 
         private void btnSingleDelete_Click(object sender, EventArgs e)
         {
-
+            if (dataGridView1.CurrentRow != null && m_SalesOrder != null && m_SalesOrder.order != null)
+            {
+                if (m_SalesOrder.order.Status == 1)
+                {
+                    int selectedIndex = dataGridView1.CurrentRow.Index;
+                    FormBackGoods form = new FormBackGoods(m_SalesOrder);
+                    form.ShowDialog();
+                    if (form.IsChanged)
+                    {
+                        Guid orderID = new Guid(dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value.ToString());
+                        SalesOrderService salesOrderService = new SalesOrderService();
+                        SalesOrder salesOrder = salesOrderService.GetPaidSalesOrder(orderID);
+                        m_SalesOrder = salesOrder;
+                        //更新账单信息
+                        Order order = salesOrder.order;
+                        this.lbOrderNo.Text = order.OrderNo;
+                        this.lbDeskName.Text = order.DeskName;
+                        string billType = string.Empty;
+                        if (order.Status == 0 || order.Status == 3)
+                        {
+                            billType = "未结账";
+                        }
+                        else if (order.Status == 1)
+                        {
+                            billType = "已结账";
+                        }
+                        else if (order.Status == 2)
+                        {
+                            billType = "已删除";
+                        }
+                        this.lbBillType.Text = billType;
+                        string eatType = string.Empty;
+                        if (order.EatType == (int)EatWayType.DineIn)
+                        {
+                            eatType = "堂食";
+                        }
+                        else if (order.EatType == (int)EatWayType.Takeout)
+                        {
+                            eatType = "外卖";
+                        }
+                        else if (order.EatType == (int)EatWayType.OutsideOrder)
+                        {
+                            eatType = "外送";
+                        }
+                        this.lbEatType.Text = eatType;
+                        this.lbEmployeeNo.Text = order.EmployeeNo;
+                        this.lbCashier.Text = order.PayEmployeeNo;
+                        this.lbDeviceNo.Text = order.DeviceNo;
+                        int startIndex = selectedIndex + 1;
+                        int index = this.lbBillIndex.Text.IndexOf('/');
+                        this.lbBillIndex.Text = startIndex + this.lbBillIndex.Text.Substring(index);
+                        BindDataGridView2(salesOrder);
+                        BindDataGridView3(salesOrder);
+                    }
+                }
+            }
         }
 
         private void btnBillModify_Click(object sender, EventArgs e)
         {
             if (dataGridView1.CurrentRow != null)
             {
-                FormBackGoods form = new FormBackGoods(m_SalesOrder);
-                form.ShowDialog();
+
             }
         }
     }
