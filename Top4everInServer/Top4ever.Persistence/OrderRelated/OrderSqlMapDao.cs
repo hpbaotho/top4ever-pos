@@ -15,6 +15,26 @@ namespace Top4ever.Persistence.OrderRelated
     {
         #region IOrderDao Members
 
+        public IList<Order> GetOrderList(string deskName)
+        {
+            return ExecuteQueryForList<Order>("GetOrderByDeskName", deskName);
+        }
+
+        public Order GetOrder(Guid orderID)
+        {
+            return (ExecuteQueryForObject("GetOrderByID", orderID) as Order);
+        }
+
+        public IList<Order> GetOrderListBySearch(string strWhere, string orderBy, int pageIndex, int pageSize)
+        {
+            Hashtable htParam = new Hashtable();
+            htParam["strWhere"] = strWhere;
+            htParam["orderBy"] = orderBy;
+            htParam["PageIndex"] = pageIndex;
+            htParam["PageSize"] = pageSize;
+            return ExecuteQueryForList<Order>("GetOrderListBySearch", htParam);
+        }
+
         public string CreateOrder(Order order)
         {
             object result = ExecuteInsert("InsertOrder", order);
@@ -35,6 +55,13 @@ namespace Top4ever.Persistence.OrderRelated
             return result > 0;
         }
 
+        public bool UpdateOrderPrice(Order order)
+        {
+            int result = 0;
+            result = ExecuteUpdate("UpdateOrderPrice", order);
+            return result > 0;
+        }
+
         public bool UpdatePayingOrder(Order order)
         {
             int result = 0;
@@ -42,24 +69,18 @@ namespace Top4ever.Persistence.OrderRelated
             return result > 0;
         }
 
-        public IList<Order> GetOrderList(string deskName)
+        public bool UpdatePaidOrderPrice(Order order)
         {
-            return ExecuteQueryForList<Order>("GetOrderByDeskName", deskName);
+            int result = 0;
+            result = ExecuteUpdate("UpdatePaidOrderPrice", order);
+            return result > 0;
         }
 
-        public IList<Order> GetOrderListBySearch(string strWhere, string orderBy, int pageIndex, int pageSize)
+        public bool DeleteWholeOrder(DeletedOrder deletedOrder)
         {
-            Hashtable htParam = new Hashtable();
-            htParam["strWhere"] = strWhere;
-            htParam["orderBy"] = orderBy;
-            htParam["PageIndex"] = pageIndex;
-            htParam["PageSize"] = pageSize;
-            return ExecuteQueryForList<Order>("GetOrderListBySearch", htParam);
-        }
-
-        public Order GetOrder(Guid orderID)
-        {
-            return (ExecuteQueryForObject("GetOrderByID", orderID) as Order);
+            int result = 0;
+            result = ExecuteUpdate("UpdateDeletedOrder", deletedOrder);
+            return result > 0;
         }
 
         public Int32 GetCurrentSubOrderNo(string deskName)
@@ -71,20 +92,6 @@ namespace Top4ever.Persistence.OrderRelated
                 result = (Int32)objValue;
             }
             return result;
-        }
-
-        public bool DeleteWholeOrder(DeletedOrder deletedOrder)
-        {
-            int result = 0;
-            result = ExecuteUpdate("UpdateDeletedOrder", deletedOrder);
-            return result > 0;
-        }
-
-        public bool UpdateOrderPrice(Order order)
-        {
-            int result = 0;
-            result = ExecuteUpdate("UpdateOrderPrice", order);
-            return result > 0;
         }
 
         public bool UpdateSplitOrderPrice(Order order)

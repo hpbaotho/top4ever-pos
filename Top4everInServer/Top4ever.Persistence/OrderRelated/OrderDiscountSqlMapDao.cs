@@ -35,7 +35,14 @@ namespace Top4ever.Persistence.OrderRelated
         public bool DeleteOrderDiscount(Guid orderID)
         {
             int result = 0;
-            result = ExecuteUpdate("UpdateDeletedOrderDiscount", orderID);
+            result = ExecuteUpdate("DeleteOrderDiscount", orderID);
+            return result > 0;
+        }
+
+        public bool DeleteOrderSingleDiscount(Guid orderDetailsID)
+        {
+            int result = 0;
+            result = ExecuteUpdate("DeleteOrderSingleDiscount", orderDetailsID);
             return result > 0;
         }
 

@@ -109,9 +109,9 @@
         </procedure>
 
         <update id="UpdateOrderDetailsDiscount" parameterClass="OrderDetails">
-            UPDATE OrderDetails
-            SET TotalDiscount = #TotalDiscount#, Wait = #Wait#
-            WHERE OrderDetailsID = #OrderDetailsID#
+          UPDATE OrderDetails
+          SET TotalDiscount = #TotalDiscount#, Wait = #Wait#, Transfered = 0
+          WHERE OrderDetailsID = #OrderDetailsID#
         </update>
 
         <update id="UpdateDeletedOrderDetails" parameterClass="DeletedOrder">

@@ -97,6 +97,9 @@ namespace Top4ever.BLL
                 case Command.ID_UPDATE_ORDERSTATUS:
                     byteRet = OrderBLL.UpdateOrderStatus(itemBuffer);
                     break;
+                case Command.ID_DELETE_PAIDSINGLEORDER:
+                    byteRet = DeletedOrderBLL.DeletePaidSingleOrder(itemBuffer);
+                    break;
 
                 default:
                     byteRet = null;

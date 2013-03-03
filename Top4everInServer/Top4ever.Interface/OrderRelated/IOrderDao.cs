@@ -11,23 +11,25 @@ namespace Top4ever.Interface.OrderRelated
     /// </summary>
     public interface IOrderDao
     {
+        IList<Order> GetOrderList(string deskName);
+
+        Order GetOrder(Guid orderID);
+
+        IList<Order> GetOrderListBySearch(string strWhere, string orderBy, int pageIndex, int pageSize);
+
         string CreateOrder(Order order);
 
         bool UpdateOrder(Order order);
 
+        bool UpdateOrderPrice(Order order);
+
         bool UpdatePayingOrder(Order order);
 
-        IList<Order> GetOrderList(string deskName);
-
-        IList<Order> GetOrderListBySearch(string strWhere, string orderBy, int pageIndex, int pageSize);
-
-        Order GetOrder(Guid orderID);
+        bool UpdatePaidOrderPrice(Order order);
 
         Int32 GetCurrentSubOrderNo(string deskName);
 
         bool DeleteWholeOrder(DeletedOrder deletedOrder);
-
-        bool UpdateOrderPrice(Order order);
 
         bool UpdateSplitOrderPrice(Order order);
 

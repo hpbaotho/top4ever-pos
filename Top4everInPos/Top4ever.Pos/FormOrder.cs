@@ -1515,18 +1515,21 @@ namespace Top4ever.Pos
                             decimal totalPrice = 0, totalDiscount = 0;
                             for (int i = 0; i < dgvGoodsOrder.RowCount; i++)
                             {
-                                if (dicRemainNum.ContainsKey(i))
+                                if (dgvGoodsOrder.Rows[i].Cells["OrderDetailsID"].Value != null)
                                 {
-                                    decimal originalDetailsPrice = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsPrice"].Value);
-                                    originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsNum"].Value);
-                                    originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsDiscount"].Value);
-                                    totalPrice += originalDetailsPrice / originalDetailsNum * dicRemainNum[i];
-                                    totalDiscount += originalDetailsDiscount / originalDetailsNum * dicRemainNum[i];
-                                }
-                                else
-                                {
-                                    totalPrice += Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsPrice"].Value);
-                                    totalDiscount += Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsDiscount"].Value);
+                                    if (dicRemainNum.ContainsKey(i))
+                                    {
+                                        decimal originalDetailsPrice = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsPrice"].Value);
+                                        originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsNum"].Value);
+                                        originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsDiscount"].Value);
+                                        totalPrice += originalDetailsPrice / originalDetailsNum * dicRemainNum[i];
+                                        totalDiscount += originalDetailsDiscount / originalDetailsNum * dicRemainNum[i];
+                                    }
+                                    else
+                                    {
+                                        totalPrice += Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsPrice"].Value);
+                                        totalDiscount += Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsDiscount"].Value);
+                                    }
                                 }
                             }
                             decimal wholePayMoney = totalPrice + totalDiscount;
@@ -1603,18 +1606,21 @@ namespace Top4ever.Pos
                             decimal totalPrice = 0, totalDiscount = 0;
                             for (int i = 0; i < dgvGoodsOrder.RowCount; i++)
                             {
-                                bool hasDeleted = false;
-                                foreach (int deletedIndex in deletedIndexList)
+                                if (dgvGoodsOrder.Rows[i].Cells["OrderDetailsID"].Value != null)
                                 {
-                                    if (i == deletedIndex)
+                                    bool hasDeleted = false;
+                                    foreach (int deletedIndex in deletedIndexList)
                                     {
-                                        hasDeleted = true;
-                                        break;
+                                        if (i == deletedIndex)
+                                        {
+                                            hasDeleted = true;
+                                            break;
+                                        }
                                     }
+                                    if (hasDeleted) continue;
+                                    totalPrice += Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsPrice"].Value);
+                                    totalDiscount += Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsDiscount"].Value);
                                 }
-                                if (hasDeleted) continue;
-                                totalPrice += Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsPrice"].Value);
-                                totalDiscount += Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsDiscount"].Value);
                             }
                             decimal wholePayMoney = totalPrice + totalDiscount;
                             decimal actualPayMoney = CutOffDecimal.HandleCutOff(wholePayMoney, CutOffType.ROUND_OFF, 0);
