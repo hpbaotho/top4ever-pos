@@ -74,10 +74,16 @@
             proc_UpdateOrderDiscount
         </procedure>
         
-        <update id="UpdateDeletedOrderDiscount" parameterClass="Guid">
+        <update id="DeleteOrderDiscount" parameterClass="Guid">
             UPDATE OrderDiscount
             SET IsVoided = 1, <![CDATA[ LastModifiedTime = getdate(), Transfered = 0 ]]>
             WHERE OrderID = #value#
+        </update>
+
+        <update id="DeleteOrderSingleDiscount" parameterClass="Guid">
+          UPDATE OrderDiscount
+          SET IsVoided = 1, <![CDATA[ LastModifiedTime = getdate(), Transfered = 0 ]]>
+          WHERE OrderDetailsID = #value#
         </update>
 
         <select id="GetOrderDiscountList" parameterClass="Guid" resultMap="OrderDiscountResult">

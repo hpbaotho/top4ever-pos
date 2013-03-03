@@ -19,6 +19,8 @@ namespace Top4ever.Interface.OrderRelated
 
         bool DeleteOrderDiscount(Guid orderID);
 
+        bool DeleteOrderSingleDiscount(Guid orderDetailsID);
+
         IList<OrderDiscount> GetOrderDiscountList(Guid orderID);
     }
 }

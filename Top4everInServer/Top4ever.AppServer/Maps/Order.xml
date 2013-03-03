@@ -112,6 +112,12 @@
             WHERE OrderID = #OrderID#
         </update>
 
+        <update id="UpdateOrderPrice" parameterClass="Order">
+          UPDATE [Order]
+          SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#, CutOffPrice = #CutOffPrice#
+          WHERE OrderID = #OrderID#
+        </update>
+
         <update id="UpdatePayingOrder" parameterClass="Order">
             UPDATE [Order]
             SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#, CutOffPrice = #CutOffPrice#, ServiceFee = #ServiceFee#, PaymentMoney = #PaymentMoney#, NeedChangePay = #NeedChangePay#,
@@ -120,19 +126,20 @@
             WHERE OrderID = #OrderID#
         </update>
 
+        <update id="UpdatePaidOrderPrice" parameterClass="Order">
+          UPDATE [Order]
+          SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#, CutOffPrice = #CutOffPrice#, ServiceFee = #ServiceFee#, PaymentMoney = #PaymentMoney#, NeedChangePay = #NeedChangePay#,
+            LastModifiedEmployeeID = #EmployeeID#, <![CDATA[ LastModifiedTime = getdate(), Transfered = 0 ]]>
+          WHERE OrderID = #OrderID#
+        </update>
+
         <update id="UpdateDeletedOrder" parameterClass="DeletedOrder">
           UPDATE [Order]
           SET AuthorisedManager = #AuthorisedManager#, CancelEmployeeNo = #CancelEmployeeNo#, CancelReasonName = #CancelReasonName#,
             [Status] = 2, IsVoided = 1, LastModifiedEmployeeID = #AuthorisedManager#, <![CDATA[ LastModifiedTime = getdate(), Transfered = 0 ]]>
           WHERE OrderID = #OrderID#
         </update>
-
-        <update id="UpdateOrderPrice" parameterClass="Order">
-            UPDATE [Order]
-            SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#, CutOffPrice = #CutOffPrice#
-            WHERE OrderID = #OrderID#
-        </update>
-
+      
         <update id="UpdateSplitOrderPrice" parameterClass="Order">
             UPDATE [Order]
             SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#,

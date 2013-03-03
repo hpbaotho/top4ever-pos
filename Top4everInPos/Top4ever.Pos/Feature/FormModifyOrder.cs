@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using Top4ever.Common;
+using Top4ever.ClientService;
 using Top4ever.CustomControl;
 using Top4ever.Domain;
 using Top4ever.Domain.Transfer;
@@ -15,11 +16,10 @@ using Top4ever.Entity;
 using Top4ever.Entity.Enum;
 using Top4ever.Print;
 using Top4ever.Print.Entity;
-using Top4ever.ClientService;
 
 namespace Top4ever.Pos.Feature
 {
-    public partial class FormBackGoods : Form
+    public partial class FormModifyOrder : Form
     {
         private const int m_Space = 2;
         private int m_Width = 0;
@@ -47,6 +47,10 @@ namespace Top4ever.Pos.Feature
         /// </summary>
         private string m_InputNumber = "0";
         /// <summary>
+        /// 去服务费
+        /// </summary>
+        private bool m_CutServiceFee = false;
+        /// <summary>
         /// 服务费
         /// </summary>
         private decimal m_ServiceFee = 0;
@@ -59,7 +63,7 @@ namespace Top4ever.Pos.Feature
             get { return m_IsChanged; }
         }
 
-        public FormBackGoods(SalesOrder salesOrder)
+        public FormModifyOrder(SalesOrder salesOrder)
         {
             InitializeComponent();
             m_SalesOrder = salesOrder;
@@ -67,13 +71,14 @@ namespace Top4ever.Pos.Feature
             btnPageDown.BackColor = btnPageDown.DisplayColor = Color.Teal;
         }
 
-        private void FormBackGoods_Load(object sender, EventArgs e)
+        private void FormModifyOrder_Load(object sender, EventArgs e)
         {
             CalculateButtonSize();
             GetPayoffButton();
             DisplayPayoffButton();
             BindGoodsOrderInfo();
             BindPayoffWay();
+            txtReceAmount.Text = (m_SalesOrder.order.ActualSellPrice + m_SalesOrder.order.ServiceFee).ToString("f2");
         }
 
         private void CalculateButtonSize()
@@ -209,7 +214,6 @@ namespace Top4ever.Pos.Feature
                     }
                     dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = orderDetails.TotalSellPrice;
                     dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = orderDetails.TotalDiscount;
-                    dgvGoodsOrder.Rows[index].Cells["DelFlag"].Value = "-0.0";
                     dgvGoodsOrder.Rows[index].Cells["OrderDetailsID"].Value = orderDetails.OrderDetailsID;
                     dgvGoodsOrder.Rows[index].Cells["OrderDetailsID"].Tag = orderDetails;
                 }
@@ -230,6 +234,7 @@ namespace Top4ever.Pos.Feature
                     {
                         dgvPayoffWay.Rows[index].Cells["ColChangePay"].Value = (-orderPayoff.NeedChangePay).ToString("f2");
                     }
+                    dgvPayoffWay.Rows[index].Cells["ColStatus"].Value = "删除";
                 }
             }
         }
@@ -423,28 +428,28 @@ namespace Top4ever.Pos.Feature
             }
             if (!string.IsNullOrEmpty(strPayoffWay))
             {
-                this.txtRealReturnAmount.Text = realPay.ToString("f2");
+                this.txtPaidInAmount.Text = realPay.ToString("f2");
                 this.txtPayoffWay.Text = strPayoffWay.Substring(1);
             }
             else
             {
-                this.txtRealReturnAmount.Text = "0.00";
+                this.txtPaidInAmount.Text = "0.00";
                 this.txtPayoffWay.Text = string.Empty;
             }
         }
 
         private void btnReal_Click(object sender, EventArgs e)
         {
-            if (curPayoffWay != null && !string.IsNullOrEmpty(txtRefundAmount.Text))
+            if (curPayoffWay != null && !string.IsNullOrEmpty(txtReceAmount.Text))
             {
                 decimal remainNeedPay = 0;
-                if (string.IsNullOrEmpty(txtRealReturnAmount.Text))
+                if (string.IsNullOrEmpty(txtPaidInAmount.Text))
                 {
-                    remainNeedPay = decimal.Parse(txtRefundAmount.Text);
+                    remainNeedPay = decimal.Parse(txtReceAmount.Text);
                 }
                 else
                 {
-                    remainNeedPay = decimal.Parse(txtRefundAmount.Text) - decimal.Parse(txtRealReturnAmount.Text);
+                    remainNeedPay = decimal.Parse(txtReceAmount.Text) - decimal.Parse(txtPaidInAmount.Text);
                 }
                 if (remainNeedPay > 0)
                 {
@@ -478,105 +483,159 @@ namespace Top4ever.Pos.Feature
             }
         }
 
-        private void btnDeleteNumber_Click(object sender, EventArgs e)
+        private void btnDiscount_Click(object sender, EventArgs e)
         {
             if (dgvGoodsOrder.CurrentRow != null)
             {
-                int selectIndex = dgvGoodsOrder.CurrentRow.Index;
-                OrderDetails orderDetails = dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Tag as OrderDetails;
-                if (orderDetails.ItemType == (int)OrderItemType.Details)
+                //权限验证
+                bool hasRights = false;
+                if (RightsItemCode.FindRights(RightsItemCode.SINGLEDISCOUNT))
                 {
-                    MessageBox.Show("细项不能单独删除！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
-                if (orderDetails.ItemType == (int)OrderItemType.SetMeal)
-                {
-                    MessageBox.Show("套餐项不能单独删除！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
-                CrystalButton btn = sender as CrystalButton;
-                decimal goodsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
-                decimal deletedNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["DelFlag"].Value);
-                decimal delNum = Math.Abs(decimal.Parse(btn.Text));
-                if (delNum > goodsNum + deletedNum)
-                {
-                    MessageBox.Show("删除的品项数量不能超过剩余数量！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
+                    hasRights = true;
                 }
                 else
                 {
-                    int goodsTotalCount = 0; //菜品主项数量合计
-                    for (int i = 0; i < dgvGoodsOrder.RowCount; i++)
+                    FormRightsCode form = new FormRightsCode();
+                    form.ShowDialog();
+                    if (form.ReturnValue)
                     {
-                        OrderDetails tempOrderDetails = dgvGoodsOrder.Rows[i].Cells["OrderDetailsID"].Tag as OrderDetails;
-                        if (tempOrderDetails.ItemType == (int)OrderItemType.Goods)
+                        IList<string> rightsCodeList = form.RightsCodeList;
+                        if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.SINGLEDISCOUNT))
                         {
-                            decimal tempGoodsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsNum"].Value);
-                            decimal tempDeletedNum = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["DelFlag"].Value);
-                            if (tempGoodsNum + tempDeletedNum > 0)
-                            {
-                                goodsTotalCount++;
-                            }
+                            hasRights = true;
                         }
                     }
-                    if (goodsTotalCount == 1 && delNum >= goodsNum + deletedNum)
+                }
+                if (!hasRights)
+                {
+                    return;
+                }
+                int selectIndex = dgvGoodsOrder.CurrentRow.Index;
+                OrderDetails orderDetails = dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Tag as OrderDetails;
+                if (orderDetails.ItemType == (int)OrderItemType.Goods)   //主项才能打折
+                {
+                    if (orderDetails.CanDiscount)
                     {
-                        MessageBox.Show("如果您要进行退单操作，请整单删除！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        return;
-                    }
-                    FormCancelOrder form = new FormCancelOrder();
-                    form.ShowDialog();
-                    if (form.CurrentReason != null)
-                    {
-                        dgvGoodsOrder.Rows[selectIndex].Cells["DelFlag"].Value = deletedNum - delNum;
-                        dgvGoodsOrder.Rows[selectIndex].Cells["DelReasonName"].Value = form.CurrentReason.ReasonName;
-                        //细项和套餐
-                        for (int i = selectIndex + 1; i < dgvGoodsOrder.RowCount; i++)
+                        FormDiscount formDiscount = new FormDiscount(DiscountDisplayModel.SingleDiscount);
+                        formDiscount.ShowDialog();
+                        if (formDiscount.CurrentDiscount != null)
                         {
-                            OrderDetails tempOrderDetails = dgvGoodsOrder.Rows[i].Cells["OrderDetailsID"].Tag as OrderDetails;
-                            if (tempOrderDetails.ItemType == (int)OrderItemType.Goods)
+                            Discount discount = formDiscount.CurrentDiscount;
+                            if (discount.DiscountType == (int)DiscountItemType.DiscountRate)
                             {
-                                break;
+                                dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value = -Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value) * discount.DiscountRate;
                             }
                             else
                             {
-                                decimal detailsDeletedNum = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["DelFlag"].Value);
-                                decimal detailsDelNum = tempOrderDetails.ItemQty / goodsNum * delNum;
-                                dgvGoodsOrder.Rows[i].Cells["DelFlag"].Value = detailsDeletedNum - detailsDelNum;
-                                dgvGoodsOrder.Rows[i].Cells["DelReasonName"].Value = form.CurrentReason.ReasonName;
+                                dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value = -discount.OffFixPay;
                             }
+                            dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Tag = discount;
+                            //更新细项
+                            if (selectIndex < dgvGoodsOrder.Rows.Count - 1)
+                            {
+                                for (int index = selectIndex + 1; index < dgvGoodsOrder.Rows.Count; index++)
+                                {
+                                    orderDetails = dgvGoodsOrder.Rows[index].Cells["OrderDetailsID"].Tag as OrderDetails;
+                                    if (orderDetails.ItemType == (int)OrderItemType.Goods)
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        if (discount.DiscountType == (int)DiscountItemType.DiscountRate)
+                                        {
+                                            dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = -Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value) * discount.DiscountRate;
+                                        }
+                                        else
+                                        {
+                                            dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = -discount.OffFixPay;
+                                        }
+                                        dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Tag = discount;
+                                    }
+                                }
+                            }
+                            //重新计算
+                            CalculateOrderPrice();
+                            txtReceAmount.Text = (m_ActualPayMoney + m_ServiceFee).ToString("f2");
                         }
-                        CalculateOrderPrice();
-                        txtRefundAmount.Text = (m_SalesOrder.order.ActualSellPrice + m_SalesOrder.order.ServiceFee - (m_ActualPayMoney + m_ServiceFee)).ToString("f2");
                     }
                 }
             }
         }
 
-        private void btnUndo_Click(object sender, EventArgs e)
+        private void btnWholeDiscount_Click(object sender, EventArgs e)
         {
-            if (dgvGoodsOrder.CurrentRow != null)
+            //权限验证
+            bool hasRights = false;
+            if (RightsItemCode.FindRights(RightsItemCode.WHOLEDISCOUNT))
             {
-                int selectIndex = dgvGoodsOrder.CurrentRow.Index;
-                dgvGoodsOrder.Rows[selectIndex].Cells["DelFlag"].Value = "-0.0";
-                dgvGoodsOrder.Rows[selectIndex].Cells["DelReasonName"].Value = null;
-                //细项和套餐
-                for (int i = selectIndex + 1; i < dgvGoodsOrder.RowCount; i++)
+                hasRights = true;
+            }
+            else
+            {
+                FormRightsCode form = new FormRightsCode();
+                form.ShowDialog();
+                if (form.ReturnValue)
                 {
-                    OrderDetails tempOrderDetails = dgvGoodsOrder.Rows[i].Cells["OrderDetailsID"].Tag as OrderDetails;
-                    if (tempOrderDetails.ItemType == (int)OrderItemType.Goods)
+                    IList<string> rightsCodeList = form.RightsCodeList;
+                    if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.WHOLEDISCOUNT))
                     {
-                        break;
-                    }
-                    else
-                    {
-                        dgvGoodsOrder.Rows[i].Cells["DelFlag"].Value = "-0.0";
-                        dgvGoodsOrder.Rows[i].Cells["DelReasonName"].Value = null;
+                        hasRights = true;
                     }
                 }
-                CalculateOrderPrice();
-                txtRefundAmount.Text = (m_SalesOrder.order.ActualSellPrice + m_SalesOrder.order.ServiceFee - (m_ActualPayMoney + m_ServiceFee)).ToString("f2");
             }
+            if (!hasRights)
+            {
+                return;
+            }
+            FormDiscount formDiscount = new FormDiscount(DiscountDisplayModel.WholeDiscount);
+            formDiscount.ShowDialog();
+            if (formDiscount.CurrentDiscount != null)
+            {
+                Discount discount = formDiscount.CurrentDiscount;
+                foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
+                {
+                    OrderDetails orderDetails = dr.Cells["OrderDetailsID"].Tag as OrderDetails;
+                    if (orderDetails != null)
+                    {
+                        if (orderDetails.CanDiscount)
+                        {
+                            if (discount.DiscountType == (int)DiscountItemType.DiscountRate)
+                            {
+                                dr.Cells["GoodsDiscount"].Value = -Convert.ToDecimal(dr.Cells["GoodsPrice"].Value) * discount.DiscountRate;
+                            }
+                            else
+                            {
+                                dr.Cells["GoodsDiscount"].Value = -discount.OffFixPay;
+                            }
+                            orderDetails.TotalDiscount = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value);
+                            dr.Cells["OrderDetailsID"].Tag = orderDetails;
+                            dr.Cells["GoodsDiscount"].Tag = discount;
+                        }
+                    }
+                }
+                //重新计算
+                CalculateOrderPrice();
+                txtReceAmount.Text = (m_ActualPayMoney + m_ServiceFee).ToString("f2");
+            }
+        }
+
+        private void btnCutServiceFee_Click(object sender, EventArgs e)
+        {
+            CrystalButton btn = sender as CrystalButton;
+            if (m_CutServiceFee)
+            {
+                m_CutServiceFee = false;
+                btn.Text = "去服务费";
+            }
+            else
+            {
+                m_CutServiceFee = true;
+                btn.Text = "加服务费";
+            }
+            //重新计算
+            CalculateOrderPrice();
+            txtReceAmount.Text = (m_ActualPayMoney + m_ServiceFee).ToString("f2");
         }
 
         private void CalculateOrderPrice()
@@ -584,11 +643,9 @@ namespace Top4ever.Pos.Feature
             decimal totalPrice = 0, totalDiscount = 0;
             for (int i = 0; i < dgvGoodsOrder.Rows.Count; i++)
             {
-                decimal itemNum = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsNum"].Value);
-                decimal deletedNum = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["DelFlag"].Value);
                 OrderDetails orderDetails = dgvGoodsOrder.Rows[i].Cells["OrderDetailsID"].Tag as OrderDetails;
-                totalPrice += (itemNum + deletedNum) * orderDetails.SellPrice;
-                totalDiscount += Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsDiscount"].Value) / itemNum * (itemNum + deletedNum);
+                totalPrice += orderDetails.ItemQty * orderDetails.SellPrice;
+                totalDiscount += Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsDiscount"].Value);
             }
             m_TotalPrice = totalPrice;
             m_Discount = totalDiscount;
@@ -596,188 +653,84 @@ namespace Top4ever.Pos.Feature
             decimal actualPayMoney = CutOffDecimal.HandleCutOff(wholePayMoney, CutOffType.ROUND_OFF, 0);
             m_ActualPayMoney = actualPayMoney;
             m_CutOff = wholePayMoney - actualPayMoney;
-            decimal serviceFee = ConstantValuePool.SysConfig.FixedServiceFee;
-            if (serviceFee == 0)
+            if (m_CutServiceFee)
             {
-                decimal serviceFeePercent = 0;
-                if (string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime1) && string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime1)
-                    && string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime2) && string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime2))
-                {
-                    serviceFeePercent = ConstantValuePool.SysConfig.ServiceFeePercent;
-                }
-                else
-                {
-                    DateTime curTime = Convert.ToDateTime(DateTime.Now.ToString("T"));
-                    if (!string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime1) && !string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime1))
-                    {
-                        if (curTime > Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeBeginTime1) && curTime < Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeEndTime1))
-                        {
-                            serviceFeePercent = ConstantValuePool.SysConfig.ServiceFeePercent;
-                        }
-                    }
-                    if (!string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime2) && !string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime2))
-                    {
-                        if (curTime > Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeBeginTime2) && curTime < Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeEndTime2))
-                        {
-                            serviceFeePercent = ConstantValuePool.SysConfig.ServiceFeePercent;
-                        }
-                    }
-                }
-                decimal tempServiceFee = actualPayMoney * serviceFeePercent / 100;
-                serviceFee = CutOffDecimal.HandleCutOff(tempServiceFee, CutOffType.ROUND_OFF, 0);
+                m_ServiceFee = 0;
             }
-            m_ServiceFee = serviceFee;
+            else
+            {
+                decimal serviceFee = ConstantValuePool.SysConfig.FixedServiceFee;
+                if (serviceFee == 0)
+                {
+                    decimal serviceFeePercent = 0;
+                    if (string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime1) && string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime1)
+                        && string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime2) && string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime2))
+                    {
+                        serviceFeePercent = ConstantValuePool.SysConfig.ServiceFeePercent;
+                    }
+                    else
+                    {
+                        DateTime curTime = Convert.ToDateTime(DateTime.Now.ToString("T"));
+                        if (!string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime1) && !string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime1))
+                        {
+                            if (curTime > Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeBeginTime1) && curTime < Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeEndTime1))
+                            {
+                                serviceFeePercent = ConstantValuePool.SysConfig.ServiceFeePercent;
+                            }
+                        }
+                        if (!string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime2) && !string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime2))
+                        {
+                            if (curTime > Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeBeginTime2) && curTime < Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeEndTime2))
+                            {
+                                serviceFeePercent = ConstantValuePool.SysConfig.ServiceFeePercent;
+                            }
+                        }
+                    }
+                    decimal tempServiceFee = actualPayMoney * serviceFeePercent / 100;
+                    serviceFee = CutOffDecimal.HandleCutOff(tempServiceFee, CutOffType.ROUND_OFF, 0);
+                }
+                m_ServiceFee = serviceFee;
+            }
         }
 
         private void btnCheckOut_Click(object sender, EventArgs e)
         {
-            decimal refundAmount = decimal.Parse(txtRefundAmount.Text);
-            decimal realReturnAmount = 0;
-            if (!string.IsNullOrEmpty(txtRealReturnAmount.Text))
+            decimal receAmount = decimal.Parse(txtReceAmount.Text);
+            decimal paidInAmount = 0;
+            if (!string.IsNullOrEmpty(txtPaidInAmount.Text))
             {
-                realReturnAmount = decimal.Parse(txtRealReturnAmount.Text);
+                paidInAmount = decimal.Parse(txtPaidInAmount.Text);
             }
-            if (refundAmount == realReturnAmount)
+            if (receAmount == paidInAmount)
             {
-                //判断支付方式是否正确
-                bool IsPayoffWayRight = true;
-                IList<OrderPayoff> _orderPayoffList = new List<OrderPayoff>();
+                //计算支付的金额并填充OrderPayoff
+                decimal paymentMoney = 0;
+                decimal needChangePay = 0;
+                List<OrderPayoff> orderPayoffList = new List<OrderPayoff>();
                 foreach (KeyValuePair<string, OrderPayoff> item in dic)
                 {
                     if (item.Value.Quantity > 0)
                     {
-                        _orderPayoffList.Add(item.Value);
+                        OrderPayoff orderPayoff = item.Value;
+                        paymentMoney += orderPayoff.AsPay * orderPayoff.Quantity;
+                        orderPayoffList.Add(orderPayoff);
                     }
                 }
-                foreach (OrderPayoff orderPayoff in _orderPayoffList)
+                bool result = ModifyForOrder(orderPayoffList, paymentMoney, needChangePay);
+                if (result)
                 {
-                    bool IsContains = false;
-                    OrderPayoff temp = null;
-                    foreach (OrderPayoff item in m_SalesOrder.orderPayoffList)
-                    {
-                        if (item.PayoffID.Equals(orderPayoff.PayoffID))
-                        {
-                            IsContains = true;
-                            temp = item;
-                            break;
-                        }
-                    }
-                    if (IsContains)
-                    {
-                        decimal tempAmount = temp.AsPay * temp.Quantity - temp.NeedChangePay;
-                        decimal payAmount = orderPayoff.AsPay * orderPayoff.Quantity - orderPayoff.NeedChangePay;
-                        if (tempAmount < payAmount)
-                        {
-                            IsPayoffWayRight = false;
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        IsPayoffWayRight = false;
-                        break;
-                    }
-                }
-                if (IsPayoffWayRight)
-                {
-                    IList<OrderPayoff> orderPayoffList = new List<OrderPayoff>();
-                    foreach (OrderPayoff item in m_SalesOrder.orderPayoffList)
-                    {
-                        bool IsContains = false;
-                        foreach (OrderPayoff orderPayoff in _orderPayoffList)
-                        {
-                            if (item.PayoffID.Equals(orderPayoff.PayoffID))
-                            {
-                                decimal remainQty = ((item.AsPay * item.Quantity - item.NeedChangePay) - (orderPayoff.AsPay * orderPayoff.Quantity - orderPayoff.NeedChangePay)) / orderPayoff.AsPay;
-                                if (remainQty > 0)
-                                {
-                                    OrderPayoff temp = new OrderPayoff();
-                                    temp.OrderPayoffID = Guid.NewGuid();
-                                    temp.OrderID = item.OrderID;
-                                    temp.PayoffID = item.PayoffID;
-                                    temp.PayoffName = item.PayoffName;
-                                    temp.PayoffType = item.PayoffType;
-                                    temp.AsPay = item.AsPay;
-                                    temp.Quantity = remainQty;
-                                    temp.NeedChangePay = 0;
-                                    temp.CardNo = item.CardNo;
-                                    temp.EmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
-                                    orderPayoffList.Add(temp);
-                                }
-                                IsContains = true;
-                                break;
-                            }
-                        }
-                        if (!IsContains)
-                        {
-                            OrderPayoff temp = CopyExtension.Clone<OrderPayoff>(item);
-                            temp.OrderPayoffID = Guid.NewGuid();
-                            temp.EmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
-                            orderPayoffList.Add(temp);
-                        }
-                    }
-                    List<DeletedOrderDetails> deletedOrderDetailsList = new List<DeletedOrderDetails>();
-                    for (int i = 0; i < dgvGoodsOrder.RowCount; i++)
-                    {
-                        OrderDetails tempOrderDetails = dgvGoodsOrder.Rows[i].Cells["OrderDetailsID"].Tag as OrderDetails;
-                        decimal tempGoodsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsNum"].Value);
-                        decimal tempGoodsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsDiscount"].Value);
-                        decimal tempDeletedNum = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["DelFlag"].Value);
-                        string tempReasonName = dgvGoodsOrder.Rows[i].Cells["DelReasonName"].Value.ToString();
-                        if (Math.Abs(tempDeletedNum) > 0)
-                        {
-                            decimal remainQty = tempGoodsNum - tempDeletedNum;
-                            DeletedOrderDetails orderDetails = new DeletedOrderDetails();
-                            orderDetails.OrderDetailsID = tempOrderDetails.OrderDetailsID;
-                            orderDetails.RemainQuantity = remainQty;
-                            orderDetails.OffPay = Math.Round(-tempGoodsDiscount / tempGoodsNum * remainQty, 4);
-                            orderDetails.AuthorisedManager = ConstantValuePool.CurrentEmployee.EmployeeID;
-                            orderDetails.CancelEmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
-                            orderDetails.CancelReasonName = tempReasonName;
-                            deletedOrderDetailsList.Add(orderDetails);
-                        }
-                    }
-                    //构造DeletedPaidOrder对象
-                    decimal paymentMoney = 0;
-                    foreach (OrderPayoff item in orderPayoffList)
-                    {
-                        paymentMoney += item.AsPay * item.Quantity;
-                    }
-                    Order order = new Order();
-                    order.OrderID = m_SalesOrder.order.OrderID;
-                    order.TotalSellPrice = m_TotalPrice;
-                    order.ActualSellPrice = m_ActualPayMoney;
-                    order.DiscountPrice = m_Discount;
-                    order.CutOffPrice = m_CutOff;
-                    order.ServiceFee = m_ServiceFee;
-                    order.PaymentMoney = paymentMoney;
-                    order.NeedChangePay = 0;
-                    order.EmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
-                    DeletedPaidOrder deletedPaidOrder = new DeletedPaidOrder();
-                    deletedPaidOrder.order = order;
-                    deletedPaidOrder.deletedOrderDetailsList = deletedOrderDetailsList;
-                    deletedPaidOrder.orderPayoffList = orderPayoffList;
-                    DeletedOrderService orderService = new DeletedOrderService();
-                    if (orderService.DeletePaidSingleOrder(deletedPaidOrder))
-                    {
-                        m_IsChanged = true;
-                        this.Close();
-                    }
-                    else
-                    {
-                        MessageBox.Show("单品删除失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
+                    m_IsChanged = true;
+                    this.Close();
                 }
                 else
                 {
-                    MessageBox.Show("退款支付方式不属于原结账支付方式，请重新支付！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("账单修改失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }
             else
             {
-                MessageBox.Show("应退金额与实退金额不一致，请重新支付！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("应收金额与实收金额不一致，请重新支付！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
         }
@@ -786,6 +739,56 @@ namespace Top4ever.Pos.Feature
         {
             m_IsChanged = false;
             this.Close();
+        }
+
+        private bool ModifyForOrder(List<OrderPayoff> orderPayoffList, decimal paymentMoney, decimal needChangePay)
+        {
+            //填充Order
+            Order order = new Order();
+            order.OrderID = m_SalesOrder.order.OrderID;
+            order.TotalSellPrice = m_TotalPrice;
+            order.ActualSellPrice = m_ActualPayMoney;
+            order.DiscountPrice = m_Discount;
+            order.CutOffPrice = m_CutOff;
+            order.ServiceFee = m_ServiceFee;
+            order.PaymentMoney = paymentMoney;
+            order.NeedChangePay = needChangePay;
+            order.EmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
+            //填充OrderDetails\OrderDiscount
+            List<OrderDetails> orderDetailsList = new List<OrderDetails>();
+            List<OrderDiscount> orderDiscountList = new List<OrderDiscount>();
+            for (int i = 0; i < dgvGoodsOrder.RowCount; i++)
+            {
+                Discount itemDiscount = dgvGoodsOrder.Rows[i].Cells["GoodsDiscount"].Tag as Discount;
+                if (itemDiscount != null)
+                {
+                    decimal itemDiscountPrice = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsDiscount"].Value);
+
+                    OrderDetails orderDetails = CopyExtension.Clone<OrderDetails>(m_SalesOrder.orderDetailsList[i]);
+                    orderDetails.TotalDiscount = itemDiscountPrice;
+                    orderDetailsList.Add(orderDetails);
+                    //OrderDiscount
+                    OrderDiscount orderDiscount = new OrderDiscount();
+                    orderDiscount.OrderDiscountID = Guid.NewGuid();
+                    orderDiscount.OrderID = m_SalesOrder.order.OrderID;
+                    orderDiscount.OrderDetailsID = orderDetails.OrderDetailsID;
+                    orderDiscount.DiscountID = itemDiscount.DiscountID;
+                    orderDiscount.DiscountName = itemDiscount.DiscountName;
+                    orderDiscount.DiscountType = itemDiscount.DiscountType;
+                    orderDiscount.DiscountRate = itemDiscount.DiscountRate;
+                    orderDiscount.OffFixPay = itemDiscount.OffFixPay;
+                    orderDiscount.OffPay = Math.Abs(itemDiscountPrice);
+                    orderDiscount.EmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
+                    orderDiscountList.Add(orderDiscount);
+                }
+            }
+            ModifiedPaidOrder modifiedPaidOrder = new ModifiedPaidOrder();
+            modifiedPaidOrder.order = order;
+            modifiedPaidOrder.orderDetailsList = orderDetailsList;
+            modifiedPaidOrder.orderDiscountList = orderDiscountList;
+            modifiedPaidOrder.orderPayoffList = orderPayoffList;
+            ModifyOrderService modifyOrderService = new ModifyOrderService();
+            return modifyOrderService.ModifyForOrder(modifiedPaidOrder);
         }
     }
 }

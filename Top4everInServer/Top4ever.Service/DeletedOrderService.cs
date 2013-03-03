@@ -22,6 +22,7 @@ namespace Top4ever.Service
         private IOrderPayoffDao _orderPayoffDao = null;
         private ISystemConfigDao _sysConfigDao = null;
         private IPrintTaskDao _printTaskDao = null;
+        private IDailyStatementDao _dailyStatementDao = null;
 
         #endregion
 
@@ -36,6 +37,7 @@ namespace Top4ever.Service
             _orderPayoffDao = _daoManager.GetDao(typeof(IOrderPayoffDao)) as IOrderPayoffDao;
             _sysConfigDao = _daoManager.GetDao(typeof(ISystemConfigDao)) as ISystemConfigDao;
             _printTaskDao = _daoManager.GetDao(typeof(IPrintTaskDao)) as IPrintTaskDao;
+            _dailyStatementDao = _daoManager.GetDao(typeof(IDailyStatementDao)) as IDailyStatementDao;
         }
 
         #endregion
@@ -128,6 +130,42 @@ namespace Top4ever.Service
                             {
                                 _printTaskDao.InsertPrintTask(printTask);
                             }
+                        }
+                        returnValue = true;
+                    }
+                }
+                _daoManager.CommitTransaction();
+            }
+            catch
+            {
+                _daoManager.RollBackTransaction();
+                returnValue = false;
+            }
+            return returnValue;
+        }
+
+        public bool DeletePaidSingleOrder(DeletedPaidOrder deletedPaidOrder)
+        {
+            bool returnValue = false;
+            _daoManager.BeginTransaction();
+            try
+            {
+                if (deletedPaidOrder != null)
+                {
+                    if (_orderDao.UpdatePaidOrderPrice(deletedPaidOrder.order))
+                    {
+                        foreach (DeletedOrderDetails item in deletedPaidOrder.deletedOrderDetailsList)
+                        {
+                            _orderDetailsDao.DeleteSingleOrderDetails(item);
+                        }
+                        _orderPayoffDao.DeleteOrderPayoff(deletedPaidOrder.order.OrderID);
+                        //日结号
+                        string dailyStatementNo = _dailyStatementDao.GetCurrentDailyStatementNo();
+                        //插入OrderPayoff
+                        foreach (OrderPayoff item in deletedPaidOrder.orderPayoffList)
+                        {
+                            item.DailyStatementNo = dailyStatementNo;
+                            _orderPayoffDao.CreateOrderPayoff(item);
                         }
                         returnValue = true;
                     }

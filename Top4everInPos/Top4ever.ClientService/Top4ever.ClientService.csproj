@@ -49,6 +49,7 @@
     <Compile Include="Enum\ParamFieldLength.cs" />
     <Compile Include="Enum\RET_VALUE.cs" />
     <Compile Include="HandoverService.cs" />
+    <Compile Include="ModifyOrderService.cs" />
     <Compile Include="OrderDetailsService.cs" />
     <Compile Include="OrderService.cs" />
     <Compile Include="PayingOrderService.cs" />

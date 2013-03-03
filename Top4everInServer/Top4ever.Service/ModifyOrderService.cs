@@ -10,11 +10,11 @@ using Top4ever.Interface.OrderRelated;
 
 namespace Top4ever.Service
 {
-    public class PayingOrderService
+    public class ModifyOrderService
     {
         #region Private Fields
 
-        private static PayingOrderService _instance = new PayingOrderService();
+        private static ModifyOrderService _instance = new ModifyOrderService();
         private IDaoManager _daoManager = null;
         private IOrderDao _orderDao = null;
         private IOrderDetailsDao _orderDetailsDao = null;
@@ -26,7 +26,7 @@ namespace Top4ever.Service
 
         #region Constructor
 
-        private PayingOrderService()
+        private ModifyOrderService()
         {
             _daoManager = ServiceConfig.GetInstance().DaoManager;
             _orderDao = _daoManager.GetDao(typeof(IOrderDao)) as IOrderDao;
@@ -40,40 +40,43 @@ namespace Top4ever.Service
 
         #region Public methods
 
-        public static PayingOrderService GetInstance()
+        public static ModifyOrderService GetInstance()
         {
             return _instance;
         }
 
-        public bool PayForOrder(PayingOrder payingOrder)
-        { 
+        public bool ModifyForOrder(ModifiedPaidOrder modifiedOrder)
+        {
             bool returnValue = false;
             _daoManager.BeginTransaction();
             try
             {
-                if (payingOrder != null)
+                if (modifiedOrder != null)
                 {
                     //日结
                     string dailyStatementNo = _dailyStatementDao.GetCurrentDailyStatementNo();
                     //更新Order
-                    if (_orderDao.UpdatePayingOrder(payingOrder.order))
-                    { 
+                    if (_orderDao.UpdatePaidOrderPrice(modifiedOrder.order))
+                    {
                         //更新OrderDetails
-                        foreach (OrderDetails item in payingOrder.orderDetailsList)
+                        foreach (OrderDetails item in modifiedOrder.orderDetailsList)
                         {
                             _orderDetailsDao.UpdateOrderDetailsDiscount(item);
                         }
-                        //插入OrderDiscount
-                        if (payingOrder.orderDiscountList != null && payingOrder.orderDiscountList.Count > 0)
+                        if (modifiedOrder.orderDiscountList != null && modifiedOrder.orderDiscountList.Count > 0)
                         {
-                            foreach (OrderDiscount item in payingOrder.orderDiscountList)
+                            foreach (OrderDiscount item in modifiedOrder.orderDiscountList)
                             {
+                                //删除OrderDiscount
+                                _orderDiscountDao.DeleteOrderSingleDiscount(item.OrderDetailsID);
+                                //插入OrderDiscount
                                 item.DailyStatementNo = dailyStatementNo;
                                 _orderDiscountDao.CreateOrderDiscount(item);
                             }
                         }
+                        _orderPayoffDao.DeleteOrderPayoff(modifiedOrder.order.OrderID);
                         //插入OrderPayoff
-                        foreach (OrderPayoff item in payingOrder.orderPayoffList)
+                        foreach (OrderPayoff item in modifiedOrder.orderPayoffList)
                         {
                             item.DailyStatementNo = dailyStatementNo;
                             _orderPayoffDao.CreateOrderPayoff(item);

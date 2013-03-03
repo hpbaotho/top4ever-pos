@@ -587,7 +587,7 @@ namespace Top4ever.Pos.Feature
                         }
                         else
                         {
-                            MessageBox.Show("删除账单失败！");
+                            MessageBox.Show("删除账单失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
                     }
@@ -615,43 +615,14 @@ namespace Top4ever.Pos.Feature
                         SalesOrder salesOrder = salesOrderService.GetPaidSalesOrder(orderID);
                         m_SalesOrder = salesOrder;
                         //更新账单信息
-                        Order order = salesOrder.order;
-                        this.lbOrderNo.Text = order.OrderNo;
-                        this.lbDeskName.Text = order.DeskName;
-                        string billType = string.Empty;
-                        if (order.Status == 0 || order.Status == 3)
-                        {
-                            billType = "未结账";
-                        }
-                        else if (order.Status == 1)
-                        {
-                            billType = "已结账";
-                        }
-                        else if (order.Status == 2)
-                        {
-                            billType = "已删除";
-                        }
-                        this.lbBillType.Text = billType;
-                        string eatType = string.Empty;
-                        if (order.EatType == (int)EatWayType.DineIn)
-                        {
-                            eatType = "堂食";
-                        }
-                        else if (order.EatType == (int)EatWayType.Takeout)
-                        {
-                            eatType = "外卖";
-                        }
-                        else if (order.EatType == (int)EatWayType.OutsideOrder)
-                        {
-                            eatType = "外送";
-                        }
-                        this.lbEatType.Text = eatType;
-                        this.lbEmployeeNo.Text = order.EmployeeNo;
-                        this.lbCashier.Text = order.PayEmployeeNo;
-                        this.lbDeviceNo.Text = order.DeviceNo;
-                        int startIndex = selectedIndex + 1;
-                        int index = this.lbBillIndex.Text.IndexOf('/');
-                        this.lbBillIndex.Text = startIndex + this.lbBillIndex.Text.Substring(index);
+                        dataGridView1.Rows[selectedIndex].Cells["TotalSellPrice"].Value = salesOrder.order.TotalSellPrice.ToString("f2");
+                        dataGridView1.Rows[selectedIndex].Cells["ActualSellPrice"].Value = salesOrder.order.ActualSellPrice.ToString("f2");
+                        dataGridView1.Rows[selectedIndex].Cells["DiscountPrice"].Value = salesOrder.order.DiscountPrice.ToString("f2");
+                        dataGridView1.Rows[selectedIndex].Cells["CutOffPrice"].Value = salesOrder.order.CutOffPrice.ToString("f2");
+                        dataGridView1.Rows[selectedIndex].Cells["ServiceFee"].Value = salesOrder.order.ServiceFee.ToString("f2");
+                        dataGridView1.Rows[selectedIndex].Cells["PaymentMoney"].Value = salesOrder.order.PaymentMoney.ToString("f2");
+                        dataGridView1.Rows[selectedIndex].Cells["NeedChangePay"].Value = salesOrder.order.NeedChangePay.ToString("f2");
+                        dataGridView1.Rows[selectedIndex].Cells["MoreOrLess"].Value = (salesOrder.order.ActualSellPrice + salesOrder.order.ServiceFee - (salesOrder.order.PaymentMoney - salesOrder.order.NeedChangePay)).ToString("f2");
                         BindDataGridView2(salesOrder);
                         BindDataGridView3(salesOrder);
                     }
@@ -661,9 +632,32 @@ namespace Top4ever.Pos.Feature
 
         private void btnBillModify_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.CurrentRow != null)
+            if (dataGridView1.CurrentRow != null && m_SalesOrder != null && m_SalesOrder.order != null)
             {
-
+                if (m_SalesOrder.order.Status == 1)
+                {
+                    int selectedIndex = dataGridView1.CurrentRow.Index;
+                    FormModifyOrder form = new FormModifyOrder(m_SalesOrder);
+                    form.ShowDialog();
+                    if (form.IsChanged)
+                    {
+                        Guid orderID = new Guid(dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value.ToString());
+                        SalesOrderService salesOrderService = new SalesOrderService();
+                        SalesOrder salesOrder = salesOrderService.GetPaidSalesOrder(orderID);
+                        m_SalesOrder = salesOrder;
+                        //更新账单信息
+                        dataGridView1.Rows[selectedIndex].Cells["TotalSellPrice"].Value = salesOrder.order.TotalSellPrice.ToString("f2");
+                        dataGridView1.Rows[selectedIndex].Cells["ActualSellPrice"].Value = salesOrder.order.ActualSellPrice.ToString("f2");
+                        dataGridView1.Rows[selectedIndex].Cells["DiscountPrice"].Value = salesOrder.order.DiscountPrice.ToString("f2");
+                        dataGridView1.Rows[selectedIndex].Cells["CutOffPrice"].Value = salesOrder.order.CutOffPrice.ToString("f2");
+                        dataGridView1.Rows[selectedIndex].Cells["ServiceFee"].Value = salesOrder.order.ServiceFee.ToString("f2");
+                        dataGridView1.Rows[selectedIndex].Cells["PaymentMoney"].Value = salesOrder.order.PaymentMoney.ToString("f2");
+                        dataGridView1.Rows[selectedIndex].Cells["NeedChangePay"].Value = salesOrder.order.NeedChangePay.ToString("f2");
+                        dataGridView1.Rows[selectedIndex].Cells["MoreOrLess"].Value = (salesOrder.order.ActualSellPrice + salesOrder.order.ServiceFee - (salesOrder.order.PaymentMoney - salesOrder.order.NeedChangePay)).ToString("f2");
+                        BindDataGridView2(salesOrder);
+                        BindDataGridView3(salesOrder);
+                    }
+                }
             }
         }
     }

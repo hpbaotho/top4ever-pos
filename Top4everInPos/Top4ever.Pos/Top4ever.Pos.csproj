@@ -78,6 +78,12 @@
     <Compile Include="Feature\FormFunctionPanel.designer.cs">
       <DependentUpon>FormFunctionPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Feature\FormModifyOrder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\FormModifyOrder.designer.cs">
+      <DependentUpon>FormModifyOrder.cs</DependentUpon>
+    </Compile>
     <Compile Include="Feature\FormNumericKeypad.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -187,6 +193,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\FormFunctionPanel.resx">
       <DependentUpon>FormFunctionPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Feature\FormModifyOrder.resx">
+      <DependentUpon>FormModifyOrder.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\FormNumericKeypad.resx">
       <DependentUpon>FormNumericKeypad.cs</DependentUpon>
