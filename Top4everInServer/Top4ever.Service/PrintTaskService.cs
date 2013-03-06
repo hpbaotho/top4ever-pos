@@ -33,7 +33,7 @@ namespace Top4ever.Service
         /// <param name="reason">原因</param>
         public IList<PrintTask> GetPrintTaskList(SalesOrder salesOrder, int printStyle, int followStyle, int taskType, string reason)
         {
-            if (salesOrder == null || salesOrder.orderDetailsList.Count == 0) return null;
+            if (salesOrder == null || salesOrder.order == null || salesOrder.orderDetailsList.Count == 0) return null;
             IList<PrintTask> printTaskList = new List<PrintTask>();
             DateTime printTime = DateTime.Now;
             Order order = salesOrder.order;

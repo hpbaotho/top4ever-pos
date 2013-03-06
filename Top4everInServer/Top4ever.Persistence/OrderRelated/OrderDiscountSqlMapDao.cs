@@ -48,7 +48,12 @@ namespace Top4ever.Persistence.OrderRelated
 
         public IList<OrderDiscount> GetOrderDiscountList(Guid orderID)
         {
-            return ExecuteQueryForList<OrderDiscount>("GetOrderDiscountList", orderID);
+            return ExecuteQueryForList<OrderDiscount>("GetOrderDiscount", orderID);
+        }
+
+        public IList<OrderDiscount> GetDeletedOrderDiscountList(Guid orderID)
+        {
+            return ExecuteQueryForList<OrderDiscount>("GetDeletedOrderDiscount", orderID);
         }
 
         #endregion

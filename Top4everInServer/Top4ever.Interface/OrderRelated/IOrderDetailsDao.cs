@@ -19,6 +19,8 @@ namespace Top4ever.Interface.OrderRelated
 
         IList<OrderDetails> GetOrderDetailsList(Guid orderID);
 
+        IList<OrderDetails> GetDeletedOrderDetailsList(Guid orderID);
+
         OrderDetails GetOrderDetails(Guid orderDetailsID);
 
         Int32 GetSequenceNum(Guid orderID);

@@ -39,6 +39,11 @@ namespace Top4ever.Persistence.OrderRelated
             return ExecuteQueryForList<OrderDetails>("GetOrderDetailsByOrderID", orderID);
         }
 
+        public IList<OrderDetails> GetDeletedOrderDetailsList(Guid orderID)
+        {
+            return ExecuteQueryForList<OrderDetails>("GetDeletedOrderDetails", orderID);
+        }
+
         public OrderDetails GetOrderDetails(Guid orderDetailsID)
         {
             return ExecuteQueryForObject("GetOrderDetailsByOrderDetailsID", orderDetailsID) as OrderDetails;

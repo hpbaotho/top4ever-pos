@@ -78,6 +78,7 @@ namespace Top4ever.Service
                         foreach (DeletedOrderDetails item in deletedSingleOrder.deletedOrderDetailsList)
                         {
                             OrderDetails orderDetails = _orderDetailsDao.GetOrderDetails(item.OrderDetailsID);
+                            orderDetails.ItemQty = item.DeletedQuantity;
                             tempOrderDetailsList.Add(orderDetails);
                             if (string.IsNullOrEmpty(cancelReason) && !string.IsNullOrEmpty(item.CancelReasonName))
                             {
@@ -110,27 +111,26 @@ namespace Top4ever.Service
             _daoManager.BeginTransaction();
             try
             {
+                //获取打印任务列表
+                Order order = _orderDao.GetOrder(deletedOrder.OrderID);
+                IList<OrderDetails> orderDetailsList = _orderDetailsDao.GetOrderDetailsList(deletedOrder.OrderID);
+                SalesOrder salesOrder = new SalesOrder();
+                salesOrder.order = order;
+                salesOrder.orderDetailsList = orderDetailsList;
+                SystemConfig systemConfig = _sysConfigDao.GetSystemConfigInfo();
+                IList<PrintTask> printTaskList = PrintTaskService.GetInstance().GetPrintTaskList(salesOrder, systemConfig.PrintStyle, systemConfig.FollowStyle, 2, deletedOrder.CancelReasonName);
+                foreach (PrintTask printTask in printTaskList)
+                {
+                    printTask.ItemQty = -printTask.ItemQty; //数量应该为负数
+                    _printTaskDao.InsertPrintTask(printTask);
+                }
+                //删除账单
                 if (_orderDao.DeleteWholeOrder(deletedOrder))
                 {
                     if (_orderDetailsDao.DeleteWholeOrderDetails(deletedOrder))
                     {
                         //该订单可能不包含折扣
                         _orderDiscountDao.DeleteOrderDiscount(deletedOrder.OrderID);
-                        //获取打印任务列表
-                        Order order = _orderDao.GetOrder(deletedOrder.OrderID);
-                        if (order != null)
-                        {
-                            IList<OrderDetails> orderDetailsList = _orderDetailsDao.GetOrderDetailsList(deletedOrder.OrderID);
-                            SalesOrder salesOrder = new SalesOrder();
-                            salesOrder.order = order;
-                            salesOrder.orderDetailsList = orderDetailsList;
-                            SystemConfig systemConfig = _sysConfigDao.GetSystemConfigInfo();
-                            IList<PrintTask> printTaskList = PrintTaskService.GetInstance().GetPrintTaskList(salesOrder, systemConfig.PrintStyle, systemConfig.FollowStyle, 2, deletedOrder.CancelReasonName);
-                            foreach (PrintTask printTask in printTaskList)
-                            {
-                                _printTaskDao.InsertPrintTask(printTask);
-                            }
-                        }
                         returnValue = true;
                     }
                 }
@@ -156,7 +156,7 @@ namespace Top4ever.Service
                     {
                         foreach (DeletedOrderDetails item in deletedPaidOrder.deletedOrderDetailsList)
                         {
-                            _orderDetailsDao.DeleteSingleOrderDetails(item);
+                            //_orderDetailsDao.DeleteSingleOrderDetails(item);
                         }
                         _orderPayoffDao.DeleteOrderPayoff(deletedPaidOrder.order.OrderID);
                         //日结号

@@ -94,7 +94,7 @@
             SELECT OrderID,OrderNo,TotalSellPrice,ActualSellPrice,DiscountPrice,CutOffPrice,ServiceFee,PaymentMoney,NeedChangePay,DeviceNo,DeskName,WorkSequence,TranSequence,EatType,[Status],
             SubOrderNo,PeopleNum,MembershipCard,MemberDiscount,InputEmployeeID,InputEmployeeNo,PayEmployeeID,PayEmployeeNo,OrderLastTime,PayLastTime,CheckoutDeviceNo
             FROM [Order]
-            WHERE OrderID = #value# AND IsVoided = 0
+            WHERE OrderID = #value#
         </select>
 
         <procedure id="GetOrderListBySearch" parameterMap="OrderListByPageParam" resultMap="OrderResult">

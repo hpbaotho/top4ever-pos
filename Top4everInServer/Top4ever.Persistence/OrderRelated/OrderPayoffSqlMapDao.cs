@@ -29,7 +29,12 @@ namespace Top4ever.Persistence.OrderRelated
 
         public IList<OrderPayoff> GetOrderPayoffList(Guid orderID)
         {
-            return ExecuteQueryForList<OrderPayoff>("GetOrderPayoffList", orderID);
+            return ExecuteQueryForList<OrderPayoff>("GetOrderPayoff", orderID);
+        }
+
+        public IList<OrderPayoff> GetDeletedOrderPayoffList(Guid orderID)
+        {
+            return ExecuteQueryForList<OrderPayoff>("GetDeletedOrderPayoff", orderID);
         }
 
         #endregion
