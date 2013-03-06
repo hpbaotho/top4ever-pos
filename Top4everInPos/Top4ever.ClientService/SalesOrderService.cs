@@ -136,12 +136,12 @@ namespace Top4ever.ClientService
             return result;
         }
 
-        public SalesOrder GetPaidSalesOrder(Guid orderID)
+        public SalesOrder GetSalesOrderByBillSearch(Guid orderID)
         {
             int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.ORDER_ID;
             byte[] sendByte = new byte[cByte];
             int byteOffset = 0;
-            Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_PAIDORDERLIST), sendByte, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_SALESORDERBYBILLSEARCH), sendByte, BasicTypeLength.INT32);
             byteOffset = BasicTypeLength.INT32;
             Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
             byteOffset += BasicTypeLength.INT32;

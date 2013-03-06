@@ -1477,6 +1477,7 @@ namespace Top4ever.Pos
                             decimal originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value);
                             DeletedOrderDetails orderDetails = new DeletedOrderDetails();
                             orderDetails.OrderDetailsID = orderDetailsID;
+                            orderDetails.DeletedQuantity = -form.DelItemNum;
                             orderDetails.RemainQuantity = remainNum;
                             orderDetails.OffPay = Math.Round(-originalDetailsDiscount / originalDetailsNum * remainNum, 4);
                             orderDetails.AuthorisedManager = ConstantValuePool.CurrentEmployee.EmployeeID;
@@ -1502,6 +1503,7 @@ namespace Top4ever.Pos
                                         dicRemainNum.Add(index, remainNum);
                                         DeletedOrderDetails item = new DeletedOrderDetails();
                                         item.OrderDetailsID = orderDetailsID;
+                                        item.DeletedQuantity = -delItemNum;
                                         item.RemainQuantity = remainNum;
                                         item.OffPay = Math.Round(-originalDetailsDiscount / originalDetailsNum * remainNum, 4);
                                         item.AuthorisedManager = ConstantValuePool.CurrentEmployee.EmployeeID;
@@ -1572,6 +1574,7 @@ namespace Top4ever.Pos
                             deletedIndexList.Add(selectIndex);
                             DeletedOrderDetails orderDetails = new DeletedOrderDetails();
                             orderDetails.OrderDetailsID = orderDetailsID;
+                            orderDetails.DeletedQuantity = -Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
                             orderDetails.RemainQuantity = 0;
                             orderDetails.OffPay = 0;
                             orderDetails.AuthorisedManager = ConstantValuePool.CurrentEmployee.EmployeeID;
@@ -1593,6 +1596,7 @@ namespace Top4ever.Pos
                                         orderDetailsID = new Guid(dgvGoodsOrder.Rows[index].Cells["OrderDetailsID"].Value.ToString());
                                         DeletedOrderDetails item = new DeletedOrderDetails();
                                         item.OrderDetailsID = orderDetailsID;
+                                        item.DeletedQuantity = -Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value);
                                         item.RemainQuantity = 0;
                                         item.OffPay = 0;
                                         item.AuthorisedManager = ConstantValuePool.CurrentEmployee.EmployeeID;
