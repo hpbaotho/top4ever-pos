@@ -10,6 +10,10 @@ namespace Top4ever.Domain.Transfer
         /// </summary>
         public Guid OrderDetailsID { get; set; }
         /// <summary>
+        /// 删除数量
+        /// </summary>
+        public decimal DeletedQuantity { get; set; }
+        /// <summary>
         /// 剩余数量
         /// </summary>
         public decimal RemainQuantity { get; set; }

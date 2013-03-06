@@ -182,7 +182,7 @@ namespace Top4ever.Pos.Feature
                 foreach (Order order in orderList)
                 {
                     string billType = string.Empty;
-                    if (order.Status == 0 || order.Status == 3)
+                    if (order.Status == 0)
                     {
                         billType = "未结账";
                     }
@@ -193,6 +193,14 @@ namespace Top4ever.Pos.Feature
                     else if (order.Status == 2)
                     {
                         billType = "已删除";
+                    }
+                    else if (order.Status == 3)
+                    {
+                        billType = "已预结";
+                    }
+                    else if (order.Status == 4)
+                    {
+                        billType = "已并桌";
                     }
                     int index = dataGridView1.Rows.Add();
                     dataGridView1.Rows[index].Cells["TranSequence"].Value = order.TranSequence.ToString();
@@ -217,7 +225,7 @@ namespace Top4ever.Pos.Feature
                 //默认加载第一行数据
                 Guid orderID = new Guid(dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value.ToString());
                 SalesOrderService salesOrderService = new SalesOrderService();
-                SalesOrder salesOrder = salesOrderService.GetPaidSalesOrder(orderID);
+                SalesOrder salesOrder = salesOrderService.GetSalesOrderByBillSearch(orderID);
                 m_SalesOrder = salesOrder;
                 //更新账单信息
                 this.lbOrderNo.Text = salesOrder.order.OrderNo;
@@ -386,48 +394,51 @@ namespace Top4ever.Pos.Feature
                 {
                     Guid orderID = new Guid(dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value.ToString());
                     SalesOrderService salesOrderService = new SalesOrderService();
-                    SalesOrder salesOrder = salesOrderService.GetPaidSalesOrder(orderID);
-                    m_SalesOrder = salesOrder;
-                    //更新账单信息
-                    Order order = salesOrder.order;
-                    this.lbOrderNo.Text = order.OrderNo;
-                    this.lbDeskName.Text = order.DeskName;
-                    string billType = string.Empty;
-                    if (order.Status == 0 || order.Status == 3)
+                    SalesOrder salesOrder = salesOrderService.GetSalesOrderByBillSearch(orderID);
+                    if (salesOrder != null)
                     {
-                        billType = "未结账";
+                        m_SalesOrder = salesOrder;
+                        //更新账单信息
+                        Order order = salesOrder.order;
+                        this.lbOrderNo.Text = order.OrderNo;
+                        this.lbDeskName.Text = order.DeskName;
+                        string billType = string.Empty;
+                        if (order.Status == 0 || order.Status == 3)
+                        {
+                            billType = "未结账";
+                        }
+                        else if (order.Status == 1)
+                        {
+                            billType = "已结账";
+                        }
+                        else if (order.Status == 2)
+                        {
+                            billType = "已删除";
+                        }
+                        this.lbBillType.Text = billType;
+                        string eatType = string.Empty;
+                        if (order.EatType == (int)EatWayType.DineIn)
+                        {
+                            eatType = "堂食";
+                        }
+                        else if (order.EatType == (int)EatWayType.Takeout)
+                        {
+                            eatType = "外卖";
+                        }
+                        else if (order.EatType == (int)EatWayType.OutsideOrder)
+                        {
+                            eatType = "外送";
+                        }
+                        this.lbEatType.Text = eatType;
+                        this.lbEmployeeNo.Text = order.EmployeeNo;
+                        this.lbCashier.Text = order.PayEmployeeNo;
+                        this.lbDeviceNo.Text = order.DeviceNo;
+                        int startIndex = selectedIndex + 1;
+                        int index = this.lbBillIndex.Text.IndexOf('/');
+                        this.lbBillIndex.Text = startIndex + this.lbBillIndex.Text.Substring(index);
+                        BindDataGridView2(salesOrder);
+                        BindDataGridView3(salesOrder);
                     }
-                    else if (order.Status == 1)
-                    {
-                        billType = "已结账";
-                    }
-                    else if (order.Status == 2)
-                    {
-                        billType = "已删除";
-                    }
-                    this.lbBillType.Text = billType;
-                    string eatType = string.Empty;
-                    if (order.EatType == (int)EatWayType.DineIn)
-                    {
-                        eatType = "堂食";
-                    }
-                    else if (order.EatType == (int)EatWayType.Takeout)
-                    {
-                        eatType = "外卖";
-                    }
-                    else if (order.EatType == (int)EatWayType.OutsideOrder)
-                    {
-                        eatType = "外送";
-                    }
-                    this.lbEatType.Text = eatType;
-                    this.lbEmployeeNo.Text = order.EmployeeNo;
-                    this.lbCashier.Text = order.PayEmployeeNo;
-                    this.lbDeviceNo.Text = order.DeviceNo;
-                    int startIndex = selectedIndex + 1;
-                    int index = this.lbBillIndex.Text.IndexOf('/');
-                    this.lbBillIndex.Text = startIndex + this.lbBillIndex.Text.Substring(index);
-                    BindDataGridView2(salesOrder);
-                    BindDataGridView3(salesOrder);
                 }
                 else
                 {
@@ -447,62 +458,65 @@ namespace Top4ever.Pos.Feature
 
         private void btnPrint_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.CurrentRow != null)
+            if (dataGridView1.CurrentRow != null && m_SalesOrder != null && m_SalesOrder.order != null)
             {
-                int selectedIndex = dataGridView1.CurrentRow.Index;
-                if (dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value != null)
+                if (m_SalesOrder.order.Status == 1)
                 {
-                    Order order = m_SalesOrder.order;
-                    //打印小票
-                    PrintData printData = new PrintData();
-                    printData.ShopName = ConstantValuePool.CurrentShop.ShopName;
-                    printData.DeskName = order.DeskName;
-                    printData.PersonNum = order.PeopleNum.ToString();
-                    printData.PrintTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
-                    printData.EmployeeNo = order.EmployeeNo;
-                    printData.TranSequence = order.TranSequence.ToString();
-                    printData.ShopAddress = ConstantValuePool.CurrentShop.RunAddress;
-                    printData.Telephone = ConstantValuePool.CurrentShop.Telephone;
-                    printData.ReceivableMoney = order.ActualSellPrice.ToString("f2");
-                    printData.ServiceFee = order.ServiceFee.ToString("f2");
-                    printData.PaidInMoney = order.PaymentMoney.ToString("f2");
-                    printData.NeedChangePay = order.NeedChangePay.ToString("f2");
-                    printData.GoodsOrderList = new List<GoodsOrder>();
-                    printData.PayingOrderList = new List<PayingGoodsOrder>();
-                    foreach (OrderDetails item in m_SalesOrder.orderDetailsList)
+                    int selectedIndex = dataGridView1.CurrentRow.Index;
+                    if (dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value != null)
                     {
-                        string strLevelFlag = string.Empty;
-                        int levelCount = item.ItemLevel * 2;
-                        for (int i = 0; i < levelCount; i++)
+                        Order order = m_SalesOrder.order;
+                        //打印小票
+                        PrintData printData = new PrintData();
+                        printData.ShopName = ConstantValuePool.CurrentShop.ShopName;
+                        printData.DeskName = order.DeskName;
+                        printData.PersonNum = order.PeopleNum.ToString();
+                        printData.PrintTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+                        printData.EmployeeNo = order.EmployeeNo;
+                        printData.TranSequence = order.TranSequence.ToString();
+                        printData.ShopAddress = ConstantValuePool.CurrentShop.RunAddress;
+                        printData.Telephone = ConstantValuePool.CurrentShop.Telephone;
+                        printData.ReceivableMoney = order.ActualSellPrice.ToString("f2");
+                        printData.ServiceFee = order.ServiceFee.ToString("f2");
+                        printData.PaidInMoney = order.PaymentMoney.ToString("f2");
+                        printData.NeedChangePay = order.NeedChangePay.ToString("f2");
+                        printData.GoodsOrderList = new List<GoodsOrder>();
+                        printData.PayingOrderList = new List<PayingGoodsOrder>();
+                        foreach (OrderDetails item in m_SalesOrder.orderDetailsList)
                         {
-                            strLevelFlag += "-";
+                            string strLevelFlag = string.Empty;
+                            int levelCount = item.ItemLevel * 2;
+                            for (int i = 0; i < levelCount; i++)
+                            {
+                                strLevelFlag += "-";
+                            }
+                            GoodsOrder goodsOrder = new GoodsOrder();
+                            goodsOrder.GoodsName = strLevelFlag + item.GoodsName;
+                            goodsOrder.GoodsNum = item.ItemQty.ToString("f1");
+                            goodsOrder.SellPrice = item.SellPrice.ToString("f2");
+                            goodsOrder.TotalSellPrice = item.TotalSellPrice.ToString("f2");
+                            goodsOrder.TotalDiscount = item.TotalDiscount.ToString("f2");
+                            goodsOrder.Unit = item.Unit;
+                            printData.GoodsOrderList.Add(goodsOrder);
                         }
-                        GoodsOrder goodsOrder = new GoodsOrder();
-                        goodsOrder.GoodsName = strLevelFlag + item.GoodsName;
-                        goodsOrder.GoodsNum = item.ItemQty.ToString("f1");
-                        goodsOrder.SellPrice = item.SellPrice.ToString("f2");
-                        goodsOrder.TotalSellPrice = item.TotalSellPrice.ToString("f2");
-                        goodsOrder.TotalDiscount = item.TotalDiscount.ToString("f2");
-                        goodsOrder.Unit = item.Unit;
-                        printData.GoodsOrderList.Add(goodsOrder);
-                    }
-                    foreach (OrderPayoff orderPayoff in m_SalesOrder.orderPayoffList)
-                    {
-                        PayingGoodsOrder payingOrder = new PayingGoodsOrder();
-                        payingOrder.PayoffName = orderPayoff.PayoffName;
-                        payingOrder.PayoffMoney = (orderPayoff.AsPay * orderPayoff.Quantity).ToString("f2");
-                        payingOrder.NeedChangePay = orderPayoff.NeedChangePay.ToString("f2");
-                        printData.PayingOrderList.Add(payingOrder);
-                    }
-                    string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
-                    string configPath = @"PrintConfig\InstructionPrintOrderSetting.config";
-                    string layoutPath = @"PrintConfig\PrintPaidOrder.ini";
-                    if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
-                    {
-                        configPath = @"PrintConfig\PrintOrderSetting.config";
-                        string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                        DriverOrderPrint printer = new DriverOrderPrint(printerName, paperWidth, "SpecimenLabel");
-                        printer.DoPrint(printData, layoutPath, configPath);
+                        foreach (OrderPayoff orderPayoff in m_SalesOrder.orderPayoffList)
+                        {
+                            PayingGoodsOrder payingOrder = new PayingGoodsOrder();
+                            payingOrder.PayoffName = orderPayoff.PayoffName;
+                            payingOrder.PayoffMoney = (orderPayoff.AsPay * orderPayoff.Quantity).ToString("f2");
+                            payingOrder.NeedChangePay = orderPayoff.NeedChangePay.ToString("f2");
+                            printData.PayingOrderList.Add(payingOrder);
+                        }
+                        string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
+                        string configPath = @"PrintConfig\InstructionPrintOrderSetting.config";
+                        string layoutPath = @"PrintConfig\PrintPaidOrder.ini";
+                        if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
+                        {
+                            configPath = @"PrintConfig\PrintOrderSetting.config";
+                            string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                            DriverOrderPrint printer = new DriverOrderPrint(printerName, paperWidth, "SpecimenLabel");
+                            printer.DoPrint(printData, layoutPath, configPath);
+                        }
                     }
                 }
             }
@@ -527,73 +541,63 @@ namespace Top4ever.Pos.Feature
 
         private void btnWholeDelete_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.CurrentRow != null)
+            if (dataGridView1.CurrentRow != null && m_SalesOrder != null && m_SalesOrder.order != null)
             {
-                int selectedIndex = dataGridView1.CurrentRow.Index;
-                if (dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value != null)
+                if (m_SalesOrder.order.Status == 1)
                 {
-                    //权限验证
-                    bool hasRights = false;
-                    if (RightsItemCode.FindRights(RightsItemCode.CANCELBILL))
+                    int selectedIndex = dataGridView1.CurrentRow.Index;
+                    if (dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value != null)
                     {
-                        hasRights = true;
-                    }
-                    else
-                    {
-                        FormRightsCode formRightsCode = new FormRightsCode();
-                        formRightsCode.ShowDialog();
-                        if (formRightsCode.ReturnValue)
+                        //权限验证
+                        bool hasRights = false;
+                        if (RightsItemCode.FindRights(RightsItemCode.CANCELBILL))
                         {
-                            IList<string> rightsCodeList = formRightsCode.RightsCodeList;
-                            if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.CANCELBILL))
-                            {
-                                hasRights = true;
-                            }
-                        }
-                    }
-                    if (!hasRights)
-                    {
-                        return;
-                    }
-                    FormCancelOrder form = new FormCancelOrder();
-                    form.ShowDialog();
-                    if (form.CurrentReason != null)
-                    {
-                        //删除订单
-                        DeletedOrder deletedOrder = new DeletedOrder();
-                        deletedOrder.OrderID = m_SalesOrder.order.OrderID;
-                        deletedOrder.AuthorisedManager = ConstantValuePool.CurrentEmployee.EmployeeID;
-                        deletedOrder.CancelEmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
-                        deletedOrder.CancelReasonName = form.CurrentReason.ReasonName;
-
-                        DeletedOrderService orderService = new DeletedOrderService();
-                        if (orderService.DeletePaidWholeOrder(deletedOrder))
-                        {
-                            dataGridView1.Rows[selectedIndex].Cells["BillType"].Value = "已删除";
-                            dataGridView1.Rows[selectedIndex].Cells["TotalSellPrice"].Value = string.Empty;
-                            dataGridView1.Rows[selectedIndex].Cells["ActualSellPrice"].Value = string.Empty;
-                            dataGridView1.Rows[selectedIndex].Cells["DiscountPrice"].Value = string.Empty;
-                            dataGridView1.Rows[selectedIndex].Cells["CutOffPrice"].Value = string.Empty;
-                            dataGridView1.Rows[selectedIndex].Cells["ServiceFee"].Value = string.Empty;
-                            dataGridView1.Rows[selectedIndex].Cells["PaymentMoney"].Value = string.Empty;
-                            dataGridView1.Rows[selectedIndex].Cells["NeedChangePay"].Value = string.Empty;
-                            dataGridView1.Rows[selectedIndex].Cells["MoreOrLess"].Value = string.Empty;
-                            btnBillModify.Enabled = false;
-                            btnBillModify.BackColor = ConstantValuePool.DisabledColor;
-                            btnSingleDelete.Enabled = false;
-                            btnSingleDelete.BackColor = ConstantValuePool.DisabledColor;
-                            btnWholeDelete.Enabled = false;
-                            btnWholeDelete.BackColor = ConstantValuePool.DisabledColor;
+                            hasRights = true;
                         }
                         else
                         {
-                            MessageBox.Show("删除账单失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            FormRightsCode formRightsCode = new FormRightsCode();
+                            formRightsCode.ShowDialog();
+                            if (formRightsCode.ReturnValue)
+                            {
+                                IList<string> rightsCodeList = formRightsCode.RightsCodeList;
+                                if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.CANCELBILL))
+                                {
+                                    hasRights = true;
+                                }
+                            }
+                        }
+                        if (!hasRights)
+                        {
                             return;
                         }
-                    }
-                    else
-                    {
-                        return;
+                        FormCancelOrder form = new FormCancelOrder();
+                        form.ShowDialog();
+                        if (form.CurrentReason != null)
+                        {
+                            //删除订单
+                            DeletedOrder deletedOrder = new DeletedOrder();
+                            deletedOrder.OrderID = m_SalesOrder.order.OrderID;
+                            deletedOrder.AuthorisedManager = ConstantValuePool.CurrentEmployee.EmployeeID;
+                            deletedOrder.CancelEmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
+                            deletedOrder.CancelReasonName = form.CurrentReason.ReasonName;
+
+                            DeletedOrderService orderService = new DeletedOrderService();
+                            if (orderService.DeletePaidWholeOrder(deletedOrder))
+                            {
+                                dataGridView1.Rows[selectedIndex].Cells["BillType"].Value = "已删除";
+                                m_SalesOrder.order.Status = 2;
+                            }
+                            else
+                            {
+                                MessageBox.Show("删除账单失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            return;
+                        }
                     }
                 }
             }
@@ -612,7 +616,7 @@ namespace Top4ever.Pos.Feature
                     {
                         Guid orderID = new Guid(dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value.ToString());
                         SalesOrderService salesOrderService = new SalesOrderService();
-                        SalesOrder salesOrder = salesOrderService.GetPaidSalesOrder(orderID);
+                        SalesOrder salesOrder = salesOrderService.GetSalesOrderByBillSearch(orderID);
                         m_SalesOrder = salesOrder;
                         //更新账单信息
                         dataGridView1.Rows[selectedIndex].Cells["TotalSellPrice"].Value = salesOrder.order.TotalSellPrice.ToString("f2");
@@ -643,7 +647,7 @@ namespace Top4ever.Pos.Feature
                     {
                         Guid orderID = new Guid(dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value.ToString());
                         SalesOrderService salesOrderService = new SalesOrderService();
-                        SalesOrder salesOrder = salesOrderService.GetPaidSalesOrder(orderID);
+                        SalesOrder salesOrder = salesOrderService.GetSalesOrderByBillSearch(orderID);
                         m_SalesOrder = salesOrder;
                         //更新账单信息
                         dataGridView1.Rows[selectedIndex].Cells["TotalSellPrice"].Value = salesOrder.order.TotalSellPrice.ToString("f2");

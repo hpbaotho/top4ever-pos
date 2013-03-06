@@ -693,7 +693,7 @@ namespace Top4ever.Pos.Feature
                                 {
                                     OrderPayoff temp = new OrderPayoff();
                                     temp.OrderPayoffID = Guid.NewGuid();
-                                    temp.OrderID = item.OrderID;
+                                    temp.OrderID = m_SalesOrder.order.OrderID;
                                     temp.PayoffID = item.PayoffID;
                                     temp.PayoffName = item.PayoffName;
                                     temp.PayoffType = item.PayoffType;
@@ -711,6 +711,7 @@ namespace Top4ever.Pos.Feature
                         if (!IsContains)
                         {
                             OrderPayoff temp = CopyExtension.Clone<OrderPayoff>(item);
+                            temp.OrderID = m_SalesOrder.order.OrderID;
                             temp.OrderPayoffID = Guid.NewGuid();
                             temp.EmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
                             orderPayoffList.Add(temp);
@@ -723,17 +724,17 @@ namespace Top4ever.Pos.Feature
                         decimal tempGoodsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsNum"].Value);
                         decimal tempGoodsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsDiscount"].Value);
                         decimal tempDeletedNum = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["DelFlag"].Value);
-                        string tempReasonName = dgvGoodsOrder.Rows[i].Cells["DelReasonName"].Value.ToString();
                         if (Math.Abs(tempDeletedNum) > 0)
                         {
-                            decimal remainQty = tempGoodsNum - tempDeletedNum;
+                            decimal remainQty = tempGoodsNum - Math.Abs(tempDeletedNum);
                             DeletedOrderDetails orderDetails = new DeletedOrderDetails();
                             orderDetails.OrderDetailsID = tempOrderDetails.OrderDetailsID;
+                            orderDetails.DeletedQuantity = tempDeletedNum;
                             orderDetails.RemainQuantity = remainQty;
                             orderDetails.OffPay = Math.Round(-tempGoodsDiscount / tempGoodsNum * remainQty, 4);
                             orderDetails.AuthorisedManager = ConstantValuePool.CurrentEmployee.EmployeeID;
                             orderDetails.CancelEmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
-                            orderDetails.CancelReasonName = tempReasonName;
+                            orderDetails.CancelReasonName = dgvGoodsOrder.Rows[i].Cells["DelReasonName"].Value.ToString(); ;
                             deletedOrderDetailsList.Add(orderDetails);
                         }
                     }
