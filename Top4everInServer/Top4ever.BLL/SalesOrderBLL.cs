@@ -103,12 +103,12 @@ namespace Top4ever.BLL
             return objRet;
         }
 
-        public static byte[] GetPaidSalesOrder(byte[] itemBuffer)
+        public static byte[] GetSalesOrderByBillSearch(byte[] itemBuffer)
         {
             byte[] objRet = null;
             string orderID = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, ParamFieldLength.ORDER_ID).Trim('\0');
 
-            SalesOrder salesOrder = SalesOrderService.GetInstance().GetPaidSalesOrder(new Guid(orderID));
+            SalesOrder salesOrder = SalesOrderService.GetInstance().GetSalesOrderByBillSearch(new Guid(orderID));
             if (salesOrder == null || salesOrder.orderDetailsList == null || salesOrder.orderDetailsList.Count == 0)
             {
                 //获取已支付单据失败

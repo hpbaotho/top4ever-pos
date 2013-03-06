@@ -16,5 +16,7 @@ namespace Top4ever.Interface.OrderRelated
         bool DeleteOrderPayoff(Guid orderID);
 
         IList<OrderPayoff> GetOrderPayoffList(Guid orderID);
+
+        IList<OrderPayoff> GetDeletedOrderPayoffList(Guid orderID);
     }
 }

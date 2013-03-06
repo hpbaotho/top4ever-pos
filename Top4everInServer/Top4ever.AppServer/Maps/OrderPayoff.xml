@@ -23,48 +23,54 @@
     -->
     <statements>
         <insert id="InsertOrderPayoff" parameterClass="OrderPayoff">
-			    INSERT INTO OrderPayoff
-			    (
-				    OrderPayoffID,
-				    OrderID,
-				    PayoffID,
-				    PayoffName,
-				    PayoffType,
-				    AsPay,
-				    Quantity,
-				    NeedChangePay,
-				    CardNo,
-				    DailyStatementNo,
-				    InputEmployeeID,
-					LastModifiedEmployeeID
-			    )
-			    VALUES
-			    (
-				    #OrderPayoffID#,
-				    #OrderID#,
-				    #PayoffID#,
-				    #PayoffName#,
-				    #PayoffType#,
-				    #AsPay#,
-				    #Quantity#,
-				    #NeedChangePay#,
-				    #CardNo#,
-				    #DailyStatementNo#,
-				    #EmployeeID#,
-					#EmployeeID#
-			    )
-		</insert>
+			      INSERT INTO OrderPayoff
+			      (
+				      OrderPayoffID,
+				      OrderID,
+				      PayoffID,
+				      PayoffName,
+				      PayoffType,
+				      AsPay,
+				      Quantity,
+				      NeedChangePay,
+				      CardNo,
+				      DailyStatementNo,
+				      InputEmployeeID,
+					  LastModifiedEmployeeID
+			      )
+			      VALUES
+			      (
+				      #OrderPayoffID#,
+				      #OrderID#,
+				      #PayoffID#,
+				      #PayoffName#,
+				      #PayoffType#,
+				      #AsPay#,
+				      #Quantity#,
+				      #NeedChangePay#,
+				      #CardNo#,
+				      #DailyStatementNo#,
+				      #EmployeeID#,
+					  #EmployeeID#
+			      )
+		  </insert>
 
-      <select id="GetOrderPayoffList" parameterClass="Guid" resultMap="OrderPayoffResult">
-        SELECT PayoffID, PayoffName,PayoffType, AsPay, Quantity, NeedChangePay, CardNo
-        FROM OrderPayoff
-        WHERE OrderID = #value# AND IsVoided = 0
+      <select id="GetOrderPayoff" parameterClass="Guid" resultMap="OrderPayoffResult">
+          SELECT PayoffID, PayoffName,PayoffType, AsPay, Quantity, NeedChangePay, CardNo
+          FROM OrderPayoff
+          WHERE OrderID = #value# AND IsVoided = 0
       </select>
 
+      <select id="GetDeletedOrderPayoff" parameterClass="Guid" resultMap="OrderPayoffResult">
+          SELECT PayoffID, PayoffName,PayoffType, AsPay, Quantity, NeedChangePay, CardNo
+          FROM OrderPayoff
+          WHERE OrderID = #value# AND IsVoided = 1
+      </select>
+      
       <update id="UpdateDeletedOrderPayoff" parameterClass="Guid">
-        UPDATE OrderPayoff
-        SET IsVoided = 1, <![CDATA[ LastModifiedTime = getdate(), Transfered = 0 ]]>
-        WHERE OrderID = #value#
+          UPDATE OrderPayoff
+          SET IsVoided = 1, <![CDATA[ LastModifiedTime = getdate(), Transfered = 0 ]]>
+          WHERE OrderID = #value#
       </update>
     </statements>
 </sqlMap>

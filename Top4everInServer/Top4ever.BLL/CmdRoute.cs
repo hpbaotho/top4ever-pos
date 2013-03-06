@@ -85,8 +85,8 @@ namespace Top4ever.BLL
                 case Command.ID_SWIPINGCARDTOLOGIN:
                     byteRet = EmployeeBLL.SwipingCardToLogin(itemBuffer);
                     break;
-                case Command.ID_GET_PAIDORDERLIST:
-                    byteRet = SalesOrderBLL.GetPaidSalesOrder(itemBuffer);
+                case Command.ID_GET_SALESORDERBYBILLSEARCH:
+                    byteRet = SalesOrderBLL.GetSalesOrderByBillSearch(itemBuffer);
                     break;
                 case Command.ID_DELETE_PAIDWHOLEORDER:
                     byteRet = DeletedOrderBLL.DeletePaidWholeOrder(itemBuffer);
@@ -99,6 +99,9 @@ namespace Top4ever.BLL
                     break;
                 case Command.ID_DELETE_PAIDSINGLEORDER:
                     byteRet = DeletedOrderBLL.DeletePaidSingleOrder(itemBuffer);
+                    break;
+                case Command.ID_MODIFY_PAIDORDER:
+                    byteRet = ModifyOrderBLL.ModifyForOrder(itemBuffer);
                     break;
 
                 default:

@@ -239,7 +239,7 @@ namespace Top4ever.Service
             return returnValue;
         }
 
-        public SalesOrder GetPaidSalesOrder(Guid orderID)
+        public SalesOrder GetSalesOrderByBillSearch(Guid orderID)
         {
             SalesOrder salesOrder = null;
             _daoManager.OpenConnection();
@@ -247,14 +247,35 @@ namespace Top4ever.Service
             Order order = _orderDao.GetOrder(orderID);
             if (order != null)
             {
-                IList<OrderDetails> orderDetailsList = _orderDetailsDao.GetOrderDetailsList(orderID);
-                IList<OrderDiscount> orderDiscountList = _orderDiscountDao.GetOrderDiscountList(orderID);
-                IList<OrderPayoff> orderPayoffList = _orderPayoffDao.GetOrderPayoffList(orderID);
                 salesOrder = new SalesOrder();
                 salesOrder.order = order;
-                salesOrder.orderDetailsList = orderDetailsList;
-                salesOrder.orderDiscountList = orderDiscountList;
-                salesOrder.orderPayoffList = orderPayoffList;
+                if (order.Status != 4)
+                {
+                    IList<OrderDetails> orderDetailsList = null;
+                    IList<OrderDiscount> orderDiscountList = null;
+                    if (order.Status == 0 || order.Status == 1 || order.Status == 3)
+                    {
+                        orderDetailsList = _orderDetailsDao.GetOrderDetailsList(orderID);
+                        orderDiscountList = _orderDiscountDao.GetOrderDiscountList(orderID);
+                    }
+                    else if (order.Status == 2)
+                    {
+                        orderDetailsList = _orderDetailsDao.GetDeletedOrderDetailsList(orderID);
+                        orderDiscountList = _orderDiscountDao.GetDeletedOrderDiscountList(orderID);
+                    }
+                    IList<OrderPayoff> orderPayoffList = null;
+                    if (order.Status == 1)
+                    {
+                        orderPayoffList = _orderPayoffDao.GetOrderPayoffList(orderID);
+                    }
+                    else if (order.Status == 2)
+                    {
+                        orderPayoffList = _orderPayoffDao.GetDeletedOrderPayoffList(orderID);
+                    }
+                    salesOrder.orderDetailsList = orderDetailsList;
+                    salesOrder.orderDiscountList = orderDiscountList;
+                    salesOrder.orderPayoffList = orderPayoffList;
+                }
             }
 
             _daoManager.CloseConnection();
