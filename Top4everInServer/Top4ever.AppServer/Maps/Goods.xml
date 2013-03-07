@@ -2,24 +2,24 @@
 <sqlMap namespace="Goods" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <alias>
-        <typeAlias alias="Goods" type="Top4ever.Domain.GoodsRelated.Goods, Top4ever.Domain" />
+      <typeAlias alias="Goods" type="Top4ever.Domain.GoodsRelated.Goods, Top4ever.Domain" />
     </alias>
 
     <resultMaps>
-        <resultMap  id="GoodsResult" class="Goods">
-            <result property="GoodsID" column="GoodsID"></result>
-            <result property="GoodsNo" column="GoodsNo"></result>
-            <result property="BarCode" column="BarCode"></result>
-            <result property="GoodsName" column="GoodsName"></result>
-			      <result property="GoodsName2nd" column="GoodsName_2nd"></result>
-            <result property="Unit" column="Unit"></result>
-            <result property="SellPrice" column="SellPrice"></result>
-            <result property="CanDiscount" column="CanDiscount"></result>
-            <result property="AutoShowDetails" column="AutoShowDetails"></result>
-            <result property="PrintSolutionName" column="PrintSolutionName"></result>
-            <result property="DepartID" column="DepartID"></result>
-            <result property="ButtonStyleID" column="ButtonStyleID"></result>
-        </resultMap>
+      <resultMap id="GoodsResult" class="Goods">
+        <result property="GoodsID" column="GoodsID"></result>
+        <result property="GoodsNo" column="GoodsNo"></result>
+        <result property="BarCode" column="BarCode"></result>
+        <result property="GoodsName" column="GoodsName"></result>
+        <result property="GoodsName2nd" column="GoodsName_2nd"></result>
+        <result property="Unit" column="Unit"></result>
+        <result property="SellPrice" column="SellPrice"></result>
+        <result property="CanDiscount" column="CanDiscount"></result>
+        <result property="AutoShowDetails" column="AutoShowDetails"></result>
+        <result property="PrintSolutionName" column="PrintSolutionName"></result>
+        <result property="DepartID" column="DepartID"></result>
+        <result property="ButtonStyleID" column="ButtonStyleID"></result>
+      </resultMap>
 
     </resultMaps>
     <!-- =============================================
@@ -27,29 +27,29 @@
     ============================================= 
     -->
     <statements>
-        <select id="GetGoodsListByGroup" parameterClass="Guid" resultMap="GoodsResult">
-			    SELECT g.GoodsID
-			        , g.GoodsNo
-			        , g.BarCode
-			        , g.GoodsName
-			        , g.GoodsName_2nd
-			        , g.Unit
-			        , g.SellPrice
-			        , g.CanDiscount
-			        , g.AutoShowDetails
-			        , g.PrintSolutionName
-			        , g.DepartID
-			        , g.ButtonStyleID
-			    FROM GoodsRelation gr JOIN Goods g ON g.GoodsID = gr.GoodsID
-			    WHERE gr.GoodsGroupID = #value# AND g.IsVoided = 0
-			    ORDER BY gr.OrderBy
-		    </select>
+      <select id="GetGoodsListByGroup" parameterClass="Guid" resultMap="GoodsResult">
+        SELECT g.GoodsID
+	        , g.GoodsNo
+	        , g.BarCode
+	        , g.GoodsName
+	        , g.GoodsName_2nd
+	        , g.Unit
+	        , g.SellPrice
+	        , g.CanDiscount
+	        , g.AutoShowDetails
+	        , g.PrintSolutionName
+	        , g.DepartID
+	        , g.ButtonStyleID
+        FROM GoodsRelation gr JOIN Goods g ON g.GoodsID = gr.GoodsID
+        WHERE gr.GoodsGroupID = #value# AND g.IsVoided = 0
+        ORDER BY gr.OrderBy
+      </select>
         
-        <select id="GetDetailsGroupIDListByGoodsID" parameterClass="Guid" resultClass="Guid">
-            SELECT DetailsGroupID
-            FROM GoodsDetailsGroup
-            WHERE GoodsID = #value#
-        </select>
+      <select id="GetDetailsGroupIDListByGoodsID" parameterClass="Guid" resultClass="Guid">
+        SELECT DetailsGroupID
+        FROM GoodsDetailsGroup
+        WHERE GoodsID = #value#
+      </select>
         
     </statements>
 </sqlMap>
