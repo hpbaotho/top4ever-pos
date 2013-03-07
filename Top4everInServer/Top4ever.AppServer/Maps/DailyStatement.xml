@@ -2,26 +2,26 @@
 <sqlMap namespace="DailyStatement" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <alias>
-        <typeAlias alias="DailyStatement" type="Top4ever.Domain.DailyStatement, Top4ever.Domain" />
+      <typeAlias alias="DailyStatement" type="Top4ever.Domain.DailyStatement, Top4ever.Domain" />
     </alias>
 
     <parameterMaps>
-        <parameterMap id="DailyStatementResult" class="DailyStatement">
-            <parameter property="DailyStatementID" column="DailyStatementID"/>
-            <parameter property="DailyStatementNo" column="DailyStatementNo"/>
-            <parameter property="DeviceNo" column="DeviceNo"/>
-			      <parameter property="BelongToDate" column="BelongToDate"/>
-			      <parameter property="Weather" column="Weather"/>
-            <parameter property="EmployeeID" column="LastChangeEmpID"/>
-        </parameterMap>
+      <parameterMap id="DailyStatementResult" class="DailyStatement">
+        <parameter property="DailyStatementID" column="DailyStatementID"/>
+        <parameter property="DailyStatementNo" column="DailyStatementNo"/>
+        <parameter property="DeviceNo" column="DeviceNo"/>
+	      <parameter property="BelongToDate" column="BelongToDate"/>
+	      <parameter property="Weather" column="Weather"/>
+        <parameter property="EmployeeID" column="LastChangeEmpID"/>
+      </parameterMap>
 
-		    <parameterMap id="DailyStatementParam" class="DailyStatement">
-			    <parameter property="DailyStatementNo"/>
-			    <parameter property="DeviceNo"/>
-			    <parameter property="BelongToDate"/>
-			    <parameter property="Weather"/>
-			    <parameter property="EmployeeID"/>
-		    </parameterMap>
+      <parameterMap id="DailyStatementParam" class="DailyStatement">
+        <parameter property="DailyStatementNo"/>
+        <parameter property="DeviceNo"/>
+        <parameter property="BelongToDate"/>
+        <parameter property="Weather"/>
+        <parameter property="EmployeeID"/>
+      </parameterMap>
 
 	</parameterMaps>
 
@@ -30,29 +30,29 @@
     ============================================= 
     -->
     <statements>
-        <select id="SelectDailyStatementNo" resultClass="String">
-            SELECT DailyStatementNo FROM DailyStatement WHERE BelongToDate IS NULL AND IsVoided = 0
-        </select>
+      <select id="SelectDailyStatementNo" resultClass="String">
+        SELECT DailyStatementNo FROM DailyStatement WHERE BelongToDate IS NULL AND IsVoided = 0
+      </select>
 
-		    <insert id="InsertDailyStatement" parameterClass="DailyStatement">
-			      INSERT INTO DailyStatement(DailyStatementID, DailyStatementNo)
-			      VALUES(#DailyStatementID#, #DailyStatementNo#)
-		    </insert>
+      <insert id="InsertDailyStatement" parameterClass="DailyStatement">
+	      INSERT INTO DailyStatement(DailyStatementID, DailyStatementNo)
+	      VALUES(#DailyStatementID#, #DailyStatementNo#)
+      </insert>
 
-		    <procedure id="UpdateDailyStatement" parameterMap="DailyStatementParam">
-			      proc_UpdateDailyStatement
-		    </procedure>
+      <procedure id="UpdateDailyStatement" parameterMap="DailyStatementParam">
+	      proc_UpdateDailyStatement
+      </procedure>
 
-        <select id="SelectDailyStatementTimeInterval" parameterClass="String" resultClass="String">
-            SELECT CONVERT(VARCHAR(10),MIN(PayTime),120) + ',' + CONVERT(VARCHAR(10),MAX(PayTime),120) AS DailyStatementTime
-            FROM [Order]
-            WHERE DailyStatementNo = #value#
-        </select>
+      <select id="SelectDailyStatementTimeInterval" parameterClass="String" resultClass="String">
+        SELECT CONVERT(VARCHAR(10),MIN(PayTime),120) + ',' + CONVERT(VARCHAR(10),MAX(PayTime),120) AS DailyStatementTime
+        FROM [Order]
+        WHERE DailyStatementNo = #value#
+      </select>
 
-        <select id="SelectLastDailyStatementDate" resultClass="DateTime">
-            SELECT TOP 1 ISNULL(BelongToDate, DATEADD(DAY,-1,GETDATE())) AS LastBelongDate
-            FROM DailyStatement
-            ORDER BY BelongToDate DESC
-        </select>
+      <select id="SelectLastDailyStatementDate" resultClass="DateTime">
+        SELECT TOP 1 ISNULL(BelongToDate, DATEADD(DAY,-1,GETDATE())) AS LastBelongDate
+        FROM DailyStatement
+        ORDER BY BelongToDate DESC
+      </select>
     </statements>
 </sqlMap>

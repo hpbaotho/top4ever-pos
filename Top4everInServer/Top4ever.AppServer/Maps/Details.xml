@@ -2,22 +2,22 @@
 <sqlMap namespace="Details" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <alias>
-        <typeAlias alias="Details" type="Top4ever.Domain.GoodsRelated.Details, Top4ever.Domain" />
+      <typeAlias alias="Details" type="Top4ever.Domain.GoodsRelated.Details, Top4ever.Domain" />
     </alias>
 
     <resultMaps>
-        <resultMap  id="DetailsResult" class="Details">
-            <result property="DetailsID" column="DetailsID"></result>
-            <result property="DetailsNo" column="DetailsNo"></result>
-            <result property="DetailsName" column="DetailsName"></result>
-			      <result property="DetailsName2nd" column="DetailsName_2nd"></result>
-            <result property="SellPrice" column="SellPrice"></result>
-            <result property="CanDiscount" column="CanDiscount"></result>
-            <result property="AutoShowDetails" column="AutoShowDetails"></result>
-            <result property="PrintSolutionName" column="PrintSolutionName"></result>
-            <result property="DepartID" column="DepartID"></result>
-            <result property="ButtonStyleID" column="ButtonStyleID"></result>
-        </resultMap>
+      <resultMap id="DetailsResult" class="Details">
+        <result property="DetailsID" column="DetailsID"></result>
+        <result property="DetailsNo" column="DetailsNo"></result>
+        <result property="DetailsName" column="DetailsName"></result>
+	      <result property="DetailsName2nd" column="DetailsName_2nd"></result>
+        <result property="SellPrice" column="SellPrice"></result>
+        <result property="CanDiscount" column="CanDiscount"></result>
+        <result property="AutoShowDetails" column="AutoShowDetails"></result>
+        <result property="PrintSolutionName" column="PrintSolutionName"></result>
+        <result property="DepartID" column="DepartID"></result>
+        <result property="ButtonStyleID" column="ButtonStyleID"></result>
+      </resultMap>
 
     </resultMaps>
     <!-- =============================================
@@ -25,25 +25,25 @@
     ============================================= 
     -->
     <statements>
-        <select id="GetDetailsListByGroup" parameterClass="Guid" resultMap="DetailsResult">
-			    SELECT DetailsID
-			    , DetailsNo
-			    , DetailsName
-			    , DetailsName_2nd
-			    , SellPrice
-			    , CanDiscount
-			    , AutoShowDetails
-			    , PrintSolutionName
-			    , DepartID
-			    , ButtonStyleID
-			    FROM Details
-			    WHERE DetailsGroupID = #value# AND IsVoided = 0
-			    ORDER BY OrderBy
-		    </select>
+      <select id="GetDetailsListByGroup" parameterClass="Guid" resultMap="DetailsResult">
+			  SELECT DetailsID
+			  , DetailsNo
+			  , DetailsName
+			  , DetailsName_2nd
+			  , SellPrice
+			  , CanDiscount
+			  , AutoShowDetails
+			  , PrintSolutionName
+			  , DepartID
+			  , ButtonStyleID
+			  FROM Details
+			  WHERE DetailsGroupID = #value# AND IsVoided = 0
+			  ORDER BY OrderBy
+		  </select>
 
-        <select id="GetDetailsGroupIDListByDetailsID" parameterClass="Guid" resultClass="Guid">
-            SELECT DetailsGroupID FROM DetailsDetailsGroup WHERE DetailsID = #value#
-        </select>
+      <select id="GetDetailsGroupIDListByDetailsID" parameterClass="Guid" resultClass="Guid">
+        SELECT DetailsGroupID FROM DetailsDetailsGroup WHERE DetailsID = #value#
+      </select>
         
     </statements>
 </sqlMap>
