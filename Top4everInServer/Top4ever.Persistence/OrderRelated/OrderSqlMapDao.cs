@@ -62,6 +62,13 @@ namespace Top4ever.Persistence.OrderRelated
             return result > 0;
         }
 
+        public bool UpdatePrePayOrder(Order order)
+        {
+            int result = 0;
+            result = ExecuteUpdate("UpdatePrePayOrder", order);
+            return result > 0;
+        }
+
         public bool UpdatePayingOrder(Order order)
         {
             int result = 0;

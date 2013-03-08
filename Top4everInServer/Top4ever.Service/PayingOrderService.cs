@@ -45,6 +45,46 @@ namespace Top4ever.Service
             return _instance;
         }
 
+        public bool CreatePrePayOrder(PayingOrder payingOrder)
+        {
+            bool returnValue = false;
+            _daoManager.BeginTransaction();
+            try
+            {
+                if (payingOrder != null)
+                {
+                    //日结
+                    string dailyStatementNo = _dailyStatementDao.GetCurrentDailyStatementNo();
+                    //更新Order
+                    if (_orderDao.UpdatePrePayOrder(payingOrder.order))
+                    {
+                        //更新OrderDetails
+                        foreach (OrderDetails item in payingOrder.orderDetailsList)
+                        {
+                            _orderDetailsDao.UpdateOrderDetailsDiscount(item);
+                        }
+                        //插入OrderDiscount
+                        if (payingOrder.orderDiscountList != null && payingOrder.orderDiscountList.Count > 0)
+                        {
+                            foreach (OrderDiscount item in payingOrder.orderDiscountList)
+                            {
+                                item.DailyStatementNo = dailyStatementNo;
+                                _orderDiscountDao.CreateOrderDiscount(item);
+                            }
+                        }
+                        returnValue = true;
+                    }
+                }
+                _daoManager.CommitTransaction();
+            }
+            catch
+            {
+                _daoManager.RollBackTransaction();
+                returnValue = false;
+            }
+            return returnValue;
+        }
+
         public bool PayForOrder(PayingOrder payingOrder)
         { 
             bool returnValue = false;

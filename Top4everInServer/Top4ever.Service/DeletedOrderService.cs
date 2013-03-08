@@ -156,7 +156,7 @@ namespace Top4ever.Service
                     {
                         foreach (DeletedOrderDetails item in deletedPaidOrder.deletedOrderDetailsList)
                         {
-                            //_orderDetailsDao.DeleteSingleOrderDetails(item);
+                            _orderDetailsDao.DeleteSingleOrderDetails(item);
                         }
                         _orderPayoffDao.DeleteOrderPayoff(deletedPaidOrder.order.OrderID);
                         //日结号

@@ -23,6 +23,8 @@ namespace Top4ever.Interface.OrderRelated
 
         bool UpdateOrderPrice(Order order);
 
+        bool UpdatePrePayOrder(Order order);
+
         bool UpdatePayingOrder(Order order);
 
         bool UpdatePaidOrderPrice(Order order);

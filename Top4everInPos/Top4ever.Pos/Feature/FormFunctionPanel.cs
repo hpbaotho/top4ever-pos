@@ -118,7 +118,7 @@ namespace Top4ever.Pos.Feature
                 btn.Width = width;
                 btn.Height = height;
                 btn.Location = new Point(px, py);
-                btn.Font = new Font("Microsoft YaHei", 12F, FontStyle.Bold);
+                btn.Font = new Font("Microsoft YaHei", 10.5F, FontStyle.Bold);
                 this.pnlFunction.Controls.Add(btn);
 
                 index++;
