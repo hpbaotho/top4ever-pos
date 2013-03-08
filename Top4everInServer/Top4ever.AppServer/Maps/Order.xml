@@ -118,6 +118,13 @@
         WHERE OrderID = #OrderID#
       </update>
 
+      <update id="UpdatePrePayOrder" parameterClass="Order">
+        UPDATE [Order]
+        SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#, CutOffPrice = #CutOffPrice#, ServiceFee = #ServiceFee#,
+            MembershipCard = #MembershipCard#, MemberDiscount = #MemberDiscount#, [Status] = 3
+        WHERE OrderID = #OrderID#
+      </update>
+
       <update id="UpdatePayingOrder" parameterClass="Order">
         UPDATE [Order]
         SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#, CutOffPrice = #CutOffPrice#, ServiceFee = #ServiceFee#, PaymentMoney = #PaymentMoney#, NeedChangePay = #NeedChangePay#,

@@ -208,7 +208,7 @@
             this.pnlDesk.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlDesk.Location = new System.Drawing.Point(0, 108);
             this.pnlDesk.Name = "pnlDesk";
-            this.pnlDesk.Size = new System.Drawing.Size(1024, 553);
+            this.pnlDesk.Size = new System.Drawing.Size(1024, 571);
             this.pnlDesk.TabIndex = 2;
             // 
             // btnLookColor
@@ -250,7 +250,7 @@
             // pnlRegion
             // 
             this.pnlRegion.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlRegion.Location = new System.Drawing.Point(0, 661);
+            this.pnlRegion.Location = new System.Drawing.Point(0, 679);
             this.pnlRegion.Name = "pnlRegion";
             this.pnlRegion.Size = new System.Drawing.Size(1024, 89);
             this.pnlRegion.TabIndex = 3;
@@ -259,7 +259,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1024, 750);
+            this.ClientSize = new System.Drawing.Size(1024, 768);
             this.Controls.Add(this.pnlDesk);
             this.Controls.Add(this.pnlRegion);
             this.Controls.Add(this.pnlToolBar);

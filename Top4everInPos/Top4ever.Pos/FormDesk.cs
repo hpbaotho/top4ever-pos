@@ -686,7 +686,8 @@ namespace Top4ever.Pos
         {
             if (haveDailyClose)
             {
-
+                FormTakeout form = new FormTakeout();
+                form.ShowDialog();
             }
             else
             {

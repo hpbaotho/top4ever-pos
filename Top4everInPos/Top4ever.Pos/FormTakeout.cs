@@ -38,6 +38,12 @@ namespace Top4ever.Pos
         public FormTakeout()
         {
             InitializeComponent();
+            btnPageUp.DisplayColor = btnPageUp.BackColor;
+            btnPageDown.DisplayColor = btnPageDown.BackColor;
+            btnHead.DisplayColor = btnHead.BackColor;
+            btnBack.DisplayColor = btnBack.BackColor;
+            btnPgUp.DisplayColor = btnPgUp.BackColor;
+            btnPgDown.DisplayColor = btnPgDown.BackColor;
         }
 
         private void FormTakeout_Load(object sender, EventArgs e)
@@ -101,12 +107,6 @@ namespace Top4ever.Pos
             txtTelephone.Text = string.Empty;
             txtName.Text = string.Empty;
             txtAddress.Text = string.Empty;
-            btnPageUp.DisplayColor = btnPageUp.BackColor;
-            btnPageDown.DisplayColor = btnPageDown.BackColor;
-            btnHead.DisplayColor = btnHead.BackColor;
-            btnBack.DisplayColor = btnBack.BackColor;
-            btnPgUp.DisplayColor = btnPgUp.BackColor;
-            btnPgDown.DisplayColor = btnPgDown.BackColor;
         }
 
         private void InitDeliveryButton()

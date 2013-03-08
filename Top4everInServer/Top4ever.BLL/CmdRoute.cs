@@ -103,6 +103,9 @@ namespace Top4ever.BLL
                 case Command.ID_MODIFY_PAIDORDER:
                     byteRet = ModifyOrderBLL.ModifyForOrder(itemBuffer);
                     break;
+                case Command.ID_CREATE_PREPAYORDER:
+                    byteRet = PayingOrderBLL.CreatePrePayOrder(itemBuffer);
+                    break;
 
                 default:
                     byteRet = null;
