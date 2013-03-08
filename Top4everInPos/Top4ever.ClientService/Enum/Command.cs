@@ -33,6 +33,7 @@ namespace Top4ever.ClientService.Enum
         ID_CHECK_LASTDAILYSTATEMENT = 27,
         ID_UPDATE_ORDERSTATUS = 28,
         ID_DELETE_PAIDSINGLEORDER = 29,
-        ID_MODIFY_PAIDORDER = 30
+        ID_MODIFY_PAIDORDER = 30,
+        ID_CREATE_PREPAYORDER = 31
     }
 }

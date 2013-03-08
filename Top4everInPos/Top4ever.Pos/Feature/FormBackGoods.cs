@@ -104,7 +104,8 @@ namespace Top4ever.Pos.Feature
                 btn.Width = m_Width;
                 btn.Height = m_Height;
                 btn.BackColor = btn.DisplayColor = Color.Blue;
-                btn.Font = new Font("Microsoft YaHei", 12F, FontStyle.Regular);
+                btn.Font = new Font("Microsoft YaHei", 9.75F, FontStyle.Regular);
+                btn.ForeColor = Color.White;
                 foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
                 {
                     if (payoff.ButtonStyleID.Equals(btnStyle.ButtonStyleID))

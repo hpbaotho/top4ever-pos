@@ -138,6 +138,7 @@ namespace Top4ever.Pos
                 btn.Height = m_Height;
                 btn.BackColor = btn.DisplayColor = Color.Blue;
                 btn.Font = new Font("Microsoft YaHei", 12F, FontStyle.Regular);
+                btn.ForeColor = Color.White;
                 foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
                 {
                     if (payoff.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
@@ -571,61 +572,64 @@ namespace Top4ever.Pos
 
         private void btnDiscount_Click(object sender, EventArgs e)
         {
-            if (dgvGoodsOrder.Rows.Count > 0)
+            if (dgvGoodsOrder.RowCount > 0)
             {
-                //权限验证
-                bool hasRights = false;
-                if (RightsItemCode.FindRights(RightsItemCode.WHOLEDISCOUNT))
+                if (m_SalesOrder.order.Status == 0)
                 {
-                    hasRights = true;
-                }
-                else
-                {
-                    FormRightsCode form = new FormRightsCode();
-                    form.ShowDialog();
-                    if (form.ReturnValue)
+                    //权限验证
+                    bool hasRights = false;
+                    if (RightsItemCode.FindRights(RightsItemCode.WHOLEDISCOUNT))
                     {
-                        IList<string> rightsCodeList = form.RightsCodeList;
-                        if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.WHOLEDISCOUNT))
-                        {
-                            hasRights = true;
-                        }
+                        hasRights = true;
                     }
-                }
-                if (!hasRights)
-                {
-                    return;
-                }
-                FormDiscount formDiscount = new FormDiscount(DiscountDisplayModel.WholeDiscount);
-                formDiscount.ShowDialog();
-                if (formDiscount.CurrentDiscount != null)
-                {
-                    Discount discount = formDiscount.CurrentDiscount;
-                    foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
+                    else
                     {
-                        OrderDetails orderDetails = dr.Cells["OrderDetailsID"].Tag as OrderDetails;
-                        if (orderDetails != null)
+                        FormRightsCode form = new FormRightsCode();
+                        form.ShowDialog();
+                        if (form.ReturnValue)
                         {
-                            Discount itemDiscount = dr.Cells["GoodsDiscount"].Tag as Discount;
-                            decimal itemDiscountPrice = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value);
-                            if (orderDetails.CanDiscount && (itemDiscount != null || itemDiscountPrice == 0))
-                            {                                
-                                if (discount.DiscountType == (int)DiscountItemType.DiscountRate)
-                                {
-                                    dr.Cells["GoodsDiscount"].Value = -Convert.ToDecimal(dr.Cells["GoodsPrice"].Value) * discount.DiscountRate;
-                                }
-                                else
-                                {
-                                    dr.Cells["GoodsDiscount"].Value = -discount.OffFixPay;
-                                }
-                                orderDetails.TotalDiscount = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value);
-                                dr.Cells["OrderDetailsID"].Tag = orderDetails;
-                                dr.Cells["GoodsDiscount"].Tag = discount;
+                            IList<string> rightsCodeList = form.RightsCodeList;
+                            if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.WHOLEDISCOUNT))
+                            {
+                                hasRights = true;
                             }
                         }
                     }
-                    //统计
-                    BindOrderInfoSum();                    
+                    if (!hasRights)
+                    {
+                        return;
+                    }
+                    FormDiscount formDiscount = new FormDiscount(DiscountDisplayModel.WholeDiscount);
+                    formDiscount.ShowDialog();
+                    if (formDiscount.CurrentDiscount != null)
+                    {
+                        Discount discount = formDiscount.CurrentDiscount;
+                        foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
+                        {
+                            OrderDetails orderDetails = dr.Cells["OrderDetailsID"].Tag as OrderDetails;
+                            if (orderDetails != null)
+                            {
+                                Discount itemDiscount = dr.Cells["GoodsDiscount"].Tag as Discount;
+                                decimal itemDiscountPrice = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value);
+                                if (orderDetails.CanDiscount && (itemDiscount != null || itemDiscountPrice == 0))
+                                {
+                                    if (discount.DiscountType == (int)DiscountItemType.DiscountRate)
+                                    {
+                                        dr.Cells["GoodsDiscount"].Value = -Convert.ToDecimal(dr.Cells["GoodsPrice"].Value) * discount.DiscountRate;
+                                    }
+                                    else
+                                    {
+                                        dr.Cells["GoodsDiscount"].Value = -discount.OffFixPay;
+                                    }
+                                    orderDetails.TotalDiscount = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value);
+                                    dr.Cells["OrderDetailsID"].Tag = orderDetails;
+                                    dr.Cells["GoodsDiscount"].Tag = discount;
+                                }
+                            }
+                        }
+                        //统计
+                        BindOrderInfoSum();
+                    }
                 }
             }
         }
@@ -954,10 +958,23 @@ namespace Top4ever.Pos
                 }
                 if (orderDetailsList.Count > 0 && newOrderDiscountList.Count > 0)
                 {
-                    SalesOrder salesOrder = new SalesOrder();
-                    salesOrder.order = submitOrder;
-                    salesOrder.orderDetailsList = orderDetailsList;
-                    salesOrder.orderDiscountList = newOrderDiscountList;
+                    PayingOrder payingOrder = new PayingOrder();
+                    payingOrder.order = submitOrder;
+                    payingOrder.orderDetailsList = orderDetailsList;
+                    payingOrder.orderDiscountList = newOrderDiscountList;
+                    PayingOrderService payingOrderService = new PayingOrderService();
+                    bool result = payingOrderService.CreatePrePayOrder(payingOrder);
+                    if (result)
+                    {
+                        btn.Text = "解锁";
+                        order.Status = 3;   //预结
+                        m_IsPreCheckOut = true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("预结账单失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                 }
                 //打印预结小票
                 PrintData printData = new PrintData();
@@ -999,20 +1016,6 @@ namespace Top4ever.Pos
                     string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
                     DriverOrderPrint printer = new DriverOrderPrint(printerName, paperWidth, "SpecimenLabel");
                     printer.DoPrint(printData, layoutPath, configPath);
-                }
-                //更新状态
-                int status = 3;
-                OrderService orderService = new OrderService();
-                if (orderService.UpdateOrderStatus(order.OrderID, status))
-                {
-                    btn.Text = "解锁";
-                    order.Status = status;
-                    m_IsPreCheckOut = true;
-                }
-                else
-                {
-                    MessageBox.Show("更新预结状态失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
                 }
             }
             else if (order.Status == 3)
@@ -1058,28 +1061,31 @@ namespace Top4ever.Pos
 
         private void btnMember_Click(object sender, EventArgs e)
         {
-            //权限验证
-            bool hasRights = false;
-            if (RightsItemCode.FindRights(RightsItemCode.MEMBERDISCOUNT))
+            if (m_SalesOrder.order.Status == 0)
             {
-                hasRights = true;
-            }
-            else
-            {
-                FormRightsCode form = new FormRightsCode();
-                form.ShowDialog();
-                if (form.ReturnValue)
+                //权限验证
+                bool hasRights = false;
+                if (RightsItemCode.FindRights(RightsItemCode.MEMBERDISCOUNT))
                 {
-                    IList<string> rightsCodeList = form.RightsCodeList;
-                    if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.MEMBERDISCOUNT))
+                    hasRights = true;
+                }
+                else
+                {
+                    FormRightsCode form = new FormRightsCode();
+                    form.ShowDialog();
+                    if (form.ReturnValue)
                     {
-                        hasRights = true;
+                        IList<string> rightsCodeList = form.RightsCodeList;
+                        if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.MEMBERDISCOUNT))
+                        {
+                            hasRights = true;
+                        }
                     }
                 }
-            }
-            if (!hasRights)
-            {
-                return;
+                if (!hasRights)
+                {
+                    return;
+                }
             }
         }
 

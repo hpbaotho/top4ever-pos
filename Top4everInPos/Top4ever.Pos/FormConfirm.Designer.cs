@@ -28,120 +28,166 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtReceMoney = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.txtPaidInMoney = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtNeedChangePay = new System.Windows.Forms.TextBox();
-            this.txtPayoffWay = new System.Windows.Forms.TextBox();
             this.btnConfirm = new Top4ever.CustomControl.CrystalButton();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lbReceAmount = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtPayoffWay = new System.Windows.Forms.TextBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.lbPaidInAmount = new System.Windows.Forms.Label();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.lbNeedChangePay = new System.Windows.Forms.Label();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 23);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(163, 29);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "应收金额：";
-            // 
-            // txtReceMoney
-            // 
-            this.txtReceMoney.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.txtReceMoney.Location = new System.Drawing.Point(156, 63);
-            this.txtReceMoney.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txtReceMoney.Name = "txtReceMoney";
-            this.txtReceMoney.ReadOnly = true;
-            this.txtReceMoney.Size = new System.Drawing.Size(436, 41);
-            this.txtReceMoney.TabIndex = 1;
-            this.txtReceMoney.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 114);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(103, 29);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "收款：";
-            // 
-            // txtPaidInMoney
-            // 
-            this.txtPaidInMoney.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.txtPaidInMoney.Location = new System.Drawing.Point(156, 153);
-            this.txtPaidInMoney.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txtPaidInMoney.Name = "txtPaidInMoney";
-            this.txtPaidInMoney.Size = new System.Drawing.Size(436, 41);
-            this.txtPaidInMoney.TabIndex = 2;
-            this.txtPaidInMoney.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(13, 210);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(313, 29);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "找零（礼券不找零）：";
-            // 
-            // txtNeedChangePay
-            // 
-            this.txtNeedChangePay.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.txtNeedChangePay.Location = new System.Drawing.Point(156, 256);
-            this.txtNeedChangePay.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txtNeedChangePay.Name = "txtNeedChangePay";
-            this.txtNeedChangePay.Size = new System.Drawing.Size(436, 41);
-            this.txtNeedChangePay.TabIndex = 3;
-            this.txtNeedChangePay.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtPayoffWay
-            // 
-            this.txtPayoffWay.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.txtPayoffWay.Font = new System.Drawing.Font("微软雅黑", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtPayoffWay.Location = new System.Drawing.Point(29, 328);
-            this.txtPayoffWay.Multiline = true;
-            this.txtPayoffWay.Name = "txtPayoffWay";
-            this.txtPayoffWay.Size = new System.Drawing.Size(563, 62);
-            this.txtPayoffWay.TabIndex = 4;
-            this.txtPayoffWay.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // btnConfirm
             // 
-            this.btnConfirm.BackColor = System.Drawing.Color.Green;
+            this.btnConfirm.BackColor = System.Drawing.Color.Teal;
             this.btnConfirm.Font = new System.Drawing.Font("微软雅黑", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnConfirm.ForeColor = System.Drawing.Color.White;
-            this.btnConfirm.Location = new System.Drawing.Point(469, 411);
+            this.btnConfirm.Location = new System.Drawing.Point(427, 257);
+            this.btnConfirm.Margin = new System.Windows.Forms.Padding(2);
             this.btnConfirm.Name = "btnConfirm";
-            this.btnConfirm.Size = new System.Drawing.Size(123, 47);
+            this.btnConfirm.Size = new System.Drawing.Size(125, 62);
             this.btnConfirm.TabIndex = 2;
             this.btnConfirm.Text = "确定";
             this.btnConfirm.UseVisualStyleBackColor = false;
             this.btnConfirm.Click += new System.EventHandler(this.btnConfirm_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.lbReceAmount);
+            this.groupBox1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.groupBox1.ForeColor = System.Drawing.Color.RoyalBlue;
+            this.groupBox1.Location = new System.Drawing.Point(8, 7);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(269, 115);
+            this.groupBox1.TabIndex = 1;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "应付金额";
+            // 
+            // lbReceAmount
+            // 
+            this.lbReceAmount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbReceAmount.Font = new System.Drawing.Font("Arial", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbReceAmount.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lbReceAmount.Location = new System.Drawing.Point(60, 46);
+            this.lbReceAmount.Name = "lbReceAmount";
+            this.lbReceAmount.Size = new System.Drawing.Size(205, 53);
+            this.lbReceAmount.TabIndex = 0;
+            this.lbReceAmount.Text = "250.00";
+            this.lbReceAmount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.label2);
+            this.groupBox2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.groupBox2.ForeColor = System.Drawing.Color.RoyalBlue;
+            this.groupBox2.Location = new System.Drawing.Point(283, 7);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(269, 115);
+            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "实付金额";
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.Font = new System.Drawing.Font("Arial", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.Blue;
+            this.label2.Location = new System.Drawing.Point(60, 55);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(205, 53);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "300.00";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtPayoffWay
+            // 
+            this.txtPayoffWay.Location = new System.Drawing.Point(8, 140);
+            this.txtPayoffWay.Multiline = true;
+            this.txtPayoffWay.Name = "txtPayoffWay";
+            this.txtPayoffWay.ReadOnly = true;
+            this.txtPayoffWay.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtPayoffWay.Size = new System.Drawing.Size(269, 179);
+            this.txtPayoffWay.TabIndex = 3;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.lbPaidInAmount);
+            this.groupBox3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.groupBox3.ForeColor = System.Drawing.Color.RoyalBlue;
+            this.groupBox3.Location = new System.Drawing.Point(283, 7);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(269, 115);
+            this.groupBox3.TabIndex = 1;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "实付金额";
+            // 
+            // lbPaidInAmount
+            // 
+            this.lbPaidInAmount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbPaidInAmount.Font = new System.Drawing.Font("Arial", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbPaidInAmount.ForeColor = System.Drawing.Color.Blue;
+            this.lbPaidInAmount.Location = new System.Drawing.Point(54, 46);
+            this.lbPaidInAmount.Name = "lbPaidInAmount";
+            this.lbPaidInAmount.Size = new System.Drawing.Size(205, 53);
+            this.lbPaidInAmount.TabIndex = 0;
+            this.lbPaidInAmount.Text = "300.00";
+            this.lbPaidInAmount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.lbNeedChangePay);
+            this.groupBox4.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.groupBox4.ForeColor = System.Drawing.Color.RoyalBlue;
+            this.groupBox4.Location = new System.Drawing.Point(283, 129);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(269, 115);
+            this.groupBox4.TabIndex = 1;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "找零";
+            // 
+            // lbNeedChangePay
+            // 
+            this.lbNeedChangePay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbNeedChangePay.Font = new System.Drawing.Font("Arial", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbNeedChangePay.ForeColor = System.Drawing.Color.Red;
+            this.lbNeedChangePay.Location = new System.Drawing.Point(59, 39);
+            this.lbNeedChangePay.Name = "lbNeedChangePay";
+            this.lbNeedChangePay.Size = new System.Drawing.Size(205, 53);
+            this.lbNeedChangePay.TabIndex = 0;
+            this.lbNeedChangePay.Text = "0.00";
+            this.lbNeedChangePay.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // FormConfirm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 29F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(614, 478);
-            this.Controls.Add(this.btnConfirm);
+            this.ClientSize = new System.Drawing.Size(560, 330);
             this.Controls.Add(this.txtPayoffWay);
-            this.Controls.Add(this.txtNeedChangePay);
-            this.Controls.Add(this.txtPaidInMoney);
-            this.Controls.Add(this.txtReceMoney);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Font = new System.Drawing.Font("宋体", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Controls.Add(this.groupBox4);
+            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.btnConfirm);
+            this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormConfirm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FormConfirm";
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -149,13 +195,15 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtReceMoney;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox txtPaidInMoney;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txtNeedChangePay;
-        private System.Windows.Forms.TextBox txtPayoffWay;
         private CustomControl.CrystalButton btnConfirm;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label lbReceAmount;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox txtPayoffWay;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Label lbPaidInAmount;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Label lbNeedChangePay;
     }
 }
