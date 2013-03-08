@@ -93,16 +93,16 @@
             this.SellPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Discount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
-            this.btnPageUp = new Top4ever.CustomControl.CrystalButton();
-            this.btnPageDown = new Top4ever.CustomControl.CrystalButton();
-            this.lbPage = new System.Windows.Forms.Label();
-            this.lbBill = new System.Windows.Forms.Label();
-            this.lbBillIndex = new System.Windows.Forms.Label();
             this.PayDefName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TotalMoney = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ChangePay = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.RealPay = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CutOffPay = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnPageUp = new Top4ever.CustomControl.CrystalButton();
+            this.btnPageDown = new Top4ever.CustomControl.CrystalButton();
+            this.lbPage = new System.Windows.Forms.Label();
+            this.lbBill = new System.Windows.Forms.Label();
+            this.lbBillIndex = new System.Windows.Forms.Label();
             this.pnlTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.pnlInformation.SuspendLayout();
@@ -178,6 +178,7 @@
             // btnBillModify
             // 
             this.btnBillModify.BackColor = System.Drawing.Color.SteelBlue;
+            this.btnBillModify.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnBillModify.ForeColor = System.Drawing.Color.White;
             this.btnBillModify.Location = new System.Drawing.Point(673, 6);
             this.btnBillModify.Name = "btnBillModify";
@@ -626,6 +627,51 @@
             this.dataGridView3.Size = new System.Drawing.Size(500, 215);
             this.dataGridView3.TabIndex = 3;
             // 
+            // PayDefName
+            // 
+            this.PayDefName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle17.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.PayDefName.DefaultCellStyle = dataGridViewCellStyle17;
+            this.PayDefName.HeaderText = "PayDefName";
+            this.PayDefName.Name = "PayDefName";
+            // 
+            // TotalMoney
+            // 
+            dataGridViewCellStyle18.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle18.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.TotalMoney.DefaultCellStyle = dataGridViewCellStyle18;
+            this.TotalMoney.HeaderText = "TotalMoney";
+            this.TotalMoney.Name = "TotalMoney";
+            this.TotalMoney.Width = 80;
+            // 
+            // ChangePay
+            // 
+            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle19.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle19.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.ChangePay.DefaultCellStyle = dataGridViewCellStyle19;
+            this.ChangePay.HeaderText = "ChangePay";
+            this.ChangePay.Name = "ChangePay";
+            this.ChangePay.Width = 86;
+            // 
+            // RealPay
+            // 
+            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle20.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle20.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.RealPay.DefaultCellStyle = dataGridViewCellStyle20;
+            this.RealPay.HeaderText = "RealPay";
+            this.RealPay.Name = "RealPay";
+            // 
+            // CutOffPay
+            // 
+            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle21.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle21.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.CutOffPay.DefaultCellStyle = dataGridViewCellStyle21;
+            this.CutOffPay.HeaderText = "CutOffPay";
+            this.CutOffPay.Name = "CutOffPay";
+            // 
             // btnPageUp
             // 
             this.btnPageUp.BackColor = System.Drawing.Color.Tomato;
@@ -681,51 +727,6 @@
             this.lbBillIndex.Size = new System.Drawing.Size(53, 21);
             this.lbBillIndex.TabIndex = 7;
             this.lbBillIndex.Text = "37/52";
-            // 
-            // PayDefName
-            // 
-            this.PayDefName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle17.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.PayDefName.DefaultCellStyle = dataGridViewCellStyle17;
-            this.PayDefName.HeaderText = "PayDefName";
-            this.PayDefName.Name = "PayDefName";
-            // 
-            // TotalMoney
-            // 
-            dataGridViewCellStyle18.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle18.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.TotalMoney.DefaultCellStyle = dataGridViewCellStyle18;
-            this.TotalMoney.HeaderText = "TotalMoney";
-            this.TotalMoney.Name = "TotalMoney";
-            this.TotalMoney.Width = 80;
-            // 
-            // ChangePay
-            // 
-            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle19.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle19.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.ChangePay.DefaultCellStyle = dataGridViewCellStyle19;
-            this.ChangePay.HeaderText = "ChangePay";
-            this.ChangePay.Name = "ChangePay";
-            this.ChangePay.Width = 86;
-            // 
-            // RealPay
-            // 
-            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle20.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle20.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.RealPay.DefaultCellStyle = dataGridViewCellStyle20;
-            this.RealPay.HeaderText = "RealPay";
-            this.RealPay.Name = "RealPay";
-            // 
-            // CutOffPay
-            // 
-            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle21.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle21.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.CutOffPay.DefaultCellStyle = dataGridViewCellStyle21;
-            this.CutOffPay.HeaderText = "CutOffPay";
-            this.CutOffPay.Name = "CutOffPay";
             // 
             // FormBillManagement
             // 

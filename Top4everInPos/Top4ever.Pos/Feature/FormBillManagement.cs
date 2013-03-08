@@ -29,6 +29,7 @@ namespace Top4ever.Pos.Feature
         public FormBillManagement()
         {
             InitializeComponent();
+            ResizeStyle();
         }
 
         private void FormBillManagement_Load(object sender, EventArgs e)
@@ -287,52 +288,52 @@ namespace Top4ever.Pos.Feature
         {
             this.dataGridView3.Rows.Clear();
             Order order = salesOrder.order;
+            //售价总计
+            int index = dataGridView3.Rows.Add();
+            dataGridView3.Rows[index].Cells[0].Value = "售价总计";
+            dataGridView3.Rows[index].Cells[1].Value = string.Empty;
+            dataGridView3.Rows[index].Cells[2].Value = string.Empty;
+            dataGridView3.Rows[index].Cells[3].Value = order.TotalSellPrice.ToString("f2");
+            //去零金额
+            if (Math.Abs(order.CutOffPrice) > 0)
+            {
+                index = dataGridView3.Rows.Add();
+                dataGridView3.Rows[index].Cells[0].Value = "去零金额";
+                dataGridView3.Rows[index].Cells[1].Value = string.Empty;
+                dataGridView3.Rows[index].Cells[2].Value = string.Empty;
+                dataGridView3.Rows[index].Cells[3].Value = string.Empty;
+                dataGridView3.Rows[index].Cells[4].Value = (-order.CutOffPrice).ToString("f2");
+            }
+            //折扣金额
+            if (Math.Abs(order.DiscountPrice) > 0)
+            {
+                index = dataGridView3.Rows.Add();
+                dataGridView3.Rows[index].Cells[0].Value = "折扣金额";
+                dataGridView3.Rows[index].Cells[1].Value = string.Empty;
+                dataGridView3.Rows[index].Cells[2].Value = string.Empty;
+                dataGridView3.Rows[index].Cells[3].Value = order.DiscountPrice.ToString("f2");
+                dataGridView3.Rows[index].Cells[4].Value = string.Empty;
+            }
+            //实际金额
+            index = dataGridView3.Rows.Add();
+            dataGridView3.Rows[index].Cells[0].Value = "实际金额";
+            dataGridView3.Rows[index].Cells[1].Value = string.Empty;
+            dataGridView3.Rows[index].Cells[2].Value = string.Empty;
+            dataGridView3.Rows[index].Cells[3].Value = order.ActualSellPrice.ToString("f2");
+            dataGridView3.Rows[index].Cells[4].Value = string.Empty;
+            //服务费
+            if (order.ServiceFee > 0)
+            {
+                index = dataGridView3.Rows.Add();
+                dataGridView3.Rows[index].Cells[0].Value = "服务费";
+                dataGridView3.Rows[index].Cells[1].Value = string.Empty;
+                dataGridView3.Rows[index].Cells[2].Value = string.Empty;
+                dataGridView3.Rows[index].Cells[3].Value = order.ServiceFee.ToString("f2");
+                dataGridView3.Rows[index].Cells[4].Value = string.Empty;
+            }
             IList<OrderPayoff> orderPayoffList = salesOrder.orderPayoffList;
             if (orderPayoffList != null && orderPayoffList.Count > 0)
             {
-                //售价总计
-                int index = dataGridView3.Rows.Add();
-                dataGridView3.Rows[index].Cells[0].Value = "售价总计";
-                dataGridView3.Rows[index].Cells[1].Value = string.Empty;
-                dataGridView3.Rows[index].Cells[2].Value = string.Empty;
-                dataGridView3.Rows[index].Cells[3].Value = order.TotalSellPrice.ToString("f2");
-                //去零金额
-                if (Math.Abs(order.CutOffPrice) > 0)
-                {
-                    index = dataGridView3.Rows.Add();
-                    dataGridView3.Rows[index].Cells[0].Value = "去零金额";
-                    dataGridView3.Rows[index].Cells[1].Value = string.Empty;
-                    dataGridView3.Rows[index].Cells[2].Value = string.Empty;
-                    dataGridView3.Rows[index].Cells[3].Value = string.Empty;
-                    dataGridView3.Rows[index].Cells[4].Value = order.CutOffPrice.ToString("f2");
-                }
-                //折扣金额
-                if (Math.Abs(order.DiscountPrice) > 0)
-                {
-                    index = dataGridView3.Rows.Add();
-                    dataGridView3.Rows[index].Cells[0].Value = "折扣金额";
-                    dataGridView3.Rows[index].Cells[1].Value = string.Empty;
-                    dataGridView3.Rows[index].Cells[2].Value = string.Empty;
-                    dataGridView3.Rows[index].Cells[3].Value = (-order.DiscountPrice).ToString("f2");
-                    dataGridView3.Rows[index].Cells[4].Value = string.Empty;
-                }
-                //实际金额
-                index = dataGridView3.Rows.Add();
-                dataGridView3.Rows[index].Cells[0].Value = "实际金额";
-                dataGridView3.Rows[index].Cells[1].Value = string.Empty;
-                dataGridView3.Rows[index].Cells[2].Value = string.Empty;
-                dataGridView3.Rows[index].Cells[3].Value = order.ActualSellPrice.ToString("f2");
-                dataGridView3.Rows[index].Cells[4].Value = string.Empty;
-                //服务费
-                if (order.ServiceFee > 0)
-                {
-                    index = dataGridView3.Rows.Add();
-                    dataGridView3.Rows[index].Cells[0].Value = "服务费";
-                    dataGridView3.Rows[index].Cells[1].Value = string.Empty;
-                    dataGridView3.Rows[index].Cells[2].Value = string.Empty;
-                    dataGridView3.Rows[index].Cells[3].Value = order.ServiceFee.ToString("f2");
-                    dataGridView3.Rows[index].Cells[4].Value = string.Empty;
-                }
                 //空行
                 dataGridView3.Rows.Add();
                 //支付金额
@@ -664,5 +665,38 @@ namespace Top4ever.Pos.Feature
                 }
             }
         }
+
+        #region 重算坐标
+        private void ResizeStyle()
+        {
+            Rectangle ScreenArea = Screen.GetWorkingArea(this);
+            if (ScreenArea.Width > 1280)
+            {
+                decimal widthRate = Convert.ToDecimal(ScreenArea.Width) / 1024;
+                decimal heightRate = Convert.ToDecimal(ScreenArea.Height) / 771;
+                SetBounds(0, 0, ScreenArea.Width, ScreenArea.Height);
+
+                foreach (Control c in this.Controls)
+                {
+                    SetControlSize(c, widthRate, heightRate);
+                }
+                foreach (Control c in this.pnlInformation.Controls)
+                {
+                    SetControlSize(c, widthRate, heightRate);
+                }
+                foreach (Control c in this.pnlTop.Controls)
+                {
+                    SetControlSize(c, widthRate, heightRate);
+                }
+            }
+        }
+
+        private void SetControlSize(Control ctl, decimal widthRate, decimal heightRate)
+        {
+            ctl.Width = Convert.ToInt32(ctl.Width * widthRate);
+            ctl.Height = Convert.ToInt32(ctl.Height * heightRate);
+            ctl.Location = new Point(Convert.ToInt32(ctl.Location.X * widthRate), Convert.ToInt32(ctl.Location.Y * heightRate));
+        }
+        #endregion
     }
 }
