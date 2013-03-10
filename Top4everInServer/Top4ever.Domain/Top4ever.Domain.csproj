@@ -71,6 +71,7 @@
     <Compile Include="Transfer\DeletedOrder.cs" />
     <Compile Include="Transfer\DeletedPaidOrder.cs" />
     <Compile Include="Transfer\DeletedSingleOrder.cs" />
+    <Compile Include="Transfer\DeliveryOrder.cs" />
     <Compile Include="Transfer\DeskChange.cs" />
     <Compile Include="Transfer\HandoverInfo.cs" />
     <Compile Include="Transfer\ItemsPrice.cs" />

@@ -14,7 +14,7 @@ namespace Top4ever.ClientService
         public SalesOrderService()
         { }
 
-        public bool CreateSalesOrder(SalesOrder salesOrder)
+        public Int32 CreateSalesOrder(SalesOrder salesOrder)
         {
             string json = JsonConvert.SerializeObject(salesOrder);
             byte[] jsonByte = Encoding.UTF8.GetBytes(json);
@@ -29,7 +29,7 @@ namespace Top4ever.ClientService
             Array.Copy(jsonByte, 0, sendByte, byteOffset, jsonByte.Length);
             byteOffset += jsonByte.Length;
 
-            bool result = false;
+            int result = 0;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
                 socket.Connect();
@@ -37,7 +37,7 @@ namespace Top4ever.ClientService
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
                 {
-                    result = true;
+                    result = BitConverter.ToInt32(receiveData, ParamFieldLength.PACKAGE_HEAD);
                 }
                 socket.Disconnect();
             }

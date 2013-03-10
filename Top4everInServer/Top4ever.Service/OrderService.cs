@@ -18,6 +18,7 @@ namespace Top4ever.Service
         private IDaoManager _daoManager = null;
         private IOrderDao _orderDao = null;
         private IPrintTaskDao _printTaskDao = null;
+        private IDailyStatementDao _dailyStatementDao = null;
 
         #endregion
 
@@ -28,6 +29,7 @@ namespace Top4ever.Service
             _daoManager = ServiceConfig.GetInstance().DaoManager;
             _orderDao = _daoManager.GetDao(typeof(IOrderDao)) as IOrderDao;
             _printTaskDao = _daoManager.GetDao(typeof(IPrintTaskDao)) as IPrintTaskDao;
+            _dailyStatementDao = _daoManager.GetDao(typeof(IDailyStatementDao)) as IDailyStatementDao;
         }
 
         #endregion
@@ -159,6 +161,22 @@ namespace Top4ever.Service
             _daoManager.CloseConnection();
 
             return result;
+        }
+
+        public IList<DeliveryOrder> GetDeliveryOrderList()
+        {
+            IList<DeliveryOrder> deliveryOrderList = null;
+
+            _daoManager.OpenConnection();
+            //日结号
+            string dailyStatementNo = _dailyStatementDao.GetCurrentDailyStatementNo();
+            if (!string.IsNullOrEmpty(dailyStatementNo))
+            {
+                deliveryOrderList = _orderDao.GetDeliveryOrderList(dailyStatementNo);
+            }
+            _daoManager.CloseConnection();
+
+            return deliveryOrderList;
         }
         #endregion
     }

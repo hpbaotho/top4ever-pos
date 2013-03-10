@@ -3,20 +3,28 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO.Ports;
 using System.Text;
 using System.Windows.Forms;
 
+using Top4ever.ClientService;
 using Top4ever.Common;
 using Top4ever.CustomControl;
 using Top4ever.Domain;
 using Top4ever.Domain.GoodsRelated;
+using Top4ever.Domain.OrderRelated;
+using Top4ever.Domain.Transfer;
 using Top4ever.Entity;
 using Top4ever.Entity.Enum;
+using Top4ever.Print.Entity;
+using Top4ever.Print;
+using Top4ever.Pos.Feature;
 
 namespace Top4ever.Pos
 {
     public partial class FormTakeout : Form
     {
+        private const string deskName = "W001";
         private List<CrystalButton> btnDeliveryList = new List<CrystalButton>();
         private const int m_Space = 2;
         private int m_GoodsGroupPageIndex = 0;
@@ -28,12 +36,21 @@ namespace Top4ever.Pos
         private IList<Guid> m_CurrentDetailsGroupIDList;
         private string m_DetailsPrefix = string.Empty;
         private bool m_GoodsOrDetails = true;
+        /// <summary>
+        /// 提交的订单信息
+        /// </summary>
+        private SalesOrder m_SalesOrder;
         private decimal m_TotalPrice = 0;
         private decimal m_ActualPayMoney = 0;
         private decimal m_Discount = 0;
         private decimal m_CutOff = 0;
+        private Guid m_EmployeeID = Guid.Empty;
+        private string m_EmployeeNo = string.Empty;
         private CrystalButton prevPressedButton = null;
         private bool m_ShowSilverCode = false;
+        //外卖单列表
+        private const int m_PageCount = 10;
+        private int m_PageIndex = 0;
 
         public FormTakeout()
         {
@@ -65,19 +82,22 @@ namespace Top4ever.Pos
             m_GoodsOrDetails = true;
             //Tools Bar Size
             int space = 2;
-            int buttonNum = 8;
+            int buttonNum = 9;
             int width = (this.pnlTools.Width - (buttonNum - 1) * space) / buttonNum;
             int offsetX = 0, offsetY = 0;
             btnFuncPanel.Width = width;
-            offsetX += width + space;
-            btnTakeOut.Width = width;
-            btnTakeOut.Location = new Point(offsetX, offsetY);
             offsetX += width + space;
             btnDiscount.Width = width;
             btnDiscount.Location = new Point(offsetX, offsetY);
             offsetX += width + space;
             btnWholeDiscount.Width = width;
             btnWholeDiscount.Location = new Point(offsetX, offsetY);
+            offsetX += width + space;
+            btnTakeOut.Width = width;
+            btnTakeOut.Location = new Point(offsetX, offsetY);
+            offsetX += width + space;
+            btnBeNew.Width = width;
+            btnBeNew.Location = new Point(offsetX, offsetY);
             offsetX += width + space;
             btnOutsideOrder.Width = width;
             btnOutsideOrder.Location = new Point(offsetX, offsetY);
@@ -107,6 +127,13 @@ namespace Top4ever.Pos
             txtTelephone.Text = string.Empty;
             txtName.Text = string.Empty;
             txtAddress.Text = string.Empty;
+            //加载外卖单列表
+            OrderService orderService = new OrderService();
+            IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
+            if (deliveryOrderList != null)
+            {
+                DisplayDeliveryOrderButton(deliveryOrderList);
+            }
         }
 
         private void InitDeliveryButton()
@@ -121,18 +148,19 @@ namespace Top4ever.Pos
             }
             else
             {
-                int buttonNum = 10, space = 2;
+                int space = 2;
                 int px = 0, py = space;
-                int height = (this.pnlDelivery.Height - this.pnlPage.Height - (buttonNum + 1) * space) / buttonNum;
-                for (int i = 0; i < buttonNum; i++)
+                int height = (this.pnlDelivery.Height - this.pnlPage.Height - (m_PageCount + 1) * space) / m_PageCount;
+                for (int i = 0; i < m_PageCount; i++)
                 {
                     CrystalButton btnDelivery = new CrystalButton();
                     btnDelivery.Name = "btnDelivery" + i;
-                    btnDelivery.BackColor = Color.DodgerBlue;
+                    btnDelivery.BackColor = btnDelivery.DisplayColor = Color.DodgerBlue;
                     btnDelivery.Font = new Font("微软雅黑", 9.75F);
                     btnDelivery.ForeColor = Color.White;
                     btnDelivery.Location = new Point(px, py);
                     btnDelivery.Size = new Size(pnlDelivery.Width - space, height);
+                    btnDelivery.Click += new System.EventHandler(this.btnDelivery_Click);
                     this.pnlDelivery.Controls.Add(btnDelivery);
                     btnDeliveryList.Add(btnDelivery);
                     py += height + space;
@@ -1074,6 +1102,46 @@ namespace Top4ever.Pos
         }
         #endregion
 
+        private void BindGoodsOrderInfo()
+        {
+            this.dgvGoodsOrder.Rows.Clear();
+            if (m_SalesOrder.orderDetailsList != null && m_SalesOrder.orderDetailsList.Count > 0)
+            {
+                foreach (OrderDetails orderDetails in m_SalesOrder.orderDetailsList)
+                {
+                    int index = dgvGoodsOrder.Rows.Add(new DataGridViewRow());
+                    dgvGoodsOrder.Rows[index].Cells["ItemID"].Value = orderDetails.GoodsID;
+                    dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = orderDetails.ItemQty;
+                    string restOrderFlag = string.Empty;
+                    if (orderDetails.Wait == 1)
+                    {
+                        restOrderFlag = "*";
+                    }
+                    if (orderDetails.ItemType == (int)OrderItemType.Goods)
+                    {
+                        dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = restOrderFlag + orderDetails.GoodsName;
+                    }
+                    else
+                    {
+                        string strLevelFlag = string.Empty;
+                        int levelCount = orderDetails.ItemLevel * 2;
+                        for (int i = 0; i < levelCount; i++)
+                        {
+                            strLevelFlag += "-";
+                        }
+                        dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = strLevelFlag + restOrderFlag + orderDetails.GoodsName;
+                    }
+                    dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = orderDetails.TotalSellPrice;
+                    dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = orderDetails.TotalDiscount;
+                    dgvGoodsOrder.Rows[index].Cells["ItemType"].Value = orderDetails.ItemType;
+                    dgvGoodsOrder.Rows[index].Cells["CanDiscount"].Value = orderDetails.CanDiscount;
+                    dgvGoodsOrder.Rows[index].Cells["ItemUnit"].Value = orderDetails.Unit;
+                    dgvGoodsOrder.Rows[index].Cells["Wait"].Value = orderDetails.Wait;
+                    dgvGoodsOrder.Rows[index].Cells["OrderDetailsID"].Value = orderDetails.OrderDetailsID;
+                }
+            }
+        }
+
         private void BindOrderInfoSum()
         {
             decimal totalPrice = 0, totalDiscount = 0;
@@ -1110,6 +1178,65 @@ namespace Top4ever.Pos
             form.ShowDialog();
         }
 
+        private void btnTakeOut_Click(object sender, EventArgs e)
+        {
+            if (SubmitSalesOrder(deskName, EatWayType.Takeout))
+            {
+                this.lbTotalPrice.Text = "总金额：";
+                this.lbDiscount.Text = "折扣：";
+                this.lbNeedPayMoney.Text = "实际应付：";
+                this.lbCutOff.Text = "去零：";
+                dgvGoodsOrder.Rows.Clear();
+                //加载外卖单列表
+                m_PageIndex = 0;
+                CleanDeliveryOrderButton();
+                OrderService orderService = new OrderService();
+                IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
+                if (deliveryOrderList != null)
+                {
+                    DisplayDeliveryOrderButton(deliveryOrderList);
+                }
+            }
+            else
+            {
+                MessageBox.Show("外带提交失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnBeNew_Click(object sender, EventArgs e)
+        {
+            this.lbTotalPrice.Text = "总金额：";
+            this.lbDiscount.Text = "折扣：";
+            this.lbNeedPayMoney.Text = "实际应付：";
+            this.lbCutOff.Text = "去零：";
+            dgvGoodsOrder.Rows.Clear();
+        }
+
+        private void btnOutsideOrder_Click(object sender, EventArgs e)
+        {
+            if (SubmitSalesOrder(deskName, EatWayType.OutsideOrder))
+            {
+                this.lbTotalPrice.Text = "总金额：";
+                this.lbDiscount.Text = "折扣：";
+                this.lbNeedPayMoney.Text = "实际应付：";
+                this.lbCutOff.Text = "去零：";
+                dgvGoodsOrder.Rows.Clear();
+                //加载外卖单列表
+                m_PageIndex = 0;
+                CleanDeliveryOrderButton();
+                OrderService orderService = new OrderService();
+                IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
+                if (deliveryOrderList != null)
+                {
+                    DisplayDeliveryOrderButton(deliveryOrderList);
+                }
+            }
+            else
+            {
+                MessageBox.Show("外送提交失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -1119,6 +1246,485 @@ namespace Top4ever.Pos
         {
             m_ShowSilverCode = !m_ShowSilverCode;
             DisplayGoodsButton();
+        }
+
+        private void btnDelivery_Click(object sender, EventArgs e)
+        {
+            CrystalButton btnDelivery = sender as CrystalButton;
+            DeliveryOrder deliveryOrder = btnDelivery.Tag as DeliveryOrder;
+            if (deliveryOrder.PayTime == null)
+            {
+                SalesOrderService salesOrderService = new SalesOrderService();
+                SalesOrder _salesOrder = salesOrderService.GetSalesOrder(deliveryOrder.OrderID);
+                if (_salesOrder != null)
+                {
+                    m_SalesOrder = _salesOrder;
+                    BindGoodsOrderInfo();   //绑定订单信息
+                    BindOrderInfoSum();
+                }
+                else
+                {
+                    MessageBox.Show("获取账单信息失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            { 
+                
+            }
+        }
+
+        private bool SubmitSalesOrder(string deskName, EatWayType eatType)
+        {
+            bool result = false;
+            Guid orderID = Guid.Empty;
+            if (m_SalesOrder == null)    //新增的菜单
+            {
+                orderID = Guid.NewGuid();
+            }
+            else
+            {
+                orderID = m_SalesOrder.order.OrderID;
+            }
+            List<OrderDetails> newOrderDetailsList = new List<OrderDetails>();
+            List<OrderDiscount> newOrderDiscountList = new List<OrderDiscount>();
+            foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
+            {
+                if (dr.Cells["OrderDetailsID"].Value == null)
+                {
+                    Guid orderDetailsID = Guid.NewGuid();
+                    int itemType = Convert.ToInt32(dr.Cells["ItemType"].Value);
+                    string goodsName = dr.Cells["GoodsName"].Value.ToString();
+                    //填充OrderDetails
+                    OrderDetails orderDetails = new OrderDetails();
+                    orderDetails.OrderDetailsID = orderDetailsID;
+                    orderDetails.OrderID = orderID;
+                    orderDetails.DeviceNo = ConstantValuePool.BizSettingConfig.DeviceNo;
+                    orderDetails.TotalSellPrice = Convert.ToDecimal(dr.Cells["GoodsPrice"].Value);
+                    orderDetails.TotalDiscount = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value);
+                    orderDetails.ItemQty = Convert.ToDecimal(dr.Cells["GoodsNum"].Value);
+                    orderDetails.EmployeeID = m_EmployeeID;
+                    if (dr.Cells["Wait"].Value != null)
+                    {
+                        orderDetails.Wait = Convert.ToInt32(dr.Cells["Wait"].Value);
+                    }
+                    if (itemType == (int)OrderItemType.Goods)
+                    {
+                        orderDetails.ItemType = (int)OrderItemType.Goods;
+                        Goods goods = dr.Cells["ItemID"].Tag as Goods;
+                        orderDetails.GoodsID = goods.GoodsID;
+                        orderDetails.GoodsNo = goods.GoodsNo;
+                        orderDetails.GoodsName = goods.GoodsName;
+                        orderDetails.Unit = goods.Unit;
+                        orderDetails.CanDiscount = goods.CanDiscount;
+                        orderDetails.SellPrice = goods.SellPrice;
+                        orderDetails.PrintSolutionName = goods.PrintSolutionName;
+                        orderDetails.DepartID = goods.DepartID;
+                    }
+                    else if (itemType == (int)OrderItemType.Details)
+                    {
+                        orderDetails.ItemType = (int)OrderItemType.Details;
+                        Details details = dr.Cells["ItemID"].Tag as Details;
+                        orderDetails.GoodsID = details.DetailsID;
+                        orderDetails.GoodsNo = details.DetailsNo;
+                        orderDetails.GoodsName = details.DetailsName;
+                        orderDetails.CanDiscount = details.CanDiscount;
+                        orderDetails.Unit = "";  //
+                        orderDetails.SellPrice = details.SellPrice;
+                        orderDetails.PrintSolutionName = details.PrintSolutionName;
+                        orderDetails.DepartID = details.DepartID;
+
+                        int index = goodsName.LastIndexOf('-');
+                        string itemPrefix = goodsName.Substring(0, index + 1);
+                        orderDetails.ItemLevel = itemPrefix.Length / 2;
+                    }
+                    else if (itemType == (int)OrderItemType.SetMeal)
+                    {
+                        orderDetails.ItemType = (int)OrderItemType.SetMeal;
+                        int index = goodsName.LastIndexOf('-');
+                        string itemPrefix = goodsName.Substring(0, index + 1);
+                        orderDetails.ItemLevel = itemPrefix.Length / 2;
+
+                        object item = dr.Cells["ItemID"].Tag;
+                        if (item is Goods)
+                        {
+                            Goods goods = item as Goods;
+                            orderDetails.GoodsID = goods.GoodsID;
+                            orderDetails.GoodsNo = goods.GoodsNo;
+                            orderDetails.GoodsName = goods.GoodsName;
+                            orderDetails.CanDiscount = goods.CanDiscount;
+                            orderDetails.Unit = goods.Unit;
+                            orderDetails.SellPrice = goods.SellPrice;
+                            orderDetails.PrintSolutionName = goods.PrintSolutionName;
+                            orderDetails.DepartID = goods.DepartID;
+                        }
+                        else if (item is Details)
+                        {
+                            Details details = item as Details;
+                            orderDetails.GoodsID = details.DetailsID;
+                            orderDetails.GoodsNo = details.DetailsNo;
+                            orderDetails.GoodsName = details.DetailsName;
+                            orderDetails.CanDiscount = details.CanDiscount;
+                            orderDetails.Unit = "";  //
+                            orderDetails.SellPrice = details.SellPrice;
+                            orderDetails.PrintSolutionName = details.PrintSolutionName;
+                            orderDetails.DepartID = details.DepartID;
+                        }
+                    }
+                    newOrderDetailsList.Add(orderDetails);
+                    //填充OrderDiscount
+                    Discount discount = dr.Cells["GoodsDiscount"].Tag as Discount;
+                    if (discount != null)
+                    {
+                        decimal offPay = Math.Abs(Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value));
+                        if (offPay > 0)
+                        {
+                            OrderDiscount orderDiscount = new OrderDiscount();
+                            orderDiscount.OrderDiscountID = Guid.NewGuid();
+                            orderDiscount.OrderID = orderID;
+                            orderDiscount.OrderDetailsID = orderDetailsID;
+                            orderDiscount.DiscountID = discount.DiscountID;
+                            orderDiscount.DiscountName = discount.DiscountName;
+                            orderDiscount.DiscountType = discount.DiscountType;
+                            orderDiscount.DiscountRate = discount.DiscountRate;
+                            orderDiscount.OffFixPay = discount.OffFixPay;
+                            orderDiscount.OffPay = offPay;
+                            orderDiscount.EmployeeID = m_EmployeeID;
+                            newOrderDiscountList.Add(orderDiscount);
+                        }
+                    }
+                }
+                else
+                {
+                    //修改过折扣的账单
+                    Discount discount = dr.Cells["GoodsDiscount"].Tag as Discount;
+                    if (discount != null)
+                    {
+                        Guid orderDetailsID = new Guid(dr.Cells["OrderDetailsID"].Value.ToString());
+                        int itemType = Convert.ToInt32(dr.Cells["ItemType"].Value);
+                        string goodsName = dr.Cells["GoodsName"].Value.ToString();
+                        //填充OrderDetails
+                        OrderDetails orderDetails = new OrderDetails();
+                        orderDetails.OrderDetailsID = orderDetailsID;
+                        orderDetails.OrderID = orderID;
+                        orderDetails.DeviceNo = ConstantValuePool.BizSettingConfig.DeviceNo;
+                        orderDetails.ItemQty = Convert.ToDecimal(dr.Cells["GoodsNum"].Value);
+                        orderDetails.GoodsName = dr.Cells["GoodsName"].Value.ToString();
+                        orderDetails.TotalSellPrice = Convert.ToDecimal(dr.Cells["GoodsPrice"].Value);
+                        orderDetails.TotalDiscount = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value);
+                        orderDetails.Unit = dr.Cells["ItemUnit"].Value.ToString();
+                        orderDetails.EmployeeID = m_EmployeeID;
+                        if (dr.Cells["Wait"].Value != null)
+                        {
+                            orderDetails.Wait = Convert.ToInt32(dr.Cells["Wait"].Value);
+                        }
+                        newOrderDetailsList.Add(orderDetails);
+                        //填充OrderDiscount
+                        decimal offPay = Math.Abs(Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value));
+                        if (offPay > 0)
+                        {
+                            OrderDiscount orderDiscount = new OrderDiscount();
+                            orderDiscount.OrderDiscountID = Guid.NewGuid();
+                            orderDiscount.OrderID = orderID;
+                            orderDiscount.OrderDetailsID = orderDetailsID;
+                            orderDiscount.DiscountID = discount.DiscountID;
+                            orderDiscount.DiscountName = discount.DiscountName;
+                            orderDiscount.DiscountType = discount.DiscountType;
+                            orderDiscount.DiscountRate = discount.DiscountRate;
+                            orderDiscount.OffFixPay = discount.OffFixPay;
+                            orderDiscount.OffPay = offPay;
+                            orderDiscount.EmployeeID = m_EmployeeID;
+                            newOrderDiscountList.Add(orderDiscount);
+                        }
+                    }
+                }
+            }
+            int _tranSeq = 0;
+            if (m_SalesOrder == null)    //新增的菜单
+            {
+                Order order = new Order();
+                order.OrderID = orderID;
+                order.TotalSellPrice = m_TotalPrice;
+                order.ActualSellPrice = m_ActualPayMoney;
+                order.DiscountPrice = m_Discount;
+                order.CutOffPrice = m_CutOff;
+                order.ServiceFee = 0;
+                order.DeviceNo = ConstantValuePool.BizSettingConfig.DeviceNo;
+                order.DeskName = deskName;
+                order.EatType = (int)eatType;
+                order.Status = 0;
+                order.PeopleNum = 1;
+                order.EmployeeID = m_EmployeeID;
+                order.EmployeeNo = m_EmployeeNo;
+                order.OrderLastTime = 0;
+
+                SalesOrder salesOrder = new SalesOrder();
+                salesOrder.order = order;
+                salesOrder.orderDetailsList = newOrderDetailsList;
+                salesOrder.orderDiscountList = newOrderDiscountList;
+                SalesOrderService orderService = new SalesOrderService();
+                _tranSeq = orderService.CreateSalesOrder(salesOrder);
+                result = _tranSeq > 0;
+            }
+            else
+            {
+                if (newOrderDetailsList.Count > 0)
+                {
+                    Order order = new Order();
+                    order.OrderID = orderID;
+                    order.TotalSellPrice = m_TotalPrice;
+                    order.ActualSellPrice = m_ActualPayMoney;
+                    order.DiscountPrice = m_Discount;
+                    order.CutOffPrice = m_CutOff;
+                    order.ServiceFee = 0;
+                    order.DeviceNo = ConstantValuePool.BizSettingConfig.DeviceNo;
+                    order.DeskName = deskName;
+                    order.PeopleNum = 1;
+                    order.EmployeeID = m_EmployeeID;
+                    order.EmployeeNo = m_EmployeeNo;
+                    order.OrderLastTime = 0;
+                    SalesOrder salesOrder = new SalesOrder();
+                    salesOrder.order = order;
+                    salesOrder.orderDetailsList = newOrderDetailsList;
+                    salesOrder.orderDiscountList = newOrderDiscountList;
+                    SalesOrderService orderService = new SalesOrderService();
+                    result = orderService.UpdateSalesOrder(salesOrder) == 1;
+
+                    _tranSeq = m_SalesOrder.order.TranSequence;
+                }
+            }
+            if (result)
+            {
+                if (ConstantValuePool.BizSettingConfig.printConfig.Enabled)
+                {
+                    //打印
+                    PrintData printData = new PrintData();
+                    printData.ShopName = ConstantValuePool.CurrentShop.ShopName;
+                    printData.DeskName = deskName;
+                    printData.PersonNum = "1";
+                    printData.PrintTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+                    printData.EmployeeNo = m_EmployeeNo;
+                    printData.TranSequence = _tranSeq.ToString();
+                    printData.ShopAddress = ConstantValuePool.CurrentShop.RunAddress;
+                    printData.Telephone = ConstantValuePool.CurrentShop.Telephone;
+                    printData.GoodsOrderList = new List<GoodsOrder>();
+                    foreach (OrderDetails item in newOrderDetailsList)
+                    {
+                        string strLevelFlag = string.Empty;
+                        if (item.ItemLevel > 0)
+                        {
+                            int levelCount = item.ItemLevel * 2;
+                            for (int i = 0; i < levelCount; i++)
+                            {
+                                strLevelFlag += "-";
+                            }
+                        }
+                        GoodsOrder goodsOrder = new GoodsOrder();
+                        goodsOrder.GoodsName = strLevelFlag + item.GoodsName;
+                        goodsOrder.GoodsNum = item.ItemQty.ToString("f1");
+                        goodsOrder.SellPrice = (item.TotalSellPrice / item.ItemQty).ToString("f2");
+                        goodsOrder.TotalSellPrice = item.TotalSellPrice.ToString("f2");
+                        goodsOrder.TotalDiscount = item.TotalDiscount.ToString("f2");
+                        goodsOrder.Unit = item.Unit;
+                        printData.GoodsOrderList.Add(goodsOrder);
+                    }
+                    int copies = ConstantValuePool.BizSettingConfig.printConfig.Copies;
+                    string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
+                    string configPath = @"PrintConfig\InstructionPrintOrderSetting.config";
+                    string layoutPath = @"PrintConfig\PrintOrder.ini";
+                    if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
+                    {
+                        configPath = @"PrintConfig\PrintOrderSetting.config";
+                        string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                        DriverOrderPrint printer = new DriverOrderPrint(printerName, paperWidth, "SpecimenLabel");
+                        for (int i = 0; i < copies; i++)
+                        {
+                            printer.DoPrint(printData, layoutPath, configPath);
+                        }
+                    }
+                    if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.COM)
+                    {
+                        string port = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                        if (port.Length > 3)
+                        {
+                            if (port.Substring(0, 3).ToUpper() == "COM")
+                            {
+                                string portName = port.Substring(0, 4).ToUpper();
+                                InstructionOrderPrint printer = new InstructionOrderPrint(portName, 9600, Parity.None, 8, StopBits.One, paperWidth);
+                                for (int i = 0; i < copies; i++)
+                                {
+                                    printer.DoPrint(printData, layoutPath, configPath);
+                                }
+                            }
+                        }
+                    }
+                    if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.ETHERNET)
+                    {
+                        string IPAddress = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                        InstructionOrderPrint printer = new InstructionOrderPrint(IPAddress, 9100, paperWidth);
+                        for (int i = 0; i < copies; i++)
+                        {
+                            printer.DoPrint(printData, layoutPath, configPath);
+                        }
+                    }
+                    if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.USB)
+                    {
+                        string VID = ConstantValuePool.BizSettingConfig.printConfig.VID;
+                        string PID = ConstantValuePool.BizSettingConfig.printConfig.PID;
+                        InstructionOrderPrint printer = new InstructionOrderPrint(VID, PID, paperWidth);
+                        for (int i = 0; i < copies; i++)
+                        {
+                            printer.DoPrint(printData, layoutPath, configPath);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        private void CleanDeliveryOrderButton()
+        {
+            foreach (CrystalButton btn in btnDeliveryList)
+            {
+                btn.Tag = null;
+                btn.Text = string.Empty;
+                btn.BackColor = btn.DisplayColor;
+                btn.Enabled = true;
+            }
+        }
+
+        private void DisplayDeliveryOrderButton(IList<DeliveryOrder> deliveryOrderList)
+        {
+            if (m_PageIndex <= 0)
+            {
+                this.btnPgUp.Enabled = false;
+                this.btnPgUp.BackColor = ConstantValuePool.DisabledColor;
+            }
+            else
+            {
+                this.btnPgUp.Enabled = true;
+                this.btnPgUp.BackColor = this.btnPgUp.DisplayColor;
+            }
+            if (deliveryOrderList.Count > (m_PageCount * (m_PageIndex + 1)))
+            {
+                this.btnPgDown.Enabled = true;
+                this.btnPgDown.BackColor = this.btnPgDown.DisplayColor;
+            }
+            else
+            {
+                this.btnPgDown.Enabled = false;
+                this.btnPgDown.BackColor = ConstantValuePool.DisabledColor;
+            }
+            int pageNum = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(deliveryOrderList.Count) / m_PageCount));
+            int startIndex = 0;
+            int endIndex = 0;
+            if ((m_PageIndex + 1) < pageNum)
+            {
+                startIndex = m_PageIndex * m_PageCount;
+                endIndex = (m_PageIndex + 1) * m_PageCount;
+            }
+            else
+            {
+                startIndex = m_PageIndex * m_PageCount;
+                endIndex = deliveryOrderList.Count;
+            }
+            for (int i = startIndex, j = 0; i < endIndex; i++, j++)
+            {
+                btnDeliveryList[j].Tag = deliveryOrderList[i];
+                if (deliveryOrderList[i].PayTime == null)
+                {
+                    btnDeliveryList[j].Text = deliveryOrderList[i].TranSequence.ToString();
+                    btnDeliveryList[j].BackColor = Color.Red;
+                }
+                else
+                {
+                    btnDeliveryList[j].Text = deliveryOrderList[i].TranSequence + "\r\n " + Convert.ToDateTime(deliveryOrderList[i].PayTime).ToString("MM-dd HH:mm");
+                    btnDeliveryList[j].BackColor = Color.Green;
+                }
+            }
+        }
+
+        private void btnDiscount_Click(object sender, EventArgs e)
+        {
+            if (dgvGoodsOrder.Rows.Count > 0 && dgvGoodsOrder.CurrentRow != null)
+            {
+                //权限验证
+                bool hasRights = false;
+                if (RightsItemCode.FindRights(RightsItemCode.SINGLEDISCOUNT))
+                {
+                    hasRights = true;
+                }
+                else
+                {
+                    FormRightsCode form = new FormRightsCode();
+                    form.ShowDialog();
+                    if (form.ReturnValue)
+                    {
+                        IList<string> rightsCodeList = form.RightsCodeList;
+                        if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.SINGLEDISCOUNT))
+                        {
+                            hasRights = true;
+                        }
+                    }
+                }
+                if (!hasRights)
+                {
+                    return;
+                }
+                int selectIndex = dgvGoodsOrder.CurrentRow.Index;
+                int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value);
+                if (itemType == (int)OrderItemType.Goods)   //主项才能打折
+                {
+                    bool canDiscount = Convert.ToBoolean(dgvGoodsOrder.Rows[selectIndex].Cells["CanDiscount"].Value);
+                    if (canDiscount)
+                    {
+                        FormDiscount formDiscount = new FormDiscount(DiscountDisplayModel.SingleDiscount);
+                        formDiscount.ShowDialog();
+                        if (formDiscount.CurrentDiscount != null)
+                        {
+                            Discount discount = formDiscount.CurrentDiscount;
+                            if (discount.DiscountType == (int)DiscountItemType.DiscountRate)
+                            {
+                                dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value = -Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value) * discount.DiscountRate;
+                            }
+                            else
+                            {
+                                dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value = -discount.OffFixPay;
+                            }
+                            dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Tag = discount;
+                            //更新细项
+                            if (selectIndex < dgvGoodsOrder.Rows.Count - 1)
+                            {
+                                for (int index = selectIndex + 1; index < dgvGoodsOrder.Rows.Count; index++)
+                                {
+                                    if (Convert.ToInt32(dgvGoodsOrder.Rows[index].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        if (discount.DiscountType == (int)DiscountItemType.DiscountRate)
+                                        {
+                                            dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = -Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value) * discount.DiscountRate;
+                                        }
+                                        else
+                                        {
+                                            dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = -discount.OffFixPay;
+                                        }
+                                        dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Tag = discount;
+                                    }
+                                }
+                            }
+                            //统计
+                            BindOrderInfoSum();
+                        }
+                    }
+                }
+            }
+        }
+
+        private void btnWholeDiscount_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

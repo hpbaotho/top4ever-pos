@@ -28,18 +28,19 @@ namespace Top4ever.Pos
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.pnlTools = new System.Windows.Forms.Panel();
             this.btnWholeDiscount = new Top4ever.CustomControl.CrystalButton();
             this.btnDiscount = new Top4ever.CustomControl.CrystalButton();
             this.btnClose = new Top4ever.CustomControl.CrystalButton();
+            this.btnBeNew = new Top4ever.CustomControl.CrystalButton();
             this.btnPrintBill = new Top4ever.CustomControl.CrystalButton();
+            this.btnTakeOut = new Top4ever.CustomControl.CrystalButton();
             this.btnDelivery = new Top4ever.CustomControl.CrystalButton();
             this.btnOutsideOrder = new Top4ever.CustomControl.CrystalButton();
-            this.btnTakeOut = new Top4ever.CustomControl.CrystalButton();
             this.btnFuncPanel = new Top4ever.CustomControl.CrystalButton();
             this.pnlCustomerInfo = new System.Windows.Forms.Panel();
             this.btnTelephone = new Top4ever.CustomControl.CrystalButton();
@@ -78,6 +79,7 @@ namespace Top4ever.Pos
             this.btnCancelOrder = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSub = new System.Windows.Forms.Button();
+            this.btnAdd = new System.Windows.Forms.Button();
             this.btnTasteRemark = new Top4ever.CustomControl.CrystalButton();
             this.pnlRight = new System.Windows.Forms.Panel();
             this.pnlItem = new System.Windows.Forms.Panel();
@@ -90,7 +92,6 @@ namespace Top4ever.Pos
             this.btnCheckout = new Top4ever.CustomControl.CrystalButton();
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.lbGoodsCode = new System.Windows.Forms.Label();
-            this.btnAdd = new System.Windows.Forms.Button();
             this.pnlTools.SuspendLayout();
             this.pnlCustomerInfo.SuspendLayout();
             this.pnlDelivery.SuspendLayout();
@@ -110,10 +111,11 @@ namespace Top4ever.Pos
             this.pnlTools.Controls.Add(this.btnWholeDiscount);
             this.pnlTools.Controls.Add(this.btnDiscount);
             this.pnlTools.Controls.Add(this.btnClose);
+            this.pnlTools.Controls.Add(this.btnBeNew);
             this.pnlTools.Controls.Add(this.btnPrintBill);
+            this.pnlTools.Controls.Add(this.btnTakeOut);
             this.pnlTools.Controls.Add(this.btnDelivery);
             this.pnlTools.Controls.Add(this.btnOutsideOrder);
-            this.pnlTools.Controls.Add(this.btnTakeOut);
             this.pnlTools.Controls.Add(this.btnFuncPanel);
             this.pnlTools.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlTools.Location = new System.Drawing.Point(0, 0);
@@ -126,31 +128,33 @@ namespace Top4ever.Pos
             this.btnWholeDiscount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(80)))));
             this.btnWholeDiscount.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 14.25F);
             this.btnWholeDiscount.ForeColor = System.Drawing.Color.White;
-            this.btnWholeDiscount.Location = new System.Drawing.Point(297, 0);
+            this.btnWholeDiscount.Location = new System.Drawing.Point(198, 0);
             this.btnWholeDiscount.Name = "btnWholeDiscount";
             this.btnWholeDiscount.Size = new System.Drawing.Size(98, 58);
             this.btnWholeDiscount.TabIndex = 0;
             this.btnWholeDiscount.Text = "Õûµ¥ÕÛ¿Û";
             this.btnWholeDiscount.UseVisualStyleBackColor = false;
+            this.btnWholeDiscount.Click += new System.EventHandler(this.btnWholeDiscount_Click);
             // 
             // btnDiscount
             // 
             this.btnDiscount.BackColor = System.Drawing.Color.LightSeaGreen;
             this.btnDiscount.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 14.25F);
             this.btnDiscount.ForeColor = System.Drawing.Color.White;
-            this.btnDiscount.Location = new System.Drawing.Point(198, 0);
+            this.btnDiscount.Location = new System.Drawing.Point(99, 0);
             this.btnDiscount.Name = "btnDiscount";
             this.btnDiscount.Size = new System.Drawing.Size(98, 58);
             this.btnDiscount.TabIndex = 0;
             this.btnDiscount.Text = "µ¥Æ·ÕÛ¿Û";
             this.btnDiscount.UseVisualStyleBackColor = false;
+            this.btnDiscount.Click += new System.EventHandler(this.btnDiscount_Click);
             // 
             // btnClose
             // 
             this.btnClose.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnClose.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 14.25F);
             this.btnClose.ForeColor = System.Drawing.Color.White;
-            this.btnClose.Location = new System.Drawing.Point(693, 0);
+            this.btnClose.Location = new System.Drawing.Point(792, 0);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(98, 58);
             this.btnClose.TabIndex = 0;
@@ -158,24 +162,50 @@ namespace Top4ever.Pos
             this.btnClose.UseVisualStyleBackColor = false;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
+            // btnBeNew
+            // 
+            this.btnBeNew.BackColor = System.Drawing.Color.DodgerBlue;
+            this.btnBeNew.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 14.25F);
+            this.btnBeNew.ForeColor = System.Drawing.Color.White;
+            this.btnBeNew.Location = new System.Drawing.Point(396, 0);
+            this.btnBeNew.Name = "btnBeNew";
+            this.btnBeNew.Size = new System.Drawing.Size(98, 58);
+            this.btnBeNew.TabIndex = 0;
+            this.btnBeNew.Text = "ÐÂ½¨";
+            this.btnBeNew.UseVisualStyleBackColor = false;
+            this.btnBeNew.Click += new System.EventHandler(this.btnBeNew_Click);
+            // 
             // btnPrintBill
             // 
             this.btnPrintBill.BackColor = System.Drawing.Color.DodgerBlue;
             this.btnPrintBill.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 14.25F);
             this.btnPrintBill.ForeColor = System.Drawing.Color.White;
-            this.btnPrintBill.Location = new System.Drawing.Point(594, 0);
+            this.btnPrintBill.Location = new System.Drawing.Point(693, 0);
             this.btnPrintBill.Name = "btnPrintBill";
             this.btnPrintBill.Size = new System.Drawing.Size(98, 58);
             this.btnPrintBill.TabIndex = 0;
             this.btnPrintBill.Text = "Ó¡µ¥";
             this.btnPrintBill.UseVisualStyleBackColor = false;
             // 
+            // btnTakeOut
+            // 
+            this.btnTakeOut.BackColor = System.Drawing.Color.SeaGreen;
+            this.btnTakeOut.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 14.25F);
+            this.btnTakeOut.ForeColor = System.Drawing.Color.White;
+            this.btnTakeOut.Location = new System.Drawing.Point(297, 0);
+            this.btnTakeOut.Name = "btnTakeOut";
+            this.btnTakeOut.Size = new System.Drawing.Size(98, 58);
+            this.btnTakeOut.TabIndex = 0;
+            this.btnTakeOut.Text = "Íâ´ø";
+            this.btnTakeOut.UseVisualStyleBackColor = false;
+            this.btnTakeOut.Click += new System.EventHandler(this.btnTakeOut_Click);
+            // 
             // btnDelivery
             // 
             this.btnDelivery.BackColor = System.Drawing.Color.Coral;
             this.btnDelivery.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 14.25F);
             this.btnDelivery.ForeColor = System.Drawing.Color.White;
-            this.btnDelivery.Location = new System.Drawing.Point(495, 0);
+            this.btnDelivery.Location = new System.Drawing.Point(594, 0);
             this.btnDelivery.Name = "btnDelivery";
             this.btnDelivery.Size = new System.Drawing.Size(98, 58);
             this.btnDelivery.TabIndex = 0;
@@ -187,24 +217,13 @@ namespace Top4ever.Pos
             this.btnOutsideOrder.BackColor = System.Drawing.Color.OrangeRed;
             this.btnOutsideOrder.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 14.25F);
             this.btnOutsideOrder.ForeColor = System.Drawing.Color.White;
-            this.btnOutsideOrder.Location = new System.Drawing.Point(396, 0);
+            this.btnOutsideOrder.Location = new System.Drawing.Point(495, 0);
             this.btnOutsideOrder.Name = "btnOutsideOrder";
             this.btnOutsideOrder.Size = new System.Drawing.Size(98, 58);
             this.btnOutsideOrder.TabIndex = 0;
             this.btnOutsideOrder.Text = "ÍâËÍ";
             this.btnOutsideOrder.UseVisualStyleBackColor = false;
-            // 
-            // btnTakeOut
-            // 
-            this.btnTakeOut.BackColor = System.Drawing.Color.SeaGreen;
-            this.btnTakeOut.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 14.25F);
-            this.btnTakeOut.ForeColor = System.Drawing.Color.White;
-            this.btnTakeOut.Location = new System.Drawing.Point(99, 0);
-            this.btnTakeOut.Name = "btnTakeOut";
-            this.btnTakeOut.Size = new System.Drawing.Size(98, 58);
-            this.btnTakeOut.TabIndex = 0;
-            this.btnTakeOut.Text = "Íâ´ø";
-            this.btnTakeOut.UseVisualStyleBackColor = false;
+            this.btnOutsideOrder.Click += new System.EventHandler(this.btnOutsideOrder_Click);
             // 
             // btnFuncPanel
             // 
@@ -384,14 +403,14 @@ namespace Top4ever.Pos
             this.dgvGoodsOrder.AllowUserToResizeColumns = false;
             this.dgvGoodsOrder.AllowUserToResizeRows = false;
             this.dgvGoodsOrder.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvGoodsOrder.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvGoodsOrder.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.dgvGoodsOrder.ColumnHeadersHeight = 35;
             this.dgvGoodsOrder.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvGoodsOrder.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -426,8 +445,8 @@ namespace Top4ever.Pos
             // 
             // GoodsNum
             // 
-            dataGridViewCellStyle10.Format = "N1";
-            this.GoodsNum.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle6.Format = "N1";
+            this.GoodsNum.DefaultCellStyle = dataGridViewCellStyle6;
             this.GoodsNum.HeaderText = "ÊýÁ¿";
             this.GoodsNum.Name = "GoodsNum";
             this.GoodsNum.ReadOnly = true;
@@ -444,10 +463,10 @@ namespace Top4ever.Pos
             // 
             // GoodsPrice
             // 
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle11.Format = "N2";
-            dataGridViewCellStyle11.Padding = new System.Windows.Forms.Padding(0, 0, 6, 0);
-            this.GoodsPrice.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle7.Format = "N2";
+            dataGridViewCellStyle7.Padding = new System.Windows.Forms.Padding(0, 0, 6, 0);
+            this.GoodsPrice.DefaultCellStyle = dataGridViewCellStyle7;
             this.GoodsPrice.HeaderText = "¼Û¸ñ";
             this.GoodsPrice.Name = "GoodsPrice";
             this.GoodsPrice.ReadOnly = true;
@@ -456,11 +475,11 @@ namespace Top4ever.Pos
             // 
             // GoodsDiscount
             // 
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle12.Format = "N2";
-            dataGridViewCellStyle12.NullValue = null;
-            dataGridViewCellStyle12.Padding = new System.Windows.Forms.Padding(0, 0, 6, 0);
-            this.GoodsDiscount.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle8.Format = "N2";
+            dataGridViewCellStyle8.NullValue = null;
+            dataGridViewCellStyle8.Padding = new System.Windows.Forms.Padding(0, 0, 6, 0);
+            this.GoodsDiscount.DefaultCellStyle = dataGridViewCellStyle8;
             this.GoodsDiscount.HeaderText = "ÕÛ¿Û";
             this.GoodsDiscount.Name = "GoodsDiscount";
             this.GoodsDiscount.ReadOnly = true;
@@ -643,6 +662,16 @@ namespace Top4ever.Pos
             this.btnSub.TabIndex = 0;
             this.btnSub.UseVisualStyleBackColor = true;
             // 
+            // btnAdd
+            // 
+            this.btnAdd.BackgroundImage = global::Top4ever.Pos.Properties.Resources.plus;
+            this.btnAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnAdd.Location = new System.Drawing.Point(0, 55);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(95, 53);
+            this.btnAdd.TabIndex = 0;
+            this.btnAdd.UseVisualStyleBackColor = true;
+            // 
             // btnTasteRemark
             // 
             this.btnTasteRemark.BackColor = System.Drawing.Color.SteelBlue;
@@ -779,16 +808,6 @@ namespace Top4ever.Pos
             this.lbGoodsCode.TabIndex = 0;
             this.lbGoodsCode.Text = "²ËÆ·±àÂë\\Æ´ÒôÂë£º";
             // 
-            // btnAdd
-            // 
-            this.btnAdd.BackgroundImage = global::Top4ever.Pos.Properties.Resources.plus;
-            this.btnAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btnAdd.Location = new System.Drawing.Point(0, 55);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(95, 53);
-            this.btnAdd.TabIndex = 0;
-            this.btnAdd.UseVisualStyleBackColor = true;
-            // 
             // FormTakeout
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
@@ -886,5 +905,6 @@ namespace Top4ever.Pos
         private System.Windows.Forms.Panel pnlItem;
         private CustomControl.CrystalButton btnBack;
         private CustomControl.CrystalButton btnHead;
+        private CustomControl.CrystalButton btnBeNew;
     }
 }

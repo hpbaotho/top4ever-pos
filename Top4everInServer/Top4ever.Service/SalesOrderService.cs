@@ -55,9 +55,9 @@ namespace Top4ever.Service
             return _instance;
         }
 
-        public bool CreateSalesOrder(SalesOrder salesOrder)
+        public Int32 CreateSalesOrder(SalesOrder salesOrder)
         {
-            bool returnValue = false;
+            Int32 tranSequence = 0;
             _daoManager.BeginTransaction();
             try
             {
@@ -79,7 +79,7 @@ namespace Top4ever.Service
                     }
                     order.SubOrderNo = curSubOrderNo;
                     //流水号
-                    order.TranSequence = _sysDictionary.GetCurrentTranSequence();
+                    order.TranSequence = tranSequence = _sysDictionary.GetCurrentTranSequence();
                     string orderNo = _orderDao.CreateOrder(order);
                     order.OrderNo = orderNo;
                     //菜单品项序号
@@ -107,16 +107,15 @@ namespace Top4ever.Service
                     {
                         _printTaskDao.InsertPrintTask(printTask);
                     }
-                    returnValue = true;
                 }
                 _daoManager.CommitTransaction();
             }
             catch
             {
+                tranSequence = 0;
                 _daoManager.RollBackTransaction();
-                returnValue = false;
             }
-            return returnValue;
+            return tranSequence;
         }
 
         /// <summary>

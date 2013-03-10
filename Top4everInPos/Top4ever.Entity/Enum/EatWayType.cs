@@ -9,7 +9,7 @@ namespace Top4ever.Entity.Enum
         /// </summary>
         DineIn = 1,
         /// <summary>
-        /// 外卖
+        /// 外带
         /// </summary>
         Takeout = 2,
         /// <summary>

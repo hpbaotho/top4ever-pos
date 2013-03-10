@@ -16,22 +16,13 @@ namespace Top4ever.BLL
             byte[] objRet = null;
             string strReceive = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, itemBuffer.Length - ParamFieldLength.PACKAGE_HEAD).Trim('\0');
             SalesOrder salesOrder = JsonConvert.DeserializeObject<SalesOrder>(strReceive);
-
-            bool result = SalesOrderService.GetInstance().CreateSalesOrder(salesOrder);
-            if (result)
-            {
-                //成功
-                objRet = new byte[ParamFieldLength.PACKAGE_HEAD];
-                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
-                Array.Copy(BitConverter.GetBytes(ParamFieldLength.PACKAGE_HEAD), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
-            }
-            else
-            {
-                //创建单子失败
-                objRet = new byte[ParamFieldLength.PACKAGE_HEAD];
-                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.ERROR_DB), 0, objRet, 0, BasicTypeLength.INT32);
-                Array.Copy(BitConverter.GetBytes(ParamFieldLength.PACKAGE_HEAD), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
-            }
+            //返回流水号
+            Int32 tranSequence = SalesOrderService.GetInstance().CreateSalesOrder(salesOrder);
+            int transCount = BasicTypeLength.INT32 + BasicTypeLength.INT32 + BasicTypeLength.INT32;
+            objRet = new byte[transCount];
+            Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes(transCount), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes(tranSequence), 0, objRet, 2 * BasicTypeLength.INT32, BasicTypeLength.INT32);
             return objRet;
         }
 
