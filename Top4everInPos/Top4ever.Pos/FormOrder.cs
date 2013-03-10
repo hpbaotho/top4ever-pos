@@ -2557,8 +2557,8 @@ namespace Top4ever.Pos
                 salesOrder.orderDetailsList = newOrderDetailsList;
                 salesOrder.orderDiscountList = newOrderDiscountList;
                 SalesOrderService orderService = new SalesOrderService();
-                bool result = orderService.CreateSalesOrder(salesOrder);
-                if (result)
+                int tranSequence = orderService.CreateSalesOrder(salesOrder);
+                if (tranSequence > 0)
                 {
                     //重新加载
                     SalesOrderService salesOrderService = new SalesOrderService();

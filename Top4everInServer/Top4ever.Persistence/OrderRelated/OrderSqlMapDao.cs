@@ -163,6 +163,11 @@ namespace Top4ever.Persistence.OrderRelated
             return result > 0;
         }
 
+        public IList<DeliveryOrder> GetDeliveryOrderList(string dailyStatementNo)
+        {
+            return ExecuteQueryForList<DeliveryOrder>("SelectDeliveryOrder", dailyStatementNo);
+        }
+
         #endregion
     }
 }

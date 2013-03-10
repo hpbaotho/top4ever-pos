@@ -42,5 +42,7 @@ namespace Top4ever.Interface.OrderRelated
         bool IsExistOrderInTimeInterval(DateTime beginTime, DateTime endTime);
 
         bool UpdateOrderStatus(Guid orderID, int status);
+
+        IList<DeliveryOrder> GetDeliveryOrderList(string dailyStatementNo);
     }
 }

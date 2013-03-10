@@ -4,6 +4,7 @@
     <alias>
       <typeAlias alias="Order" type="Top4ever.Domain.OrderRelated.Order, Top4ever.Domain" />
       <typeAlias alias="DeletedOrder" type="Top4ever.Domain.Transfer.DeletedOrder, Top4ever.Domain" />
+      <typeAlias alias="DeliveryOrder" type="Top4ever.Domain.Transfer.DeliveryOrder, Top4ever.Domain" />
     </alias>
 
     <resultMaps>
@@ -41,6 +42,13 @@
         <result property="AuthorisedManager" column="AuthorisedManager"></result>
         <result property="CancelEmployeeNo" column="CancelEmployeeNo"></result>
         <result property="CancelReasonName" column="CancelReasonName"></result>
+      </resultMap>
+
+      <resultMap id="DeliveryOrderResult" class="DeliveryOrder">
+        <result property="OrderID" column="OrderID"></result>
+        <result property="TranSequence" column="TranSequence"></result>
+        <result property="EatType" column="EatType"></result>
+        <result property="PayTime" column="PayTime"></result>
       </resultMap>
     </resultMaps>
 
@@ -180,5 +188,22 @@
         SET [Status] = #Status#
         WHERE OrderID = #OrderID#
       </update>
+
+      <select id="SelectDeliveryOrder" parameterClass="String" resultMap="DeliveryOrderResult">
+        <!--未结账的外带单-->
+        SELECT OrderID, PayTime, TranSequence, EatType
+        FROM [Order]
+        WHERE DailyStatementNo = #DailyStatementNo# AND [Status] = 0 AND EatType = 2
+        <!--已结账而未出货的外带单-->
+        UNION ALL
+        SELECT OrderID, PayTime, TranSequence, EatType
+        FROM [Order]
+        WHERE DailyStatementNo = #DailyStatementNo# AND [Status] = 1 AND EatType = 2 AND DeliveryTime IS NULL
+        <!--未结账的外送单-->
+        UNION ALL
+        SELECT OrderID, PayTime, TranSequence, EatType
+        FROM [Order]
+        WHERE DailyStatementNo = #DailyStatementNo# AND [Status] = 0 AND EatType = 3
+      </select>
     </statements>
 </sqlMap>

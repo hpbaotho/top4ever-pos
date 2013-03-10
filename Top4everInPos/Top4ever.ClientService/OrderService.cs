@@ -151,5 +151,31 @@ namespace Top4ever.ClientService
             }
             return result;
         }
+
+        public IList<DeliveryOrder> GetDeliveryOrderList()
+        {
+            int cByte = ParamFieldLength.PACKAGE_HEAD;
+            byte[] sendByte = new byte[cByte];
+            int byteOffset = 0;
+            Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_DELIVERYORDERLIST), sendByte, BasicTypeLength.INT32);
+            byteOffset = BasicTypeLength.INT32;
+            Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
+            byteOffset += BasicTypeLength.INT32;
+
+            IList<DeliveryOrder> deliveryOrderList = null;
+            using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
+            {
+                socket.Connect();
+                Byte[] receiveData = null;
+                Int32 operCode = socket.SendReceive(sendByte, out receiveData);
+                if (operCode == (int)RET_VALUE.SUCCEEDED)
+                {
+                    string strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD, receiveData.Length - ParamFieldLength.PACKAGE_HEAD);
+                    deliveryOrderList = JsonConvert.DeserializeObject<IList<DeliveryOrder>>(strReceive);
+                }
+                socket.Disconnect();
+            }
+            return deliveryOrderList;
+        }
     }
 }
