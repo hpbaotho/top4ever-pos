@@ -189,6 +189,12 @@
         WHERE OrderID = #OrderID#
       </update>
 
+      <update id="UpdateTakeoutOrderStatus" parameterClass="System.Collections.Hashtable">
+        UPDATE [Order]
+        SET <![CDATA[ DeliveryTime = GETDATE() ]]>, DeliveryEmployeeID = #EmployeeID#
+        WHERE OrderID = #OrderID#
+      </update>
+
       <select id="SelectDeliveryOrder" parameterClass="String" resultMap="DeliveryOrderResult">
         <!--未结账的外带单-->
         SELECT OrderID, PayTime, TranSequence, EatType

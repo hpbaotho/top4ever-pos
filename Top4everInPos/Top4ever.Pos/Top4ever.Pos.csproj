@@ -66,6 +66,12 @@
     <Compile Include="Feature\FormChoseMultiOrder.Designer.cs">
       <DependentUpon>FormChoseMultiOrder.cs</DependentUpon>
     </Compile>
+    <Compile Include="Feature\FormDeliveryGoods.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\FormDeliveryGoods.Designer.cs">
+      <DependentUpon>FormDeliveryGoods.cs</DependentUpon>
+    </Compile>
     <Compile Include="Feature\FormDiscount.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -132,6 +138,12 @@
     <Compile Include="Feature\FormSwipeCard.designer.cs">
       <DependentUpon>FormSwipeCard.cs</DependentUpon>
     </Compile>
+    <Compile Include="Feature\FormTakeGoods.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\FormTakeGoods.Designer.cs">
+      <DependentUpon>FormTakeGoods.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormCheckOut.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -194,6 +206,9 @@
     <EmbeddedResource Include="Feature\FormChoseMultiOrder.resx">
       <DependentUpon>FormChoseMultiOrder.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Feature\FormDeliveryGoods.resx">
+      <DependentUpon>FormDeliveryGoods.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Feature\FormDiscount.resx">
       <DependentUpon>FormDiscount.cs</DependentUpon>
     </EmbeddedResource>
@@ -226,6 +241,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\FormSwipeCard.resx">
       <DependentUpon>FormSwipeCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Feature\FormTakeGoods.resx">
+      <DependentUpon>FormTakeGoods.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormCheckOut.resx">
       <DependentUpon>FormCheckOut.cs</DependentUpon>
