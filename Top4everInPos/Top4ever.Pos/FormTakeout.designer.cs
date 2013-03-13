@@ -28,10 +28,10 @@ namespace Top4ever.Pos
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.pnlTools = new System.Windows.Forms.Panel();
             this.btnWholeDiscount = new Top4ever.CustomControl.CrystalButton();
             this.btnDiscount = new Top4ever.CustomControl.CrystalButton();
@@ -39,7 +39,7 @@ namespace Top4ever.Pos
             this.btnBeNew = new Top4ever.CustomControl.CrystalButton();
             this.btnPrintBill = new Top4ever.CustomControl.CrystalButton();
             this.btnTakeOut = new Top4ever.CustomControl.CrystalButton();
-            this.btnDelivery = new Top4ever.CustomControl.CrystalButton();
+            this.btnDeliveryGoods = new Top4ever.CustomControl.CrystalButton();
             this.btnOutsideOrder = new Top4ever.CustomControl.CrystalButton();
             this.btnFuncPanel = new Top4ever.CustomControl.CrystalButton();
             this.pnlCustomerInfo = new System.Windows.Forms.Panel();
@@ -114,7 +114,7 @@ namespace Top4ever.Pos
             this.pnlTools.Controls.Add(this.btnBeNew);
             this.pnlTools.Controls.Add(this.btnPrintBill);
             this.pnlTools.Controls.Add(this.btnTakeOut);
-            this.pnlTools.Controls.Add(this.btnDelivery);
+            this.pnlTools.Controls.Add(this.btnDeliveryGoods);
             this.pnlTools.Controls.Add(this.btnOutsideOrder);
             this.pnlTools.Controls.Add(this.btnFuncPanel);
             this.pnlTools.Dock = System.Windows.Forms.DockStyle.Top;
@@ -186,6 +186,7 @@ namespace Top4ever.Pos
             this.btnPrintBill.TabIndex = 0;
             this.btnPrintBill.Text = "Ó¡µ¥";
             this.btnPrintBill.UseVisualStyleBackColor = false;
+            this.btnPrintBill.Click += new System.EventHandler(this.btnPrintBill_Click);
             // 
             // btnTakeOut
             // 
@@ -200,17 +201,18 @@ namespace Top4ever.Pos
             this.btnTakeOut.UseVisualStyleBackColor = false;
             this.btnTakeOut.Click += new System.EventHandler(this.btnTakeOut_Click);
             // 
-            // btnDelivery
+            // btnDeliveryGoods
             // 
-            this.btnDelivery.BackColor = System.Drawing.Color.Coral;
-            this.btnDelivery.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 14.25F);
-            this.btnDelivery.ForeColor = System.Drawing.Color.White;
-            this.btnDelivery.Location = new System.Drawing.Point(594, 0);
-            this.btnDelivery.Name = "btnDelivery";
-            this.btnDelivery.Size = new System.Drawing.Size(98, 58);
-            this.btnDelivery.TabIndex = 0;
-            this.btnDelivery.Text = "³ö»õ";
-            this.btnDelivery.UseVisualStyleBackColor = false;
+            this.btnDeliveryGoods.BackColor = System.Drawing.Color.Coral;
+            this.btnDeliveryGoods.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 14.25F);
+            this.btnDeliveryGoods.ForeColor = System.Drawing.Color.White;
+            this.btnDeliveryGoods.Location = new System.Drawing.Point(594, 0);
+            this.btnDeliveryGoods.Name = "btnDeliveryGoods";
+            this.btnDeliveryGoods.Size = new System.Drawing.Size(98, 58);
+            this.btnDeliveryGoods.TabIndex = 0;
+            this.btnDeliveryGoods.Text = "³ö»õ";
+            this.btnDeliveryGoods.UseVisualStyleBackColor = false;
+            this.btnDeliveryGoods.Click += new System.EventHandler(this.btnDeliveryGoods_Click);
             // 
             // btnOutsideOrder
             // 
@@ -403,14 +405,14 @@ namespace Top4ever.Pos
             this.dgvGoodsOrder.AllowUserToResizeColumns = false;
             this.dgvGoodsOrder.AllowUserToResizeRows = false;
             this.dgvGoodsOrder.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvGoodsOrder.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvGoodsOrder.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvGoodsOrder.ColumnHeadersHeight = 35;
             this.dgvGoodsOrder.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvGoodsOrder.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -445,8 +447,8 @@ namespace Top4ever.Pos
             // 
             // GoodsNum
             // 
-            dataGridViewCellStyle6.Format = "N1";
-            this.GoodsNum.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Format = "N1";
+            this.GoodsNum.DefaultCellStyle = dataGridViewCellStyle2;
             this.GoodsNum.HeaderText = "ÊýÁ¿";
             this.GoodsNum.Name = "GoodsNum";
             this.GoodsNum.ReadOnly = true;
@@ -463,10 +465,10 @@ namespace Top4ever.Pos
             // 
             // GoodsPrice
             // 
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle7.Format = "N2";
-            dataGridViewCellStyle7.Padding = new System.Windows.Forms.Padding(0, 0, 6, 0);
-            this.GoodsPrice.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Format = "N2";
+            dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(0, 0, 6, 0);
+            this.GoodsPrice.DefaultCellStyle = dataGridViewCellStyle3;
             this.GoodsPrice.HeaderText = "¼Û¸ñ";
             this.GoodsPrice.Name = "GoodsPrice";
             this.GoodsPrice.ReadOnly = true;
@@ -475,11 +477,11 @@ namespace Top4ever.Pos
             // 
             // GoodsDiscount
             // 
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle8.Format = "N2";
-            dataGridViewCellStyle8.NullValue = null;
-            dataGridViewCellStyle8.Padding = new System.Windows.Forms.Padding(0, 0, 6, 0);
-            this.GoodsDiscount.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N2";
+            dataGridViewCellStyle4.NullValue = null;
+            dataGridViewCellStyle4.Padding = new System.Windows.Forms.Padding(0, 0, 6, 0);
+            this.GoodsDiscount.DefaultCellStyle = dataGridViewCellStyle4;
             this.GoodsDiscount.HeaderText = "ÕÛ¿Û";
             this.GoodsDiscount.Name = "GoodsDiscount";
             this.GoodsDiscount.ReadOnly = true;
@@ -871,7 +873,7 @@ namespace Top4ever.Pos
         private Top4ever.CustomControl.CrystalButton btnWholeDiscount;
         private Top4ever.CustomControl.CrystalButton btnDiscount;
         private Top4ever.CustomControl.CrystalButton btnOutsideOrder;
-        private Top4ever.CustomControl.CrystalButton btnDelivery;
+        private Top4ever.CustomControl.CrystalButton btnDeliveryGoods;
         private Top4ever.CustomControl.CrystalButton btnPrintBill;
         private Top4ever.CustomControl.CrystalButton btnClose;
         private Top4ever.CustomControl.CrystalButton btnTelephone;

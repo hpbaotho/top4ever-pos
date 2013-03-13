@@ -123,6 +123,30 @@ namespace Top4ever.BLL
             return objRet;
         }
 
+        public static byte[] DeliveryTakeoutOrder(byte[] itemBuffer)
+        {
+            byte[] objRet = null;
+            string orderID = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, ParamFieldLength.ORDER_ID).Trim('\0');
+            string employeeID = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.ORDER_ID, ParamFieldLength.EMPLOYEE_ID).Trim('\0');
+
+            bool result = OrderService.GetInstance().DeliveryTakeoutOrder(new Guid(orderID), new Guid(employeeID));
+            if (result)
+            {
+                //更新出货状态成功
+                objRet = new byte[ParamFieldLength.PACKAGE_HEAD];
+                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
+                Array.Copy(BitConverter.GetBytes(ParamFieldLength.PACKAGE_HEAD), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            }
+            else
+            {
+                //更新出货状态失败
+                objRet = new byte[ParamFieldLength.PACKAGE_HEAD];
+                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.ERROR_DB), 0, objRet, 0, BasicTypeLength.INT32);
+                Array.Copy(BitConverter.GetBytes(ParamFieldLength.PACKAGE_HEAD), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            }
+            return objRet;
+        }
+
         public static byte[] GetDeliveryOrderList(byte[] itemBuffer)
         {
             byte[] objRet = null;

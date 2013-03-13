@@ -16,6 +16,7 @@ namespace Top4ever.BLL.Enum
         public const int DEVICE_NO = 20;
         public const int REGION_ID = 36;
         public const int ORDER_ID = 36;
+        public const int EMPLOYEE_ID = 36;
         public const int SQL_WHERE = 200;
         public const int SQL_ORDERBY = 100;
     }
