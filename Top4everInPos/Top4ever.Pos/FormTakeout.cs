@@ -19,6 +19,7 @@ using Top4ever.Entity.Enum;
 using Top4ever.Print.Entity;
 using Top4ever.Print;
 using Top4ever.Pos.Feature;
+using Top4ever.Pos.TakeawayCall;
 
 namespace Top4ever.Pos
 {
@@ -61,7 +62,7 @@ namespace Top4ever.Pos
             btnBack.DisplayColor = btnBack.BackColor;
             btnPgUp.DisplayColor = btnPgUp.BackColor;
             btnPgDown.DisplayColor = btnPgDown.BackColor;
-            btnOutsideOrder.DisplayColor = btnOutsideOrder.BackColor;
+            btnDeliveryGoods.DisplayColor = btnDeliveryGoods.BackColor;
         }
 
         private void FormTakeout_Load(object sender, EventArgs e)
@@ -128,8 +129,8 @@ namespace Top4ever.Pos
             txtTelephone.Text = string.Empty;
             txtName.Text = string.Empty;
             txtAddress.Text = string.Empty;
-            btnOutsideOrder.Enabled = false;
-            btnOutsideOrder.BackColor = ConstantValuePool.DisabledColor;
+            btnDeliveryGoods.Enabled = false;
+            btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
             //加载外卖单列表
             OrderService orderService = new OrderService();
             IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
@@ -174,7 +175,7 @@ namespace Top4ever.Pos
         #region 初始化
         private void InitializeGoodsGroupButton()
         {
-            if (ConstantValuePool.GoodsGroupButton == null || ConstantValuePool.GoodsGroupButton.Count == 0)
+            if (ConstantValuePool.GoodsGroupButtonList == null || ConstantValuePool.GoodsGroupButtonList.Count == 0)
             {
                 if (ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls != null && ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls.Count > 0)
                 {
@@ -233,14 +234,14 @@ namespace Top4ever.Pos
                             break;
                         }
                     }
-                    ConstantValuePool.GoodsGroupButton = goodsGroupButton;
+                    ConstantValuePool.GoodsGroupButtonList = goodsGroupButton;
                 }
             }
         }
 
         private void InitializeGoodsButton()
         {
-            if (ConstantValuePool.DicGoodsButton == null || ConstantValuePool.DicGoodsButton.Count == 0)
+            if (ConstantValuePool.DicGoodsButtonList == null || ConstantValuePool.DicGoodsButtonList.Count == 0)
             {
                 if (ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls != null && ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls.Count > 0)
                 {
@@ -313,14 +314,14 @@ namespace Top4ever.Pos
                             break;
                         }
                     }
-                    ConstantValuePool.DicGoodsButton = dicGoodsButton;
+                    ConstantValuePool.DicGoodsButtonList = dicGoodsButton;
                 }
             }
         }
 
         private void InitializeDetailButton()
         {
-            if (ConstantValuePool.DicDetailsButton == null || ConstantValuePool.DicDetailsButton.Count == 0)
+            if (ConstantValuePool.DicDetailsButtonList == null || ConstantValuePool.DicDetailsButtonList.Count == 0)
             {
                 if (ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls != null && ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls.Count > 0)
                 {
@@ -393,7 +394,7 @@ namespace Top4ever.Pos
                             break;
                         }
                     }
-                    ConstantValuePool.DicDetailsButton = DicDetailsButton;
+                    ConstantValuePool.DicDetailsButtonList = DicDetailsButton;
                 }
             }
         }
@@ -426,13 +427,13 @@ namespace Top4ever.Pos
                 }
                 int startIndex = m_GoodsGroupPageIndex * pageSize;
                 int endIndex = (m_GoodsGroupPageIndex + 1) * pageSize;
-                if (endIndex > ConstantValuePool.GoodsGroupButton.Count)
+                if (endIndex > ConstantValuePool.GoodsGroupButtonList.Count)
                 {
-                    endIndex = ConstantValuePool.GoodsGroupButton.Count;
+                    endIndex = ConstantValuePool.GoodsGroupButtonList.Count;
                 }
                 for (int i = startIndex; i < endIndex; i++)
                 {
-                    CrystalButton btnGoodsGroup = ConstantValuePool.GoodsGroupButton[i];
+                    CrystalButton btnGoodsGroup = ConstantValuePool.GoodsGroupButtonList[i];
                     btnGoodsGroup.BackColor = btnGoodsGroup.DisplayColor;
                     btnGoodsGroup.Click -= new System.EventHandler(this.btnGoodsGroup_Click);
                     btnGoodsGroup.Click += new System.EventHandler(this.btnGoodsGroup_Click);
@@ -459,7 +460,7 @@ namespace Top4ever.Pos
                 btnPageDown.Width = width;
                 btnPageDown.Height = height;
                 btnPageDown.Location = new Point(px, py);
-                if (endIndex >= ConstantValuePool.GoodsGroupButton.Count)
+                if (endIndex >= ConstantValuePool.GoodsGroupButtonList.Count)
                 {
                     btnPageDown.Enabled = false;
                     btnPageDown.BackColor = ConstantValuePool.DisabledColor;
@@ -489,9 +490,9 @@ namespace Top4ever.Pos
             if (m_CurrentGoodsGroup != null)
             {
                 string goodsGroupID = m_CurrentGoodsGroup.GoodsGroupID.ToString();
-                if (ConstantValuePool.DicGoodsButton.ContainsKey(goodsGroupID))
+                if (ConstantValuePool.DicGoodsButtonList.ContainsKey(goodsGroupID))
                 {
-                    List<CrystalButton> btnGoodsList = ConstantValuePool.DicGoodsButton[goodsGroupID];
+                    List<CrystalButton> btnGoodsList = ConstantValuePool.DicGoodsButtonList[goodsGroupID];
                     if (btnGoodsList != null && btnGoodsList.Count > 0)
                     {
                         if (ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls != null && ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls.Count > 0)
@@ -715,9 +716,9 @@ namespace Top4ever.Pos
             //清除pnlItem内所有控件
             this.pnlItem.Controls.Clear();
             string detailGroupID = m_CurrentDetailsGroup.DetailsGroupID.ToString();
-            if (ConstantValuePool.DicDetailsButton.ContainsKey(detailGroupID))
+            if (ConstantValuePool.DicDetailsButtonList.ContainsKey(detailGroupID))
             {
-                List<CrystalButton> btnDetailList = ConstantValuePool.DicDetailsButton[detailGroupID];
+                List<CrystalButton> btnDetailList = ConstantValuePool.DicDetailsButtonList[detailGroupID];
                 if (btnDetailList != null && btnDetailList.Count > 0)
                 {
                     if (ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls != null && ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls.Count > 0)
@@ -1372,7 +1373,11 @@ namespace Top4ever.Pos
 
         private void btnDeliveryGoods_Click(object sender, EventArgs e)
         {
-
+            string telPhone = this.txtTelephone.Text;
+            string customerName = this.txtName.Text;
+            string address = this.txtAddress.Text;
+            FormDeliveryGoods form = new FormDeliveryGoods(m_SalesOrder, telPhone, customerName, address);
+            form.ShowDialog();
         }
 
         private void btnPrintBill_Click(object sender, EventArgs e)
@@ -1404,6 +1409,16 @@ namespace Top4ever.Pos
                     m_SalesOrder = _salesOrder;
                     BindGoodsOrderInfo();   //绑定订单信息
                     BindOrderInfoSum();
+                    if (_salesOrder.order.EatType == (int)EatWayType.OutsideOrder && _salesOrder.order.DeliveryTime == null)
+                    {
+                        btnDeliveryGoods.Enabled = true;
+                        btnDeliveryGoods.BackColor = btnDeliveryGoods.DisplayColor;
+                    }
+                    else
+                    {
+                        btnDeliveryGoods.Enabled = false;
+                        btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
+                    }
                 }
                 else
                 {
@@ -1795,6 +1810,18 @@ namespace Top4ever.Pos
                     btnDeliveryList[j].BackColor = Color.Green;
                 }
             }
+        }
+
+        private void btnTelephone_Click(object sender, EventArgs e)
+        {
+            FormFindCustomer form = new FormFindCustomer();
+            form.ShowDialog();
+        }
+
+        private void btnAddress_Click(object sender, EventArgs e)
+        {
+            FormIncomingCall form = new FormIncomingCall();
+            form.ShowDialog();
         }
     }
 }

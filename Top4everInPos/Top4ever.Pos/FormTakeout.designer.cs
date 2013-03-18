@@ -267,6 +267,7 @@ namespace Top4ever.Pos
             this.btnTelephone.TabIndex = 1;
             this.btnTelephone.Text = "电话：";
             this.btnTelephone.UseVisualStyleBackColor = false;
+            this.btnTelephone.Click += new System.EventHandler(this.btnTelephone_Click);
             // 
             // btnRecentlyCall
             // 
@@ -329,8 +330,9 @@ namespace Top4ever.Pos
             this.btnAddress.Name = "btnAddress";
             this.btnAddress.Size = new System.Drawing.Size(103, 32);
             this.btnAddress.TabIndex = 1;
-            this.btnAddress.Text = "工作地址：";
+            this.btnAddress.Text = "外送地址：";
             this.btnAddress.UseVisualStyleBackColor = false;
+            this.btnAddress.Click += new System.EventHandler(this.btnAddress_Click);
             // 
             // txtTelephone
             // 

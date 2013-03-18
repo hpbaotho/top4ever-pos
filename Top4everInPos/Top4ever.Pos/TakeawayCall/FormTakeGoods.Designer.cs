@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.Feature
+﻿namespace Top4ever.Pos.TakeawayCall
 {
     partial class FormTakeGoods
     {

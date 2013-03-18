@@ -6,11 +6,11 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Top4ever.Pos.Feature
+namespace Top4ever.Pos.TakeawayCall
 {
-    public partial class FormDeliveryGoods : Form
+    public partial class FormIncomingCall : Form
     {
-        public FormDeliveryGoods()
+        public FormIncomingCall()
         {
             InitializeComponent();
         }
