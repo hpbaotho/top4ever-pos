@@ -66,12 +66,6 @@
     <Compile Include="Feature\FormChoseMultiOrder.Designer.cs">
       <DependentUpon>FormChoseMultiOrder.cs</DependentUpon>
     </Compile>
-    <Compile Include="Feature\FormDeliveryGoods.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Feature\FormDeliveryGoods.Designer.cs">
-      <DependentUpon>FormDeliveryGoods.cs</DependentUpon>
-    </Compile>
     <Compile Include="Feature\FormDiscount.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -138,12 +132,6 @@
     <Compile Include="Feature\FormSwipeCard.designer.cs">
       <DependentUpon>FormSwipeCard.cs</DependentUpon>
     </Compile>
-    <Compile Include="Feature\FormTakeGoods.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Feature\FormTakeGoods.Designer.cs">
-      <DependentUpon>FormTakeGoods.cs</DependentUpon>
-    </Compile>
     <Compile Include="FormCheckOut.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -194,6 +182,36 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TakeawayCall\FormDeliveryGoods.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TakeawayCall\FormDeliveryGoods.designer.cs">
+      <DependentUpon>FormDeliveryGoods.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TakeawayCall\FormFindCustomer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TakeawayCall\FormFindCustomer.designer.cs">
+      <DependentUpon>FormFindCustomer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TakeawayCall\FormIncomingCall.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TakeawayCall\FormIncomingCall.designer.cs">
+      <DependentUpon>FormIncomingCall.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TakeawayCall\FormInputCustomer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TakeawayCall\FormInputCustomer.designer.cs">
+      <DependentUpon>FormInputCustomer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TakeawayCall\FormTakeGoods.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TakeawayCall\FormTakeGoods.designer.cs">
+      <DependentUpon>FormTakeGoods.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Feature\FormBackGoods.resx">
       <DependentUpon>FormBackGoods.cs</DependentUpon>
     </EmbeddedResource>
@@ -205,9 +223,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\FormChoseMultiOrder.resx">
       <DependentUpon>FormChoseMultiOrder.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Feature\FormDeliveryGoods.resx">
-      <DependentUpon>FormDeliveryGoods.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\FormDiscount.resx">
       <DependentUpon>FormDiscount.cs</DependentUpon>
@@ -241,9 +256,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\FormSwipeCard.resx">
       <DependentUpon>FormSwipeCard.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Feature\FormTakeGoods.resx">
-      <DependentUpon>FormTakeGoods.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormCheckOut.resx">
       <DependentUpon>FormCheckOut.cs</DependentUpon>
@@ -279,6 +291,21 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="TakeawayCall\FormDeliveryGoods.resx">
+      <DependentUpon>FormDeliveryGoods.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TakeawayCall\FormFindCustomer.resx">
+      <DependentUpon>FormFindCustomer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TakeawayCall\FormIncomingCall.resx">
+      <DependentUpon>FormIncomingCall.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TakeawayCall\FormInputCustomer.resx">
+      <DependentUpon>FormInputCustomer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TakeawayCall\FormTakeGoods.resx">
+      <DependentUpon>FormTakeGoods.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Config\AppSetting.config">
       <SubType>Designer</SubType>
     </None>
