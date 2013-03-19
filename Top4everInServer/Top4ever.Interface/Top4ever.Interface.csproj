@@ -37,6 +37,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Accounts\IEmployeeDao.cs" />
+    <Compile Include="Customers\ICustomerInfoDao.cs" />
+    <Compile Include="Customers\ICustomerOrderDao.cs" />
     <Compile Include="GoodsRelated\IDetailsDao.cs" />
     <Compile Include="GoodsRelated\IDetailsGroupDao.cs" />
     <Compile Include="GoodsRelated\IGoodsDao.cs" />

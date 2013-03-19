@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="Customers" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <alias>
+    <typeAlias alias="CustomerInfo" type="Top4ever.Domain.Customers.CustomerInfo, Top4ever.Domain" />
+    <typeAlias alias="CustomerOrder" type="Top4ever.Domain.Customers.CustomerOrder, Top4ever.Domain" />
+  </alias>
+
+  <resultMaps>
+    <resultMap id="CustomerInfoResult" class="CustomerInfo">
+      <result property="Telephone" column="Telephone"></result>
+      <result property="CustomerName" column="CustomerName"></result>
+      <result property="DeliveryAddress1" column="DeliveryAddress1"></result>
+      <result property="DeliveryAddress2" column="DeliveryAddress2"></result>
+      <result property="DeliveryAddress3" column="DeliveryAddress3"></result>
+      <result property="ActiveIndex" column="ActiveIndex"></result>
+    </resultMap>
+
+  </resultMaps>
+
+  <parameterMaps>
+    <parameterMap id="CustomerInfoParam" class="Hashtable">
+      <parameter property="Telephone" column="Telephone" />
+      <parameter property="CustomerName" column="CustomerName" />
+      <parameter property="DeliveryAddress1" column="DeliveryAddress1" />
+      <parameter property="DeliveryAddress2" column="DeliveryAddress2" />
+      <parameter property="DeliveryAddress3" column="DeliveryAddress3" />
+      <parameter property="ActiveIndex" column="ActiveIndex" />
+      <parameter property="LastModifiedEmployeeID" column="LastModifiedEmployeeID" />
+      <parameter property="ReturnValue" column="ReturnValue" direction="Output" />
+    </parameterMap>
+  </parameterMaps>
+  <!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+  <statements>
+    <procedure id="InsertCustomerInfo" parameterMap="CustomerInfoParam">
+      proc_CreateCustomerInfo
+    </procedure>
+
+    <update id="UpdateCustomerInfo" parameterClass="CustomerInfo">
+      UPDATE CustomerInfo
+      SET CustomerName = #CustomerName#, DeliveryAddress1 = #DeliveryAddress1#, DeliveryAddress2 = #DeliveryAddress2#, DeliveryAddress3 = #DeliveryAddress3#,
+        ActiveIndex = #ActiveIndex#, LastModifiedEmployeeID = #LastModifiedEmployeeID#, <![CDATA[ LastModifiedTime = getdate() ]]>
+      WHERE Telephone = #Telephone#
+    </update>
+
+    <select id="GetCustomerInfoByPhone" parameterClass="String" resultMap="CustomerInfoResult">
+      SELECT Telephone, CustomerName, DeliveryAddress1, DeliveryAddress2, DeliveryAddress3, ActiveIndex
+      FROM CustomerInfo
+      WHERE Telephone LIKE '%#value#%'
+    </select>
+
+    <select id="GetCustomerInfoByName" parameterClass="String" resultMap="CustomerInfoResult">
+      SELECT Telephone, CustomerName, DeliveryAddress1, DeliveryAddress2, DeliveryAddress3, ActiveIndex
+      FROM CustomerInfo
+      WHERE CustomerName LIKE '%#value#%'
+    </select>
+
+    <insert id="InsertCustomerOrder" parameterClass="CustomerOrder">
+      INSERT INTO CustomerOrder
+      (OrderID, Telephone, CustomerName, [Address], Remark, DeliveryEmployeeID)
+      VALUES
+      (#OrderID#, #Telephone#, #CustomerName#, #Address#, #Remark#, #DeliveryEmployeeID#)
+    </insert>
+  </statements>
+</sqlMap>

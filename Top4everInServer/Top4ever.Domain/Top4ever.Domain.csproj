@@ -43,6 +43,8 @@
     <Compile Include="BizDesk.cs" />
     <Compile Include="BizRegion.cs" />
     <Compile Include="ButtonStyle.cs" />
+    <Compile Include="Customers\CustomerInfo.cs" />
+    <Compile Include="Customers\CustomerOrder.cs" />
     <Compile Include="DailyStatement.cs" />
     <Compile Include="DailyTurnover.cs" />
     <Compile Include="DeskRealTimeInfo.cs" />

@@ -50,6 +50,8 @@
     <Compile Include="BaseSqlMapDao.cs" />
     <Compile Include="BusinessReportSqlMapDao.cs" />
     <Compile Include="ButtonStyleSqlMapDao.cs" />
+    <Compile Include="Customers\CustomerInfoSqlMapDao.cs" />
+    <Compile Include="Customers\CustomerOrderSqlMapDao.cs" />
     <Compile Include="DailyStatementSqlMapDao.cs" />
     <Compile Include="DailyTurnoverSqlMapDao.cs" />
     <Compile Include="DeskSqlMapDao.cs" />
