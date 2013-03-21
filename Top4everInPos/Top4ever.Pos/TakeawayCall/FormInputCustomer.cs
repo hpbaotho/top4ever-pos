@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+
+using Top4ever.ClientService;
+using Top4ever.Domain.Customers;
+using Top4ever.Entity;
 
 namespace Top4ever.Pos.TakeawayCall
 {
@@ -84,7 +87,29 @@ namespace Top4ever.Pos.TakeawayCall
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
+            CustomerInfo customerInfo = new CustomerInfo();
+            customerInfo.Telephone = this.txtTelephone.Text.Trim();
+            customerInfo.CustomerName = this.txtName.Text.Trim();
+            customerInfo.DeliveryAddress1 = this.txtAddress1.Text.Trim();
+            customerInfo.DeliveryAddress2 = this.txtAddress2.Text.Trim();
+            customerInfo.DeliveryAddress3 = this.txtAddress3.Text.Trim();
+            customerInfo.ActiveIndex = 1;
+            customerInfo.LastModifiedEmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
 
+            CustomersService customerService = new CustomersService();
+            int result = customerService.CreateCustomerInfo(customerInfo);
+            if (result == 1)
+            {
+                MessageBox.Show("创建客户信息成功！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else if (result == 2)
+            {
+                MessageBox.Show("联系电话已存在，不能重复添加！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                MessageBox.Show("创建客户信息失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
