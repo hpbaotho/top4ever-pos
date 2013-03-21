@@ -35,14 +35,14 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtAddress3 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.ckAddress3 = new System.Windows.Forms.CheckBox();
+            this.ckAddress2 = new System.Windows.Forms.CheckBox();
             this.txtAddress2 = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.txtAddress1 = new System.Windows.Forms.TextBox();
             this.txtCustomerName = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.ckAddress2 = new System.Windows.Forms.CheckBox();
-            this.ckAddress3 = new System.Windows.Forms.CheckBox();
             this.btnCancel = new Top4ever.CustomControl.CrystalButton();
             this.btnConfirm = new Top4ever.CustomControl.CrystalButton();
             this.groupBox1.SuspendLayout();
@@ -129,6 +129,26 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "其他地址：";
             // 
+            // ckAddress3
+            // 
+            this.ckAddress3.AutoSize = true;
+            this.ckAddress3.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ckAddress3.Location = new System.Drawing.Point(405, 155);
+            this.ckAddress3.Name = "ckAddress3";
+            this.ckAddress3.Size = new System.Drawing.Size(15, 14);
+            this.ckAddress3.TabIndex = 8;
+            this.ckAddress3.UseVisualStyleBackColor = true;
+            // 
+            // ckAddress2
+            // 
+            this.ckAddress2.AutoSize = true;
+            this.ckAddress2.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ckAddress2.Location = new System.Drawing.Point(405, 115);
+            this.ckAddress2.Name = "ckAddress2";
+            this.ckAddress2.Size = new System.Drawing.Size(15, 14);
+            this.ckAddress2.TabIndex = 8;
+            this.ckAddress2.UseVisualStyleBackColor = true;
+            // 
             // txtAddress2
             // 
             this.txtAddress2.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -183,26 +203,6 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "客户姓名：";
             // 
-            // ckAddress2
-            // 
-            this.ckAddress2.AutoSize = true;
-            this.ckAddress2.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ckAddress2.Location = new System.Drawing.Point(405, 115);
-            this.ckAddress2.Name = "ckAddress2";
-            this.ckAddress2.Size = new System.Drawing.Size(15, 14);
-            this.ckAddress2.TabIndex = 8;
-            this.ckAddress2.UseVisualStyleBackColor = true;
-            // 
-            // ckAddress3
-            // 
-            this.ckAddress3.AutoSize = true;
-            this.ckAddress3.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ckAddress3.Location = new System.Drawing.Point(405, 155);
-            this.ckAddress3.Name = "ckAddress3";
-            this.ckAddress3.Size = new System.Drawing.Size(15, 14);
-            this.ckAddress3.TabIndex = 8;
-            this.ckAddress3.UseVisualStyleBackColor = true;
-            // 
             // btnCancel
             // 
             this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(43)))), ((int)(((byte)(59)))));
@@ -213,6 +213,7 @@
             this.btnCancel.TabIndex = 9;
             this.btnCancel.Text = "取消";
             this.btnCancel.UseVisualStyleBackColor = false;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnConfirm
             // 
@@ -224,6 +225,7 @@
             this.btnConfirm.TabIndex = 8;
             this.btnConfirm.Text = "确定";
             this.btnConfirm.UseVisualStyleBackColor = false;
+            this.btnConfirm.Click += new System.EventHandler(this.btnConfirm_Click);
             // 
             // FormIncomingCall
             // 
@@ -241,6 +243,7 @@
             this.Name = "FormIncomingCall";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "客户来电";
+            this.Load += new System.EventHandler(this.FormIncomingCall_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
