@@ -49,6 +49,7 @@
         <result property="TranSequence" column="TranSequence"></result>
         <result property="EatType" column="EatType"></result>
         <result property="PayTime" column="PayTime"></result>
+        <result property="DeliveryTime" column="DeliveryTime"></result>
       </resultMap>
     </resultMaps>
 
@@ -191,23 +192,23 @@
 
       <update id="UpdateTakeoutOrderStatus" parameterClass="System.Collections.Hashtable">
         UPDATE [Order]
-        SET <![CDATA[ DeliveryTime = GETDATE() ]]>, DeliveryEmployeeID = #EmployeeID#
+        SET <![CDATA[ DeliveryTime = GETDATE() ]]>, DeliveryEmployeeName = #EmployeeName#
         WHERE OrderID = #OrderID#
       </update>
 
       <select id="SelectDeliveryOrder" parameterClass="String" resultMap="DeliveryOrderResult">
         <!--未结账的外带单-->
-        SELECT OrderID, PayTime, TranSequence, EatType
+        SELECT OrderID, PayTime, TranSequence, EatType, DeliveryTime
         FROM [Order]
         WHERE DailyStatementNo = #DailyStatementNo# AND [Status] = 0 AND EatType = 2
         <!--已结账而未出货的外带单-->
         UNION ALL
-        SELECT OrderID, PayTime, TranSequence, EatType
+        SELECT OrderID, PayTime, TranSequence, EatType, DeliveryTime
         FROM [Order]
         WHERE DailyStatementNo = #DailyStatementNo# AND [Status] = 1 AND EatType = 2 AND DeliveryTime IS NULL
         <!--未结账的外送单-->
         UNION ALL
-        SELECT OrderID, PayTime, TranSequence, EatType
+        SELECT OrderID, PayTime, TranSequence, EatType, DeliveryTime
         FROM [Order]
         WHERE DailyStatementNo = #DailyStatementNo# AND [Status] = 0 AND EatType = 3
       </select>

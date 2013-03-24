@@ -18,6 +18,18 @@ namespace Top4ever.Persistence.Customers
             ExecuteInsert("InsertCustomerOrder", customerOrder);
         }
 
+        public CustomerOrder GetCustomerOrder(Guid orderID)
+        {
+            return (ExecuteQueryForObject("GetCustomerOrder", orderID) as CustomerOrder);
+        }
+
+        public bool UpdateCustomerOrder(CustomerOrder customerOrder)
+        {
+            int result = 0;
+            result = ExecuteUpdate("UpdateCustomerOrder", customerOrder);
+            return result > 0;
+        }
+
         #endregion
     }
 }

@@ -163,12 +163,12 @@ namespace Top4ever.Persistence.OrderRelated
             return result > 0;
         }
 
-        public bool DeliveryTakeoutOrder(Guid orderID, Guid employeeID)
+        public bool DeliveryTakeoutOrder(Guid orderID, string employeeName)
         {
             int result = 0;
             Hashtable htParam = new Hashtable();
             htParam["OrderID"] = orderID;
-            htParam["EmployeeID"] = employeeID;
+            htParam["EmployeeName"] = employeeName;
             result = ExecuteUpdate("UpdateTakeoutOrderStatus", htParam);
             return result > 0;
         }

@@ -14,6 +14,8 @@ namespace Top4ever.Interface.Accounts
 
         Employee GetEmployee(string attendanceCard);
 
+        Employee GetEmployeeByNo(string employeeNo);
+
         IList<String> GetRightsCodeList(string userName, string password);
     }
 }

@@ -44,7 +44,7 @@ namespace Top4ever.Pos.TakeawayCall
             }
             else
             {
-                this.Height = 265;
+                this.Height = 289;
                 this.handwritingPad1.Visible = false;
                 this.btnHandwriting.Text = "手写输入∨";
             }

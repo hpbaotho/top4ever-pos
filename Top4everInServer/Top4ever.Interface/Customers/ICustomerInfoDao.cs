@@ -14,8 +14,8 @@ namespace Top4ever.Interface.Customers
 
         bool UpdateCustomerInfo(CustomerInfo customerInfo);
 
-        IList<CustomerInfo> GetCustomerInfoByPhone(string telephone);
+        CustomerInfo GetCustomerInfoByPhone(string telephone);
 
-        IList<CustomerInfo> GetCustomerInfoByName(string customerName);
+        IList<CustomerInfo> GetAllCustomerInfo();
     }
 }

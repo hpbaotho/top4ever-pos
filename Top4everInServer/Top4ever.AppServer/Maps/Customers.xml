@@ -16,6 +16,12 @@
       <result property="ActiveIndex" column="ActiveIndex"></result>
     </resultMap>
 
+    <resultMap id="CustomerOrderResult" class="CustomerOrder">
+      <result property="Telephone" column="Telephone"></result>
+      <result property="CustomerName" column="CustomerName"></result>
+      <result property="Address" column="Address"></result>
+    </resultMap>
+
   </resultMaps>
 
   <parameterMaps>
@@ -49,20 +55,31 @@
     <select id="GetCustomerInfoByPhone" parameterClass="String" resultMap="CustomerInfoResult">
       SELECT Telephone, CustomerName, DeliveryAddress1, DeliveryAddress2, DeliveryAddress3, ActiveIndex
       FROM CustomerInfo
-      WHERE Telephone LIKE '%#value#%'
+      WHERE Telephone = #Telephone#
     </select>
 
-    <select id="GetCustomerInfoByName" parameterClass="String" resultMap="CustomerInfoResult">
+    <select id="GetAllCustomerInfo" resultMap="CustomerInfoResult">
       SELECT Telephone, CustomerName, DeliveryAddress1, DeliveryAddress2, DeliveryAddress3, ActiveIndex
       FROM CustomerInfo
-      WHERE CustomerName LIKE '%#value#%'
     </select>
 
     <insert id="InsertCustomerOrder" parameterClass="CustomerOrder">
       INSERT INTO CustomerOrder
-      (OrderID, Telephone, CustomerName, [Address], Remark, DeliveryEmployeeID)
+      (OrderID, Telephone, CustomerName, [Address])
       VALUES
-      (#OrderID#, #Telephone#, #CustomerName#, #Address#, #Remark#, #DeliveryEmployeeID#)
+      (#OrderID#, #Telephone#, #CustomerName#, #Address#)
     </insert>
+
+    <select id="GetCustomerOrder" parameterClass="Guid" resultMap="CustomerOrderResult">
+      SELECT Telephone, CustomerName, [Address]
+      FROM CustomerOrder
+      WHERE OrderID = #OrderID#
+    </select>
+
+    <update id="UpdateCustomerOrder" parameterClass="CustomerOrder">
+      UPDATE CustomerOrder
+      SET Remark = #Remark#, DeliveryEmployeeName = #DeliveryEmployeeName#, <![CDATA[ DeliveryTime = getdate() ]]>
+      WHERE OrderID = #OrderID#
+    </update>
   </statements>
 </sqlMap>

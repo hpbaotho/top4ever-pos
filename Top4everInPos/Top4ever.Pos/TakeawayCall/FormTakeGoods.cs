@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using Top4ever.ClientService;
+using Top4ever.Domain.Customers;
 using Top4ever.Domain.Transfer;
 using Top4ever.Domain.OrderRelated;
 using Top4ever.Entity;
@@ -102,8 +103,11 @@ namespace Top4ever.Pos.TakeawayCall
 
         private void btnTakeGoods_Click(object sender, EventArgs e)
         {
-            OrderService orderService = new OrderService();
-            if (orderService.DeliveryTakeoutOrder(_salesOrder.order.OrderID, ConstantValuePool.CurrentEmployee.EmployeeID))
+            CustomerOrder customerOrder = new CustomerOrder();
+            customerOrder.OrderID = _salesOrder.order.OrderID;
+            customerOrder.DeliveryEmployeeName = string.Empty;
+            CustomersService customerService = new CustomersService();
+            if (customerService.UpdateTakeoutOrderStatus(customerOrder))
             {
                 _hasDeliveried = true;
                 this.Close();

@@ -30,23 +30,25 @@
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnLoadCustomer = new Top4ever.CustomControl.CrystalButton();
             this.txtCustomerName = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtTelephone = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.dgvGoodsOrder = new System.Windows.Forms.DataGridView();
-            this.btnInputCustomer = new Top4ever.CustomControl.CrystalButton();
-            this.btnCancel = new Top4ever.CustomControl.CrystalButton();
-            this.btnConfirm = new Top4ever.CustomControl.CrystalButton();
+            this.dgvCustomerInfo = new System.Windows.Forms.DataGridView();
             this.Telephone = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CustomerName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Address = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnInputCustomer = new Top4ever.CustomControl.CrystalButton();
+            this.btnCancel = new Top4ever.CustomControl.CrystalButton();
+            this.btnConfirm = new Top4ever.CustomControl.CrystalButton();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvGoodsOrder)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCustomerInfo)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnLoadCustomer);
             this.groupBox1.Controls.Add(this.txtCustomerName);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.txtTelephone);
@@ -58,17 +60,30 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "客户信息";
             // 
+            // btnLoadCustomer
+            // 
+            this.btnLoadCustomer.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.btnLoadCustomer.ForeColor = System.Drawing.Color.White;
+            this.btnLoadCustomer.Location = new System.Drawing.Point(296, 23);
+            this.btnLoadCustomer.Name = "btnLoadCustomer";
+            this.btnLoadCustomer.Size = new System.Drawing.Size(72, 55);
+            this.btnLoadCustomer.TabIndex = 1;
+            this.btnLoadCustomer.Text = "加载客户";
+            this.btnLoadCustomer.UseVisualStyleBackColor = false;
+            this.btnLoadCustomer.Click += new System.EventHandler(this.btnLoadCustomer_Click);
+            // 
             // txtCustomerName
             // 
-            this.txtCustomerName.Location = new System.Drawing.Point(161, 53);
+            this.txtCustomerName.Location = new System.Drawing.Point(122, 53);
             this.txtCustomerName.Name = "txtCustomerName";
             this.txtCustomerName.Size = new System.Drawing.Size(168, 25);
             this.txtCustomerName.TabIndex = 1;
+            this.txtCustomerName.TextChanged += new System.EventHandler(this.txtCustomerName_TextChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(81, 56);
+            this.label2.Location = new System.Drawing.Point(44, 56);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(74, 19);
             this.label2.TabIndex = 9;
@@ -76,27 +91,28 @@
             // 
             // txtTelephone
             // 
-            this.txtTelephone.Location = new System.Drawing.Point(161, 23);
+            this.txtTelephone.Location = new System.Drawing.Point(122, 23);
             this.txtTelephone.Name = "txtTelephone";
             this.txtTelephone.Size = new System.Drawing.Size(168, 25);
             this.txtTelephone.TabIndex = 0;
+            this.txtTelephone.TextChanged += new System.EventHandler(this.txtTelephone_TextChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(81, 26);
+            this.label1.Location = new System.Drawing.Point(44, 26);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(74, 19);
             this.label1.TabIndex = 7;
             this.label1.Text = "联系电话：";
             // 
-            // dgvGoodsOrder
+            // dgvCustomerInfo
             // 
-            this.dgvGoodsOrder.AllowUserToAddRows = false;
-            this.dgvGoodsOrder.AllowUserToDeleteRows = false;
-            this.dgvGoodsOrder.AllowUserToResizeColumns = false;
-            this.dgvGoodsOrder.AllowUserToResizeRows = false;
-            this.dgvGoodsOrder.BackgroundColor = System.Drawing.SystemColors.ButtonFace;
+            this.dgvCustomerInfo.AllowUserToAddRows = false;
+            this.dgvCustomerInfo.AllowUserToDeleteRows = false;
+            this.dgvCustomerInfo.AllowUserToResizeColumns = false;
+            this.dgvCustomerInfo.AllowUserToResizeRows = false;
+            this.dgvCustomerInfo.BackgroundColor = System.Drawing.SystemColors.ButtonFace;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -104,52 +120,19 @@
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvGoodsOrder.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dgvGoodsOrder.ColumnHeadersHeight = 30;
-            this.dgvGoodsOrder.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgvCustomerInfo.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgvCustomerInfo.ColumnHeadersHeight = 30;
+            this.dgvCustomerInfo.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Telephone,
             this.CustomerName,
             this.Address});
-            this.dgvGoodsOrder.Location = new System.Drawing.Point(8, 95);
-            this.dgvGoodsOrder.Name = "dgvGoodsOrder";
-            this.dgvGoodsOrder.RowHeadersVisible = false;
-            this.dgvGoodsOrder.RowTemplate.Height = 23;
-            this.dgvGoodsOrder.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvGoodsOrder.Size = new System.Drawing.Size(412, 256);
-            this.dgvGoodsOrder.TabIndex = 4;
-            // 
-            // btnInputCustomer
-            // 
-            this.btnInputCustomer.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.btnInputCustomer.ForeColor = System.Drawing.Color.White;
-            this.btnInputCustomer.Location = new System.Drawing.Point(8, 359);
-            this.btnInputCustomer.Name = "btnInputCustomer";
-            this.btnInputCustomer.Size = new System.Drawing.Size(82, 46);
-            this.btnInputCustomer.TabIndex = 5;
-            this.btnInputCustomer.Text = "新顾客";
-            this.btnInputCustomer.UseVisualStyleBackColor = false;
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(43)))), ((int)(((byte)(59)))));
-            this.btnCancel.ForeColor = System.Drawing.Color.White;
-            this.btnCancel.Location = new System.Drawing.Point(342, 359);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(78, 46);
-            this.btnCancel.TabIndex = 7;
-            this.btnCancel.Text = "取消";
-            this.btnCancel.UseVisualStyleBackColor = false;
-            // 
-            // btnConfirm
-            // 
-            this.btnConfirm.BackColor = System.Drawing.Color.Teal;
-            this.btnConfirm.ForeColor = System.Drawing.Color.White;
-            this.btnConfirm.Location = new System.Drawing.Point(256, 359);
-            this.btnConfirm.Name = "btnConfirm";
-            this.btnConfirm.Size = new System.Drawing.Size(78, 46);
-            this.btnConfirm.TabIndex = 6;
-            this.btnConfirm.Text = "确定";
-            this.btnConfirm.UseVisualStyleBackColor = false;
+            this.dgvCustomerInfo.Location = new System.Drawing.Point(8, 95);
+            this.dgvCustomerInfo.Name = "dgvCustomerInfo";
+            this.dgvCustomerInfo.RowHeadersVisible = false;
+            this.dgvCustomerInfo.RowTemplate.Height = 23;
+            this.dgvCustomerInfo.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvCustomerInfo.Size = new System.Drawing.Size(412, 256);
+            this.dgvCustomerInfo.TabIndex = 4;
             // 
             // Telephone
             // 
@@ -172,6 +155,42 @@
             this.Address.Name = "Address";
             this.Address.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // btnInputCustomer
+            // 
+            this.btnInputCustomer.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.btnInputCustomer.ForeColor = System.Drawing.Color.White;
+            this.btnInputCustomer.Location = new System.Drawing.Point(8, 359);
+            this.btnInputCustomer.Name = "btnInputCustomer";
+            this.btnInputCustomer.Size = new System.Drawing.Size(82, 46);
+            this.btnInputCustomer.TabIndex = 5;
+            this.btnInputCustomer.Text = "新顾客";
+            this.btnInputCustomer.UseVisualStyleBackColor = false;
+            this.btnInputCustomer.Click += new System.EventHandler(this.btnInputCustomer_Click);
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(43)))), ((int)(((byte)(59)))));
+            this.btnCancel.ForeColor = System.Drawing.Color.White;
+            this.btnCancel.Location = new System.Drawing.Point(342, 359);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(78, 46);
+            this.btnCancel.TabIndex = 7;
+            this.btnCancel.Text = "取消";
+            this.btnCancel.UseVisualStyleBackColor = false;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // btnConfirm
+            // 
+            this.btnConfirm.BackColor = System.Drawing.Color.Teal;
+            this.btnConfirm.ForeColor = System.Drawing.Color.White;
+            this.btnConfirm.Location = new System.Drawing.Point(256, 359);
+            this.btnConfirm.Name = "btnConfirm";
+            this.btnConfirm.Size = new System.Drawing.Size(78, 46);
+            this.btnConfirm.TabIndex = 6;
+            this.btnConfirm.Text = "确定";
+            this.btnConfirm.UseVisualStyleBackColor = false;
+            this.btnConfirm.Click += new System.EventHandler(this.btnConfirm_Click);
+            // 
             // FormFindCustomer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
@@ -180,7 +199,7 @@
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnConfirm);
             this.Controls.Add(this.btnInputCustomer);
-            this.Controls.Add(this.dgvGoodsOrder);
+            this.Controls.Add(this.dgvCustomerInfo);
             this.Controls.Add(this.groupBox1);
             this.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -192,7 +211,7 @@
             this.Text = "FormFindCustomer";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvGoodsOrder)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCustomerInfo)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -204,12 +223,13 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtTelephone;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.DataGridView dgvGoodsOrder;
+        private System.Windows.Forms.DataGridView dgvCustomerInfo;
         private CustomControl.CrystalButton btnInputCustomer;
         private CustomControl.CrystalButton btnCancel;
         private CustomControl.CrystalButton btnConfirm;
         private System.Windows.Forms.DataGridViewTextBoxColumn Telephone;
         private System.Windows.Forms.DataGridViewTextBoxColumn CustomerName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Address;
+        private CustomControl.CrystalButton btnLoadCustomer;
     }
 }

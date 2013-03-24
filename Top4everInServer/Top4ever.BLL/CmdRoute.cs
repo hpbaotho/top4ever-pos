@@ -110,7 +110,28 @@ namespace Top4ever.BLL
                     byteRet = OrderBLL.GetDeliveryOrderList(itemBuffer);
                     break;
                 case Command.ID_UPDATE_TAKEOUTORDERSTATUS:
-                    byteRet = OrderBLL.DeliveryTakeoutOrder(itemBuffer);
+                    byteRet = CustomersBLL.UpdateTakeoutOrderStatus(itemBuffer);
+                    break;
+                case Command.ID_CREATE_CUSTOMERINFO:
+                    byteRet = CustomersBLL.CreateCustomerInfo(itemBuffer);
+                    break;
+                case Command.ID_UPDATE_CUSTOMERINFO:
+                    byteRet = CustomersBLL.UpdateCustomerInfo(itemBuffer);
+                    break;
+                case Command.ID_GET_CUSTOMERINFOBYPHONE:
+                    byteRet = CustomersBLL.GetCustomerInfoByPhone(itemBuffer);
+                    break;
+                case Command.ID_GET_ALLCUSTOMERINFO:
+                    byteRet = CustomersBLL.GetAllCustomerInfo();
+                    break;
+                case Command.ID_GET_EMPLOYEEBYNO:
+                    byteRet = EmployeeBLL.GetEmployeeByNo(itemBuffer);
+                    break;
+                case Command.ID_GET_CUSTOMERORDER:
+                    byteRet = CustomersBLL.GetCustomerOrder(itemBuffer);
+                    break;
+                case Command.ID_CREATE_CUSTOMERORDER:
+                    byteRet = CustomersBLL.CreateCustomerOrder(itemBuffer);
                     break;
 
                 default:

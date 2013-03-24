@@ -35,14 +35,14 @@ namespace Top4ever.Persistence.Customers
             return result > 0;
         }
 
-        public IList<CustomerInfo> GetCustomerInfoByPhone(string telephone)
+        public CustomerInfo GetCustomerInfoByPhone(string telephone)
         {
-            return ExecuteQueryForList<CustomerInfo>("GetCustomerInfoByPhone", telephone);
+            return (ExecuteQueryForObject("GetCustomerInfoByPhone", telephone) as CustomerInfo);
         }
 
-        public IList<CustomerInfo> GetCustomerInfoByName(string customerName)
+        public IList<CustomerInfo> GetAllCustomerInfo()
         {
-            return ExecuteQueryForList<CustomerInfo>("GetCustomerInfoByName", customerName);
+            return ExecuteQueryForList<CustomerInfo>("GetAllCustomerInfo", null);
         }
     }
 }

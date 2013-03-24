@@ -67,6 +67,25 @@
         WHERE AttendanceCard = #value# AND IsVoided = 0
       </select>
 
+      <select id="GetEmployeeByNo" resultMap="EmployeeResult" parameterClass="String">
+        SELECT [EmployeeID]
+        ,[EmployeeNo]
+        ,[Password]
+        ,[Name]
+        ,[LimitMoney]
+        ,[MinDiscount]
+        ,[Birthday]
+        ,[IndentifyNo]
+        ,[Sex]
+        ,[Address]
+        ,[Telephone]
+        ,[MobilePhone]
+        ,[EntryDate]
+        ,[LeaveDate]
+        FROM [Employee]
+        WHERE EmployeeNo = #value# AND IsVoided = 0
+      </select>
+
       <select id="GetRightsCodeListByEmployee" resultClass="String" parameterClass="Employee">
         SELECT r.RightsCode
         FROM Employee e JOIN RoleRightsMap rrm ON rrm.RoleID = e.RoleID
