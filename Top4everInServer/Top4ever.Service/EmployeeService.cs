@@ -102,6 +102,35 @@ namespace Top4ever.Service
             return result;
         }
 
+        /// <summary>
+        /// 获取用户信息 0:数据库操作失败, 1:成功, 2:账号不存在
+        /// </summary>
+        public int GetEmployeeByNo(string employeeNo, out Employee employee)
+        {
+            int result = 0;
+            try
+            {
+                _daoManager.OpenConnection();
+                employee = _employeeDao.GetEmployeeByNo(employeeNo);
+                if (employee == null)
+                {
+                    result = 2;
+                }
+                else
+                {
+                    result = 1;
+                }
+                _daoManager.CloseConnection();
+            }
+            catch (Exception ex)
+            {
+                employee = null;
+                result = 0;
+                logger.Error("Through employee No. to get employee operation failed !", ex);
+            }
+            return result;
+        }
+
         public IList<String> GetRightsCodeList(string userName, string password)
         {
             IList<String> rightsCodeList = null;

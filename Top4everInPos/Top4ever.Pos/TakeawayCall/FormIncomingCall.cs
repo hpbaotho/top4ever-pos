@@ -14,39 +14,49 @@ namespace Top4ever.Pos.TakeawayCall
 {
     public partial class FormIncomingCall : Form
     {
-        private string _telephone = string.Empty;
+        private CustomerInfo _customerInfo = null;
+        private string _address = string.Empty;
 
-        public FormIncomingCall(string telephone)
+        public FormIncomingCall(string telephone, string address)
         {
-            _telephone = telephone;
+            CustomersService customerService = new CustomersService();
+            _customerInfo = customerService.GetCustomerInfoByPhone(telephone);
+            _address = address;
             InitializeComponent();
         }
 
         private void FormIncomingCall_Load(object sender, EventArgs e)
         {
-            ShowCustomerInfo(_telephone);
-        }
-
-        private void ShowCustomerInfo(string telephone)
-        {
-            CustomersService customerService = new CustomersService();
-            IList<CustomerInfo> customerInfoList = customerService.GetCustomerInfoByPhone(telephone);
-            if (customerInfoList != null && customerInfoList.Count > 0)
+            if (_customerInfo != null)
             {
-                CustomerInfo customerInfo = customerInfoList[0];
-                txtCustomerName.Text = customerInfo.CustomerName;
-                txtAddress1.Text = customerInfo.DeliveryAddress1;
-                txtAddress2.Text = customerInfo.DeliveryAddress2;
-                txtAddress3.Text = customerInfo.DeliveryAddress3;
-                if (customerInfo.ActiveIndex == 1)
+                txtCustomerName.Text = _customerInfo.CustomerName;
+                txtAddress1.Text = _customerInfo.DeliveryAddress1;
+                txtAddress2.Text = _customerInfo.DeliveryAddress2;
+                txtAddress3.Text = _customerInfo.DeliveryAddress3;
+                if (_customerInfo.ActiveIndex == 1)
                 {
                     ckAddress1.Checked = true;
                 }
-                else if (customerInfo.ActiveIndex == 2)
+                else if (_customerInfo.ActiveIndex == 2)
                 {
                     ckAddress2.Checked = true;
                 }
-                else if (customerInfo.ActiveIndex == 3)
+                else if (_customerInfo.ActiveIndex == 3)
+                {
+                    ckAddress3.Checked = true;
+                }
+            }
+            if (!string.IsNullOrEmpty(_address))
+            {
+                if (txtAddress1.Text == _address)
+                {
+                    ckAddress1.Checked = true;
+                }
+                else if (txtAddress2.Text == _address)
+                {
+                    ckAddress2.Checked = true;
+                }
+                else if (txtAddress3.Text == _address)
                 {
                     ckAddress3.Checked = true;
                 }
@@ -76,14 +86,34 @@ namespace Top4ever.Pos.TakeawayCall
             customerInfo.DeliveryAddress3 = this.txtAddress3.Text.Trim();
             customerInfo.ActiveIndex = activeIndex;
             customerInfo.LastModifiedEmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
+
             CustomersService customerService = new CustomersService();
-            if (customerService.UpdateCustomerInfo(customerInfo))
+            if (_customerInfo == null)  //新增
             {
-                this.Close();
+                int result = customerService.CreateCustomerInfo(customerInfo);
+                if (result == 1)
+                {
+                    this.Close();
+                }
+                else if (result == 2)
+                {
+                    MessageBox.Show("联系电话已存在，不能重复添加！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show("创建客户信息失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-            else
+            else  //更新
             {
-                MessageBox.Show("更新客户信息失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (customerService.UpdateCustomerInfo(customerInfo))
+                {
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("更新客户信息失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 

@@ -163,17 +163,6 @@ namespace Top4ever.Service
             return result;
         }
 
-        public bool DeliveryTakeoutOrder(Guid orderID, Guid employeeID)
-        {
-            bool result = false;
-
-            _daoManager.OpenConnection();
-            result = _orderDao.DeliveryTakeoutOrder(orderID, employeeID);
-            _daoManager.CloseConnection();
-
-            return result;
-        }
-
         public IList<DeliveryOrder> GetDeliveryOrderList()
         {
             IList<DeliveryOrder> deliveryOrderList = null;

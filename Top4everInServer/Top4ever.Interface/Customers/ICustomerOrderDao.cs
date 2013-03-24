@@ -11,5 +11,9 @@ namespace Top4ever.Interface.Customers
     public interface ICustomerOrderDao
     {
         void CreateCustomerOrder(CustomerOrder customerOrder);
+
+        CustomerOrder GetCustomerOrder(Guid orderID);
+
+        bool UpdateCustomerOrder(CustomerOrder customerOrder);
     }
 }

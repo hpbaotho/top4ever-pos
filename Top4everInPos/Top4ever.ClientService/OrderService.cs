@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Top4ever.ClientService.Enum;
+using Top4ever.Domain.Customers;
 using Top4ever.Domain.OrderRelated;
 using Top4ever.Domain.Transfer;
 using Top4ever.Entity;
@@ -136,41 +137,6 @@ namespace Top4ever.ClientService
             //status
             Array.Copy(BitConverter.GetBytes(status), 0, sendByte, byteOffset, BasicTypeLength.INT32);
             byteOffset += BasicTypeLength.INT32;
-
-            bool result = false;
-            using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
-            {
-                socket.Connect();
-                Byte[] receiveData = null;
-                Int32 operCode = socket.SendReceive(sendByte, out receiveData);
-                if (operCode == (int)RET_VALUE.SUCCEEDED)
-                {
-                    result = true;
-                }
-                socket.Disconnect();
-            }
-            return result;
-        }
-
-        public bool DeliveryTakeoutOrder(Guid orderID, Guid employeeID)
-        {
-            int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.ORDER_ID + ParamFieldLength.EMPLOYEE_ID;
-            byte[] sendByte = new byte[cByte];
-            int byteOffset = 0;
-            Array.Copy(BitConverter.GetBytes((int)Command.ID_UPDATE_TAKEOUTORDERSTATUS), sendByte, BasicTypeLength.INT32);
-            byteOffset = BasicTypeLength.INT32;
-            Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
-            byteOffset += BasicTypeLength.INT32;
-
-            byte[] tempByte = null;
-            //orderID
-            tempByte = Encoding.UTF8.GetBytes(orderID.ToString());
-            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
-            byteOffset += ParamFieldLength.ORDER_ID;
-            //employeeID
-            tempByte = Encoding.UTF8.GetBytes(employeeID.ToString());
-            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
-            byteOffset += ParamFieldLength.EMPLOYEE_ID;
 
             bool result = false;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))

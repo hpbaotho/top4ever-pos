@@ -20,5 +20,9 @@ namespace Top4ever.Domain.Transfer
         /// 付款时间
         /// </summary>
         public DateTime? PayTime{ get; set; }
+        /// <summary>
+        /// 外送时间
+        /// </summary>
+        public DateTime? DeliveryTime { get; set; }
     }
 }

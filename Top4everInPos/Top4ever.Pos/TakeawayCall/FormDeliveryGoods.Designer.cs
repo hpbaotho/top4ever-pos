@@ -44,8 +44,8 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnBrowse = new Top4ever.CustomControl.CrystalButton();
             this.txtEmployeeName = new System.Windows.Forms.TextBox();
-            this.txtEmployeeNo = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.btnCancel = new Top4ever.CustomControl.CrystalButton();
             this.btnHandwriting = new Top4ever.CustomControl.CrystalButton();
@@ -151,6 +151,7 @@
             this.txtName.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.txtName.Location = new System.Drawing.Point(342, 20);
             this.txtName.Name = "txtName";
+            this.txtName.ReadOnly = true;
             this.txtName.Size = new System.Drawing.Size(136, 26);
             this.txtName.TabIndex = 1;
             this.txtName.Text = "张三疯";
@@ -168,6 +169,7 @@
             this.txtAddress.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.txtAddress.Location = new System.Drawing.Point(96, 57);
             this.txtAddress.Name = "txtAddress";
+            this.txtAddress.ReadOnly = true;
             this.txtAddress.Size = new System.Drawing.Size(382, 26);
             this.txtAddress.TabIndex = 1;
             // 
@@ -176,6 +178,7 @@
             this.txtTelephone.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.txtTelephone.Location = new System.Drawing.Point(96, 20);
             this.txtTelephone.Name = "txtTelephone";
+            this.txtTelephone.ReadOnly = true;
             this.txtTelephone.Size = new System.Drawing.Size(117, 26);
             this.txtTelephone.TabIndex = 1;
             // 
@@ -211,8 +214,8 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btnBrowse);
             this.groupBox3.Controls.Add(this.txtEmployeeName);
-            this.groupBox3.Controls.Add(this.txtEmployeeNo);
             this.groupBox3.Controls.Add(this.label8);
             this.groupBox3.Location = new System.Drawing.Point(12, 184);
             this.groupBox3.Name = "groupBox3";
@@ -220,22 +223,26 @@
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             // 
+            // btnBrowse
+            // 
+            this.btnBrowse.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.btnBrowse.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnBrowse.ForeColor = System.Drawing.Color.White;
+            this.btnBrowse.Location = new System.Drawing.Point(220, 23);
+            this.btnBrowse.Name = "btnBrowse";
+            this.btnBrowse.Size = new System.Drawing.Size(43, 31);
+            this.btnBrowse.TabIndex = 2;
+            this.btnBrowse.Text = "...";
+            this.btnBrowse.UseVisualStyleBackColor = false;
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
+            // 
             // txtEmployeeName
             // 
             this.txtEmployeeName.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtEmployeeName.Location = new System.Drawing.Point(217, 25);
+            this.txtEmployeeName.Location = new System.Drawing.Point(97, 25);
             this.txtEmployeeName.Name = "txtEmployeeName";
-            this.txtEmployeeName.ReadOnly = true;
-            this.txtEmployeeName.Size = new System.Drawing.Size(261, 26);
+            this.txtEmployeeName.Size = new System.Drawing.Size(117, 26);
             this.txtEmployeeName.TabIndex = 1;
-            // 
-            // txtEmployeeNo
-            // 
-            this.txtEmployeeNo.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtEmployeeNo.Location = new System.Drawing.Point(97, 25);
-            this.txtEmployeeNo.Name = "txtEmployeeNo";
-            this.txtEmployeeNo.Size = new System.Drawing.Size(117, 26);
-            this.txtEmployeeNo.TabIndex = 1;
             // 
             // label8
             // 
@@ -342,12 +349,12 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TextBox txtEmployeeName;
-        private System.Windows.Forms.TextBox txtEmployeeNo;
         private System.Windows.Forms.Label label8;
         private CustomControl.CrystalButton btnDelivery;
         private CustomControl.CrystalButton btnCancel;
         private CustomControl.CrystalButton btnHandwriting;
         private CustomControl.HandwritingPad handwritingPad1;
         private CustomControl.CrystalButton btnBackspace;
+        private CustomControl.CrystalButton btnBrowse;
     }
 }

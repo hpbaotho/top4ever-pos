@@ -77,7 +77,7 @@ namespace Top4ever.ClientService
             return result;
         }
 
-        public IList<CustomerInfo> GetCustomerInfoByPhone(string telephone)
+        public CustomerInfo GetCustomerInfoByPhone(string telephone)
         {
             int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.TELEPHONE;
             byte[] sendByte = new byte[cByte];
@@ -93,7 +93,7 @@ namespace Top4ever.ClientService
             byteOffset += ParamFieldLength.TELEPHONE;
 
             Int32 operCode = 0;
-            IList<CustomerInfo> customerInfoList = null;
+            CustomerInfo customerInfo = null;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
                 socket.Connect();
@@ -102,27 +102,22 @@ namespace Top4ever.ClientService
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
                 {
                     string strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD, receiveData.Length - ParamFieldLength.PACKAGE_HEAD);
-                    customerInfoList = JsonConvert.DeserializeObject<IList<CustomerInfo>>(strReceive);
+                    customerInfo = JsonConvert.DeserializeObject<CustomerInfo>(strReceive);
                 }
                 socket.Disconnect();
             }
-            return customerInfoList;
+            return customerInfo;
         }
 
-        public IList<CustomerInfo> GetCustomerInfoByName(string customerName)
+        public IList<CustomerInfo> GetAllCustomerInfo()
         {
-            int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.CUSTOMER_NAME;
+            int cByte = ParamFieldLength.PACKAGE_HEAD;
             byte[] sendByte = new byte[cByte];
             int byteOffset = 0;
-            Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_CUSTOMERINFOBYNAME), sendByte, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_ALLCUSTOMERINFO), sendByte, BasicTypeLength.INT32);
             byteOffset = BasicTypeLength.INT32;
             Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
             byteOffset += BasicTypeLength.INT32;
-
-            //customerName
-            byte[] tempByte = Encoding.UTF8.GetBytes(customerName);
-            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
-            byteOffset += ParamFieldLength.CUSTOMER_NAME;
 
             Int32 operCode = 0;
             IList<CustomerInfo> customerInfoList = null;
@@ -141,7 +136,39 @@ namespace Top4ever.ClientService
             return customerInfoList;
         }
 
-        public bool CreateCustomerOrder(CustomerOrder customerOrder)
+        public CustomerOrder GetCustomerOrder(Guid orderID)
+        {
+            int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.ORDER_ID;
+            byte[] sendByte = new byte[cByte];
+            int byteOffset = 0;
+            Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_CUSTOMERORDER), sendByte, BasicTypeLength.INT32);
+            byteOffset = BasicTypeLength.INT32;
+            Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
+            byteOffset += BasicTypeLength.INT32;
+
+            //orderID
+            byte[] tempByte = Encoding.UTF8.GetBytes(orderID.ToString());
+            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
+            byteOffset += ParamFieldLength.ORDER_ID;
+
+            Int32 operCode = 0;
+            CustomerOrder customerOrder = null;
+            using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
+            {
+                socket.Connect();
+                Byte[] receiveData = null;
+                operCode = socket.SendReceive(sendByte, out receiveData);
+                if (operCode == (int)RET_VALUE.SUCCEEDED)
+                {
+                    string strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD, receiveData.Length - ParamFieldLength.PACKAGE_HEAD);
+                    customerOrder = JsonConvert.DeserializeObject<CustomerOrder>(strReceive);
+                }
+                socket.Disconnect();
+            }
+            return customerOrder;
+        }
+
+        public bool UpdateTakeoutOrderStatus(CustomerOrder customerOrder)
         {
             string json = JsonConvert.SerializeObject(customerOrder);
             byte[] jsonByte = Encoding.UTF8.GetBytes(json);
@@ -149,7 +176,7 @@ namespace Top4ever.ClientService
             int cByte = ParamFieldLength.PACKAGE_HEAD + jsonByte.Length;
             byte[] sendByte = new byte[cByte];
             int byteOffset = 0;
-            Array.Copy(BitConverter.GetBytes((int)Command.ID_CREATE_CUSTOMERORDER), sendByte, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes((int)Command.ID_UPDATE_TAKEOUTORDERSTATUS), sendByte, BasicTypeLength.INT32);
             byteOffset = BasicTypeLength.INT32;
             Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
             byteOffset += BasicTypeLength.INT32;

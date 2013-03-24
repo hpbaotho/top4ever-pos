@@ -26,6 +26,11 @@ namespace Top4ever.Persistence.Accounts
             return ExecuteQueryForObject("GetEmployeeBySwipeCard", attendanceCard) as Employee;
         }
 
+        public Employee GetEmployeeByNo(string employeeNo)
+        {
+            return ExecuteQueryForObject("GetEmployeeByNo", employeeNo) as Employee;
+        }
+
         public IList<String> GetRightsCodeList(string userName, string password)
         {
             Employee emp = new Employee();

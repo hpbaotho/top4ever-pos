@@ -11,6 +11,7 @@ using Top4ever.ClientService;
 using Top4ever.Common;
 using Top4ever.CustomControl;
 using Top4ever.Domain;
+using Top4ever.Domain.Customers;
 using Top4ever.Domain.GoodsRelated;
 using Top4ever.Domain.OrderRelated;
 using Top4ever.Domain.Transfer;
@@ -45,8 +46,6 @@ namespace Top4ever.Pos
         private decimal m_ActualPayMoney = 0;
         private decimal m_Discount = 0;
         private decimal m_CutOff = 0;
-        private Guid m_EmployeeID = Guid.Empty;
-        private string m_EmployeeNo = string.Empty;
         private CrystalButton prevPressedButton = null;
         private bool m_ShowSilverCode = false;
         //外卖单列表
@@ -1314,26 +1313,42 @@ namespace Top4ever.Pos
 
         private void btnTakeOut_Click(object sender, EventArgs e)
         {
-            if (SubmitSalesOrder(deskName, EatWayType.Takeout))
+            if (dgvGoodsOrder.Rows.Count > 0)
             {
-                this.lbTotalPrice.Text = "总金额：";
-                this.lbDiscount.Text = "折扣：";
-                this.lbNeedPayMoney.Text = "实际应付：";
-                this.lbCutOff.Text = "去零：";
-                dgvGoodsOrder.Rows.Clear();
-                //加载外卖单列表
-                m_PageIndex = 0;
-                CleanDeliveryOrderButton();
-                OrderService orderService = new OrderService();
-                IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
-                if (deliveryOrderList != null)
+                int result = SubmitSalesOrder(deskName, EatWayType.Takeout);
+                if (result == 1)
                 {
-                    DisplayDeliveryOrderButton(deliveryOrderList);
+                    this.lbTotalPrice.Text = "总金额：";
+                    this.lbDiscount.Text = "折扣：";
+                    this.lbNeedPayMoney.Text = "实际应付：";
+                    this.lbCutOff.Text = "去零：";
+                    dgvGoodsOrder.Rows.Clear();
+                    m_SalesOrder = null;
+                    btnDeliveryGoods.Enabled = false;
+                    btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
+                    txtTelephone.Text = string.Empty;
+                    txtName.Text = string.Empty;
+                    txtAddress.Text = string.Empty;
+                    txtTelephone.ReadOnly = false;
+                    txtName.ReadOnly = false;
+                    //加载外卖单列表
+                    m_PageIndex = 0;
+                    CleanDeliveryOrderButton();
+                    OrderService orderService = new OrderService();
+                    IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
+                    if (deliveryOrderList != null)
+                    {
+                        DisplayDeliveryOrderButton(deliveryOrderList);
+                    }
                 }
-            }
-            else
-            {
-                MessageBox.Show("外带提交失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else if (result == 2)
+                {
+                    MessageBox.Show("没有数据可以提交！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show("外带提交失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -1344,30 +1359,54 @@ namespace Top4ever.Pos
             this.lbNeedPayMoney.Text = "实际应付：";
             this.lbCutOff.Text = "去零：";
             dgvGoodsOrder.Rows.Clear();
+            m_SalesOrder = null;
+            btnDeliveryGoods.Enabled = false;
+            btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
+            txtTelephone.Text = string.Empty;
+            txtName.Text = string.Empty;
+            txtAddress.Text = string.Empty;
+            txtTelephone.ReadOnly = false;
+            txtName.ReadOnly = false;
         }
 
         private void btnOutsideOrder_Click(object sender, EventArgs e)
         {
-            if (SubmitSalesOrder(deskName, EatWayType.OutsideOrder))
+            if (dgvGoodsOrder.Rows.Count > 0)
             {
-                this.lbTotalPrice.Text = "总金额：";
-                this.lbDiscount.Text = "折扣：";
-                this.lbNeedPayMoney.Text = "实际应付：";
-                this.lbCutOff.Text = "去零：";
-                dgvGoodsOrder.Rows.Clear();
-                //加载外卖单列表
-                m_PageIndex = 0;
-                CleanDeliveryOrderButton();
-                OrderService orderService = new OrderService();
-                IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
-                if (deliveryOrderList != null)
+                int result = SubmitSalesOrder(deskName, EatWayType.OutsideOrder);
+                if (result == 1)
                 {
-                    DisplayDeliveryOrderButton(deliveryOrderList);
+                    this.lbTotalPrice.Text = "总金额：";
+                    this.lbDiscount.Text = "折扣：";
+                    this.lbNeedPayMoney.Text = "实际应付：";
+                    this.lbCutOff.Text = "去零：";
+                    dgvGoodsOrder.Rows.Clear();
+                    m_SalesOrder = null;
+                    btnDeliveryGoods.Enabled = false;
+                    btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
+                    txtTelephone.Text = string.Empty;
+                    txtName.Text = string.Empty;
+                    txtAddress.Text = string.Empty;
+                    txtTelephone.ReadOnly = false;
+                    txtName.ReadOnly = false;
+                    //加载外卖单列表
+                    m_PageIndex = 0;
+                    CleanDeliveryOrderButton();
+                    OrderService orderService = new OrderService();
+                    IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
+                    if (deliveryOrderList != null)
+                    {
+                        DisplayDeliveryOrderButton(deliveryOrderList);
+                    }
                 }
-            }
-            else
-            {
-                MessageBox.Show("外送提交失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else if (result == 2)
+                {
+                    MessageBox.Show("没有数据可以提交！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show("外送提交失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -1378,6 +1417,18 @@ namespace Top4ever.Pos
             string address = this.txtAddress.Text;
             FormDeliveryGoods form = new FormDeliveryGoods(m_SalesOrder, telPhone, customerName, address);
             form.ShowDialog();
+            if (form.HasDeliveried)
+            {
+                //加载外卖单列表
+                m_PageIndex = 0;
+                CleanDeliveryOrderButton();
+                OrderService orderService = new OrderService();
+                IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
+                if (deliveryOrderList != null)
+                {
+                    DisplayDeliveryOrderButton(deliveryOrderList);
+                }
+            }
         }
 
         private void btnPrintBill_Click(object sender, EventArgs e)
@@ -1399,17 +1450,12 @@ namespace Top4ever.Pos
         private void btnDelivery_Click(object sender, EventArgs e)
         {
             CrystalButton btnDelivery = sender as CrystalButton;
-            DeliveryOrder deliveryOrder = btnDelivery.Tag as DeliveryOrder;
-            if (deliveryOrder.PayTime == null)
+            if (btnDelivery.Tag != null)
             {
-                SalesOrderService salesOrderService = new SalesOrderService();
-                SalesOrder _salesOrder = salesOrderService.GetSalesOrder(deliveryOrder.OrderID);
-                if (_salesOrder != null)
+                DeliveryOrder deliveryOrder = btnDelivery.Tag as DeliveryOrder;
+                if (deliveryOrder.PayTime == null)
                 {
-                    m_SalesOrder = _salesOrder;
-                    BindGoodsOrderInfo();   //绑定订单信息
-                    BindOrderInfoSum();
-                    if (_salesOrder.order.EatType == (int)EatWayType.OutsideOrder && _salesOrder.order.DeliveryTime == null)
+                    if (deliveryOrder.EatType == (int)EatWayType.OutsideOrder && deliveryOrder.DeliveryTime == null)
                     {
                         btnDeliveryGoods.Enabled = true;
                         btnDeliveryGoods.BackColor = btnDeliveryGoods.DisplayColor;
@@ -1419,32 +1465,53 @@ namespace Top4ever.Pos
                         btnDeliveryGoods.Enabled = false;
                         btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
                     }
+                    SalesOrderService salesOrderService = new SalesOrderService();
+                    SalesOrder _salesOrder = salesOrderService.GetSalesOrder(deliveryOrder.OrderID);
+                    if (_salesOrder != null)
+                    {
+                        m_SalesOrder = _salesOrder;
+                        BindGoodsOrderInfo();   //绑定订单信息
+                        BindOrderInfoSum();
+                        CustomersService customerService = new CustomersService();
+                        CustomerOrder customerOrder = customerService.GetCustomerOrder(m_SalesOrder.order.OrderID);
+                        if (customerOrder != null)
+                        {
+                            this.txtTelephone.Text = customerOrder.Telephone;
+                            this.txtName.Text = customerOrder.CustomerName;
+                            this.txtAddress.Text = customerOrder.Address;
+                            txtTelephone.ReadOnly = true;
+                            txtName.ReadOnly = true;
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("获取账单信息失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("获取账单信息失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            else
-            { 
-                SalesOrderService salesOrderService = new SalesOrderService();
-                SalesOrder _salesOrder = salesOrderService.GetSalesOrder(deliveryOrder.OrderID);
-                if (_salesOrder != null)
-                {
-                    FormTakeGoods form = new FormTakeGoods(_salesOrder);
-                    form.ShowDialog();
-                    if (form.HasDeliveried)
+                    SalesOrderService salesOrderService = new SalesOrderService();
+                    SalesOrder _salesOrder = salesOrderService.GetSalesOrder(deliveryOrder.OrderID);
+                    if (_salesOrder != null)
                     {
-                        btnDelivery.Enabled = false;
-                        btnDelivery.BackColor = ConstantValuePool.DisabledColor;
+                        FormTakeGoods form = new FormTakeGoods(_salesOrder);
+                        form.ShowDialog();
+                        if (form.HasDeliveried)
+                        {
+                            btnDelivery.Enabled = false;
+                            btnDelivery.BackColor = ConstantValuePool.DisabledColor;
+                        }
                     }
                 }
             }
         }
 
-        private bool SubmitSalesOrder(string deskName, EatWayType eatType)
+        /// <summary>
+        /// 0:提交失败 1:成功 2:没有可提交的数据
+        /// </summary>
+        private Int32 SubmitSalesOrder(string deskName, EatWayType eatType)
         {
-            bool result = false;
+            int result = 0;
             Guid orderID = Guid.Empty;
             if (m_SalesOrder == null)    //新增的菜单
             {
@@ -1471,7 +1538,7 @@ namespace Top4ever.Pos
                     orderDetails.TotalSellPrice = Convert.ToDecimal(dr.Cells["GoodsPrice"].Value);
                     orderDetails.TotalDiscount = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value);
                     orderDetails.ItemQty = Convert.ToDecimal(dr.Cells["GoodsNum"].Value);
-                    orderDetails.EmployeeID = m_EmployeeID;
+                    orderDetails.EmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
                     if (dr.Cells["Wait"].Value != null)
                     {
                         orderDetails.Wait = Convert.ToInt32(dr.Cells["Wait"].Value);
@@ -1557,7 +1624,7 @@ namespace Top4ever.Pos
                             orderDiscount.DiscountRate = discount.DiscountRate;
                             orderDiscount.OffFixPay = discount.OffFixPay;
                             orderDiscount.OffPay = offPay;
-                            orderDiscount.EmployeeID = m_EmployeeID;
+                            orderDiscount.EmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
                             newOrderDiscountList.Add(orderDiscount);
                         }
                     }
@@ -1581,7 +1648,7 @@ namespace Top4ever.Pos
                         orderDetails.TotalSellPrice = Convert.ToDecimal(dr.Cells["GoodsPrice"].Value);
                         orderDetails.TotalDiscount = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value);
                         orderDetails.Unit = dr.Cells["ItemUnit"].Value.ToString();
-                        orderDetails.EmployeeID = m_EmployeeID;
+                        orderDetails.EmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
                         if (dr.Cells["Wait"].Value != null)
                         {
                             orderDetails.Wait = Convert.ToInt32(dr.Cells["Wait"].Value);
@@ -1601,7 +1668,7 @@ namespace Top4ever.Pos
                             orderDiscount.DiscountRate = discount.DiscountRate;
                             orderDiscount.OffFixPay = discount.OffFixPay;
                             orderDiscount.OffPay = offPay;
-                            orderDiscount.EmployeeID = m_EmployeeID;
+                            orderDiscount.EmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
                             newOrderDiscountList.Add(orderDiscount);
                         }
                     }
@@ -1622,8 +1689,8 @@ namespace Top4ever.Pos
                 order.EatType = (int)eatType;
                 order.Status = 0;
                 order.PeopleNum = 1;
-                order.EmployeeID = m_EmployeeID;
-                order.EmployeeNo = m_EmployeeNo;
+                order.EmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
+                order.EmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
                 order.OrderLastTime = 0;
 
                 SalesOrder salesOrder = new SalesOrder();
@@ -1632,7 +1699,10 @@ namespace Top4ever.Pos
                 salesOrder.orderDiscountList = newOrderDiscountList;
                 SalesOrderService orderService = new SalesOrderService();
                 _tranSeq = orderService.CreateSalesOrder(salesOrder);
-                result = _tranSeq > 0;
+                if (_tranSeq > 0)
+                {
+                    result = 1;
+                }
             }
             else
             {
@@ -1648,20 +1718,26 @@ namespace Top4ever.Pos
                     order.DeviceNo = ConstantValuePool.BizSettingConfig.DeviceNo;
                     order.DeskName = deskName;
                     order.PeopleNum = 1;
-                    order.EmployeeID = m_EmployeeID;
-                    order.EmployeeNo = m_EmployeeNo;
+                    order.EmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
+                    order.EmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
                     order.OrderLastTime = 0;
                     SalesOrder salesOrder = new SalesOrder();
                     salesOrder.order = order;
                     salesOrder.orderDetailsList = newOrderDetailsList;
                     salesOrder.orderDiscountList = newOrderDiscountList;
                     SalesOrderService orderService = new SalesOrderService();
-                    result = orderService.UpdateSalesOrder(salesOrder) == 1;
-
+                    if (orderService.UpdateSalesOrder(salesOrder) == 1)
+                    {
+                        result = 1;
+                    }
                     _tranSeq = m_SalesOrder.order.TranSequence;
                 }
+                else
+                {
+                    result = 2;
+                }
             }
-            if (result)
+            if (result == 1 && eatType == EatWayType.Takeout)
             {
                 if (ConstantValuePool.BizSettingConfig.printConfig.Enabled)
                 {
@@ -1671,7 +1747,7 @@ namespace Top4ever.Pos
                     printData.DeskName = deskName;
                     printData.PersonNum = "1";
                     printData.PrintTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
-                    printData.EmployeeNo = m_EmployeeNo;
+                    printData.EmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
                     printData.TranSequence = _tranSeq.ToString();
                     printData.ShopAddress = ConstantValuePool.CurrentShop.RunAddress;
                     printData.Telephone = ConstantValuePool.CurrentShop.Telephone;
@@ -1801,8 +1877,24 @@ namespace Top4ever.Pos
                 btnDeliveryList[j].Tag = deliveryOrderList[i];
                 if (deliveryOrderList[i].PayTime == null)
                 {
-                    btnDeliveryList[j].Text = deliveryOrderList[i].TranSequence.ToString();
-                    btnDeliveryList[j].BackColor = Color.Red;
+                    if (deliveryOrderList[i].EatType == (int)EatWayType.Takeout)
+                    {
+                        btnDeliveryList[j].BackColor = Color.Red;
+                        btnDeliveryList[j].Text = deliveryOrderList[i].TranSequence.ToString() + "-外带";
+                    }
+                    if (deliveryOrderList[i].EatType == (int)EatWayType.OutsideOrder)
+                    {
+                        if (deliveryOrderList[i].DeliveryTime == null)
+                        {
+                            btnDeliveryList[j].BackColor = Color.Orange;
+                            btnDeliveryList[j].Text = deliveryOrderList[i].TranSequence.ToString() + "-未出货";
+                        }
+                        else
+                        {
+                            btnDeliveryList[j].BackColor = Color.Olive;
+                            btnDeliveryList[j].Text = deliveryOrderList[i].TranSequence.ToString() + "-已出货";
+                        }
+                    }
                 }
                 else
                 {
@@ -1816,12 +1908,39 @@ namespace Top4ever.Pos
         {
             FormFindCustomer form = new FormFindCustomer();
             form.ShowDialog();
+            if (form.SelectedCustomerInfo != null)
+            {
+                CustomerInfo customerInfo = form.SelectedCustomerInfo;
+                string address = string.Empty;
+                if (customerInfo.ActiveIndex == 1)
+                {
+                    address = customerInfo.DeliveryAddress1;
+                }
+                else if (customerInfo.ActiveIndex == 2)
+                {
+                    address = customerInfo.DeliveryAddress2;
+                }
+                else if (customerInfo.ActiveIndex == 3)
+                {
+                    address = customerInfo.DeliveryAddress3;
+                }
+                txtTelephone.Text = customerInfo.Telephone;
+                txtName.Text = customerInfo.CustomerName;
+                txtAddress.Text = address;
+                txtTelephone.ReadOnly = true;
+                txtName.ReadOnly = true;
+            }
         }
 
         private void btnAddress_Click(object sender, EventArgs e)
         {
-            FormIncomingCall form = new FormIncomingCall();
-            form.ShowDialog();
+            string telephone = txtTelephone.Text.Trim();
+            string address = txtAddress.Text.Trim();
+            if (!string.IsNullOrEmpty(telephone))
+            {
+                FormIncomingCall form = new FormIncomingCall(telephone, address);
+                form.ShowDialog();
+            }
         }
     }
 }

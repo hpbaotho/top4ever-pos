@@ -19,5 +19,7 @@ namespace Top4ever.BLL.Enum
         public const int EMPLOYEE_ID = 36;
         public const int SQL_WHERE = 200;
         public const int SQL_ORDERBY = 100;
+        public const int TELEPHONE = 24;
+        public const int CUSTOMER_NAME = 20;
     }
 }
