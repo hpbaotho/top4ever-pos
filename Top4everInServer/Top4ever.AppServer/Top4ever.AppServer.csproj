@@ -55,7 +55,9 @@
     </Content>
     <Content Include="Maps\BusinessReport.xml" />
     <Content Include="Maps\ButtonStyle.xml" />
-    <Content Include="Maps\Customers.xml" />
+    <Content Include="Maps\Customers.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Maps\DailyStatement.xml">
       <SubType>Designer</SubType>
     </Content>

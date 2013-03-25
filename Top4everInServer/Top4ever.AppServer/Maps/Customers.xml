@@ -35,6 +35,13 @@
       <parameter property="LastModifiedEmployeeID" column="LastModifiedEmployeeID" />
       <parameter property="ReturnValue" column="ReturnValue" direction="Output" />
     </parameterMap>
+
+    <parameterMap id="CustomerOrderParam" class="Hashtable">
+      <parameter property="OrderID" column="OrderID" />
+      <parameter property="Telephone" column="Telephone" />
+      <parameter property="CustomerName" column="CustomerName" />
+      <parameter property="Address" column="Address" />
+    </parameterMap>
   </parameterMaps>
   <!-- =============================================
         MAPPED STATEMENTS 
@@ -63,12 +70,9 @@
       FROM CustomerInfo
     </select>
 
-    <insert id="InsertCustomerOrder" parameterClass="CustomerOrder">
-      INSERT INTO CustomerOrder
-      (OrderID, Telephone, CustomerName, [Address])
-      VALUES
-      (#OrderID#, #Telephone#, #CustomerName#, #Address#)
-    </insert>
+    <procedure id="InsertCustomerOrder" parameterMap="CustomerOrderParam">
+      proc_InsertCustomerOrder
+    </procedure>
 
     <select id="GetCustomerOrder" parameterClass="Guid" resultMap="CustomerOrderResult">
       SELECT Telephone, CustomerName, [Address]
@@ -78,7 +82,7 @@
 
     <update id="UpdateCustomerOrder" parameterClass="CustomerOrder">
       UPDATE CustomerOrder
-      SET Remark = #Remark#, DeliveryEmployeeName = #DeliveryEmployeeName#, <![CDATA[ DeliveryTime = getdate() ]]>
+      SET Remark = #Remark#, DeliveryEmployeeNo = #DeliveryEmployeeNo#, <![CDATA[ DeliveryTime = getdate() ]]>
       WHERE OrderID = #OrderID#
     </update>
   </statements>

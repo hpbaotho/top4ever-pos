@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using Top4ever.Domain.Customers;
@@ -15,7 +16,12 @@ namespace Top4ever.Persistence.Customers
 
         public void CreateCustomerOrder(CustomerOrder customerOrder)
         {
-            ExecuteInsert("InsertCustomerOrder", customerOrder);
+            Hashtable htParam = new Hashtable();
+            htParam["OrderID"] = customerOrder.OrderID;
+            htParam["Telephone"] = customerOrder.Telephone;
+            htParam["CustomerName"] = customerOrder.CustomerName;
+            htParam["Address"] = customerOrder.Address;
+            ExecuteInsert("InsertCustomerOrder", htParam);
         }
 
         public CustomerOrder GetCustomerOrder(Guid orderID)

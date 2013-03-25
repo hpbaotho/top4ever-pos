@@ -138,7 +138,7 @@ namespace Top4ever.Service
                     //更新外送人员
                     _customerOrderDao.UpdateCustomerOrder(customerOrder);
                 }
-                _orderDao.DeliveryTakeoutOrder(customerOrder.OrderID, customerOrder.DeliveryEmployeeName);
+                _orderDao.DeliveryTakeoutOrder(customerOrder.OrderID, customerOrder.DeliveryEmployeeNo);
                 returnValue = true;
                 _daoManager.CommitTransaction();
             }

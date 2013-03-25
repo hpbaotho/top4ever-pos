@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="BusinessReportService.cs" />
     <Compile Include="ButtonStyleService.cs" />
+    <Compile Include="CustomersService.cs" />
     <Compile Include="DailyBalanceService.cs" />
     <Compile Include="DeletedOrderService.cs" />
     <Compile Include="DeskService.cs" />

@@ -32,8 +32,8 @@ namespace Top4ever.Domain.Customers
         public string Remark { get; set; }
 
         /// <summary>
-        /// 外送人员
+        /// 外送人员编号
         /// </summary>
-        public string DeliveryEmployeeName { get; set; }
+        public string DeliveryEmployeeNo { get; set; }
     }
 }
