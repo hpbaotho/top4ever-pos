@@ -128,6 +128,7 @@
             this.Address});
             this.dgvCustomerInfo.Location = new System.Drawing.Point(8, 95);
             this.dgvCustomerInfo.Name = "dgvCustomerInfo";
+            this.dgvCustomerInfo.ReadOnly = true;
             this.dgvCustomerInfo.RowHeadersVisible = false;
             this.dgvCustomerInfo.RowTemplate.Height = 23;
             this.dgvCustomerInfo.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -138,6 +139,7 @@
             // 
             this.Telephone.HeaderText = "联系电话";
             this.Telephone.Name = "Telephone";
+            this.Telephone.ReadOnly = true;
             this.Telephone.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.Telephone.Width = 135;
             // 
@@ -145,6 +147,7 @@
             // 
             this.CustomerName.HeaderText = "客户姓名";
             this.CustomerName.Name = "CustomerName";
+            this.CustomerName.ReadOnly = true;
             this.CustomerName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.CustomerName.Width = 85;
             // 
@@ -153,6 +156,7 @@
             this.Address.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.Address.HeaderText = "外送地址";
             this.Address.Name = "Address";
+            this.Address.ReadOnly = true;
             this.Address.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // btnInputCustomer

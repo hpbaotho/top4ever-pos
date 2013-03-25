@@ -58,6 +58,7 @@
             this.ckAddress1.Size = new System.Drawing.Size(15, 14);
             this.ckAddress1.TabIndex = 8;
             this.ckAddress1.UseVisualStyleBackColor = true;
+            this.ckAddress1.CheckedChanged += new System.EventHandler(this.ckAddress1_CheckedChanged);
             // 
             // groupBox1
             // 
@@ -138,6 +139,7 @@
             this.ckAddress3.Size = new System.Drawing.Size(15, 14);
             this.ckAddress3.TabIndex = 8;
             this.ckAddress3.UseVisualStyleBackColor = true;
+            this.ckAddress3.CheckedChanged += new System.EventHandler(this.ckAddress3_CheckedChanged);
             // 
             // ckAddress2
             // 
@@ -148,6 +150,7 @@
             this.ckAddress2.Size = new System.Drawing.Size(15, 14);
             this.ckAddress2.TabIndex = 8;
             this.ckAddress2.UseVisualStyleBackColor = true;
+            this.ckAddress2.CheckedChanged += new System.EventHandler(this.ckAddress2_CheckedChanged);
             // 
             // txtAddress2
             // 

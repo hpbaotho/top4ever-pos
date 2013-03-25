@@ -77,13 +77,12 @@ namespace Top4ever.Pos.TakeawayCall
             string inputString = this.txtRemark.Text;
             if (!string.IsNullOrEmpty(inputString))
             {
-                this.txtRemark.TabIndex = 0;
-                this.txtRemark.Focus();
+                this.txtRemark.Select();
                 SendKeys.Send("{BACKSPACE}");
             }
         }
 
-        private void btnBrowse_Click(object sender, EventArgs e)
+        private void txtEmployeeNo_MouseDown(object sender, MouseEventArgs e)
         {
             FormNumericKeypad keyForm = new FormNumericKeypad(false);
             keyForm.DisplayText = "请输入用户名";
@@ -91,11 +90,13 @@ namespace Top4ever.Pos.TakeawayCall
             if (!string.IsNullOrEmpty(keyForm.KeypadValue))
             {
                 string employeeNo = keyForm.KeypadValue;
+                this.txtEmployeeNo.Text = employeeNo;
                 Employee employee = null;
                 EmployeeService employeeService = new EmployeeService();
                 int result = employeeService.GetEmployeeByNo(employeeNo, ref employee);
                 if (result == 1)
                 {
+                    this.txtEmployeeNo.Text = employee.EmployeeNo;
                     this.txtEmployeeName.Text = employee.Name;
                 }
                 else if (result == 2)
@@ -113,11 +114,8 @@ namespace Top4ever.Pos.TakeawayCall
         {
             CustomerOrder customerOrder = new CustomerOrder();
             customerOrder.OrderID = _salesOrder.order.OrderID;
-            customerOrder.Telephone = this.txtTelephone.Text;
-            customerOrder.CustomerName = this.txtName.Text;
-            customerOrder.Address = this.txtAddress.Text;
             customerOrder.Remark = this.txtRemark.Text.Trim();
-            customerOrder.DeliveryEmployeeName = this.txtEmployeeName.Text.Trim();
+            customerOrder.DeliveryEmployeeNo = this.txtEmployeeNo.Text.Trim();
             CustomersService customerService = new CustomersService();
             if (customerService.UpdateTakeoutOrderStatus(customerOrder))
             {
@@ -139,6 +137,8 @@ namespace Top4ever.Pos.TakeawayCall
         private void handwritingPad1_UserHandWriting(object sender, InkWritingEventArgs e)
         {
             this.txtRemark.Text += e.InkPadValue;
+            this.txtRemark.TabIndex = 0;
+            this.txtRemark.Focus();
         }
     }
 }

@@ -17,12 +17,19 @@ namespace Top4ever.Pos.TakeawayCall
         private CustomerInfo _customerInfo = null;
         private string _address = string.Empty;
 
+        private string _selectedAddress = string.Empty;
+        public string SelectedAddress
+        {
+            get { return _selectedAddress; }
+        }
+
         public FormIncomingCall(string telephone, string address)
         {
             CustomersService customerService = new CustomersService();
             _customerInfo = customerService.GetCustomerInfoByPhone(telephone);
             _address = address;
             InitializeComponent();
+            this.lbTelephone.Text = telephone;
         }
 
         private void FormIncomingCall_Load(object sender, EventArgs e)
@@ -66,17 +73,26 @@ namespace Top4ever.Pos.TakeawayCall
         private void btnConfirm_Click(object sender, EventArgs e)
         {
             int activeIndex = 1;
+            string address = string.Empty;
             if (ckAddress1.Checked)
             {
                 activeIndex = 1;
+                address = txtAddress1.Text.Trim();
             }
             else if (ckAddress2.Checked)
             {
                 activeIndex = 2;
+                address = txtAddress2.Text.Trim();
             }
             else if (ckAddress3.Checked)
             {
                 activeIndex = 3;
+                address = txtAddress3.Text.Trim();
+            }
+            if (string.IsNullOrEmpty(address))
+            {
+                MessageBox.Show("选择的地址不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
             CustomerInfo customerInfo = new CustomerInfo();
             customerInfo.Telephone = this.lbTelephone.Text;
@@ -88,11 +104,12 @@ namespace Top4ever.Pos.TakeawayCall
             customerInfo.LastModifiedEmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
 
             CustomersService customerService = new CustomersService();
-            if (_customerInfo == null)  //新增
+            if (string.IsNullOrEmpty(_address))  //新增
             {
                 int result = customerService.CreateCustomerInfo(customerInfo);
                 if (result == 1)
                 {
+                    _selectedAddress = address;
                     this.Close();
                 }
                 else if (result == 2)
@@ -108,6 +125,7 @@ namespace Top4ever.Pos.TakeawayCall
             {
                 if (customerService.UpdateCustomerInfo(customerInfo))
                 {
+                    _selectedAddress = address;
                     this.Close();
                 }
                 else
@@ -120,6 +138,33 @@ namespace Top4ever.Pos.TakeawayCall
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void ckAddress1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ckAddress1.Checked)
+            {
+                ckAddress2.Checked = false;
+                ckAddress3.Checked = false;
+            }
+        }
+
+        private void ckAddress2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ckAddress2.Checked)
+            {
+                ckAddress1.Checked = false;
+                ckAddress3.Checked = false;
+            }
+        }
+
+        private void ckAddress3_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ckAddress3.Checked)
+            {
+                ckAddress1.Checked = false;
+                ckAddress2.Checked = false;
+            }
         }
     }
 }
