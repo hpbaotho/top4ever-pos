@@ -43,6 +43,7 @@
     <Compile Include="BizDeskBLL.cs" />
     <Compile Include="BusinessReportBLL.cs" />
     <Compile Include="CmdRoute.cs" />
+    <Compile Include="CustomersBLL.cs" />
     <Compile Include="DailyBalanceBLL.cs" />
     <Compile Include="DeletedOrderBLL.cs" />
     <Compile Include="Enum\BasicTypeLength.cs" />

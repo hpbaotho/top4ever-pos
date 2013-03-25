@@ -192,7 +192,7 @@
 
       <update id="UpdateTakeoutOrderStatus" parameterClass="System.Collections.Hashtable">
         UPDATE [Order]
-        SET <![CDATA[ DeliveryTime = GETDATE() ]]>, DeliveryEmployeeName = #EmployeeName#
+        SET <![CDATA[ DeliveryTime = GETDATE() ]]>, DeliveryEmployeeNo = #EmployeeNo#
         WHERE OrderID = #OrderID#
       </update>
 
@@ -211,6 +211,7 @@
         SELECT OrderID, PayTime, TranSequence, EatType, DeliveryTime
         FROM [Order]
         WHERE DailyStatementNo = #DailyStatementNo# AND [Status] = 0 AND EatType = 3
+        ORDER BY TranSequence
       </select>
     </statements>
 </sqlMap>

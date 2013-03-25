@@ -43,7 +43,7 @@ namespace Top4ever.Interface.OrderRelated
 
         bool UpdateOrderStatus(Guid orderID, int status);
 
-        bool DeliveryTakeoutOrder(Guid orderID, string employeeName);
+        bool DeliveryTakeoutOrder(Guid orderID, string employeeNo);
 
         IList<DeliveryOrder> GetDeliveryOrderList(string dailyStatementNo);
     }
