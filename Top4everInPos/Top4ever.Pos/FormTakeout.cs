@@ -62,6 +62,7 @@ namespace Top4ever.Pos
             btnPgUp.DisplayColor = btnPgUp.BackColor;
             btnPgDown.DisplayColor = btnPgDown.BackColor;
             btnDeliveryGoods.DisplayColor = btnDeliveryGoods.BackColor;
+            btnOutsideOrder.DisplayColor = btnOutsideOrder.BackColor;
         }
 
         private void FormTakeout_Load(object sender, EventArgs e)
@@ -1315,39 +1316,46 @@ namespace Top4ever.Pos
         {
             if (dgvGoodsOrder.Rows.Count > 0)
             {
-                int result = SubmitSalesOrder(deskName, EatWayType.Takeout);
-                if (result == 1)
+                if (m_SalesOrder == null || m_SalesOrder.order.EatType == (int)EatWayType.Takeout)
                 {
-                    this.lbTotalPrice.Text = "总金额：";
-                    this.lbDiscount.Text = "折扣：";
-                    this.lbNeedPayMoney.Text = "实际应付：";
-                    this.lbCutOff.Text = "去零：";
-                    dgvGoodsOrder.Rows.Clear();
-                    m_SalesOrder = null;
-                    btnDeliveryGoods.Enabled = false;
-                    btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
-                    txtTelephone.Text = string.Empty;
-                    txtName.Text = string.Empty;
-                    txtAddress.Text = string.Empty;
-                    txtTelephone.ReadOnly = false;
-                    txtName.ReadOnly = false;
-                    //加载外卖单列表
-                    m_PageIndex = 0;
-                    CleanDeliveryOrderButton();
-                    OrderService orderService = new OrderService();
-                    IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
-                    if (deliveryOrderList != null)
+                    int result = SubmitSalesOrder(deskName, EatWayType.Takeout);
+                    if (result == 1)
                     {
-                        DisplayDeliveryOrderButton(deliveryOrderList);
+                        this.lbTotalPrice.Text = "总金额：";
+                        this.lbDiscount.Text = "折扣：";
+                        this.lbNeedPayMoney.Text = "实际应付：";
+                        this.lbCutOff.Text = "去零：";
+                        dgvGoodsOrder.Rows.Clear();
+                        m_SalesOrder = null;
+                        btnDeliveryGoods.Enabled = false;
+                        btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
+                        txtTelephone.Text = string.Empty;
+                        txtName.Text = string.Empty;
+                        txtAddress.Text = string.Empty;
+                        txtTelephone.ReadOnly = false;
+                        txtName.ReadOnly = false;
+                        //加载外卖单列表
+                        m_PageIndex = 0;
+                        CleanDeliveryOrderButton();
+                        OrderService orderService = new OrderService();
+                        IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
+                        if (deliveryOrderList != null)
+                        {
+                            DisplayDeliveryOrderButton(deliveryOrderList);
+                        }
                     }
-                }
-                else if (result == 2)
-                {
-                    MessageBox.Show("没有数据可以提交！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    else if (result == 2)
+                    {
+                        MessageBox.Show("没有数据可以提交！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        MessageBox.Show("外带提交失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("外带提交失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("类型不一致，请更改类型后再进行操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -1362,6 +1370,8 @@ namespace Top4ever.Pos
             m_SalesOrder = null;
             btnDeliveryGoods.Enabled = false;
             btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
+            btnOutsideOrder.Enabled = true;
+            btnOutsideOrder.BackColor = btnOutsideOrder.DisplayColor;
             txtTelephone.Text = string.Empty;
             txtName.Text = string.Empty;
             txtAddress.Text = string.Empty;
@@ -1373,39 +1383,46 @@ namespace Top4ever.Pos
         {
             if (dgvGoodsOrder.Rows.Count > 0)
             {
-                int result = SubmitSalesOrder(deskName, EatWayType.OutsideOrder);
-                if (result == 1)
+                if (m_SalesOrder == null || m_SalesOrder.order.EatType == (int)EatWayType.OutsideOrder)
                 {
-                    this.lbTotalPrice.Text = "总金额：";
-                    this.lbDiscount.Text = "折扣：";
-                    this.lbNeedPayMoney.Text = "实际应付：";
-                    this.lbCutOff.Text = "去零：";
-                    dgvGoodsOrder.Rows.Clear();
-                    m_SalesOrder = null;
-                    btnDeliveryGoods.Enabled = false;
-                    btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
-                    txtTelephone.Text = string.Empty;
-                    txtName.Text = string.Empty;
-                    txtAddress.Text = string.Empty;
-                    txtTelephone.ReadOnly = false;
-                    txtName.ReadOnly = false;
-                    //加载外卖单列表
-                    m_PageIndex = 0;
-                    CleanDeliveryOrderButton();
-                    OrderService orderService = new OrderService();
-                    IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
-                    if (deliveryOrderList != null)
+                    int result = SubmitSalesOrder(deskName, EatWayType.OutsideOrder);
+                    if (result == 1)
                     {
-                        DisplayDeliveryOrderButton(deliveryOrderList);
+                        this.lbTotalPrice.Text = "总金额：";
+                        this.lbDiscount.Text = "折扣：";
+                        this.lbNeedPayMoney.Text = "实际应付：";
+                        this.lbCutOff.Text = "去零：";
+                        dgvGoodsOrder.Rows.Clear();
+                        m_SalesOrder = null;
+                        btnDeliveryGoods.Enabled = false;
+                        btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
+                        txtTelephone.Text = string.Empty;
+                        txtName.Text = string.Empty;
+                        txtAddress.Text = string.Empty;
+                        txtTelephone.ReadOnly = false;
+                        txtName.ReadOnly = false;
+                        //加载外卖单列表
+                        m_PageIndex = 0;
+                        CleanDeliveryOrderButton();
+                        OrderService orderService = new OrderService();
+                        IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
+                        if (deliveryOrderList != null)
+                        {
+                            DisplayDeliveryOrderButton(deliveryOrderList);
+                        }
                     }
-                }
-                else if (result == 2)
-                {
-                    MessageBox.Show("没有数据可以提交！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    else if (result == 2)
+                    {
+                        MessageBox.Show("没有数据可以提交！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        MessageBox.Show("外送提交失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("外送提交失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("类型不一致，请更改类型后再进行操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -1465,6 +1482,16 @@ namespace Top4ever.Pos
                         btnDeliveryGoods.Enabled = false;
                         btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
                     }
+                    if (deliveryOrder.EatType == (int)EatWayType.OutsideOrder && deliveryOrder.DeliveryTime != null)
+                    {
+                        btnOutsideOrder.Enabled = false;
+                        btnOutsideOrder.BackColor = ConstantValuePool.DisabledColor;
+                    }
+                    else
+                    {
+                        btnOutsideOrder.Enabled = true;
+                        btnOutsideOrder.BackColor = btnOutsideOrder.DisplayColor;
+                    }
                     SalesOrderService salesOrderService = new SalesOrderService();
                     SalesOrder _salesOrder = salesOrderService.GetSalesOrder(deliveryOrder.OrderID);
                     if (_salesOrder != null)
@@ -1481,6 +1508,14 @@ namespace Top4ever.Pos
                             this.txtAddress.Text = customerOrder.Address;
                             txtTelephone.ReadOnly = true;
                             txtName.ReadOnly = true;
+                        }
+                        else
+                        {
+                            this.txtTelephone.Text = string.Empty;
+                            this.txtName.Text = string.Empty;
+                            this.txtAddress.Text = string.Empty;
+                            txtTelephone.ReadOnly = false;
+                            txtName.ReadOnly = false;
                         }
                     }
                     else
@@ -1737,88 +1772,112 @@ namespace Top4ever.Pos
                     result = 2;
                 }
             }
-            if (result == 1 && eatType == EatWayType.Takeout)
+            if (eatType == EatWayType.OutsideOrder)
             {
-                if (ConstantValuePool.BizSettingConfig.printConfig.Enabled)
+                if (result == 1 || result == 2)
                 {
-                    //打印
-                    PrintData printData = new PrintData();
-                    printData.ShopName = ConstantValuePool.CurrentShop.ShopName;
-                    printData.DeskName = deskName;
-                    printData.PersonNum = "1";
-                    printData.PrintTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
-                    printData.EmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
-                    printData.TranSequence = _tranSeq.ToString();
-                    printData.ShopAddress = ConstantValuePool.CurrentShop.RunAddress;
-                    printData.Telephone = ConstantValuePool.CurrentShop.Telephone;
-                    printData.GoodsOrderList = new List<GoodsOrder>();
-                    foreach (OrderDetails item in newOrderDetailsList)
+                    //添加外送信息
+                    CustomerOrder customerOrder = new CustomerOrder();
+                    customerOrder.OrderID = orderID;
+                    customerOrder.Telephone = txtTelephone.Text.Trim();
+                    customerOrder.CustomerName = txtName.Text.Trim();
+                    customerOrder.Address = txtAddress.Text.Trim();
+                    CustomersService customerService = new CustomersService();
+                    if (customerService.CreateCustomerOrder(customerOrder))
                     {
-                        string strLevelFlag = string.Empty;
-                        if (item.ItemLevel > 0)
+                        result = 1;
+                    }
+                    else
+                    {
+                        MessageBox.Show("添加外送信息失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            if (eatType == EatWayType.Takeout)
+            {
+                if (result == 1)
+                {
+                    if (ConstantValuePool.BizSettingConfig.printConfig.Enabled)
+                    {
+                        //打印
+                        PrintData printData = new PrintData();
+                        printData.ShopName = ConstantValuePool.CurrentShop.ShopName;
+                        printData.DeskName = deskName;
+                        printData.PersonNum = "1";
+                        printData.PrintTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+                        printData.EmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
+                        printData.TranSequence = _tranSeq.ToString();
+                        printData.ShopAddress = ConstantValuePool.CurrentShop.RunAddress;
+                        printData.Telephone = ConstantValuePool.CurrentShop.Telephone;
+                        printData.GoodsOrderList = new List<GoodsOrder>();
+                        foreach (OrderDetails item in newOrderDetailsList)
                         {
-                            int levelCount = item.ItemLevel * 2;
-                            for (int i = 0; i < levelCount; i++)
+                            string strLevelFlag = string.Empty;
+                            if (item.ItemLevel > 0)
                             {
-                                strLevelFlag += "-";
+                                int levelCount = item.ItemLevel * 2;
+                                for (int i = 0; i < levelCount; i++)
+                                {
+                                    strLevelFlag += "-";
+                                }
+                            }
+                            GoodsOrder goodsOrder = new GoodsOrder();
+                            goodsOrder.GoodsName = strLevelFlag + item.GoodsName;
+                            goodsOrder.GoodsNum = item.ItemQty.ToString("f1");
+                            goodsOrder.SellPrice = (item.TotalSellPrice / item.ItemQty).ToString("f2");
+                            goodsOrder.TotalSellPrice = item.TotalSellPrice.ToString("f2");
+                            goodsOrder.TotalDiscount = item.TotalDiscount.ToString("f2");
+                            goodsOrder.Unit = item.Unit;
+                            printData.GoodsOrderList.Add(goodsOrder);
+                        }
+                        int copies = ConstantValuePool.BizSettingConfig.printConfig.Copies;
+                        string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
+                        string configPath = @"PrintConfig\InstructionPrintOrderSetting.config";
+                        string layoutPath = @"PrintConfig\PrintOrder.ini";
+                        if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
+                        {
+                            configPath = @"PrintConfig\PrintOrderSetting.config";
+                            string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                            DriverOrderPrint printer = new DriverOrderPrint(printerName, paperWidth, "SpecimenLabel");
+                            for (int i = 0; i < copies; i++)
+                            {
+                                printer.DoPrint(printData, layoutPath, configPath);
                             }
                         }
-                        GoodsOrder goodsOrder = new GoodsOrder();
-                        goodsOrder.GoodsName = strLevelFlag + item.GoodsName;
-                        goodsOrder.GoodsNum = item.ItemQty.ToString("f1");
-                        goodsOrder.SellPrice = (item.TotalSellPrice / item.ItemQty).ToString("f2");
-                        goodsOrder.TotalSellPrice = item.TotalSellPrice.ToString("f2");
-                        goodsOrder.TotalDiscount = item.TotalDiscount.ToString("f2");
-                        goodsOrder.Unit = item.Unit;
-                        printData.GoodsOrderList.Add(goodsOrder);
-                    }
-                    int copies = ConstantValuePool.BizSettingConfig.printConfig.Copies;
-                    string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
-                    string configPath = @"PrintConfig\InstructionPrintOrderSetting.config";
-                    string layoutPath = @"PrintConfig\PrintOrder.ini";
-                    if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
-                    {
-                        configPath = @"PrintConfig\PrintOrderSetting.config";
-                        string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                        DriverOrderPrint printer = new DriverOrderPrint(printerName, paperWidth, "SpecimenLabel");
-                        for (int i = 0; i < copies; i++)
+                        if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.COM)
                         {
-                            printer.DoPrint(printData, layoutPath, configPath);
-                        }
-                    }
-                    if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.COM)
-                    {
-                        string port = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                        if (port.Length > 3)
-                        {
-                            if (port.Substring(0, 3).ToUpper() == "COM")
+                            string port = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                            if (port.Length > 3)
                             {
-                                string portName = port.Substring(0, 4).ToUpper();
-                                InstructionOrderPrint printer = new InstructionOrderPrint(portName, 9600, Parity.None, 8, StopBits.One, paperWidth);
-                                for (int i = 0; i < copies; i++)
+                                if (port.Substring(0, 3).ToUpper() == "COM")
                                 {
-                                    printer.DoPrint(printData, layoutPath, configPath);
+                                    string portName = port.Substring(0, 4).ToUpper();
+                                    InstructionOrderPrint printer = new InstructionOrderPrint(portName, 9600, Parity.None, 8, StopBits.One, paperWidth);
+                                    for (int i = 0; i < copies; i++)
+                                    {
+                                        printer.DoPrint(printData, layoutPath, configPath);
+                                    }
                                 }
                             }
                         }
-                    }
-                    if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.ETHERNET)
-                    {
-                        string IPAddress = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                        InstructionOrderPrint printer = new InstructionOrderPrint(IPAddress, 9100, paperWidth);
-                        for (int i = 0; i < copies; i++)
+                        if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.ETHERNET)
                         {
-                            printer.DoPrint(printData, layoutPath, configPath);
+                            string IPAddress = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                            InstructionOrderPrint printer = new InstructionOrderPrint(IPAddress, 9100, paperWidth);
+                            for (int i = 0; i < copies; i++)
+                            {
+                                printer.DoPrint(printData, layoutPath, configPath);
+                            }
                         }
-                    }
-                    if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.USB)
-                    {
-                        string VID = ConstantValuePool.BizSettingConfig.printConfig.VID;
-                        string PID = ConstantValuePool.BizSettingConfig.printConfig.PID;
-                        InstructionOrderPrint printer = new InstructionOrderPrint(VID, PID, paperWidth);
-                        for (int i = 0; i < copies; i++)
+                        if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.USB)
                         {
-                            printer.DoPrint(printData, layoutPath, configPath);
+                            string VID = ConstantValuePool.BizSettingConfig.printConfig.VID;
+                            string PID = ConstantValuePool.BizSettingConfig.printConfig.PID;
+                            InstructionOrderPrint printer = new InstructionOrderPrint(VID, PID, paperWidth);
+                            for (int i = 0; i < copies; i++)
+                            {
+                                printer.DoPrint(printData, layoutPath, configPath);
+                            }
                         }
                     }
                 }
@@ -1940,7 +1999,570 @@ namespace Top4ever.Pos
             {
                 FormIncomingCall form = new FormIncomingCall(telephone, address);
                 form.ShowDialog();
+                if (!string.IsNullOrEmpty(form.SelectedAddress))
+                {
+                    txtTelephone.Text = form.SelectedAddress;
+                }
             }
+        }
+
+        private void btnShowDetails_Click(object sender, EventArgs e)
+        {
+            if (dgvGoodsOrder.CurrentRow != null)
+            {
+                int selectIndex = dgvGoodsOrder.CurrentRow.Index;
+                if (dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value == null)
+                {
+                    m_DetailsGroupPageIndex = 0;
+                    m_DetailsPageIndex = 0;
+                    int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value);
+                    if (itemType == (int)OrderItemType.Goods)
+                    {
+                        Goods goods = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Goods;
+                        if (goods.DetailsGroupIDList != null && goods.DetailsGroupIDList.Count > 0)
+                        {
+                            m_GoodsOrDetails = false;    //状态为细项
+                            m_CurrentDetailsGroupIDList = goods.DetailsGroupIDList;
+                            DisplayDetailGroupButton();
+                            this.pnlItem.Controls.Clear();
+                            m_DetailsPrefix = "--";
+                        }
+                    }
+                    else if (itemType == (int)OrderItemType.Details)
+                    {
+                        Details details = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Details;
+                        if (details.DetailsGroupIDList != null && details.DetailsGroupIDList.Count > 0)
+                        {
+                            m_GoodsOrDetails = false;    //状态为细项
+                            m_CurrentDetailsGroupIDList = details.DetailsGroupIDList;
+                            DisplayDetailGroupButton();
+                            this.pnlItem.Controls.Clear();
+                            //detail prefix --
+                            string goodsName = dgvGoodsOrder.Rows[selectIndex].Cells["GoodsName"].Value.ToString();
+                            if (goodsName.IndexOf('-') >= 0)
+                            {
+                                int index = goodsName.LastIndexOf('-');
+                                m_DetailsPrefix = goodsName.Substring(0, index + 1);
+                                m_DetailsPrefix += "--";
+                            }
+                            else
+                            {
+                                m_DetailsPrefix = "--";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            if (dgvGoodsOrder.CurrentRow != null)
+            {
+                int selectIndex = dgvGoodsOrder.CurrentRow.Index;
+                if (dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value == null)
+                {
+                    decimal quantity = 0;
+                    int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value);
+                    if (itemType == (int)OrderItemType.Goods)
+                    {
+                        Goods goods = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Goods;
+                        decimal originalGoodsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
+                        decimal originalGoodsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value);
+                        quantity = originalGoodsNum + 1;
+                        dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value = quantity;
+                        dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value = goods.SellPrice * quantity;
+                        if (Math.Abs(originalGoodsDiscount) > 0 && originalGoodsNum > 0)
+                        {
+                            dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value = originalGoodsDiscount / originalGoodsNum * quantity;
+                        }
+                        //更新细项
+                        if (selectIndex < dgvGoodsOrder.Rows.Count - 1)
+                        {
+                            for (int index = selectIndex + 1; index < dgvGoodsOrder.Rows.Count; index++)
+                            {
+                                if (Convert.ToInt32(dgvGoodsOrder.Rows[index].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    decimal originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value);
+                                    decimal originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value);
+                                    decimal currentQty = originalDetailsNum / originalGoodsNum * quantity;
+                                    dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = currentQty;
+                                    if (Math.Abs(originalDetailsDiscount) > 0 && originalDetailsNum > 0)
+                                    {
+                                        dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = originalDetailsDiscount / originalDetailsNum * currentQty;
+                                    }
+                                    object item = dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag;
+                                    if (item is Goods)
+                                    {
+                                        Goods subGoods = item as Goods;
+                                        dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = subGoods.SellPrice * currentQty;
+                                    }
+                                    if (item is Details)
+                                    {
+                                        Details details = item as Details;
+                                        dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = details.SellPrice * currentQty;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (itemType == (int)OrderItemType.Details)
+                    {
+                        Details details = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Details;
+                        decimal originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
+                        decimal originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value);
+                        quantity = originalDetailsNum + 1;
+                        dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value = quantity;
+                        dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value = details.SellPrice * quantity;
+                        if (Math.Abs(originalDetailsDiscount) > 0 && originalDetailsNum > 0)
+                        {
+                            dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value = originalDetailsDiscount / originalDetailsNum * quantity;
+                        }
+                    }
+                    //统计
+                    BindOrderInfoSum();
+                }
+            }
+        }
+
+        private void btnSub_Click(object sender, EventArgs e)
+        {
+            if (dgvGoodsOrder.CurrentRow != null)
+            {
+                int selectIndex = dgvGoodsOrder.CurrentRow.Index;
+                if (dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value == null)
+                {
+                    decimal quantity = 0;
+                    int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value);
+                    if (itemType == (int)OrderItemType.Goods)
+                    {
+                        Goods goods = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Goods;
+                        decimal originalGoodsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
+                        decimal originalGoodsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value);
+                        quantity = originalGoodsNum - 1;
+                        if (quantity <= 0) return;
+                        dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value = quantity;
+                        dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value = goods.SellPrice * quantity;
+                        if (Math.Abs(originalGoodsDiscount) > 0 && originalGoodsNum > 0)
+                        {
+                            dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value = originalGoodsDiscount / originalGoodsNum * quantity;
+                        }
+                        //更新细项
+                        if (selectIndex < dgvGoodsOrder.Rows.Count - 1)
+                        {
+                            for (int index = selectIndex + 1; index < dgvGoodsOrder.Rows.Count; index++)
+                            {
+                                if (Convert.ToInt32(dgvGoodsOrder.Rows[index].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    decimal originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value);
+                                    decimal originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value);
+                                    decimal currentQty = originalDetailsNum / originalGoodsNum * quantity;
+                                    dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = currentQty;
+                                    if (Math.Abs(originalDetailsDiscount) > 0 && originalDetailsNum > 0)
+                                    {
+                                        dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = originalDetailsDiscount / originalDetailsNum * currentQty;
+                                    }
+                                    object item = dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag;
+                                    if (item is Goods)
+                                    {
+                                        Goods subGoods = item as Goods;
+                                        dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = subGoods.SellPrice * currentQty;
+                                    }
+                                    if (item is Details)
+                                    {
+                                        Details details = item as Details;
+                                        dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = details.SellPrice * currentQty;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (itemType == (int)OrderItemType.Details)
+                    {
+                        Details details = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Details;
+                        decimal originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
+                        decimal originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value);
+                        quantity = originalDetailsNum - 1;
+                        dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value = quantity;
+                        dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value = details.SellPrice * quantity;
+                        if (Math.Abs(originalDetailsDiscount) > 0 && originalDetailsNum > 0)
+                        {
+                            dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value = originalDetailsDiscount / originalDetailsNum * quantity;
+                        }
+                    }
+                    //统计
+                    BindOrderInfoSum();
+                }
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            if (dgvGoodsOrder.CurrentRow != null)
+            {
+                int selectIndex = dgvGoodsOrder.CurrentRow.Index;
+                if (dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value != null)
+                {
+                    int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value);
+                    if (itemType == (int)OrderItemType.Details)
+                    {
+                        MessageBox.Show("细项不能单独删除！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                    if (itemType == (int)OrderItemType.SetMeal)
+                    {
+                        MessageBox.Show("套餐项不能单独删除！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                    Guid orderDetailsID = new Guid(dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value.ToString());
+                    decimal goodsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
+                    string goodsName = dgvGoodsOrder.Rows[selectIndex].Cells["GoodsName"].Value.ToString();
+                    decimal goodsPrice = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value);
+                    if (!RightsItemCode.FindRights(RightsItemCode.CANCELGOODS))
+                    {
+                        decimal singleItemPriceSum = goodsPrice / goodsNum;
+                        if (itemType == (int)OrderItemType.Goods && selectIndex < dgvGoodsOrder.Rows.Count - 1)
+                        {
+                            for (int index = selectIndex + 1; index < dgvGoodsOrder.RowCount; index++)
+                            {
+                                if (Convert.ToInt32(dgvGoodsOrder.Rows[index].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    singleItemPriceSum += Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value) / Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value);
+                                }
+                            }
+                            if (singleItemPriceSum > ConstantValuePool.CurrentEmployee.LimitMoney)
+                            {
+                                if (DialogResult.Yes == MessageBox.Show("当前用户不具备该权限，并且超过最高退菜限额，是否更换用户？", "信息提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                                {
+                                    //权限验证
+                                    bool hasRights = false;
+                                    FormRightsCode formRightsCode = new FormRightsCode();
+                                    formRightsCode.ShowDialog();
+                                    if (formRightsCode.ReturnValue)
+                                    {
+                                        IList<string> rightsCodeList = formRightsCode.RightsCodeList;
+                                        if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.CANCELGOODS))
+                                        {
+                                            hasRights = true;
+                                        }
+                                    }
+                                    if (!hasRights)
+                                    {
+                                        return;
+                                    }
+                                }
+                                else
+                                {
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                    FormCancelOrder form = new FormCancelOrder(goodsName, goodsNum);
+                    form.ShowDialog();
+                    if (form.DelItemNum > 0 && form.CurrentReason != null)
+                    {
+                        if (form.DelItemNum < goodsNum)
+                        {
+                            //Key:Index, Value:RemainNum
+                            Dictionary<int, decimal> dicRemainNum = new Dictionary<int, decimal>();
+                            List<DeletedOrderDetails> deletedOrderDetailsList = new List<DeletedOrderDetails>();
+                            //主项
+                            decimal remainNum = goodsNum - form.DelItemNum;
+                            dicRemainNum.Add(selectIndex, remainNum);
+                            decimal originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
+                            decimal originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value);
+                            DeletedOrderDetails orderDetails = new DeletedOrderDetails();
+                            orderDetails.OrderDetailsID = orderDetailsID;
+                            orderDetails.DeletedQuantity = -form.DelItemNum;
+                            orderDetails.RemainQuantity = remainNum;
+                            orderDetails.OffPay = Math.Round(-originalDetailsDiscount / originalDetailsNum * remainNum, 4);
+                            orderDetails.AuthorisedManager = ConstantValuePool.CurrentEmployee.EmployeeID;
+                            orderDetails.CancelEmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
+                            orderDetails.CancelReasonName = form.CurrentReason.ReasonName;
+                            deletedOrderDetailsList.Add(orderDetails);
+                            //细项
+                            if (selectIndex < dgvGoodsOrder.Rows.Count - 1)
+                            {
+                                for (int index = selectIndex + 1; index < dgvGoodsOrder.RowCount; index++)
+                                {
+                                    if (Convert.ToInt32(dgvGoodsOrder.Rows[index].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        orderDetailsID = new Guid(dgvGoodsOrder.Rows[index].Cells["OrderDetailsID"].Value.ToString());
+                                        originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value);
+                                        originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value);
+                                        decimal delItemNum = originalDetailsNum / goodsNum * form.DelItemNum;
+                                        remainNum = originalDetailsNum - delItemNum;
+                                        dicRemainNum.Add(index, remainNum);
+                                        DeletedOrderDetails item = new DeletedOrderDetails();
+                                        item.OrderDetailsID = orderDetailsID;
+                                        item.DeletedQuantity = -delItemNum;
+                                        item.RemainQuantity = remainNum;
+                                        item.OffPay = Math.Round(-originalDetailsDiscount / originalDetailsNum * remainNum, 4);
+                                        item.AuthorisedManager = ConstantValuePool.CurrentEmployee.EmployeeID;
+                                        item.CancelEmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
+                                        item.CancelReasonName = form.CurrentReason.ReasonName;
+                                        deletedOrderDetailsList.Add(item);
+                                    }
+                                }
+                            }
+                            //计算价格信息
+                            decimal totalPrice = 0, totalDiscount = 0;
+                            for (int i = 0; i < dgvGoodsOrder.RowCount; i++)
+                            {
+                                if (dgvGoodsOrder.Rows[i].Cells["OrderDetailsID"].Value != null)
+                                {
+                                    if (dicRemainNum.ContainsKey(i))
+                                    {
+                                        decimal originalDetailsPrice = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsPrice"].Value);
+                                        originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsNum"].Value);
+                                        originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsDiscount"].Value);
+                                        totalPrice += originalDetailsPrice / originalDetailsNum * dicRemainNum[i];
+                                        totalDiscount += originalDetailsDiscount / originalDetailsNum * dicRemainNum[i];
+                                    }
+                                    else
+                                    {
+                                        totalPrice += Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsPrice"].Value);
+                                        totalDiscount += Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsDiscount"].Value);
+                                    }
+                                }
+                            }
+                            decimal wholePayMoney = totalPrice + totalDiscount;
+                            decimal actualPayMoney = CutOffDecimal.HandleCutOff(wholePayMoney, CutOffType.ROUND_OFF, 0);
+                            //构造DeletedSingleOrder对象
+                            DeletedSingleOrder deletedSingleOrder = new DeletedSingleOrder();
+                            deletedSingleOrder.OrderID = m_SalesOrder.order.OrderID;
+                            deletedSingleOrder.TotalSellPrice = totalPrice;
+                            deletedSingleOrder.ActualSellPrice = actualPayMoney;
+                            deletedSingleOrder.DiscountPrice = totalDiscount;
+                            deletedSingleOrder.CutOffPrice = wholePayMoney - actualPayMoney;
+                            deletedSingleOrder.deletedOrderDetailsList = deletedOrderDetailsList;
+
+                            DeletedOrderService orderService = new DeletedOrderService();
+                            if (orderService.DeleteSingleOrder(deletedSingleOrder))
+                            {
+                                foreach (KeyValuePair<int, decimal> item in dicRemainNum)
+                                {
+                                    int index = item.Key;
+                                    decimal remainsNum = item.Value;
+                                    decimal detailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value);
+                                    decimal detailsPrice = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value);
+                                    decimal detailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value);
+                                    dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = remainsNum;
+                                    dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = detailsPrice / detailsNum * remainsNum;
+                                    dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = detailsDiscount / detailsNum * remainsNum;
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show("删除品项失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            List<int> deletedIndexList = new List<int>();
+                            List<DeletedOrderDetails> deletedOrderDetailsList = new List<DeletedOrderDetails>();
+                            //主项
+                            deletedIndexList.Add(selectIndex);
+                            DeletedOrderDetails orderDetails = new DeletedOrderDetails();
+                            orderDetails.OrderDetailsID = orderDetailsID;
+                            orderDetails.DeletedQuantity = -Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
+                            orderDetails.RemainQuantity = 0;
+                            orderDetails.OffPay = 0;
+                            orderDetails.AuthorisedManager = ConstantValuePool.CurrentEmployee.EmployeeID;
+                            orderDetails.CancelEmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
+                            orderDetails.CancelReasonName = form.CurrentReason.ReasonName;
+                            deletedOrderDetailsList.Add(orderDetails);
+                            //细项
+                            if (selectIndex < dgvGoodsOrder.RowCount - 1)
+                            {
+                                for (int index = selectIndex + 1; index < dgvGoodsOrder.RowCount; index++)
+                                {
+                                    if (Convert.ToInt32(dgvGoodsOrder.Rows[index].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        deletedIndexList.Add(index);
+                                        orderDetailsID = new Guid(dgvGoodsOrder.Rows[index].Cells["OrderDetailsID"].Value.ToString());
+                                        DeletedOrderDetails item = new DeletedOrderDetails();
+                                        item.OrderDetailsID = orderDetailsID;
+                                        item.DeletedQuantity = -Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value);
+                                        item.RemainQuantity = 0;
+                                        item.OffPay = 0;
+                                        item.AuthorisedManager = ConstantValuePool.CurrentEmployee.EmployeeID;
+                                        item.CancelEmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
+                                        item.CancelReasonName = form.CurrentReason.ReasonName;
+                                        deletedOrderDetailsList.Add(item);
+                                    }
+                                }
+                            }
+                            //计算价格信息
+                            decimal totalPrice = 0, totalDiscount = 0;
+                            for (int i = 0; i < dgvGoodsOrder.RowCount; i++)
+                            {
+                                if (dgvGoodsOrder.Rows[i].Cells["OrderDetailsID"].Value != null)
+                                {
+                                    bool hasDeleted = false;
+                                    foreach (int deletedIndex in deletedIndexList)
+                                    {
+                                        if (i == deletedIndex)
+                                        {
+                                            hasDeleted = true;
+                                            break;
+                                        }
+                                    }
+                                    if (hasDeleted) continue;
+                                    totalPrice += Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsPrice"].Value);
+                                    totalDiscount += Convert.ToDecimal(dgvGoodsOrder.Rows[i].Cells["GoodsDiscount"].Value);
+                                }
+                            }
+                            decimal wholePayMoney = totalPrice + totalDiscount;
+                            decimal actualPayMoney = CutOffDecimal.HandleCutOff(wholePayMoney, CutOffType.ROUND_OFF, 0);
+                            //构造DeletedSingleOrder对象
+                            DeletedSingleOrder deletedSingleOrder = new DeletedSingleOrder();
+                            deletedSingleOrder.OrderID = m_SalesOrder.order.OrderID;
+                            deletedSingleOrder.TotalSellPrice = totalPrice;
+                            deletedSingleOrder.ActualSellPrice = actualPayMoney;
+                            deletedSingleOrder.DiscountPrice = totalDiscount;
+                            deletedSingleOrder.CutOffPrice = wholePayMoney - actualPayMoney;
+                            deletedSingleOrder.deletedOrderDetailsList = deletedOrderDetailsList;
+
+                            DeletedOrderService orderService = new DeletedOrderService();
+                            if (orderService.DeleteSingleOrder(deletedSingleOrder))
+                            {
+                                for (int i = deletedIndexList.Count - 1; i >= 0; i--)
+                                {
+                                    dgvGoodsOrder.Rows.RemoveAt(deletedIndexList[i]);
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show("删除品项失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                return;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value) == (int)OrderItemType.Details)
+                    {
+                        dgvGoodsOrder.Rows.RemoveAt(selectIndex);
+                    }
+                    else if (Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value) == (int)OrderItemType.SetMeal)
+                    {
+                        MessageBox.Show("套餐项不能单独删除！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                    else
+                    {
+                        dgvGoodsOrder.Rows.RemoveAt(selectIndex);
+                        if (selectIndex < dgvGoodsOrder.RowCount - 1)
+                        {
+                            for (int i = selectIndex; i < dgvGoodsOrder.RowCount; i++)
+                            {
+                                if (Convert.ToInt32(dgvGoodsOrder.Rows[i].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    dgvGoodsOrder.Rows.RemoveAt(i);
+                                    i--;
+                                }
+                            }
+                        }
+                    }
+                }
+                //统计
+                BindOrderInfoSum();
+            }
+        }
+
+        private void btnCancelOrder_Click(object sender, EventArgs e)
+        {
+            if (m_SalesOrder != null)
+            {
+                //权限验证
+                bool hasRights = false;
+                if (RightsItemCode.FindRights(RightsItemCode.CANCELBILL))
+                {
+                    hasRights = true;
+                }
+                else
+                {
+                    FormRightsCode formRightsCode = new FormRightsCode();
+                    formRightsCode.ShowDialog();
+                    if (formRightsCode.ReturnValue)
+                    {
+                        IList<string> rightsCodeList = formRightsCode.RightsCodeList;
+                        if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.CANCELBILL))
+                        {
+                            hasRights = true;
+                        }
+                    }
+                }
+                if (!hasRights)
+                {
+                    return;
+                }
+                FormCancelOrder form = new FormCancelOrder();
+                form.ShowDialog();
+                if (form.CurrentReason != null)
+                {
+                    //删除订单
+                    DeletedOrder deletedOrder = new DeletedOrder();
+                    deletedOrder.OrderID = m_SalesOrder.order.OrderID;
+                    deletedOrder.AuthorisedManager = ConstantValuePool.CurrentEmployee.EmployeeID;
+                    deletedOrder.CancelEmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
+                    deletedOrder.CancelReasonName = form.CurrentReason.ReasonName;
+
+                    DeletedOrderService orderService = new DeletedOrderService();
+                    if (!orderService.DeleteWholeOrder(deletedOrder))
+                    {
+                        MessageBox.Show("删除账单失败！");
+                        return;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+            this.lbTotalPrice.Text = "总金额：";
+            this.lbDiscount.Text = "折扣：";
+            this.lbNeedPayMoney.Text = "实际应付：";
+            this.lbCutOff.Text = "去零：";
+            dgvGoodsOrder.Rows.Clear();
+            m_SalesOrder = null;
+            btnDeliveryGoods.Enabled = false;
+            btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
+            btnOutsideOrder.Enabled = true;
+            btnOutsideOrder.BackColor = btnOutsideOrder.DisplayColor;
+            txtTelephone.Text = string.Empty;
+            txtName.Text = string.Empty;
+            txtAddress.Text = string.Empty;
+            txtTelephone.ReadOnly = false;
+            txtName.ReadOnly = false;
         }
     }
 }
