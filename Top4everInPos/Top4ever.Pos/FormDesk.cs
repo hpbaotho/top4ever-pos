@@ -21,8 +21,10 @@ namespace Top4ever.Pos
 {
     public partial class FormDesk : Form
     {
-        private Guid m_CurrentRegionID = Guid.Empty;
         private FormOrder m_FormOrder = new FormOrder();
+        private FormTakeout m_FormTakeout = new FormTakeout();
+
+        private Guid m_CurrentRegionID = Guid.Empty;
         private ButtonOperateType m_OperateType = ButtonOperateType.NONE;
         private CrystalButton prevPressedButton = null;
         private CrystalButton prevRegionButton = null;
@@ -376,7 +378,7 @@ namespace Top4ever.Pos
                         m_FormOrder.CurrentDeskName = desk.DeskName;
                         m_FormOrder.PlaceSalesOrder = null;
                         m_FormOrder.VisibleShow = true;
-                        m_FormOrder.ShowDialog();
+                        m_FormOrder.Show();
                     }
                 }
                 else if (desk.Status == (int)DeskButtonStatus.OCCUPIED)
@@ -424,7 +426,7 @@ namespace Top4ever.Pos
                                         m_FormOrder.CurrentDeskName = desk.DeskName;
                                         m_FormOrder.PlaceSalesOrder = salesOrder;
                                         m_FormOrder.VisibleShow = true;
-                                        m_FormOrder.ShowDialog();
+                                        m_FormOrder.Show();
                                     }
                                 }
                             }
@@ -686,8 +688,8 @@ namespace Top4ever.Pos
         {
             if (haveDailyClose)
             {
-                FormTakeout form = new FormTakeout();
-                form.ShowDialog();
+                m_FormTakeout.VisibleShow = true;
+                m_FormTakeout.Show();
             }
             else
             {

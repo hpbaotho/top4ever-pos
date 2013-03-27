@@ -49,7 +49,7 @@
             // lbInput
             // 
             this.lbInput.AutoSize = true;
-            this.lbInput.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbInput.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbInput.Location = new System.Drawing.Point(31, 14);
             this.lbInput.Name = "lbInput";
             this.lbInput.Size = new System.Drawing.Size(90, 22);
@@ -58,7 +58,7 @@
             // 
             // txtNumeric
             // 
-            this.txtNumeric.Font = new System.Drawing.Font("Microsoft YaHei", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtNumeric.Font = new System.Drawing.Font("微软雅黑", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.txtNumeric.Location = new System.Drawing.Point(35, 46);
             this.txtNumeric.Name = "txtNumeric";
             this.txtNumeric.Size = new System.Drawing.Size(236, 35);
@@ -66,10 +66,10 @@
             // 
             // btnConfirm
             // 
-            this.btnConfirm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(148)))), ((int)(((byte)(91)))));
-            this.btnConfirm.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnConfirm.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnConfirm.Location = new System.Drawing.Point(35, 342);
+            this.btnConfirm.BackColor = System.Drawing.Color.Teal;
+            this.btnConfirm.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnConfirm.ForeColor = System.Drawing.Color.White;
+            this.btnConfirm.Location = new System.Drawing.Point(160, 342);
             this.btnConfirm.Name = "btnConfirm";
             this.btnConfirm.Size = new System.Drawing.Size(111, 56);
             this.btnConfirm.TabIndex = 2;
@@ -80,9 +80,9 @@
             // btnCancel
             // 
             this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(43)))), ((int)(((byte)(59)))));
-            this.btnCancel.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnCancel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnCancel.Location = new System.Drawing.Point(160, 342);
+            this.btnCancel.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnCancel.ForeColor = System.Drawing.Color.White;
+            this.btnCancel.Location = new System.Drawing.Point(35, 342);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(111, 56);
             this.btnCancel.TabIndex = 2;
@@ -93,7 +93,7 @@
             // btnZero
             // 
             this.btnZero.BackColor = System.Drawing.SystemColors.ControlText;
-            this.btnZero.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnZero.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnZero.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnZero.Location = new System.Drawing.Point(35, 271);
             this.btnZero.Name = "btnZero";
@@ -106,7 +106,7 @@
             // btnNine
             // 
             this.btnNine.BackColor = System.Drawing.SystemColors.ControlText;
-            this.btnNine.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
+            this.btnNine.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.btnNine.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnNine.Location = new System.Drawing.Point(196, 212);
             this.btnNine.Name = "btnNine";
@@ -119,7 +119,7 @@
             // btnEight
             // 
             this.btnEight.BackColor = System.Drawing.SystemColors.ControlText;
-            this.btnEight.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
+            this.btnEight.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.btnEight.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnEight.Location = new System.Drawing.Point(115, 212);
             this.btnEight.Name = "btnEight";
@@ -132,7 +132,7 @@
             // btnSeven
             // 
             this.btnSeven.BackColor = System.Drawing.SystemColors.ControlText;
-            this.btnSeven.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
+            this.btnSeven.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.btnSeven.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnSeven.Location = new System.Drawing.Point(35, 212);
             this.btnSeven.Name = "btnSeven";
@@ -145,7 +145,7 @@
             // btnSix
             // 
             this.btnSix.BackColor = System.Drawing.SystemColors.ControlText;
-            this.btnSix.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
+            this.btnSix.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.btnSix.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnSix.Location = new System.Drawing.Point(196, 153);
             this.btnSix.Name = "btnSix";
@@ -158,7 +158,7 @@
             // btnFive
             // 
             this.btnFive.BackColor = System.Drawing.SystemColors.ControlText;
-            this.btnFive.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
+            this.btnFive.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.btnFive.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnFive.Location = new System.Drawing.Point(115, 153);
             this.btnFive.Name = "btnFive";
@@ -171,7 +171,7 @@
             // btnFour
             // 
             this.btnFour.BackColor = System.Drawing.SystemColors.ControlText;
-            this.btnFour.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
+            this.btnFour.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.btnFour.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnFour.Location = new System.Drawing.Point(35, 153);
             this.btnFour.Name = "btnFour";
@@ -184,7 +184,7 @@
             // btnThree
             // 
             this.btnThree.BackColor = System.Drawing.SystemColors.ControlText;
-            this.btnThree.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
+            this.btnThree.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.btnThree.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnThree.Location = new System.Drawing.Point(196, 94);
             this.btnThree.Name = "btnThree";
@@ -197,7 +197,7 @@
             // btnTwo
             // 
             this.btnTwo.BackColor = System.Drawing.SystemColors.ControlText;
-            this.btnTwo.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
+            this.btnTwo.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.btnTwo.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnTwo.Location = new System.Drawing.Point(115, 94);
             this.btnTwo.Name = "btnTwo";
@@ -210,7 +210,7 @@
             // btnOne
             // 
             this.btnOne.BackColor = System.Drawing.SystemColors.ControlText;
-            this.btnOne.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
+            this.btnOne.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.btnOne.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnOne.Location = new System.Drawing.Point(35, 94);
             this.btnOne.Name = "btnOne";
@@ -223,7 +223,7 @@
             // btnBackSpace
             // 
             this.btnBackSpace.BackColor = System.Drawing.Color.OrangeRed;
-            this.btnBackSpace.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBackSpace.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnBackSpace.ForeColor = System.Drawing.Color.White;
             this.btnBackSpace.Location = new System.Drawing.Point(196, 271);
             this.btnBackSpace.Name = "btnBackSpace";
@@ -236,7 +236,7 @@
             // btnDot
             // 
             this.btnDot.BackColor = System.Drawing.SystemColors.ControlText;
-            this.btnDot.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnDot.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnDot.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnDot.Location = new System.Drawing.Point(115, 271);
             this.btnDot.Name = "btnDot";

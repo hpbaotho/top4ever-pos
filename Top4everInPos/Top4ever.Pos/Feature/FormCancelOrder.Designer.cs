@@ -47,7 +47,7 @@
             // 
             this.btnConfirm.BackColor = System.Drawing.Color.Teal;
             this.btnConfirm.ForeColor = System.Drawing.Color.White;
-            this.btnConfirm.Location = new System.Drawing.Point(72, 362);
+            this.btnConfirm.Location = new System.Drawing.Point(208, 362);
             this.btnConfirm.Name = "btnConfirm";
             this.btnConfirm.Size = new System.Drawing.Size(92, 58);
             this.btnConfirm.TabIndex = 4;
@@ -59,7 +59,7 @@
             // 
             this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(43)))), ((int)(((byte)(59)))));
             this.btnCancel.ForeColor = System.Drawing.Color.White;
-            this.btnCancel.Location = new System.Drawing.Point(208, 362);
+            this.btnCancel.Location = new System.Drawing.Point(71, 362);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(92, 58);
             this.btnCancel.TabIndex = 4;

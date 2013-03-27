@@ -75,20 +75,7 @@ namespace Top4ever.Entity
         /// 细项按钮
         /// </summary>
         public static Dictionary<string, List<CrystalButton>> DicDetailsButton { get; set; }
-
-        /// <summary>
-        /// 外卖菜品组按钮
-        /// </summary>
-        public static IList<CrystalButton> GoodsGroupButtonList { get; set; }
-        /// <summary>
-        /// 外卖菜品按钮
-        /// </summary>
-        public static Dictionary<string, List<CrystalButton>> DicGoodsButtonList { get; set; }
-        /// <summary>
-        /// 外卖细项按钮
-        /// </summary>
-        public static Dictionary<string, List<CrystalButton>> DicDetailsButtonList { get; set; }
-
+        
         /// <summary>
         /// 程序的配置
         /// </summary>

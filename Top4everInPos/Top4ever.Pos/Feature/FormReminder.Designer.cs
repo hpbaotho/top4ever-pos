@@ -46,7 +46,7 @@
             // 
             this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(43)))), ((int)(((byte)(59)))));
             this.btnCancel.ForeColor = System.Drawing.Color.White;
-            this.btnCancel.Location = new System.Drawing.Point(215, 362);
+            this.btnCancel.Location = new System.Drawing.Point(77, 366);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(92, 58);
             this.btnCancel.TabIndex = 1;
@@ -68,7 +68,7 @@
             // 
             this.btnConfirm.BackColor = System.Drawing.Color.Teal;
             this.btnConfirm.ForeColor = System.Drawing.Color.White;
-            this.btnConfirm.Location = new System.Drawing.Point(71, 362);
+            this.btnConfirm.Location = new System.Drawing.Point(207, 366);
             this.btnConfirm.Name = "btnConfirm";
             this.btnConfirm.Size = new System.Drawing.Size(92, 58);
             this.btnConfirm.TabIndex = 1;
@@ -96,7 +96,7 @@
             this.Controls.Add(this.pnlReason);
             this.Font = new System.Drawing.Font("微软雅黑", 12F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "FormReminder";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "催单理由";

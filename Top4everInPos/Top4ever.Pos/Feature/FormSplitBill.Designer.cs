@@ -28,14 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle49 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle50 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle51 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle52 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle53 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle54 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle55 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle56 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel6 = new System.Windows.Forms.Panel();
@@ -43,6 +43,8 @@
             this.btnEmployee2 = new Top4ever.CustomControl.CrystalButton();
             this.btnDeskNo2 = new Top4ever.CustomControl.CrystalButton();
             this.dgvGoodsOrderSum2 = new System.Windows.Forms.DataGridView();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvGoodsOrder2 = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -58,6 +60,8 @@
             this.btnEmployee = new Top4ever.CustomControl.CrystalButton();
             this.btnDeskNo = new Top4ever.CustomControl.CrystalButton();
             this.dgvGoodsOrderSum = new System.Windows.Forms.DataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvGoodsOrder = new System.Windows.Forms.DataGridView();
             this.GoodsNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.GoodsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -68,10 +72,6 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnCancel = new Top4ever.CustomControl.CrystalButton();
             this.btnSave = new Top4ever.CustomControl.CrystalButton();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel6.SuspendLayout();
@@ -107,6 +107,7 @@
             // 
             // panel6
             // 
+            this.panel6.BackColor = System.Drawing.Color.Black;
             this.panel6.Controls.Add(this.btnPeopleNum);
             this.panel6.Controls.Add(this.btnEmployee2);
             this.panel6.Controls.Add(this.btnDeskNo2);
@@ -118,31 +119,31 @@
             // btnPeopleNum
             // 
             this.btnPeopleNum.BackColor = System.Drawing.Color.Orchid;
-            this.btnPeopleNum.Location = new System.Drawing.Point(286, 0);
+            this.btnPeopleNum.Location = new System.Drawing.Point(287, 3);
             this.btnPeopleNum.Name = "btnPeopleNum";
-            this.btnPeopleNum.Size = new System.Drawing.Size(94, 50);
-            this.btnPeopleNum.TabIndex = 8;
+            this.btnPeopleNum.Size = new System.Drawing.Size(90, 45);
+            this.btnPeopleNum.TabIndex = 3;
             this.btnPeopleNum.Text = "人数：";
             this.btnPeopleNum.UseVisualStyleBackColor = false;
             this.btnPeopleNum.Click += new System.EventHandler(this.btnPeopleNum_Click);
             // 
             // btnEmployee2
             // 
-            this.btnEmployee2.BackColor = System.Drawing.Color.Orchid;
-            this.btnEmployee2.Location = new System.Drawing.Point(105, 0);
+            this.btnEmployee2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(228)))), ((int)(((byte)(44)))));
+            this.btnEmployee2.Location = new System.Drawing.Point(108, 3);
             this.btnEmployee2.Name = "btnEmployee2";
-            this.btnEmployee2.Size = new System.Drawing.Size(178, 50);
-            this.btnEmployee2.TabIndex = 7;
+            this.btnEmployee2.Size = new System.Drawing.Size(175, 45);
+            this.btnEmployee2.TabIndex = 2;
             this.btnEmployee2.Text = "服务员：";
             this.btnEmployee2.UseVisualStyleBackColor = false;
             // 
             // btnDeskNo2
             // 
-            this.btnDeskNo2.BackColor = System.Drawing.Color.Orchid;
-            this.btnDeskNo2.Location = new System.Drawing.Point(0, 0);
+            this.btnDeskNo2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(148)))), ((int)(((byte)(91)))));
+            this.btnDeskNo2.Location = new System.Drawing.Point(3, 3);
             this.btnDeskNo2.Name = "btnDeskNo2";
-            this.btnDeskNo2.Size = new System.Drawing.Size(102, 50);
-            this.btnDeskNo2.TabIndex = 6;
+            this.btnDeskNo2.Size = new System.Drawing.Size(102, 45);
+            this.btnDeskNo2.TabIndex = 1;
             this.btnDeskNo2.Text = "桌号：";
             this.btnDeskNo2.UseVisualStyleBackColor = false;
             // 
@@ -166,6 +167,23 @@
             this.dgvGoodsOrderSum2.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvGoodsOrderSum2.Size = new System.Drawing.Size(380, 158);
             this.dgvGoodsOrderSum2.TabIndex = 2;
+            // 
+            // Column3
+            // 
+            this.Column3.HeaderText = "Column3";
+            this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
+            this.Column3.Width = 190;
+            // 
+            // Column4
+            // 
+            dataGridViewCellStyle49.Format = "N2";
+            dataGridViewCellStyle49.NullValue = null;
+            this.Column4.DefaultCellStyle = dataGridViewCellStyle49;
+            this.Column4.HeaderText = "Column4";
+            this.Column4.Name = "Column4";
+            this.Column4.ReadOnly = true;
+            this.Column4.Width = 186;
             // 
             // dgvGoodsOrder2
             // 
@@ -193,8 +211,8 @@
             // 
             // dataGridViewTextBoxColumn1
             // 
-            dataGridViewCellStyle2.Format = "N1";
-            this.dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle50.Format = "N1";
+            this.dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle50;
             this.dataGridViewTextBoxColumn1.HeaderText = "数量";
             this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             this.dataGridViewTextBoxColumn1.ReadOnly = true;
@@ -211,8 +229,8 @@
             // 
             // dataGridViewTextBoxColumn3
             // 
-            dataGridViewCellStyle3.Format = "N2";
-            this.dataGridViewTextBoxColumn3.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle51.Format = "N2";
+            this.dataGridViewTextBoxColumn3.DefaultCellStyle = dataGridViewCellStyle51;
             this.dataGridViewTextBoxColumn3.HeaderText = "价格";
             this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
             this.dataGridViewTextBoxColumn3.ReadOnly = true;
@@ -221,9 +239,9 @@
             // 
             // dataGridViewTextBoxColumn4
             // 
-            dataGridViewCellStyle4.Format = "N2";
-            dataGridViewCellStyle4.NullValue = null;
-            this.dataGridViewTextBoxColumn4.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle52.Format = "N2";
+            dataGridViewCellStyle52.NullValue = null;
+            this.dataGridViewTextBoxColumn4.DefaultCellStyle = dataGridViewCellStyle52;
             this.dataGridViewTextBoxColumn4.HeaderText = "折扣";
             this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
             this.dataGridViewTextBoxColumn4.ReadOnly = true;
@@ -247,11 +265,11 @@
             // btnBack
             // 
             this.btnBack.BackColor = System.Drawing.Color.RoyalBlue;
-            this.btnBack.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnBack.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnBack.ForeColor = System.Drawing.Color.White;
             this.btnBack.Location = new System.Drawing.Point(389, 241);
             this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(80, 43);
+            this.btnBack.Size = new System.Drawing.Size(80, 53);
             this.btnBack.TabIndex = 4;
             this.btnBack.Text = "<<<";
             this.btnBack.UseVisualStyleBackColor = false;
@@ -260,11 +278,11 @@
             // btnHead
             // 
             this.btnHead.BackColor = System.Drawing.Color.DarkSlateGray;
-            this.btnHead.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnHead.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnHead.ForeColor = System.Drawing.Color.White;
             this.btnHead.Location = new System.Drawing.Point(389, 134);
             this.btnHead.Name = "btnHead";
-            this.btnHead.Size = new System.Drawing.Size(80, 43);
+            this.btnHead.Size = new System.Drawing.Size(80, 53);
             this.btnHead.TabIndex = 4;
             this.btnHead.Text = ">>>";
             this.btnHead.UseVisualStyleBackColor = false;
@@ -282,6 +300,7 @@
             // 
             // panel5
             // 
+            this.panel5.BackColor = System.Drawing.Color.Black;
             this.panel5.Controls.Add(this.btnPersonNum);
             this.panel5.Controls.Add(this.btnEmployee);
             this.panel5.Controls.Add(this.btnDeskNo);
@@ -293,29 +312,29 @@
             // btnPersonNum
             // 
             this.btnPersonNum.BackColor = System.Drawing.Color.Orchid;
-            this.btnPersonNum.Location = new System.Drawing.Point(286, 0);
+            this.btnPersonNum.Location = new System.Drawing.Point(286, 3);
             this.btnPersonNum.Name = "btnPersonNum";
-            this.btnPersonNum.Size = new System.Drawing.Size(94, 50);
+            this.btnPersonNum.Size = new System.Drawing.Size(90, 45);
             this.btnPersonNum.TabIndex = 5;
             this.btnPersonNum.Text = "人数：";
             this.btnPersonNum.UseVisualStyleBackColor = false;
             // 
             // btnEmployee
             // 
-            this.btnEmployee.BackColor = System.Drawing.Color.Orchid;
-            this.btnEmployee.Location = new System.Drawing.Point(105, 0);
+            this.btnEmployee.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(228)))), ((int)(((byte)(44)))));
+            this.btnEmployee.Location = new System.Drawing.Point(108, 3);
             this.btnEmployee.Name = "btnEmployee";
-            this.btnEmployee.Size = new System.Drawing.Size(178, 50);
+            this.btnEmployee.Size = new System.Drawing.Size(175, 45);
             this.btnEmployee.TabIndex = 4;
             this.btnEmployee.Text = "服务员：";
             this.btnEmployee.UseVisualStyleBackColor = false;
             // 
             // btnDeskNo
             // 
-            this.btnDeskNo.BackColor = System.Drawing.Color.Orchid;
-            this.btnDeskNo.Location = new System.Drawing.Point(0, 0);
+            this.btnDeskNo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(148)))), ((int)(((byte)(91)))));
+            this.btnDeskNo.Location = new System.Drawing.Point(3, 3);
             this.btnDeskNo.Name = "btnDeskNo";
-            this.btnDeskNo.Size = new System.Drawing.Size(102, 50);
+            this.btnDeskNo.Size = new System.Drawing.Size(102, 45);
             this.btnDeskNo.TabIndex = 3;
             this.btnDeskNo.Text = "桌号：";
             this.btnDeskNo.UseVisualStyleBackColor = false;
@@ -340,6 +359,23 @@
             this.dgvGoodsOrderSum.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvGoodsOrderSum.Size = new System.Drawing.Size(380, 158);
             this.dgvGoodsOrderSum.TabIndex = 2;
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Column1";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            this.Column1.Width = 190;
+            // 
+            // Column2
+            // 
+            dataGridViewCellStyle53.Format = "N2";
+            dataGridViewCellStyle53.NullValue = null;
+            this.Column2.DefaultCellStyle = dataGridViewCellStyle53;
+            this.Column2.HeaderText = "Column2";
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
+            this.Column2.Width = 186;
             // 
             // dgvGoodsOrder
             // 
@@ -367,8 +403,8 @@
             // 
             // GoodsNum
             // 
-            dataGridViewCellStyle6.Format = "N1";
-            this.GoodsNum.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle54.Format = "N1";
+            this.GoodsNum.DefaultCellStyle = dataGridViewCellStyle54;
             this.GoodsNum.HeaderText = "数量";
             this.GoodsNum.Name = "GoodsNum";
             this.GoodsNum.ReadOnly = true;
@@ -385,8 +421,8 @@
             // 
             // GoodsPrice
             // 
-            dataGridViewCellStyle7.Format = "N2";
-            this.GoodsPrice.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle55.Format = "N2";
+            this.GoodsPrice.DefaultCellStyle = dataGridViewCellStyle55;
             this.GoodsPrice.HeaderText = "价格";
             this.GoodsPrice.Name = "GoodsPrice";
             this.GoodsPrice.ReadOnly = true;
@@ -395,9 +431,9 @@
             // 
             // GoodsDiscount
             // 
-            dataGridViewCellStyle8.Format = "N2";
-            dataGridViewCellStyle8.NullValue = null;
-            this.GoodsDiscount.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle56.Format = "N2";
+            dataGridViewCellStyle56.NullValue = null;
+            this.GoodsDiscount.DefaultCellStyle = dataGridViewCellStyle56;
             this.GoodsDiscount.HeaderText = "折扣";
             this.GoodsDiscount.Name = "GoodsDiscount";
             this.GoodsDiscount.ReadOnly = true;
@@ -430,11 +466,11 @@
             // btnCancel
             // 
             this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(43)))), ((int)(((byte)(59)))));
-            this.btnCancel.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnCancel.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnCancel.ForeColor = System.Drawing.Color.White;
-            this.btnCancel.Location = new System.Drawing.Point(461, 6);
+            this.btnCancel.Location = new System.Drawing.Point(289, 6);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(110, 43);
+            this.btnCancel.Size = new System.Drawing.Size(110, 48);
             this.btnCancel.TabIndex = 5;
             this.btnCancel.Text = "取消";
             this.btnCancel.UseVisualStyleBackColor = false;
@@ -443,49 +479,15 @@
             // btnSave
             // 
             this.btnSave.BackColor = System.Drawing.Color.Teal;
-            this.btnSave.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnSave.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnSave.ForeColor = System.Drawing.Color.White;
-            this.btnSave.Location = new System.Drawing.Point(287, 6);
+            this.btnSave.Location = new System.Drawing.Point(459, 6);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(110, 43);
+            this.btnSave.Size = new System.Drawing.Size(110, 48);
             this.btnSave.TabIndex = 4;
             this.btnSave.Text = "确定";
             this.btnSave.UseVisualStyleBackColor = false;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "Column1";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            this.Column1.Width = 190;
-            // 
-            // Column2
-            // 
-            dataGridViewCellStyle5.Format = "N2";
-            dataGridViewCellStyle5.NullValue = null;
-            this.Column2.DefaultCellStyle = dataGridViewCellStyle5;
-            this.Column2.HeaderText = "Column2";
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
-            this.Column2.Width = 186;
-            // 
-            // Column3
-            // 
-            this.Column3.HeaderText = "Column3";
-            this.Column3.Name = "Column3";
-            this.Column3.ReadOnly = true;
-            this.Column3.Width = 190;
-            // 
-            // Column4
-            // 
-            dataGridViewCellStyle1.Format = "N2";
-            dataGridViewCellStyle1.NullValue = null;
-            this.Column4.DefaultCellStyle = dataGridViewCellStyle1;
-            this.Column4.HeaderText = "Column4";
-            this.Column4.Name = "Column4";
-            this.Column4.ReadOnly = true;
-            this.Column4.Width = 186;
             // 
             // FormSplitBill
             // 
@@ -494,7 +496,7 @@
             this.ClientSize = new System.Drawing.Size(858, 622);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
-            this.Font = new System.Drawing.Font("Microsoft YaHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximizeBox = false;
