@@ -131,7 +131,7 @@
             this.pnlContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlContainer.Location = new System.Drawing.Point(0, 0);
             this.pnlContainer.Name = "pnlContainer";
-            this.pnlContainer.Size = new System.Drawing.Size(1024, 715);
+            this.pnlContainer.Size = new System.Drawing.Size(1024, 733);
             this.pnlContainer.TabIndex = 0;
             // 
             // pnlRight
@@ -142,17 +142,18 @@
             this.pnlRight.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlRight.Location = new System.Drawing.Point(520, 0);
             this.pnlRight.Name = "pnlRight";
-            this.pnlRight.Size = new System.Drawing.Size(504, 715);
+            this.pnlRight.Size = new System.Drawing.Size(504, 733);
             this.pnlRight.TabIndex = 1;
             // 
             // pnlItem
             // 
+            this.pnlItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(7)))), ((int)(((byte)(45)))), ((int)(((byte)(107)))));
             this.pnlItem.Controls.Add(this.btnBack);
             this.pnlItem.Controls.Add(this.btnHead);
             this.pnlItem.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlItem.Location = new System.Drawing.Point(0, 352);
+            this.pnlItem.Location = new System.Drawing.Point(0, 318);
             this.pnlItem.Name = "pnlItem";
-            this.pnlItem.Size = new System.Drawing.Size(504, 363);
+            this.pnlItem.Size = new System.Drawing.Size(504, 415);
             this.pnlItem.TabIndex = 3;
             // 
             // btnBack
@@ -160,7 +161,7 @@
             this.btnBack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(146)))), ((int)(((byte)(51)))));
             this.btnBack.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnBack.ForeColor = System.Drawing.Color.White;
-            this.btnBack.Location = new System.Drawing.Point(421, 301);
+            this.btnBack.Location = new System.Drawing.Point(421, 333);
             this.btnBack.Name = "btnBack";
             this.btnBack.Size = new System.Drawing.Size(80, 76);
             this.btnBack.TabIndex = 0;
@@ -173,7 +174,7 @@
             this.btnHead.BackColor = System.Drawing.Color.Tomato;
             this.btnHead.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnHead.ForeColor = System.Drawing.Color.White;
-            this.btnHead.Location = new System.Drawing.Point(336, 301);
+            this.btnHead.Location = new System.Drawing.Point(336, 333);
             this.btnHead.Name = "btnHead";
             this.btnHead.Size = new System.Drawing.Size(80, 76);
             this.btnHead.TabIndex = 0;
@@ -183,12 +184,13 @@
             // 
             // pnlGroup
             // 
+            this.pnlGroup.BackColor = System.Drawing.Color.Gray;
             this.pnlGroup.Controls.Add(this.btnPageDown);
             this.pnlGroup.Controls.Add(this.btnPageUp);
             this.pnlGroup.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlGroup.Location = new System.Drawing.Point(0, 50);
             this.pnlGroup.Name = "pnlGroup";
-            this.pnlGroup.Size = new System.Drawing.Size(504, 302);
+            this.pnlGroup.Size = new System.Drawing.Size(504, 268);
             this.pnlGroup.TabIndex = 2;
             // 
             // btnPageDown
@@ -196,7 +198,7 @@
             this.btnPageDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(146)))), ((int)(((byte)(51)))));
             this.btnPageDown.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnPageDown.ForeColor = System.Drawing.Color.White;
-            this.btnPageDown.Location = new System.Drawing.Point(421, 223);
+            this.btnPageDown.Location = new System.Drawing.Point(421, 189);
             this.btnPageDown.Name = "btnPageDown";
             this.btnPageDown.Size = new System.Drawing.Size(80, 76);
             this.btnPageDown.TabIndex = 0;
@@ -209,7 +211,7 @@
             this.btnPageUp.BackColor = System.Drawing.Color.Tomato;
             this.btnPageUp.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnPageUp.ForeColor = System.Drawing.Color.White;
-            this.btnPageUp.Location = new System.Drawing.Point(335, 223);
+            this.btnPageUp.Location = new System.Drawing.Point(335, 189);
             this.btnPageUp.Name = "btnPageUp";
             this.btnPageUp.Size = new System.Drawing.Size(80, 76);
             this.btnPageUp.TabIndex = 0;
@@ -265,7 +267,7 @@
             this.pnlLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlLeft.Location = new System.Drawing.Point(0, 0);
             this.pnlLeft.Name = "pnlLeft";
-            this.pnlLeft.Size = new System.Drawing.Size(520, 715);
+            this.pnlLeft.Size = new System.Drawing.Size(520, 733);
             this.pnlLeft.TabIndex = 0;
             // 
             // dgvGoodsOrder
@@ -303,7 +305,7 @@
             this.dgvGoodsOrder.RowHeadersVisible = false;
             this.dgvGoodsOrder.RowTemplate.Height = 23;
             this.dgvGoodsOrder.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvGoodsOrder.Size = new System.Drawing.Size(520, 332);
+            this.dgvGoodsOrder.Size = new System.Drawing.Size(520, 350);
             this.dgvGoodsOrder.TabIndex = 4;
             this.dgvGoodsOrder.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgvGoodsOrder_MouseDown);
             // 
@@ -408,7 +410,7 @@
             this.pnlToolBar.Controls.Add(this.btnAdd1);
             this.pnlToolBar.Controls.Add(this.exTabControl1);
             this.pnlToolBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlToolBar.Location = new System.Drawing.Point(0, 467);
+            this.pnlToolBar.Location = new System.Drawing.Point(0, 485);
             this.pnlToolBar.Name = "pnlToolBar";
             this.pnlToolBar.Size = new System.Drawing.Size(520, 248);
             this.pnlToolBar.TabIndex = 1;
@@ -976,7 +978,7 @@
             this.pnlBottom.Controls.Add(this.txtServiceTime);
             this.pnlBottom.Controls.Add(this.txtDeviceNo);
             this.pnlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlBottom.Location = new System.Drawing.Point(0, 715);
+            this.pnlBottom.Location = new System.Drawing.Point(0, 733);
             this.pnlBottom.Name = "pnlBottom";
             this.pnlBottom.Size = new System.Drawing.Size(1024, 35);
             this.pnlBottom.TabIndex = 1;
@@ -1031,7 +1033,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1024, 750);
+            this.ClientSize = new System.Drawing.Size(1024, 768);
             this.Controls.Add(this.pnlContainer);
             this.Controls.Add(this.pnlBottom);
             this.DoubleBuffered = true;

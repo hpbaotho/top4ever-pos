@@ -25,10 +25,14 @@ namespace Top4ever.Pos
     public partial class FormOrder : Form
     {
         private const int m_Space = 2;
-        private int m_GoodsGroupPageIndex = 0;
-        private int m_GoodsPageIndex = 0;
-        private int m_DetailsGroupPageIndex = 0;
-        private int m_DetailsPageIndex = 0;
+        private List<CrystalButton> btnGroupList = new List<CrystalButton>();
+        private List<CrystalButton> btnItemList = new List<CrystalButton>();
+        //品项组列表
+        private int m_GroupPageSize = 0;
+        private int m_GroupPageIndex = 0;
+        //品项列表
+        private int m_ItemPageSize = 0;
+        private int m_ItemPageIndex = 0;
         private GoodsGroup m_CurrentGoodsGroup;
         private DetailsGroup m_CurrentDetailsGroup;
         private IList<Guid> m_CurrentDetailsGroupIDList;
@@ -93,923 +97,6 @@ namespace Top4ever.Pos
             btnBack.DisplayColor = btnBack.BackColor;
         }
 
-        #region 初始化
-        private void InitializeGoodsGroupButton()
-        {
-            if (ConstantValuePool.GoodsGroupButton == null || ConstantValuePool.GoodsGroupButton.Count == 0)
-            {
-                if (ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls != null && ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls.Count > 0)
-                {
-                    List<CrystalButton> goodsGroupButton = new List<CrystalButton>();
-                    foreach (BizControl control in ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls)
-                    {
-                        if (control.Name == "GoodsGroup")
-                        {
-                            int width = (this.pnlGroup.Width - m_Space * control.ColumnsCount) / control.ColumnsCount;
-                            int height = (this.pnlGroup.Height - m_Space * control.RowsCount) / control.RowsCount;
-                            int pageSize = control.ColumnsCount * control.RowsCount - 2;    //扣除向前、向后两个按钮
-                            //坐标
-                            int px = m_Space, py = 0, times = 0, pageCount = 0;
-                            foreach (GoodsGroup item in ConstantValuePool.GoodsGroupList)
-                            {
-                                //实例化Button
-                                CrystalButton btn = new CrystalButton();
-                                btn.Name = item.GoodsGroupID.ToString();
-                                btn.Text = item.GoodsGroupName;
-                                btn.Width = width;
-                                btn.Height = height;
-                                btn.Location = new Point(px, py);
-                                btn.Tag = item;
-                                foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
-                                { 
-                                    if(item.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
-                                    {
-                                        float emSize = (float)btnStyle.FontSize;
-                                        FontStyle style = FontStyle.Regular;
-                                        btn.Font = new Font(btnStyle.FontName, emSize, style);
-                                        btn.ForeColor = ColorConvert.RGB(btnStyle.ForeColor);
-                                        btn.BackColor = btn.DisplayColor = ColorConvert.RGB(btnStyle.BackColor);
-                                        break;
-                                    }
-                                }
-                                goodsGroupButton.Add(btn);
-                                //计算Button位置
-                                times++;
-                                pageCount++;
-                                px += m_Space + width;
-                                if (times == control.ColumnsCount)
-                                {
-                                    px = m_Space;
-                                    times = 0;
-                                    py += m_Space + height;
-                                }
-                                if (pageCount == pageSize)
-                                {
-                                    //new page 初始化
-                                    px = m_Space;
-                                    py = 0;
-                                    times = 0;
-                                    pageCount = 0;
-                                }
-                            }
-                            break;
-                        }
-                    }
-                    ConstantValuePool.GoodsGroupButton = goodsGroupButton;
-                }
-            }
-        }
-
-        private void InitializeGoodsButton()
-        {
-            if (ConstantValuePool.DicGoodsButton == null || ConstantValuePool.DicGoodsButton.Count == 0)
-            {
-                if (ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls != null && ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls.Count > 0)
-                {
-                    Dictionary<string, List<CrystalButton>> dicGoodsButton = new Dictionary<string, List<CrystalButton>>();
-                    foreach (BizControl control in ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls)
-                    {
-                        if (control.Name == "Goods")
-                        {
-                            int width = (this.pnlItem.Width - m_Space * control.ColumnsCount) / control.ColumnsCount;
-                            int height = (this.pnlItem.Height - m_Space * control.RowsCount) / control.RowsCount;
-                            int pageSize = control.ColumnsCount * control.RowsCount - 2;    //扣除向前、向后两个按钮
-                            //坐标
-                            int px = m_Space, py = 0, times = 0, pageCount = 0;
-                            foreach (GoodsGroup goodsGroupItem in ConstantValuePool.GoodsGroupList)
-                            {
-                                if (goodsGroupItem.GoodsList != null && goodsGroupItem.GoodsList.Count > 0)
-                                {
-                                    string goodsGroupID = goodsGroupItem.GoodsGroupID.ToString();
-                                    List<CrystalButton> btnGoods = new List<CrystalButton>();
-                                    foreach (Goods goodsItem in goodsGroupItem.GoodsList)
-                                    {
-                                        //实例化Button
-                                        CrystalButton btn = new CrystalButton();
-                                        btn.Name = goodsItem.GoodsID.ToString();
-                                        btn.Text = goodsItem.GoodsName;
-                                        btn.Width = width;
-                                        btn.Height = height;
-                                        btn.Location = new Point(px, py);
-                                        btn.Tag = goodsItem;
-                                        foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
-                                        {
-                                            if (goodsItem.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
-                                            {
-                                                float emSize = (float)btnStyle.FontSize;
-                                                FontStyle style = FontStyle.Regular;
-                                                btn.Font = new Font(btnStyle.FontName, emSize, style);
-                                                btn.ForeColor = ColorConvert.RGB(btnStyle.ForeColor);
-                                                btn.BackColor = btn.DisplayColor = ColorConvert.RGB(btnStyle.BackColor);
-                                                break;
-                                            }
-                                        }
-                                        btnGoods.Add(btn);
-                                        //计算Button位置
-                                        times++;
-                                        pageCount++;
-                                        px += m_Space + width;
-                                        if (times == control.ColumnsCount)
-                                        {
-                                            px = m_Space;
-                                            times = 0;
-                                            py += m_Space + height;
-                                        }
-                                        if (pageCount == pageSize)
-                                        {
-                                            //new page 初始化
-                                            px = m_Space;
-                                            py = 0;
-                                            times = 0;
-                                            pageCount = 0;
-                                        }
-                                    }
-                                    dicGoodsButton.Add(goodsGroupID, btnGoods);
-                                    //new button 初始化
-                                    px = m_Space;
-                                    py = 0;
-                                    times = 0;
-                                    pageCount = 0;
-                                }
-                            }
-                            break;
-                        }
-                    }
-                    ConstantValuePool.DicGoodsButton = dicGoodsButton;
-                }
-            }
-        }
-
-        private void InitializeDetailButton()
-        {
-            if (ConstantValuePool.DicDetailsButton == null || ConstantValuePool.DicDetailsButton.Count == 0)
-            {
-                if (ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls != null && ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls.Count > 0)
-                {
-                    Dictionary<string, List<CrystalButton>> DicDetailsButton = new Dictionary<string, List<CrystalButton>>();
-                    foreach (BizControl control in ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls)
-                    {
-                        if (control.Name == "Details")
-                        {
-                            int width = (this.pnlItem.Width - m_Space * control.ColumnsCount) / control.ColumnsCount;
-                            int height = (this.pnlItem.Height - m_Space * control.RowsCount) / control.RowsCount;
-                            int pageSize = control.ColumnsCount * control.RowsCount - 2;    //扣除向前、向后两个按钮
-                            //坐标
-                            int px = m_Space, py = 0, times = 0, pageCount = 0;
-                            foreach (DetailsGroup detailsGroupItem in ConstantValuePool.DetailsGroupList)
-                            {
-                                if (detailsGroupItem.DetailsList != null && detailsGroupItem.DetailsList.Count > 0)
-                                {
-                                    string detailGroupID = detailsGroupItem.DetailsGroupID.ToString();
-                                    List<CrystalButton> btnDetails = new List<CrystalButton>();
-                                    foreach (Details detailsItem in detailsGroupItem.DetailsList)
-                                    {
-                                        //实例化Button
-                                        CrystalButton btn = new CrystalButton();
-                                        btn.Name = detailsItem.DetailsID.ToString();
-                                        btn.Text = detailsItem.DetailsName;
-                                        btn.Width = width;
-                                        btn.Height = height;
-                                        btn.Location = new Point(px, py);
-                                        btn.Tag = detailsItem;
-                                        foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
-                                        {
-                                            if (detailsItem.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
-                                            {
-                                                float emSize = (float)btnStyle.FontSize;
-                                                FontStyle style = FontStyle.Regular;
-                                                btn.Font = new Font(btnStyle.FontName, emSize, style);
-                                                btn.ForeColor = ColorConvert.RGB(btnStyle.ForeColor);
-                                                btn.BackColor = btn.DisplayColor = ColorConvert.RGB(btnStyle.BackColor);
-                                                break;
-                                            }
-                                        }
-                                        btnDetails.Add(btn);
-                                        //计算Button位置
-                                        times++;
-                                        pageCount++;
-                                        px += m_Space + width;
-                                        if (times == control.ColumnsCount)
-                                        {
-                                            px = m_Space;
-                                            times = 0;
-                                            py += m_Space + height;
-                                        }
-                                        if (pageCount == pageSize)
-                                        {
-                                            //new page 初始化
-                                            px = m_Space;
-                                            py = 0;
-                                            times = 0;
-                                            pageCount = 0;
-                                        }
-                                    }
-                                    DicDetailsButton.Add(detailGroupID, btnDetails);
-                                    //new button 初始化
-                                    px = m_Space;
-                                    py = 0;
-                                    times = 0;
-                                    pageCount = 0;
-                                }
-                            }
-                            break;
-                        }
-                    }
-                    ConstantValuePool.DicDetailsButton = DicDetailsButton;
-                }
-            }
-        }
-        #endregion
-
-        #region 显示按钮
-
-        private void DisplayGoodsGroupButton()
-        {
-            //禁止引发Layout事件
-            this.pnlGroup.SuspendLayout();
-            this.SuspendLayout();
-            //清除pnlGroup内所有控件
-            this.pnlGroup.Controls.Clear();
-            //显示控件
-            if (ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls != null && ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls.Count > 0)
-            {
-                int width = 0, height = 0, columnsCount = 0, rowsCount = 0, pageSize = 0;
-                foreach (BizControl control in ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls)
-                {
-                    if (control.Name == "GoodsGroup")
-                    {
-                        width = (this.pnlGroup.Width - m_Space * control.ColumnsCount) / control.ColumnsCount;
-                        height = (this.pnlGroup.Height - m_Space * control.RowsCount) / control.RowsCount;
-                        columnsCount = control.ColumnsCount;
-                        rowsCount = control.RowsCount;
-                        pageSize = control.ColumnsCount * control.RowsCount - 2;    //扣除向前、向后两个按钮
-                        break;
-                    }
-                }
-                int startIndex = m_GoodsGroupPageIndex * pageSize;
-                int endIndex = (m_GoodsGroupPageIndex + 1) * pageSize;
-                if (endIndex > ConstantValuePool.GoodsGroupButton.Count)
-                {
-                    endIndex = ConstantValuePool.GoodsGroupButton.Count;
-                }
-                for (int i = startIndex; i < endIndex; i++)
-                {
-                    CrystalButton btnGoodsGroup = ConstantValuePool.GoodsGroupButton[i];
-                    btnGoodsGroup.BackColor = btnGoodsGroup.DisplayColor;
-                    btnGoodsGroup.Click -= new System.EventHandler(this.btnGoodsGroup_Click);
-                    btnGoodsGroup.Click += new System.EventHandler(this.btnGoodsGroup_Click);
-                    this.pnlGroup.Controls.Add(btnGoodsGroup);
-                }
-                //设置页码按钮的位置
-                int px = (columnsCount - 2) * width + (columnsCount - 2 + 1) * m_Space;
-                int py = (rowsCount - 1) * (height + m_Space);
-                btnPageUp.Width = width;
-                btnPageUp.Height = height;
-                btnPageUp.Location = new Point(px, py);
-                if (startIndex <= 0)
-                {
-                    btnPageUp.Enabled = false;
-                    btnPageUp.BackColor = ConstantValuePool.DisabledColor;
-                }
-                else
-                {
-                    btnPageUp.Enabled = true;
-                    btnPageUp.BackColor = btnPageUp.DisplayColor;
-                }
-                px = (columnsCount - 1) * width + (columnsCount - 1 + 1) * m_Space;
-                py = (rowsCount - 1) * (height + m_Space);
-                btnPageDown.Width = width;
-                btnPageDown.Height = height;
-                btnPageDown.Location = new Point(px, py);
-                if (endIndex >= ConstantValuePool.GoodsGroupButton.Count)
-                {
-                    btnPageDown.Enabled = false;
-                    btnPageDown.BackColor = ConstantValuePool.DisabledColor;
-                }
-                else
-                {
-                    btnPageDown.Enabled = true;
-                    btnPageDown.BackColor = btnPageDown.DisplayColor;
-                }
-                //向前
-                this.pnlGroup.Controls.Add(btnPageUp);
-                //向后
-                this.pnlGroup.Controls.Add(btnPageDown);
-            }
-            this.pnlGroup.ResumeLayout(false);
-            this.pnlGroup.PerformLayout();
-            this.ResumeLayout(false);
-        }
-
-        private void DisplayGoodsButton()
-        {
-            //禁止引发Layout事件
-            this.pnlItem.SuspendLayout();
-            this.SuspendLayout();
-            //清除pnlItem内所有控件
-            this.pnlItem.Controls.Clear();
-            if (m_CurrentGoodsGroup != null)
-            {
-                string goodsGroupID = m_CurrentGoodsGroup.GoodsGroupID.ToString();
-                if (ConstantValuePool.DicGoodsButton.ContainsKey(goodsGroupID))
-                {
-                    List<CrystalButton> btnGoodsList = ConstantValuePool.DicGoodsButton[goodsGroupID];
-                    if (btnGoodsList != null && btnGoodsList.Count > 0)
-                    {
-                        if (ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls != null && ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls.Count > 0)
-                        {
-                            int width = 0, height = 0, columnsCount = 0, rowsCount = 0, pageSize = 0;
-                            foreach (BizControl control in ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls)
-                            {
-                                if (control.Name == "Goods")
-                                {
-                                    width = (this.pnlItem.Width - m_Space * control.ColumnsCount) / control.ColumnsCount;
-                                    height = (this.pnlItem.Height - m_Space * control.RowsCount) / control.RowsCount;
-                                    columnsCount = control.ColumnsCount;
-                                    rowsCount = control.RowsCount;
-                                    pageSize = control.ColumnsCount * control.RowsCount - 2;    //扣除向前、向后两个按钮
-                                    break;
-                                }
-                            }
-                            //显示控件
-                            int startIndex = m_GoodsPageIndex * pageSize;
-                            int endIndex = (m_GoodsPageIndex + 1) * pageSize;
-                            if (endIndex > btnGoodsList.Count)
-                            {
-                                endIndex = btnGoodsList.Count;
-                            }
-                            for (int i = startIndex; i < endIndex; i++)
-                            {
-                                CrystalButton btnGoods = btnGoodsList[i];
-                                btnGoods.Click -= new System.EventHandler(this.btnGoods_Click);
-                                btnGoods.Click += new System.EventHandler(this.btnGoods_Click);
-                                if (m_ShowSilverCode)
-                                {
-                                    if (btnGoods.Text.IndexOf("￥") > 0)
-                                    {
-                                        //do nothing
-                                    }
-                                    else
-                                    {
-                                        Goods temp = btnGoods.Tag as Goods;
-                                        btnGoods.Text += "\r\n ￥" + temp.SellPrice.ToString("f2");
-                                    }
-                                }
-                                else
-                                {
-                                    if (btnGoods.Text.IndexOf("￥") > 0)
-                                    {
-                                        btnGoods.Text = btnGoods.Text.Substring(0, btnGoods.Text.IndexOf("￥") - 3);
-                                    }
-                                    else
-                                    {
-                                        //do nothing
-                                    }
-                                }
-                                this.pnlItem.Controls.Add(btnGoods);
-                            }
-                            //设置页码按钮的位置
-                            int px = (columnsCount - 2) * width + (columnsCount - 2 + 1) * m_Space;
-                            int py = (rowsCount - 1) * (height + m_Space);
-                            btnHead.Width = width;
-                            btnHead.Height = height;
-                            btnHead.Location = new Point(px, py);
-                            if (startIndex <= 0)
-                            {
-                                btnHead.Enabled = false;
-                                btnHead.BackColor = ConstantValuePool.DisabledColor;
-                            }
-                            else
-                            {
-                                btnHead.Enabled = true;
-                                btnHead.BackColor = btnHead.DisplayColor;
-                            }
-                            px = (columnsCount - 1) * width + (columnsCount - 1 + 1) * m_Space;
-                            py = (rowsCount - 1) * (height + m_Space);
-                            btnBack.Width = width;
-                            btnBack.Height = height;
-                            btnBack.Location = new Point(px, py);
-                            if (endIndex >= btnGoodsList.Count)
-                            {
-                                btnBack.Enabled = false;
-                                btnBack.BackColor = ConstantValuePool.DisabledColor;
-                            }
-                            else
-                            {
-                                btnBack.Enabled = true;
-                                btnBack.BackColor = btnBack.DisplayColor;
-                            }
-                            //向前
-                            this.pnlItem.Controls.Add(btnHead);
-                            //向后
-                            this.pnlItem.Controls.Add(btnBack);
-                        }
-                    }
-                }
-            }
-            this.pnlItem.ResumeLayout(false);
-            this.pnlItem.PerformLayout();
-            this.ResumeLayout(false);
-        }
-
-        private void DisplayDetailGroupButton()
-        {
-            List<DetailsGroup> detailGroupList = new List<DetailsGroup>();
-            foreach (DetailsGroup item in ConstantValuePool.DetailsGroupList)
-            {
-                if (m_CurrentDetailsGroupIDList.Contains(item.DetailsGroupID))
-                {
-                    detailGroupList.Add(item);
-                }
-            }
-            if (detailGroupList.Count > 0)
-            {
-                //禁止引发Layout事件
-                this.pnlGroup.SuspendLayout();
-                this.SuspendLayout();
-                //清除pnlGroup内所有控件
-                this.pnlGroup.Controls.Clear();
-                //显示控件
-                if (ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls != null && ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls.Count > 0)
-                {
-                    int width = 0, height = 0, columnsCount = 0, rowsCount = 0, pageSize = 0;
-                    foreach (BizControl control in ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls)
-                    {
-                        if (control.Name == "DetailsGroup")
-                        {
-                            width = (this.pnlGroup.Width - m_Space * control.ColumnsCount) / control.ColumnsCount;
-                            height = (this.pnlGroup.Height - m_Space * control.RowsCount) / control.RowsCount;
-                            columnsCount = control.ColumnsCount;
-                            rowsCount = control.RowsCount;
-                            pageSize = control.ColumnsCount * control.RowsCount - 2;    //扣除向前、向后两个按钮
-                            break;
-                        }
-                    }
-                    int startIndex = m_DetailsGroupPageIndex * pageSize;
-                    int endIndex = (m_DetailsGroupPageIndex + 1) * pageSize;
-                    if (endIndex > detailGroupList.Count)
-                    {
-                        endIndex = detailGroupList.Count;
-                    }
-                    //坐标
-                    int px = m_Space, py = 0, times = 0;
-                    for (int i = startIndex; i < endIndex; i++)
-                    {
-                        //实例化Button
-                        CrystalButton btn = new CrystalButton();
-                        btn.Name = detailGroupList[i].DetailsGroupID.ToString();
-                        btn.Text = detailGroupList[i].DetailsGroupName;
-                        btn.Width = width;
-                        btn.Height = height;
-                        btn.Location = new Point(px, py);
-                        btn.Tag = detailGroupList[i];
-                        btn.Click += new System.EventHandler(this.btnDetailGroup_Click);
-                        foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
-                        {
-                            if (detailGroupList[i].ButtonStyleID.Equals(btnStyle.ButtonStyleID))
-                            {
-                                float emSize = (float)btnStyle.FontSize;
-                                FontStyle style = FontStyle.Regular;
-                                btn.Font = new Font(btnStyle.FontName, emSize, style);
-                                btn.ForeColor = ColorConvert.RGB(btnStyle.ForeColor);
-                                btn.BackColor = btn.DisplayColor = ColorConvert.RGB(btnStyle.BackColor);
-                                break;
-                            }
-                        }
-                        this.pnlGroup.Controls.Add(btn);
-                        //计算Button位置
-                        times++;
-                        px += m_Space + width;
-                        if (times == columnsCount)
-                        {
-                            px = m_Space;
-                            times = 0;
-                            py += m_Space + height;
-                        }
-                    }
-                    //设置页码按钮的位置
-                    px = (columnsCount - 2) * width + (columnsCount - 2 + 1) * m_Space;
-                    py = (rowsCount - 1) * (height + m_Space);
-                    btnPageUp.Width = width;
-                    btnPageUp.Height = height;
-                    btnPageUp.Location = new Point(px, py);
-                    if (startIndex <= 0)
-                    {
-                        btnPageUp.Enabled = false;
-                        btnPageUp.BackColor = ConstantValuePool.DisabledColor;
-                    }
-                    else
-                    {
-                        btnPageUp.Enabled = true;
-                        btnPageUp.BackColor = btnPageUp.DisplayColor;
-                    }
-                    px = (columnsCount - 1) * width + (columnsCount - 1 + 1) * m_Space;
-                    py = (rowsCount - 1) * (height + m_Space);
-                    btnPageDown.Width = width;
-                    btnPageDown.Height = height;
-                    btnPageDown.Location = new Point(px, py);
-                    if (endIndex >= detailGroupList.Count)
-                    {
-                        btnPageDown.Enabled = false;
-                        btnPageDown.BackColor = ConstantValuePool.DisabledColor;
-                    }
-                    else
-                    {
-                        btnPageDown.Enabled = true;
-                        btnPageDown.BackColor = btnPageDown.DisplayColor;
-                    }
-                    //向前
-                    this.pnlGroup.Controls.Add(btnPageUp);
-                    //向后
-                    this.pnlGroup.Controls.Add(btnPageDown);
-                }
-                this.pnlGroup.ResumeLayout(false);
-                this.pnlGroup.PerformLayout();
-                this.ResumeLayout(false);
-            }
-        }
-
-        private void DisplayDetailButton()
-        {
-            //禁止引发Layout事件
-            this.pnlItem.SuspendLayout();
-            this.SuspendLayout();
-            //清除pnlItem内所有控件
-            this.pnlItem.Controls.Clear();
-            string detailGroupID = m_CurrentDetailsGroup.DetailsGroupID.ToString();
-            if (ConstantValuePool.DicDetailsButton.ContainsKey(detailGroupID))
-            {
-                List<CrystalButton> btnDetailList = ConstantValuePool.DicDetailsButton[detailGroupID];
-                if (btnDetailList != null && btnDetailList.Count > 0)
-                {
-                    if (ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls != null && ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls.Count > 0)
-                    {
-                        int width = 0, height = 0, columnsCount = 0, rowsCount = 0, pageSize = 0;
-                        foreach (BizControl control in ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls)
-                        {
-                            if (control.Name == "Details")
-                            {
-                                width = (this.pnlItem.Width - m_Space * control.ColumnsCount) / control.ColumnsCount;
-                                height = (this.pnlItem.Height - m_Space * control.RowsCount) / control.RowsCount;
-                                columnsCount = control.ColumnsCount;
-                                rowsCount = control.RowsCount;
-                                pageSize = control.ColumnsCount * control.RowsCount - 2;    //扣除向前、向后两个按钮
-                                break;
-                            }
-                        }
-                        //显示控件
-                        int startIndex = m_DetailsPageIndex * pageSize;
-                        int endIndex = (m_DetailsPageIndex + 1) * pageSize;
-                        if (endIndex > btnDetailList.Count)
-                        {
-                            endIndex = btnDetailList.Count;
-                        }
-                        for (int i = startIndex; i < endIndex; i++)
-                        {
-                            CrystalButton btnDetails = btnDetailList[i];
-                            btnDetails.Click -= new System.EventHandler(this.btnDetails_Click);
-                            btnDetails.Click += new System.EventHandler(this.btnDetails_Click);
-                            this.pnlItem.Controls.Add(btnDetails);
-                        }
-                        //设置页码按钮的位置
-                        int px = (columnsCount - 2) * width + (columnsCount - 2 + 1) * m_Space;
-                        int py = (rowsCount - 1) * (height + m_Space);
-                        btnHead.Width = width;
-                        btnHead.Height = height;
-                        btnHead.Location = new Point(px, py);
-                        if (startIndex <= 0)
-                        {
-                            btnHead.Enabled = false;
-                            btnHead.BackColor = ConstantValuePool.DisabledColor;
-                        }
-                        else
-                        {
-                            btnHead.Enabled = true;
-                            btnHead.BackColor = btnHead.DisplayColor;
-                        }
-                        px = (columnsCount - 1) * width + (columnsCount - 1 + 1) * m_Space;
-                        py = (rowsCount - 1) * (height + m_Space);
-                        btnBack.Width = width;
-                        btnBack.Height = height;
-                        btnBack.Location = new Point(px, py);
-                        if (endIndex >= btnDetailList.Count)
-                        {
-                            btnBack.Enabled = false;
-                            btnBack.BackColor = ConstantValuePool.DisabledColor;
-                        }
-                        else
-                        {
-                            btnBack.Enabled = true;
-                            btnBack.BackColor = btnBack.DisplayColor;
-                        }
-                        //向前
-                        this.pnlItem.Controls.Add(btnHead);
-                        //向后
-                        this.pnlItem.Controls.Add(btnBack);
-                    }
-                }
-            }
-            this.pnlItem.ResumeLayout(false);
-            this.pnlItem.PerformLayout();
-            this.ResumeLayout(false);
-        }
-
-        #endregion
-
-        #region goods or detail button event
-
-        private void btnGoodsGroup_Click(object sender, EventArgs e)
-        {
-            CrystalButton btnGoodsGroup = sender as CrystalButton;
-            m_CurrentGoodsGroup = btnGoodsGroup.Tag as GoodsGroup;
-            Color pressedColor = ConstantValuePool.PressedColor;
-            foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
-            {
-                if (m_CurrentGoodsGroup.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
-                {
-                    pressedColor = ColorConvert.RGB(btnStyle.ClickedBackColor);
-                    break;
-                }
-            }
-            btnGoodsGroup.BackColor = pressedColor;
-            if (prevPressedButton == null)
-            {
-                prevPressedButton = btnGoodsGroup;
-            }
-            else
-            {
-                prevPressedButton.BackColor = prevPressedButton.DisplayColor;
-                prevPressedButton = btnGoodsGroup;
-            }
-
-            m_GoodsPageIndex = 0;
-            DisplayGoodsButton();
-        }
-
-        private void btnGoods_Click(object sender, EventArgs e)
-        {
-            CrystalButton btnGoods = sender as CrystalButton;
-            Goods goods = btnGoods.Tag as Goods;
-            int index, selectedIndex;
-            index = selectedIndex = dgvGoodsOrder.Rows.Add(new DataGridViewRow());
-            dgvGoodsOrder.Rows[index].Cells["ItemID"].Value = goods.GoodsID;
-            dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag = goods;
-            dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = 1;
-            dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = goods.GoodsName;
-            dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = goods.SellPrice;
-            dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = 0;
-            dgvGoodsOrder.Rows[index].Cells["ItemType"].Value = OrderItemType.Goods;
-            dgvGoodsOrder.Rows[index].Cells["CanDiscount"].Value = goods.CanDiscount;
-            dgvGoodsOrder.Rows[index].Cells["ItemUnit"].Value = goods.Unit;
-            
-            #region 判断是否套餐
-            bool haveCirculate = false;
-            foreach (GoodsSetMeal item in ConstantValuePool.GoodsSetMealList)
-            {
-                if (item.ParentGoodsID.Equals(goods.GoodsID))
-                {
-                    Goods temp = new Goods();
-                    temp.GoodsID = item.ItemID;
-                    temp.GoodsNo = item.ItemNo;
-                    temp.GoodsName = item.ItemName;
-                    temp.GoodsName2nd = item.ItemName2nd;
-                    temp.Unit = item.Unit;
-                    temp.SellPrice = item.SellPrice;
-                    temp.CanDiscount = item.CanDiscount;
-                    temp.AutoShowDetails = item.AutoShowDetails;
-                    temp.PrintSolutionName = item.PrintSolutionName;
-                    temp.DepartID = item.DepartID;
-                    //更新列表
-                    index = dgvGoodsOrder.Rows.Add(new DataGridViewRow());
-                    dgvGoodsOrder.Rows[index].Cells["ItemID"].Value = item.ItemID;
-                    dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag = temp;
-                    dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = item.ItemQty;
-                    dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = "--" + item.ItemName;
-                    dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = item.SellPrice;
-                    decimal discount = 0;
-                    if (item.DiscountRate > 0)
-                    {
-                        discount = item.SellPrice * item.ItemQty * item.DiscountRate;
-                    }
-                    else
-                    {
-                        discount = item.OffFixPay;
-                    }
-                    dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = (-discount).ToString("f2");
-                    dgvGoodsOrder.Rows[index].Cells["ItemType"].Value = OrderItemType.SetMeal;
-                    dgvGoodsOrder.Rows[index].Cells["CanDiscount"].Value = item.CanDiscount;
-                    dgvGoodsOrder.Rows[index].Cells["ItemUnit"].Value = item.Unit;
-                    
-                    #region 判断套餐项是否含细项
-                    bool haveDetails = false;
-                    foreach (GoodsSetMeal detailsSetMeal in ConstantValuePool.DetailsSetMealList)
-                    {
-                        if (detailsSetMeal.ParentGoodsID.Equals(temp.GoodsID))
-                        {
-                            Details details = new Details();
-                            details.DetailsID = detailsSetMeal.ItemID;
-                            details.DetailsNo = detailsSetMeal.ItemNo;
-                            details.DetailsName = detailsSetMeal.ItemName;
-                            details.DetailsName2nd = detailsSetMeal.ItemName2nd;
-                            details.SellPrice = detailsSetMeal.SellPrice;
-                            details.CanDiscount = detailsSetMeal.CanDiscount;
-                            details.AutoShowDetails = detailsSetMeal.AutoShowDetails;
-                            details.PrintSolutionName = detailsSetMeal.PrintSolutionName;
-                            details.DepartID = detailsSetMeal.DepartID;
-                            //更新列表
-                            index = dgvGoodsOrder.Rows.Add(new DataGridViewRow());
-                            dgvGoodsOrder.Rows[index].Cells["ItemID"].Value = detailsSetMeal.ItemID;
-                            dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag = details;
-                            dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = detailsSetMeal.ItemQty;
-                            dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = "----" + detailsSetMeal.ItemName;
-                            dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = detailsSetMeal.SellPrice;
-                            decimal detailsDiscount = 0;
-                            if (detailsSetMeal.DiscountRate > 0)
-                            {
-                                detailsDiscount = detailsSetMeal.SellPrice * detailsSetMeal.ItemQty * detailsSetMeal.DiscountRate;
-                            }
-                            else
-                            {
-                                detailsDiscount = detailsSetMeal.OffFixPay;
-                            }
-                            dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = (-detailsDiscount).ToString("f2");
-                            dgvGoodsOrder.Rows[index].Cells["ItemType"].Value = OrderItemType.SetMeal;
-                            dgvGoodsOrder.Rows[index].Cells["CanDiscount"].Value = detailsSetMeal.CanDiscount;
-                            haveDetails = true;
-                        }
-                        else
-                        {
-                            if (haveDetails) break;
-                        }
-                    }
-                    #endregion
-
-                    haveCirculate = true;
-                }
-                else
-                {
-                    if (haveCirculate) break;
-                }
-            }
-            #endregion
-
-            #region 判断是否自动显示细项组
-            if (goods.AutoShowDetails)
-            {
-                m_DetailsGroupPageIndex = 0;
-                m_DetailsPageIndex = 0;
-                if (goods.DetailsGroupIDList != null && goods.DetailsGroupIDList.Count > 0)
-                {
-                    m_GoodsOrDetails = false;    //状态为细项
-                    m_CurrentDetailsGroupIDList = goods.DetailsGroupIDList;
-                    DisplayDetailGroupButton();
-                    this.pnlItem.Controls.Clear();
-                    m_DetailsPrefix = "--";
-                }
-            }
-            #endregion
-
-            //datagridview滚动条定位
-            dgvGoodsOrder.Rows[selectedIndex].Selected = true;
-            dgvGoodsOrder.CurrentCell = dgvGoodsOrder.Rows[selectedIndex].Cells["GoodsNum"];
-            //统计
-            BindOrderInfoSum();
-        }
-
-        private void btnDetailGroup_Click(object sender, EventArgs e)
-        {
-            prevPressedButton.BackColor = prevPressedButton.DisplayColor;
-
-            CrystalButton btnDetailGroup = sender as CrystalButton;
-            DetailsGroup detailsGroup = btnDetailGroup.Tag as DetailsGroup;
-            Color pressedColor = ConstantValuePool.PressedColor;
-            foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
-            {
-                if (detailsGroup.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
-                {
-                    pressedColor = ColorConvert.RGB(btnStyle.ClickedBackColor);
-                    break;
-                }
-            }
-            btnDetailGroup.BackColor = pressedColor;
-            prevPressedButton = btnDetailGroup;
-            if (detailsGroup.DetailsList != null && detailsGroup.DetailsList.Count > 0)
-            {
-                m_CurrentDetailsGroup = detailsGroup;
-                m_DetailsPageIndex = 0;
-                DisplayDetailButton();
-            }
-        }
-
-        private void btnDetails_Click(object sender, EventArgs e)
-        {
-            if (dgvGoodsOrder.CurrentRow != null)
-            {
-                int selectIndex = dgvGoodsOrder.CurrentRow.Index;
-                //数量
-                decimal itemNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
-                CrystalButton btnDetails = sender as CrystalButton;
-                Details details = btnDetails.Tag as Details;
-                DataGridViewRow dgr = dgvGoodsOrder.Rows[0].Clone() as DataGridViewRow;
-                dgr.Cells[0].Value = details.DetailsID;
-                dgr.Cells[0].Tag = details;
-                dgr.Cells[1].Value = itemNum;
-                dgr.Cells[2].Value = m_DetailsPrefix + details.DetailsName;
-                dgr.Cells[3].Value = details.SellPrice;
-                dgr.Cells[4].Value = 0;
-                dgr.Cells[5].Value = OrderItemType.Details;
-                dgr.Cells[6].Value = details.CanDiscount;
-                int rowIndex = selectIndex + 1;
-                if (rowIndex == dgvGoodsOrder.Rows.Count)
-                {
-                    dgvGoodsOrder.Rows.Add(dgr);
-                }
-                else
-                {
-                    if (Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
-                    {
-                        for (int i = selectIndex + 1; i < dgvGoodsOrder.RowCount; i++)
-                        {
-                            int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[i].Cells["ItemType"].Value);
-                            if (itemType == (int)OrderItemType.Goods)
-                            {
-                                break;
-                            }
-                            else 
-                            {
-                                rowIndex++;
-                            }
-                        }
-                    }
-                    dgvGoodsOrder.Rows.Insert(rowIndex, dgr);
-                }
-                //统计
-                BindOrderInfoSum();
-            }
-        }
-
-        #endregion
-
-        #region 分页事件
-
-        private void btnPageUp_Click(object sender, EventArgs e)
-        {
-            if (m_GoodsOrDetails)
-            {
-                m_GoodsGroupPageIndex--;
-                DisplayGoodsGroupButton();
-            }
-            else
-            {
-                m_DetailsGroupPageIndex--;
-                DisplayDetailGroupButton();
-            }
-        }
-
-        private void btnPageDown_Click(object sender, EventArgs e)
-        {
-            if (m_GoodsOrDetails)
-            {
-                m_GoodsGroupPageIndex++;
-                DisplayGoodsGroupButton();
-            }
-            else
-            {
-                m_DetailsGroupPageIndex++;
-                DisplayDetailGroupButton();
-            }
-        }
-
-        private void btnHead_Click(object sender, EventArgs e)
-        {
-            if (m_GoodsOrDetails)
-            {
-                m_GoodsPageIndex--;
-                DisplayGoodsButton();
-            }
-            else
-            {
-                m_DetailsPageIndex--;
-                DisplayDetailButton();
-            }
-        }
-
-        private void btnBack_Click(object sender, EventArgs e)
-        {
-            if (m_GoodsOrDetails)
-            {
-                m_GoodsPageIndex++;
-                DisplayGoodsButton();
-            }
-            else
-            {
-                m_DetailsPageIndex++;
-                DisplayDetailButton();
-            }
-        }
-
-        #endregion
-
         private void FormOrder_Load(object sender, EventArgs e)
         {
             if (!RightsItemCode.FindRights(RightsItemCode.SPLITBILL))
@@ -1034,20 +121,17 @@ namespace Top4ever.Pos
         {
             if (m_OnShow)
             {
-                //初始化菜品组按钮
-                InitializeGoodsGroupButton();
-                //初始化菜品按钮
-                InitializeGoodsButton();
-                //初始化细项按钮
-                InitializeDetailButton();
+                //初始化品项组按钮
+                InitializeGroupButton();
+                //初始化品项按钮
+                InitializeItemButton();
                 //初始化
-                m_GoodsGroupPageIndex = 0;
-                m_GoodsPageIndex = 0;
-                m_DetailsGroupPageIndex = 0;
-                m_DetailsPageIndex = 0;
                 LoadDefaultGoodsGroupButton();
                 m_GoodsOrDetails = true;
                 m_GoodsNum = string.Empty;
+                m_DetailsPrefix = string.Empty;
+                prevPressedButton = null;
+                m_ShowSilverCode = false;
                 this.lbTotalPrice.Text = "总金额：";
                 this.lbDiscount.Text = "折扣：";
                 this.lbNeedPayMoney.Text = "实际应付：";
@@ -1080,6 +164,753 @@ namespace Top4ever.Pos
                 this.btnPersonNum.Text = "人数：" + m_PersonNum;
             }
         }
+
+        #region 初始化
+
+        private void InitializeGroupButton()
+        {
+            if (btnGroupList.Count == 0)
+            {
+                if (ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls != null && ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls.Count > 0)
+                {
+                    foreach (BizControl control in ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls)
+                    {
+                        if (control.Name == "Group")
+                        {
+                            int width = (this.pnlGroup.Width - m_Space * (control.ColumnsCount + 1)) / control.ColumnsCount;
+                            int height = (this.pnlGroup.Height - m_Space * (control.RowsCount + 1)) / control.RowsCount;
+                            m_GroupPageSize = control.ColumnsCount * control.RowsCount - 2;    //扣除向前、向后两个按钮
+                            //坐标
+                            int px = m_Space, py = m_Space, times = 0, pageCount = 0;
+                            for (int i = 0; i < m_GroupPageSize; i++)
+                            {
+                                CrystalButton btnGroup = new CrystalButton();
+                                btnGroup.Name = "btnGroup" + i;
+                                btnGroup.BackColor = btnGroup.DisplayColor = Color.DodgerBlue;
+                                btnGroup.Location = new Point(px, py);
+                                btnGroup.Size = new Size(width, height);
+                                btnGroup.Click += new System.EventHandler(this.btnGroup_Click);
+
+                                this.pnlGroup.Controls.Add(btnGroup);
+                                btnGroupList.Add(btnGroup);
+                                //计算Button位置
+                                times++;
+                                pageCount++;
+                                px += m_Space + width;
+                                if (times == control.ColumnsCount)
+                                {
+                                    px = m_Space;
+                                    times = 0;
+                                    py += m_Space + height;
+                                }
+                            }
+                            px = (control.ColumnsCount - 2) * width + (control.ColumnsCount - 2 + 1) * m_Space;
+                            py = (control.RowsCount - 1) * height + control.RowsCount * m_Space;
+                            btnPageUp.Width = width;
+                            btnPageUp.Height = height;
+                            btnPageUp.Location = new Point(px, py);
+                            px += width + m_Space;
+                            btnPageDown.Width = width;
+                            btnPageDown.Height = height;
+                            btnPageDown.Location = new Point(px, py);
+                            //向前
+                            this.pnlGroup.Controls.Add(btnPageUp);
+                            //向后
+                            this.pnlGroup.Controls.Add(btnPageDown);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void InitializeItemButton()
+        {
+            if (btnItemList.Count == 0)
+            {
+                if (ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls != null && ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls.Count > 0)
+                {
+                    foreach (BizControl control in ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls)
+                    {
+                        if (control.Name == "Item")
+                        {
+                            int width = (this.pnlItem.Width - m_Space * (control.ColumnsCount + 1)) / control.ColumnsCount;
+                            int height = (this.pnlItem.Height - m_Space * (control.RowsCount + 1)) / control.RowsCount;
+                            m_ItemPageSize = control.ColumnsCount * control.RowsCount - 2;    //扣除向前、向后两个按钮
+                            //坐标
+                            int px = m_Space, py = m_Space, times = 0, pageCount = 0;
+                            for (int i = 0; i < m_ItemPageSize; i++)
+                            {
+                                CrystalButton btnItem = new CrystalButton();
+                                btnItem.Name = "btnItem" + i;
+                                btnItem.BackColor = btnItem.DisplayColor = Color.DodgerBlue;
+                                btnItem.Location = new Point(px, py);
+                                btnItem.Size = new Size(width, height);
+                                btnItem.Click += new System.EventHandler(this.btnItem_Click);
+
+                                this.pnlItem.Controls.Add(btnItem);
+                                btnItemList.Add(btnItem);
+                                //计算Button位置
+                                times++;
+                                pageCount++;
+                                px += m_Space + width;
+                                if (times == control.ColumnsCount)
+                                {
+                                    px = m_Space;
+                                    times = 0;
+                                    py += m_Space + height;
+                                }
+                            }
+                            px = (control.ColumnsCount - 2) * width + (control.ColumnsCount - 2 + 1) * m_Space;
+                            py = (control.RowsCount - 1) * height + control.RowsCount * m_Space;
+                            btnHead.Width = width;
+                            btnHead.Height = height;
+                            btnHead.Location = new Point(px, py);
+                            px += width + m_Space;
+                            btnBack.Width = width;
+                            btnBack.Height = height;
+                            btnBack.Location = new Point(px, py);
+                            //向前
+                            this.pnlItem.Controls.Add(btnHead);
+                            //向后
+                            this.pnlItem.Controls.Add(btnBack);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region 显示按钮
+
+        private void DisplayGoodsGroupButton()
+        {
+            //禁止引发Layout事件
+            this.pnlGroup.SuspendLayout();
+            this.SuspendLayout();
+
+            int unDisplayNum = 0;
+            int startIndex = m_GroupPageIndex * m_GroupPageSize;
+            int endIndex = (m_GroupPageIndex + 1) * m_GroupPageSize;
+            if (endIndex > ConstantValuePool.GoodsGroupList.Count)
+            {
+                unDisplayNum = endIndex - ConstantValuePool.GoodsGroupList.Count;
+                endIndex = ConstantValuePool.GoodsGroupList.Count;
+            }
+            //隐藏没有内容的按钮
+            for (int i = btnGroupList.Count - unDisplayNum; i < btnGroupList.Count; i++)
+            {
+                btnGroupList[i].Visible = false;
+            }
+            //显示有内容的按钮
+            for (int i = 0, j = startIndex; j < endIndex; i++, j++)
+            {
+                GoodsGroup goodsGroup = ConstantValuePool.GoodsGroupList[j];
+                CrystalButton btn = btnGroupList[i];
+                btn.Visible = true;
+                btn.Text = goodsGroup.GoodsGroupName;
+                btn.Tag = goodsGroup;
+                foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
+                {
+                    if (goodsGroup.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
+                    {
+                        float emSize = (float)btnStyle.FontSize;
+                        FontStyle style = FontStyle.Regular;
+                        btn.Font = new Font(btnStyle.FontName, emSize, style);
+                        btn.ForeColor = ColorConvert.RGB(btnStyle.ForeColor);
+                        btn.BackColor = btn.DisplayColor = ColorConvert.RGB(btnStyle.BackColor);
+                        break;
+                    }
+                }
+            }
+            //设置页码按钮的显示
+            if (startIndex <= 0)
+            {
+                btnPageUp.Enabled = false;
+                btnPageUp.BackColor = ConstantValuePool.DisabledColor;
+            }
+            else
+            {
+                btnPageUp.Enabled = true;
+                btnPageUp.BackColor = btnPageUp.DisplayColor;
+            }
+            if (endIndex >= ConstantValuePool.GoodsGroupList.Count)
+            {
+                btnPageDown.Enabled = false;
+                btnPageDown.BackColor = ConstantValuePool.DisabledColor;
+            }
+            else
+            {
+                btnPageDown.Enabled = true;
+                btnPageDown.BackColor = btnPageDown.DisplayColor;
+            }
+
+            this.pnlGroup.ResumeLayout(false);
+            this.pnlGroup.PerformLayout();
+            this.ResumeLayout(false);
+        }
+
+        private void DisplayGoodsButton()
+        {
+            if (m_CurrentGoodsGroup != null)
+            {
+                if (m_CurrentGoodsGroup.GoodsList == null || m_CurrentGoodsGroup.GoodsList.Count == 0)
+                {
+                    HideItemButton();
+                }
+                else
+                {
+                    //禁止引发Layout事件
+                    this.pnlItem.SuspendLayout();
+                    this.SuspendLayout();
+
+                    //显示控件
+                    int unDisplayNum = 0;
+                    int startIndex = m_ItemPageIndex * m_ItemPageSize;
+                    int endIndex = (m_ItemPageIndex + 1) * m_ItemPageSize;
+                    if (endIndex > m_CurrentGoodsGroup.GoodsList.Count)
+                    {
+                        unDisplayNum = endIndex - m_CurrentGoodsGroup.GoodsList.Count;
+                        endIndex = m_CurrentGoodsGroup.GoodsList.Count;
+                    }
+                    //隐藏没有内容的按钮
+                    for (int i = btnItemList.Count - unDisplayNum; i < btnItemList.Count; i++)
+                    {
+                        btnItemList[i].Visible = false;
+                    }
+                    //显示有内容的按钮
+                    for (int i = 0, j = startIndex; j < endIndex; i++, j++)
+                    {
+                        Goods goods = m_CurrentGoodsGroup.GoodsList[j];
+                        CrystalButton btn = btnItemList[i];
+                        btn.Visible = true;
+                        if (m_ShowSilverCode)
+                        {
+                            btn.Text = goods.GoodsName + "\r\n ￥" + goods.SellPrice.ToString("f2");
+                        }
+                        else
+                        {
+                            btn.Text = goods.GoodsName;
+                        }
+                        btn.Tag = goods;
+                        foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
+                        {
+                            if (goods.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
+                            {
+                                float emSize = (float)btnStyle.FontSize;
+                                FontStyle style = FontStyle.Regular;
+                                btn.Font = new Font(btnStyle.FontName, emSize, style);
+                                btn.ForeColor = ColorConvert.RGB(btnStyle.ForeColor);
+                                btn.BackColor = btn.DisplayColor = ColorConvert.RGB(btnStyle.BackColor);
+                                break;
+                            }
+                        }
+                    }
+                    //设置页码按钮的显示
+                    if (startIndex <= 0)
+                    {
+                        btnHead.Enabled = false;
+                        btnHead.BackColor = ConstantValuePool.DisabledColor;
+                    }
+                    else
+                    {
+                        btnHead.Enabled = true;
+                        btnHead.BackColor = btnHead.DisplayColor;
+                    }
+                    if (endIndex >= m_CurrentGoodsGroup.GoodsList.Count)
+                    {
+                        btnBack.Enabled = false;
+                        btnBack.BackColor = ConstantValuePool.DisabledColor;
+                    }
+                    else
+                    {
+                        btnBack.Enabled = true;
+                        btnBack.BackColor = btnBack.DisplayColor;
+                    }
+
+                    this.pnlItem.ResumeLayout(false);
+                    this.pnlItem.PerformLayout();
+                    this.ResumeLayout(false);
+                }
+            }
+        }
+
+        private void DisplayDetailGroupButton()
+        {
+            List<DetailsGroup> detailGroupList = new List<DetailsGroup>();
+            foreach (DetailsGroup item in ConstantValuePool.DetailsGroupList)
+            {
+                if (m_CurrentDetailsGroupIDList.Contains(item.DetailsGroupID))
+                {
+                    detailGroupList.Add(item);
+                }
+            }
+            if (detailGroupList.Count > 0)
+            {
+                //禁止引发Layout事件
+                this.pnlGroup.SuspendLayout();
+                this.SuspendLayout();
+
+                int unDisplayNum = 0;
+                int startIndex = m_GroupPageIndex * m_GroupPageSize;
+                int endIndex = (m_GroupPageIndex + 1) * m_GroupPageSize;
+                if (endIndex > detailGroupList.Count)
+                {
+                    unDisplayNum = endIndex - detailGroupList.Count;
+                    endIndex = detailGroupList.Count;
+                }
+                //隐藏没有内容的按钮
+                for (int i = btnGroupList.Count - unDisplayNum; i < btnGroupList.Count; i++)
+                {
+                    btnGroupList[i].Visible = false;
+                }
+                //显示有内容的按钮
+                for (int i = 0, j = startIndex; j < endIndex; i++, j++)
+                {
+                    DetailsGroup detailsGroup = detailGroupList[j];
+                    CrystalButton btn = btnGroupList[i];
+                    btn.Visible = true;
+                    btn.Text = detailsGroup.DetailsGroupName;
+                    btn.Tag = detailsGroup;
+                    foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
+                    {
+                        if (detailsGroup.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
+                        {
+                            float emSize = (float)btnStyle.FontSize;
+                            FontStyle style = FontStyle.Regular;
+                            btn.Font = new Font(btnStyle.FontName, emSize, style);
+                            btn.ForeColor = ColorConvert.RGB(btnStyle.ForeColor);
+                            btn.BackColor = btn.DisplayColor = ColorConvert.RGB(btnStyle.BackColor);
+                            break;
+                        }
+                    }
+                }
+                //设置页码按钮的显示
+                if (startIndex <= 0)
+                {
+                    btnPageUp.Enabled = false;
+                    btnPageUp.BackColor = ConstantValuePool.DisabledColor;
+                }
+                else
+                {
+                    btnPageUp.Enabled = true;
+                    btnPageUp.BackColor = btnPageUp.DisplayColor;
+                }
+                if (endIndex >= detailGroupList.Count)
+                {
+                    btnPageDown.Enabled = false;
+                    btnPageDown.BackColor = ConstantValuePool.DisabledColor;
+                }
+                else
+                {
+                    btnPageDown.Enabled = true;
+                    btnPageDown.BackColor = btnPageDown.DisplayColor;
+                }
+
+                this.pnlGroup.ResumeLayout(false);
+                this.pnlGroup.PerformLayout();
+                this.ResumeLayout(false);
+            }
+        }
+
+        private void DisplayDetailButton()
+        {
+            if (m_CurrentDetailsGroup != null)
+            {
+                if (m_CurrentDetailsGroup.DetailsList == null || m_CurrentDetailsGroup.DetailsList.Count == 0)
+                {
+                    HideItemButton();
+                }
+                else
+                {
+                    //禁止引发Layout事件
+                    this.pnlItem.SuspendLayout();
+                    this.SuspendLayout();
+
+                    //显示控件
+                    int unDisplayNum = 0;
+                    int startIndex = m_ItemPageIndex * m_ItemPageSize;
+                    int endIndex = (m_ItemPageIndex + 1) * m_ItemPageSize;
+                    if (endIndex > m_CurrentDetailsGroup.DetailsList.Count)
+                    {
+                        unDisplayNum = endIndex - m_CurrentDetailsGroup.DetailsList.Count;
+                        endIndex = m_CurrentDetailsGroup.DetailsList.Count;
+                    }
+                    //隐藏没有内容的按钮
+                    for (int i = btnItemList.Count - unDisplayNum; i < btnItemList.Count; i++)
+                    {
+                        btnItemList[i].Visible = false;
+                    }
+                    //显示有内容的按钮
+                    for (int i = 0, j = startIndex; j < endIndex; i++, j++)
+                    {
+                        Details details = m_CurrentDetailsGroup.DetailsList[j];
+                        CrystalButton btn = btnItemList[i];
+                        btn.Visible = true;
+                        if (m_ShowSilverCode)
+                        {
+                            btn.Text = details.DetailsName + "\r\n ￥" + details.SellPrice.ToString("f2");
+                        }
+                        else
+                        {
+                            btn.Text = details.DetailsName;
+                        }
+                        btn.Tag = details;
+                        foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
+                        {
+                            if (details.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
+                            {
+                                float emSize = (float)btnStyle.FontSize;
+                                FontStyle style = FontStyle.Regular;
+                                btn.Font = new Font(btnStyle.FontName, emSize, style);
+                                btn.ForeColor = ColorConvert.RGB(btnStyle.ForeColor);
+                                btn.BackColor = btn.DisplayColor = ColorConvert.RGB(btnStyle.BackColor);
+                                break;
+                            }
+                        }
+                    }
+                    //设置页码按钮的显示
+                    if (startIndex <= 0)
+                    {
+                        btnHead.Enabled = false;
+                        btnHead.BackColor = ConstantValuePool.DisabledColor;
+                    }
+                    else
+                    {
+                        btnHead.Enabled = true;
+                        btnHead.BackColor = btnHead.DisplayColor;
+                    }
+                    if (endIndex >= m_CurrentDetailsGroup.DetailsList.Count)
+                    {
+                        btnBack.Enabled = false;
+                        btnBack.BackColor = ConstantValuePool.DisabledColor;
+                    }
+                    else
+                    {
+                        btnBack.Enabled = true;
+                        btnBack.BackColor = btnBack.DisplayColor;
+                    }
+                }
+                this.pnlItem.ResumeLayout(false);
+                this.pnlItem.PerformLayout();
+                this.ResumeLayout(false);
+            }
+        }
+
+        private void HideItemButton()
+        {
+            //禁止引发Layout事件
+            this.pnlItem.SuspendLayout();
+            this.SuspendLayout();
+
+            for (int i = 0; i < btnItemList.Count; i++)
+            {
+                btnItemList[i].Visible = false;
+            }
+            btnHead.Enabled = false;
+            btnHead.BackColor = ConstantValuePool.DisabledColor;
+            btnBack.Enabled = false;
+            btnBack.BackColor = ConstantValuePool.DisabledColor;
+
+            this.pnlItem.ResumeLayout(false);
+            this.pnlItem.PerformLayout();
+            this.ResumeLayout(false);
+        }
+
+        #endregion
+
+        #region goods or detail button event
+
+        private void btnGroup_Click(object sender, EventArgs e)
+        {
+            CrystalButton btnGroup = sender as CrystalButton;
+            if (btnGroup.Tag is GoodsGroup)
+            {
+                m_CurrentGoodsGroup = btnGroup.Tag as GoodsGroup;
+                Color pressedColor = ConstantValuePool.PressedColor;
+                foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
+                {
+                    if (m_CurrentGoodsGroup.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
+                    {
+                        pressedColor = ColorConvert.RGB(btnStyle.ClickedBackColor);
+                        break;
+                    }
+                }
+                btnGroup.BackColor = pressedColor;
+                if (prevPressedButton == null)
+                {
+                    prevPressedButton = btnGroup;
+                }
+                else
+                {
+                    prevPressedButton.BackColor = prevPressedButton.DisplayColor;
+                    prevPressedButton = btnGroup;
+                }
+                m_ItemPageIndex = 0;
+                DisplayGoodsButton();
+            }
+            if (btnGroup.Tag is DetailsGroup)
+            {
+                prevPressedButton.BackColor = prevPressedButton.DisplayColor;
+
+                DetailsGroup detailsGroup = btnGroup.Tag as DetailsGroup;
+                Color pressedColor = ConstantValuePool.PressedColor;
+                foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
+                {
+                    if (detailsGroup.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
+                    {
+                        pressedColor = ColorConvert.RGB(btnStyle.ClickedBackColor);
+                        break;
+                    }
+                }
+                btnGroup.BackColor = pressedColor;
+                prevPressedButton = btnGroup;
+                if (detailsGroup.DetailsList != null && detailsGroup.DetailsList.Count > 0)
+                {
+                    m_CurrentDetailsGroup = detailsGroup;
+                    m_ItemPageIndex = 0;
+                    DisplayDetailButton();
+                }
+            }
+        }
+
+        private void btnItem_Click(object sender, EventArgs e)
+        {
+            CrystalButton btnItem = sender as CrystalButton;
+            if (btnItem.Tag is Goods)
+            {
+                Goods goods = btnItem.Tag as Goods;
+                int index, selectedIndex;
+                index = selectedIndex = dgvGoodsOrder.Rows.Add(new DataGridViewRow());
+                dgvGoodsOrder.Rows[index].Cells["ItemID"].Value = goods.GoodsID;
+                dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag = goods;
+                dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = 1;
+                dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = goods.GoodsName;
+                dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = goods.SellPrice;
+                dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = 0;
+                dgvGoodsOrder.Rows[index].Cells["ItemType"].Value = OrderItemType.Goods;
+                dgvGoodsOrder.Rows[index].Cells["CanDiscount"].Value = goods.CanDiscount;
+                dgvGoodsOrder.Rows[index].Cells["ItemUnit"].Value = goods.Unit;
+
+                #region 判断是否套餐
+                bool haveCirculate = false;
+                foreach (GoodsSetMeal item in ConstantValuePool.GoodsSetMealList)
+                {
+                    if (item.ParentGoodsID.Equals(goods.GoodsID))
+                    {
+                        Goods temp = new Goods();
+                        temp.GoodsID = item.ItemID;
+                        temp.GoodsNo = item.ItemNo;
+                        temp.GoodsName = item.ItemName;
+                        temp.GoodsName2nd = item.ItemName2nd;
+                        temp.Unit = item.Unit;
+                        temp.SellPrice = item.SellPrice;
+                        temp.CanDiscount = item.CanDiscount;
+                        temp.AutoShowDetails = item.AutoShowDetails;
+                        temp.PrintSolutionName = item.PrintSolutionName;
+                        temp.DepartID = item.DepartID;
+                        //更新列表
+                        index = dgvGoodsOrder.Rows.Add(new DataGridViewRow());
+                        dgvGoodsOrder.Rows[index].Cells["ItemID"].Value = item.ItemID;
+                        dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag = temp;
+                        dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = item.ItemQty;
+                        dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = "--" + item.ItemName;
+                        dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = item.SellPrice;
+                        decimal discount = 0;
+                        if (item.DiscountRate > 0)
+                        {
+                            discount = item.SellPrice * item.ItemQty * item.DiscountRate;
+                        }
+                        else
+                        {
+                            discount = item.OffFixPay;
+                        }
+                        dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = (-discount).ToString("f2");
+                        dgvGoodsOrder.Rows[index].Cells["ItemType"].Value = OrderItemType.SetMeal;
+                        dgvGoodsOrder.Rows[index].Cells["CanDiscount"].Value = item.CanDiscount;
+                        dgvGoodsOrder.Rows[index].Cells["ItemUnit"].Value = item.Unit;
+
+                        #region 判断套餐项是否含细项
+                        bool haveDetails = false;
+                        foreach (GoodsSetMeal detailsSetMeal in ConstantValuePool.DetailsSetMealList)
+                        {
+                            if (detailsSetMeal.ParentGoodsID.Equals(temp.GoodsID))
+                            {
+                                Details details = new Details();
+                                details.DetailsID = detailsSetMeal.ItemID;
+                                details.DetailsNo = detailsSetMeal.ItemNo;
+                                details.DetailsName = detailsSetMeal.ItemName;
+                                details.DetailsName2nd = detailsSetMeal.ItemName2nd;
+                                details.SellPrice = detailsSetMeal.SellPrice;
+                                details.CanDiscount = detailsSetMeal.CanDiscount;
+                                details.AutoShowDetails = detailsSetMeal.AutoShowDetails;
+                                details.PrintSolutionName = detailsSetMeal.PrintSolutionName;
+                                details.DepartID = detailsSetMeal.DepartID;
+                                //更新列表
+                                index = dgvGoodsOrder.Rows.Add(new DataGridViewRow());
+                                dgvGoodsOrder.Rows[index].Cells["ItemID"].Value = detailsSetMeal.ItemID;
+                                dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag = details;
+                                dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = detailsSetMeal.ItemQty;
+                                dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = "----" + detailsSetMeal.ItemName;
+                                dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = detailsSetMeal.SellPrice;
+                                decimal detailsDiscount = 0;
+                                if (detailsSetMeal.DiscountRate > 0)
+                                {
+                                    detailsDiscount = detailsSetMeal.SellPrice * detailsSetMeal.ItemQty * detailsSetMeal.DiscountRate;
+                                }
+                                else
+                                {
+                                    detailsDiscount = detailsSetMeal.OffFixPay;
+                                }
+                                dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = (-detailsDiscount).ToString("f2");
+                                dgvGoodsOrder.Rows[index].Cells["ItemType"].Value = OrderItemType.SetMeal;
+                                dgvGoodsOrder.Rows[index].Cells["CanDiscount"].Value = detailsSetMeal.CanDiscount;
+                                haveDetails = true;
+                            }
+                            else
+                            {
+                                if (haveDetails) break;
+                            }
+                        }
+                        #endregion
+
+                        haveCirculate = true;
+                    }
+                    else
+                    {
+                        if (haveCirculate) break;
+                    }
+                }
+                #endregion
+
+                #region 判断是否自动显示细项组
+                if (goods.AutoShowDetails)
+                {
+                    m_GroupPageIndex = 0;
+                    m_ItemPageIndex = 0;
+                    if (goods.DetailsGroupIDList != null && goods.DetailsGroupIDList.Count > 0)
+                    {
+                        m_GoodsOrDetails = false;    //状态为细项
+                        m_CurrentDetailsGroupIDList = goods.DetailsGroupIDList;
+                        DisplayDetailGroupButton();
+                        HideItemButton();
+                        m_DetailsPrefix = "--";
+                    }
+                }
+                #endregion
+
+                //datagridview滚动条定位
+                dgvGoodsOrder.Rows[selectedIndex].Selected = true;
+                dgvGoodsOrder.CurrentCell = dgvGoodsOrder.Rows[selectedIndex].Cells["GoodsNum"];
+                //统计
+                BindOrderInfoSum();
+            }
+            if (btnItem.Tag is Details)
+            {
+                Details details = btnItem.Tag as Details;
+                if (dgvGoodsOrder.CurrentRow != null)
+                {
+                    int selectIndex = dgvGoodsOrder.CurrentRow.Index;
+                    //数量
+                    decimal itemNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
+                    DataGridViewRow dgr = dgvGoodsOrder.Rows[0].Clone() as DataGridViewRow;
+                    dgr.Cells[0].Value = details.DetailsID;
+                    dgr.Cells[0].Tag = details;
+                    dgr.Cells[1].Value = itemNum;
+                    dgr.Cells[2].Value = m_DetailsPrefix + details.DetailsName;
+                    dgr.Cells[3].Value = details.SellPrice;
+                    dgr.Cells[4].Value = 0;
+                    dgr.Cells[5].Value = OrderItemType.Details;
+                    dgr.Cells[6].Value = details.CanDiscount;
+                    int rowIndex = selectIndex + 1;
+                    if (rowIndex == dgvGoodsOrder.Rows.Count)
+                    {
+                        dgvGoodsOrder.Rows.Add(dgr);
+                    }
+                    else
+                    {
+                        if (Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                        {
+                            for (int i = selectIndex + 1; i < dgvGoodsOrder.RowCount; i++)
+                            {
+                                int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[i].Cells["ItemType"].Value);
+                                if (itemType == (int)OrderItemType.Goods)
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    rowIndex++;
+                                }
+                            }
+                        }
+                        dgvGoodsOrder.Rows.Insert(rowIndex, dgr);
+                    }
+                    //统计
+                    BindOrderInfoSum();
+                }
+            }
+        }
+
+        #endregion
+
+        #region 分页事件
+
+        private void btnPageUp_Click(object sender, EventArgs e)
+        {
+            m_GroupPageIndex--;
+            if (m_GoodsOrDetails)
+            {
+                DisplayGoodsGroupButton();
+            }
+            else
+            {
+                DisplayDetailGroupButton();
+            }
+        }
+
+        private void btnPageDown_Click(object sender, EventArgs e)
+        {
+            m_GroupPageIndex++;
+            if (m_GoodsOrDetails)
+            {
+                DisplayGoodsGroupButton();
+            }
+            else
+            {
+                DisplayDetailGroupButton();
+            }
+        }
+
+        private void btnHead_Click(object sender, EventArgs e)
+        {
+            m_ItemPageIndex--;
+            if (m_GoodsOrDetails)
+            {
+                DisplayGoodsButton();
+            }
+            else
+            {
+                DisplayDetailButton();
+            }
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            m_ItemPageIndex++;
+            if (m_GoodsOrDetails)
+            {
+                DisplayGoodsButton();
+            }
+            else
+            {
+                DisplayDetailButton();
+            }
+        }
+
+        #endregion
 
         private void BindGoodsOrderInfo()
         {
@@ -1148,8 +979,8 @@ namespace Top4ever.Pos
                 int selectIndex = dgvGoodsOrder.CurrentRow.Index;
                 if (dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value == null)
                 {
-                    m_DetailsGroupPageIndex = 0;
-                    m_DetailsPageIndex = 0;
+                    m_GroupPageIndex = 0;
+                    m_ItemPageIndex = 0;
                     int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value);
                     if (itemType == (int)OrderItemType.Goods)
                     {
@@ -1159,7 +990,7 @@ namespace Top4ever.Pos
                             m_GoodsOrDetails = false;    //状态为细项
                             m_CurrentDetailsGroupIDList = goods.DetailsGroupIDList;
                             DisplayDetailGroupButton();
-                            this.pnlItem.Controls.Clear();
+                            HideItemButton();
                             m_DetailsPrefix = "--";
                         }
                     }
@@ -1171,7 +1002,7 @@ namespace Top4ever.Pos
                             m_GoodsOrDetails = false;    //状态为细项
                             m_CurrentDetailsGroupIDList = details.DetailsGroupIDList;
                             DisplayDetailGroupButton();
-                            this.pnlItem.Controls.Clear();
+                            HideItemButton();
                             //detail prefix --
                             string goodsName = dgvGoodsOrder.Rows[selectIndex].Cells["GoodsName"].Value.ToString();
                             if (goodsName.IndexOf('-') >= 0)
@@ -2707,26 +2538,10 @@ namespace Top4ever.Pos
 
         private void LoadDefaultGoodsGroupButton()
         {
-            m_GoodsGroupPageIndex = 0;
-            m_GoodsPageIndex = 0;
+            m_GroupPageIndex = 0;
+            m_ItemPageIndex = 0;
             DisplayGoodsGroupButton();
-            this.pnlItem.Controls.Clear();
-            //m_CurrentGoodsGroup = ConstantValuePool.GoodsGroupList[0];
-            //// begin 设置颜色
-            //CrystalButton btnGoodsGroup = ConstantValuePool.GoodsGroupButton[0];
-            //Color pressedColor = ConstantValuePool.PressedColor;
-            //foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
-            //{
-            //    if (m_CurrentGoodsGroup.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
-            //    {
-            //        pressedColor = ColorConvert.RGB(btnStyle.ClickedBackColor);
-            //        break;
-            //    }
-            //}
-            //btnGoodsGroup.BackColor = pressedColor;
-            //prevPressedButton = btnGoodsGroup;
-            //// end
-            //DisplayGoodsButton();
+            HideItemButton();
         }
 
         private string formateTime(int time)

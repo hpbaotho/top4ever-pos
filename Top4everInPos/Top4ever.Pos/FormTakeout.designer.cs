@@ -28,10 +28,10 @@ namespace Top4ever.Pos
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             this.pnlTools = new System.Windows.Forms.Panel();
             this.btnWholeDiscount = new Top4ever.CustomControl.CrystalButton();
             this.btnDiscount = new Top4ever.CustomControl.CrystalButton();
@@ -251,7 +251,7 @@ namespace Top4ever.Pos
             this.pnlCustomerInfo.Controls.Add(this.btnAddress);
             this.pnlCustomerInfo.Controls.Add(this.txtTelephone);
             this.pnlCustomerInfo.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlCustomerInfo.Location = new System.Drawing.Point(0, 733);
+            this.pnlCustomerInfo.Location = new System.Drawing.Point(0, 715);
             this.pnlCustomerInfo.Name = "pnlCustomerInfo";
             this.pnlCustomerInfo.Size = new System.Drawing.Size(1024, 35);
             this.pnlCustomerInfo.TabIndex = 0;
@@ -350,7 +350,7 @@ namespace Top4ever.Pos
             this.pnlDelivery.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlDelivery.Location = new System.Drawing.Point(0, 58);
             this.pnlDelivery.Name = "pnlDelivery";
-            this.pnlDelivery.Size = new System.Drawing.Size(129, 675);
+            this.pnlDelivery.Size = new System.Drawing.Size(129, 657);
             this.pnlDelivery.TabIndex = 2;
             // 
             // pnlPage
@@ -358,7 +358,7 @@ namespace Top4ever.Pos
             this.pnlPage.Controls.Add(this.btnPgDown);
             this.pnlPage.Controls.Add(this.btnPgUp);
             this.pnlPage.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlPage.Location = new System.Drawing.Point(0, 622);
+            this.pnlPage.Location = new System.Drawing.Point(0, 604);
             this.pnlPage.Name = "pnlPage";
             this.pnlPage.Size = new System.Drawing.Size(129, 53);
             this.pnlPage.TabIndex = 0;
@@ -397,7 +397,7 @@ namespace Top4ever.Pos
             this.pnlGoodsOrder.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlGoodsOrder.Location = new System.Drawing.Point(129, 58);
             this.pnlGoodsOrder.Name = "pnlGoodsOrder";
-            this.pnlGoodsOrder.Size = new System.Drawing.Size(398, 675);
+            this.pnlGoodsOrder.Size = new System.Drawing.Size(398, 657);
             this.pnlGoodsOrder.TabIndex = 2;
             // 
             // dgvGoodsOrder
@@ -407,14 +407,14 @@ namespace Top4ever.Pos
             this.dgvGoodsOrder.AllowUserToResizeColumns = false;
             this.dgvGoodsOrder.AllowUserToResizeRows = false;
             this.dgvGoodsOrder.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle17.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvGoodsOrder.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvGoodsOrder.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
             this.dgvGoodsOrder.ColumnHeadersHeight = 35;
             this.dgvGoodsOrder.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvGoodsOrder.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -435,7 +435,7 @@ namespace Top4ever.Pos
             this.dgvGoodsOrder.RowHeadersVisible = false;
             this.dgvGoodsOrder.RowTemplate.Height = 23;
             this.dgvGoodsOrder.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvGoodsOrder.Size = new System.Drawing.Size(398, 463);
+            this.dgvGoodsOrder.Size = new System.Drawing.Size(398, 445);
             this.dgvGoodsOrder.TabIndex = 3;
             this.dgvGoodsOrder.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgvGoodsOrder_MouseDown);
             // 
@@ -449,8 +449,8 @@ namespace Top4ever.Pos
             // 
             // GoodsNum
             // 
-            dataGridViewCellStyle18.Format = "N1";
-            this.GoodsNum.DefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle14.Format = "N1";
+            this.GoodsNum.DefaultCellStyle = dataGridViewCellStyle14;
             this.GoodsNum.HeaderText = "ÊýÁ¿";
             this.GoodsNum.Name = "GoodsNum";
             this.GoodsNum.ReadOnly = true;
@@ -467,10 +467,10 @@ namespace Top4ever.Pos
             // 
             // GoodsPrice
             // 
-            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle19.Format = "N2";
-            dataGridViewCellStyle19.Padding = new System.Windows.Forms.Padding(0, 0, 6, 0);
-            this.GoodsPrice.DefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle15.Format = "N2";
+            dataGridViewCellStyle15.Padding = new System.Windows.Forms.Padding(0, 0, 6, 0);
+            this.GoodsPrice.DefaultCellStyle = dataGridViewCellStyle15;
             this.GoodsPrice.HeaderText = "¼Û¸ñ";
             this.GoodsPrice.Name = "GoodsPrice";
             this.GoodsPrice.ReadOnly = true;
@@ -479,11 +479,11 @@ namespace Top4ever.Pos
             // 
             // GoodsDiscount
             // 
-            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle20.Format = "N2";
-            dataGridViewCellStyle20.NullValue = null;
-            dataGridViewCellStyle20.Padding = new System.Windows.Forms.Padding(0, 0, 6, 0);
-            this.GoodsDiscount.DefaultCellStyle = dataGridViewCellStyle20;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle16.Format = "N2";
+            dataGridViewCellStyle16.NullValue = null;
+            dataGridViewCellStyle16.Padding = new System.Windows.Forms.Padding(0, 0, 6, 0);
+            this.GoodsDiscount.DefaultCellStyle = dataGridViewCellStyle16;
             this.GoodsDiscount.HeaderText = "ÕÛ¿Û";
             this.GoodsDiscount.Name = "GoodsDiscount";
             this.GoodsDiscount.ReadOnly = true;
@@ -594,7 +594,7 @@ namespace Top4ever.Pos
             this.pnlToolBar.Controls.Add(this.btnAdd);
             this.pnlToolBar.Controls.Add(this.btnTasteRemark);
             this.pnlToolBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlToolBar.Location = new System.Drawing.Point(0, 567);
+            this.pnlToolBar.Location = new System.Drawing.Point(0, 549);
             this.pnlToolBar.Name = "pnlToolBar";
             this.pnlToolBar.Size = new System.Drawing.Size(398, 108);
             this.pnlToolBar.TabIndex = 0;
@@ -701,17 +701,18 @@ namespace Top4ever.Pos
             this.pnlRight.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlRight.Location = new System.Drawing.Point(527, 58);
             this.pnlRight.Name = "pnlRight";
-            this.pnlRight.Size = new System.Drawing.Size(497, 675);
+            this.pnlRight.Size = new System.Drawing.Size(497, 657);
             this.pnlRight.TabIndex = 2;
             // 
             // pnlItem
             // 
+            this.pnlItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(7)))), ((int)(((byte)(45)))), ((int)(((byte)(107)))));
             this.pnlItem.Controls.Add(this.btnBack);
             this.pnlItem.Controls.Add(this.btnHead);
             this.pnlItem.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlItem.Location = new System.Drawing.Point(0, 232);
             this.pnlItem.Name = "pnlItem";
-            this.pnlItem.Size = new System.Drawing.Size(497, 390);
+            this.pnlItem.Size = new System.Drawing.Size(497, 372);
             this.pnlItem.TabIndex = 4;
             // 
             // btnBack
@@ -742,6 +743,7 @@ namespace Top4ever.Pos
             // 
             // pnlGroup
             // 
+            this.pnlGroup.BackColor = System.Drawing.Color.Gray;
             this.pnlGroup.Controls.Add(this.btnPageDown);
             this.pnlGroup.Controls.Add(this.btnPageUp);
             this.pnlGroup.Dock = System.Windows.Forms.DockStyle.Top;
@@ -782,7 +784,7 @@ namespace Top4ever.Pos
             this.pnlCodeSearch.Controls.Add(this.txtSearch);
             this.pnlCodeSearch.Controls.Add(this.lbGoodsCode);
             this.pnlCodeSearch.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlCodeSearch.Location = new System.Drawing.Point(0, 622);
+            this.pnlCodeSearch.Location = new System.Drawing.Point(0, 604);
             this.pnlCodeSearch.Name = "pnlCodeSearch";
             this.pnlCodeSearch.Size = new System.Drawing.Size(497, 53);
             this.pnlCodeSearch.TabIndex = 0;
@@ -821,7 +823,7 @@ namespace Top4ever.Pos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1024, 768);
+            this.ClientSize = new System.Drawing.Size(1024, 750);
             this.Controls.Add(this.pnlRight);
             this.Controls.Add(this.pnlGoodsOrder);
             this.Controls.Add(this.pnlDelivery);
@@ -835,6 +837,7 @@ namespace Top4ever.Pos
             this.Text = "FormTakeout";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.FormTakeout_Load);
+            this.VisibleChanged += new System.EventHandler(this.FormTakeout_VisibleChanged);
             this.pnlTools.ResumeLayout(false);
             this.pnlCustomerInfo.ResumeLayout(false);
             this.pnlCustomerInfo.PerformLayout();
