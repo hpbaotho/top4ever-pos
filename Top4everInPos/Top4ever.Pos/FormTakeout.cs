@@ -40,6 +40,7 @@ namespace Top4ever.Pos
         //品项列表
         private int m_ItemPageSize = 0;
         private int m_ItemPageIndex = 0;
+        private IList<DeliveryOrder> m_DeliveryOrderList = new List<DeliveryOrder>();
         private GoodsGroup m_CurrentGoodsGroup;
         private DetailsGroup m_CurrentDetailsGroup;
         private IList<Guid> m_CurrentDetailsGroupIDList;
@@ -150,7 +151,8 @@ namespace Top4ever.Pos
                 if (deliveryOrderList != null)
                 {
                     m_PageIndex = 0;
-                    DisplayDeliveryOrderButton(deliveryOrderList);
+                    m_DeliveryOrderList = deliveryOrderList;
+                    DisplayDeliveryOrderButton();
                 }
             }
         }
@@ -934,13 +936,16 @@ namespace Top4ever.Pos
 
         private void btnPgUp_Click(object sender, EventArgs e)
         {
-
+            m_PageIndex--;
+            DisplayDeliveryOrderButton();
         }
 
         private void btnPgDown_Click(object sender, EventArgs e)
         {
-
+            m_PageIndex++;
+            DisplayDeliveryOrderButton();
         }
+
         #endregion
 
         private void BindGoodsOrderInfo()
@@ -1172,13 +1177,13 @@ namespace Top4ever.Pos
                         txtTelephone.ReadOnly = false;
                         txtName.ReadOnly = false;
                         //加载外卖单列表
-                        m_PageIndex = 0;
-                        CleanDeliveryOrderButton();
                         OrderService orderService = new OrderService();
                         IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
                         if (deliveryOrderList != null)
                         {
-                            DisplayDeliveryOrderButton(deliveryOrderList);
+                            m_PageIndex = 0;
+                            m_DeliveryOrderList = deliveryOrderList;
+                            DisplayDeliveryOrderButton();
                         }
                     }
                     else if (result == 2)
@@ -1239,13 +1244,13 @@ namespace Top4ever.Pos
                         txtTelephone.ReadOnly = false;
                         txtName.ReadOnly = false;
                         //加载外卖单列表
-                        m_PageIndex = 0;
-                        CleanDeliveryOrderButton();
                         OrderService orderService = new OrderService();
                         IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
                         if (deliveryOrderList != null)
                         {
-                            DisplayDeliveryOrderButton(deliveryOrderList);
+                            m_PageIndex = 0;
+                            m_DeliveryOrderList = deliveryOrderList;
+                            DisplayDeliveryOrderButton();
                         }
                     }
                     else if (result == 2)
@@ -1273,14 +1278,18 @@ namespace Top4ever.Pos
             form.ShowDialog();
             if (form.HasDeliveried)
             {
+                btnOutsideOrder.Enabled = false;
+                btnOutsideOrder.BackColor = ConstantValuePool.DisabledColor;
+                btnDeliveryGoods.Enabled = false;
+                btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
                 //加载外卖单列表
-                m_PageIndex = 0;
-                CleanDeliveryOrderButton();
                 OrderService orderService = new OrderService();
                 IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
                 if (deliveryOrderList != null)
                 {
-                    DisplayDeliveryOrderButton(deliveryOrderList);
+                    m_PageIndex = 0;
+                    m_DeliveryOrderList = deliveryOrderList;
+                    DisplayDeliveryOrderButton();
                 }
             }
         }
@@ -1728,83 +1737,84 @@ namespace Top4ever.Pos
             return result;
         }
 
-        private void CleanDeliveryOrderButton()
+        private void DisplayDeliveryOrderButton()
         {
-            m_PageIndex = 0;
-            foreach (CrystalButton btn in btnDeliveryList)
-            {
-                btn.Tag = null;
-                btn.Text = string.Empty;
-                btn.BackColor = btn.DisplayColor;
-                btn.Enabled = true;
-            }
-        }
+            //禁止引发Layout事件
+            this.pnlDelivery.SuspendLayout();
+            this.SuspendLayout();
 
-        private void DisplayDeliveryOrderButton(IList<DeliveryOrder> deliveryOrderList)
-        {
-            if (m_PageIndex <= 0)
+            int unDisplayNum = 0;
+            int startIndex = m_PageIndex * m_PageSize;
+            int endIndex = (m_PageIndex + 1) * m_PageSize;
+            if (endIndex > m_DeliveryOrderList.Count)
             {
-                this.btnPgUp.Enabled = false;
-                this.btnPgUp.BackColor = ConstantValuePool.DisabledColor;
+                unDisplayNum = endIndex - m_DeliveryOrderList.Count;
+                endIndex = m_DeliveryOrderList.Count;
             }
-            else
+            //隐藏没有内容的按钮
+            for (int i = btnDeliveryList.Count - unDisplayNum; i < btnDeliveryList.Count; i++)
             {
-                this.btnPgUp.Enabled = true;
-                this.btnPgUp.BackColor = this.btnPgUp.DisplayColor;
+                btnDeliveryList[i].Tag = null;
+                btnDeliveryList[i].Text = string.Empty;
+                btnDeliveryList[i].BackColor = btnDeliveryList[i].DisplayColor;
+                btnDeliveryList[i].Enabled = true;
             }
-            if (deliveryOrderList.Count > (m_PageSize * (m_PageIndex + 1)))
+            //显示有内容的按钮
+            for (int i = 0, j = startIndex; j < endIndex; i++, j++)
             {
-                this.btnPgDown.Enabled = true;
-                this.btnPgDown.BackColor = this.btnPgDown.DisplayColor;
-            }
-            else
-            {
-                this.btnPgDown.Enabled = false;
-                this.btnPgDown.BackColor = ConstantValuePool.DisabledColor;
-            }
-            int pageNum = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(deliveryOrderList.Count) / m_PageSize));
-            int startIndex = 0;
-            int endIndex = 0;
-            if ((m_PageIndex + 1) < pageNum)
-            {
-                startIndex = m_PageIndex * m_PageSize;
-                endIndex = (m_PageIndex + 1) * m_PageSize;
-            }
-            else
-            {
-                startIndex = m_PageIndex * m_PageSize;
-                endIndex = deliveryOrderList.Count;
-            }
-            for (int i = startIndex, j = 0; i < endIndex; i++, j++)
-            {
-                btnDeliveryList[j].Tag = deliveryOrderList[i];
-                if (deliveryOrderList[i].PayTime == null)
+                btnDeliveryList[i].Tag = m_DeliveryOrderList[j];
+                if (m_DeliveryOrderList[j].PayTime == null)
                 {
-                    if (deliveryOrderList[i].EatType == (int)EatWayType.Takeout)
+                    if (m_DeliveryOrderList[j].EatType == (int)EatWayType.Takeout)
                     {
-                        btnDeliveryList[j].BackColor = Color.Red;
-                        btnDeliveryList[j].Text = deliveryOrderList[i].TranSequence.ToString() + "-外带";
+                        btnDeliveryList[i].BackColor = Color.Red;
+                        btnDeliveryList[i].Text = m_DeliveryOrderList[j].TranSequence.ToString() + "-外带";
                     }
-                    if (deliveryOrderList[i].EatType == (int)EatWayType.OutsideOrder)
+                    if (m_DeliveryOrderList[j].EatType == (int)EatWayType.OutsideOrder)
                     {
-                        if (deliveryOrderList[i].DeliveryTime == null)
+                        if (m_DeliveryOrderList[j].DeliveryTime == null)
                         {
-                            btnDeliveryList[j].BackColor = Color.Orange;
-                            btnDeliveryList[j].Text = deliveryOrderList[i].TranSequence.ToString() + "-未出货";
+                            btnDeliveryList[i].BackColor = Color.Orange;
+                            btnDeliveryList[i].Text = m_DeliveryOrderList[j].TranSequence.ToString() + "-未出货";
                         }
                         else
                         {
-                            btnDeliveryList[j].BackColor = Color.Olive;
-                            btnDeliveryList[j].Text = deliveryOrderList[i].TranSequence.ToString() + "-已出货";
+                            btnDeliveryList[i].BackColor = Color.Olive;
+                            btnDeliveryList[i].Text = m_DeliveryOrderList[j].TranSequence.ToString() + "-已出货";
                         }
                     }
                 }
                 else
                 {
-                    btnDeliveryList[j].Text = deliveryOrderList[i].TranSequence + "\r\n " + Convert.ToDateTime(deliveryOrderList[i].PayTime).ToString("MM-dd HH:mm");
-                    btnDeliveryList[j].BackColor = Color.Green;
+                    btnDeliveryList[i].Text = m_DeliveryOrderList[j].TranSequence + "\r\n " + Convert.ToDateTime(m_DeliveryOrderList[j].PayTime).ToString("MM-dd HH:mm");
+                    btnDeliveryList[i].BackColor = Color.Green;
                 }
             }
+            //设置页码按钮的显示
+            if (startIndex <= 0)
+            {
+                btnPgUp.Enabled = false;
+                btnPgUp.BackColor = ConstantValuePool.DisabledColor;
+            }
+            else
+            {
+                btnPgUp.Enabled = true;
+                btnPgUp.BackColor = btnPgUp.DisplayColor;
+            }
+            if (endIndex >= m_DeliveryOrderList.Count)
+            {
+                btnPgDown.Enabled = false;
+                btnPgDown.BackColor = ConstantValuePool.DisabledColor;
+            }
+            else
+            {
+                btnPgDown.Enabled = true;
+                btnPgDown.BackColor = btnPgDown.DisplayColor;
+            }
+
+            this.pnlDelivery.ResumeLayout(false);
+            this.pnlDelivery.PerformLayout();
+            this.ResumeLayout(false);
         }
 
         private void btnTelephone_Click(object sender, EventArgs e)
@@ -2380,8 +2390,20 @@ namespace Top4ever.Pos
                     deletedOrder.CancelEmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
                     deletedOrder.CancelReasonName = form.CurrentReason.ReasonName;
 
-                    DeletedOrderService orderService = new DeletedOrderService();
-                    if (!orderService.DeleteWholeOrder(deletedOrder))
+                    DeletedOrderService deletedOrderService = new DeletedOrderService();
+                    if (deletedOrderService.DeleteWholeOrder(deletedOrder))
+                    {
+                        //加载外卖单列表
+                        OrderService orderService = new OrderService();
+                        IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
+                        if (deliveryOrderList != null)
+                        {
+                            m_PageIndex = 0;
+                            m_DeliveryOrderList = deliveryOrderList;
+                            DisplayDeliveryOrderButton();
+                        }
+                    }
+                    else
                     {
                         MessageBox.Show("删除账单失败！");
                         return;

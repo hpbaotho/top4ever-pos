@@ -2088,17 +2088,33 @@ namespace Top4ever.Pos
 
         private void btnSplitBill_Click(object sender, EventArgs e)
         {
-            FormSplitBill form = new FormSplitBill(m_SalesOrder);
-            form.ShowDialog();
-            if (form.SplitOrderSuccess)
+            if (m_SalesOrder == null)
             {
-                //重新加载
-                SalesOrderService salesOrderService = new SalesOrderService();
-                m_SalesOrder = salesOrderService.GetSalesOrder(m_SalesOrder.order.OrderID);
-                BindGoodsOrderInfo();   //绑定订单信息
-                BindOrderInfoSum();
+                MessageBox.Show("账单未落单，不允许分单！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
-            this.exTabControl1.SelectedIndex = 0;
+            else
+            {
+                foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
+                {
+                    if (dr.Cells["OrderDetailsID"].Value == null)
+                    {
+                        MessageBox.Show("账单中包含未落单品项，不允许分单！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+                FormSplitBill form = new FormSplitBill(m_SalesOrder);
+                form.ShowDialog();
+                if (form.SplitOrderSuccess)
+                {
+                    //重新加载
+                    SalesOrderService salesOrderService = new SalesOrderService();
+                    m_SalesOrder = salesOrderService.GetSalesOrder(m_SalesOrder.order.OrderID);
+                    BindGoodsOrderInfo();   //绑定订单信息
+                    BindOrderInfoSum();
+                }
+                this.exTabControl1.SelectedIndex = 0;
+            }
         }
 
         private void btnReform_Click(object sender, EventArgs e)

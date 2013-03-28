@@ -130,11 +130,7 @@ namespace Top4ever.Service
             {
                 Order order = salesOrder.order;
                 BizDesk desk = _deskDao.GetBizDeskByName(order.DeskName);
-                if (order.DeviceNo != desk.DeviceNo)
-                {
-                    result = 2;
-                }
-                else
+                if (desk == null || desk.DeviceNo == order.DeviceNo)
                 {
                     if (_orderDao.UpdateOrder(order))
                     {
@@ -156,6 +152,10 @@ namespace Top4ever.Service
                         }
                         result = 1;
                     }
+                }
+                else
+                {
+                    result = 2;
                 }
                 _daoManager.CommitTransaction();
             }
