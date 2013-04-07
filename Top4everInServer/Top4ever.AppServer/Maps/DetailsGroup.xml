@@ -12,6 +12,7 @@
         <result property="DetailsGroupName" column="DetailsGroupName"></result>
         <result property="DetailsGroupName2nd" column="DetailsGroupName_2nd"></result>
         <result property="LimitedNumbers" column="LimitedNumbers"></result>
+        <result property="IsCommon" column="IsCommon"></result>
         <result property="ButtonStyleID" column="ButtonStyleID"></result>
       </resultMap>
 
@@ -22,7 +23,7 @@
     -->
     <statements>
       <select id="GetDetailsGroupList" resultMap="DetailsGroupResult">
-        SELECT DetailsGroupID, DetailsGroupNo, DetailsGroupName, DetailsGroupName_2nd, LimitedNumbers, ButtonStyleID
+        SELECT DetailsGroupID, DetailsGroupNo, DetailsGroupName, DetailsGroupName_2nd, LimitedNumbers, IsCommon, ButtonStyleID
         FROM DetailsGroup
         WHERE IsVoided = 0
         ORDER BY OrderBy

@@ -25,6 +25,13 @@ namespace Top4ever.Pos
             BindPrinterInfo();
             //多语言
             InitMultiLanguageCombox();
+            //营业方式
+            ListItem item = new ListItem("堂食", Convert.ToString((int)ShopSaleType.DineIn));
+            cmbSaleType.Items.Add(item);
+            item = new ListItem("外卖", Convert.ToString((int)ShopSaleType.Takeout));
+            cmbSaleType.Items.Add(item);
+            item = new ListItem("堂食加外卖", Convert.ToString((int)ShopSaleType.DineInAndTakeout));
+            cmbSaleType.Items.Add(item);
         }
 
         private void FormConfig_Load(object sender, EventArgs e)
@@ -41,6 +48,7 @@ namespace Top4ever.Pos
                 rbTimeSystem12H.Checked = true;
             }
             this.txtFont.Text = ConstantValuePool.BizSettingConfig.FontSize.ToString();
+            this.cmbSaleType.SelectedIndex = GetIndexByValue(cmbSaleType, Convert.ToString((int)ConstantValuePool.BizSettingConfig.SaleType));
             if (ConstantValuePool.BizSettingConfig.UsePettyCash)
             {
                 ckbPettyCash.Checked = true;
@@ -65,13 +73,29 @@ namespace Top4ever.Pos
             {
                 ckbTakeAwayCash.Checked = false;
             }
-            if (ConstantValuePool.BizSettingConfig.CheckSoldOut)
+            if (ConstantValuePool.BizSettingConfig.ShowSoldOutQty)
             {
-                ckbSoldOut.Checked = true;
+                ckbSoldOutQty.Checked = true;
             }
             else
             {
-                ckbSoldOut.Checked = false;
+                ckbSoldOutQty.Checked = false;
+            }
+            if (ConstantValuePool.BizSettingConfig.DirectShipping)
+            {
+                ckbDirectShipping.Checked = true;
+            }
+            else
+            {
+                ckbDirectShipping.Checked = false;
+            }
+            if (ConstantValuePool.BizSettingConfig.CarteMode)
+            {
+                ckbCarteMode.Checked = true;
+            }
+            else
+            {
+                ckbCarteMode.Checked = false;
             }
             if (ConstantValuePool.BizSettingConfig.printConfig.Enabled)
             {
@@ -168,33 +192,19 @@ namespace Top4ever.Pos
             }
             foreach(BizControl control in ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls)
             {
-                if(control.Name == "GoodsGroup")
+                if(control.Name == "Group")
                 {
                     this.txtGoodsGroupRows.Text = control.RowsCount.ToString();
                     this.txtGoodsGroupRows.Enabled = false;
                     this.txtGoodsGroupColumns.Text = control.ColumnsCount.ToString();
                     this.txtGoodsGroupColumns.Enabled = false;
                 }
-                else if (control.Name == "Goods")
+                else if (control.Name == "Item")
                 {
                     this.txtGoodsRows.Text = control.RowsCount.ToString();
                     this.txtGoodsRows.Enabled = false;
                     this.txtGoodsColumns.Text = control.ColumnsCount.ToString();
                     this.txtGoodsColumns.Enabled = false;
-                }
-                else if (control.Name == "DetailsGroup")
-                {
-                    this.txtDetailsGroupRows.Text = control.RowsCount.ToString();
-                    this.txtDetailsGroupRows.Enabled = false;
-                    this.txtDetailsGroupColumns.Text = control.ColumnsCount.ToString();
-                    this.txtDetailsGroupColumns.Enabled = false;
-                }
-                else if (control.Name == "Details")
-                {
-                    this.txtDetailsRows.Text = control.RowsCount.ToString();
-                    this.txtDetailsRows.Enabled = false;
-                    this.txtDetailsColumns.Text = control.ColumnsCount.ToString();
-                    this.txtDetailsColumns.Enabled = false;
                 }
                 else if (control.Name == "Payoff")
                 {
@@ -342,24 +352,14 @@ namespace Top4ever.Pos
             //布局
             List<BizControl> bizControls = new List<BizControl>();
             BizControl control = new BizControl();
-            control.Name = "GoodsGroup";
+            control.Name = "Group";
             control.RowsCount = int.Parse(this.txtGoodsGroupRows.Text);
             control.ColumnsCount = int.Parse(this.txtGoodsGroupColumns.Text);
             bizControls.Add(control);
             control = new BizControl();
-            control.Name = "Goods";
+            control.Name = "Item";
             control.RowsCount = int.Parse(this.txtGoodsRows.Text);
             control.ColumnsCount = int.Parse(this.txtGoodsColumns.Text);
-            bizControls.Add(control);
-            control = new BizControl();
-            control.Name = "DetailsGroup";
-            control.RowsCount = int.Parse(this.txtDetailsGroupRows.Text);
-            control.ColumnsCount = int.Parse(this.txtDetailsGroupColumns.Text);
-            bizControls.Add(control);
-            control = new BizControl();
-            control.Name = "Details";
-            control.RowsCount = int.Parse(this.txtDetailsRows.Text);
-            control.ColumnsCount = int.Parse(this.txtDetailsColumns.Text);
             bizControls.Add(control);
             control = new BizControl();
             control.Name = "Payoff";
@@ -459,10 +459,14 @@ namespace Top4ever.Pos
                 appConfig.TimeSystem24H = false;
             }
             appConfig.FontSize = float.Parse(txtFont.Text);
+            ListItem itemType = cmbSaleType.SelectedItem as ListItem;
+            appConfig.SaleType = (ShopSaleType)int.Parse(itemType.Value);
             appConfig.UsePettyCash = ckbPettyCash.Checked;
             appConfig.ShowBrevityCode = ckbBriefCode.Checked;
             appConfig.TakeAwayCash = ckbTakeAwayCash.Checked;
-            appConfig.CheckSoldOut = ckbSoldOut.Checked;
+            appConfig.ShowSoldOutQty = ckbSoldOutQty.Checked;
+            appConfig.DirectShipping = ckbDirectShipping.Checked;
+            appConfig.CarteMode = ckbCarteMode.Checked;
             BizUIConfig bizUIConfig = new BizUIConfig();
             bizUIConfig.BizControls = bizControls;
             appConfig.bizUIConfig = bizUIConfig;
@@ -507,34 +511,6 @@ namespace Top4ever.Pos
             {
                 this.txtGoodsRows.Enabled = false;
                 this.txtGoodsColumns.Enabled = false;
-            }
-        }
-
-        private void ckbDetailsGroup_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ckbDetailsGroup.Checked)
-            {
-                this.txtDetailsGroupRows.Enabled = true;
-                this.txtDetailsGroupColumns.Enabled = true;
-            }
-            else
-            {
-                this.txtDetailsGroupRows.Enabled = false;
-                this.txtDetailsGroupColumns.Enabled = false;
-            }
-        }
-
-        private void ckbDetails_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ckbDetails.Checked)
-            {
-                this.txtDetailsRows.Enabled = true;
-                this.txtDetailsColumns.Enabled = true;
-            }
-            else
-            {
-                this.txtDetailsRows.Enabled = false;
-                this.txtDetailsColumns.Enabled = false;
             }
         }
 

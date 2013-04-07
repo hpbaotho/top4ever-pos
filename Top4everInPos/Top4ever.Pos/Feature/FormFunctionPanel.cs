@@ -14,6 +14,12 @@ namespace Top4ever.Pos.Feature
     public partial class FormFunctionPanel : Form
     {
         private List<CrystalButton> btnList = new List<CrystalButton>();
+        private bool needExist = false;
+        
+        public bool IsNeedExist
+        {
+            get { return needExist; }
+        }
 
         public FormFunctionPanel()
         {
@@ -94,6 +100,13 @@ namespace Top4ever.Pos.Feature
             btnPunchIn.ForeColor = Color.White;
             btnPunchIn.Click += new EventHandler(this.btnPunchIn_Click);
             btnList.Add(btnPunchIn);
+            CrystalButton btnSetting = new CrystalButton();
+            btnSetting.Name = "btnSetting";
+            btnSetting.Text = "系统设置";
+            btnSetting.BackColor = Color.Teal;
+            btnSetting.ForeColor = Color.White;
+            btnSetting.Click += new EventHandler(this.btnSetting_Click);
+            btnList.Add(btnSetting);
             CrystalButton btnCancel = new CrystalButton();
             btnCancel.Name = "btnCancel";
             btnCancel.Text = "取消";
@@ -252,8 +265,8 @@ namespace Top4ever.Pos.Feature
             formReport.ShowDialog();
             if (formReport.HandleSuccess)
             {
+                needExist = true;
                 this.Close();
-                ConstantValuePool.DeskForm.Close();
             }
         }
 
@@ -297,6 +310,12 @@ namespace Top4ever.Pos.Feature
 
         }
 
+        private void btnSetting_Click(object sender, EventArgs e)
+        {
+            FormConfig form = new FormConfig();
+            form.ShowDialog();
+        }
+
         private void btnDailyStatement_Click(object sender, EventArgs e)
         {
             int modelType = 2;
@@ -304,8 +323,8 @@ namespace Top4ever.Pos.Feature
             formReport.ShowDialog();
             if (formReport.HandleSuccess)
             {
+                needExist = true;
                 this.Close();
-                ConstantValuePool.DeskForm.Close();
             }
         }
 

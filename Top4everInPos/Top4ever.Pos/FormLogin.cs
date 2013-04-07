@@ -17,6 +17,7 @@ using Top4ever.Domain.Transfer;
 using Top4ever.Entity;
 using Top4ever.Entity.Config;
 using Top4ever.Print;
+using Top4ever.Entity.Enum;
 
 namespace Top4ever.Pos
 {
@@ -112,7 +113,7 @@ namespace Top4ever.Pos
                 //保存静态池内
                 ConstantValuePool.CurrentEmployee = employee;
                 //获取基础数据
-                SystemBasicData basicDataService = new SystemBasicData();
+                SystemBasicDataService basicDataService = new SystemBasicDataService();
                 SysBasicData sysBasicData = basicDataService.GetSysBasicData();
                 if (sysBasicData != null)
                 {
@@ -126,13 +127,27 @@ namespace Top4ever.Pos
                     ConstantValuePool.DetailsGroupList = sysBasicData.DetailsGroupList;
                     ConstantValuePool.GoodsSetMealList = sysBasicData.GoodsSetMealList;
                     ConstantValuePool.DetailsSetMealList = sysBasicData.DetailsSetMealList;
+                    ConstantValuePool.GoodsCronTriggerList = sysBasicData.GoodsCronTriggerList;
                     ConstantValuePool.ButtonStyleList = sysBasicData.ButtonStyleList;
-                    
-                    FormDesk deskForm = new FormDesk(haveDailyClose);
-                    ConstantValuePool.DeskForm = deskForm;
-                    txtPassword.Text = string.Empty;
-                    txtPassword.Focus();
-                    deskForm.ShowDialog();
+                    ConstantValuePool.PromotionList = sysBasicData.PromotionList;
+                    ConstantValuePool.PromotionConditionList = sysBasicData.PromotionConditionList;
+                    ConstantValuePool.PromotionCronTriggerList = sysBasicData.PromotionCronTriggerList;
+                    ConstantValuePool.PromotionPresentList = sysBasicData.PromotionPresentList;
+
+                    if (ConstantValuePool.BizSettingConfig.SaleType == ShopSaleType.Takeout)
+                    {
+                        FormTakeout formTakeout = new FormTakeout(haveDailyClose);
+                        formTakeout.VisibleShow = true;
+                        formTakeout.ShowDialog();
+                    }
+                    else
+                    {
+                        FormDesk deskForm = new FormDesk(haveDailyClose);
+                        ConstantValuePool.DeskForm = deskForm;
+                        txtPassword.Text = string.Empty;
+                        txtPassword.Focus();
+                        deskForm.ShowDialog();
+                    }
                 }
                 else
                 {
@@ -234,7 +249,7 @@ namespace Top4ever.Pos
                 //保存静态池内
                 ConstantValuePool.CurrentEmployee = employee;
                 //获取基础数据
-                SystemBasicData basicDataService = new SystemBasicData();
+                SystemBasicDataService basicDataService = new SystemBasicDataService();
                 SysBasicData sysBasicData = basicDataService.GetSysBasicData();
                 if (sysBasicData != null)
                 {
@@ -248,14 +263,24 @@ namespace Top4ever.Pos
                     ConstantValuePool.DetailsGroupList = sysBasicData.DetailsGroupList;
                     ConstantValuePool.GoodsSetMealList = sysBasicData.GoodsSetMealList;
                     ConstantValuePool.DetailsSetMealList = sysBasicData.DetailsSetMealList;
+                    ConstantValuePool.GoodsCronTriggerList = sysBasicData.GoodsCronTriggerList;
                     ConstantValuePool.ButtonStyleList = sysBasicData.ButtonStyleList;
 
-                    FormDesk deskForm = new FormDesk(haveDailyClose);
-                    ConstantValuePool.DeskForm = deskForm;
-                    txtName.Text = employee.EmployeeNo;
-                    txtPassword.Text = string.Empty;
-                    txtPassword.Focus();
-                    deskForm.ShowDialog();
+                    if (ConstantValuePool.BizSettingConfig.SaleType == ShopSaleType.Takeout)
+                    {
+                        FormTakeout formTakeout = new FormTakeout(haveDailyClose);
+                        formTakeout.VisibleShow = true;
+                        formTakeout.ShowDialog();
+                    }
+                    else
+                    {
+                        FormDesk deskForm = new FormDesk(haveDailyClose);
+                        ConstantValuePool.DeskForm = deskForm;
+                        txtName.Text = employee.EmployeeNo;
+                        txtPassword.Text = string.Empty;
+                        txtPassword.Focus();
+                        deskForm.ShowDialog();
+                    }
                 }
                 else
                 {

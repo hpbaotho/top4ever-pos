@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="Promotions" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <alias>
+    <typeAlias alias="Promotion" type="Top4ever.Domain.Promotions.Promotion, Top4ever.Domain" />
+    <typeAlias alias="PromotionCondition" type="Top4ever.Domain.Promotions.PromotionCondition, Top4ever.Domain" />
+    <typeAlias alias="PromotionCronTrigger" type="Top4ever.Domain.Promotions.PromotionCronTrigger, Top4ever.Domain" />
+    <typeAlias alias="PromotionPresent" type="Top4ever.Domain.Promotions.PromotionPresent, Top4ever.Domain" />
+  </alias>
+
+  <resultMaps>
+    <resultMap  id="PromotionResult" class="Promotion">
+      <result property="ActivityNo" column="ActivityNo"></result>
+      <result property="PromotionName" column="PromotionName"></result>
+      <result property="PresentType" column="PresentType"></result>
+      <result property="WithOtherPromotion" column="WithOtherPromotion"></result>
+      <result property="CustomerBase" column="CustomerBase"></result>
+      <result property="PairItems" column="PairItems"></result>
+      <result property="IsIncluded" column="IsIncluded"></result>
+      <result property="AndOr" column="AndOr"></result>
+    </resultMap>
+
+    <resultMap  id="PromotionConditionResult" class="PromotionCondition">
+      <result property="ActivityNo" column="ActivityNo"></result>
+      <result property="GoodsGroupNo" column="GoodsGroupNo"></result>
+      <result property="GoodsNo" column="GoodsNo"></result>
+      <result property="Quantity" column="Quantity"></result>
+      <result property="SellPrice" column="SellPrice"></result>
+      <result property="MoreOrLess" column="MoreOrLess"></result>
+      <result property="LeastDiscount" column="LeastDiscount"></result>
+    </resultMap>
+
+    <resultMap  id="PromotionCronTriggerResult" class="PromotionCronTrigger">
+      <result property="ActivityNo" column="ActivityNo"></result>
+      <result property="Year" column="Year"></result>
+      <result property="Week" column="Week"></result>
+      <result property="Month" column="Month"></result>
+      <result property="Day" column="Day"></result>
+      <result property="SmallTime" column="SmallTime"></result>
+    </resultMap>
+
+    <resultMap  id="PromotionPresentResult" class="PromotionPresent">
+      <result property="ActivityNo" column="ActivityNo"></result>
+      <result property="TotalMoney" column="TotalMoney"></result>
+      <result property="TotalQuantity" column="TotalQuantity"></result>
+      <result property="Classification" column="Classification"></result>
+      <result property="GoodsNo" column="GoodsNo"></result>
+      <result property="OriginalPrice" column="OriginalPrice"></result>
+      <result property="SellPrice" column="SellPrice"></result>
+      <result property="Quantity" column="Quantity"></result>
+      <result property="DiscountRate" column="DiscountRate"></result>
+      <result property="OffFixPay" column="OffFixPay"></result>
+      <result property="TimesLimit" column="TimesLimit"></result>
+      <result property="IsMultiple" column="IsMultiple"></result>
+      <result property="TypeOption" column="TypeOption"></result>
+    </resultMap>
+  </resultMaps>
+  <!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+  <statements>
+    <select id="GetAllPromotion" resultMap="PromotionResult">
+      SELECT ActivityNo, PromotionName, PresentType, WithOtherPromotion, CustomerBase, PairItems, IsIncluded, AndOr
+      FROM Promotion
+      WHERE IsVoided = 0
+      ORDER BY OrderBy
+    </select>
+
+    <select id="GetAllPromotionCondition" resultMap="PromotionConditionResult">
+      SELECT ActivityNo, GoodsGroupNo, GoodsNo, Quantity, SellPrice, MoreOrLess, LeastDiscount
+      FROM PromotionCondition
+      WHERE IsVoided = 0
+    </select>
+
+    <select id="GetAllPromotionCronTrigger" resultMap="PromotionCronTriggerResult">
+      SELECT ActivityNo, [Year], [Week], [Month], [Day], SmallTime
+      FROM PromotionCronTrigger
+      WHERE IsVoided = 0
+    </select>
+
+    <select id="GetAllPromotionPresent" resultMap="PromotionPresentResult">
+      SELECT ActivityNo, TotalMoney, TotalQuantity, Classification, GoodsNo, SellPrice,
+      Quantity, DiscountRate, OffFixPay, TimesLimit, IsMultiple, TypeOption
+      FROM PromotionPresent
+      WHERE IsVoided = 0
+      ORDER BY OrderBy
+    </select>
+  </statements>
+</sqlMap>

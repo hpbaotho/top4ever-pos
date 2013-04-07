@@ -21,8 +21,8 @@ namespace Top4ever.Pos
 {
     public partial class FormDesk : Form
     {
-        private FormOrder m_FormOrder = new FormOrder();
-        private FormTakeout m_FormTakeout = new FormTakeout();
+        private FormOrder m_FormOrder = null;
+        private FormTakeout m_FormTakeout = null;
 
         private Guid m_CurrentRegionID = Guid.Empty;
         private ButtonOperateType m_OperateType = ButtonOperateType.NONE;
@@ -44,6 +44,8 @@ namespace Top4ever.Pos
         public FormDesk(bool haveDailyClose)
         {
             this.haveDailyClose = haveDailyClose;
+            m_FormOrder = new FormOrder();
+            m_FormTakeout = new FormTakeout(haveDailyClose);
             InitializeComponent();
         }
 
@@ -68,7 +70,15 @@ namespace Top4ever.Pos
             this.btnLookColor.Location = new Point(px, py);
 
             this.pnlSysTools.Width = this.scrollingText1.Width = this.pnlToolBar.Width;
-            int toolsBarNum = 8;
+            int toolsBarNum = 6;
+            if (ConstantValuePool.BizSettingConfig.SaleType == ShopSaleType.DineInAndTakeout)
+            {
+                toolsBarNum++;
+            }
+            else
+            {
+                btnTakeOut.Visible = false;
+            }
             int btnWidth = this.pnlSysTools.Width / toolsBarNum;
             int btnHeight = this.pnlSysTools.Height;
             px = 0;
@@ -87,12 +97,12 @@ namespace Top4ever.Pos
             px += btnWidth;
             btnCheckOut.Size = new System.Drawing.Size(btnWidth, btnHeight);
             btnCheckOut.Location = new Point(px, py);
-            px += btnWidth;
-            btnTakeOut.Size = new System.Drawing.Size(btnWidth, btnHeight);
-            btnTakeOut.Location = new Point(px, py);
-            px += btnWidth;
-            btnSetting.Size = new System.Drawing.Size(btnWidth, btnHeight);
-            btnSetting.Location = new Point(px, py);
+            if (ConstantValuePool.BizSettingConfig.SaleType == ShopSaleType.DineInAndTakeout)
+            {
+                px += btnWidth;
+                btnTakeOut.Size = new System.Drawing.Size(btnWidth, btnHeight);
+                btnTakeOut.Location = new Point(px, py);
+            }
             px += btnWidth;
             btnExit.Size = new System.Drawing.Size(this.pnlSysTools.Width - px, btnHeight);
             btnExit.Location = new Point(px, py);
@@ -624,6 +634,10 @@ namespace Top4ever.Pos
         {
             Feature.FormFunctionPanel form = new Feature.FormFunctionPanel();
             form.ShowDialog();
+            if (form.IsNeedExist)
+            {
+                this.Close();
+            }
         }
 
         private void btnOrder_Click(object sender, EventArgs e)
@@ -676,12 +690,6 @@ namespace Top4ever.Pos
             btn.BackColor = ConstantValuePool.PressedColor;
             m_OperateType = ButtonOperateType.CHECKOUT;
             prevPressedButton = btn;
-        }
-
-        private void btnSetting_Click(object sender, EventArgs e)
-        {
-            FormConfig form = new FormConfig();
-            form.ShowDialog();
         }
 
         private void btnTakeOut_Click(object sender, EventArgs e)

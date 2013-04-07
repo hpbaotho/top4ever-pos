@@ -24,6 +24,21 @@ namespace Top4ever.Persistence.GoodsRelated
             return ExecuteQueryForList<Guid>("GetDetailsGroupIDListByGoodsID", goodsID);
         }
 
+        public IList<GoodsCheckStock> GetGoodsCheckStock()
+        {
+            return ExecuteQueryForList<GoodsCheckStock>("GetGoodsCheckStock", null);
+        }
+
+        public Int32 UpdateReducedGoodsQty(Guid goodsID, decimal reducedQty)
+        {
+            Hashtable htParam = new Hashtable();
+            htParam["GoodsID"] = goodsID;
+            htParam["ReducedQty"] = reducedQty;
+            htParam["ReturnValue"] = 0;
+            ExecuteQueryForObject("UpdateReducedGoodsQty", htParam);
+            int i = (int)htParam["ReturnValue"];    //返回值
+            return i;
+        }
         #endregion
     }
 }

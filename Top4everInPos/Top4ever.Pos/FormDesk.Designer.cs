@@ -32,7 +32,6 @@
             this.scrollingText1 = new Top4ever.CustomControl.ScrollingText();
             this.pnlSysTools = new System.Windows.Forms.Panel();
             this.btnExit = new Top4ever.CustomControl.CrystalButton();
-            this.btnSetting = new Top4ever.CustomControl.CrystalButton();
             this.btnTakeOut = new Top4ever.CustomControl.CrystalButton();
             this.btnCheckOut = new Top4ever.CustomControl.CrystalButton();
             this.btnTurnTable = new Top4ever.CustomControl.CrystalButton();
@@ -84,7 +83,6 @@
             // pnlSysTools
             // 
             this.pnlSysTools.Controls.Add(this.btnExit);
-            this.pnlSysTools.Controls.Add(this.btnSetting);
             this.pnlSysTools.Controls.Add(this.btnTakeOut);
             this.pnlSysTools.Controls.Add(this.btnCheckOut);
             this.pnlSysTools.Controls.Add(this.btnTurnTable);
@@ -101,7 +99,7 @@
             this.btnExit.BackColor = System.Drawing.Color.Red;
             this.btnExit.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.btnExit.ForeColor = System.Drawing.Color.White;
-            this.btnExit.Location = new System.Drawing.Point(831, 0);
+            this.btnExit.Location = new System.Drawing.Point(747, 0);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 71);
             this.btnExit.TabIndex = 7;
@@ -109,25 +107,12 @@
             this.btnExit.UseVisualStyleBackColor = false;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
-            // btnSetting
-            // 
-            this.btnSetting.BackColor = System.Drawing.Color.MidnightBlue;
-            this.btnSetting.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnSetting.ForeColor = System.Drawing.Color.White;
-            this.btnSetting.Location = new System.Drawing.Point(721, 0);
-            this.btnSetting.Name = "btnSetting";
-            this.btnSetting.Size = new System.Drawing.Size(75, 71);
-            this.btnSetting.TabIndex = 6;
-            this.btnSetting.Text = "设置";
-            this.btnSetting.UseVisualStyleBackColor = false;
-            this.btnSetting.Click += new System.EventHandler(this.btnSetting_Click);
-            // 
             // btnTakeOut
             // 
             this.btnTakeOut.BackColor = System.Drawing.Color.MidnightBlue;
             this.btnTakeOut.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnTakeOut.ForeColor = System.Drawing.Color.White;
-            this.btnTakeOut.Location = new System.Drawing.Point(615, 0);
+            this.btnTakeOut.Location = new System.Drawing.Point(627, 0);
             this.btnTakeOut.Name = "btnTakeOut";
             this.btnTakeOut.Size = new System.Drawing.Size(75, 71);
             this.btnTakeOut.TabIndex = 9;
@@ -288,7 +273,6 @@
         private CustomControl.CrystalButton btnTakeColor;
         private System.Windows.Forms.Panel pnlSysTools;
         private CustomControl.CrystalButton btnExit;
-        private CustomControl.CrystalButton btnSetting;
         private CustomControl.CrystalButton btnTakeOut;
         private CustomControl.CrystalButton btnCheckOut;
         private CustomControl.CrystalButton btnTurnTable;

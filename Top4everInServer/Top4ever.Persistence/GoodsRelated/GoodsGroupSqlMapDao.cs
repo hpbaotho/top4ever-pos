@@ -16,5 +16,10 @@ namespace Top4ever.Persistence.GoodsRelated
         {
             return ExecuteQueryForList<GoodsGroup>("GetGoodsGroupList", null);
         }
+
+        public IList<GoodsCronTrigger> GetAllGoodsCronTrigger()
+        {
+            return ExecuteQueryForList<GoodsCronTrigger>("GetGoodsCronTriggerList", null);
+        }
     }
 }

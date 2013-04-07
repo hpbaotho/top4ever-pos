@@ -61,10 +61,35 @@ namespace Top4ever.Domain.GoodsRelated
         public Guid DepartID { get; set; }
 
         /// <summary>
+        /// 简码
+        /// </summary>
+        public string BrevityCode { get; set; }
+
+        /// <summary>
+        /// 拼音码
+        /// </summary>
+        public string PinyinCode { get; set; }
+
+        /// <summary>
+        /// 是否自定义价格
+        /// </summary>
+        public bool IsCustomPrice { get; set; }
+
+        /// <summary>
+        /// 是否自定义数量
+        /// </summary>
+        public bool IsCustomQty { get; set; }
+
+        /// <summary>
+        /// 是否检查库存
+        /// </summary>
+        public bool IsCheckStock { get; set; }
+
+        /// <summary>
         /// 外键
         /// </summary>
         public Guid ButtonStyleID { get; set; }
-        
+
         /// <summary>
         /// 每个菜品所拥有的细项组ID
         /// </summary>

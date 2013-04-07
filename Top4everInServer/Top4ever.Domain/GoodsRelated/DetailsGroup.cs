@@ -31,6 +31,11 @@ namespace Top4ever.Domain.GoodsRelated
         public int LimitedNumbers { get; set; }
 
         /// <summary>
+        /// 公共细项组
+        /// </summary>
+        public bool IsCommon { get; set; }
+
+        /// <summary>
         /// 外键
         /// </summary>
         public Guid ButtonStyleID { get; set; }

@@ -35,6 +35,7 @@ namespace Top4ever.Entity
         public static readonly string SPLITBILL = "RA4";        //分单
         public static readonly string PLACEORDER = "RA5";       //落单
         public static readonly string PAYMENT = "RA6";          //支付
+        public static readonly string CUSTOMTASTE = "RA7";      //自定义口味
 
         public static bool FindRights(string rightsCode)
         {

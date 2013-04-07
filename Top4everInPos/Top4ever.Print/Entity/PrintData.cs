@@ -66,5 +66,25 @@ namespace Top4ever.Print.Entity
         /// 支付方式
         /// </summary>
         public List<PayingGoodsOrder> PayingOrderList { get; set; }
+        /// <summary>
+        /// 客户联系电话
+        /// </summary>
+        public string CustomerPhone { get; set; }
+        /// <summary>
+        /// 客户名称
+        /// </summary>
+        public string CustomerName { get; set; }
+        /// <summary>
+        /// 外送地址
+        /// </summary>
+        public string DeliveryAddress { get; set; }
+        /// <summary>
+        /// 外送备注
+        /// </summary>
+        public string Remark { get; set; }
+        /// <summary>
+        /// 外送员工姓名
+        /// </summary>
+        public string DeliveryEmployeeName { get; set; }
     }
 }
