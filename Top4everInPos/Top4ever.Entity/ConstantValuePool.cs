@@ -11,6 +11,7 @@ using Top4ever.Domain.OrderRelated;
 using Top4ever.Entity.Config;
 using Top4ever.Entity.Enum;
 using Top4ever.Print;
+using Top4ever.Domain.Promotions;
 
 namespace Top4ever.Entity
 {
@@ -61,21 +62,18 @@ namespace Top4ever.Entity
 
         public static IList<GoodsSetMeal> DetailsSetMealList { get; set; }
 
+        public static IList<GoodsCronTrigger> GoodsCronTriggerList { get; set; }
+
         public static IList<ButtonStyle> ButtonStyleList { get; set; }
 
-        /// <summary>
-        /// 菜品组按钮
-        /// </summary>
-        public static IList<CrystalButton> GoodsGroupButton { get; set; }
-        /// <summary>
-        /// 菜品按钮
-        /// </summary>
-        public static Dictionary<string, List<CrystalButton>> DicGoodsButton { get; set; }
-        /// <summary>
-        /// 细项按钮
-        /// </summary>
-        public static Dictionary<string, List<CrystalButton>> DicDetailsButton { get; set; }
-        
+        public static IList<Promotion> PromotionList { get; set; }
+
+        public static IList<PromotionCondition> PromotionConditionList { get; set; }
+
+        public static IList<PromotionCronTrigger> PromotionCronTriggerList { get; set; }
+
+        public static IList<PromotionPresent> PromotionPresentList { get; set; }
+
         /// <summary>
         /// 程序的配置
         /// </summary>

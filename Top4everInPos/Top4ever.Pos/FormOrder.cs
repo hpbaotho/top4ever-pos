@@ -106,8 +106,8 @@ namespace Top4ever.Pos
             }
             if (!RightsItemCode.FindRights(RightsItemCode.REFORM))
             {
-                btnReform.Enabled = false;
-                btnReform.BackColor = ConstantValuePool.DisabledColor;
+                btnTasteRemark.Enabled = false;
+                btnTasteRemark.BackColor = ConstantValuePool.DisabledColor;
             }
             if (!RightsItemCode.FindRights(RightsItemCode.PLACEORDER))
             {
@@ -312,6 +312,7 @@ namespace Top4ever.Pos
                 btn.Visible = true;
                 btn.Text = goodsGroup.GoodsGroupName;
                 btn.Tag = goodsGroup;
+                btn.Enabled = IsGoodsOrGroupButtonEnabled(goodsGroup.GoodsGroupID);
                 foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
                 {
                     if (goodsGroup.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
@@ -395,6 +396,7 @@ namespace Top4ever.Pos
                             btn.Text = goods.GoodsName;
                         }
                         btn.Tag = goods;
+                        btn.Enabled = IsGoodsOrGroupButtonEnabled(goods.GoodsID);
                         foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
                         {
                             if (goods.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
@@ -442,7 +444,7 @@ namespace Top4ever.Pos
             List<DetailsGroup> detailGroupList = new List<DetailsGroup>();
             foreach (DetailsGroup item in ConstantValuePool.DetailsGroupList)
             {
-                if (m_CurrentDetailsGroupIDList.Contains(item.DetailsGroupID))
+                if (item.IsCommon || m_CurrentDetailsGroupIDList.Contains(item.DetailsGroupID))
                 {
                     detailGroupList.Add(item);
                 }
@@ -813,6 +815,40 @@ namespace Top4ever.Pos
                 if (dgvGoodsOrder.CurrentRow != null)
                 {
                     int selectIndex = dgvGoodsOrder.CurrentRow.Index;
+                    if (m_CurrentDetailsGroup.LimitedNumbers > 0)
+                    {
+                        object objGroupLimitNum = dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Tag;
+                        if (objGroupLimitNum == null)
+                        {
+                            Dictionary<Guid, int> dicGroupLimitNum = new Dictionary<Guid, int>();
+                            dicGroupLimitNum.Add(m_CurrentDetailsGroup.DetailsGroupID, 1);
+                            dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Tag = dicGroupLimitNum;
+                        }
+                        else
+                        {
+                            Dictionary<Guid, int> dicGroupLimitNum = objGroupLimitNum as Dictionary<Guid, int>;
+                            if (dicGroupLimitNum.ContainsKey(m_CurrentDetailsGroup.DetailsGroupID))
+                            {
+                                int selectedNum = dicGroupLimitNum[m_CurrentDetailsGroup.DetailsGroupID];
+                                if (selectedNum >= m_CurrentDetailsGroup.LimitedNumbers)
+                                {
+                                    MessageBox.Show("超出细项的数量限制！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    return;
+                                }
+                                else
+                                {
+                                    selectedNum++;
+                                    dicGroupLimitNum[m_CurrentDetailsGroup.DetailsGroupID] = selectedNum;
+                                    dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Tag = dicGroupLimitNum;
+                                }
+                            }
+                            else
+                            {
+                                dicGroupLimitNum.Add(m_CurrentDetailsGroup.DetailsGroupID, 1);
+                                dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Tag = dicGroupLimitNum;
+                            }
+                        }
+                    }
                     //数量
                     decimal itemNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
                     DataGridViewRow dgr = dgvGoodsOrder.Rows[0].Clone() as DataGridViewRow;
@@ -2117,9 +2153,106 @@ namespace Top4ever.Pos
             }
         }
 
-        private void btnReform_Click(object sender, EventArgs e)
+        private void btnTasteRemark_Click(object sender, EventArgs e)
         {
-            this.exTabControl1.SelectedIndex = 0;
+            if (dgvGoodsOrder.CurrentRow != null)
+            {
+                //权限验证
+                bool hasRights = false;
+                if (RightsItemCode.FindRights(RightsItemCode.CUSTOMTASTE))
+                {
+                    hasRights = true;
+                }
+                else
+                {
+                    FormRightsCode form = new FormRightsCode();
+                    form.ShowDialog();
+                    if (form.ReturnValue)
+                    {
+                        IList<string> rightsCodeList = form.RightsCodeList;
+                        if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.CUSTOMTASTE))
+                        {
+                            hasRights = true;
+                        }
+                    }
+                }
+                if (!hasRights)
+                {
+                    return;
+                }
+                int selectIndex = dgvGoodsOrder.CurrentRow.Index;
+                if (dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value == null)
+                {
+                    string goodsName = dgvGoodsOrder.Rows[selectIndex].Cells["GoodsName"].Value.ToString();
+                    FormCustomDetails form = new FormCustomDetails(goodsName);
+                    form.ShowDialog();
+                    if (!string.IsNullOrEmpty(form.CustomTasteName))
+                    {
+                        string printSolutionName = string.Empty;
+                        Guid departID = Guid.Empty;
+                        int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value);
+                        if (itemType == (int)OrderItemType.Goods)
+                        {
+                            Goods _goods = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Goods;
+                            printSolutionName = _goods.PrintSolutionName;
+                            departID = _goods.DepartID;
+                        }
+                        else if (itemType == (int)OrderItemType.Details)
+                        {
+                            Details _details = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Details;
+                            printSolutionName = _details.PrintSolutionName;
+                            departID = _details.DepartID;
+                        }
+                        Details details = new Details();
+                        details.DetailsID = new Guid("77777777-7777-7777-7777-777777777777");
+                        details.DetailsNo = "7777";
+                        details.DetailsName = details.DetailsName2nd = form.CustomTasteName.Replace("-", "");
+                        details.SellPrice = 0;
+                        details.CanDiscount = false;
+                        details.AutoShowDetails = false;
+                        details.PrintSolutionName = printSolutionName;
+                        details.DepartID = departID;
+                        //数量
+                        decimal itemNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
+                        DataGridViewRow dgr = dgvGoodsOrder.Rows[0].Clone() as DataGridViewRow;
+                        dgr.Cells[0].Value = details.DetailsID;
+                        dgr.Cells[0].Tag = details;
+                        dgr.Cells[1].Value = itemNum;
+                        dgr.Cells[2].Value = form.CustomTasteName;
+                        dgr.Cells[3].Value = details.SellPrice;
+                        dgr.Cells[4].Value = 0;
+                        dgr.Cells[5].Value = OrderItemType.Details;
+                        dgr.Cells[6].Value = details.CanDiscount;
+                        int rowIndex = selectIndex + 1;
+                        if (rowIndex == dgvGoodsOrder.Rows.Count)
+                        {
+                            dgvGoodsOrder.Rows.Add(dgr);
+                        }
+                        else
+                        {
+                            if (Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                            {
+                                for (int i = selectIndex + 1; i < dgvGoodsOrder.RowCount; i++)
+                                {
+                                    itemType = Convert.ToInt32(dgvGoodsOrder.Rows[i].Cells["ItemType"].Value);
+                                    if (itemType == (int)OrderItemType.Goods)
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        rowIndex++;
+                                    }
+                                }
+                            }
+                            dgvGoodsOrder.Rows.Insert(rowIndex, dgr);
+                        }
+                        //统计
+                        BindOrderInfoSum();
+                    }
+                }
+                this.exTabControl1.SelectedIndex = 0;
+            }
         }
 
         private void btnPriceCode_Click(object sender, EventArgs e)
@@ -2228,8 +2361,9 @@ namespace Top4ever.Pos
             {
                 orderID = m_SalesOrder.order.OrderID;
             }
-            List<OrderDetails> newOrderDetailsList = new List<OrderDetails>();
-            List<OrderDiscount> newOrderDiscountList = new List<OrderDiscount>();
+            IList<GoodsCheckStock> temp = new List<GoodsCheckStock>();
+            IList<OrderDetails> newOrderDetailsList = new List<OrderDetails>();
+            IList<OrderDiscount> newOrderDiscountList = new List<OrderDiscount>();
             foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
             {
                 if (dr.Cells["OrderDetailsID"].Value == null)
@@ -2262,6 +2396,12 @@ namespace Top4ever.Pos
                         orderDetails.SellPrice = goods.SellPrice;
                         orderDetails.PrintSolutionName = goods.PrintSolutionName;
                         orderDetails.DepartID = goods.DepartID;
+
+                        GoodsCheckStock goodsCheckStock = new GoodsCheckStock();
+                        goodsCheckStock.GoodsID = goods.GoodsID;
+                        goodsCheckStock.GoodsName = goods.GoodsName;
+                        goodsCheckStock.ReducedQuantity = orderDetails.ItemQty;
+                        temp.Add(goodsCheckStock);
                     }
                     else if (itemType == (int)OrderItemType.Details)
                     {
@@ -2378,6 +2518,38 @@ namespace Top4ever.Pos
                             orderDiscount.EmployeeID = m_EmployeeID;
                             newOrderDiscountList.Add(orderDiscount);
                         }
+                    }
+                }
+            }
+            //品项沽清
+            GoodsService goodsService = new GoodsService();
+            IList<GoodsCheckStock> tempGoodsStockList = goodsService.GetGoodsCheckStock();
+            if (tempGoodsStockList.Count > 0 && temp.Count > 0)
+            {
+                IList<GoodsCheckStock> goodsCheckStockList = new List<GoodsCheckStock>();
+                foreach (GoodsCheckStock item in temp)
+                {
+                    bool IsContains = false;
+                    foreach (GoodsCheckStock tempGoodsStock in tempGoodsStockList)
+                    {
+                        if (item.GoodsID.Equals(tempGoodsStock.GoodsID))
+                        {
+                            IsContains = true;
+                            break;
+                        }
+                    }
+                    if (IsContains)
+                    {
+                        goodsCheckStockList.Add(item);
+                    }
+                }
+                if (goodsCheckStockList.Count > 0)
+                {
+                    string goodsName = goodsService.UpdateReducedGoodsQty(goodsCheckStockList);
+                    if (!string.IsNullOrEmpty(goodsName))
+                    {
+                        MessageBox.Show(string.Format("<{0}> 的剩余数量不足！", goodsName), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return false;
                     }
                 }
             }
@@ -2593,6 +2765,153 @@ namespace Top4ever.Pos
             ctl.Height = Convert.ToInt32(ctl.Height * heightRate);
             ctl.Location = new Point(Convert.ToInt32(ctl.Location.X * widthRate), Convert.ToInt32(ctl.Location.Y * heightRate));
         }
+
+        private bool IsGoodsOrGroupButtonEnabled(Guid goodsOrGroupID)
+        {
+            bool IsEnabled = true;
+            foreach (GoodsCronTrigger trigger in ConstantValuePool.GoodsCronTriggerList)
+            {
+                if (goodsOrGroupID == trigger.CronTriggerID)
+                {
+                    DayOfWeek curWeek = DateTime.Now.DayOfWeek;
+                    string curMonth = DateTime.Now.Month.ToString();
+                    string curDay = DateTime.Now.Day.ToString();
+                    string curShortTime = DateTime.Now.ToString("HH:mm");
+                    //判断是否包含当前月份
+                    if (trigger.Month != "*")
+                    {
+                        string[] monthArr = trigger.Month.Split(',');
+                        bool IsContainMonth = false;
+                        foreach (string month in monthArr)
+                        {
+                            if (curMonth == month)
+                            {
+                                IsContainMonth = true;
+                                break;
+                            }
+                        }
+                        if (!IsContainMonth)
+                        {
+                            IsEnabled = false;
+                            break;
+                        }
+                    }
+                    //判断周或者日
+                    if (trigger.Week == "?")
+                    {
+                        //判断是否包含当日
+                        if (trigger.Day != "*")
+                        {
+                            string[] dayArr = trigger.Day.Split(',');
+                            bool IsContainDay = false;
+                            foreach (string day in dayArr)
+                            {
+                                if (curDay == day)
+                                {
+                                    IsContainDay = true;
+                                    break;
+                                }
+                            }
+                            if (!IsContainDay)
+                            {
+                                IsEnabled = false;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //判断是否包含周几
+                        //判断包含# 例:当月第几周星期几
+                        if (trigger.Week.IndexOf('#') > 0)
+                        {
+                            string weekIndex = trigger.Week.Split('#')[0];
+                            string weekDay = trigger.Week.Split('#')[1];
+                            //计算当日是当月的第几周
+                            DateTime FirstofMonth = Convert.ToDateTime(DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + "01");
+                            int i = (int)FirstofMonth.Date.DayOfWeek;
+                            if (i == 0)
+                            {
+                                i = 7;
+                            }
+                            int curWeekIndex = (DateTime.Now.Day + i - 1) / 7;
+                            if (curWeekIndex != int.Parse(weekIndex))
+                            {
+                                IsEnabled = false;
+                                break;
+                            }
+                            else
+                            {
+                                if ((int)curWeek != int.Parse(weekDay))
+                                {
+                                    IsEnabled = false;
+                                    break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            //不包含# 例:当月每个星期几
+                            string[] weekArr = trigger.Week.Split(',');
+                            bool IsContainWeek = false;
+                            foreach (string week in weekArr)
+                            {
+                                if ((int)curWeek == int.Parse(week))
+                                {
+                                    IsContainWeek = true;
+                                    break;
+                                }
+                            }
+                            if (!IsContainWeek)
+                            {
+                                IsEnabled = false;
+                                break;
+                            }
+                        }
+                    }
+                    //判断时间段
+                    if (trigger.SmallTime != "*")
+                    {
+                        if (trigger.SmallTime.IndexOf(',') > 0)
+                        {
+                            bool IsInTime = false;
+                            string[] timeIntervalArr = trigger.SmallTime.Split(',');
+                            foreach (string timeInterval in timeIntervalArr)
+                            {
+                                if (timeInterval.IndexOf('-') > 0)
+                                {
+                                    DateTime beginTime = Convert.ToDateTime(timeInterval.Split('-')[0].Trim());
+                                    DateTime endTime = Convert.ToDateTime(timeInterval.Split('-')[1].Trim());
+                                    if (DateTime.Now >= beginTime && DateTime.Now <= endTime)
+                                    {
+                                        IsInTime = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (!IsInTime)
+                            {
+                                IsEnabled = false;
+                                break;
+                            }
+                        }
+                        else if (trigger.SmallTime.IndexOf('-') > 0)
+                        {
+                            DateTime beginTime = Convert.ToDateTime(trigger.SmallTime.Split('-')[0].Trim());
+                            DateTime endTime = Convert.ToDateTime(trigger.SmallTime.Split('-')[1].Trim());
+                            if (DateTime.Now < beginTime || DateTime.Now > endTime)
+                            {
+                                IsEnabled = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+            return IsEnabled;
+        }
+        
         #endregion
     }
 }

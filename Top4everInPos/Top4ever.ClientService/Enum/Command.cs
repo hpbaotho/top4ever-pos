@@ -43,6 +43,8 @@ namespace Top4ever.ClientService.Enum
         ID_GET_ALLCUSTOMERINFO = 37,
         ID_GET_EMPLOYEEBYNO = 38,
         ID_GET_CUSTOMERORDER = 39,
-        ID_CREATE_CUSTOMERORDER = 40
+        ID_CREATE_CUSTOMERORDER = 40,
+        ID_GET_GOODSCHECKSTOCK = 41,
+        ID_UPDATE_REDUCEDGOODSQTY = 42
     }
 }

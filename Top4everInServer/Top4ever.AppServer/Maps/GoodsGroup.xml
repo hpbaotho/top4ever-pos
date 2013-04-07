@@ -3,6 +3,7 @@
 
     <alias>
       <typeAlias alias="GoodsGroup" type="Top4ever.Domain.GoodsRelated.GoodsGroup, Top4ever.Domain" />
+      <typeAlias alias="GoodsCronTrigger" type="Top4ever.Domain.GoodsRelated.GoodsCronTrigger, Top4ever.Domain" />
     </alias>
 
     <resultMaps>
@@ -12,6 +13,15 @@
         <result property="GoodsGroupName" column="GoodsGroupName"></result>
         <result property="GoodsGroupName2nd" column="GoodsGroupName_2nd"></result>
         <result property="ButtonStyleID" column="ButtonStyleID"></result>
+      </resultMap>
+
+      <resultMap id="GoodsCronTriggerResult" class="GoodsCronTrigger">
+        <result property="CronTriggerID" column="CronTriggerID"></result>
+        <result property="Year" column="Year"></result>
+        <result property="Week" column="Week"></result>
+        <result property="Month" column="Month"></result>
+        <result property="Day" column="Day"></result>
+        <result property="SmallTime" column="SmallTime"></result>
       </resultMap>
 
     </resultMaps>
@@ -25,6 +35,12 @@
         FROM GoodsGroup
         WHERE IsVoided = 0
         ORDER BY OrderBy
+      </select>
+
+      <select id="GetGoodsCronTriggerList" resultMap="GoodsCronTriggerResult">
+        SELECT CronTriggerID, [Year], [Week], [Month], [Day], [SmallTime]
+        FROM GoodsCronTrigger
+        WHERE IsVoided = 0
       </select>
 
     </statements>

@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormOrder));
             this.pnlContainer = new System.Windows.Forms.Panel();
             this.pnlRight = new System.Windows.Forms.Panel();
@@ -87,7 +87,7 @@
             this.btnLadeGoods = new Top4ever.CustomControl.CrystalButton();
             this.btnRestOrder = new Top4ever.CustomControl.CrystalButton();
             this.btnRestGoods = new Top4ever.CustomControl.CrystalButton();
-            this.btnReform = new Top4ever.CustomControl.CrystalButton();
+            this.btnTasteRemark = new Top4ever.CustomControl.CrystalButton();
             this.btnReminder = new Top4ever.CustomControl.CrystalButton();
             this.btnPriceCode = new Top4ever.CustomControl.CrystalButton();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -277,14 +277,14 @@
             this.dgvGoodsOrder.AllowUserToResizeColumns = false;
             this.dgvGoodsOrder.AllowUserToResizeRows = false;
             this.dgvGoodsOrder.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvGoodsOrder.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvGoodsOrder.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.dgvGoodsOrder.ColumnHeadersHeight = 35;
             this.dgvGoodsOrder.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvGoodsOrder.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -319,8 +319,8 @@
             // 
             // GoodsNum
             // 
-            dataGridViewCellStyle2.Format = "N1";
-            this.GoodsNum.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Format = "N1";
+            this.GoodsNum.DefaultCellStyle = dataGridViewCellStyle6;
             this.GoodsNum.HeaderText = "数量";
             this.GoodsNum.Name = "GoodsNum";
             this.GoodsNum.ReadOnly = true;
@@ -337,10 +337,10 @@
             // 
             // GoodsPrice
             // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.GoodsPrice.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle7.Format = "N2";
+            dataGridViewCellStyle7.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.GoodsPrice.DefaultCellStyle = dataGridViewCellStyle7;
             this.GoodsPrice.HeaderText = "价格";
             this.GoodsPrice.Name = "GoodsPrice";
             this.GoodsPrice.ReadOnly = true;
@@ -348,11 +348,11 @@
             // 
             // GoodsDiscount
             // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle4.Format = "N2";
-            dataGridViewCellStyle4.NullValue = null;
-            dataGridViewCellStyle4.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.GoodsDiscount.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle8.Format = "N2";
+            dataGridViewCellStyle8.NullValue = null;
+            dataGridViewCellStyle8.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.GoodsDiscount.DefaultCellStyle = dataGridViewCellStyle8;
             this.GoodsDiscount.HeaderText = "折扣";
             this.GoodsDiscount.Name = "GoodsDiscount";
             this.GoodsDiscount.ReadOnly = true;
@@ -718,7 +718,7 @@
             this.tabPage2.Controls.Add(this.btnLadeGoods);
             this.tabPage2.Controls.Add(this.btnRestOrder);
             this.tabPage2.Controls.Add(this.btnRestGoods);
-            this.tabPage2.Controls.Add(this.btnReform);
+            this.tabPage2.Controls.Add(this.btnTasteRemark);
             this.tabPage2.Controls.Add(this.btnReminder);
             this.tabPage2.Controls.Add(this.btnPriceCode);
             this.tabPage2.ImageIndex = 1;
@@ -794,18 +794,18 @@
             this.btnRestGoods.UseVisualStyleBackColor = false;
             this.btnRestGoods.Click += new System.EventHandler(this.btnRestGoods_Click);
             // 
-            // btnReform
+            // btnTasteRemark
             // 
-            this.btnReform.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.btnReform.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnReform.ForeColor = System.Drawing.Color.White;
-            this.btnReform.Location = new System.Drawing.Point(84, 2);
-            this.btnReform.Name = "btnReform";
-            this.btnReform.Size = new System.Drawing.Size(78, 77);
-            this.btnReform.TabIndex = 1;
-            this.btnReform.Text = "重整";
-            this.btnReform.UseVisualStyleBackColor = false;
-            this.btnReform.Click += new System.EventHandler(this.btnReform_Click);
+            this.btnTasteRemark.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.btnTasteRemark.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTasteRemark.ForeColor = System.Drawing.Color.White;
+            this.btnTasteRemark.Location = new System.Drawing.Point(84, 2);
+            this.btnTasteRemark.Name = "btnTasteRemark";
+            this.btnTasteRemark.Size = new System.Drawing.Size(78, 77);
+            this.btnTasteRemark.TabIndex = 1;
+            this.btnTasteRemark.Text = "口味备注";
+            this.btnTasteRemark.UseVisualStyleBackColor = false;
+            this.btnTasteRemark.Click += new System.EventHandler(this.btnTasteRemark_Click);
             // 
             // btnReminder
             // 
@@ -1118,7 +1118,7 @@
         private System.Windows.Forms.TabPage tabPage2;
         private CustomControl.CrystalButton btnSplitBill;
         private CustomControl.CrystalButton btnRestGoods;
-        private CustomControl.CrystalButton btnReform;
+        private CustomControl.CrystalButton btnTasteRemark;
         private CustomControl.CrystalButton btnPriceCode;
         private System.Windows.Forms.TabPage tabPage3;
         private CustomControl.CrystalButton btnRestOrder;

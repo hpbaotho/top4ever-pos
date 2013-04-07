@@ -3,59 +3,28 @@ using System.Collections.Generic;
 using System.Text;
 
 using Top4ever.ClientService.Enum;
-using Top4ever.Domain.Transfer;
+using Top4ever.Domain.GoodsRelated;
 using Top4ever.Entity;
 using Newtonsoft.Json;
 
 namespace Top4ever.ClientService
 {
-    public class BusinessReportService
+    public class GoodsService
     {
-        public BusinessReportService()
+        public GoodsService()
         { }
 
-        public BusinessReport GetReportDataByHandover(string deviceNo)
-        {
-            int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.DEVICE_NO;
-            byte[] sendByte = new byte[cByte];
-            int byteOffset = 0;
-            Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_REPORTDATABYHANDOVER), sendByte, BasicTypeLength.INT32);
-            byteOffset = BasicTypeLength.INT32;
-            Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
-            byteOffset += BasicTypeLength.INT32;
-
-            //deviceNo
-            byte[] tempByte = Encoding.UTF8.GetBytes(deviceNo);
-            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
-            byteOffset += ParamFieldLength.DEVICE_NO;
-
-            BusinessReport bizReport = null;
-            using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
-            {
-                socket.Connect();
-                Byte[] receiveData = null;
-                Int32 operCode = socket.SendReceive(sendByte, out receiveData);
-                if (operCode == (int)RET_VALUE.SUCCEEDED)
-                {
-                    string strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD, receiveData.Length - ParamFieldLength.PACKAGE_HEAD).Trim('\0');
-                    bizReport = JsonConvert.DeserializeObject<BusinessReport>(strReceive);
-                }
-                socket.Disconnect();
-            }
-            return bizReport;
-        }
-
-        public BusinessReport GetReportDataByDailyStatement()
+        public IList<GoodsCheckStock> GetGoodsCheckStock()
         {
             int cByte = ParamFieldLength.PACKAGE_HEAD;
             byte[] sendByte = new byte[cByte];
             int byteOffset = 0;
-            Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_REPORTDATABYDAILYSTATEMENT), sendByte, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_GOODSCHECKSTOCK), sendByte, BasicTypeLength.INT32);
             byteOffset = BasicTypeLength.INT32;
             Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
             byteOffset += BasicTypeLength.INT32;
 
-            BusinessReport bizReport = null;
+            IList<GoodsCheckStock> goodsCheckStockList = null;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
                 socket.Connect();
@@ -64,11 +33,45 @@ namespace Top4ever.ClientService
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
                 {
                     string strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD, receiveData.Length - ParamFieldLength.PACKAGE_HEAD).Trim('\0');
-                    bizReport = JsonConvert.DeserializeObject<BusinessReport>(strReceive);
+                    goodsCheckStockList = JsonConvert.DeserializeObject<IList<GoodsCheckStock>>(strReceive);
                 }
                 socket.Disconnect();
             }
-            return bizReport;
+            return goodsCheckStockList;
+        }
+
+        /// <summary>
+        /// 品项沽清
+        /// </summary>
+        /// <returns>成功返回空字符，失败返回品项名称</returns>
+        public string UpdateReducedGoodsQty(IList<GoodsCheckStock> goodsCheckStockList)
+        {
+            string json = JsonConvert.SerializeObject(goodsCheckStockList);
+            byte[] jsonByte = Encoding.UTF8.GetBytes(json);
+
+            int cByte = ParamFieldLength.PACKAGE_HEAD + jsonByte.Length;
+            byte[] sendByte = new byte[cByte];
+            int byteOffset = 0;
+            Array.Copy(BitConverter.GetBytes((int)Command.ID_UPDATE_REDUCEDGOODSQTY), sendByte, BasicTypeLength.INT32);
+            byteOffset = BasicTypeLength.INT32;
+            Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
+            byteOffset += BasicTypeLength.INT32;
+            Array.Copy(jsonByte, 0, sendByte, byteOffset, jsonByte.Length);
+            byteOffset += jsonByte.Length;
+
+            string strReceive = string.Empty;
+            using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
+            {
+                socket.Connect();
+                Byte[] receiveData = null;
+                Int32 operCode = socket.SendReceive(sendByte, out receiveData);
+                if (operCode == (int)RET_VALUE.SUCCEEDED)
+                {
+                    strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD, receiveData.Length - ParamFieldLength.PACKAGE_HEAD).Trim('\0');
+                }
+                socket.Disconnect();
+            }
+            return strReceive;
         }
     }
 }

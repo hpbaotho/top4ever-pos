@@ -12,6 +12,7 @@ using Top4ever.Interface;
 using Top4ever.Interface.Accounts;
 using Top4ever.Interface.GoodsRelated;
 using Top4ever.Interface.OrderRelated;
+using Top4ever.Domain.Promotions;
 
 namespace Top4ever.Service
 {
@@ -38,6 +39,7 @@ namespace Top4ever.Service
         private IGoodsSetMealDao _goodsSetMealDao = null;
         private IButtonStyleDao _buttonStyleDao = null;
         private ISystemConfigDao _sysConfigDao = null;
+        private IPromotionDao _promotionDao = null;
 
         #endregion
 
@@ -59,6 +61,7 @@ namespace Top4ever.Service
             _goodsSetMealDao = _daoManager.GetDao(typeof(IGoodsSetMealDao)) as IGoodsSetMealDao;
             _buttonStyleDao = _daoManager.GetDao(typeof(IButtonStyleDao)) as IButtonStyleDao;
             _sysConfigDao = _daoManager.GetDao(typeof(ISystemConfigDao)) as ISystemConfigDao;
+            _promotionDao = _daoManager.GetDao(typeof(IPromotionDao)) as IPromotionDao;
         }
 
         #endregion
@@ -133,10 +136,19 @@ namespace Top4ever.Service
                 }
                 IList<GoodsSetMeal> goodsSetMealList = _goodsSetMealDao.GetAllGoodsSetMeal();
                 IList<GoodsSetMeal> detailsSetMealList = _goodsSetMealDao.GetAllDetailsSetMeal();
+                IList<GoodsCronTrigger> goodsCronTriggerList = _goodsGroupDao.GetAllGoodsCronTrigger();
                 //ButtonStyle
                 IList<ButtonStyle> buttonStyleList = _buttonStyleDao.GetButtonStyleList();
                 //SystemConfig
                 SystemConfig systemConfig = _sysConfigDao.GetSystemConfigInfo();
+                //Promotion
+                IList<Promotion> promotionList = _promotionDao.GetPromotionList();
+                //PromotionCondition
+                IList<PromotionCondition> promotionConditionList = _promotionDao.GetPromotionConditionList();
+                //PromotionCronTrigger
+                IList<PromotionCronTrigger> promotionCronTriggerList = _promotionDao.GetPromotionCronTriggerList();
+                //PromotionPresent
+                IList<PromotionPresent> promotionPresentList = _promotionDao.GetPromotionPresentList();
                 // SysBasicData
                 basicData.CurrentShop = CurrentShop;
                 basicData.RegionList = regionList;
@@ -147,12 +159,17 @@ namespace Top4ever.Service
                 basicData.DetailsGroupList = detailsGroupList;
                 basicData.GoodsSetMealList = goodsSetMealList;
                 basicData.DetailsSetMealList = detailsSetMealList;
+                basicData.GoodsCronTriggerList = goodsCronTriggerList;
                 basicData.ButtonStyleList = buttonStyleList;
                 basicData.SysConfig = systemConfig;
+                basicData.PromotionList = promotionList;
+                basicData.PromotionConditionList = promotionConditionList;
+                basicData.PromotionCronTriggerList = promotionCronTriggerList;
+                basicData.PromotionPresentList = promotionPresentList;
 
                 _daoManager.CommitTransaction();
             }
-            catch(Exception ex)
+            catch
             {
                 _daoManager.RollBackTransaction();
                 basicData = null;

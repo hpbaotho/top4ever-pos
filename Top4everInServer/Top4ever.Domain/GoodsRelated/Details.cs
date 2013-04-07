@@ -41,6 +41,16 @@ namespace Top4ever.Domain.GoodsRelated
         public bool AutoShowDetails { get; set; }
 
         /// <summary>
+        /// 简码
+        /// </summary>
+        public string BrevityCode { get; set; }
+
+        /// <summary>
+        /// 拼音码
+        /// </summary>
+        public string PinyinCode { get; set; }
+
+        /// <summary>
         /// 厨房打印机
         /// </summary>
         public string PrintSolutionName { get; set; }

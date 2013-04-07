@@ -133,6 +133,12 @@ namespace Top4ever.BLL
                 case Command.ID_CREATE_CUSTOMERORDER:
                     byteRet = CustomersBLL.CreateCustomerOrder(itemBuffer);
                     break;
+                case Command.ID_GET_GOODSCHECKSTOCK:
+                    byteRet = GoodsBLL.GetGoodsCheckStock();
+                    break;
+                case Command.ID_UPDATE_REDUCEDGOODSQTY:
+                    byteRet = GoodsBLL.UpdateReducedGoodsQty(itemBuffer);
+                    break;
 
                 default:
                     byteRet = null;

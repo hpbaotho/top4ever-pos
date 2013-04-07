@@ -26,8 +26,8 @@ namespace Top4ever.Pos
 {
     public partial class FormTakeout : Form
     {
-        private const string deskName = "W001";
         private const int m_Space = 2;
+        private string deskName = "W001";
         private List<CrystalButton> btnDeliveryList = new List<CrystalButton>();
         private List<CrystalButton> btnGroupList = new List<CrystalButton>();
         private List<CrystalButton> btnItemList = new List<CrystalButton>();
@@ -56,6 +56,7 @@ namespace Top4ever.Pos
         private decimal m_CutOff = 0;
         private CrystalButton prevPressedButton = null;
         private bool m_ShowSilverCode = false;
+        private bool haveDailyClose;
 
         private bool m_OnShow = false;
         public bool VisibleShow
@@ -63,8 +64,9 @@ namespace Top4ever.Pos
             set { m_OnShow = value; }
         }
 
-        public FormTakeout()
+        public FormTakeout(bool haveDailyClose)
         {
+            this.haveDailyClose = haveDailyClose;
             InitializeComponent();
             btnPageUp.DisplayColor = btnPageUp.BackColor;
             btnPageDown.DisplayColor = btnPageDown.BackColor;
@@ -328,6 +330,7 @@ namespace Top4ever.Pos
                 btn.Visible = true;
                 btn.Text = goodsGroup.GoodsGroupName;
                 btn.Tag = goodsGroup;
+                btn.Enabled = IsGoodsOrGroupButtonEnabled(goodsGroup.GoodsGroupID);
                 foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
                 {
                     if (goodsGroup.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
@@ -411,6 +414,7 @@ namespace Top4ever.Pos
                             btn.Text = goods.GoodsName;
                         }
                         btn.Tag = goods;
+                        btn.Enabled = IsGoodsOrGroupButtonEnabled(goods.GoodsID);
                         foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
                         {
                             if (goods.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
@@ -458,7 +462,7 @@ namespace Top4ever.Pos
             List<DetailsGroup> detailGroupList = new List<DetailsGroup>();
             foreach (DetailsGroup item in ConstantValuePool.DetailsGroupList)
             {
-                if (m_CurrentDetailsGroupIDList.Contains(item.DetailsGroupID))
+                if (item.IsCommon || m_CurrentDetailsGroupIDList.Contains(item.DetailsGroupID))
                 {
                     detailGroupList.Add(item);
                 }
@@ -837,6 +841,40 @@ namespace Top4ever.Pos
                 if (dgvGoodsOrder.CurrentRow != null)
                 {
                     int selectIndex = dgvGoodsOrder.CurrentRow.Index;
+                    if (m_CurrentDetailsGroup.LimitedNumbers > 0)
+                    {
+                        object objGroupLimitNum = dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Tag;
+                        if (objGroupLimitNum == null)
+                        {
+                            Dictionary<Guid, int> dicGroupLimitNum = new Dictionary<Guid, int>();
+                            dicGroupLimitNum.Add(m_CurrentDetailsGroup.DetailsGroupID, 1);
+                            dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Tag = dicGroupLimitNum;
+                        }
+                        else
+                        {
+                            Dictionary<Guid, int> dicGroupLimitNum = objGroupLimitNum as Dictionary<Guid, int>;
+                            if (dicGroupLimitNum.ContainsKey(m_CurrentDetailsGroup.DetailsGroupID))
+                            {
+                                int selectedNum = dicGroupLimitNum[m_CurrentDetailsGroup.DetailsGroupID];
+                                if (selectedNum >= m_CurrentDetailsGroup.LimitedNumbers)
+                                {
+                                    MessageBox.Show("超出细项的数量限制！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    return;
+                                }
+                                else
+                                {
+                                    selectedNum++;
+                                    dicGroupLimitNum[m_CurrentDetailsGroup.DetailsGroupID] = selectedNum;
+                                    dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Tag = dicGroupLimitNum;
+                                }
+                            }
+                            else
+                            {
+                                dicGroupLimitNum.Add(m_CurrentDetailsGroup.DetailsGroupID, 1);
+                                dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Tag = dicGroupLimitNum;
+                            }
+                        }
+                    }
                     //数量
                     decimal itemNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
                     DataGridViewRow dgr = dgvGoodsOrder.Rows[0].Clone() as DataGridViewRow;
@@ -1022,6 +1060,14 @@ namespace Top4ever.Pos
         {
             Feature.FormFunctionPanel form = new Feature.FormFunctionPanel();
             form.ShowDialog();
+            if (form.IsNeedExist)
+            {
+                if (ConstantValuePool.DeskForm != null)
+                {
+                    ConstantValuePool.DeskForm.Close();
+                }
+                this.Close();
+            }
         }
 
         private void btnDiscount_Click(object sender, EventArgs e)
@@ -1156,49 +1202,79 @@ namespace Top4ever.Pos
 
         private void btnTakeOut_Click(object sender, EventArgs e)
         {
-            if (dgvGoodsOrder.Rows.Count > 0)
+            if (haveDailyClose)
             {
-                if (m_SalesOrder == null || m_SalesOrder.order.EatType == (int)EatWayType.Takeout)
+                if (dgvGoodsOrder.Rows.Count > 0)
                 {
-                    int result = SubmitSalesOrder(deskName, EatWayType.Takeout);
-                    if (result == 1)
+                    if (m_SalesOrder == null || m_SalesOrder.order.EatType == (int)EatWayType.Takeout)
                     {
-                        this.lbTotalPrice.Text = "总金额：";
-                        this.lbDiscount.Text = "折扣：";
-                        this.lbNeedPayMoney.Text = "实际应付：";
-                        this.lbCutOff.Text = "去零：";
-                        dgvGoodsOrder.Rows.Clear();
-                        m_SalesOrder = null;
-                        btnDeliveryGoods.Enabled = false;
-                        btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
-                        txtTelephone.Text = string.Empty;
-                        txtName.Text = string.Empty;
-                        txtAddress.Text = string.Empty;
-                        txtTelephone.ReadOnly = false;
-                        txtName.ReadOnly = false;
-                        //加载外卖单列表
-                        OrderService orderService = new OrderService();
-                        IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
-                        if (deliveryOrderList != null)
+                        if (m_SalesOrder == null && ConstantValuePool.BizSettingConfig.CarteMode)
                         {
-                            m_PageIndex = 0;
-                            m_DeliveryOrderList = deliveryOrderList;
-                            DisplayDeliveryOrderButton();
+                            FormNumericKeypad form = new FormNumericKeypad();
+                            form.DisplayText = "请输入餐牌号";
+                            form.ShowDialog();
+                            if (string.IsNullOrEmpty(form.KeypadValue))
+                            {
+                                MessageBox.Show("餐牌号不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                return;
+                            }
+                            else
+                            {
+                                if (form.KeypadValue.Length > 3)
+                                {
+                                    MessageBox.Show("您输入的餐牌号码过大！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    return;
+                                }
+                                else
+                                {
+                                    deskName = "W" + form.KeypadValue.PadLeft(3, '0');
+                                }
+                            }
                         }
-                    }
-                    else if (result == 2)
-                    {
-                        MessageBox.Show("没有数据可以提交！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        int result = SubmitSalesOrder(deskName, EatWayType.Takeout);
+                        if (result == 1)
+                        {
+                            this.lbTotalPrice.Text = "总金额：";
+                            this.lbDiscount.Text = "折扣：";
+                            this.lbNeedPayMoney.Text = "实际应付：";
+                            this.lbCutOff.Text = "去零：";
+                            dgvGoodsOrder.Rows.Clear();
+                            m_SalesOrder = null;
+                            btnDeliveryGoods.Enabled = false;
+                            btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
+                            txtTelephone.Text = string.Empty;
+                            txtName.Text = string.Empty;
+                            txtAddress.Text = string.Empty;
+                            txtTelephone.ReadOnly = false;
+                            txtName.ReadOnly = false;
+                            //加载外卖单列表
+                            OrderService orderService = new OrderService();
+                            IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
+                            if (deliveryOrderList != null)
+                            {
+                                m_PageIndex = 0;
+                                m_DeliveryOrderList = deliveryOrderList;
+                                DisplayDeliveryOrderButton();
+                            }
+                        }
+                        else if (result == 0)
+                        {
+                            MessageBox.Show("外带提交失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else if (result == 2)
+                        {
+                            MessageBox.Show("没有数据可以提交！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                     else
                     {
-                        MessageBox.Show("外带提交失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("类型不一致，请更改类型后再进行操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                else
-                {
-                    MessageBox.Show("类型不一致，请更改类型后再进行操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+            }
+            else
+            {
+                MessageBox.Show("上次未日结，请先进行日结操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -1223,58 +1299,125 @@ namespace Top4ever.Pos
 
         private void btnOutsideOrder_Click(object sender, EventArgs e)
         {
-            if (dgvGoodsOrder.Rows.Count > 0)
+            if (haveDailyClose)
             {
-                if (m_SalesOrder == null || m_SalesOrder.order.EatType == (int)EatWayType.OutsideOrder)
+                if (dgvGoodsOrder.Rows.Count > 0)
                 {
-                    int result = SubmitSalesOrder(deskName, EatWayType.OutsideOrder);
-                    if (result == 1)
+                    if (m_SalesOrder == null || m_SalesOrder.order.EatType == (int)EatWayType.OutsideOrder)
                     {
-                        this.lbTotalPrice.Text = "总金额：";
-                        this.lbDiscount.Text = "折扣：";
-                        this.lbNeedPayMoney.Text = "实际应付：";
-                        this.lbCutOff.Text = "去零：";
-                        dgvGoodsOrder.Rows.Clear();
-                        m_SalesOrder = null;
-                        btnDeliveryGoods.Enabled = false;
-                        btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
-                        txtTelephone.Text = string.Empty;
-                        txtName.Text = string.Empty;
-                        txtAddress.Text = string.Empty;
-                        txtTelephone.ReadOnly = false;
-                        txtName.ReadOnly = false;
-                        //加载外卖单列表
-                        OrderService orderService = new OrderService();
-                        IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
-                        if (deliveryOrderList != null)
+                        if (m_SalesOrder == null && ConstantValuePool.BizSettingConfig.CarteMode)
                         {
-                            m_PageIndex = 0;
-                            m_DeliveryOrderList = deliveryOrderList;
-                            DisplayDeliveryOrderButton();
+                            FormNumericKeypad form = new FormNumericKeypad();
+                            form.DisplayText = "请输入餐牌号";
+                            form.ShowDialog();
+                            if (string.IsNullOrEmpty(form.KeypadValue))
+                            {
+                                MessageBox.Show("餐牌号不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                return;
+                            }
+                            else
+                            {
+                                if (form.KeypadValue.Length > 3)
+                                {
+                                    MessageBox.Show("您输入的餐牌号码过大！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    return;
+                                }
+                                else
+                                {
+                                    deskName = "W" + form.KeypadValue.PadLeft(3, '0');
+                                }
+                            }
                         }
-                    }
-                    else if (result == 2)
-                    {
-                        MessageBox.Show("没有数据可以提交！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        int result = SubmitSalesOrder(deskName, EatWayType.OutsideOrder);
+                        if (result == 1)
+                        {
+                            this.lbTotalPrice.Text = "总金额：";
+                            this.lbDiscount.Text = "折扣：";
+                            this.lbNeedPayMoney.Text = "实际应付：";
+                            this.lbCutOff.Text = "去零：";
+                            dgvGoodsOrder.Rows.Clear();
+                            m_SalesOrder = null;
+                            btnDeliveryGoods.Enabled = false;
+                            btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
+                            txtTelephone.Text = string.Empty;
+                            txtName.Text = string.Empty;
+                            txtAddress.Text = string.Empty;
+                            txtTelephone.ReadOnly = false;
+                            txtName.ReadOnly = false;
+                            //加载外卖单列表
+                            OrderService orderService = new OrderService();
+                            IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
+                            if (deliveryOrderList != null)
+                            {
+                                m_PageIndex = 0;
+                                m_DeliveryOrderList = deliveryOrderList;
+                                DisplayDeliveryOrderButton();
+                            }
+                        }
+                        else if (result == 0)
+                        {
+                            MessageBox.Show("外送提交失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else if (result == 2)
+                        {
+                            MessageBox.Show("没有数据可以提交！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                     else
                     {
-                        MessageBox.Show("外送提交失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("类型不一致，请更改类型后再进行操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                else
-                {
-                    MessageBox.Show("类型不一致，请更改类型后再进行操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+            }
+            else
+            {
+                MessageBox.Show("上次未日结，请先进行日结操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
         private void btnDeliveryGoods_Click(object sender, EventArgs e)
         {
+            bool IsContainsNewItem = false;
+            foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
+            {
+                if (dr.Cells["OrderDetailsID"].Value == null)
+                {
+                    IsContainsNewItem = true;
+                    break;
+                }
+            }
+            if (IsContainsNewItem)
+            {
+                MessageBox.Show("存在新单，不能出货！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            PrintData printData = new PrintData();
+            printData.ShopName = ConstantValuePool.CurrentShop.ShopName;
+            printData.DeskName = deskName;
+            printData.PersonNum = "1";
+            printData.PrintTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+            printData.EmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
+            printData.TranSequence = m_SalesOrder.order.TranSequence.ToString();
+            printData.ShopAddress = ConstantValuePool.CurrentShop.RunAddress;
+            printData.Telephone = ConstantValuePool.CurrentShop.Telephone;
+            printData.GoodsOrderList = new List<GoodsOrder>();
+            foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
+            {
+                GoodsOrder goodsOrder = new GoodsOrder();
+                goodsOrder.GoodsName = dr.Cells["GoodsName"].Value.ToString();
+                decimal ItemQty = Convert.ToDecimal(dr.Cells["GoodsNum"].Value);
+                decimal totalSellPrice = Convert.ToDecimal(dr.Cells["GoodsPrice"].Value);
+                goodsOrder.GoodsNum = ItemQty.ToString("f1");
+                goodsOrder.SellPrice = (totalSellPrice / ItemQty).ToString("f2");
+                goodsOrder.TotalSellPrice = totalSellPrice.ToString("f2");
+                goodsOrder.TotalDiscount = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value).ToString("f2");
+                goodsOrder.Unit = dr.Cells["ItemUnit"].Value.ToString();
+                printData.GoodsOrderList.Add(goodsOrder);
+            }
             string telPhone = this.txtTelephone.Text;
             string customerName = this.txtName.Text;
             string address = this.txtAddress.Text;
-            FormDeliveryGoods form = new FormDeliveryGoods(m_SalesOrder, telPhone, customerName, address);
+            FormDeliveryGoods form = new FormDeliveryGoods(m_SalesOrder, printData, telPhone, customerName, address);
             form.ShowDialog();
             if (form.HasDeliveried)
             {
@@ -1296,7 +1439,102 @@ namespace Top4ever.Pos
 
         private void btnPrintBill_Click(object sender, EventArgs e)
         {
-
+            if (dgvGoodsOrder.Rows.Count > 0)
+            {
+                bool IsContainsNewItem = false;
+                foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
+                {
+                    if (dr.Cells["OrderDetailsID"].Value == null)
+                    {
+                        IsContainsNewItem = true;
+                        break;
+                    }
+                }
+                if (IsContainsNewItem)
+                {
+                    MessageBox.Show("存在新单，不能印单！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                else
+                {
+                    if (ConstantValuePool.BizSettingConfig.printConfig.Enabled)
+                    {
+                        //打印
+                        PrintData printData = new PrintData();
+                        printData.ShopName = ConstantValuePool.CurrentShop.ShopName;
+                        printData.DeskName = deskName;
+                        printData.PersonNum = "1";
+                        printData.PrintTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+                        printData.EmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
+                        printData.TranSequence = m_SalesOrder.order.TranSequence.ToString();
+                        printData.ShopAddress = ConstantValuePool.CurrentShop.RunAddress;
+                        printData.Telephone = ConstantValuePool.CurrentShop.Telephone;
+                        printData.GoodsOrderList = new List<GoodsOrder>();
+                        foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
+                        {
+                            GoodsOrder goodsOrder = new GoodsOrder();
+                            goodsOrder.GoodsName = dr.Cells["GoodsName"].Value.ToString();
+                            decimal ItemQty = Convert.ToDecimal(dr.Cells["GoodsNum"].Value);
+                            decimal totalSellPrice = Convert.ToDecimal(dr.Cells["GoodsPrice"].Value);
+                            goodsOrder.GoodsNum = ItemQty.ToString("f1");
+                            goodsOrder.SellPrice = (totalSellPrice / ItemQty).ToString("f2");
+                            goodsOrder.TotalSellPrice = totalSellPrice.ToString("f2");
+                            goodsOrder.TotalDiscount = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value).ToString("f2");
+                            goodsOrder.Unit = dr.Cells["ItemUnit"].Value.ToString();
+                            printData.GoodsOrderList.Add(goodsOrder);
+                        }
+                        int copies = ConstantValuePool.BizSettingConfig.printConfig.Copies;
+                        string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
+                        string configPath = @"PrintConfig\InstructionPrintOrderSetting.config";
+                        string layoutPath = @"PrintConfig\PrintOrder.ini";
+                        if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
+                        {
+                            configPath = @"PrintConfig\PrintOrderSetting.config";
+                            string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                            DriverOrderPrint printer = new DriverOrderPrint(printerName, paperWidth, "SpecimenLabel");
+                            for (int i = 0; i < copies; i++)
+                            {
+                                printer.DoPrint(printData, layoutPath, configPath);
+                            }
+                        }
+                        if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.COM)
+                        {
+                            string port = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                            if (port.Length > 3)
+                            {
+                                if (port.Substring(0, 3).ToUpper() == "COM")
+                                {
+                                    string portName = port.Substring(0, 4).ToUpper();
+                                    InstructionOrderPrint printer = new InstructionOrderPrint(portName, 9600, Parity.None, 8, StopBits.One, paperWidth);
+                                    for (int i = 0; i < copies; i++)
+                                    {
+                                        printer.DoPrint(printData, layoutPath, configPath);
+                                    }
+                                }
+                            }
+                        }
+                        if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.ETHERNET)
+                        {
+                            string IPAddress = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                            InstructionOrderPrint printer = new InstructionOrderPrint(IPAddress, 9100, paperWidth);
+                            for (int i = 0; i < copies; i++)
+                            {
+                                printer.DoPrint(printData, layoutPath, configPath);
+                            }
+                        }
+                        if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.USB)
+                        {
+                            string VID = ConstantValuePool.BizSettingConfig.printConfig.VID;
+                            string PID = ConstantValuePool.BizSettingConfig.printConfig.PID;
+                            InstructionOrderPrint printer = new InstructionOrderPrint(VID, PID, paperWidth);
+                            for (int i = 0; i < copies; i++)
+                            {
+                                printer.DoPrint(printData, layoutPath, configPath);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private void btnPromotion_Click(object sender, EventArgs e)
@@ -1307,7 +1545,14 @@ namespace Top4ever.Pos
         private void btnClose_Click(object sender, EventArgs e)
         {
             m_OnShow = false;
-            this.Hide();
+            if (ConstantValuePool.DeskForm == null)
+            {
+                this.Close();
+            }
+            else
+            {
+                this.Hide();
+            }
         }
 
         private void btnPriceCode_Click(object sender, EventArgs e)
@@ -1394,7 +1639,7 @@ namespace Top4ever.Pos
         }
 
         /// <summary>
-        /// 0:提交失败 1:成功 2:没有可提交的数据
+        /// 0:提交失败 1:成功 2:没有可提交的数据 3:沽清失败
         /// </summary>
         private Int32 SubmitSalesOrder(string deskName, EatWayType eatType)
         {
@@ -1408,8 +1653,9 @@ namespace Top4ever.Pos
             {
                 orderID = m_SalesOrder.order.OrderID;
             }
-            List<OrderDetails> newOrderDetailsList = new List<OrderDetails>();
-            List<OrderDiscount> newOrderDiscountList = new List<OrderDiscount>();
+            IList<GoodsCheckStock> temp = new List<GoodsCheckStock>();
+            IList<OrderDetails> newOrderDetailsList = new List<OrderDetails>();
+            IList<OrderDiscount> newOrderDiscountList = new List<OrderDiscount>();
             foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
             {
                 if (dr.Cells["OrderDetailsID"].Value == null)
@@ -1442,6 +1688,12 @@ namespace Top4ever.Pos
                         orderDetails.SellPrice = goods.SellPrice;
                         orderDetails.PrintSolutionName = goods.PrintSolutionName;
                         orderDetails.DepartID = goods.DepartID;
+
+                        GoodsCheckStock goodsCheckStock = new GoodsCheckStock();
+                        goodsCheckStock.GoodsID = goods.GoodsID;
+                        goodsCheckStock.GoodsName = goods.GoodsName;
+                        goodsCheckStock.ReducedQuantity = orderDetails.ItemQty;
+                        temp.Add(goodsCheckStock);
                     }
                     else if (itemType == (int)OrderItemType.Details)
                     {
@@ -1558,6 +1810,38 @@ namespace Top4ever.Pos
                             orderDiscount.EmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
                             newOrderDiscountList.Add(orderDiscount);
                         }
+                    }
+                }
+            }
+            //品项沽清
+            GoodsService goodsService = new GoodsService();
+            IList<GoodsCheckStock> tempGoodsStockList = goodsService.GetGoodsCheckStock();
+            if (tempGoodsStockList.Count > 0 && temp.Count > 0)
+            {
+                IList<GoodsCheckStock> goodsCheckStockList = new List<GoodsCheckStock>();
+                foreach (GoodsCheckStock item in temp)
+                {
+                    bool IsContains = false;
+                    foreach (GoodsCheckStock tempGoodsStock in tempGoodsStockList)
+                    {
+                        if (item.GoodsID.Equals(tempGoodsStock.GoodsID))
+                        {
+                            IsContains = true;
+                            break;
+                        }
+                    }
+                    if (IsContains)
+                    {
+                        goodsCheckStockList.Add(item);
+                    }
+                }
+                if (goodsCheckStockList.Count > 0)
+                {
+                    string goodsName = goodsService.UpdateReducedGoodsQty(goodsCheckStockList);
+                    if (!string.IsNullOrEmpty(goodsName))
+                    {
+                        MessageBox.Show(string.Format("<{0}> 的剩余数量不足！", goodsName), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return 3;
                     }
                 }
             }
@@ -2429,6 +2713,339 @@ namespace Top4ever.Pos
             txtAddress.Text = string.Empty;
             txtTelephone.ReadOnly = false;
             txtName.ReadOnly = false;
+        }
+
+        private bool IsGoodsOrGroupButtonEnabled(Guid goodsOrGroupID)
+        {
+            bool IsEnabled = true;
+            foreach (GoodsCronTrigger trigger in ConstantValuePool.GoodsCronTriggerList)
+            {
+                if (goodsOrGroupID == trigger.CronTriggerID)
+                {
+                    DayOfWeek curWeek = DateTime.Now.DayOfWeek;
+                    string curMonth = DateTime.Now.Month.ToString();
+                    string curDay = DateTime.Now.Day.ToString();
+                    string curShortTime = DateTime.Now.ToString("HH:mm");
+                    //判断是否包含当前月份
+                    if (trigger.Month != "*")
+                    {
+                        string[] monthArr = trigger.Month.Split(',');
+                        bool IsContainMonth = false;
+                        foreach (string month in monthArr)
+                        {
+                            if (curMonth == month)
+                            {
+                                IsContainMonth = true;
+                                break;
+                            }
+                        }
+                        if (!IsContainMonth)
+                        {
+                            IsEnabled = false;
+                            break;
+                        }
+                    }
+                    //判断周或者日
+                    if (trigger.Week == "?")
+                    {
+                        //判断是否包含当日
+                        if (trigger.Day != "*")
+                        {
+                            string[] dayArr = trigger.Day.Split(',');
+                            bool IsContainDay = false;
+                            foreach (string day in dayArr)
+                            {
+                                if (curDay == day)
+                                {
+                                    IsContainDay = true;
+                                    break;
+                                }
+                            }
+                            if (!IsContainDay)
+                            {
+                                IsEnabled = false;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //判断是否包含周几
+                        //判断包含# 例:当月第几周星期几
+                        if (trigger.Week.IndexOf('#') > 0)
+                        {
+                            string weekIndex = trigger.Week.Split('#')[0];
+                            string weekDay = trigger.Week.Split('#')[1];
+                            //计算当日是当月的第几周
+                            DateTime FirstofMonth = Convert.ToDateTime(DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + "01");
+                            int i = (int)FirstofMonth.Date.DayOfWeek;
+                            if (i == 0)
+                            {
+                                i = 7;
+                            }
+                            int curWeekIndex = (DateTime.Now.Day + i - 1) / 7;
+                            if (curWeekIndex != int.Parse(weekIndex))
+                            {
+                                IsEnabled = false;
+                                break;
+                            }
+                            else
+                            {
+                                if ((int)curWeek != int.Parse(weekDay))
+                                {
+                                    IsEnabled = false;
+                                    break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            //不包含# 例:当月每个星期几
+                            string[] weekArr = trigger.Week.Split(',');
+                            bool IsContainWeek = false;
+                            foreach (string week in weekArr)
+                            {
+                                if ((int)curWeek == int.Parse(week))
+                                {
+                                    IsContainWeek = true;
+                                    break;
+                                }
+                            }
+                            if (!IsContainWeek)
+                            {
+                                IsEnabled = false;
+                                break;
+                            }
+                        }
+                    }
+                    //判断时间段
+                    if (trigger.SmallTime != "*")
+                    {
+                        if (trigger.SmallTime.IndexOf(',') > 0)
+                        {
+                            bool IsInTime = false;
+                            string[] timeIntervalArr = trigger.SmallTime.Split(',');
+                            foreach (string timeInterval in timeIntervalArr)
+                            {
+                                if (timeInterval.IndexOf('-') > 0)
+                                {
+                                    DateTime beginTime = Convert.ToDateTime(timeInterval.Split('-')[0].Trim());
+                                    DateTime endTime = Convert.ToDateTime(timeInterval.Split('-')[1].Trim());
+                                    if (DateTime.Now >= beginTime && DateTime.Now <= endTime)
+                                    {
+                                        IsInTime = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (!IsInTime)
+                            {
+                                IsEnabled = false;
+                                break;
+                            }
+                        }
+                        else if (trigger.SmallTime.IndexOf('-') > 0)
+                        {
+                            DateTime beginTime = Convert.ToDateTime(trigger.SmallTime.Split('-')[0].Trim());
+                            DateTime endTime = Convert.ToDateTime(trigger.SmallTime.Split('-')[1].Trim());
+                            if (DateTime.Now < beginTime || DateTime.Now > endTime)
+                            {
+                                IsEnabled = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+            return IsEnabled;
+        }
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            string singleCode = this.txtSearch.Text.Trim();
+            if (singleCode.Length > 3)
+            {
+                List<Goods> goodsList = new List<Goods>();
+                foreach (GoodsGroup goodsGroup in ConstantValuePool.GoodsGroupList)
+                {
+                    foreach (Goods goods in goodsGroup.GoodsList)
+                    {
+                        if (!string.IsNullOrEmpty(goods.BrevityCode) && goods.BrevityCode.IndexOf(singleCode) >= 0)
+                        {
+                            goodsList.Add(goods);
+                        }
+                        if (!string.IsNullOrEmpty(goods.PinyinCode) && goods.PinyinCode.IndexOf(singleCode) >= 0)
+                        {
+                            goodsList.Add(goods);
+                        }
+                    }
+                }
+                //少于一页的数量才显示
+                if (goodsList.Count <= m_ItemPageSize)
+                {
+                    //禁止引发Layout事件
+                    this.pnlItem.SuspendLayout();
+                    this.SuspendLayout();
+
+                    int unDisplayNum = m_ItemPageSize - goodsList.Count;
+                    //隐藏没有内容的按钮
+                    for (int i = btnItemList.Count - unDisplayNum; i < btnItemList.Count; i++)
+                    {
+                        btnItemList[i].Visible = false;
+                    }
+                    //显示有内容的按钮
+                    for (int i = 0; i < goodsList.Count; i++)
+                    {
+                        Goods goods = goodsList[i];
+                        CrystalButton btn = btnItemList[i];
+                        btn.Visible = true;
+                        if (m_ShowSilverCode)
+                        {
+                            btn.Text = goods.GoodsName + "\r\n ￥" + goods.SellPrice.ToString("f2");
+                        }
+                        else
+                        {
+                            btn.Text = goods.GoodsName;
+                        }
+                        btn.Tag = goods;
+                        btn.Enabled = IsGoodsOrGroupButtonEnabled(goods.GoodsID);
+                        foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
+                        {
+                            if (goods.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
+                            {
+                                float emSize = (float)btnStyle.FontSize;
+                                FontStyle style = FontStyle.Regular;
+                                btn.Font = new Font(btnStyle.FontName, emSize, style);
+                                btn.ForeColor = ColorConvert.RGB(btnStyle.ForeColor);
+                                btn.BackColor = btn.DisplayColor = ColorConvert.RGB(btnStyle.BackColor);
+                                break;
+                            }
+                        }
+                    }
+                    btnHead.Enabled = false;
+                    btnHead.BackColor = ConstantValuePool.DisabledColor;
+                    btnBack.Enabled = false;
+                    btnBack.BackColor = ConstantValuePool.DisabledColor;
+
+                    this.pnlItem.ResumeLayout(false);
+                    this.pnlItem.PerformLayout();
+                    this.ResumeLayout(false);
+                }
+            }
+        }
+
+        private void btnTasteRemark_Click(object sender, EventArgs e)
+        {
+            if (dgvGoodsOrder.CurrentRow != null)
+            {
+                //权限验证
+                bool hasRights = false;
+                if (RightsItemCode.FindRights(RightsItemCode.CUSTOMTASTE))
+                {
+                    hasRights = true;
+                }
+                else
+                {
+                    FormRightsCode form = new FormRightsCode();
+                    form.ShowDialog();
+                    if (form.ReturnValue)
+                    {
+                        IList<string> rightsCodeList = form.RightsCodeList;
+                        if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.CUSTOMTASTE))
+                        {
+                            hasRights = true;
+                        }
+                    }
+                }
+                if (!hasRights)
+                {
+                    return;
+                }
+                int selectIndex = dgvGoodsOrder.CurrentRow.Index;
+                if (dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value == null)
+                {
+                    string goodsName = dgvGoodsOrder.Rows[selectIndex].Cells["GoodsName"].Value.ToString();
+                    FormCustomDetails form = new FormCustomDetails(goodsName);
+                    form.ShowDialog();
+                    if (!string.IsNullOrEmpty(form.CustomTasteName))
+                    {
+                        string printSolutionName = string.Empty;
+                        Guid departID = Guid.Empty;
+                        int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value);
+                        if (itemType == (int)OrderItemType.Goods)
+                        {
+                            Goods _goods = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Goods;
+                            printSolutionName = _goods.PrintSolutionName;
+                            departID = _goods.DepartID;
+                        }
+                        else if (itemType == (int)OrderItemType.Details)
+                        {
+                            Details _details = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Details;
+                            printSolutionName = _details.PrintSolutionName;
+                            departID = _details.DepartID;
+                        }
+                        Details details = new Details();
+                        details.DetailsID = new Guid("77777777-7777-7777-7777-777777777777");
+                        details.DetailsNo = "7777";
+                        details.DetailsName = details.DetailsName2nd = form.CustomTasteName.Replace("-", "");
+                        details.SellPrice = 0;
+                        details.CanDiscount = false;
+                        details.AutoShowDetails = false;
+                        details.PrintSolutionName = printSolutionName;
+                        details.DepartID = departID;
+                        //数量
+                        decimal itemNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
+                        DataGridViewRow dgr = dgvGoodsOrder.Rows[0].Clone() as DataGridViewRow;
+                        dgr.Cells[0].Value = details.DetailsID;
+                        dgr.Cells[0].Tag = details;
+                        dgr.Cells[1].Value = itemNum;
+                        dgr.Cells[2].Value = form.CustomTasteName;
+                        dgr.Cells[3].Value = details.SellPrice;
+                        dgr.Cells[4].Value = 0;
+                        dgr.Cells[5].Value = OrderItemType.Details;
+                        dgr.Cells[6].Value = details.CanDiscount;
+                        int rowIndex = selectIndex + 1;
+                        if (rowIndex == dgvGoodsOrder.Rows.Count)
+                        {
+                            dgvGoodsOrder.Rows.Add(dgr);
+                        }
+                        else
+                        {
+                            if (Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                            {
+                                for (int i = selectIndex + 1; i < dgvGoodsOrder.RowCount; i++)
+                                {
+                                    itemType = Convert.ToInt32(dgvGoodsOrder.Rows[i].Cells["ItemType"].Value);
+                                    if (itemType == (int)OrderItemType.Goods)
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        rowIndex++;
+                                    }
+                                }
+                            }
+                            dgvGoodsOrder.Rows.Insert(rowIndex, dgr);
+                        }
+                        //统计
+                        BindOrderInfoSum();
+                    }
+                }
+            }
+        }
+
+        private void btnCheckout_Click(object sender, EventArgs e)
+        {
+            if (haveDailyClose)
+            {
+
+            }
+            else
+            {
+                MessageBox.Show("上次未日结，请先进行日结操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }

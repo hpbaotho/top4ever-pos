@@ -692,6 +692,7 @@ namespace Top4ever.Pos
             this.btnTasteRemark.TabIndex = 0;
             this.btnTasteRemark.Text = "¿ÚÎ¶±¸×¢";
             this.btnTasteRemark.UseVisualStyleBackColor = false;
+            this.btnTasteRemark.Click += new System.EventHandler(this.btnTasteRemark_Click);
             // 
             // pnlRight
             // 
@@ -800,6 +801,7 @@ namespace Top4ever.Pos
             this.btnCheckout.TabIndex = 2;
             this.btnCheckout.Text = "½áÕË";
             this.btnCheckout.UseVisualStyleBackColor = false;
+            this.btnCheckout.Click += new System.EventHandler(this.btnCheckout_Click);
             // 
             // txtSearch
             // 
@@ -808,6 +810,7 @@ namespace Top4ever.Pos
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(200, 33);
             this.txtSearch.TabIndex = 1;
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             // 
             // lbGoodsCode
             // 

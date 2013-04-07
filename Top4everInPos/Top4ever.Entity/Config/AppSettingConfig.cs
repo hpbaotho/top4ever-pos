@@ -45,25 +45,40 @@ namespace Top4ever.Entity.Config
         [XmlElement("FontSize")]
         public float FontSize { get; set; }
         /// <summary>
+        /// 营业方式
+        /// </summary>
+        [XmlElement("SaleType")]
+        public ShopSaleType SaleType { get; set; }
+        /// <summary>
         /// 启用零用金
         /// </summary>
         [XmlElement("UsePettyCash")]
         public bool UsePettyCash { get; set; }
         /// <summary>
-        /// 显示简码
-        /// </summary>
-        [XmlElement("ShowBrevityCode")]
-        public bool ShowBrevityCode { get; set; }
-        /// <summary>
-        /// 抽大钞
+        /// 启用抽大钞
         /// </summary>
         [XmlElement("TakeAwayCash")]
         public bool TakeAwayCash { get; set; }
         /// <summary>
-        /// 是否沽清
+        /// 自动显示简码
         /// </summary>
-        [XmlElement("CheckSoldOut")]
-        public bool CheckSoldOut { get; set; }
+        [XmlElement("ShowBrevityCode")]
+        public bool ShowBrevityCode { get; set; }
+        /// <summary>
+        /// 显示沽清数量
+        /// </summary>
+        [XmlElement("ShowSoldOutQty")]
+        public bool ShowSoldOutQty { get; set; }
+        /// <summary>
+        /// 直接出货
+        /// </summary>
+        [XmlElement("DirectShipping")]
+        public bool DirectShipping { get; set; }
+        /// <summary>
+        /// 餐牌模式
+        /// </summary>
+        [XmlElement("CarteMode")]
+        public bool CarteMode { get; set; }
 
         [XmlElement("BizUIConfig")]
         public BizUIConfig bizUIConfig { get; set; }
