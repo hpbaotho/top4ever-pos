@@ -49,6 +49,7 @@
     <Compile Include="Enum\Command.cs" />
     <Compile Include="Enum\ParamFieldLength.cs" />
     <Compile Include="Enum\RET_VALUE.cs" />
+    <Compile Include="GoodsService.cs" />
     <Compile Include="HandoverService.cs" />
     <Compile Include="ModifyOrderService.cs" />
     <Compile Include="OrderDetailsService.cs" />
@@ -58,7 +59,7 @@
     <Compile Include="ReminderService.cs" />
     <Compile Include="SalesOrderService.cs" />
     <Compile Include="SocketClient.cs" />
-    <Compile Include="SystemBasicData.cs" />
+    <Compile Include="SystemBasicDataService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Top4ever.Domain\Top4ever.Domain.csproj">
