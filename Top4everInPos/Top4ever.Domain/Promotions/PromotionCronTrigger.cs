@@ -1,17 +1,13 @@
 ﻿using System;
 
-namespace Top4ever.Domain.GoodsRelated
+namespace Top4ever.Domain.Promotions
 {
-    public class GoodsCronTrigger
+    public class PromotionCronTrigger
     {
         /// <summary>
-        /// 组或者品项的主键
+        /// 活动号
         /// </summary>
-        public Guid ItemID { get; set; }
-        /// <summary>
-        /// 品项类别
-        /// </summary>
-        public int ItemType { get; set; }
+        public string ActivityNo { get; set; }
         /// <summary>
         /// 开始日期
         /// </summary>
