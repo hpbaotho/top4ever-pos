@@ -51,6 +51,8 @@
     <Compile Include="GoodsRelated\Details.cs" />
     <Compile Include="GoodsRelated\DetailsGroup.cs" />
     <Compile Include="GoodsRelated\Goods.cs" />
+    <Compile Include="GoodsRelated\GoodsCheckStock.cs" />
+    <Compile Include="GoodsRelated\GoodsCronTrigger.cs" />
     <Compile Include="GoodsRelated\GoodsGroup.cs" />
     <Compile Include="GoodsRelated\GoodsSetMeal.cs" />
     <Compile Include="HandoverRecord.cs" />
@@ -63,6 +65,10 @@
     <Compile Include="OrderRelated\PayoffWay.cs" />
     <Compile Include="OrderRelated\Reason.cs" />
     <Compile Include="PrintTask.cs" />
+    <Compile Include="Promotions\Promotion.cs" />
+    <Compile Include="Promotions\PromotionCondition.cs" />
+    <Compile Include="Promotions\PromotionCronTrigger.cs" />
+    <Compile Include="Promotions\PromotionPresent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shop.cs" />
     <Compile Include="SystemConfig.cs" />

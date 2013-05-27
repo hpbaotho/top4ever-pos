@@ -52,6 +52,7 @@
     <Compile Include="IHandoverRecordDao.cs" />
     <Compile Include="IHandoverTurnoverDao.cs" />
     <Compile Include="IPrintTaskDao.cs" />
+    <Compile Include="IPromotionDao.cs" />
     <Compile Include="IRegionDao.cs" />
     <Compile Include="IShopDao.cs" />
     <Compile Include="ISystemConfigDao.cs" />
