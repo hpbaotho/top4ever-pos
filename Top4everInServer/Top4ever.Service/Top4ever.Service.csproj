@@ -49,6 +49,7 @@
     <Compile Include="DeletedOrderService.cs" />
     <Compile Include="DeskService.cs" />
     <Compile Include="EmployeeService.cs" />
+    <Compile Include="GoodsService.cs" />
     <Compile Include="HandoverService.cs" />
     <Compile Include="ModifyOrderService.cs" />
     <Compile Include="OrderDetailsService.cs" />

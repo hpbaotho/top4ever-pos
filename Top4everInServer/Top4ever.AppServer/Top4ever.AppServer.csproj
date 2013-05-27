@@ -91,6 +91,7 @@
     </Content>
     <Content Include="Maps\PayoffWay.xml" />
     <Content Include="Maps\PrintTask.xml" />
+    <Content Include="Maps\Promotions.xml" />
     <Content Include="Maps\Reason.xml" />
     <Content Include="Maps\Region.xml" />
     <Content Include="Maps\Shop.xml" />

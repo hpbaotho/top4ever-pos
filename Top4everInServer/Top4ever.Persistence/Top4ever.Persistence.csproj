@@ -70,6 +70,7 @@
     <Compile Include="OrderRelated\PayoffWaySqlMapDao.cs" />
     <Compile Include="OrderRelated\ReasonSqlMapDao.cs" />
     <Compile Include="PrintTaskSqlMapDao.cs" />
+    <Compile Include="PromotionSqlMapDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegionSqlMapDao.cs" />
     <Compile Include="ShopSqlMapDao.cs" />

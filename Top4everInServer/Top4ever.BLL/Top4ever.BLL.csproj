@@ -50,6 +50,7 @@
     <Compile Include="Enum\Command.cs" />
     <Compile Include="Enum\ParamFieldLength.cs" />
     <Compile Include="Enum\RET_VALUE.cs" />
+    <Compile Include="GoodsBLL.cs" />
     <Compile Include="HandoverBLL.cs" />
     <Compile Include="ModifyOrderBLL.cs" />
     <Compile Include="OrderBLL.cs" />
