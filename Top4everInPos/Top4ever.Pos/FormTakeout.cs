@@ -330,7 +330,7 @@ namespace Top4ever.Pos
                 btn.Visible = true;
                 btn.Text = goodsGroup.GoodsGroupName;
                 btn.Tag = goodsGroup;
-                btn.Enabled = IsGoodsOrGroupButtonEnabled(goodsGroup.GoodsGroupID);
+                btn.Enabled = IsItemButtonEnabled(goodsGroup.GoodsGroupID, ItemsType.GoodsGroup);
                 foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
                 {
                     if (goodsGroup.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
@@ -414,7 +414,7 @@ namespace Top4ever.Pos
                             btn.Text = goods.GoodsName;
                         }
                         btn.Tag = goods;
-                        btn.Enabled = IsGoodsOrGroupButtonEnabled(goods.GoodsID);
+                        btn.Enabled = IsItemButtonEnabled(goods.GoodsID, ItemsType.Goods);
                         foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
                         {
                             if (goods.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
@@ -2715,83 +2715,37 @@ namespace Top4ever.Pos
             txtName.ReadOnly = false;
         }
 
-        private bool IsGoodsOrGroupButtonEnabled(Guid goodsOrGroupID)
+        private bool IsItemButtonEnabled(Guid itemID, ItemsType itemType)
         {
             bool IsEnabled = true;
             foreach (GoodsCronTrigger trigger in ConstantValuePool.GoodsCronTriggerList)
             {
-                if (goodsOrGroupID == trigger.CronTriggerID)
+                if (itemID == trigger.ItemID && (int)itemType == trigger.ItemType)
                 {
-                    DayOfWeek curWeek = DateTime.Now.DayOfWeek;
-                    string curMonth = DateTime.Now.Month.ToString();
-                    string curDay = DateTime.Now.Day.ToString();
-                    string curShortTime = DateTime.Now.ToString("HH:mm");
-                    //判断是否包含当前月份
-                    if (trigger.Month != "*")
+                    if (DateTime.Now >= DateTime.Parse(trigger.BeginDate) && DateTime.Now <= DateTime.Parse(trigger.EndDate))
                     {
-                        string[] monthArr = trigger.Month.Split(',');
-                        bool IsContainMonth = false;
-                        foreach (string month in monthArr)
+                        DayOfWeek curWeek = DateTime.Now.DayOfWeek;
+                        string curMonth = DateTime.Now.Month.ToString();
+                        string curDay = DateTime.Now.Day.ToString();
+                        int curHour = DateTime.Now.Hour;
+                        int curMinute = DateTime.Now.Minute;
+                        //判断周或者日
+                        if (trigger.Week == "?")
                         {
-                            if (curMonth == month)
+                            //判断是否包含当日
+                            if (trigger.Day != "*")
                             {
-                                IsContainMonth = true;
-                                break;
-                            }
-                        }
-                        if (!IsContainMonth)
-                        {
-                            IsEnabled = false;
-                            break;
-                        }
-                    }
-                    //判断周或者日
-                    if (trigger.Week == "?")
-                    {
-                        //判断是否包含当日
-                        if (trigger.Day != "*")
-                        {
-                            string[] dayArr = trigger.Day.Split(',');
-                            bool IsContainDay = false;
-                            foreach (string day in dayArr)
-                            {
-                                if (curDay == day)
+                                string[] dayArr = trigger.Day.Split(',');
+                                bool IsContainDay = false;
+                                foreach (string day in dayArr)
                                 {
-                                    IsContainDay = true;
-                                    break;
+                                    if (curDay == day)
+                                    {
+                                        IsContainDay = true;
+                                        break;
+                                    }
                                 }
-                            }
-                            if (!IsContainDay)
-                            {
-                                IsEnabled = false;
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        //判断是否包含周几
-                        //判断包含# 例:当月第几周星期几
-                        if (trigger.Week.IndexOf('#') > 0)
-                        {
-                            string weekIndex = trigger.Week.Split('#')[0];
-                            string weekDay = trigger.Week.Split('#')[1];
-                            //计算当日是当月的第几周
-                            DateTime FirstofMonth = Convert.ToDateTime(DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + "01");
-                            int i = (int)FirstofMonth.Date.DayOfWeek;
-                            if (i == 0)
-                            {
-                                i = 7;
-                            }
-                            int curWeekIndex = (DateTime.Now.Day + i - 1) / 7;
-                            if (curWeekIndex != int.Parse(weekIndex))
-                            {
-                                IsEnabled = false;
-                                break;
-                            }
-                            else
-                            {
-                                if ((int)curWeek != int.Parse(weekDay))
+                                if (!IsContainDay)
                                 {
                                     IsEnabled = false;
                                     break;
@@ -2800,63 +2754,194 @@ namespace Top4ever.Pos
                         }
                         else
                         {
-                            //不包含# 例:当月每个星期几
-                            string[] weekArr = trigger.Week.Split(',');
-                            bool IsContainWeek = false;
-                            foreach (string week in weekArr)
+                            //判断是否包含周几
+                            //判断包含# 例:当月第几周星期几
+                            if (trigger.Week.IndexOf('#') > 0)
                             {
-                                if ((int)curWeek == int.Parse(week))
+                                string weekIndex = trigger.Week.Split('#')[0];
+                                string weekDay = trigger.Week.Split('#')[1];
+                                //计算当日是当月的第几周
+                                DateTime FirstofMonth = Convert.ToDateTime(DateTime.Now.Year + "-" + DateTime.Now.Month.ToString().PadLeft(2, '0') + "-" + "01");
+                                int i = (int)FirstofMonth.Date.DayOfWeek;
+                                if (i == 0)
                                 {
-                                    IsContainWeek = true;
+                                    i = 7;
+                                }
+                                int curWeekIndex = (DateTime.Now.Day + i - 1) / 7;
+                                if (curWeekIndex != int.Parse(weekIndex))
+                                {
+                                    IsEnabled = false;
                                     break;
                                 }
-                            }
-                            if (!IsContainWeek)
-                            {
-                                IsEnabled = false;
-                                break;
-                            }
-                        }
-                    }
-                    //判断时间段
-                    if (trigger.SmallTime != "*")
-                    {
-                        if (trigger.SmallTime.IndexOf(',') > 0)
-                        {
-                            bool IsInTime = false;
-                            string[] timeIntervalArr = trigger.SmallTime.Split(',');
-                            foreach (string timeInterval in timeIntervalArr)
-                            {
-                                if (timeInterval.IndexOf('-') > 0)
+                                else
                                 {
-                                    DateTime beginTime = Convert.ToDateTime(timeInterval.Split('-')[0].Trim());
-                                    DateTime endTime = Convert.ToDateTime(timeInterval.Split('-')[1].Trim());
-                                    if (DateTime.Now >= beginTime && DateTime.Now <= endTime)
+                                    if ((int)curWeek != int.Parse(weekDay))
                                     {
-                                        IsInTime = true;
+                                        IsEnabled = false;
                                         break;
                                     }
                                 }
                             }
-                            if (!IsInTime)
+                            else
                             {
-                                IsEnabled = false;
-                                break;
+                                //不包含# 例:当月每个星期几
+                                string[] weekArr = trigger.Week.Split(',');
+                                bool IsContainWeek = false;
+                                foreach (string week in weekArr)
+                                {
+                                    if ((int)curWeek == int.Parse(week))
+                                    {
+                                        IsContainWeek = true;
+                                        break;
+                                    }
+                                }
+                                if (!IsContainWeek)
+                                {
+                                    IsEnabled = false;
+                                    break;
+                                }
                             }
                         }
-                        else if (trigger.SmallTime.IndexOf('-') > 0)
+                        //判断时
+                        if (trigger.Hour != "*")
                         {
-                            DateTime beginTime = Convert.ToDateTime(trigger.SmallTime.Split('-')[0].Trim());
-                            DateTime endTime = Convert.ToDateTime(trigger.SmallTime.Split('-')[1].Trim());
-                            if (DateTime.Now < beginTime || DateTime.Now > endTime)
+                            if (trigger.Hour.IndexOf('-') > 0)
                             {
-                                IsEnabled = false;
-                                break;
+                                string hourMinute = curHour.ToString().PadLeft(2, '0') + ":" + curMinute.ToString().PadLeft(2, '0');
+                                if (trigger.Hour.IndexOf(',') > 0) //多个小时时间段
+                                {
+                                    string[] hourArr = trigger.Hour.Split(',');
+                                    bool IsContainHour = false;
+                                    foreach (string hour in hourArr)
+                                    {
+                                        string beginHour = hour.Split('-')[0].Trim();
+                                        string endHour = hour.Split('-')[1].Trim();
+                                        if (string.Compare(hourMinute, beginHour) >= 0 && string.Compare(hourMinute, endHour) <= 0)
+                                        {
+                                            IsContainHour = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!IsContainHour)
+                                    {
+                                        IsEnabled = false;
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    string beginHour = trigger.Hour.Split('-')[0].Trim();
+                                    string endHour = trigger.Hour.Split('-')[1].Trim();
+                                    if (string.Compare(hourMinute, beginHour) < 0 || string.Compare(hourMinute, endHour) > 0)
+                                    {
+                                        IsEnabled = false;
+                                        break;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (trigger.Hour.IndexOf(',') > 0) //多个小时
+                                {
+                                    string[] hourArr = trigger.Hour.Split(',');
+                                    bool IsContainHour = false;
+                                    foreach (string hour in hourArr)
+                                    {
+                                        if (curHour == int.Parse(hour))
+                                        {
+                                            IsContainHour = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!IsContainHour)
+                                    {
+                                        IsEnabled = false;
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    if (curHour != int.Parse(trigger.Hour))
+                                    {
+                                        IsEnabled = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        //判断分
+                        if (trigger.Minute != "*")
+                        {
+                            if (trigger.Minute.IndexOf('-') > 0)
+                            {
+                                if (trigger.Minute.IndexOf(',') > 0) //多个分钟时间段
+                                {
+                                    string[] minuteArr = trigger.Minute.Split(',');
+                                    bool IsContainMinute = false;
+                                    foreach (string minute in minuteArr)
+                                    {
+                                        string beginMinute = minute.Split('-')[0];
+                                        string endMinute = minute.Split('-')[1];
+                                        if (curMinute >= int.Parse(beginMinute) && curMinute <= int.Parse(endMinute))
+                                        {
+                                            IsContainMinute = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!IsContainMinute)
+                                    {
+                                        IsEnabled = false;
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    string beginMinute = trigger.Minute.Split('-')[0];
+                                    string endMinute = trigger.Minute.Split('-')[1];
+                                    if (curMinute < int.Parse(beginMinute) || curMinute > int.Parse(endMinute))
+                                    {
+                                        IsEnabled = false;
+                                        break;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (trigger.Minute.IndexOf(',') > 0) //多个分钟
+                                {
+                                    string[] minuteArr = trigger.Minute.Split(',');
+                                    bool IsContainMinute = false;
+                                    foreach (string minute in minuteArr)
+                                    {
+                                        if (curMinute == int.Parse(minute))
+                                        {
+                                            IsContainMinute = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!IsContainMinute)
+                                    {
+                                        IsEnabled = false;
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    if (curMinute != int.Parse(trigger.Minute))
+                                    {
+                                        IsEnabled = false;
+                                        break;
+                                    }
+                                }
                             }
                         }
                     }
+                    else
+                    {
+                        IsEnabled = false;
+                    }
+                    break;
                 }
-                break;
             }
             return IsEnabled;
         }
@@ -2909,7 +2994,7 @@ namespace Top4ever.Pos
                             btn.Text = goods.GoodsName;
                         }
                         btn.Tag = goods;
-                        btn.Enabled = IsGoodsOrGroupButtonEnabled(goods.GoodsID);
+                        btn.Enabled = IsItemButtonEnabled(goods.GoodsID, ItemsType.Goods);
                         foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
                         {
                             if (goods.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
