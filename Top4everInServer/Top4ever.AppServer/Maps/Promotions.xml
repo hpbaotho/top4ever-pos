@@ -15,6 +15,7 @@
       <result property="PresentType" column="PresentType"></result>
       <result property="WithOtherPromotion" column="WithOtherPromotion"></result>
       <result property="CustomerBase" column="CustomerBase"></result>
+      <result property="TimeLimit" column="TimeLimit"></result>
       <result property="PairItems" column="PairItems"></result>
       <result property="IsIncluded" column="IsIncluded"></result>
       <result property="AndOr" column="AndOr"></result>
@@ -61,7 +62,7 @@
     -->
   <statements>
     <select id="GetAllPromotion" resultMap="PromotionResult">
-      SELECT ActivityNo, PromotionName, PresentType, WithOtherPromotion, CustomerBase, PairItems, IsIncluded, AndOr
+      SELECT ActivityNo, PromotionName, PresentType, WithOtherPromotion, CustomerBase, TimeLimit, PairItems, IsIncluded, AndOr
       FROM Promotion
       WHERE IsVoided = 0
       ORDER BY OrderBy
@@ -80,7 +81,7 @@
     </select>
 
     <select id="GetAllPromotionPresent" resultMap="PromotionPresentResult">
-      SELECT ActivityNo, TotalMoney, TotalQuantity, Classification, GoodsNo, SellPrice,
+      SELECT ActivityNo, TotalMoney, TotalQuantity, Classification, GoodsID, SellPrice,
       Quantity, DiscountRate, OffFixPay, TimesLimit, IsMultiple, TypeOption
       FROM PromotionPresent
       WHERE IsVoided = 0

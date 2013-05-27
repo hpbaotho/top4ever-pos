@@ -251,7 +251,7 @@ namespace Top4ever.Pos
             this.pnlCustomerInfo.Controls.Add(this.btnAddress);
             this.pnlCustomerInfo.Controls.Add(this.txtTelephone);
             this.pnlCustomerInfo.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlCustomerInfo.Location = new System.Drawing.Point(0, 733);
+            this.pnlCustomerInfo.Location = new System.Drawing.Point(0, 715);
             this.pnlCustomerInfo.Name = "pnlCustomerInfo";
             this.pnlCustomerInfo.Size = new System.Drawing.Size(1024, 35);
             this.pnlCustomerInfo.TabIndex = 0;
@@ -350,7 +350,7 @@ namespace Top4ever.Pos
             this.pnlDelivery.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlDelivery.Location = new System.Drawing.Point(0, 58);
             this.pnlDelivery.Name = "pnlDelivery";
-            this.pnlDelivery.Size = new System.Drawing.Size(129, 675);
+            this.pnlDelivery.Size = new System.Drawing.Size(129, 657);
             this.pnlDelivery.TabIndex = 2;
             // 
             // pnlPage
@@ -358,7 +358,7 @@ namespace Top4ever.Pos
             this.pnlPage.Controls.Add(this.btnPgDown);
             this.pnlPage.Controls.Add(this.btnPgUp);
             this.pnlPage.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlPage.Location = new System.Drawing.Point(0, 622);
+            this.pnlPage.Location = new System.Drawing.Point(0, 604);
             this.pnlPage.Name = "pnlPage";
             this.pnlPage.Size = new System.Drawing.Size(129, 53);
             this.pnlPage.TabIndex = 0;
@@ -397,7 +397,7 @@ namespace Top4ever.Pos
             this.pnlGoodsOrder.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlGoodsOrder.Location = new System.Drawing.Point(129, 58);
             this.pnlGoodsOrder.Name = "pnlGoodsOrder";
-            this.pnlGoodsOrder.Size = new System.Drawing.Size(398, 675);
+            this.pnlGoodsOrder.Size = new System.Drawing.Size(398, 657);
             this.pnlGoodsOrder.TabIndex = 2;
             // 
             // dgvGoodsOrder
@@ -435,7 +435,7 @@ namespace Top4ever.Pos
             this.dgvGoodsOrder.RowHeadersVisible = false;
             this.dgvGoodsOrder.RowTemplate.Height = 23;
             this.dgvGoodsOrder.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvGoodsOrder.Size = new System.Drawing.Size(398, 463);
+            this.dgvGoodsOrder.Size = new System.Drawing.Size(398, 445);
             this.dgvGoodsOrder.TabIndex = 3;
             this.dgvGoodsOrder.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgvGoodsOrder_MouseDown);
             // 
@@ -594,7 +594,7 @@ namespace Top4ever.Pos
             this.pnlToolBar.Controls.Add(this.btnAdd);
             this.pnlToolBar.Controls.Add(this.btnTasteRemark);
             this.pnlToolBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlToolBar.Location = new System.Drawing.Point(0, 567);
+            this.pnlToolBar.Location = new System.Drawing.Point(0, 549);
             this.pnlToolBar.Name = "pnlToolBar";
             this.pnlToolBar.Size = new System.Drawing.Size(398, 108);
             this.pnlToolBar.TabIndex = 0;
@@ -702,7 +702,7 @@ namespace Top4ever.Pos
             this.pnlRight.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlRight.Location = new System.Drawing.Point(527, 58);
             this.pnlRight.Name = "pnlRight";
-            this.pnlRight.Size = new System.Drawing.Size(497, 675);
+            this.pnlRight.Size = new System.Drawing.Size(497, 657);
             this.pnlRight.TabIndex = 2;
             // 
             // pnlItem
@@ -713,7 +713,7 @@ namespace Top4ever.Pos
             this.pnlItem.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlItem.Location = new System.Drawing.Point(0, 232);
             this.pnlItem.Name = "pnlItem";
-            this.pnlItem.Size = new System.Drawing.Size(497, 390);
+            this.pnlItem.Size = new System.Drawing.Size(497, 372);
             this.pnlItem.TabIndex = 4;
             // 
             // btnBack
@@ -785,7 +785,7 @@ namespace Top4ever.Pos
             this.pnlCodeSearch.Controls.Add(this.txtSearch);
             this.pnlCodeSearch.Controls.Add(this.lbGoodsCode);
             this.pnlCodeSearch.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlCodeSearch.Location = new System.Drawing.Point(0, 622);
+            this.pnlCodeSearch.Location = new System.Drawing.Point(0, 604);
             this.pnlCodeSearch.Name = "pnlCodeSearch";
             this.pnlCodeSearch.Size = new System.Drawing.Size(497, 53);
             this.pnlCodeSearch.TabIndex = 0;
@@ -826,7 +826,7 @@ namespace Top4ever.Pos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1024, 768);
+            this.ClientSize = new System.Drawing.Size(1024, 750);
             this.Controls.Add(this.pnlRight);
             this.Controls.Add(this.pnlGoodsOrder);
             this.Controls.Add(this.pnlDelivery);

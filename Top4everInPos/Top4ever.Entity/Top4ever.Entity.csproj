@@ -50,11 +50,13 @@
     <Compile Include="Enum\DiscountDisplayModel.cs" />
     <Compile Include="Enum\DiscountItemType.cs" />
     <Compile Include="Enum\EatWayType.cs" />
+    <Compile Include="Enum\ItemsType.cs" />
     <Compile Include="Enum\LanguageType.cs" />
     <Compile Include="Enum\OrderItemType.cs" />
     <Compile Include="Enum\PayoffWayMode.cs" />
     <Compile Include="Enum\PortType.cs" />
     <Compile Include="Enum\ReasonItemType.cs" />
+    <Compile Include="Enum\ShopSaleType.cs" />
     <Compile Include="ListItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RightsItemCode.cs" />
