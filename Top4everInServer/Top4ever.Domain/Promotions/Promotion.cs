@@ -13,7 +13,7 @@ namespace Top4ever.Domain.Promotions
         /// </summary>
         public string PromotionName { get; set; }
         /// <summary>
-        /// 一般/累赠/单选/复选
+        /// 1:一般 2:累赠 3:单选 4:复选
         /// </summary>
         public int PresentType { get; set; }
         /// <summary>
@@ -23,11 +23,15 @@ namespace Top4ever.Domain.Promotions
         /// <summary>
         /// 基于会员
         /// </summary>
-        public int CustomerBase { get; set; }
-        /// <summary>
-        /// 是否配对
-        /// </summary>
-        public bool PairItems { get; set; }
+        public int? CustomerBase { get; set; }
+		/// <summary>
+		/// 生日限制
+		/// </summary>
+		public bool MustBirthday { get; set; }
+		/// <summary>
+		/// 次数限制
+		/// </summary>
+		public int? TimeLimit { get; set; }
         /// <summary>
         /// 包含/排除
         /// </summary>
