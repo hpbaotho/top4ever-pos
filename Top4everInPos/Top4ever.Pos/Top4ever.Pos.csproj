@@ -189,6 +189,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Promotions\PromotionConditionService.cs" />
     <Compile Include="Promotions\PromotionCronTriggerService.cs" />
+    <Compile Include="Promotions\PromotionPresentCommonService.cs" />
+    <Compile Include="Promotions\PromotionPresentGiftService.cs" />
+    <Compile Include="Promotions\PromotionPresentMultipleService.cs" />
     <Compile Include="Promotions\PromotionPresentService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TakeawayCall\FormDeliveryGoods.cs">

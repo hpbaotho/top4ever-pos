@@ -599,13 +599,31 @@ namespace Top4ever.Pos
                     {
                         return;
                     }
-                    FormDiscount formDiscount = new FormDiscount(DiscountDisplayModel.WholeDiscount);
+                    //计算未打折金额
+                    decimal noDiscountPrice = 0;
+                    foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
+                    {
+                        OrderDetails orderDetails = dr.Cells["OrderDetailsID"].Tag as OrderDetails;
+                        if (orderDetails != null)
+                        {
+                            Discount itemDiscount = dr.Cells["GoodsDiscount"].Tag as Discount;
+                            decimal itemDiscountPrice = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value);
+                            if (orderDetails.CanDiscount && (itemDiscount != null || itemDiscountPrice == 0))
+                            {
+                                noDiscountPrice += orderDetails.TotalSellPrice;
+                            }
+                        }
+                    }
+                    FormDiscount formDiscount = new FormDiscount(DiscountDisplayModel.WholeDiscount, noDiscountPrice, m_ActualPayMoney);
                     formDiscount.ShowDialog();
                     if (formDiscount.CurrentDiscount != null)
                     {
                         Discount discount = formDiscount.CurrentDiscount;
-                        foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
+                        int firstIndex = -1; //折价索引
+                        decimal offFixedPay = 0;
+                        for (int index = 0; index < dgvGoodsOrder.Rows.Count; index++)
                         {
+                            DataGridViewRow dr = dgvGoodsOrder.Rows[index];
                             OrderDetails orderDetails = dr.Cells["OrderDetailsID"].Tag as OrderDetails;
                             if (orderDetails != null)
                             {
@@ -619,13 +637,31 @@ namespace Top4ever.Pos
                                     }
                                     else
                                     {
-                                        dr.Cells["GoodsDiscount"].Value = -discount.OffFixPay;
+                                        if (firstIndex < 0)
+                                        {
+                                            firstIndex = index;
+                                        }
+                                        decimal discountPrice = orderDetails.TotalSellPrice / noDiscountPrice * discount.OffFixPay;
+                                        discountPrice = Math.Round(discountPrice, 2);
+                                        dr.Cells["GoodsDiscount"].Value = -discountPrice;
+                                        offFixedPay += discountPrice;
                                     }
                                     orderDetails.TotalDiscount = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value);
                                     dr.Cells["OrderDetailsID"].Tag = orderDetails;
                                     dr.Cells["GoodsDiscount"].Tag = discount;
                                 }
                             }
+                        }
+                        if (firstIndex >= 0)
+                        {
+                            decimal gap = discount.OffFixPay - offFixedPay;
+                            gap = Math.Round(gap, 2);
+                            decimal discountPrice = Math.Abs(Convert.ToDecimal(dgvGoodsOrder.Rows[firstIndex].Cells["GoodsDiscount"].Value));
+                            discountPrice += gap;
+                            dgvGoodsOrder.Rows[firstIndex].Cells["GoodsDiscount"].Value = -discountPrice;
+                            OrderDetails orderDetails = dgvGoodsOrder.Rows[firstIndex].Cells["OrderDetailsID"].Tag as OrderDetails;
+                            orderDetails.TotalDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[firstIndex].Cells["GoodsDiscount"].Value);
+                            dgvGoodsOrder.Rows[firstIndex].Cells["OrderDetailsID"].Tag = orderDetails;
                         }
                         //统计
                         BindOrderInfoSum();

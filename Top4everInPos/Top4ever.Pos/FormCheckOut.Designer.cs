@@ -130,7 +130,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel2.Location = new System.Drawing.Point(0, 8);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(8, 760);
+            this.panel2.Size = new System.Drawing.Size(8, 742);
             this.panel2.TabIndex = 2;
             // 
             // panel4
@@ -138,13 +138,13 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel4.Location = new System.Drawing.Point(1016, 8);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(8, 760);
+            this.panel4.Size = new System.Drawing.Size(8, 742);
             this.panel4.TabIndex = 4;
             // 
             // panel3
             // 
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(8, 760);
+            this.panel3.Location = new System.Drawing.Point(8, 742);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(1008, 8);
             this.panel3.TabIndex = 5;
@@ -157,7 +157,7 @@
             this.pnlLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlLeft.Location = new System.Drawing.Point(8, 8);
             this.pnlLeft.Name = "pnlLeft";
-            this.pnlLeft.Size = new System.Drawing.Size(482, 752);
+            this.pnlLeft.Size = new System.Drawing.Size(482, 734);
             this.pnlLeft.TabIndex = 6;
             // 
             // dgvGoodsOrder
@@ -192,7 +192,7 @@
             this.dgvGoodsOrder.RowHeadersVisible = false;
             this.dgvGoodsOrder.RowTemplate.Height = 23;
             this.dgvGoodsOrder.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvGoodsOrder.Size = new System.Drawing.Size(482, 522);
+            this.dgvGoodsOrder.Size = new System.Drawing.Size(482, 504);
             this.dgvGoodsOrder.TabIndex = 6;
             // 
             // ItemID
@@ -268,7 +268,7 @@
             this.pnlLeftBottom.Controls.Add(this.btnPreCheck);
             this.pnlLeftBottom.Controls.Add(this.btnMember);
             this.pnlLeftBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlLeftBottom.Location = new System.Drawing.Point(0, 664);
+            this.pnlLeftBottom.Location = new System.Drawing.Point(0, 646);
             this.pnlLeftBottom.Name = "pnlLeftBottom";
             this.pnlLeftBottom.Size = new System.Drawing.Size(482, 88);
             this.pnlLeftBottom.TabIndex = 4;
@@ -438,7 +438,7 @@
             this.pnlRight.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlRight.Location = new System.Drawing.Point(490, 8);
             this.pnlRight.Name = "pnlRight";
-            this.pnlRight.Size = new System.Drawing.Size(526, 752);
+            this.pnlRight.Size = new System.Drawing.Size(526, 734);
             this.pnlRight.TabIndex = 7;
             // 
             // pnlPayoffWay
@@ -449,7 +449,7 @@
             this.pnlPayoffWay.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlPayoffWay.Location = new System.Drawing.Point(0, 138);
             this.pnlPayoffWay.Name = "pnlPayoffWay";
-            this.pnlPayoffWay.Size = new System.Drawing.Size(526, 188);
+            this.pnlPayoffWay.Size = new System.Drawing.Size(526, 170);
             this.pnlPayoffWay.TabIndex = 4;
             // 
             // btnPageDown
@@ -485,7 +485,7 @@
             this.pnlPayTypeNum.Controls.Add(this.lbMulti);
             this.pnlPayTypeNum.Controls.Add(this.txtPayoff);
             this.pnlPayTypeNum.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlPayTypeNum.Location = new System.Drawing.Point(0, 326);
+            this.pnlPayTypeNum.Location = new System.Drawing.Point(0, 308);
             this.pnlPayTypeNum.Name = "pnlPayTypeNum";
             this.pnlPayTypeNum.Size = new System.Drawing.Size(526, 45);
             this.pnlPayTypeNum.TabIndex = 3;
@@ -529,7 +529,7 @@
             this.pnlNumericPad.Controls.Add(this.pnlNumeric);
             this.pnlNumericPad.Controls.Add(this.pnlBigNumeric);
             this.pnlNumericPad.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlNumericPad.Location = new System.Drawing.Point(0, 371);
+            this.pnlNumericPad.Location = new System.Drawing.Point(0, 353);
             this.pnlNumericPad.Name = "pnlNumericPad";
             this.pnlNumericPad.Size = new System.Drawing.Size(526, 316);
             this.pnlNumericPad.TabIndex = 2;
@@ -834,7 +834,7 @@
             // 
             this.pnlPayDefType.Controls.Add(this.txtPayoffWay);
             this.pnlPayDefType.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlPayDefType.Location = new System.Drawing.Point(0, 687);
+            this.pnlPayDefType.Location = new System.Drawing.Point(0, 669);
             this.pnlPayDefType.Name = "pnlPayDefType";
             this.pnlPayDefType.Size = new System.Drawing.Size(526, 65);
             this.pnlPayDefType.TabIndex = 1;
@@ -973,7 +973,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1024, 768);
+            this.ClientSize = new System.Drawing.Size(1024, 750);
             this.Controls.Add(this.pnlRight);
             this.Controls.Add(this.pnlLeft);
             this.Controls.Add(this.panel3);

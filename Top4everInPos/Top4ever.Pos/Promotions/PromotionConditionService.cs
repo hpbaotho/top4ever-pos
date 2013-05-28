@@ -49,7 +49,7 @@ namespace Top4ever.Pos.Promotions
                                     if (InPromotion)
                                     {
                                         //其他判断条件
-                                        int fitCount = 0;
+                                        decimal fitCount = 0M;
                                         for (int j = index; j < orderDetailsList.Count; j++)
                                         {
                                             if (orderDetailsList[index].GoodsID == orderDetailsList[j].GoodsID)
@@ -72,7 +72,7 @@ namespace Top4ever.Pos.Promotions
                                                 }
                                                 if (condition)
                                                 {
-                                                    fitCount++;
+                                                    fitCount += orderDetailsList[j].ItemQty;
                                                 }
                                             }
                                         }
@@ -102,7 +102,7 @@ namespace Top4ever.Pos.Promotions
                                     {
                                         //其他判断条件
                                         bool condition = false;
-                                        int fitCount = 0;
+                                        decimal fitCount = 0;
                                         for (int j = index; j < orderDetailsList.Count; j++)
                                         {
                                             if (orderDetailsList[index].GoodsID == orderDetailsList[j].GoodsID)
@@ -125,7 +125,7 @@ namespace Top4ever.Pos.Promotions
                                                 }
                                                 if (condition)
                                                 {
-                                                    fitCount++;
+                                                    fitCount += orderDetailsList[j].ItemQty;
                                                 }
                                             }
                                         }
@@ -170,24 +170,7 @@ namespace Top4ever.Pos.Promotions
             if (promotionCondition.GroupOrItem)
             {
                 //组
-                foreach (GoodsGroup goodsGroup in ConstantValuePool.GoodsGroupList)
-                {
-                    foreach (Goods goods in goodsGroup.GoodsList)
-                    {
-                        if (goods.GoodsID == orderDetails.GoodsID)
-                        {
-                            if (goodsGroup.GoodsGroupID == promotionCondition.GoodsGroupID)
-                            {
-                                result = true;
-                            }
-                            break;
-                        }
-                    }
-                    if (result)
-                    {
-                        break;
-                    }
-                }
+                result = GoodsUtil.IsGoodsInGroup(orderDetails.GoodsID, (Guid)promotionCondition.GoodsGroupID);
             }
             else
             { 

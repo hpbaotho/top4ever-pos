@@ -57,6 +57,7 @@
     <Compile Include="Enum\PortType.cs" />
     <Compile Include="Enum\ReasonItemType.cs" />
     <Compile Include="Enum\ShopSaleType.cs" />
+    <Compile Include="GoodsUtil.cs" />
     <Compile Include="ListItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RightsItemCode.cs" />
