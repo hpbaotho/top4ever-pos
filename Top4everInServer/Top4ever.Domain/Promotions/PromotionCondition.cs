@@ -9,13 +9,17 @@ namespace Top4ever.Domain.Promotions
         /// </summary>
         public string ActivityNo { get; set; }
         /// <summary>
-        /// 组号
+        /// 组编号
         /// </summary>
-        public string GoodsGroupNo { get; set; }
+        public Guid? GoodsGroupID { get; set; }
         /// <summary>
-        /// 品项号
+        /// 品项编号
         /// </summary>
-        public string GoodsNo { get; set; }
+        public Guid? GoodsID { get; set; }
+        /// <summary>
+        /// 组或者品项
+        /// </summary>
+        public bool GroupOrItem { get; set; }
         /// <summary>
         /// 数量
         /// </summary>
@@ -29,8 +33,8 @@ namespace Top4ever.Domain.Promotions
         /// </summary>
         public int MoreOrLess { get; set; }
         /// <summary>
-        /// 单品折扣 %以上
+        /// 单品折扣率 以上
         /// </summary>
-        public decimal LeastDiscount { get; set; }
+        public decimal LeastDiscountRate { get; set; }
     }
 }
