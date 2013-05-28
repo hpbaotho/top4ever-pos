@@ -13,10 +13,12 @@ using Top4ever.Common;
 using Top4ever.Domain;
 using Top4ever.Domain.GoodsRelated;
 using Top4ever.Domain.OrderRelated;
+using Top4ever.Domain.Promotions;
 using Top4ever.Domain.Transfer;
 using Top4ever.Entity;
 using Top4ever.Entity.Enum;
 using Top4ever.Pos.Feature;
+using Top4ever.Pos.Promotions;
 using Top4ever.Print;
 using Top4ever.Print.Entity;
 
@@ -1660,7 +1662,8 @@ namespace Top4ever.Pos
                     bool canDiscount = Convert.ToBoolean(dgvGoodsOrder.Rows[selectIndex].Cells["CanDiscount"].Value);
                     if (canDiscount)
                     {
-                        FormDiscount formDiscount = new FormDiscount(DiscountDisplayModel.SingleDiscount);
+                        decimal itemPrice = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value);
+                        FormDiscount formDiscount = new FormDiscount(DiscountDisplayModel.SingleDiscount, -1, itemPrice);
                         formDiscount.ShowDialog();
                         if (formDiscount.CurrentDiscount != null)
                         {
@@ -2336,6 +2339,89 @@ namespace Top4ever.Pos
             {
                 this.Close();
                 ConstantValuePool.DeskForm.Close();
+            }
+        }
+
+        private void btnPromotion_Click(object sender, EventArgs e)
+        {
+            IList<OrderDetails> orderDetailsList = null;
+            foreach (Promotion promotion in ConstantValuePool.PromotionList)
+            {
+                bool result = false;
+                foreach (PromotionCronTrigger cronTrigger in ConstantValuePool.PromotionCronTriggerList)
+                {
+                    if (promotion.ActivityNo == cronTrigger.ActivityNo)
+                    {
+                        PromotionCronTriggerService cronTriggerService = new PromotionCronTriggerService(cronTrigger);
+                        result = cronTriggerService.IsPromotionInTime();
+                        break;
+                    }
+                }
+                if (result)
+                {
+                    IList<PromotionCondition> promotionConditionList = new List<PromotionCondition>();
+                    foreach (PromotionCondition promotionCondition in ConstantValuePool.PromotionConditionList)
+                    {
+                        if (promotion.ActivityNo == promotionCondition.ActivityNo)
+                        {
+                            promotionConditionList.Add(promotionCondition);
+                        }
+                    }
+                    PromotionConditionService conditionService = new PromotionConditionService(promotionConditionList);
+                    result = conditionService.IsItemEligible(orderDetailsList, promotion.IsIncluded, promotion.AndOr);
+                    if (result)
+                    {
+                        //totalQuantity
+                        decimal totalQuantity = 0M;
+                        foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
+                        {
+                            int itemType = Convert.ToInt32(dr.Cells["ItemType"].Value);
+                            if (itemType == (int)OrderItemType.Goods)
+                            {
+                                totalQuantity += Convert.ToDecimal(dr.Cells["GoodsNum"].Value);
+                            }
+                        }
+                        //PromotionPresent
+                        IList<PromotionPresent> promotionPresentList = new List<PromotionPresent>();
+                        foreach (PromotionPresent promotionPresent in ConstantValuePool.PromotionPresentList)
+                        {
+                            if (promotion.ActivityNo == promotionPresent.ActivityNo)
+                            {
+                                if (promotionPresent.TotalMoney <= m_ActualPayMoney && promotionPresent.TotalQuantity <= totalQuantity)
+                                {
+                                    promotionPresentList.Add(promotionPresent);
+                                }
+                            }
+                        }
+                        if (promotionPresentList.Count > 0)
+                        {
+                            PromotionPresentService presentService;
+                            if (promotion.PresentType == 1)
+                            {
+                                presentService = new PromotionPresentCommonService(m_ActualPayMoney, totalQuantity, promotionPresentList);
+                                presentService.GetPromotionPresents(dgvGoodsOrder);
+                            }
+                            if (promotion.PresentType == 2)
+                            {
+                                presentService = new PromotionPresentMultipleService(m_ActualPayMoney, totalQuantity, promotionPresentList);
+                                presentService.GetPromotionPresents(dgvGoodsOrder);
+                            }
+                            if (promotion.PresentType == 3 || promotion.PresentType == 4)
+                            {
+
+                            }
+                            if (!promotion.WithOtherPromotion) break;
+                        }
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    continue;
+                }
             }
         }
 

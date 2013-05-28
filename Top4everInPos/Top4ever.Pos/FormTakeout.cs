@@ -1104,7 +1104,8 @@ namespace Top4ever.Pos
                     bool canDiscount = Convert.ToBoolean(dgvGoodsOrder.Rows[selectIndex].Cells["CanDiscount"].Value);
                     if (canDiscount)
                     {
-                        FormDiscount formDiscount = new FormDiscount(DiscountDisplayModel.SingleDiscount);
+                        decimal itemPrice = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value);
+                        FormDiscount formDiscount = new FormDiscount(DiscountDisplayModel.SingleDiscount, -1, itemPrice);
                         formDiscount.ShowDialog();
                         if (formDiscount.CurrentDiscount != null)
                         {
@@ -1174,13 +1175,27 @@ namespace Top4ever.Pos
             {
                 return;
             }
-            FormDiscount formDiscount = new FormDiscount(DiscountDisplayModel.WholeDiscount);
+            //计算未打折金额
+            decimal noDiscountPrice = 0;
+            foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
+            {
+                bool canDiscount = Convert.ToBoolean(dr.Cells["CanDiscount"].Value);
+                if (canDiscount)
+                {
+                    decimal itemPrice = Convert.ToDecimal(dr.Cells["GoodsPrice"].Value);
+                    noDiscountPrice += itemPrice;
+                }
+            }
+            FormDiscount formDiscount = new FormDiscount(DiscountDisplayModel.WholeDiscount, noDiscountPrice, m_ActualPayMoney);
             formDiscount.ShowDialog();
             if (formDiscount.CurrentDiscount != null)
             {
                 Discount discount = formDiscount.CurrentDiscount;
-                foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
+                int firstIndex = -1; //折价索引
+                decimal offFixedPay = 0;
+                for (int index = 0; index < dgvGoodsOrder.Rows.Count; index++)
                 {
+                    DataGridViewRow dr = dgvGoodsOrder.Rows[index];
                     bool canDiscount = Convert.ToBoolean(dr.Cells["CanDiscount"].Value);
                     if (canDiscount)
                     {
@@ -1190,10 +1205,26 @@ namespace Top4ever.Pos
                         }
                         else
                         {
-                            dr.Cells["GoodsDiscount"].Value = -discount.OffFixPay;
+                            if (firstIndex < 0)
+                            {
+                                firstIndex = index;
+                            }
+                            decimal itemPrice = Convert.ToDecimal(dr.Cells["GoodsPrice"].Value);
+                            decimal discountPrice = itemPrice / noDiscountPrice * discount.OffFixPay;
+                            discountPrice = Math.Round(discountPrice, 2);
+                            dr.Cells["GoodsDiscount"].Value = -discountPrice;
+                            offFixedPay += discountPrice;
                         }
                         dr.Cells["GoodsDiscount"].Tag = discount;
                     }
+                }
+                if (firstIndex >= 0)
+                {
+                    decimal gap = discount.OffFixPay - offFixedPay;
+                    gap = Math.Round(gap, 2);
+                    decimal discountPrice = Math.Abs(Convert.ToDecimal(dgvGoodsOrder.Rows[firstIndex].Cells["GoodsDiscount"].Value));
+                    discountPrice += gap;
+                    dgvGoodsOrder.Rows[firstIndex].Cells["GoodsDiscount"].Value = -discountPrice;
                 }
                 //统计
                 BindOrderInfoSum();
