@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 using Top4ever.ClientService;
@@ -16,20 +17,83 @@ namespace Top4ever.Pos.TakeawayCall
     {
         private CustomerInfo _customerInfo = null;
         private string _address = string.Empty;
+        /// <summary>
+        /// 0:手动 1:程序
+        /// </summary>
+        private int _callType = 0;
+        private System.Threading.Timer timer = null;
 
         private string _selectedAddress = string.Empty;
         public string SelectedAddress
         {
             get { return _selectedAddress; }
         }
+        private CustomerInfo m_CustomerInfo = null;
+        public CustomerInfo CurCustomerInfo
+        {
+            get { return m_CustomerInfo; }
+        }
 
-        public FormIncomingCall(string telephone, string address)
+        public FormIncomingCall(string telephone, string address, int callType)
         {
             CustomersService customerService = new CustomersService();
             _customerInfo = customerService.GetCustomerInfoByPhone(telephone);
             _address = address;
+            _callType = callType;
             InitializeComponent();
             this.lbTelephone.Text = telephone;
+            if (callType == 1 && ConstantValuePool.BizSettingConfig.telCallConfig.Enabled && ConstantValuePool.IsTelCallWorking)
+            {
+                timer = new System.Threading.Timer(new TimerCallback(CallBack), null, 15000, 500);
+            }
+        }
+
+        private void CallBack(Object stateObject)
+        {
+            if (ConstantValuePool.BizSettingConfig.telCallConfig.Enabled && ConstantValuePool.IsTelCallWorking)
+            {
+                if (ConstantValuePool.BizSettingConfig.telCallConfig.Model == 0 || ConstantValuePool.BizSettingConfig.telCallConfig.Model == 1)
+                {
+                    if (LDT.Check_State(ConstantValuePool.TelCallID) == 255)
+                    {
+                        string strPhoneNo = LDT.GetNumber_Tel(1).ToString();
+                        if (strPhoneNo.Length > 0)
+                        {
+                            this.lbTelephone.Text = strPhoneNo;
+                            //UpdateCallRecord(strTelNo, 0, ref strMessage);
+                            this.txtCustomerName.Text = string.Empty;
+                            this.txtAddress1.Text = string.Empty;
+                            this.txtAddress2.Text = string.Empty;
+                            this.txtAddress3.Text = string.Empty;
+                            CustomersService customerService = new CustomersService();
+                            _customerInfo = customerService.GetCustomerInfoByPhone(strPhoneNo);
+                            if (_customerInfo != null)
+                            {
+                                txtCustomerName.Text = _customerInfo.CustomerName;
+                                txtAddress1.Text = _customerInfo.DeliveryAddress1;
+                                txtAddress2.Text = _customerInfo.DeliveryAddress2;
+                                txtAddress3.Text = _customerInfo.DeliveryAddress3;
+                                if (_customerInfo.ActiveIndex == 1)
+                                {
+                                    ckAddress1.Checked = true;
+                                }
+                                else if (_customerInfo.ActiveIndex == 2)
+                                {
+                                    ckAddress2.Checked = true;
+                                }
+                                else if (_customerInfo.ActiveIndex == 3)
+                                {
+                                    ckAddress3.Checked = true;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (ConstantValuePool.BizSettingConfig.telCallConfig.Model == 0)
+                {
+                    ConstantValuePool.IsTelCallWorking = LDT.Plugin_Tel(ConstantValuePool.TelCallID);
+                }
+            }
         }
 
         private void FormIncomingCall_Load(object sender, EventArgs e)
@@ -104,12 +168,13 @@ namespace Top4ever.Pos.TakeawayCall
             customerInfo.LastModifiedEmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
 
             CustomersService customerService = new CustomersService();
-            if (string.IsNullOrEmpty(_address))  //新增
+            if (_customerInfo == null)  //新增
             {
                 int result = customerService.CreateCustomerInfo(customerInfo);
                 if (result == 1)
                 {
                     _selectedAddress = address;
+                    m_CustomerInfo = customerInfo;
                     this.Close();
                 }
                 else if (result == 2)
@@ -126,6 +191,7 @@ namespace Top4ever.Pos.TakeawayCall
                 if (customerService.UpdateCustomerInfo(customerInfo))
                 {
                     _selectedAddress = address;
+                    m_CustomerInfo = customerInfo;
                     this.Close();
                 }
                 else

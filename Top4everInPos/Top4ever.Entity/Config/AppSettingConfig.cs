@@ -89,6 +89,9 @@ namespace Top4ever.Entity.Config
         [XmlElement("CashBoxConfig")]
         public CashBoxConfig cashBoxConfig { get; set; }
 
+        [XmlElement("TelCallConfig")]
+        public TelCallConfig telCallConfig { get; set; }
+
         [XmlElement("ClientShowConfig")]
         public ClientShowConfig clientShowConfig { get; set; }
     }

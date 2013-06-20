@@ -31,8 +31,10 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.cmbSaleType = new System.Windows.Forms.ComboBox();
             this.txtFont = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.rbTimeSystem12H = new System.Windows.Forms.RadioButton();
             this.rbTimeSystem24H = new System.Windows.Forms.RadioButton();
@@ -69,6 +71,8 @@
             this.ckbSoldOutQty = new System.Windows.Forms.CheckBox();
             this.ckbBriefCode = new System.Windows.Forms.CheckBox();
             this.ckbTakeAwayCash = new System.Windows.Forms.CheckBox();
+            this.ckbCarteMode = new System.Windows.Forms.CheckBox();
+            this.ckbDirectShipping = new System.Windows.Forms.CheckBox();
             this.ckbPettyCash = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
@@ -107,6 +111,8 @@
             this.cmbClientShowPort = new System.Windows.Forms.ComboBox();
             this.label24 = new System.Windows.Forms.Label();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.cmbTelCallModel = new System.Windows.Forms.ComboBox();
+            this.ckbTelCall = new System.Windows.Forms.CheckBox();
             this.ckbCashDrawer = new System.Windows.Forms.CheckBox();
             this.txtCashPID = new System.Windows.Forms.TextBox();
             this.txtCashVID = new System.Windows.Forms.TextBox();
@@ -118,10 +124,6 @@
             this.label23 = new System.Windows.Forms.Label();
             this.btnSave = new Top4ever.CustomControl.CrystalButton();
             this.btnCancel = new Top4ever.CustomControl.CrystalButton();
-            this.label16 = new System.Windows.Forms.Label();
-            this.cmbSaleType = new System.Windows.Forms.ComboBox();
-            this.ckbDirectShipping = new System.Windows.Forms.CheckBox();
-            this.ckbCarteMode = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -180,6 +182,14 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "系统配置";
             // 
+            // cmbSaleType
+            // 
+            this.cmbSaleType.FormattingEnabled = true;
+            this.cmbSaleType.Location = new System.Drawing.Point(92, 71);
+            this.cmbSaleType.Name = "cmbSaleType";
+            this.cmbSaleType.Size = new System.Drawing.Size(145, 27);
+            this.cmbSaleType.TabIndex = 2;
+            // 
             // txtFont
             // 
             this.txtFont.Location = new System.Drawing.Point(347, 32);
@@ -198,6 +208,18 @@
             this.label13.TabIndex = 0;
             this.label13.Text = "字体大小：";
             this.label13.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label16
+            // 
+            this.label16.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label16.AutoSize = true;
+            this.label16.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label16.Location = new System.Drawing.Point(14, 74);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(74, 19);
+            this.label16.TabIndex = 0;
+            this.label16.Text = "营业方式：";
+            this.label16.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // label10
             // 
@@ -583,6 +605,28 @@
             this.ckbTakeAwayCash.TabIndex = 1;
             this.ckbTakeAwayCash.Text = "抽大钞";
             this.ckbTakeAwayCash.UseVisualStyleBackColor = true;
+            // 
+            // ckbCarteMode
+            // 
+            this.ckbCarteMode.AutoSize = true;
+            this.ckbCarteMode.Font = new System.Drawing.Font("宋体", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ckbCarteMode.Location = new System.Drawing.Point(255, 73);
+            this.ckbCarteMode.Name = "ckbCarteMode";
+            this.ckbCarteMode.Size = new System.Drawing.Size(78, 17);
+            this.ckbCarteMode.TabIndex = 0;
+            this.ckbCarteMode.Text = "餐牌模式";
+            this.ckbCarteMode.UseVisualStyleBackColor = true;
+            // 
+            // ckbDirectShipping
+            // 
+            this.ckbDirectShipping.AutoSize = true;
+            this.ckbDirectShipping.Font = new System.Drawing.Font("宋体", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ckbDirectShipping.Location = new System.Drawing.Point(255, 34);
+            this.ckbDirectShipping.Name = "ckbDirectShipping";
+            this.ckbDirectShipping.Size = new System.Drawing.Size(78, 17);
+            this.ckbDirectShipping.TabIndex = 0;
+            this.ckbDirectShipping.Text = "直接出货";
+            this.ckbDirectShipping.UseVisualStyleBackColor = true;
             // 
             // ckbPettyCash
             // 
@@ -981,6 +1025,8 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.cmbTelCallModel);
+            this.groupBox7.Controls.Add(this.ckbTelCall);
             this.groupBox7.Controls.Add(this.ckbCashDrawer);
             this.groupBox7.Controls.Add(this.txtCashPID);
             this.groupBox7.Controls.Add(this.txtCashVID);
@@ -995,7 +1041,32 @@
             this.groupBox7.Size = new System.Drawing.Size(518, 146);
             this.groupBox7.TabIndex = 4;
             this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "钱箱设置";
+            this.groupBox7.Text = "钱箱/来电宝设置";
+            // 
+            // cmbTelCallModel
+            // 
+            this.cmbTelCallModel.Font = new System.Drawing.Font("宋体", 9.75F);
+            this.cmbTelCallModel.FormattingEnabled = true;
+            this.cmbTelCallModel.Items.AddRange(new object[] {
+            "纽曼NM-LD-U新版",
+            "纽曼NM-LD-U"});
+            this.cmbTelCallModel.Location = new System.Drawing.Point(380, 29);
+            this.cmbTelCallModel.Name = "cmbTelCallModel";
+            this.cmbTelCallModel.Size = new System.Drawing.Size(121, 21);
+            this.cmbTelCallModel.TabIndex = 2;
+            // 
+            // ckbTelCall
+            // 
+            this.ckbTelCall.AutoSize = true;
+            this.ckbTelCall.Font = new System.Drawing.Font("宋体", 9.75F);
+            this.ckbTelCall.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.ckbTelCall.Location = new System.Drawing.Point(311, 31);
+            this.ckbTelCall.Name = "ckbTelCall";
+            this.ckbTelCall.Size = new System.Drawing.Size(65, 17);
+            this.ckbTelCall.TabIndex = 2;
+            this.ckbTelCall.Text = "来电宝";
+            this.ckbTelCall.UseVisualStyleBackColor = true;
+            this.ckbTelCall.CheckedChanged += new System.EventHandler(this.ckbTelCall_CheckedChanged);
             // 
             // ckbCashDrawer
             // 
@@ -1109,48 +1180,6 @@
             this.btnCancel.Text = "取消";
             this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-            // 
-            // label16
-            // 
-            this.label16.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label16.AutoSize = true;
-            this.label16.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label16.Location = new System.Drawing.Point(14, 74);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(74, 19);
-            this.label16.TabIndex = 0;
-            this.label16.Text = "营业方式：";
-            this.label16.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // cmbSaleType
-            // 
-            this.cmbSaleType.FormattingEnabled = true;
-            this.cmbSaleType.Location = new System.Drawing.Point(92, 71);
-            this.cmbSaleType.Name = "cmbSaleType";
-            this.cmbSaleType.Size = new System.Drawing.Size(145, 27);
-            this.cmbSaleType.TabIndex = 2;
-            // 
-            // ckbDirectShipping
-            // 
-            this.ckbDirectShipping.AutoSize = true;
-            this.ckbDirectShipping.Font = new System.Drawing.Font("宋体", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ckbDirectShipping.Location = new System.Drawing.Point(255, 34);
-            this.ckbDirectShipping.Name = "ckbDirectShipping";
-            this.ckbDirectShipping.Size = new System.Drawing.Size(78, 17);
-            this.ckbDirectShipping.TabIndex = 0;
-            this.ckbDirectShipping.Text = "直接出货";
-            this.ckbDirectShipping.UseVisualStyleBackColor = true;
-            // 
-            // ckbCarteMode
-            // 
-            this.ckbCarteMode.AutoSize = true;
-            this.ckbCarteMode.Font = new System.Drawing.Font("宋体", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ckbCarteMode.Location = new System.Drawing.Point(255, 73);
-            this.ckbCarteMode.Name = "ckbCarteMode";
-            this.ckbCarteMode.Size = new System.Drawing.Size(78, 17);
-            this.ckbCarteMode.TabIndex = 0;
-            this.ckbCarteMode.Text = "餐牌模式";
-            this.ckbCarteMode.UseVisualStyleBackColor = true;
             // 
             // FormConfig
             // 
@@ -1290,5 +1319,7 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.CheckBox ckbDirectShipping;
         private System.Windows.Forms.CheckBox ckbCarteMode;
+        private System.Windows.Forms.ComboBox cmbTelCallModel;
+        private System.Windows.Forms.CheckBox ckbTelCall;
     }
 }

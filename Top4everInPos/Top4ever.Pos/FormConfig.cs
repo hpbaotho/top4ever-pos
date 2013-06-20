@@ -163,6 +163,17 @@ namespace Top4ever.Pos
                 txtCashVID.Enabled = false;
                 txtCashPID.Enabled = false;
             }
+            if (ConstantValuePool.BizSettingConfig.telCallConfig.Enabled)
+            {
+                ckbTelCall.Enabled = true;
+                cmbTelCallModel.Enabled = true;
+                cmbTelCallModel.SelectedIndex = ConstantValuePool.BizSettingConfig.telCallConfig.Model;
+            }
+            else
+            {
+                ckbTelCall.Enabled = false;
+                cmbTelCallModel.Enabled = false;
+            }
             if (ConstantValuePool.BizSettingConfig.clientShowConfig.Enabled)
             {
                 ckbClientShow.Checked = true;
@@ -406,6 +417,46 @@ namespace Top4ever.Pos
                 cashboxConfig.VID = this.txtCashVID.Text;
                 cashboxConfig.PID = this.txtCashPID.Text;
             }
+            //来电宝
+            TelCallConfig telCallConfig = new TelCallConfig();
+            telCallConfig.Enabled = ckbTelCall.Checked;
+            if (ckbTelCall.Checked)
+            {
+                telCallConfig.Model = cmbTelCallModel.SelectedIndex;
+                if (telCallConfig.Model == 0)
+                {
+                    if (!LDT.Plugin_Tel(1))
+                    {
+                        ConstantValuePool.IsTelCallWorking = false;
+                        MessageBox.Show("来电宝设备没有接入POS机！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    for (int i = 1; i <= LDT.DevCount_Tel(); i++)
+                    {
+                        if (LDT.Begin_Tel(i, '1') == 0)
+                        {
+                            ConstantValuePool.IsTelCallWorking = false;
+                            MessageBox.Show("开启来电宝设备失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            break;
+                        }
+                        else
+                        {
+                            ConstantValuePool.TelCallID = i;
+                        }
+                    }
+                }
+                if (telCallConfig.Model == 1)
+                {
+                    if (LDT.Begin_Tel(64, '1') == 0)
+                    {
+                        ConstantValuePool.IsTelCallWorking = false;
+                        MessageBox.Show("开启来电宝设备失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    else
+                    {
+                        ConstantValuePool.TelCallID = 64;
+                    }
+                }
+            }
             //客显
             ClientShowConfig clientShowConfig = new ClientShowConfig();
             clientShowConfig.Enabled = ckbClientShow.Checked;
@@ -472,6 +523,7 @@ namespace Top4ever.Pos
             appConfig.bizUIConfig = bizUIConfig;
             appConfig.printConfig = printConfig;
             appConfig.cashBoxConfig = cashboxConfig;
+            appConfig.telCallConfig = telCallConfig;
             appConfig.clientShowConfig = clientShowConfig;
             //存储在静态对象中
             ConstantValuePool.BizSettingConfig = appConfig;
@@ -577,6 +629,18 @@ namespace Top4ever.Pos
                 rbUsbCashDrawer.Enabled = false;
                 txtCashVID.Enabled = false;
                 txtCashPID.Enabled = false;
+            }
+        }
+
+        private void ckbTelCall_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ckbTelCall.Checked)
+            {
+                cmbTelCallModel.Enabled = true;
+            }
+            else
+            {
+                cmbTelCallModel.Enabled = false;
             }
         }
 

@@ -78,6 +78,14 @@ namespace Top4ever.Entity
         /// 程序的配置
         /// </summary>
         public static AppSettingConfig BizSettingConfig { get; set; }
+        /// <summary>
+        /// 来电宝编号
+        /// </summary>
+        public static int TelCallID { get; set; }
+        /// <summary>
+        /// 来电宝是否正常工作
+        /// </summary>
+        public static bool IsTelCallWorking { get; set; }
 
         /// <summary>
         /// 桌况对象
