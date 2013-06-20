@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO.Ports;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 using Top4ever.ClientService;
@@ -57,6 +58,8 @@ namespace Top4ever.Pos
         private CrystalButton prevPressedButton = null;
         private bool m_ShowSilverCode = false;
         private bool haveDailyClose;
+        private bool currentFormActivate = false;
+        private Thread backWork = null;
 
         private bool m_OnShow = false;
         public bool VisibleShow
@@ -123,6 +126,54 @@ namespace Top4ever.Pos
             btnRecords.Location = new Point(locPX, btnAddress.Location.Y);
             locPX += btnRecords.Width + 2;
             btnRecentlyCall.Location = new Point(locPX, btnAddress.Location.Y);
+            if (ConstantValuePool.BizSettingConfig.telCallConfig.Enabled && ConstantValuePool.IsTelCallWorking)
+            {
+                backWork = new Thread(new ThreadStart(doWork));
+                backWork.IsBackground = true;
+                backWork.Start();
+            }
+        }
+
+        private void doWork()
+        {
+            if (ConstantValuePool.BizSettingConfig.telCallConfig.Enabled && ConstantValuePool.IsTelCallWorking)
+            {
+                while (true)
+                {
+                    if (currentFormActivate)
+                    {
+                        if (ConstantValuePool.IsTelCallWorking)
+                        {
+                            if (ConstantValuePool.BizSettingConfig.telCallConfig.Model == 0 || ConstantValuePool.BizSettingConfig.telCallConfig.Model == 1)
+                            {
+                                if (LDT.Check_State(ConstantValuePool.TelCallID) == 255)
+                                {
+                                    string strPhoneNo = LDT.GetNumber_Tel(1).ToString();
+                                    if (strPhoneNo.Length > 0)
+                                    {
+                                        //UpdateCallRecord(strTelNo, 0, ref strMessage);
+                                        int callType = 1;  //程序
+                                        FormIncomingCall form = new FormIncomingCall(strPhoneNo, string.Empty, callType);
+                                        form.ShowDialog();
+                                        if (!string.IsNullOrEmpty(form.SelectedAddress) && form.CurCustomerInfo != null)
+                                        {
+                                            txtTelephone.Text = form.CurCustomerInfo.Telephone;
+                                            txtName.Text = form.CurCustomerInfo.CustomerName;
+                                            txtAddress.Text = form.SelectedAddress;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        Thread.Sleep(100);
+                        if (ConstantValuePool.BizSettingConfig.telCallConfig.Model == 0)
+                        {
+                            ConstantValuePool.IsTelCallWorking = LDT.Plugin_Tel(ConstantValuePool.TelCallID);
+                        }
+                    }
+                    Thread.Sleep(500);
+                }
+            }
         }
 
         private void FormTakeout_VisibleChanged(object sender, EventArgs e)
@@ -157,6 +208,18 @@ namespace Top4ever.Pos
                     DisplayDeliveryOrderButton();
                 }
             }
+        }
+
+        protected override void OnActivated(EventArgs e)
+        {
+            currentFormActivate = true;
+            base.OnActivated(e);
+        }
+
+        protected override void OnDeactivate(EventArgs e)
+        {
+            currentFormActivate = false;
+            base.OnDeactivate(e);
         }
 
         #region 初始化
@@ -2166,7 +2229,8 @@ namespace Top4ever.Pos
             string address = txtAddress.Text.Trim();
             if (!string.IsNullOrEmpty(telephone))
             {
-                FormIncomingCall form = new FormIncomingCall(telephone, address);
+                int callType = 0;  //手动
+                FormIncomingCall form = new FormIncomingCall(telephone, address, callType);
                 form.ShowDialog();
                 if (!string.IsNullOrEmpty(form.SelectedAddress))
                 {

@@ -393,8 +393,13 @@ namespace Top4ever.Print
                                         if (property == column.Name)
                                         {
                                             Color color = Color.FromName(column.Font.ForeColor);
-                                            Brush brush = new SolidBrush(color);
                                             Font font = new Font(column.Font.FontName, column.Font.FontSize, column.Font.FontStyle);
+                                            if (printData.TaskType == (int)PrintTaskType.DeleteBill)
+                                            {
+                                                color = Color.Red;
+                                                font = new Font(column.Font.FontName, column.Font.FontSize, FontStyle.Strikeout);
+                                            }
+                                            Brush brush = new SolidBrush(color);
                                             SizeF size = m_Graphics.MeasureString(itemValue, font);//测量字体的大小
                                             float itemWidth = 0f;
                                             if (column.Width.IndexOf('%') > 0)
