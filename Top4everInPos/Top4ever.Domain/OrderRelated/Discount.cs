@@ -38,6 +38,10 @@ namespace Top4ever.Domain.OrderRelated
         /// </summary>
         public int DisplayModel { get; set; }
         /// <summary>
+        /// 强制折扣
+        /// </summary>
+        public bool ForcedDiscount { get; set; }
+        /// <summary>
         /// 外键
         /// </summary>
         public Guid ButtonStyleID { get; set; }

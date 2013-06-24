@@ -60,6 +60,8 @@
     <Compile Include="SalesOrderService.cs" />
     <Compile Include="SocketClient.cs" />
     <Compile Include="SystemBasicDataService.cs" />
+    <Compile Include="VIPCardService.cs" />
+    <Compile Include="VIPCardTradeService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Top4ever.Domain\Top4ever.Domain.csproj">

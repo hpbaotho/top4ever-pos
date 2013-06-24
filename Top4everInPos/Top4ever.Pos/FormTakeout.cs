@@ -152,15 +152,7 @@ namespace Top4ever.Pos
                                     if (strPhoneNo.Length > 0)
                                     {
                                         //UpdateCallRecord(strTelNo, 0, ref strMessage);
-                                        int callType = 1;  //程序
-                                        FormIncomingCall form = new FormIncomingCall(strPhoneNo, string.Empty, callType);
-                                        form.ShowDialog();
-                                        if (!string.IsNullOrEmpty(form.SelectedAddress) && form.CurCustomerInfo != null)
-                                        {
-                                            txtTelephone.Text = form.CurCustomerInfo.Telephone;
-                                            txtName.Text = form.CurCustomerInfo.CustomerName;
-                                            txtAddress.Text = form.SelectedAddress;
-                                        }
+                                        SetIncomingCall(strPhoneNo);
                                     }
                                 }
                             }
@@ -172,6 +164,28 @@ namespace Top4ever.Pos
                         }
                     }
                     Thread.Sleep(500);
+                }
+            }
+        }
+
+        public delegate void IncomingCallMessage(string strPhoneNo);
+        private void SetIncomingCall(string strPhoneNo)
+        {
+            if (txtTelephone.InvokeRequired)
+            {
+                IncomingCallMessage _myInvoke = new IncomingCallMessage(SetIncomingCall);
+                this.Invoke(_myInvoke, new object[] { strPhoneNo });
+            }
+            else
+            {
+                int callType = 1;  //程序
+                FormIncomingCall form = new FormIncomingCall(strPhoneNo, string.Empty, callType);
+                form.ShowDialog();
+                if (!string.IsNullOrEmpty(form.SelectedAddress) && form.CurCustomerInfo != null)
+                {
+                    txtTelephone.Text = form.CurCustomerInfo.Telephone;
+                    txtName.Text = form.CurCustomerInfo.CustomerName;
+                    txtAddress.Text = form.SelectedAddress;
                 }
             }
         }
@@ -792,22 +806,22 @@ namespace Top4ever.Pos
                     if (item.ParentGoodsID.Equals(goods.GoodsID))
                     {
                         Goods temp = new Goods();
-                        temp.GoodsID = item.ItemID;
-                        temp.GoodsNo = item.ItemNo;
-                        temp.GoodsName = item.ItemName;
-                        temp.GoodsName2nd = item.ItemName2nd;
+                        temp.GoodsID = item.GoodsID;
+                        temp.GoodsNo = item.GoodsNo;
+                        temp.GoodsName = item.GoodsName;
+                        temp.GoodsName2nd = item.GoodsName2nd;
                         temp.Unit = item.Unit;
                         temp.SellPrice = item.SellPrice;
-                        temp.CanDiscount = item.CanDiscount;
-                        temp.AutoShowDetails = item.AutoShowDetails;
+                        temp.CanDiscount = false;
+                        temp.AutoShowDetails = false;
                         temp.PrintSolutionName = item.PrintSolutionName;
                         temp.DepartID = item.DepartID;
                         //更新列表
                         index = dgvGoodsOrder.Rows.Add(new DataGridViewRow());
-                        dgvGoodsOrder.Rows[index].Cells["ItemID"].Value = item.ItemID;
+                        dgvGoodsOrder.Rows[index].Cells["ItemID"].Value = item.GoodsID;
                         dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag = temp;
                         dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = item.ItemQty;
-                        dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = "--" + item.ItemName;
+                        dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = "--" + item.GoodsName;
                         dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = item.SellPrice;
                         decimal discount = 0;
                         if (item.DiscountRate > 0)
@@ -820,52 +834,8 @@ namespace Top4ever.Pos
                         }
                         dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = (-discount).ToString("f2");
                         dgvGoodsOrder.Rows[index].Cells["ItemType"].Value = OrderItemType.SetMeal;
-                        dgvGoodsOrder.Rows[index].Cells["CanDiscount"].Value = item.CanDiscount;
+                        dgvGoodsOrder.Rows[index].Cells["CanDiscount"].Value = false;
                         dgvGoodsOrder.Rows[index].Cells["ItemUnit"].Value = item.Unit;
-
-                        #region 判断套餐项是否含细项
-                        bool haveDetails = false;
-                        foreach (GoodsSetMeal detailsSetMeal in ConstantValuePool.DetailsSetMealList)
-                        {
-                            if (detailsSetMeal.ParentGoodsID.Equals(temp.GoodsID))
-                            {
-                                Details details = new Details();
-                                details.DetailsID = detailsSetMeal.ItemID;
-                                details.DetailsNo = detailsSetMeal.ItemNo;
-                                details.DetailsName = detailsSetMeal.ItemName;
-                                details.DetailsName2nd = detailsSetMeal.ItemName2nd;
-                                details.SellPrice = detailsSetMeal.SellPrice;
-                                details.CanDiscount = detailsSetMeal.CanDiscount;
-                                details.AutoShowDetails = detailsSetMeal.AutoShowDetails;
-                                details.PrintSolutionName = detailsSetMeal.PrintSolutionName;
-                                details.DepartID = detailsSetMeal.DepartID;
-                                //更新列表
-                                index = dgvGoodsOrder.Rows.Add(new DataGridViewRow());
-                                dgvGoodsOrder.Rows[index].Cells["ItemID"].Value = detailsSetMeal.ItemID;
-                                dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag = details;
-                                dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = detailsSetMeal.ItemQty;
-                                dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = "----" + detailsSetMeal.ItemName;
-                                dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = detailsSetMeal.SellPrice;
-                                decimal detailsDiscount = 0;
-                                if (detailsSetMeal.DiscountRate > 0)
-                                {
-                                    detailsDiscount = detailsSetMeal.SellPrice * detailsSetMeal.ItemQty * detailsSetMeal.DiscountRate;
-                                }
-                                else
-                                {
-                                    detailsDiscount = detailsSetMeal.OffFixPay;
-                                }
-                                dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = (-detailsDiscount).ToString("f2");
-                                dgvGoodsOrder.Rows[index].Cells["ItemType"].Value = OrderItemType.SetMeal;
-                                dgvGoodsOrder.Rows[index].Cells["CanDiscount"].Value = detailsSetMeal.CanDiscount;
-                                haveDetails = true;
-                            }
-                            else
-                            {
-                                if (haveDetails) break;
-                            }
-                        }
-                        #endregion
 
                         haveCirculate = true;
                     }
