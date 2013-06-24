@@ -6,49 +6,69 @@ namespace Top4ever.Domain.GoodsRelated
     public class GoodsSetMeal
     {
         /// <summary>
-        /// 套餐项的父级
+        /// 套餐主项
         /// </summary>
         public Guid ParentGoodsID { get; set; }
 
         /// <summary>
-        /// 套餐项的数量
+        /// 组号
+        /// </summary>
+        public int GroupNo { get; set; }
+
+        /// <summary>
+        /// 组号
+        /// </summary>
+        public string GroupName { get; set; }
+
+        /// <summary>
+        /// 是否必选
+        /// </summary>
+        public bool IsRequired { get; set; }
+
+        /// <summary>
+        /// 限定数量
+        /// </summary>
+        public int LimitedQty { get; set; }
+
+        /// <summary>
+        /// 套餐明细的数量
         /// </summary>
         public decimal ItemQty { get; set; }
 
         /// <summary>
-        /// 套餐项的折扣率
+        /// 套餐明细的折扣类型
+        /// </summary>
+        public int DiscountType { get; set; }
+
+        /// <summary>
+        /// 套餐明细的折扣率
         /// </summary>
         public decimal DiscountRate { get; set; }
 
         /// <summary>
-        /// 套餐项的折扣额
+        /// 套餐明细的折固定金额
         /// </summary>
         public decimal OffFixPay { get; set; }
 
         /// <summary>
-        /// 套餐项的ID
+        /// GoodsID
         /// </summary>
-        public Guid ItemID { get; set; }
+        public Guid GoodsID { get; set; }
 
         /// <summary>
-        /// 套餐项编号
+        /// 编号
         /// </summary>
-        public string ItemNo { get; set; }
+        public string GoodsNo { get; set; }
 
         /// <summary>
-        /// 套餐项名称
+        /// 名称
         /// </summary>
-        public string ItemName { get; set; }
+        public string GoodsName { get; set; }
 
         /// <summary>
-        /// 套餐项名称第二语言
+        /// 名称第二语言
         /// </summary>
-        public string ItemName2nd { get; set; }
-
-        /// <summary>
-        /// 单位名称
-        /// </summary>
-        public string Unit { get; set; }
+        public string GoodsName2nd { get; set; }
 
         /// <summary>
         /// 单位售价
@@ -56,14 +76,9 @@ namespace Top4ever.Domain.GoodsRelated
         public decimal SellPrice { get; set; }
 
         /// <summary>
-        /// 能否打折
+        /// 单位名称
         /// </summary>
-        public bool CanDiscount { get; set; }
-
-        /// <summary>
-        /// 是否自动显示细项
-        /// </summary>
-        public bool AutoShowDetails { get; set; }
+        public string Unit { get; set; }
 
         /// <summary>
         /// 厨房打印机

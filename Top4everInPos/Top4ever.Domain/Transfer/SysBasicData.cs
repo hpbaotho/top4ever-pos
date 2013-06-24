@@ -26,8 +26,6 @@ namespace Top4ever.Domain.Transfer
 
         public IList<GoodsSetMeal> GoodsSetMealList { get; set; }
 
-        public IList<GoodsSetMeal> DetailsSetMealList { get; set; }
-
         public IList<GoodsCronTrigger> GoodsCronTriggerList { get; set; }
 
         public IList<ButtonStyle> ButtonStyleList { get; set; }

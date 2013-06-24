@@ -5,16 +5,16 @@ namespace Top4ever.Entity
 {
     public class RightsItemCode
     {
-        public static readonly string DAILYSTATEMENT = "MA0";                 //日结
-        public static readonly string PETTYCASHMODIFY = "MA1";              //零用金修改
-        public static readonly string HOURSTURNOVER = "MA2";                //小时营业额
-        public static readonly string HISTORYSEARCH = "MA3";                  //历史日结/交班查询
+        public static readonly string DAILYSTATEMENT = "MA0";           //日结
+        public static readonly string PETTYCASHMODIFY = "MA1";          //零用金修改
+        public static readonly string HOURSTURNOVER = "MA2";            //小时营业额
+        public static readonly string HISTORYSEARCH = "MA3";            //历史日结/交班查询
         public static readonly string SINGLEGOODSSTATISTICS = "MA4";    //单品销量统计
         public static readonly string DELETEDGOODSREPORT = "MA5";       //删除品项报表
-        public static readonly string PETTYCASHREPORT = "MA6";              //零用金报表
-        public static readonly string HISTORYDAILYREPORT = "MA7";         //历史日结汇总表
-        public static readonly string PUNCHINREPORT = "MA8";                //打卡报表
-        public static readonly string LOGSEARCH = "MA9";                        //日志查询
+        public static readonly string PETTYCASHREPORT = "MA6";          //零用金报表
+        public static readonly string HISTORYDAILYREPORT = "MA7";       //历史日结汇总表
+        public static readonly string PUNCHINREPORT = "MA8";            //打卡报表
+        public static readonly string LOGSEARCH = "MA9";                //日志查询
 
         public static readonly string CANCELBILL = "BA0";           //取消账单
         public static readonly string SINGLEDISCOUNT = "BA1";       //单品折扣
@@ -37,6 +37,10 @@ namespace Top4ever.Entity
         public static readonly string PAYMENT = "RA6";          //支付
         public static readonly string CUSTOMTASTE = "RA7";      //自定义口味
         public static readonly string CUSTOMDISCOUNT = "RA8";   //自定义折扣
+
+        public static readonly string REPORTLOSS = "MC0";       //会员卡挂失
+        public static readonly string LOCKCARD = "MC1";         //会员卡锁卡
+        public static readonly string CANCELCARD = "MC2";       //会员卡作废
 
         public static bool FindRights(string rightsCode)
         {

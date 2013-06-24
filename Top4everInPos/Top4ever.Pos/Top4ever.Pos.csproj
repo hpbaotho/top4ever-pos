@@ -193,6 +193,24 @@
       <DependentUpon>FormTest.cs</DependentUpon>
     </Compile>
     <Compile Include="LDT.cs" />
+    <Compile Include="Membership\FormVIPCardPassword.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Membership\FormVIPCardPassword.Designer.cs">
+      <DependentUpon>FormVIPCardPassword.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Membership\FormVIPCardSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Membership\FormVIPCardSearch.Designer.cs">
+      <DependentUpon>FormVIPCardSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Membership\FormVIPCardStatus.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Membership\FormVIPCardStatus.Designer.cs">
+      <DependentUpon>FormVIPCardStatus.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Promotions\PromotionConditionService.cs" />
     <Compile Include="Promotions\PromotionCronTriggerService.cs" />
@@ -306,6 +324,15 @@
     <EmbeddedResource Include="FormTest.resx">
       <DependentUpon>FormTest.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Membership\FormVIPCardPassword.resx">
+      <DependentUpon>FormVIPCardPassword.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Membership\FormVIPCardSearch.resx">
+      <DependentUpon>FormVIPCardSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Membership\FormVIPCardStatus.resx">
+      <DependentUpon>FormVIPCardStatus.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -388,7 +415,6 @@
     <None Include="Resources\arrow_right_green.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Membership\" />
     <Folder Include="StoreSales\" />
   </ItemGroup>
   <ItemGroup>

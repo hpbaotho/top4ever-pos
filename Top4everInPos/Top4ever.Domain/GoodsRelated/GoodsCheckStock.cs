@@ -15,6 +15,11 @@ namespace Top4ever.Domain.GoodsRelated
         public string GoodsName { get; set; }
 
         /// <summary>
+        /// 品项名称第二语言
+        /// </summary>
+        public string GoodsName2nd { get; set; }
+
+        /// <summary>
         /// 剩余数量
         /// </summary>
         public decimal RemainQuantity { get; set; }

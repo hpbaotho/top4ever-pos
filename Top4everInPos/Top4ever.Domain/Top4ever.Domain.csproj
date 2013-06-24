@@ -57,6 +57,8 @@
     <Compile Include="GoodsRelated\GoodsSetMeal.cs" />
     <Compile Include="HandoverRecord.cs" />
     <Compile Include="HandoverTurnover.cs" />
+    <Compile Include="MembershipCard\VIPCard.cs" />
+    <Compile Include="MembershipCard\VIPCardTrade.cs" />
     <Compile Include="OrderRelated\Discount.cs" />
     <Compile Include="OrderRelated\Order.cs" />
     <Compile Include="OrderRelated\OrderDetails.cs" />

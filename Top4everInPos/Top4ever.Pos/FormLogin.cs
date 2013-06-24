@@ -77,13 +77,24 @@ namespace Top4ever.Pos
             }
             else
             {
-                MessageBox.Show("找不到程序的配置文件！");
+                MessageBox.Show("找不到程序的配置文件！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
             }
-
+            string employeeName = this.txtName.Text.Trim();
+            string password = this.txtPassword.Text.Trim();
+            if (string.IsNullOrEmpty(employeeName))
+            {
+                MessageBox.Show("用户名不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (string.IsNullOrEmpty(password))
+            {
+                MessageBox.Show("密码不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             Employee employee = null;
             EmployeeService employeeService = new EmployeeService();
-            int result = employeeService.EmployeeLogin(this.txtName.Text.Trim(), this.txtPassword.Text.Trim(), ref employee);
+            int result = employeeService.EmployeeLogin(employeeName, password, ref employee);
             if (result == 1)
             {
                 bool haveDailyClose = true;
@@ -126,7 +137,6 @@ namespace Top4ever.Pos
                     ConstantValuePool.GoodsGroupList = sysBasicData.GoodsGroupList;
                     ConstantValuePool.DetailsGroupList = sysBasicData.DetailsGroupList;
                     ConstantValuePool.GoodsSetMealList = sysBasicData.GoodsSetMealList;
-                    ConstantValuePool.DetailsSetMealList = sysBasicData.DetailsSetMealList;
                     ConstantValuePool.GoodsCronTriggerList = sysBasicData.GoodsCronTriggerList;
                     ConstantValuePool.ButtonStyleList = sysBasicData.ButtonStyleList;
                     ConstantValuePool.PromotionList = sysBasicData.PromotionList;
@@ -262,7 +272,6 @@ namespace Top4ever.Pos
                     ConstantValuePool.GoodsGroupList = sysBasicData.GoodsGroupList;
                     ConstantValuePool.DetailsGroupList = sysBasicData.DetailsGroupList;
                     ConstantValuePool.GoodsSetMealList = sysBasicData.GoodsSetMealList;
-                    ConstantValuePool.DetailsSetMealList = sysBasicData.DetailsSetMealList;
                     ConstantValuePool.GoodsCronTriggerList = sysBasicData.GoodsCronTriggerList;
                     ConstantValuePool.ButtonStyleList = sysBasicData.ButtonStyleList;
 

@@ -20,5 +20,9 @@ namespace Top4ever.ClientService.Enum
         public const int TELEPHONE = 24;
         public const int CUSTOMER_NAME = 20;
         public const int GOODS_NAME = 30;
+        public const int CARD_NO = 50;
+        public const int CARD_PASSWORD = 128;
+        public const int BEGINDATE = 20;
+        public const int ENDDATE = 20;
     }
 }
