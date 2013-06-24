@@ -57,6 +57,8 @@
     <Compile Include="IShopDao.cs" />
     <Compile Include="ISystemConfigDao.cs" />
     <Compile Include="ISystemDictionaryDao.cs" />
+    <Compile Include="MembershipCard\IVIPCardDao.cs" />
+    <Compile Include="MembershipCard\IVIPCardTradeDao.cs" />
     <Compile Include="OrderRelated\IDiscountDao.cs" />
     <Compile Include="OrderRelated\IOrderDao.cs" />
     <Compile Include="OrderRelated\IOrderDetailsDao.cs" />

@@ -21,7 +21,7 @@ namespace Top4ever.Domain.Promotions
         /// </summary>
         public int Classification { get; set; }
         /// <summary>
-        /// 赠品品项编号
+        /// 赠品编号
         /// </summary>
 		public Guid? GoodsID { get; set; }
         /// <summary>
@@ -32,10 +32,6 @@ namespace Top4ever.Domain.Promotions
         /// 赠品名称
         /// </summary>
         public string GoodsName { get; set; }
-        /// <summary>
-        /// 类别
-        /// </summary>
-        public int? ItemType { get; set; }
         /// <summary>
         /// 单位名称
         /// </summary>
@@ -60,10 +56,6 @@ namespace Top4ever.Domain.Promotions
         /// 倍数
         /// </summary>
         public bool IsMultiple { get; set; }
-        /// <summary>
-        /// 折扣类型
-        /// </summary>
-        public int? DiscountType { get; set; }
         /// <summary>
         /// 折扣率
         /// </summary>

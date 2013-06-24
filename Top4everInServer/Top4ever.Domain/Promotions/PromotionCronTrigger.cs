@@ -25,12 +25,12 @@ namespace Top4ever.Domain.Promotions
         /// </summary>
         public string Day { get; set; }
         /// <summary>
-		/// 小时
-		/// </summary>
-		public string Hour { get; set; }
-		/// <summary>
-		/// 分钟
-		/// </summary>
-		public string Minute { get; set; }
+        /// 小时
+        /// </summary>
+        public string Hour { get; set; }
+        /// <summary>
+        /// 分钟
+        /// </summary>
+        public string Minute { get; set; }
     }
 }

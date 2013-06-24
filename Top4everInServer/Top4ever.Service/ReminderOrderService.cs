@@ -61,12 +61,15 @@ namespace Top4ever.Service
                     SalesOrder salesOrder = new SalesOrder();
                     salesOrder.order = order;
                     salesOrder.orderDetailsList = orderDetailsList;
-
+                    //添加打印任务
                     SystemConfig systemConfig = _sysConfigDao.GetSystemConfigInfo();
-                    IList<PrintTask> printTaskList = PrintTaskService.GetInstance().GetPrintTaskList(salesOrder, systemConfig.PrintStyle, systemConfig.FollowStyle, 3, reminderOrder.ReasonName);
-                    foreach (PrintTask printTask in printTaskList)
+                    if (systemConfig.IncludeKitchenPrint)
                     {
-                        _printTaskDao.InsertPrintTask(printTask);
+                        IList<PrintTask> printTaskList = PrintTaskService.GetInstance().GetPrintTaskList(salesOrder, systemConfig.PrintStyle, systemConfig.FollowStyle, systemConfig.PrintType, 3, reminderOrder.ReasonName);
+                        foreach (PrintTask printTask in printTaskList)
+                        {
+                            _printTaskDao.InsertPrintTask(printTask);
+                        }
                     }
                     returnValue = true;
                 }

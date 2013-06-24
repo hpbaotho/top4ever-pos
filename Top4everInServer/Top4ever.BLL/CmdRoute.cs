@@ -139,6 +139,15 @@ namespace Top4ever.BLL
                 case Command.ID_UPDATE_REDUCEDGOODSQTY:
                     byteRet = GoodsBLL.UpdateReducedGoodsQty(itemBuffer);
                     break;
+                case Command.ID_GET_VIPCARD:
+                    byteRet = VIPCardBLL.SearchVIPCard(itemBuffer);
+                    break;
+                case Command.ID_GET_VIPCARDTRADELIST:
+                    byteRet = VIPCardTradeBLL.GetVIPCardTradeList(itemBuffer);
+                    break;
+                case Command.ID_UPDATE_CARDPASSWORD:
+                    byteRet = VIPCardBLL.UpdateCardPassword(itemBuffer);
+                    break;
 
                 default:
                     byteRet = null;

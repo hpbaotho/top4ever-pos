@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using System.Text;
 
-namespace Top4ever.AppServer
+namespace Top4ever.Common
 {
     public class CheckNetWork
     {

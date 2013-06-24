@@ -13,6 +13,7 @@
         <result property="PayoffType" column="PayoffType"></result>
         <result property="AsPay" column="AsPay"></result>
         <result property="ButtonStyleID" column="ButtonStyleID"></result>
+        <result property="AsVIPCardPayWay" column="AsVIPCardPayWay"></result>
       </resultMap>
 
     </resultMaps>
@@ -22,11 +23,11 @@
     -->
     <statements>
       <select id="GetPayoffWayList" resultMap="PayoffWayResult">
-			  SELECT PayoffID, PayoffName, PayoffName_2nd, PayoffType, AsPay, ButtonStyleID
-			  FROM PayoffWay
-			  WHERE IsVoided = 0
-			  ORDER BY OrderBy
-		  </select>
+        SELECT PayoffID, PayoffName, PayoffName_2nd, PayoffType, AsPay, ButtonStyleID, AsVIPCardPayWay
+        FROM PayoffWay
+        WHERE IsVoided = 0
+        ORDER BY OrderBy
+      </select>
 
     </statements>
 </sqlMap>

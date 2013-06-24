@@ -38,11 +38,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CheckNetWork.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Top4ever.Common\Top4ever.Common.csproj">
+      <Project>{A7630CE5-49F7-40A8-9C92-96708201C756}</Project>
+      <Name>Top4ever.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Top4ever.NetServer\Top4ever.NetServer.csproj">
       <Project>{860789A4-9B68-46DC-BF9E-3B8A1F925CBE}</Project>
       <Name>Top4ever.NetServer</Name>
@@ -95,8 +98,14 @@
     <Content Include="Maps\Reason.xml" />
     <Content Include="Maps\Region.xml" />
     <Content Include="Maps\Shop.xml" />
-    <Content Include="Maps\SystemConfig.xml" />
-    <Content Include="Maps\SystemDictionary.xml" />
+    <Content Include="Maps\SystemConfig.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Maps\SystemDictionary.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Maps\VIPCard.xml" />
+    <Content Include="Maps\VIPCardTrade.xml" />
     <Content Include="providers.config" />
     <Content Include="SqlMap.config">
       <SubType>Designer</SubType>

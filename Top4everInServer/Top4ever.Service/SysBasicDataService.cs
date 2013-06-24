@@ -135,7 +135,6 @@ namespace Top4ever.Service
                     }
                 }
                 IList<GoodsSetMeal> goodsSetMealList = _goodsSetMealDao.GetAllGoodsSetMeal();
-                IList<GoodsSetMeal> detailsSetMealList = _goodsSetMealDao.GetAllDetailsSetMeal();
                 IList<GoodsCronTrigger> goodsCronTriggerList = _goodsGroupDao.GetAllGoodsCronTrigger();
                 //ButtonStyle
                 IList<ButtonStyle> buttonStyleList = _buttonStyleDao.GetButtonStyleList();
@@ -158,7 +157,6 @@ namespace Top4ever.Service
                 basicData.GoodsGroupList = goodsGroupList;
                 basicData.DetailsGroupList = detailsGroupList;
                 basicData.GoodsSetMealList = goodsSetMealList;
-                basicData.DetailsSetMealList = detailsSetMealList;
                 basicData.GoodsCronTriggerList = goodsCronTriggerList;
                 basicData.ButtonStyleList = buttonStyleList;
                 basicData.SysConfig = systemConfig;
