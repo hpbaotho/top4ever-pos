@@ -16,12 +16,14 @@
       </resultMap>
 
       <resultMap id="GoodsCronTriggerResult" class="GoodsCronTrigger">
-        <result property="CronTriggerID" column="CronTriggerID"></result>
-        <result property="Year" column="Year"></result>
+        <result property="ItemID" column="ItemID"></result>
+        <result property="ItemType" column="ItemType"></result>
+        <result property="BeginDate" column="BeginDate"></result>
+        <result property="EndDate" column="EndDate"></result>
         <result property="Week" column="Week"></result>
-        <result property="Month" column="Month"></result>
         <result property="Day" column="Day"></result>
-        <result property="SmallTime" column="SmallTime"></result>
+        <result property="Hour" column="Hour"></result>
+        <result property="Minute" column="Minute"></result>
       </resultMap>
 
     </resultMaps>
@@ -38,7 +40,7 @@
       </select>
 
       <select id="GetGoodsCronTriggerList" resultMap="GoodsCronTriggerResult">
-        SELECT CronTriggerID, [Year], [Week], [Month], [Day], [SmallTime]
+        SELECT ItemID,ItemType,BeginDate,EndDate,Week,[Day],Hour,Minute
         FROM GoodsCronTrigger
         WHERE IsVoided = 0
       </select>

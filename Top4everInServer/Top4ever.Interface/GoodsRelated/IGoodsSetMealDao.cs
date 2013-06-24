@@ -11,7 +11,5 @@ namespace Top4ever.Interface.GoodsRelated
     public interface IGoodsSetMealDao
     {
         IList<GoodsSetMeal> GetAllGoodsSetMeal();
-
-        IList<GoodsSetMeal> GetAllDetailsSetMeal();
     }
 }

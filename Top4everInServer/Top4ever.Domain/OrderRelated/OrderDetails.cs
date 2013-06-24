@@ -92,11 +92,6 @@ namespace Top4ever.Domain.OrderRelated
         public string DailyStatementNo { get; set; }
 
         /// <summary>
-        /// 打印类型（0 一单一切, 1 一菜一切）
-        /// </summary>
-        public int PrintType { get; set; }
-
-        /// <summary>
         /// 厨房打印机
         /// </summary>
         public string PrintSolutionName { get; set; }

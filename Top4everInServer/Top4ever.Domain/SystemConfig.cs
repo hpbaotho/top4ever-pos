@@ -41,6 +41,10 @@ namespace Top4ever.Domain
         /// </summary>
         public int FollowStyle { get; set; }
         /// <summary>
+        /// 打印类型（0 一单一切, 1 一菜一切）
+        /// </summary>
+        public int PrintType { get; set; }
+        /// <summary>
         /// 最近数据同步时间
         /// </summary>
         public DateTime LastDataSyncTime { get; set; }

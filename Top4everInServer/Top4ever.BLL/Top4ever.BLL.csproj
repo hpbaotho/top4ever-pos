@@ -61,6 +61,8 @@
     <Compile Include="ReminderBLL.cs" />
     <Compile Include="SalesOrderBLL.cs" />
     <Compile Include="SysBasicDataBLL.cs" />
+    <Compile Include="VIPCardBLL.cs" />
+    <Compile Include="VIPCardTradeBLL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Top4ever.Domain\Top4ever.Domain.csproj">

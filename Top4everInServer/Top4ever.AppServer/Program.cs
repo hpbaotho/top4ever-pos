@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net.Sockets;
 
+using Top4ever.Common;
 using Top4ever.NetServer;
 
 namespace Top4ever.AppServer
@@ -11,6 +12,16 @@ namespace Top4ever.AppServer
     {
         static void Main(string[] args)
         {
+            DateTime? dt = GetStandardDataTime();
+            if (dt != null)
+            {
+                DateTime localTime = Convert.ToDateTime(dt).AddHours(8);
+                TimeSpan ts = localTime - DateTime.Now;
+                if (Math.Abs(ts.Hours) > 0)
+                { 
+                    
+                }
+            }
             try
             {
                 Int32 port = 5689;
@@ -24,7 +35,6 @@ namespace Top4ever.AppServer
                 Console.Read();
 
                 sl.Stop();
-
             }
             catch (Exception ex)
             {
@@ -32,7 +42,7 @@ namespace Top4ever.AppServer
             }
         }
 
-        public static DateTime GetStandardDataTime()
+        public static DateTime? GetStandardDataTime()
         {
             //"time-a.timefreq.bldrdoc.gov"     "132.163.4.101";
             //"time-b.timefreq.bldrdoc.gov"     "132.163.4.102";
@@ -61,14 +71,29 @@ namespace Top4ever.AppServer
                     }
                     catch (Exception ex)
                     {
-                        //log ex
+                        throw ex;
                     }
                 }
             }
             string strTime = Encoding.ASCII.GetString(bytes, 0, bytesRead);
             string[] s = strTime.Split(' ');
-            DateTime dt = DateTime.Parse(s[1] + " " + s[2]);//得到标准时间
-            return dt;
+            if (s.Length > 2)
+            {
+                DateTime dt;
+                if (DateTime.TryParse(s[1] + " " + s[2], out dt))
+                {
+                    //得到标准时间
+                    return dt;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

@@ -15,6 +15,7 @@
         <result property="MinQuotas" column="MinQuotas"></result>
         <result property="OffFixPay" column="OffFixPay"></result>
         <result property="DisplayModel" column="DisplayModel"></result>
+        <result property="ForcedDiscount" column="ForcedDiscount"></result>
         <result property="ButtonStyleID" column="ButtonStyleID"></result>
       </resultMap>
 
@@ -25,7 +26,7 @@
     -->
     <statements>
       <select id="GetDiscountList" resultMap="DiscountResult">
-        SELECT DiscountID, DiscountName, DiscountName_2nd, DiscountType, DiscountRate, MinQuotas, OffFixPay, DisplayModel, ButtonStyleID
+        SELECT DiscountID,DiscountName,DiscountName_2nd,DiscountType,DiscountRate,MinQuotas,OffFixPay,DisplayModel,ForcedDiscount,ButtonStyleID
         FROM Discount
         WHERE IsVoided = 0
         ORDER BY OrderBy

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using IBatisNet.DataAccess;
 
+using Top4ever.Domain;
 using Top4ever.Domain.OrderRelated;
 using Top4ever.Domain.Transfer;
 using Top4ever.Interface;
@@ -19,6 +20,7 @@ namespace Top4ever.Service
         private IOrderDao _orderDao = null;
         private IPrintTaskDao _printTaskDao = null;
         private IDailyStatementDao _dailyStatementDao = null;
+        private ISystemConfigDao _sysConfigDao = null;
 
         #endregion
 
@@ -30,6 +32,7 @@ namespace Top4ever.Service
             _orderDao = _daoManager.GetDao(typeof(IOrderDao)) as IOrderDao;
             _printTaskDao = _daoManager.GetDao(typeof(IPrintTaskDao)) as IPrintTaskDao;
             _dailyStatementDao = _daoManager.GetDao(typeof(IDailyStatementDao)) as IDailyStatementDao;
+            _sysConfigDao = _daoManager.GetDao(typeof(ISystemConfigDao)) as ISystemConfigDao;
         }
 
         #endregion
@@ -98,8 +101,12 @@ namespace Top4ever.Service
             _daoManager.BeginTransaction();
             try
             {
-                //添加打印任务
-                _printTaskDao.InsertDeskOperatePrint(deskChange);
+                SystemConfig systemConfig = _sysConfigDao.GetSystemConfigInfo();
+                if (systemConfig.IncludeKitchenPrint)
+                {
+                    //添加打印任务
+                    _printTaskDao.InsertDeskOperatePrint(deskChange);
+                }
                 // 转台
                 if (deskChange.OrderID1st != Guid.Empty && deskChange.OrderID2nd == Guid.Empty)
                 {

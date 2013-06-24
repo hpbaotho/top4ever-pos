@@ -29,9 +29,10 @@ namespace Top4ever.Service
         /// <param name="salesOrder">订单实例</param>
         /// <param name="printStyle">1 堂吃, 2 外卖, 3 堂吃兼外卖</param>
         /// <param name="followStyle">1 细跟主, 2 主跟细</param>
+        /// <param name="printType">打印类型（0 一单一切, 1 一菜一切）</param>
         /// <param name="taskType">任务类别 1,加单 2,删单 3,催单 4,转台</param>
         /// <param name="reason">原因</param>
-        public IList<PrintTask> GetPrintTaskList(SalesOrder salesOrder, int printStyle, int followStyle, int taskType, string reason)
+        public IList<PrintTask> GetPrintTaskList(SalesOrder salesOrder, int printStyle, int followStyle, int printType, int taskType, string reason)
         {
             if (salesOrder == null || salesOrder.order == null || salesOrder.orderDetailsList.Count == 0) return null;
             IList<PrintTask> printTaskList = new List<PrintTask>();
@@ -135,7 +136,7 @@ namespace Top4ever.Service
                                 printTask.Reason = reason;
                                 printTask.IsPrinted = false;
                                 printTask.PrintSolutionName = printerName;
-                                printTask.PrintType = details.PrintType;
+                                printTask.PrintType = printType;
                                 printTask.GoodsName = details.GoodsName;
                                 printTask.Unit = details.Unit;
                                 printTask.ItemQty = details.ItemQty;
@@ -304,7 +305,7 @@ namespace Top4ever.Service
                                             printTask.Reason = reason;
                                             printTask.IsPrinted = false;
                                             printTask.PrintSolutionName = printerName;
-                                            printTask.PrintType = details.PrintType;
+                                            printTask.PrintType = printType;
                                             printTask.GoodsName = details.GoodsName;
                                             printTask.Unit = details.Unit;
                                             printTask.ItemQty = details.ItemQty;

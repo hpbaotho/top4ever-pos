@@ -30,6 +30,7 @@
       <resultMap id="GoodsCheckStockResult" class="GoodsCheckStock">
         <result property="GoodsID" column="GoodsID"></result>
         <result property="GoodsName" column="GoodsName"></result>
+        <result property="GoodsName2nd" column="GoodsName_2nd"></result>
         <result property="RemainQuantity" column="RemainQuantity"></result>
       </resultMap>
     </resultMaps>
@@ -76,9 +77,9 @@
       </select>
 
       <select id="GetGoodsCheckStock" resultMap="GoodsCheckStockResult">
-        SELECT GoodsID, GoodsName, RemainQuantity
-        FROM Goods
-        WHERE IsCheckStock = 1 AND IsVoided = 0
+        SELECT gs.GoodsID, g.GoodsName, g.GoodsName_2nd, gs.RemainQuantity
+        FROM Goods g JOIN GoodsStock gs ON gs.GoodsID = g.GoodsID
+        WHERE gs.IsSoldOut = 0 AND g.IsVoided = 0
       </select>
 
       <procedure id="UpdateReducedGoodsQty" parameterMap="UpdateReducedQtyParam">

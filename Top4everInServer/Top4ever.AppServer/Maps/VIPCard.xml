@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="VIPCard" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <alias>
+    <typeAlias alias="VIPCard" type="Top4ever.Domain.MembershipCard.VIPCard, Top4ever.Domain" />
+  </alias>
+
+  <resultMaps>
+    <resultMap id="VIPCardResult" class="VIPCard">
+      <result property="VIPCardID" column="VIPCardID"></result>
+      <result property="CardNo" column="CardNo"></result>
+      <result property="Password" column="Password"></result>
+      <result property="Balance" column="Balance"></result>
+      <result property="DiscountRate" column="DiscountRate"></result>
+      <result property="Integral" column="Integral"></result>
+      <result property="Name" column="Name"></result>
+      <result property="Telephone" column="Telephone"></result>
+      <result property="Birthday" column="Birthday"></result>
+      <result property="Address" column="Address"></result>
+      <result property="Status" column="Status"></result>
+      <result property="OpenCardTime" column="OpenCardTime"></result>
+      <result property="LastConsumeTime" column="LastConsumeTime"></result>
+      <result property="Remark" column="Remark"></result>
+    </resultMap>
+
+  </resultMaps>
+
+  <parameterMaps>
+    <parameterMap id="VIPCardParam" class="Hashtable">
+      <parameter property="CardNo" column="CardNo" />
+      <parameter property="CurrentPassword" column="CurrentPassword" />
+      <parameter property="NewPassword" column="NewPassword" />
+    </parameterMap>
+  </parameterMaps>
+
+  <!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+  <statements>
+    <select id="GetVIPCardInfo" resultMap="VIPCardResult" parameterClass="VIPCard">
+      SELECT VIPCardID,CardNo,Password,Balance,DiscountRate,Integral,[Name],Telephone,Birthday,[Address],[Status],LastConsumeTime,OpenCardTime,Remark
+      FROM VIPCard_Offline WITH(NOLOCK)
+      WHERE CardNo = #CardNo# AND [Password] = #Password#
+    </select>
+
+    <select id="GetCardPassword" parameterClass="String" resultClass="String">
+      SELECT Password FROM VIPCard_Offline WITH(NOLOCK) WHERE CardNo = #value#
+    </select>
+
+    <update id="UpdateCardPassword" parameterMap="VIPCardParam">
+      UPDATE VIPCard_Offline
+      SET [Password] = #NewPassword#
+      WHERE CardNo = #CardNo# AND [Password] = #CurrentPassword#
+    </update>
+  </statements>
+</sqlMap>

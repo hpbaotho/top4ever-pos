@@ -29,5 +29,9 @@ namespace Top4ever.Domain.OrderRelated
         /// 外键
         /// </summary>
         public Guid ButtonStyleID { get; set; }
+        /// <summary>
+        /// 作为会员卡的储值支付方式
+        /// </summary>
+        public bool AsVIPCardPayWay { get; set; }
     }
 }

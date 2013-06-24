@@ -16,6 +16,7 @@
         <result property="IncludeKitchenPrint" column="IncludeKitchenPrint"></result>
         <result property="PrintStyle" column="PrintStyle"></result>
         <result property="FollowStyle" column="FollowStyle"></result>
+        <result property="PrintType" column="PrintType"></result>
         <result property="LastDataSyncTime" column="LastDataSyncTime"></result>
         <result property="FixedServiceFee" column="FixedServiceFee"></result>
         <result property="ServiceFeePercent" column="ServiceFeePercent"></result>
@@ -41,6 +42,7 @@
         ,[IncludeKitchenPrint]
         ,[PrintStyle]
         ,[FollowStyle]
+        ,[PrintType]
         ,[LastDataSyncTime]
         ,[FixedServiceFee]
         ,[ServiceFeePercent]

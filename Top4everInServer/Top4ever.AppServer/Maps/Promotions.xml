@@ -15,29 +15,31 @@
       <result property="PresentType" column="PresentType"></result>
       <result property="WithOtherPromotion" column="WithOtherPromotion"></result>
       <result property="CustomerBase" column="CustomerBase"></result>
+      <result property="MustBirthday" column="MustBirthday"></result>
       <result property="TimeLimit" column="TimeLimit"></result>
-      <result property="PairItems" column="PairItems"></result>
       <result property="IsIncluded" column="IsIncluded"></result>
       <result property="AndOr" column="AndOr"></result>
     </resultMap>
 
     <resultMap  id="PromotionConditionResult" class="PromotionCondition">
       <result property="ActivityNo" column="ActivityNo"></result>
-      <result property="GoodsGroupNo" column="GoodsGroupNo"></result>
-      <result property="GoodsNo" column="GoodsNo"></result>
+      <result property="GoodsGroupID" column="GoodsGroupID"></result>
+      <result property="GoodsID" column="GoodsID"></result>
+      <result property="GroupOrItem" column="GroupOrItem"></result>
       <result property="Quantity" column="Quantity"></result>
       <result property="SellPrice" column="SellPrice"></result>
       <result property="MoreOrLess" column="MoreOrLess"></result>
-      <result property="LeastDiscount" column="LeastDiscount"></result>
+      <result property="LeastDiscountRate" column="LeastDiscountRate"></result>
     </resultMap>
 
     <resultMap  id="PromotionCronTriggerResult" class="PromotionCronTrigger">
       <result property="ActivityNo" column="ActivityNo"></result>
-      <result property="Year" column="Year"></result>
+      <result property="BeginDate" column="BeginDate"></result>
+      <result property="EndDate" column="EndDate"></result>
       <result property="Week" column="Week"></result>
-      <result property="Month" column="Month"></result>
       <result property="Day" column="Day"></result>
-      <result property="SmallTime" column="SmallTime"></result>
+      <result property="Hour" column="Hour"></result>
+      <result property="Minute" column="Minute"></result>
     </resultMap>
 
     <resultMap  id="PromotionPresentResult" class="PromotionPresent">
@@ -45,15 +47,18 @@
       <result property="TotalMoney" column="TotalMoney"></result>
       <result property="TotalQuantity" column="TotalQuantity"></result>
       <result property="Classification" column="Classification"></result>
+      <result property="GoodsID" column="GoodsID"></result>
       <result property="GoodsNo" column="GoodsNo"></result>
-      <result property="OriginalPrice" column="OriginalPrice"></result>
+      <result property="GoodsName" column="GoodsName"></result>
+      <result property="Unit" column="Unit"></result>
+      <result property="PrintSolutionName" column="PrintSolutionName"></result>
+      <result property="DepartID" column="DepartID"></result>
       <result property="SellPrice" column="SellPrice"></result>
       <result property="Quantity" column="Quantity"></result>
+      <result property="IsMultiple" column="IsMultiple"></result>
       <result property="DiscountRate" column="DiscountRate"></result>
       <result property="OffFixPay" column="OffFixPay"></result>
-      <result property="TimesLimit" column="TimesLimit"></result>
-      <result property="IsMultiple" column="IsMultiple"></result>
-      <result property="TypeOption" column="TypeOption"></result>
+      <result property="DiscountLimit" column="DiscountLimit"></result>
     </resultMap>
   </resultMaps>
   <!-- =============================================
@@ -62,27 +67,26 @@
     -->
   <statements>
     <select id="GetAllPromotion" resultMap="PromotionResult">
-      SELECT ActivityNo, PromotionName, PresentType, WithOtherPromotion, CustomerBase, TimeLimit, PairItems, IsIncluded, AndOr
+      SELECT ActivityNo, PromotionName, PresentType, WithOtherPromotion, CustomerBase, MustBirthday, TimeLimit, IsIncluded, AndOr
       FROM Promotion
       WHERE IsVoided = 0
       ORDER BY OrderBy
     </select>
 
     <select id="GetAllPromotionCondition" resultMap="PromotionConditionResult">
-      SELECT ActivityNo, GoodsGroupNo, GoodsNo, Quantity, SellPrice, MoreOrLess, LeastDiscount
+      SELECT ActivityNo,GoodsGroupID,GoodsID,GroupOrItem,Quantity,SellPrice,MoreOrLess,LeastDiscountRate
       FROM PromotionCondition
-      WHERE IsVoided = 0
     </select>
 
     <select id="GetAllPromotionCronTrigger" resultMap="PromotionCronTriggerResult">
-      SELECT ActivityNo, [Year], [Week], [Month], [Day], SmallTime
+      SELECT ActivityNo,BeginDate,EndDate,Week,[Day],Hour,Minute
       FROM PromotionCronTrigger
       WHERE IsVoided = 0
     </select>
 
     <select id="GetAllPromotionPresent" resultMap="PromotionPresentResult">
-      SELECT ActivityNo, TotalMoney, TotalQuantity, Classification, GoodsID, SellPrice,
-      Quantity, DiscountRate, OffFixPay, TimesLimit, IsMultiple, TypeOption
+      SELECT ActivityNo,TotalMoney,TotalQuantity,Classification,GoodsID,GoodsNo,GoodsName,Unit,
+        PrintSolutionName,DepartID,SellPrice,Quantity,IsMultiple,DiscountRate,OffFixPay,DiscountLimit
       FROM PromotionPresent
       WHERE IsVoided = 0
       ORDER BY OrderBy

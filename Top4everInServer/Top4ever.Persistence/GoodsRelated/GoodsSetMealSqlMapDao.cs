@@ -16,10 +16,5 @@ namespace Top4ever.Persistence.GoodsRelated
         {
             return ExecuteQueryForList<GoodsSetMeal>("GetGoodsSetMealList", null);
         }
-
-        public IList<GoodsSetMeal> GetAllDetailsSetMeal()
-        {
-            return ExecuteQueryForList<GoodsSetMeal>("GetDetailsSetMealList", null);
-        }
     }
 }
