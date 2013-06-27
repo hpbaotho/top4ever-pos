@@ -272,17 +272,20 @@ namespace Top4ever.Pos.Feature
 
         private void btnMemberStored_Click(object sender, EventArgs e)
         {
-
+            Membership.FormVIPCardStoreValue formStoreValue = new Membership.FormVIPCardStoreValue();
+            formStoreValue.ShowDialog();
         }
 
         private void btnMemberSearch_Click(object sender, EventArgs e)
         {
-
+            Membership.FormVIPCardSearch formSearch = new Membership.FormVIPCardSearch();
+            formSearch.ShowDialog();
         }
 
         private void btnMemberStatus_Click(object sender, EventArgs e)
         {
-
+            Membership.FormVIPCardStatus formStatus = new Membership.FormVIPCardStatus();
+            formStatus.ShowDialog();
         }
 
         private void btnUploadBill_Click(object sender, EventArgs e)

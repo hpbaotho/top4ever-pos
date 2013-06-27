@@ -314,7 +314,7 @@
             this.txtVIPCardNo.Location = new System.Drawing.Point(134, 33);
             this.txtVIPCardNo.Name = "txtVIPCardNo";
             this.txtVIPCardNo.Size = new System.Drawing.Size(379, 29);
-            this.txtVIPCardNo.TabIndex = 1;
+            this.txtVIPCardNo.TabIndex = 0;
             this.txtVIPCardNo.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtVIPCardNo_KeyDown);
             // 
             // btnCancel
@@ -332,7 +332,6 @@
             // btnModifyPassword
             // 
             this.btnModifyPassword.BackColor = System.Drawing.Color.RoyalBlue;
-            this.btnModifyPassword.Enabled = false;
             this.btnModifyPassword.ForeColor = System.Drawing.Color.White;
             this.btnModifyPassword.Location = new System.Drawing.Point(101, 553);
             this.btnModifyPassword.Name = "btnModifyPassword";

@@ -48,6 +48,8 @@ namespace Top4ever.ClientService.Enum
         ID_UPDATE_REDUCEDGOODSQTY = 42,
         ID_GET_VIPCARD = 43,
         ID_GET_VIPCARDTRADELIST = 44,
-        ID_UPDATE_CARDPASSWORD = 45
+        ID_UPDATE_CARDPASSWORD = 45,
+        ID_UPDATE_CARDSTATUS = 46,
+        ID_ADD_CARDSTOREDVALUE = 47
     }
 }

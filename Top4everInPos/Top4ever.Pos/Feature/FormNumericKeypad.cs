@@ -14,6 +14,7 @@ namespace Top4ever.Pos.Feature
         private string m_DisplayText = string.Empty;
         private string m_DefaultValue = string.Empty;
         private string m_KeypadValue = string.Empty;
+        private bool m_IsPassword = false;
 
         #region Input 
         public string DisplayText
@@ -24,6 +25,11 @@ namespace Top4ever.Pos.Feature
         public string DefaultValue
         {
             set { m_DefaultValue = value; }
+        }
+
+        public bool IsPassword
+        {
+            set { m_IsPassword = value; }
         }
         #endregion
 
@@ -56,6 +62,10 @@ namespace Top4ever.Pos.Feature
             {
                 btnDot.Enabled = false;
                 btnDot.BackColor = Entity.ConstantValuePool.DisabledColor;
+            }
+            if (m_IsPassword)
+            {
+                txtNumeric.PasswordChar = '*';
             }
         }
 
