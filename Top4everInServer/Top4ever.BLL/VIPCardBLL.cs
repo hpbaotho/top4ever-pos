@@ -72,5 +72,21 @@ namespace Top4ever.BLL
             }
             return objRet;
         }
+
+        public static byte[] UpdateVIPCardStatus(byte[] itemBuffer)
+        {
+            byte[] objRet = null;
+            string cardNo = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, ParamFieldLength.CARD_NO).Trim('\0');
+            string password = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.CARD_NO, ParamFieldLength.CARD_PASSWORD).Trim('\0');
+            int status = BitConverter.ToInt32(itemBuffer, ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.CARD_NO + ParamFieldLength.CARD_PASSWORD);
+
+            int result = VIPCardService.GetInstance().UpdateVIPCardStatus(cardNo, password, status);
+            //返回
+            objRet = new byte[ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32];
+            Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes(ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes(result), 0, objRet, ParamFieldLength.PACKAGE_HEAD, BasicTypeLength.INT32);
+            return objRet;
+        }
     }
 }

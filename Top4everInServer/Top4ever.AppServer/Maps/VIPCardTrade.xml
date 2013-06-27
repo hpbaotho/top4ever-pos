@@ -3,6 +3,7 @@
 
   <alias>
     <typeAlias alias="VIPCardTrade" type="Top4ever.Domain.MembershipCard.VIPCardTrade, Top4ever.Domain" />
+    <typeAlias alias="VIPCardStoredVaule" type="Top4ever.Domain.MembershipCard.VIPCardStoredVaule, Top4ever.Domain" />
   </alias>
 
   <resultMaps>
@@ -18,6 +19,15 @@
       <result property="IsVoided" column="IsVoided"></result>
     </resultMap>
 
+    <resultMap id="VIPCardStoredVauleResult" class="VIPCardStoredVaule">
+      <result property="StoredVauleAmount" column="StoredVauleAmount"></result>
+      <result property="FixedAmount" column="FixedAmount"></result>
+      <result property="PresentAmountRate" column="PresentAmountRate"></result>
+      <result property="FixedIntegral" column="FixedIntegral"></result>
+      <result property="PresentIntegralRate" column="PresentIntegralRate"></result>
+      <result property="IsMultiple" column="IsMultiple"></result>
+    </resultMap>
+
   </resultMaps>
 
   <parameterMaps>
@@ -25,6 +35,24 @@
       <parameter property="CardNo" column="CardNo" />
       <parameter property="BeginDate" column="BeginDate" />
       <parameter property="EndDate" column="EndDate" />
+    </parameterMap>
+
+    <parameterMap id="StoredAmountParam" class="Hashtable">
+      <parameter property="CardNo" column="CardNo" />
+      <parameter property="StoredVauleAmount" column="StoredVauleAmount" />
+    </parameterMap>
+
+    <parameterMap id="VIPCardStoredValueParam" class="Hashtable">
+      <parameter property="CardNo" column="CardNo" />
+      <parameter property="StoreMoney" column="StoreMoney" />
+      <parameter property="GiftAmount" column="GiftAmount" />
+      <parameter property="GiftIntegral" column="GiftIntegral" />
+      <parameter property="EmployeeNo" column="EmployeeNo" />
+      <parameter property="DeviceNo" column="DeviceNo" />
+      <parameter property="DailyStatementNo" column="DailyStatementNo" />
+      <parameter property="PayoffID" column="PayoffID" />
+      <parameter property="PayoffName" column="PayoffName" />
+      <parameter property="ReturnValue" column="ReturnValue"  direction="Output" />
     </parameterMap>
   </parameterMaps>
 
@@ -39,5 +67,12 @@
       WHERE CardNo = #CardNo# AND <![CDATA[ TradeTime >= #BeginDate# AND TradeTime <= #EndDate# ]]>
     </select>
 
+    <procedure id="GetVIPCardStoredVaule" resultMap="VIPCardStoredVauleResult" parameterMap="StoredAmountParam">
+      proc_GetVIPCardStoredVaule
+    </procedure>
+
+    <procedure id="AddVIPCardStoredValue" parameterMap="VIPCardStoredValueParam">
+      proc_AddVIPCardStoredValue
+    </procedure>
   </statements>
 </sqlMap>

@@ -14,6 +14,8 @@ namespace Top4ever.Interface.MembershipCard
 
         string GetCardPassword(string cardNo);
 
-        bool UpdateCardPassword(string cardNo, string currentPassword, string newPassword);
+        bool UpdateVIPCardPassword(string cardNo, string password, string newPassword);
+
+        Int32 UpdateVIPCardStatus(string cardNo, string password, int status);
     }
 }

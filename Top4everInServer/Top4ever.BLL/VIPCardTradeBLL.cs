@@ -4,6 +4,7 @@ using System.Text;
 
 using Top4ever.BLL.Enum;
 using Top4ever.Domain.MembershipCard;
+using Top4ever.Domain.Transfer;
 using Top4ever.Service;
 using Newtonsoft.Json;
 
@@ -37,6 +38,26 @@ namespace Top4ever.BLL
                 Array.Copy(BitConverter.GetBytes(transCount), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
                 Array.Copy(jsonByte, 0, objRet, 2 * BasicTypeLength.INT32, jsonByte.Length);
             }
+            return objRet;
+        }
+
+        public static byte[] AddVIPCardStoredValue(byte[] itemBuffer)
+        {
+            byte[] objRet = null;
+            string strReceive = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, itemBuffer.Length - ParamFieldLength.PACKAGE_HEAD).Trim('\0');
+            VIPCardAddMoney cardAddMoney = JsonConvert.DeserializeObject<VIPCardAddMoney>(strReceive);
+
+            string tradePayNo = string.Empty;
+            int result = VIPCardTradeService.GetInstance().AddVIPCardStoredValue(cardAddMoney, out tradePayNo);
+            
+            byte[] buffer = Encoding.UTF8.GetBytes(tradePayNo);
+            int transCount = ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32 + ParamFieldLength.TRADEPAYNO;
+            objRet = new byte[transCount];
+            Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes(transCount), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes(result), 0, objRet, ParamFieldLength.PACKAGE_HEAD, BasicTypeLength.INT32);
+            Array.Copy(buffer, 0, objRet, ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32, buffer.Length);
+
             return objRet;
         }
     }

@@ -17,6 +17,7 @@ namespace Top4ever.BLL.Enum
         public const int REGION_ID = 36;
         public const int ORDER_ID = 36;
         public const int EMPLOYEE_ID = 36;
+        public const int EMPLOYEE_NO = 20;
         public const int SQL_WHERE = 200;
         public const int SQL_ORDERBY = 100;
         public const int TELEPHONE = 24;
@@ -26,5 +27,6 @@ namespace Top4ever.BLL.Enum
         public const int CARD_PASSWORD = 128;
         public const int BEGINDATE = 20;
         public const int ENDDATE = 20;
+        public const int TRADEPAYNO = 30;
     }
 }

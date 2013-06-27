@@ -26,10 +26,17 @@
   </resultMaps>
 
   <parameterMaps>
-    <parameterMap id="VIPCardParam" class="Hashtable">
+    <parameterMap id="UpdateCardPwdParam" class="Hashtable">
       <parameter property="CardNo" column="CardNo" />
-      <parameter property="CurrentPassword" column="CurrentPassword" />
+      <parameter property="Password" column="Password" />
       <parameter property="NewPassword" column="NewPassword" />
+    </parameterMap>
+
+    <parameterMap id="UpdateCardStatusParam" class="Hashtable">
+      <parameter property="CardNo" column="CardNo" />
+      <parameter property="Password" column="Password" />
+      <parameter property="Status" column="Status" />
+      <parameter property="ReturnValue" column="ReturnValue" direction="Output" />
     </parameterMap>
   </parameterMaps>
 
@@ -48,10 +55,12 @@
       SELECT Password FROM VIPCard_Offline WITH(NOLOCK) WHERE CardNo = #value#
     </select>
 
-    <update id="UpdateCardPassword" parameterMap="VIPCardParam">
-      UPDATE VIPCard_Offline
-      SET [Password] = #NewPassword#
-      WHERE CardNo = #CardNo# AND [Password] = #CurrentPassword#
-    </update>
+    <procedure id="UpdateVIPCardPassword" parameterMap="UpdateCardPwdParam">
+      proc_UpdateVIPCardPassword
+    </procedure>
+
+    <procedure id="UpdateVIPCardStatus" parameterMap="UpdateCardStatusParam">
+      proc_UpdateVIPCardStatus
+    </procedure>
   </statements>
 </sqlMap>
