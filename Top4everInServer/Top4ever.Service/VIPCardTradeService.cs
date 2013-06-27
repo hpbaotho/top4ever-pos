@@ -6,6 +6,8 @@ using IBatisNet.Common.Logging;
 using IBatisNet.DataAccess;
 
 using Top4ever.Domain.MembershipCard;
+using Top4ever.Domain.Transfer;
+using Top4ever.Interface;
 using Top4ever.Interface.MembershipCard;
 
 namespace Top4ever.Service
@@ -22,6 +24,7 @@ namespace Top4ever.Service
         private static VIPCardTradeService _instance = new VIPCardTradeService();
         private IDaoManager _daoManager = null;
         private IVIPCardTradeDao _VIPCardTradeDao = null;
+        private IDailyStatementDao _dailyStatementDao = null;
 
         #endregion
 
@@ -31,6 +34,7 @@ namespace Top4ever.Service
         {
             _daoManager = ServiceConfig.GetInstance().DaoManager;
             _VIPCardTradeDao = _daoManager.GetDao(typeof(IVIPCardTradeDao)) as IVIPCardTradeDao;
+            _dailyStatementDao = _daoManager.GetDao(typeof(IDailyStatementDao)) as IDailyStatementDao;
         }
 
         #endregion
@@ -53,6 +57,49 @@ namespace Top4ever.Service
             return cardTradeList;
         }
 
+        public Int32 AddVIPCardStoredValue(VIPCardAddMoney cardMoney, out string tradePayNo)
+        {
+            int result = 0;
+            tradePayNo = string.Empty;
+            _daoManager.OpenConnection();
+            //日结号
+            string dailyStatementNo = _dailyStatementDao.GetCurrentDailyStatementNo();
+            VIPCardStoredVaule cardStoredVaule = _VIPCardTradeDao.GetVIPCardStoredVaule(cardMoney.CardNo, cardMoney.StoreMoney);
+            if (cardStoredVaule == null)
+            {
+                result = 2; //卡号不存在
+            }
+            else
+            {
+                decimal giftAmount = 0M;
+                int giftIntegral = 0;
+                decimal multiple = 1M;
+                if (cardStoredVaule.IsMultiple)
+                {
+                    multiple = cardMoney.StoreMoney / cardStoredVaule.StoredVauleAmount;
+                }
+                if (cardStoredVaule.FixedAmount > 0)
+                {
+                    giftAmount = cardStoredVaule.FixedAmount * multiple;
+                }
+                else
+                {
+                    giftAmount = cardMoney.StoreMoney * cardStoredVaule.PresentAmountRate * multiple;
+                }
+                if (cardStoredVaule.FixedIntegral > 0)
+                {
+                    giftIntegral = Convert.ToInt32(cardStoredVaule.FixedIntegral * multiple);
+                }
+                else
+                {
+                    giftIntegral = Convert.ToInt32(cardMoney.StoreMoney * cardStoredVaule.PresentIntegralRate * multiple);
+                }
+                result = _VIPCardTradeDao.AddVIPCardStoredValue(cardMoney.CardNo, cardMoney.StoreMoney, giftAmount, giftIntegral, cardMoney.EmployeeNo, cardMoney.DeviceNo, dailyStatementNo, cardMoney.PayoffID, cardMoney.PayoffName, out tradePayNo);
+            }
+
+            _daoManager.CloseConnection();
+            return result;
+        }
         #endregion
     }
 }

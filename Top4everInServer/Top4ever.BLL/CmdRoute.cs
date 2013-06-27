@@ -148,6 +148,12 @@ namespace Top4ever.BLL
                 case Command.ID_UPDATE_CARDPASSWORD:
                     byteRet = VIPCardBLL.UpdateCardPassword(itemBuffer);
                     break;
+                case Command.ID_UPDATE_CARDSTATUS:
+                    byteRet = VIPCardBLL.UpdateVIPCardStatus(itemBuffer);
+                    break;
+                case Command.ID_ADD_CARDSTOREDVALUE:
+                    byteRet = VIPCardTradeBLL.AddVIPCardStoredValue(itemBuffer);
+                    break;
 
                 default:
                     byteRet = null;

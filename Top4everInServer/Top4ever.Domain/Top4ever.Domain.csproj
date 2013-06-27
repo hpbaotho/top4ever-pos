@@ -58,6 +58,7 @@
     <Compile Include="HandoverRecord.cs" />
     <Compile Include="HandoverTurnover.cs" />
     <Compile Include="MembershipCard\VIPCard.cs" />
+    <Compile Include="MembershipCard\VIPCardStoredVaule.cs" />
     <Compile Include="MembershipCard\VIPCardTrade.cs" />
     <Compile Include="OrderRelated\Discount.cs" />
     <Compile Include="OrderRelated\Order.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Transfer\SalesSplitOrder.cs" />
     <Compile Include="Transfer\SysBasicData.cs" />
     <Compile Include="Transfer\SalesOrder.cs" />
+    <Compile Include="Transfer\VIPCardAddMoney.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

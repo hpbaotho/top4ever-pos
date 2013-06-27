@@ -33,17 +33,28 @@ namespace Top4ever.Persistence.MembershipCard
             return password;
         }
 
-        public bool UpdateCardPassword(string cardNo, string currentPassword, string newPassword)
+        public bool UpdateVIPCardPassword(string cardNo, string password, string newPassword)
         {
             int result = 0;
             Hashtable htParam = new Hashtable();
             htParam["CardNo"] = cardNo;
-            htParam["CurrentPassword"] = currentPassword;
+            htParam["Password"] = password;
             htParam["NewPassword"] = newPassword;
-            result = ExecuteUpdate("UpdateCardPassword", htParam);
+            result = ExecuteUpdate("UpdateVIPCardPassword", htParam);
             return result > 0;
         }
 
+        public Int32 UpdateVIPCardStatus(string cardNo, string password, int status)
+        {
+            Hashtable htParam = new Hashtable();
+            htParam["CardNo"] = cardNo;
+            htParam["Password"] = password;
+            htParam["Status"] = status;
+            htParam["ReturnValue"] = 0;
+            ExecuteQueryForObject("UpdateVIPCardStatus", htParam);
+            int i = (int)htParam["ReturnValue"];    //返回值
+            return i;
+        }
         #endregion
     }
 }

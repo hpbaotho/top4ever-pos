@@ -53,10 +53,14 @@ namespace Top4ever.Service
             {
                 _daoManager.OpenConnection();
                 //加密的密码
+                string str = string.Empty;
                 string saltedPassword = _VIPCardDao.GetCardPassword(cardNo);
-                int index = saltedPassword.IndexOf("*");
-                string salt = saltedPassword.Substring(0, index);
-                string str = salt + "*" + PasswordCryptographer.SaltPassword(password, salt);
+                if (!string.IsNullOrEmpty(saltedPassword))
+                {
+                    int index = saltedPassword.IndexOf("*");
+                    string salt = saltedPassword.Substring(0, index);
+                    str = salt + "*" + PasswordCryptographer.SaltPassword(password, salt);
+                }
                 card = _VIPCardDao.GetVIPCard(cardNo, str);
                 if (card == null)
                 {
@@ -91,12 +95,41 @@ namespace Top4ever.Service
             bool result = false;
             _daoManager.OpenConnection();
             //加密的密码
+            string str = string.Empty;
             string saltedPassword = _VIPCardDao.GetCardPassword(cardNo);
-            int index = saltedPassword.IndexOf("*");
-            string salt = saltedPassword.Substring(0, index);
-            string str = salt + "*" + PasswordCryptographer.SaltPassword(currentPassword, salt);
+            if (!string.IsNullOrEmpty(saltedPassword))
+            {
+                int index = saltedPassword.IndexOf("*");
+                string salt = saltedPassword.Substring(0, index);
+                str = salt + "*" + PasswordCryptographer.SaltPassword(currentPassword, salt);
+            }
             string newSaltedPassword = PasswordCryptographer.GenerateSaltedPassword(newPassword);
-            result = _VIPCardDao.UpdateCardPassword(cardNo, str, newSaltedPassword);
+            result = _VIPCardDao.UpdateVIPCardPassword(cardNo, str, newSaltedPassword);
+            _daoManager.CloseConnection();
+            return result;
+        }
+
+        public Int32 UpdateVIPCardStatus(string cardNo, string password, int status)
+        {
+            int result = 0;
+            _daoManager.OpenConnection();
+            //加密的密码
+            string str = string.Empty;
+            if (status == 1)
+            {
+                str = PasswordCryptographer.GenerateSaltedPassword(password);
+            }
+            else
+            {
+                string saltedPassword = _VIPCardDao.GetCardPassword(cardNo);
+                if (!string.IsNullOrEmpty(saltedPassword))
+                {
+                    int index = saltedPassword.IndexOf("*");
+                    string salt = saltedPassword.Substring(0, index);
+                    str = salt + "*" + PasswordCryptographer.SaltPassword(password, salt);
+                }
+            }
+            result = _VIPCardDao.UpdateVIPCardStatus(cardNo, str, status);
             _daoManager.CloseConnection();
             return result;
         }

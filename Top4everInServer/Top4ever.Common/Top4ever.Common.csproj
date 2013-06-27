@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseConfigManager.cs" />
     <Compile Include="CacheHelper.cs" />
     <Compile Include="CheckNetWork.cs" />
     <Compile Include="ColorConvert.cs" />
