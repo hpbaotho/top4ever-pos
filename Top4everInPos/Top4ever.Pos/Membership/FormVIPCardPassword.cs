@@ -14,6 +14,11 @@ namespace Top4ever.Pos.Membership
     {
         private string cardNo = string.Empty;
         private string currentPassword = string.Empty;
+        private bool _operResult = false;
+        public bool Result
+        {
+            get { return _operResult; }
+        }
 
         public FormVIPCardPassword(string cardNo, string currentPassword)
         {
@@ -44,16 +49,20 @@ namespace Top4ever.Pos.Membership
             VIPCardService cardService = new VIPCardService();
             if (cardService.UpdateCardPassword(cardNo, currentPassword, newPassword))
             {
+                _operResult = true;
+                MessageBox.Show("密码修改成功！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
             else
             {
+                _operResult = false;
                 MessageBox.Show("密码修改失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
+            _operResult = false;
             this.Close();
         }
     }

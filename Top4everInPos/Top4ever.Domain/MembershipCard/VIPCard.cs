@@ -45,7 +45,7 @@ namespace Top4ever.Domain.MembershipCard
         /// </summary>
         public string Address { get; set; }
         /// <summary>
-        /// 状态
+        /// 状态 1:开卡 2:挂失 3:锁卡 4:作废
         /// </summary>
         public int Status { get; set; }
         /// <summary>

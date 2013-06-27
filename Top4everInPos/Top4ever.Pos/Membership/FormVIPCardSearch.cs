@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 using Top4ever.ClientService;
 using Top4ever.Domain.MembershipCard;
+using Top4ever.Entity;
 
 namespace Top4ever.Pos.Membership
 {
@@ -33,6 +34,9 @@ namespace Top4ever.Pos.Membership
 
         private void FormVIPCardSearch_Load(object sender, EventArgs e)
         {
+            btnModifyPassword.DisplayColor = btnModifyPassword.BackColor;
+            btnModifyPassword.Enabled = false;
+            btnModifyPassword.BackColor = ConstantValuePool.DisabledColor;
             if (formType == 0)
             {
                 groupBox2.Visible = false;
@@ -52,6 +56,7 @@ namespace Top4ever.Pos.Membership
             {
                 Feature.FormNumericKeypad keyForm = new Feature.FormNumericKeypad(false);
                 keyForm.DisplayText = "请输入密码";
+                keyForm.IsPassword = true;
                 keyForm.ShowDialog();
                 if (!string.IsNullOrEmpty(keyForm.KeypadValue))
                 {
@@ -95,16 +100,19 @@ namespace Top4ever.Pos.Membership
                             txtLastConsumeTime.Text = Convert.ToDateTime(card.LastConsumeTime).ToString("yyyy-MM-dd HH:mm:ss");
                         }
                         btnModifyPassword.Enabled = true;
+                        btnModifyPassword.BackColor = btnModifyPassword.DisplayColor;
                     }
                     else if (result == 2)
                     {
                         btnModifyPassword.Enabled = false;
+                        btnModifyPassword.BackColor = ConstantValuePool.DisabledColor;
                         MessageBox.Show("您输入的会员卡号或者密码错误！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                     else
                     {
                         btnModifyPassword.Enabled = false;
+                        btnModifyPassword.BackColor = ConstantValuePool.DisabledColor;
                         MessageBox.Show("服务器出现错误，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
@@ -119,6 +127,10 @@ namespace Top4ever.Pos.Membership
             {
                 FormVIPCardPassword formPassword = new FormVIPCardPassword(cardNo, _inputPassword);
                 formPassword.ShowDialog();
+                if (formPassword.Result)
+                {
+                    this.Close();
+                }
             }
         }
 

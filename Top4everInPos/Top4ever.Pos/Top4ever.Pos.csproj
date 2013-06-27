@@ -211,6 +211,12 @@
     <Compile Include="Membership\FormVIPCardStatus.Designer.cs">
       <DependentUpon>FormVIPCardStatus.cs</DependentUpon>
     </Compile>
+    <Compile Include="Membership\FormVIPCardStoreValue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Membership\FormVIPCardStoreValue.Designer.cs">
+      <DependentUpon>FormVIPCardStoreValue.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Promotions\PromotionConditionService.cs" />
     <Compile Include="Promotions\PromotionCronTriggerService.cs" />
@@ -332,6 +338,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Membership\FormVIPCardStatus.resx">
       <DependentUpon>FormVIPCardStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Membership\FormVIPCardStoreValue.resx">
+      <DependentUpon>FormVIPCardStoreValue.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
