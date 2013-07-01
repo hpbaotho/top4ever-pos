@@ -64,6 +64,7 @@
     <Compile Include="HandoverTurnoverSqlMapDao.cs" />
     <Compile Include="MembershipCard\VIPCardSqlMapDao.cs" />
     <Compile Include="MembershipCard\VIPCardTradeSqlMapDao.cs" />
+    <Compile Include="NoticeSqlMapDao.cs" />
     <Compile Include="OrderRelated\DiscountSqlMapDao.cs" />
     <Compile Include="OrderRelated\OrderDetailsSqlMapDao.cs" />
     <Compile Include="OrderRelated\OrderDiscountSqlMapDao.cs" />

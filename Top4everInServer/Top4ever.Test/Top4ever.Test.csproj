@@ -81,6 +81,7 @@
     </Compile>
     <Content Include="Maps\BusinessReport.xml" />
     <Content Include="Maps\ButtonStyle.xml" />
+    <Content Include="Maps\Customers.xml" />
     <Content Include="Maps\DailyStatement.xml" />
     <Content Include="Maps\DailyTurnover.xml" />
     <Content Include="Maps\Desk.xml">
@@ -106,6 +107,7 @@
     </Content>
     <Content Include="Maps\HandoverRecord.xml" />
     <Content Include="Maps\HandoverTurnover.xml" />
+    <Content Include="Maps\Notice.xml" />
     <Content Include="Maps\Order.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -120,6 +122,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Maps\PrintTask.xml" />
+    <Content Include="Maps\Promotions.xml" />
     <Content Include="Maps\Reason.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -131,6 +134,8 @@
     </Content>
     <Content Include="Maps\SystemConfig.xml" />
     <Content Include="Maps\SystemDictionary.xml" />
+    <Content Include="Maps\VIPCard.xml" />
+    <Content Include="Maps\VIPCardTrade.xml" />
     <Content Include="providers.config" />
     <Content Include="SqlMap.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

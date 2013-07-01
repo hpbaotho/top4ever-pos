@@ -65,14 +65,10 @@ namespace Top4ever.Service
             //日结号
             string dailyStatementNo = _dailyStatementDao.GetCurrentDailyStatementNo();
             VIPCardStoredVaule cardStoredVaule = _VIPCardTradeDao.GetVIPCardStoredVaule(cardMoney.CardNo, cardMoney.StoreMoney);
-            if (cardStoredVaule == null)
+            decimal giftAmount = 0M;
+            int giftIntegral = 0;
+            if (cardStoredVaule != null)
             {
-                result = 2; //卡号不存在
-            }
-            else
-            {
-                decimal giftAmount = 0M;
-                int giftIntegral = 0;
                 decimal multiple = 1M;
                 if (cardStoredVaule.IsMultiple)
                 {
@@ -94,9 +90,8 @@ namespace Top4ever.Service
                 {
                     giftIntegral = Convert.ToInt32(cardMoney.StoreMoney * cardStoredVaule.PresentIntegralRate * multiple);
                 }
-                result = _VIPCardTradeDao.AddVIPCardStoredValue(cardMoney.CardNo, cardMoney.StoreMoney, giftAmount, giftIntegral, cardMoney.EmployeeNo, cardMoney.DeviceNo, dailyStatementNo, cardMoney.PayoffID, cardMoney.PayoffName, out tradePayNo);
             }
-
+            result = _VIPCardTradeDao.AddVIPCardStoredValue(cardMoney.CardNo, cardMoney.StoreMoney, giftAmount, giftIntegral, cardMoney.EmployeeNo, cardMoney.DeviceNo, dailyStatementNo, cardMoney.PayoffID, cardMoney.PayoffName, out tradePayNo);
             _daoManager.CloseConnection();
             return result;
         }

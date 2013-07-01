@@ -17,7 +17,7 @@ namespace Top4ever.BLL
                     byteRet = EmployeeBLL.EmployeeLogin(itemBuffer);
                     break;
                 case Command.ID_GET_SYSBASICDATA:
-                    byteRet = SysBasicDataBLL.GetSysBasicData(itemBuffer);
+                    byteRet = SysBasicDataBLL.GetSysBasicData();
                     break;
                 case Command.ID_GET_DESKBYNAME:
                     byteRet = BizDeskBLL.GetBizDeskByName(itemBuffer);
@@ -145,6 +145,9 @@ namespace Top4ever.BLL
                 case Command.ID_GET_VIPCARDTRADELIST:
                     byteRet = VIPCardTradeBLL.GetVIPCardTradeList(itemBuffer);
                     break;
+                case Command.ID_GET_CARDDISCOUNTRATE:
+                    byteRet = VIPCardBLL.GetCardDiscountRate(itemBuffer);
+                    break;
                 case Command.ID_UPDATE_CARDPASSWORD:
                     byteRet = VIPCardBLL.UpdateCardPassword(itemBuffer);
                     break;
@@ -153,6 +156,9 @@ namespace Top4ever.BLL
                     break;
                 case Command.ID_ADD_CARDSTOREDVALUE:
                     byteRet = VIPCardTradeBLL.AddVIPCardStoredValue(itemBuffer);
+                    break;
+                case Command.ID_GET_SHOP:
+                    byteRet = ShopBLL.GetCurrentShop();
                     break;
 
                 default:

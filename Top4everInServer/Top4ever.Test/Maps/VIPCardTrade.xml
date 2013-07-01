@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="VIPCardTrade" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <alias>
+    <typeAlias alias="VIPCardTrade" type="Top4ever.Domain.MembershipCard.VIPCardTrade, Top4ever.Domain" />
+    <typeAlias alias="VIPCardStoredVaule" type="Top4ever.Domain.MembershipCard.VIPCardStoredVaule, Top4ever.Domain" />
+  </alias>
+
+  <resultMaps>
+    <resultMap id="VIPCardTradeResult" class="VIPCardTrade">
+      <result property="CardNo" column="CardNo"></result>
+      <result property="TradePayNo" column="TradePayNo"></result>
+      <result property="TradeType" column="TradeType"></result>
+      <result property="TradeAmount" column="TradeAmount"></result>
+      <result property="TradeIntegral" column="TradeIntegral"></result>
+      <result property="TradeTime" column="TradeTime"></result>
+      <result property="PayoffName" column="PayoffName"></result>
+      <result property="DeviceNo" column="DeviceNo"></result>
+      <result property="IsVoided" column="IsVoided"></result>
+    </resultMap>
+
+    <resultMap id="VIPCardStoredVauleResult" class="VIPCardStoredVaule">
+      <result property="StoredVauleAmount" column="StoredVauleAmount"></result>
+      <result property="FixedAmount" column="FixedAmount"></result>
+      <result property="PresentAmountRate" column="PresentAmountRate"></result>
+      <result property="FixedIntegral" column="FixedIntegral"></result>
+      <result property="PresentIntegralRate" column="PresentIntegralRate"></result>
+      <result property="IsMultiple" column="IsMultiple"></result>
+    </resultMap>
+
+  </resultMaps>
+
+  <parameterMaps>
+    <parameterMap id="VIPCardTradeParam" class="Hashtable">
+      <parameter property="CardNo" column="CardNo" />
+      <parameter property="BeginDate" column="BeginDate" />
+      <parameter property="EndDate" column="EndDate" />
+    </parameterMap>
+
+    <parameterMap id="StoredAmountParam" class="Hashtable">
+      <parameter property="CardNo" column="CardNo" />
+      <parameter property="StoredVauleAmount" column="StoredVauleAmount" />
+    </parameterMap>
+
+    <parameterMap id="VIPCardStoredValueParam" class="Hashtable">
+      <parameter property="CardNo" column="CardNo" />
+      <parameter property="StoreMoney" column="StoreMoney" />
+      <parameter property="GiftAmount" column="GiftAmount" />
+      <parameter property="GiftIntegral" column="GiftIntegral" />
+      <parameter property="EmployeeNo" column="EmployeeNo" />
+      <parameter property="DeviceNo" column="DeviceNo" />
+      <parameter property="DailyStatementNo" column="DailyStatementNo" />
+      <parameter property="PayoffID" column="PayoffID" />
+      <parameter property="PayoffName" column="PayoffName" />
+      <parameter property="ReturnValue" column="ReturnValue"  direction="Output" />
+    </parameterMap>
+  </parameterMaps>
+
+  <!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+  <statements>
+    <select id="GetVIPCardTradeList" resultMap="VIPCardTradeResult" parameterMap="VIPCardTradeParam">
+      SELECT CardNo,TradePayNo,TradeType,TradeAmount,TradeIntegral,TradeTime,PayoffName,DeviceNo,IsVoided
+      FROM VIPCardTrade_Offline
+      WHERE CardNo = #CardNo# AND <![CDATA[ TradeTime >= #BeginDate# AND TradeTime <= #EndDate# ]]>
+    </select>
+
+    <procedure id="GetVIPCardStoredVaule" resultMap="VIPCardStoredVauleResult" parameterMap="StoredAmountParam">
+      proc_GetVIPCardStoredVaule
+    </procedure>
+
+    <procedure id="AddVIPCardStoredValue" parameterMap="VIPCardStoredValueParam">
+      proc_AddVIPCardStoredValue
+    </procedure>
+  </statements>
+</sqlMap>

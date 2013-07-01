@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="Notice" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <alias>
+    <typeAlias alias="Notice" type="Top4ever.Domain.Notice, Top4ever.Domain" />
+  </alias>
+
+  <resultMaps>
+    <resultMap id="NoticeResult" class="Notice">
+      <result property="NoticeID" column="NoticeID"></result>
+      <result property="NoticeContent" column="NoticeContent"></result>
+      <result property="BeginDateTime" column="BeginDateTime"></result>
+      <result property="EndDateTime" column="EndDateTime"></result>
+    </resultMap>
+
+  </resultMaps>
+
+  <!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+  <statements>
+    <select id="GetNoticeList" resultMap="NoticeResult">
+      SELECT NoticeID, NoticeContent, BeginDateTime, EndDateTime
+      FROM Notice WITH(NOLOCK)
+      WHERE <![CDATA[ BeginDateTime <= GETDATE() AND EndDateTime >= GETDATE() ]]>
+    </select>
+
+  </statements>
+</sqlMap>

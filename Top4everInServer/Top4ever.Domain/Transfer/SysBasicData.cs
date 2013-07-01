@@ -10,7 +10,7 @@ namespace Top4ever.Domain.Transfer
 {
     public class SysBasicData
     {
-        public Shop CurrentShop { get; set; }
+        public IList<Notice> NoticeList { get; set; }
 
         public IList<BizRegion> RegionList { get; set; }
 
