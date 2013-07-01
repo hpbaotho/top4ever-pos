@@ -74,6 +74,9 @@ namespace Top4ever.Pos.Feature
                 CrystalButton btn = new CrystalButton();
                 btn.Name = item.DiscountID.ToString();
                 btn.Text = item.DiscountName;
+                btn.BackColor = Color.Teal;
+                btn.Font = new Font("微软雅黑", 12F, FontStyle.Regular);
+                btn.ForeColor = Color.White;
                 btn.Width = width;
                 btn.Height = height;
                 btn.Location = new Point(px, py);
@@ -94,36 +97,42 @@ namespace Top4ever.Pos.Feature
                 }
             }
             //显示固定折扣
-            count = discountOffPayList.Count;
-            maxColumn = (int)Math.Ceiling(Convert.ToDecimal(count) / 5);
-            maxRow = (int)Math.Ceiling(Convert.ToDecimal(count) / maxColumn);
-            width = (this.tabPage2.Width - (maxColumn - 1) * space) / maxColumn;
-            height = (this.tabPage2.Height - (maxRow - 1) * space) / maxRow;
-            px = 0;
-            py = 0;
-            index = 1;
-            foreach (Discount item in discountOffPayList)
+            if (discountOffPayList.Count > 0)
             {
-                CrystalButton btn = new CrystalButton();
-                btn.Name = item.DiscountID.ToString();
-                btn.Text = item.DiscountName;
-                btn.Width = width;
-                btn.Height = height;
-                btn.Location = new Point(px, py);
-                btn.Tag = item;
-                btn.Click += new System.EventHandler(this.btnDiscount_Click);
-                this.tabPage2.Controls.Add(btn);
+                count = discountOffPayList.Count;
+                maxColumn = (int)Math.Ceiling(Convert.ToDecimal(count) / 5);
+                maxRow = (int)Math.Ceiling(Convert.ToDecimal(count) / maxColumn);
+                width = (this.tabPage2.Width - (maxColumn - 1) * space) / maxColumn;
+                height = (this.tabPage2.Height - (maxRow - 1) * space) / maxRow;
+                px = 0;
+                py = 0;
+                index = 1;
+                foreach (Discount item in discountOffPayList)
+                {
+                    CrystalButton btn = new CrystalButton();
+                    btn.Name = item.DiscountID.ToString();
+                    btn.Text = item.DiscountName;
+                    btn.BackColor = Color.Teal;
+                    btn.Font = new Font("Microsoft YaHei", 12F, FontStyle.Regular);
+                    btn.ForeColor = Color.White;
+                    btn.Width = width;
+                    btn.Height = height;
+                    btn.Location = new Point(px, py);
+                    btn.Tag = item;
+                    btn.Click += new System.EventHandler(this.btnDiscount_Click);
+                    this.tabPage2.Controls.Add(btn);
 
-                index++;
-                if (index > maxColumn)
-                {
-                    px = 0;
-                    py += height + space;
-                    index = 1;
-                }
-                else
-                {
-                    px += width + space;
+                    index++;
+                    if (index > maxColumn)
+                    {
+                        px = 0;
+                        py += height + space;
+                        index = 1;
+                    }
+                    else
+                    {
+                        px += width + space;
+                    }
                 }
             }
         }

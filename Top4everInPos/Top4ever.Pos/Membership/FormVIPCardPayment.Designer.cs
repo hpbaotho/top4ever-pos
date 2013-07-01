@@ -1,6 +1,6 @@
 ﻿namespace Top4ever.Pos.Membership
 {
-    partial class FormVIPCardSearch
+    partial class FormVIPCardPayment
     {
         /// <summary>
         /// 必需的设计器变量。
@@ -28,6 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnConsume = new Top4ever.CustomControl.CrystalButton();
+            this.label10 = new System.Windows.Forms.Label();
+            this.txtConsumAmount = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label11 = new System.Windows.Forms.Label();
             this.txtOpenCardTime = new System.Windows.Forms.TextBox();
@@ -50,9 +54,55 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtVIPCardNo = new System.Windows.Forms.TextBox();
             this.btnCancel = new Top4ever.CustomControl.CrystalButton();
-            this.btnModifyPassword = new Top4ever.CustomControl.CrystalButton();
+            this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.btnCancel);
+            this.groupBox2.Controls.Add(this.btnConsume);
+            this.groupBox2.Controls.Add(this.label10);
+            this.groupBox2.Controls.Add(this.txtConsumAmount);
+            this.groupBox2.ForeColor = System.Drawing.Color.Red;
+            this.groupBox2.Location = new System.Drawing.Point(12, 459);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(542, 84);
+            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "会员支付";
+            // 
+            // btnConsume
+            // 
+            this.btnConsume.BackColor = System.Drawing.Color.Teal;
+            this.btnConsume.ForeColor = System.Drawing.Color.White;
+            this.btnConsume.Location = new System.Drawing.Point(415, 24);
+            this.btnConsume.Name = "btnConsume";
+            this.btnConsume.Size = new System.Drawing.Size(112, 49);
+            this.btnConsume.TabIndex = 1;
+            this.btnConsume.Text = "消费";
+            this.btnConsume.UseVisualStyleBackColor = false;
+            this.btnConsume.Click += new System.EventHandler(this.btnConsume_Click);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold);
+            this.label10.ForeColor = System.Drawing.Color.Red;
+            this.label10.Location = new System.Drawing.Point(27, 35);
+            this.label10.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(103, 25);
+            this.label10.TabIndex = 1;
+            this.label10.Text = "消费金额:";
+            // 
+            // txtConsumAmount
+            // 
+            this.txtConsumAmount.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold);
+            this.txtConsumAmount.Location = new System.Drawing.Point(134, 32);
+            this.txtConsumAmount.Name = "txtConsumAmount";
+            this.txtConsumAmount.Size = new System.Drawing.Size(142, 30);
+            this.txtConsumAmount.TabIndex = 1;
             // 
             // groupBox1
             // 
@@ -259,7 +309,7 @@
             // 
             this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(43)))), ((int)(((byte)(59)))));
             this.btnCancel.ForeColor = System.Drawing.Color.White;
-            this.btnCancel.Location = new System.Drawing.Point(351, 474);
+            this.btnCancel.Location = new System.Drawing.Point(290, 24);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(112, 49);
             this.btnCancel.TabIndex = 2;
@@ -267,35 +317,24 @@
             this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // btnModifyPassword
-            // 
-            this.btnModifyPassword.BackColor = System.Drawing.Color.RoyalBlue;
-            this.btnModifyPassword.ForeColor = System.Drawing.Color.White;
-            this.btnModifyPassword.Location = new System.Drawing.Point(102, 474);
-            this.btnModifyPassword.Name = "btnModifyPassword";
-            this.btnModifyPassword.Size = new System.Drawing.Size(112, 49);
-            this.btnModifyPassword.TabIndex = 1;
-            this.btnModifyPassword.Text = "密码修改";
-            this.btnModifyPassword.UseVisualStyleBackColor = false;
-            this.btnModifyPassword.Click += new System.EventHandler(this.btnModifyPassword_Click);
-            // 
-            // FormVIPCardSearch
+            // FormVIPCardPayment
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(567, 538);
-            this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.btnModifyPassword);
+            this.ClientSize = new System.Drawing.Size(567, 557);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(5);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "FormVIPCardSearch";
+            this.Name = "FormVIPCardPayment";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "会员管理";
-            this.Load += new System.EventHandler(this.FormVIPCardSearch_Load);
+            this.Load += new System.EventHandler(this.FormVIPCardPayment_Load);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -304,6 +343,9 @@
 
         #endregion
 
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox txtConsumAmount;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox txtOpenCardTime;
@@ -325,7 +367,7 @@
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtVIPCardNo;
+        private CustomControl.CrystalButton btnConsume;
         private CustomControl.CrystalButton btnCancel;
-        private CustomControl.CrystalButton btnModifyPassword;
     }
 }

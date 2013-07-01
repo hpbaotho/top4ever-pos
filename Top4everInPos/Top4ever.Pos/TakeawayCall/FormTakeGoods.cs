@@ -83,7 +83,7 @@ namespace Top4ever.Pos.TakeawayCall
                     {
                         index = dgvPayoffWay.Rows.Add();
                         dgvPayoffWay.Rows[index].Cells[0].Value = orderPayoff.PayoffName;
-                        if (orderPayoff.PayoffType == (int)PayoffWayMode.GiftVoucher)
+                        if (orderPayoff.PayoffType == (int)PayoffWayMode.GiftVoucher || orderPayoff.PayoffType == (int)PayoffWayMode.Coupon)
                         {
                             dgvPayoffWay.Rows[index].Cells[1].Value = string.Format("{0} 张", orderPayoff.Quantity.ToString("f1"));
                         }

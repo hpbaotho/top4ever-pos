@@ -262,7 +262,7 @@ namespace Top4ever.Pos.Feature
             {
                 OrderPayoff orderPayoff = dic[curPayoffWay.PayoffID.ToString()];
                 decimal totalPrice = orderPayoff.Quantity * orderPayoff.AsPay;
-                if (curPayoffWay.PayoffType == (int)PayoffWayMode.GiftVoucher)
+                if (curPayoffWay.PayoffType == (int)PayoffWayMode.GiftVoucher || curPayoffWay.PayoffType == (int)PayoffWayMode.Coupon)
                 {
                     this.txtAmount.Text = string.Format("{0} 张(合 {1} 元)", orderPayoff.Quantity, totalPrice.ToString("f2"));
                 }
@@ -273,7 +273,7 @@ namespace Top4ever.Pos.Feature
             }
             else
             {
-                if (curPayoffWay.PayoffType == (int)PayoffWayMode.GiftVoucher)
+                if (curPayoffWay.PayoffType == (int)PayoffWayMode.GiftVoucher || curPayoffWay.PayoffType == (int)PayoffWayMode.Coupon)
                 {
                     this.txtAmount.Text = string.Format("{0} 张(合 {1} 元)", "0", "0.00");
                 }
@@ -394,7 +394,7 @@ namespace Top4ever.Pos.Feature
                 dic.Add(curPayoffWay.PayoffID.ToString(), orderPayoff);
             }
             decimal totalPrice = Convert.ToDecimal(m_InputNumber) * curPayoffWay.AsPay;
-            if (curPayoffWay.PayoffType == (int)PayoffWayMode.GiftVoucher)
+            if (curPayoffWay.PayoffType == (int)PayoffWayMode.GiftVoucher || curPayoffWay.PayoffType == (int)PayoffWayMode.Coupon)
             {
                 this.txtAmount.Text = string.Format("{0} 张(合 {1} 元)", m_InputNumber, totalPrice.ToString("f2"));
             }
@@ -416,7 +416,7 @@ namespace Top4ever.Pos.Feature
                     decimal totalPrice = item.Value.Quantity * item.Value.AsPay;
                     realPay += totalPrice;
                     string singlePay = string.Empty;
-                    if (item.Value.PayoffType == (int)PayoffWayMode.GiftVoucher)
+                    if (item.Value.PayoffType == (int)PayoffWayMode.GiftVoucher || item.Value.PayoffType == (int)PayoffWayMode.Coupon)
                     {
                         singlePay = string.Format("[{0} : {1} 张(合 {2} 元)]", item.Value.PayoffName, item.Value.Quantity, totalPrice.ToString("f2"));
                     }
@@ -471,7 +471,7 @@ namespace Top4ever.Pos.Feature
             if (curPayoffWay != null)
             {
                 dic.Remove(curPayoffWay.PayoffID.ToString());
-                if (curPayoffWay.PayoffType == (int)PayoffWayMode.GiftVoucher)
+                if (curPayoffWay.PayoffType == (int)PayoffWayMode.GiftVoucher || curPayoffWay.PayoffType == (int)PayoffWayMode.Coupon)
                 {
                     this.txtAmount.Text = string.Format("{0} 张(合 {1} 元)", "0", "0.00");
                 }

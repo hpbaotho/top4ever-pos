@@ -117,7 +117,7 @@ namespace Top4ever.Pos.Feature
 
         private void btnConfirm_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(this.txtNumeric.Text.Trim()))
+            if (!m_IsPassword && string.IsNullOrEmpty(this.txtNumeric.Text.Trim()))
             {
                 return;
             }

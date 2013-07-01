@@ -63,6 +63,37 @@ namespace Top4ever.ClientService
             return result;
         }
 
+        public decimal GetCardDiscountRate(string cardNo)
+        {
+            int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.CARD_NO;
+            byte[] sendByte = new byte[cByte];
+            int byteOffset = 0;
+            Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_CARDDISCOUNTRATE), sendByte, BasicTypeLength.INT32);
+            byteOffset = BasicTypeLength.INT32;
+            Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
+            byteOffset += BasicTypeLength.INT32;
+
+            byte[] tempByte = null;
+            //cardNo
+            tempByte = Encoding.UTF8.GetBytes(cardNo);
+            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
+            byteOffset += ParamFieldLength.CARD_NO;
+
+            double discountRate = 0;
+            using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
+            {
+                socket.Connect();
+                Byte[] receiveData = null;
+                Int32 operCode = socket.SendReceive(sendByte, out receiveData);
+                if (operCode == (int)RET_VALUE.SUCCEEDED)
+                {
+                    discountRate = BitConverter.ToDouble(receiveData, ParamFieldLength.PACKAGE_HEAD);
+                }
+                socket.Disconnect();
+            }
+            return (decimal)discountRate;
+        }
+
         public bool UpdateCardPassword(string cardNo, string currentPassword, string newPassword)
         {
             int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.CARD_NO + ParamFieldLength.CARD_PASSWORD + ParamFieldLength.CARD_PASSWORD;

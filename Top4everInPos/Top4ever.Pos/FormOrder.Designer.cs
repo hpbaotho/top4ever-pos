@@ -82,6 +82,7 @@
             this.btnExit = new Top4ever.CustomControl.CrystalButton();
             this.btnCancelOrder = new Top4ever.CustomControl.CrystalButton();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.btnPromotion = new Top4ever.CustomControl.CrystalButton();
             this.btnSplitBill = new Top4ever.CustomControl.CrystalButton();
             this.btnLadeOrder = new Top4ever.CustomControl.CrystalButton();
             this.btnLadeGoods = new Top4ever.CustomControl.CrystalButton();
@@ -105,10 +106,8 @@
             this.pnlBottom = new System.Windows.Forms.Panel();
             this.txtSoftwareProvider = new System.Windows.Forms.TextBox();
             this.txtCurrentDateTime = new System.Windows.Forms.TextBox();
-            this.txtServiceTime = new System.Windows.Forms.TextBox();
             this.txtDeviceNo = new System.Windows.Forms.TextBox();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.btnPromotion = new Top4ever.CustomControl.CrystalButton();
+            this.txtShopNo = new System.Windows.Forms.TextBox();
             this.pnlContainer.SuspendLayout();
             this.pnlRight.SuspendLayout();
             this.pnlItem.SuspendLayout();
@@ -731,6 +730,19 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "功能";
             // 
+            // btnPromotion
+            // 
+            this.btnPromotion.BackColor = System.Drawing.Color.Brown;
+            this.btnPromotion.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPromotion.ForeColor = System.Drawing.Color.White;
+            this.btnPromotion.Location = new System.Drawing.Point(3, 2);
+            this.btnPromotion.Name = "btnPromotion";
+            this.btnPromotion.Size = new System.Drawing.Size(78, 77);
+            this.btnPromotion.TabIndex = 1;
+            this.btnPromotion.Text = "促销";
+            this.btnPromotion.UseVisualStyleBackColor = false;
+            this.btnPromotion.Click += new System.EventHandler(this.btnPromotion_Click);
+            // 
             // btnSplitBill
             // 
             this.btnSplitBill.BackColor = System.Drawing.SystemColors.HotTrack;
@@ -977,7 +989,7 @@
             // 
             this.pnlBottom.Controls.Add(this.txtSoftwareProvider);
             this.pnlBottom.Controls.Add(this.txtCurrentDateTime);
-            this.pnlBottom.Controls.Add(this.txtServiceTime);
+            this.pnlBottom.Controls.Add(this.txtShopNo);
             this.pnlBottom.Controls.Add(this.txtDeviceNo);
             this.pnlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pnlBottom.Location = new System.Drawing.Point(0, 715);
@@ -993,56 +1005,38 @@
             this.txtSoftwareProvider.ReadOnly = true;
             this.txtSoftwareProvider.Size = new System.Drawing.Size(425, 29);
             this.txtSoftwareProvider.TabIndex = 0;
-            this.txtSoftwareProvider.Text = "软件提供商：XX有限公司";
+            this.txtSoftwareProvider.Text = "软件提供商：讯创科技有限公司";
             this.txtSoftwareProvider.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // txtCurrentDateTime
             // 
             this.txtCurrentDateTime.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtCurrentDateTime.Location = new System.Drawing.Point(146, 3);
+            this.txtCurrentDateTime.Location = new System.Drawing.Point(326, 3);
             this.txtCurrentDateTime.Name = "txtCurrentDateTime";
             this.txtCurrentDateTime.ReadOnly = true;
             this.txtCurrentDateTime.Size = new System.Drawing.Size(271, 29);
             this.txtCurrentDateTime.TabIndex = 0;
             this.txtCurrentDateTime.Text = "日期：";
             // 
-            // txtServiceTime
-            // 
-            this.txtServiceTime.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtServiceTime.Location = new System.Drawing.Point(417, 3);
-            this.txtServiceTime.Name = "txtServiceTime";
-            this.txtServiceTime.ReadOnly = true;
-            this.txtServiceTime.Size = new System.Drawing.Size(182, 29);
-            this.txtServiceTime.TabIndex = 0;
-            this.txtServiceTime.Text = "服务时间：00:00:00";
-            // 
             // txtDeviceNo
             // 
             this.txtDeviceNo.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtDeviceNo.Location = new System.Drawing.Point(0, 3);
+            this.txtDeviceNo.Location = new System.Drawing.Point(178, 3);
             this.txtDeviceNo.Name = "txtDeviceNo";
             this.txtDeviceNo.ReadOnly = true;
             this.txtDeviceNo.Size = new System.Drawing.Size(146, 29);
             this.txtDeviceNo.TabIndex = 0;
             this.txtDeviceNo.Text = "设备号：";
             // 
-            // timer1
+            // txtShopNo
             // 
-            this.timer1.Interval = 1000;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // btnPromotion
-            // 
-            this.btnPromotion.BackColor = System.Drawing.Color.Brown;
-            this.btnPromotion.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPromotion.ForeColor = System.Drawing.Color.White;
-            this.btnPromotion.Location = new System.Drawing.Point(3, 2);
-            this.btnPromotion.Name = "btnPromotion";
-            this.btnPromotion.Size = new System.Drawing.Size(78, 77);
-            this.btnPromotion.TabIndex = 1;
-            this.btnPromotion.Text = "促销";
-            this.btnPromotion.UseVisualStyleBackColor = false;
-            this.btnPromotion.Click += new System.EventHandler(this.btnPromotion_Click);
+            this.txtShopNo.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtShopNo.Location = new System.Drawing.Point(2, 3);
+            this.txtShopNo.Name = "txtShopNo";
+            this.txtShopNo.ReadOnly = true;
+            this.txtShopNo.Size = new System.Drawing.Size(173, 29);
+            this.txtShopNo.TabIndex = 0;
+            this.txtShopNo.Text = "店铺号：";
             // 
             // FormOrder
             // 
@@ -1141,10 +1135,8 @@
         private CustomControl.CrystalButton btnLadeGoods;
         private CustomControl.CrystalButton btnReminder;
         private System.Windows.Forms.TextBox txtDeviceNo;
-        private System.Windows.Forms.TextBox txtServiceTime;
         private System.Windows.Forms.TextBox txtSoftwareProvider;
         private System.Windows.Forms.TextBox txtCurrentDateTime;
-        private System.Windows.Forms.Timer timer1;
         private CustomControl.CrystalButton btnHandover;
         private CustomControl.CrystalButton btnDailyStatement;
         private System.Windows.Forms.DataGridViewTextBoxColumn ItemID;
@@ -1158,5 +1150,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Wait;
         private System.Windows.Forms.DataGridViewTextBoxColumn OrderDetailsID;
         private CustomControl.CrystalButton btnPromotion;
+        private System.Windows.Forms.TextBox txtShopNo;
     }
 }

@@ -19,6 +19,10 @@ namespace Top4ever.Entity.Enum
         /// <summary>
         /// 会员卡
         /// </summary>
-        MembershipCard = 4
+        MembershipCard = 4,
+        /// <summary>
+        /// 团购券
+        /// </summary>
+        Coupon = 5
     }
 }

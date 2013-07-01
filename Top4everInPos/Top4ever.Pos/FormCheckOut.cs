@@ -57,6 +57,14 @@ namespace Top4ever.Pos
         /// 服务费
         /// </summary>
         private decimal m_ServiceFee = 0;
+        /// <summary>
+        /// 会员折扣卡号 
+        /// </summary>
+        private string m_MembershipCard = string.Empty;
+        /// <summary>
+        /// 会员折扣
+        /// </summary>
+        private decimal m_MemberDiscountRate = 0M;
 
         #region output
 
@@ -107,6 +115,7 @@ namespace Top4ever.Pos
             this.btnDeskNo.Text = "桌号：" + m_CurrentDeskName;
             this.btnEmployee.Text = "服务员：" + ConstantValuePool.CurrentEmployee.EmployeeNo;
             this.btnPersonNum.Text = "人数：" + m_SalesOrder.order.PeopleNum;
+            this.lbUnpaidAmount.Text = (decimal.Parse(lbReceMoney.Text) + decimal.Parse(lbServiceFee.Text)).ToString("f2");
         }
 
         private void CalculateButtonSize()
@@ -333,7 +342,7 @@ namespace Top4ever.Pos
             {
                 OrderPayoff orderPayoff = dic[curPayoffWay.PayoffID.ToString()];
                 decimal totalPrice = orderPayoff.Quantity * orderPayoff.AsPay;
-                if (curPayoffWay.PayoffType == (int)PayoffWayMode.GiftVoucher)
+                if (curPayoffWay.PayoffType == (int)PayoffWayMode.GiftVoucher || curPayoffWay.PayoffType == (int)PayoffWayMode.Coupon)
                 {
                     this.txtAmount.Text = string.Format("{0} 张(合 {1} 元)", orderPayoff.Quantity, totalPrice.ToString("f2"));
                 }
@@ -344,13 +353,39 @@ namespace Top4ever.Pos
             }
             else
             {
-                if (curPayoffWay.PayoffType == (int)PayoffWayMode.GiftVoucher)
+                if (curPayoffWay.PayoffType == (int)PayoffWayMode.GiftVoucher || curPayoffWay.PayoffType == (int)PayoffWayMode.Coupon)
                 {
                     this.txtAmount.Text = string.Format("{0} 张(合 {1} 元)", "0", "0.00");
                 }
                 else
                 {
                     this.txtAmount.Text = string.Format("{0} 元", "0.00");
+                }
+                if (curPayoffWay.PayoffType == (int)PayoffWayMode.MembershipCard)
+                { 
+                    decimal unPaidPrice = decimal.Parse(lbUnpaidAmount.Text);
+                    if (unPaidPrice > 0)
+                    {
+                        Membership.FormVIPCardPayment formCardPayment = new Membership.FormVIPCardPayment(unPaidPrice);
+                        formCardPayment.ShowDialog();
+                        if (formCardPayment.CardPaidAmount > 0)
+                        {
+                            OrderPayoff orderPayoff = new OrderPayoff();
+                            orderPayoff.OrderPayoffID = Guid.NewGuid();
+                            orderPayoff.OrderID = m_SalesOrder.order.OrderID;
+                            orderPayoff.PayoffID = curPayoffWay.PayoffID;
+                            orderPayoff.PayoffName = curPayoffWay.PayoffName;
+                            orderPayoff.PayoffType = curPayoffWay.PayoffType;
+                            orderPayoff.AsPay = curPayoffWay.AsPay;
+                            orderPayoff.Quantity = formCardPayment.CardPaidAmount / curPayoffWay.AsPay;
+                            orderPayoff.CardNo = formCardPayment.CardNo;
+                            orderPayoff.EmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
+                            dic.Add(curPayoffWay.PayoffID.ToString(), orderPayoff);
+                        }
+                        this.txtAmount.Text = string.Format("{0} 元", formCardPayment.CardPaidAmount.ToString("f2"));
+                        DisplayPayoffWay();
+                        //屏蔽数字键盘
+                    }
                 }
             }
             m_InputNumber = "0";
@@ -454,7 +489,7 @@ namespace Top4ever.Pos
             if (curPayoffWay != null)
             {
                 dic.Remove(curPayoffWay.PayoffID.ToString());
-                if (curPayoffWay.PayoffType == (int)PayoffWayMode.GiftVoucher)
+                if (curPayoffWay.PayoffType == (int)PayoffWayMode.GiftVoucher || curPayoffWay.PayoffType == (int)PayoffWayMode.Coupon)
                 {
                     this.txtAmount.Text = string.Format("{0} 张(合 {1} 元)", "0", "0.00");
                 }
@@ -489,7 +524,7 @@ namespace Top4ever.Pos
                 dic.Add(curPayoffWay.PayoffID.ToString(), orderPayoff);
             }
             decimal totalPrice = Convert.ToDecimal(m_InputNumber) * curPayoffWay.AsPay;
-            if (curPayoffWay.PayoffType == (int)PayoffWayMode.GiftVoucher)
+            if (curPayoffWay.PayoffType == (int)PayoffWayMode.GiftVoucher || curPayoffWay.PayoffType == (int)PayoffWayMode.Coupon)
             {
                 this.txtAmount.Text = string.Format("{0} 张(合 {1} 元)", m_InputNumber, totalPrice.ToString("f2"));
             }
@@ -511,7 +546,7 @@ namespace Top4ever.Pos
                     decimal totalPrice = item.Value.Quantity * item.Value.AsPay;
                     realPay += totalPrice;
                     string singlePay = string.Empty;
-                    if (item.Value.PayoffType == (int)PayoffWayMode.GiftVoucher)
+                    if (item.Value.PayoffType == (int)PayoffWayMode.GiftVoucher || item.Value.PayoffType == (int)PayoffWayMode.Coupon)
                     {
                         singlePay = string.Format("[{0} : {1} 张(合 {2} 元)]", item.Value.PayoffName, item.Value.Quantity, totalPrice.ToString("f2"));
                     }
@@ -618,6 +653,8 @@ namespace Top4ever.Pos
                     formDiscount.ShowDialog();
                     if (formDiscount.CurrentDiscount != null)
                     {
+                        m_MembershipCard = string.Empty;
+                        m_MemberDiscountRate = 0M;
                         Discount discount = formDiscount.CurrentDiscount;
                         int firstIndex = -1; //折价索引
                         decimal offFixedPay = 0;
@@ -851,7 +888,7 @@ namespace Top4ever.Pos
                 int status = (int)DeskButtonStatus.IDLE_MODE;
                 DeskService deskService = new DeskService();
                 deskService.UpdateDeskStatus(m_CurrentDeskName, string.Empty, status);
-                FormConfirm form = new FormConfirm(receMoney + m_ServiceFee, paidInMoney, needChangePay, orderPayoffList);
+                FormConfirm form = new FormConfirm(receMoney + m_ServiceFee, needChangePay, orderPayoffList);
                 form.ShowDialog();
                 this.Close();
             }
@@ -874,11 +911,10 @@ namespace Top4ever.Pos
             order.ServiceFee = m_ServiceFee;
             order.PaymentMoney = paymentMoney;
             order.NeedChangePay = needChangePay;
-            order.MembershipCard = string.Empty;
-            order.MemberDiscount = 0;
+            order.MembershipCard = m_MembershipCard;
+            order.MemberDiscount = m_MemberDiscountRate;
             order.PayEmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
             order.PayEmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
-            order.PayLastTime = 0;
             order.CheckoutDeviceNo = ConstantValuePool.BizSettingConfig.DeviceNo;
             //填充OrderDetails\OrderDiscount
             List<OrderDetails> orderDetailsList = new List<OrderDetails>();
@@ -961,8 +997,8 @@ namespace Top4ever.Pos
                 submitOrder.DiscountPrice = m_Discount;
                 submitOrder.CutOffPrice = m_CutOff;
                 submitOrder.ServiceFee = m_ServiceFee;
-                submitOrder.MembershipCard = string.Empty;
-                submitOrder.MemberDiscount = 0;
+                submitOrder.MembershipCard = m_MembershipCard;
+                submitOrder.MemberDiscount = m_MemberDiscountRate;
                 //填充OrderDetails\OrderDiscount
                 List<OrderDetails> orderDetailsList = new List<OrderDetails>();
                 List<OrderDiscount> newOrderDiscountList = new List<OrderDiscount>();
@@ -1004,6 +1040,22 @@ namespace Top4ever.Pos
                     {
                         btn.Text = "解锁";
                         order.Status = 3;   //预结
+                        m_IsPreCheckOut = true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("预结账单失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+                else
+                {
+                    int status = 3;   //预结
+                    OrderService orderService = new OrderService();
+                    if (orderService.UpdateOrderStatus(order.OrderID, status))
+                    {
+                        btn.Text = "解锁";
+                        order.Status = status;
                         m_IsPreCheckOut = true;
                     }
                     else
@@ -1122,6 +1174,38 @@ namespace Top4ever.Pos
                 {
                     return;
                 }
+                Membership.FormVIPCardDiscount formCardDiscount = new Membership.FormVIPCardDiscount();
+                formCardDiscount.ShowDialog();
+                if (formCardDiscount.Result == 1)
+                {
+                    m_MembershipCard = formCardDiscount.CardNo;
+                    m_MemberDiscountRate = formCardDiscount.DiscountRate;
+                    Discount discount = new Discount();
+                    discount.DiscountID = new Guid("99999999-9999-9999-9999-999999999999");
+                    discount.DiscountName = "会员折扣";
+                    discount.DiscountName2nd = "会员折扣";
+                    discount.DiscountType = (int)DiscountItemType.DiscountRate;
+                    discount.DiscountRate = formCardDiscount.DiscountRate;
+                    for (int index = 0; index < dgvGoodsOrder.Rows.Count; index++)
+                    {
+                        DataGridViewRow dr = dgvGoodsOrder.Rows[index];
+                        OrderDetails orderDetails = dr.Cells["OrderDetailsID"].Tag as OrderDetails;
+                        if (orderDetails != null)
+                        {
+                            Discount itemDiscount = dr.Cells["GoodsDiscount"].Tag as Discount;
+                            decimal itemDiscountPrice = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value);
+                            if (orderDetails.CanDiscount && (itemDiscount != null || itemDiscountPrice == 0))
+                            {
+                                dr.Cells["GoodsDiscount"].Value = -Convert.ToDecimal(dr.Cells["GoodsPrice"].Value) * discount.DiscountRate;
+                                orderDetails.TotalDiscount = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value);
+                                dr.Cells["OrderDetailsID"].Tag = orderDetails;
+                                dr.Cells["GoodsDiscount"].Tag = discount;
+                            }
+                        }
+                    }
+                    //统计
+                    BindOrderInfoSum();
+                }
             }
         }
 
@@ -1138,6 +1222,7 @@ namespace Top4ever.Pos
                 this.pictureBox1.Image = Properties.Resources.add;
             }
             BindOrderInfoSum();
+            this.lbUnpaidAmount.Text = (decimal.Parse(lbReceMoney.Text) + decimal.Parse(lbServiceFee.Text) - decimal.Parse(lbPaidInMoney.Text)).ToString("f2");
         }
     }
 }

@@ -68,16 +68,15 @@ namespace Top4ever.Pos
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            //读取程序的配置文件
-            string appSettingPath = "Config/AppSetting.config";
-            if (File.Exists(appSettingPath))
+            //判断程序的配置文件
+            if (ConstantValuePool.BizSettingConfig == null)
             {
-                AppSettingConfig appSettingConfig = XmlUtil.Deserialize<AppSettingConfig>(appSettingPath);
-                ConstantValuePool.BizSettingConfig = appSettingConfig;
+                MessageBox.Show("找不到程序的配置文件！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
             }
-            else
+            if (ConstantValuePool.CurrentShop == null)
             {
-                MessageBox.Show("找不到程序的配置文件！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("获取不到店铺信息，请检查服务器IP配置或者网络是否正确！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
             string employeeName = this.txtName.Text.Trim();
@@ -128,7 +127,7 @@ namespace Top4ever.Pos
                 SysBasicData sysBasicData = basicDataService.GetSysBasicData();
                 if (sysBasicData != null)
                 {
-                    ConstantValuePool.CurrentShop = sysBasicData.CurrentShop;
+                    ConstantValuePool.NoticeList = sysBasicData.NoticeList;
                     ConstantValuePool.SysConfig = sysBasicData.SysConfig;
                     ConstantValuePool.RegionList = sysBasicData.RegionList;
                     ConstantValuePool.DiscountList = sysBasicData.DiscountList;
@@ -214,16 +213,15 @@ namespace Top4ever.Pos
             }
             string attendanceCard = form.CardNumber;
 
-            //读取程序的配置文件
-            string appSettingPath = "Config/AppSetting.config";
-            if (File.Exists(appSettingPath))
+            //判断程序的配置文件
+            if (ConstantValuePool.BizSettingConfig == null)
             {
-                AppSettingConfig appSettingConfig = XmlUtil.Deserialize<AppSettingConfig>(appSettingPath);
-                ConstantValuePool.BizSettingConfig = appSettingConfig;
+                MessageBox.Show("找不到程序的配置文件！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
             }
-            else
+            if (ConstantValuePool.CurrentShop == null)
             {
-                MessageBox.Show("找不到程序的配置文件！");
+                MessageBox.Show("获取不到店铺信息，请检查服务器IP配置或者网络是否正确！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
 
@@ -263,7 +261,7 @@ namespace Top4ever.Pos
                 SysBasicData sysBasicData = basicDataService.GetSysBasicData();
                 if (sysBasicData != null)
                 {
-                    ConstantValuePool.CurrentShop = sysBasicData.CurrentShop;
+                    ConstantValuePool.NoticeList = sysBasicData.NoticeList;
                     ConstantValuePool.SysConfig = sysBasicData.SysConfig;
                     ConstantValuePool.RegionList = sysBasicData.RegionList;
                     ConstantValuePool.DiscountList = sysBasicData.DiscountList;
