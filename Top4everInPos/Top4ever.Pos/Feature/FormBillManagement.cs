@@ -353,7 +353,7 @@ namespace Top4ever.Pos.Feature
                 {
                     index = dataGridView3.Rows.Add();
                     dataGridView3.Rows[index].Cells[0].Value = orderPayoff.PayoffName;
-                    if (orderPayoff.PayoffType == (int)PayoffWayMode.GiftVoucher)
+                    if (orderPayoff.PayoffType == (int)PayoffWayMode.GiftVoucher || orderPayoff.PayoffType == (int)PayoffWayMode.Coupon)
                     {
                         dataGridView3.Rows[index].Cells[1].Value = string.Format("{0} 张", orderPayoff.Quantity.ToString("f1"));
                     }

@@ -801,47 +801,138 @@ namespace Top4ever.Pos
 
                 #region 判断是否套餐
                 bool haveCirculate = false;
+                IList<GoodsSetMeal> goodsSetMealList = new List<GoodsSetMeal>();
                 foreach (GoodsSetMeal item in ConstantValuePool.GoodsSetMealList)
                 {
                     if (item.ParentGoodsID.Equals(goods.GoodsID))
                     {
-                        Goods temp = new Goods();
-                        temp.GoodsID = item.GoodsID;
-                        temp.GoodsNo = item.GoodsNo;
-                        temp.GoodsName = item.GoodsName;
-                        temp.GoodsName2nd = item.GoodsName2nd;
-                        temp.Unit = item.Unit;
-                        temp.SellPrice = item.SellPrice;
-                        temp.CanDiscount = false;
-                        temp.AutoShowDetails = false;
-                        temp.PrintSolutionName = item.PrintSolutionName;
-                        temp.DepartID = item.DepartID;
-                        //更新列表
-                        index = dgvGoodsOrder.Rows.Add(new DataGridViewRow());
-                        dgvGoodsOrder.Rows[index].Cells["ItemID"].Value = item.GoodsID;
-                        dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag = temp;
-                        dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = item.ItemQty;
-                        dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = "--" + item.GoodsName;
-                        dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = item.SellPrice;
-                        decimal discount = 0;
-                        if (item.DiscountRate > 0)
-                        {
-                            discount = item.SellPrice * item.ItemQty * item.DiscountRate;
-                        }
-                        else
-                        {
-                            discount = item.OffFixPay;
-                        }
-                        dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = (-discount).ToString("f2");
-                        dgvGoodsOrder.Rows[index].Cells["ItemType"].Value = OrderItemType.SetMeal;
-                        dgvGoodsOrder.Rows[index].Cells["CanDiscount"].Value = false;
-                        dgvGoodsOrder.Rows[index].Cells["ItemUnit"].Value = item.Unit;
-
+                        goodsSetMealList.Add(item);
                         haveCirculate = true;
                     }
                     else
                     {
                         if (haveCirculate) break;
+                    }
+                }
+                if (goodsSetMealList.Count > 0)
+                {
+                    Dictionary<int, List<GoodsSetMeal>> dicGoodsSetMealByGroup = new Dictionary<int, List<GoodsSetMeal>>();
+                    foreach (GoodsSetMeal item in goodsSetMealList)
+                    {
+                        if (dicGoodsSetMealByGroup.ContainsKey(item.GroupNo))
+                        {
+                            dicGoodsSetMealByGroup[item.GroupNo].Add(item);
+                        }
+                        else
+                        {
+                            List<GoodsSetMeal> temp = new List<GoodsSetMeal>();
+                            temp.Add(item);
+                            dicGoodsSetMealByGroup.Add(item.GroupNo, temp);
+                        }
+                    }
+                    bool IsSingleGoodsSetMeal = false;
+                    foreach (KeyValuePair<int, List<GoodsSetMeal>> item in dicGoodsSetMealByGroup)
+                    {
+                        if (item.Value[0].IsRequired == true && (int)item.Value[0].LimitedQty == item.Value.Count)
+                        {
+                            IsSingleGoodsSetMeal = true;
+                        }
+                        else
+                        {
+                            IsSingleGoodsSetMeal = false;
+                            break;
+                        }
+                    }
+                    if (IsSingleGoodsSetMeal)
+                    {
+                        foreach (GoodsSetMeal item in goodsSetMealList)
+                        {
+                            Goods temp = new Goods();
+                            temp.GoodsID = item.GoodsID;
+                            temp.GoodsNo = item.GoodsNo;
+                            temp.GoodsName = item.GoodsName;
+                            temp.GoodsName2nd = item.GoodsName2nd;
+                            temp.Unit = item.Unit;
+                            temp.SellPrice = item.SellPrice;
+                            temp.CanDiscount = false;
+                            temp.AutoShowDetails = false;
+                            temp.PrintSolutionName = item.PrintSolutionName;
+                            temp.DepartID = item.DepartID;
+                            //更新列表
+                            index = dgvGoodsOrder.Rows.Add(new DataGridViewRow());
+                            dgvGoodsOrder.Rows[index].Cells["ItemID"].Value = item.GoodsID;
+                            dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag = temp;
+                            dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = item.ItemQty;
+                            dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = "--" + item.GoodsName;
+                            dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = item.SellPrice;
+                            decimal discount = 0;
+                            if (item.DiscountRate > 0)
+                            {
+                                discount = item.SellPrice * item.ItemQty * item.DiscountRate;
+                            }
+                            else
+                            {
+                                discount = item.OffFixPay;
+                            }
+                            dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = (-discount).ToString("f2");
+                            dgvGoodsOrder.Rows[index].Cells["ItemType"].Value = OrderItemType.SetMeal;
+                            dgvGoodsOrder.Rows[index].Cells["CanDiscount"].Value = false;
+                            dgvGoodsOrder.Rows[index].Cells["ItemUnit"].Value = item.Unit;
+                        }
+                    }
+                    else
+                    {
+                        //需要人工选择
+                        if (dicGoodsSetMealByGroup.Count > 0)
+                        {
+                            FormGoodsSetMeal form = new FormGoodsSetMeal(dicGoodsSetMealByGroup);
+                            form.ShowDialog();
+                            if (form.DicResultGoodsSetMeal.Count > 0)
+                            {
+                                foreach (KeyValuePair<int, List<GoodsSetMeal>> dicItem in form.DicResultGoodsSetMeal)
+                                {
+                                    foreach (GoodsSetMeal item in dicItem.Value)
+                                    {
+                                        Goods temp = new Goods();
+                                        temp.GoodsID = item.GoodsID;
+                                        temp.GoodsNo = item.GoodsNo;
+                                        temp.GoodsName = item.GoodsName;
+                                        temp.GoodsName2nd = item.GoodsName2nd;
+                                        temp.Unit = item.Unit;
+                                        temp.SellPrice = item.SellPrice;
+                                        temp.CanDiscount = false;
+                                        temp.AutoShowDetails = false;
+                                        temp.PrintSolutionName = item.PrintSolutionName;
+                                        temp.DepartID = item.DepartID;
+                                        //更新列表
+                                        index = dgvGoodsOrder.Rows.Add(new DataGridViewRow());
+                                        dgvGoodsOrder.Rows[index].Cells["ItemID"].Value = item.GoodsID;
+                                        dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag = temp;
+                                        dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = item.ItemQty;
+                                        dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = "--" + item.GoodsName;
+                                        dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = item.SellPrice;
+                                        decimal discount = 0;
+                                        if (item.DiscountRate > 0)
+                                        {
+                                            discount = item.SellPrice * item.ItemQty * item.DiscountRate;
+                                        }
+                                        else
+                                        {
+                                            discount = item.OffFixPay;
+                                        }
+                                        dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = (-discount).ToString("f2");
+                                        dgvGoodsOrder.Rows[index].Cells["ItemType"].Value = OrderItemType.SetMeal;
+                                        dgvGoodsOrder.Rows[index].Cells["CanDiscount"].Value = false;
+                                        dgvGoodsOrder.Rows[index].Cells["ItemUnit"].Value = item.Unit;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                dgvGoodsOrder.Rows.RemoveAt(dgvGoodsOrder.Rows.Count - 1);
+                                return;
+                            }
+                        }
                     }
                 }
                 #endregion
@@ -1880,7 +1971,7 @@ namespace Top4ever.Pos
             //品项沽清
             GoodsService goodsService = new GoodsService();
             IList<GoodsCheckStock> tempGoodsStockList = goodsService.GetGoodsCheckStock();
-            if (tempGoodsStockList.Count > 0 && temp.Count > 0)
+            if (tempGoodsStockList != null && tempGoodsStockList.Count > 0 && temp.Count > 0)
             {
                 IList<GoodsCheckStock> goodsCheckStockList = new List<GoodsCheckStock>();
                 foreach (GoodsCheckStock item in temp)
@@ -1926,7 +2017,6 @@ namespace Top4ever.Pos
                 order.PeopleNum = 1;
                 order.EmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
                 order.EmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
-                order.OrderLastTime = 0;
 
                 SalesOrder salesOrder = new SalesOrder();
                 salesOrder.order = order;
@@ -1955,7 +2045,6 @@ namespace Top4ever.Pos
                     order.PeopleNum = 1;
                     order.EmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
                     order.EmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
-                    order.OrderLastTime = 0;
                     SalesOrder salesOrder = new SalesOrder();
                     salesOrder.order = order;
                     salesOrder.orderDetailsList = newOrderDetailsList;

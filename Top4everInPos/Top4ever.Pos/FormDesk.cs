@@ -45,7 +45,10 @@ namespace Top4ever.Pos
         {
             this.haveDailyClose = haveDailyClose;
             m_FormOrder = new FormOrder();
-            m_FormTakeout = new FormTakeout(haveDailyClose);
+            if (ConstantValuePool.BizSettingConfig.SaleType == ShopSaleType.DineInAndTakeout)
+            {
+                m_FormTakeout = new FormTakeout(haveDailyClose);
+            }
             InitializeComponent();
         }
 
@@ -146,6 +149,15 @@ namespace Top4ever.Pos
             {
                 btnCheckOut.Enabled = false;
                 btnCheckOut.BackColor = ConstantValuePool.DisabledColor;
+            }
+            string strNotice = string.Empty;
+            foreach (Notice item in ConstantValuePool.NoticeList)
+            {
+                strNotice += item.NoticeContent + "\t\t\t";
+            }
+            if (!string.IsNullOrEmpty(strNotice))
+            {
+                scrollingText1.ScrollText = strNotice;
             }
 
             Thread backWork = new Thread(new ThreadStart(doWork));

@@ -26,7 +26,7 @@ namespace Top4ever.Domain.OrderRelated
         public string PayoffName { get; set; }
 
         /// <summary>
-        /// 1,现金; 2,礼券或代金券; 3,信用卡; 4,会员卡或储值卡
+        /// 1,现金; 2,礼券或代金券; 3,信用卡; 4,会员卡或储值卡; 5,团购券
         /// </summary>
         public int PayoffType { get; set; }
 

@@ -175,7 +175,6 @@ namespace Top4ever.Pos.Feature
                 int remainPeopleNum = m_SalesOrder.order.PeopleNum - int.Parse(personNum);
                 if (remainPeopleNum <= 0) remainPeopleNum = 1;
                 originalOrder.PeopleNum = remainPeopleNum;
-                originalOrder.OrderLastTime = m_SalesOrder.order.OrderLastTime / 2;
                 List<OrderDetails> subOrderDetailsList = new List<OrderDetails>();
                 foreach (DataGridViewRow dr in dgvGoodsOrder2.Rows)
                 {
@@ -218,7 +217,6 @@ namespace Top4ever.Pos.Feature
                 newOrder.PeopleNum = int.Parse(personNum);
                 newOrder.EmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
                 newOrder.EmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
-                newOrder.OrderLastTime = m_SalesOrder.order.OrderLastTime / 2;
                 List<OrderDetails> newOrderDetailsList = new List<OrderDetails>();
                 foreach (DataGridViewRow dr in dgvGoodsOrder2.Rows)
                 {

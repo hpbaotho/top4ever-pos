@@ -13,18 +13,18 @@ namespace Top4ever.Pos
 {
     public partial class FormConfirm : Form
     {
-        public FormConfirm(decimal actualPayMoney, decimal paidInMoney, decimal needChangePay, List<OrderPayoff> orderPayoffList)
+        public FormConfirm(decimal actualPayMoney, decimal needChangePay, List<OrderPayoff> orderPayoffList)
         {
             InitializeComponent();
             this.lbReceAmount.Text = actualPayMoney.ToString("f2");
-            this.lbPaidInAmount.Text = paidInMoney.ToString("f2");
             this.lbNeedChangePay.Text = needChangePay.ToString("f2");
             //支付方式
+            decimal paidInMoney = 0M;
             foreach (OrderPayoff item in orderPayoffList)
             {
                 string strPayoffWay = string.Empty;
                 decimal totalPrice = item.Quantity * item.AsPay;
-                if (item.PayoffType == (int)PayoffWayMode.GiftVoucher)
+                if (item.PayoffType == (int)PayoffWayMode.GiftVoucher || item.PayoffType == (int)PayoffWayMode.Coupon)
                 {
                     strPayoffWay = string.Format("{0} : {1} 张(合 {2} 元)", item.PayoffName, item.Quantity, totalPrice.ToString("f2"));
                 }
@@ -33,7 +33,9 @@ namespace Top4ever.Pos
                     strPayoffWay = string.Format("{0} : {1} 元", item.PayoffName, totalPrice.ToString("f2"));
                 }
                 this.txtPayoffWay.AppendText(strPayoffWay + "\r\n");
+                paidInMoney += totalPrice;
             }
+            this.lbPaidInAmount.Text = paidInMoney.ToString("f2");
         }
 
         private void btnConfirm_Click(object sender, EventArgs e)

@@ -1,9 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 
+using Top4ever.ClientService;
 using Top4ever.Common;
+using Top4ever.Domain;
+using Top4ever.Entity;
+using Top4ever.Entity.Config;
+using Top4ever.Pos.Register;
 
 namespace Top4ever.Pos
 {
@@ -20,12 +27,58 @@ namespace Top4ever.Pos
             // Set the unhandled exception mode to force all Windows Forms errors to go through our handler.
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             // Add the event handler for handling non-UI thread exceptions to the event. 
-            AppDomain.CurrentDomain.UnhandledException +=
-                new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormLogin());
+            //get config file
+            Shop currentShop = null;
+            string appSettingPath = "Config/AppSetting.config";
+            if (File.Exists(appSettingPath))
+            {
+                AppSettingConfig appSettingConfig = XmlUtil.Deserialize<AppSettingConfig>(appSettingPath);
+                ConstantValuePool.BizSettingConfig = appSettingConfig;
+                ShopService shopService = new ShopService();
+                currentShop = shopService.GetCurrentShop();
+            }
+            if(currentShop != null)
+            {
+                ConstantValuePool.CurrentShop = currentShop;
+                //Check for registration
+                int remainDays = 0;
+                if (ProductRegister.CheckProductRegistration(ref remainDays))
+                {
+                    Application.Run(new FormLogin());
+                }
+                else
+                {
+                    string strVersion = string.Empty;
+                    Assembly executingAssembly = Assembly.GetExecutingAssembly();
+                    object[] objectAttrs = executingAssembly.GetCustomAttributes(typeof(AssemblyFileVersionAttribute), false);
+                    if (objectAttrs.Length > 0)
+                    {
+                        AssemblyFileVersionAttribute fileAttr = objectAttrs[0] as AssemblyFileVersionAttribute;
+                        if (fileAttr != null)
+                        {
+                            strVersion = fileAttr.Version;
+                        }
+                    }
+                    FormProductTry formTry = new FormProductTry(remainDays, currentShop.ShopName, currentShop.ShopNo, strVersion);
+                    formTry.ShowDialog();
+                    if (formTry.Result)
+                    {
+                        Application.Run(new FormLogin());
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                Application.Run(new FormLogin());
+            }
         }
 
         static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
