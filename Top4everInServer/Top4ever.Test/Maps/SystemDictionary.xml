@@ -6,7 +6,7 @@
 	</alias>
 
 	<resultMaps>
-		<resultMap  id="SystemDictionaryResult" class="SystemDictionary">
+		<resultMap id="SystemDictionaryResult" class="SystemDictionary">
 			<result property="SysDictionaryID" column="SysDictionaryID"></result>
 			<result property="Name" column="Name"></result>
 			<result property="Value" column="Value"></result>

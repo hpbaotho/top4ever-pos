@@ -2,22 +2,19 @@
 <sqlMap namespace="OrderPayoff" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <alias>
-        <typeAlias alias="OrderPayoff" type="Top4ever.Domain.OrderRelated.OrderPayoff, Top4ever.Domain" />
+      <typeAlias alias="OrderPayoff" type="Top4ever.Domain.OrderRelated.OrderPayoff, Top4ever.Domain" />
     </alias>
 
     <resultMaps>
-        <resultMap  id="OrderPayoffResult" class="OrderPayoff">
-            <result property="OrderPayoffID" column="OrderPayoffID"></result>
-            <result property="OrderID" column="OrderID"></result>
-            <result property="PayoffID" column="PayoffID"></result>
-            <result property="PayoffName" column="PayoffName"></result>
-            <result property="PayoffType" column="PayoffType"></result>
-            <result property="AsPay" column="AsPay"></result>
-            <result property="Quantity" column="Quantity"></result>
-            <result property="NeedChangePay" column="NeedChangePay"></result>
-            <result property="CardNo" column="CardNo"></result>
-            <result property="EmployeeID" column="LastModifiedEmployeeID"></result>
-        </resultMap>
+      <resultMap id="OrderPayoffResult" class="OrderPayoff">
+        <result property="PayoffID" column="PayoffID"></result>
+        <result property="PayoffName" column="PayoffName"></result>
+        <result property="PayoffType" column="PayoffType"></result>
+        <result property="AsPay" column="AsPay"></result>
+        <result property="Quantity" column="Quantity"></result>
+        <result property="NeedChangePay" column="NeedChangePay"></result>
+        <result property="CardNo" column="CardNo"></result>
+      </resultMap>
       
     </resultMaps>
     <!-- =============================================
@@ -25,37 +22,55 @@
     ============================================= 
     -->
     <statements>
-        <insert id="InsertOrderPayoff" parameterClass="OrderPayoff">
-			    INSERT INTO OrderPayoff
-			    (
-				    OrderPayoffID,
-				    OrderID,
-				    PayoffID,
-				    PayoffName,
-				    PayoffType,
-				    AsPay,
-				    Quantity,
-				    NeedChangePay,
-				    CardNo,
-				    DailyStatementNo,
-				    InputEmployeeID,
-					LastModifiedEmployeeID
-			    )
-			    VALUES
-			    (
-				    #OrderPayoffID#,
-				    #OrderID#,
-				    #PayoffID#,
-				    #PayoffName#,
-				    #PayoffType#,
-				    #AsPay#,
-				    #Quantity#,
-				    #NeedChangePay#,
-				    #CardNo#,
-				    #DailyStatementNo#,
-				    #EmployeeID#,
-					#EmployeeID#
-			    )
-		</insert>
+      <insert id="InsertOrderPayoff" parameterClass="OrderPayoff">
+        INSERT INTO OrderPayoff
+        (
+	        OrderPayoffID,
+	        OrderID,
+	        PayoffID,
+	        PayoffName,
+	        PayoffType,
+	        AsPay,
+	        Quantity,
+	        NeedChangePay,
+	        CardNo,
+	        DailyStatementNo,
+	        InputEmployeeID,
+	        LastModifiedEmployeeID
+        )
+        VALUES
+        (
+	        #OrderPayoffID#,
+	        #OrderID#,
+	        #PayoffID#,
+	        #PayoffName#,
+	        #PayoffType#,
+	        #AsPay#,
+	        #Quantity#,
+	        #NeedChangePay#,
+	        #CardNo#,
+	        #DailyStatementNo#,
+	        #EmployeeID#,
+	        #EmployeeID#
+        )
+      </insert>
+
+      <select id="GetOrderPayoff" parameterClass="Guid" resultMap="OrderPayoffResult">
+        SELECT PayoffID, PayoffName,PayoffType, AsPay, Quantity, NeedChangePay, CardNo
+        FROM OrderPayoff
+        WHERE OrderID = #value# AND IsVoided = 0
+      </select>
+
+      <select id="GetDeletedOrderPayoff" parameterClass="Guid" resultMap="OrderPayoffResult">
+        SELECT PayoffID, PayoffName,PayoffType, AsPay, Quantity, NeedChangePay, CardNo
+        FROM OrderPayoff
+        WHERE OrderID = #value# AND IsVoided = 1
+      </select>
+      
+      <update id="UpdateDeletedOrderPayoff" parameterClass="Guid">
+        UPDATE OrderPayoff
+        SET IsVoided = 1, <![CDATA[ LastModifiedTime = getdate(), Transfered = 0 ]]>
+        WHERE OrderID = #value#
+      </update>
     </statements>
 </sqlMap>

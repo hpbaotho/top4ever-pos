@@ -2,18 +2,19 @@
 <sqlMap namespace="DetailsGroup" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <alias>
-        <typeAlias alias="DetailsGroup" type="Top4ever.Domain.GoodsRelated.DetailsGroup, Top4ever.Domain" />
+      <typeAlias alias="DetailsGroup" type="Top4ever.Domain.GoodsRelated.DetailsGroup, Top4ever.Domain" />
     </alias>
 
     <resultMaps>
-        <resultMap  id="DetailsGroupResult" class="DetailsGroup">
-            <result property="DetailsGroupID" column="DetailsGroupID"></result>
-            <result property="DetailsGroupNo" column="DetailsGroupNo"></result>
-            <result property="DetailsGroupName" column="DetailsGroupName"></result>
-			<result property="DetailsGroupName2nd" column="DetailsGroupName_2nd"></result>
-            <result property="LimitedNumbers" column="LimitedNumbers"></result>
-            <result property="ButtonStyleID" column="ButtonStyleID"></result>
-        </resultMap>
+      <resultMap id="DetailsGroupResult" class="DetailsGroup">
+        <result property="DetailsGroupID" column="DetailsGroupID"></result>
+        <result property="DetailsGroupNo" column="DetailsGroupNo"></result>
+        <result property="DetailsGroupName" column="DetailsGroupName"></result>
+        <result property="DetailsGroupName2nd" column="DetailsGroupName_2nd"></result>
+        <result property="LimitedNumbers" column="LimitedNumbers"></result>
+        <result property="IsCommon" column="IsCommon"></result>
+        <result property="ButtonStyleID" column="ButtonStyleID"></result>
+      </resultMap>
 
     </resultMaps>
     <!-- =============================================
@@ -21,12 +22,12 @@
     ============================================= 
     -->
     <statements>
-        <select id="GetDetailsGroupList" resultMap="DetailsGroupResult">
-			SELECT DetailsGroupID, DetailsGroupNo, DetailsGroupName, DetailsGroupName_2nd, LimitedNumbers, ButtonStyleID
-			FROM DetailsGroup
-			WHERE IsVoided = 0
-			ORDER BY OrderBy
-		</select>
+      <select id="GetDetailsGroupList" resultMap="DetailsGroupResult">
+        SELECT DetailsGroupID, DetailsGroupNo, DetailsGroupName, DetailsGroupName_2nd, LimitedNumbers, IsCommon, ButtonStyleID
+        FROM DetailsGroup
+        WHERE IsVoided = 0
+        ORDER BY OrderBy
+      </select>
 
     </statements>
 </sqlMap>

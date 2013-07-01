@@ -48,6 +48,20 @@ namespace Top4ever.BLL
             return objRet;
         }
 
+        public static byte[] GetCardDiscountRate(byte[] itemBuffer)
+        {
+            byte[] objRet = null;
+            string cardNo = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, ParamFieldLength.CARD_NO).Trim('\0');
+
+            decimal discountRate = VIPCardService.GetInstance().GetCardDiscountRate(cardNo);
+            int transCount = BasicTypeLength.INT32 + BasicTypeLength.INT32 + BasicTypeLength.DOUBLE_DECIMAL;
+            objRet = new byte[transCount];
+            Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes(transCount), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes((double)discountRate), 0, objRet, 2 * BasicTypeLength.INT32, BasicTypeLength.DOUBLE_DECIMAL);
+            return objRet;
+        }
+
         public static byte[] UpdateCardPassword(byte[] itemBuffer)
         {
             byte[] objRet = null;

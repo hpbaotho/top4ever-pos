@@ -33,6 +33,17 @@ namespace Top4ever.Persistence.MembershipCard
             return password;
         }
 
+        public decimal GetCardDiscountRate(string cardNo)
+        {
+            decimal discountRate = 0M;
+            object objValue = ExecuteQueryForObject("GetCardDiscountRate", cardNo);
+            if (objValue != null)
+            {
+                discountRate = Convert.ToDecimal(objValue);
+            }
+            return discountRate;
+        }
+
         public bool UpdateVIPCardPassword(string cardNo, string password, string newPassword)
         {
             int result = 0;

@@ -55,10 +55,6 @@
       SELECT Password FROM VIPCard_Offline WITH(NOLOCK) WHERE CardNo = #value#
     </select>
 
-    <select id="GetCardDiscountRate" parameterClass="String" resultClass="Decimal">
-      SELECT DiscountRate FROM VIPCard_Offline WITH(NOLOCK) WHERE CardNo = #value#
-    </select>
-
     <procedure id="UpdateVIPCardPassword" parameterMap="UpdateCardPwdParam">
       proc_UpdateVIPCardPassword
     </procedure>

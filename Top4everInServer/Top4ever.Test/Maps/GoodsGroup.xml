@@ -2,17 +2,29 @@
 <sqlMap namespace="GoodsGroup" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <alias>
-        <typeAlias alias="GoodsGroup" type="Top4ever.Domain.GoodsRelated.GoodsGroup, Top4ever.Domain" />
+      <typeAlias alias="GoodsGroup" type="Top4ever.Domain.GoodsRelated.GoodsGroup, Top4ever.Domain" />
+      <typeAlias alias="GoodsCronTrigger" type="Top4ever.Domain.GoodsRelated.GoodsCronTrigger, Top4ever.Domain" />
     </alias>
 
     <resultMaps>
-        <resultMap  id="GoodsGroupResult" class="GoodsGroup">
-            <result property="GoodsGroupID" column="GoodsGroupID"></result>
-            <result property="GoodsGroupNo" column="GoodsGroupNo"></result>
-            <result property="GoodsGroupName" column="GoodsGroupName"></result>
-			<result property="GoodsGroupName2nd" column="GoodsGroupName_2nd"></result>
-            <result property="ButtonStyleID" column="ButtonStyleID"></result>
-        </resultMap>
+      <resultMap id="GoodsGroupResult" class="GoodsGroup">
+        <result property="GoodsGroupID" column="GoodsGroupID"></result>
+        <result property="GoodsGroupNo" column="GoodsGroupNo"></result>
+        <result property="GoodsGroupName" column="GoodsGroupName"></result>
+        <result property="GoodsGroupName2nd" column="GoodsGroupName_2nd"></result>
+        <result property="ButtonStyleID" column="ButtonStyleID"></result>
+      </resultMap>
+
+      <resultMap id="GoodsCronTriggerResult" class="GoodsCronTrigger">
+        <result property="ItemID" column="ItemID"></result>
+        <result property="ItemType" column="ItemType"></result>
+        <result property="BeginDate" column="BeginDate"></result>
+        <result property="EndDate" column="EndDate"></result>
+        <result property="Week" column="Week"></result>
+        <result property="Day" column="Day"></result>
+        <result property="Hour" column="Hour"></result>
+        <result property="Minute" column="Minute"></result>
+      </resultMap>
 
     </resultMaps>
     <!-- =============================================
@@ -20,12 +32,18 @@
     ============================================= 
     -->
     <statements>
-        <select id="GetGoodsGroupList" resultMap="GoodsGroupResult">
-			SELECT GoodsGroupID, GoodsGroupNo, GoodsGroupName, GoodsGroupName_2nd, ButtonStyleID
-			FROM GoodsGroup
-			WHERE IsVoided = 0
-			ORDER BY OrderBy
-		</select>
+      <select id="GetGoodsGroupList" resultMap="GoodsGroupResult">
+        SELECT GoodsGroupID, GoodsGroupNo, GoodsGroupName, GoodsGroupName_2nd, ButtonStyleID
+        FROM GoodsGroup
+        WHERE IsVoided = 0
+        ORDER BY OrderBy
+      </select>
+
+      <select id="GetGoodsCronTriggerList" resultMap="GoodsCronTriggerResult">
+        SELECT ItemID,ItemType,BeginDate,EndDate,Week,[Day],Hour,Minute
+        FROM GoodsCronTrigger
+        WHERE IsVoided = 0
+      </select>
 
     </statements>
 </sqlMap>

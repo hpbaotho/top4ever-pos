@@ -26,7 +26,7 @@ namespace Top4ever.Service
         private static SysBasicDataService _instance = new SysBasicDataService();
         private IDaoManager _daoManager = null;
 
-        private IShopDao _shopDao = null;
+        private INoticeDao _noticeDao = null;
         private IRegionDao _regionDao = null;
         private IDeskDao _deskDao = null;
         private IDiscountDao _discountDao = null;
@@ -48,7 +48,7 @@ namespace Top4ever.Service
         private SysBasicDataService()
         {
             _daoManager = ServiceConfig.GetInstance().DaoManager;
-            _shopDao = _daoManager.GetDao(typeof(IShopDao)) as IShopDao;
+            _noticeDao = _daoManager.GetDao(typeof(INoticeDao)) as INoticeDao;
             _regionDao = _daoManager.GetDao(typeof(IRegionDao)) as IRegionDao;
             _deskDao = _daoManager.GetDao(typeof(IDeskDao)) as IDeskDao;
             _discountDao = _daoManager.GetDao(typeof(IDiscountDao)) as IDiscountDao;
@@ -80,8 +80,8 @@ namespace Top4ever.Service
             _daoManager.BeginTransaction();
             try
             {
-                // shop
-                Shop CurrentShop = _shopDao.GetSingleShop();
+                // notice
+                IList<Notice> noticeList = _noticeDao.GetAllNotice();
                 // region
                 IList<BizRegion> regionList = _regionDao.GetAllBizRegion();
                 if (regionList != null && regionList.Count > 0)
@@ -149,7 +149,7 @@ namespace Top4ever.Service
                 //PromotionPresent
                 IList<PromotionPresent> promotionPresentList = _promotionDao.GetPromotionPresentList();
                 // SysBasicData
-                basicData.CurrentShop = CurrentShop;
+                basicData.NoticeList = noticeList;
                 basicData.RegionList = regionList;
                 basicData.DiscountList = discountList;
                 basicData.PayoffWayList = payoffWayList;

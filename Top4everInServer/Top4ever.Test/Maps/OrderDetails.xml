@@ -2,159 +2,167 @@
 <sqlMap namespace="OrderDetails" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <alias>
-        <typeAlias alias="OrderDetails" type="Top4ever.Domain.OrderRelated.OrderDetails, Top4ever.Domain" />
-        <!--<typeAlias alias="DeletedOrder" type="Top4ever.Domain.Transfer.DeletedOrder, Top4ever.Domain" />-->
-        <typeAlias alias="DeletedOrderDetails" type="Top4ever.Domain.Transfer.DeletedOrderDetails, Top4ever.Domain" />
+      <typeAlias alias="OrderDetails" type="Top4ever.Domain.OrderRelated.OrderDetails, Top4ever.Domain" />
+      <!--<typeAlias alias="DeletedOrder" type="Top4ever.Domain.Transfer.DeletedOrder, Top4ever.Domain" />-->
+      <typeAlias alias="DeletedOrderDetails" type="Top4ever.Domain.Transfer.DeletedOrderDetails, Top4ever.Domain" />
     </alias>
 
     <resultMaps>
-        <resultMap  id="OrderDetailsResult" class="OrderDetails">
-            <result property="OrderDetailsID" column="OrderDetailsID"></result>
-            <result property="OrderID" column="OrderID"></result>
-            <result property="DeviceNo" column="DeviceNo"></result>
-            <result property="OrderBy" column="OrderBy"></result>
-            <result property="ItemType" column="ItemType"></result>
-            <result property="GoodsID" column="GoodsID"></result>
-            <result property="GoodsNo" column="GoodsNo"></result>
-            <result property="GoodsName" column="GoodsName"></result>
-            <result property="Unit" column="Unit"></result>
-            <result property="CanDiscount" column="CanDiscount"></result>
-            <result property="ItemLevel" column="ItemLevel"></result>
-            <result property="ItemQty" column="ItemQty"></result>
-            <result property="SellPrice" column="SellPrice"></result>
-            <result property="TotalSellPrice" column="TotalSellPrice"></result>
-            <result property="TotalDiscount" column="TotalDiscount"></result>
-            <result property="Wait" column="Wait"></result>
-            <result property="PrintSolutionName" column="PrintSolutionName"></result>
-            <result property="DepartID" column="DepartID"></result>
-            <result property="EmployeeID" column="InputEmployeeID"></result>
-        </resultMap>
+      <resultMap id="OrderDetailsResult" class="OrderDetails">
+        <result property="OrderDetailsID" column="OrderDetailsID"></result>
+        <result property="OrderID" column="OrderID"></result>
+        <result property="DeviceNo" column="DeviceNo"></result>
+        <result property="OrderBy" column="OrderBy"></result>
+        <result property="ItemType" column="ItemType"></result>
+        <result property="GoodsID" column="GoodsID"></result>
+        <result property="GoodsNo" column="GoodsNo"></result>
+        <result property="GoodsName" column="GoodsName"></result>
+        <result property="Unit" column="Unit"></result>
+        <result property="CanDiscount" column="CanDiscount"></result>
+        <result property="ItemLevel" column="ItemLevel"></result>
+        <result property="ItemQty" column="ItemQty"></result>
+        <result property="SellPrice" column="SellPrice"></result>
+        <result property="TotalSellPrice" column="TotalSellPrice"></result>
+        <result property="TotalDiscount" column="TotalDiscount"></result>
+        <result property="Wait" column="Wait"></result>
+        <result property="PrintSolutionName" column="PrintSolutionName"></result>
+        <result property="DepartID" column="DepartID"></result>
+        <result property="EmployeeID" column="InputEmployeeID"></result>
+      </resultMap>
 
-        <resultMap id="DeletedOrderResult" class="DeletedOrder">
-            <result property="OrderID" column="OrderID"></result>
-            <result property="AuthorisedManager" column="AuthorisedManager"></result>
-            <result property="CancelEmployeeNo" column="CancelEmployeeNo"></result>
-            <result property="CancelReasonName" column="CancelReasonName"></result>
-        </resultMap>
+      <resultMap id="DeletedOrderResult" class="DeletedOrder">
+        <result property="OrderID" column="OrderID"></result>
+        <result property="AuthorisedManager" column="AuthorisedManager"></result>
+        <result property="CancelEmployeeNo" column="CancelEmployeeNo"></result>
+        <result property="CancelReasonName" column="CancelReasonName"></result>
+      </resultMap>
 
-        <resultMap id="DeletedOrderDetailsResult" class="DeletedOrderDetails">
-            <result property="OrderDetailsID" column="OrderDetailsID"></result>
-            <result property="RemainQuantity" column="RemainQuantity"></result>
-            <result property="OffPay" column="OffPay"></result>
-            <result property="AuthorisedManager" column="AuthorisedManager"></result>
-            <result property="CancelEmployeeNo" column="CancelEmployeeNo"></result>
-            <result property="CancelReasonName" column="CancelReasonName"></result>
-        </resultMap>
+      <resultMap id="DeletedOrderDetailsResult" class="DeletedOrderDetails">
+        <result property="OrderDetailsID" column="OrderDetailsID"></result>
+        <result property="RemainQuantity" column="RemainQuantity"></result>
+        <result property="OffPay" column="OffPay"></result>
+        <result property="AuthorisedManager" column="AuthorisedManager"></result>
+        <result property="CancelEmployeeNo" column="CancelEmployeeNo"></result>
+        <result property="CancelReasonName" column="CancelReasonName"></result>
+      </resultMap>
     </resultMaps>
 
     <parameterMaps>
-        <parameterMap id="UpdateOrderDetailsParam" class="OrderDetails">
-            <parameter property="OrderDetailsID"/>
-            <parameter property="OrderID"/>
-            <parameter property="DeviceNo"/>
-            <parameter property="OrderBy"/>
-            <parameter property="ItemType"/>
-            <parameter property="GoodsID"/>
-            <parameter property="GoodsNo"/>
-            <parameter property="GoodsName"/>
-            <parameter property="Unit"/>
-            <parameter property="CanDiscount"/>
-            <parameter property="ItemLevel"/>
-            <parameter property="PrintSolutionName"/>
-            <parameter property="DepartID"/>
-            <parameter property="TotalSellPrice"/>
-            <parameter property="TotalDiscount"/>
-            <parameter property="ItemQty"/>
-            <parameter property="SellPrice"/>
-            <parameter property="Wait"/>
-            <parameter property="EmployeeID" column="InputEmployeeID"/>
-        </parameterMap>
+      <parameterMap id="UpdateOrderDetailsParam" class="OrderDetails">
+        <parameter property="OrderDetailsID"/>
+        <parameter property="OrderID"/>
+        <parameter property="DeviceNo"/>
+        <parameter property="OrderBy"/>
+        <parameter property="ItemType"/>
+        <parameter property="GoodsID"/>
+        <parameter property="GoodsNo"/>
+        <parameter property="GoodsName"/>
+        <parameter property="Unit"/>
+        <parameter property="CanDiscount"/>
+        <parameter property="ItemLevel"/>
+        <parameter property="PrintSolutionName"/>
+        <parameter property="DepartID"/>
+        <parameter property="TotalSellPrice"/>
+        <parameter property="TotalDiscount"/>
+        <parameter property="ItemQty"/>
+        <parameter property="SellPrice"/>
+        <parameter property="Wait"/>
+        <parameter property="EmployeeID" column="InputEmployeeID"/>
+      </parameterMap>
         
-        <parameterMap id="DeleteSingleOrderDetailsParam" class="DeletedOrderDetails">
-            <parameter property="OrderDetailsID"/>
-            <parameter property="RemainQuantity"/>
-            <parameter property="OffPay"/>
-            <parameter property="AuthorisedManager"/>
-            <parameter property="CancelEmployeeNo"/>
-            <parameter property="CancelReasonName"/>
-        </parameterMap>
+      <parameterMap id="DeleteSingleOrderDetailsParam" class="DeletedOrderDetails">
+        <parameter property="OrderDetailsID"/>
+        <parameter property="RemainQuantity"/>
+        <parameter property="OffPay"/>
+        <parameter property="AuthorisedManager"/>
+        <parameter property="CancelEmployeeNo"/>
+        <parameter property="CancelReasonName"/>
+      </parameterMap>
 
-        <parameterMap id="SubSplitOrderParam" class="OrderDetails">
-            <parameter property="OrderDetailsID"/>
-            <parameter property="TotalSellPrice"/>
-            <parameter property="TotalDiscount"/>
-            <parameter property="ItemQty"/>
-        </parameterMap>
+      <parameterMap id="SubSplitOrderParam" class="OrderDetails">
+        <parameter property="OrderDetailsID"/>
+        <parameter property="TotalSellPrice"/>
+        <parameter property="TotalDiscount"/>
+        <parameter property="ItemQty"/>
+      </parameterMap>
     </parameterMaps>
     <!-- =============================================
         MAPPED STATEMENTS 
     ============================================= 
     -->
     <statements>
-        <insert id="InsertOrderDetails" parameterClass="OrderDetails">
-			    INSERT INTO OrderDetails
-			    (
-			    [OrderDetailsID],[OrderID],[DeviceNo],[OrderBy],[ItemType],[GoodsID],[GoodsNo],[GoodsName],[Unit],[CanDiscount],[ItemLevel],[PrintSolutionName],
-				[DepartID],[TotalSellPrice],[TotalDiscount],[ItemQty],[SellPrice],[Wait],[DailyStatementNo],[InputEmployeeID],[LastModifiedEmployeeID]
-			    )
-			    VALUES
-			    (
-			    #OrderDetailsID#,#OrderID#,#DeviceNo#,#OrderBy#,#ItemType#,#GoodsID#,#GoodsNo#,#GoodsName#,#Unit#,#CanDiscount#,#ItemLevel#,#PrintSolutionName#,
-				#DepartID#,#TotalSellPrice#,#TotalDiscount#,#ItemQty#,#SellPrice#,#Wait#,#DailyStatementNo#,#EmployeeID#,#EmployeeID#
-			    )
-		</insert>
+      <insert id="InsertOrderDetails" parameterClass="OrderDetails">
+	      INSERT INTO OrderDetails
+	      (
+          [OrderDetailsID],[OrderID],[DeviceNo],[OrderBy],[ItemType],[GoodsID],[GoodsNo],[GoodsName],[Unit],[CanDiscount],[ItemLevel],[PrintSolutionName],
+          [DepartID],[TotalSellPrice],[TotalDiscount],[ItemQty],[SellPrice],[Wait],[DailyStatementNo],[InputEmployeeID],[LastModifiedEmployeeID]
+        )
+	      VALUES
+	      (
+          #OrderDetailsID#,#OrderID#,#DeviceNo#,#OrderBy#,#ItemType#,#GoodsID#,#GoodsNo#,#GoodsName#,#Unit#,#CanDiscount#,#ItemLevel#,#PrintSolutionName#,
+          #DepartID#,#TotalSellPrice#,#TotalDiscount#,#ItemQty#,#SellPrice#,#Wait#,#DailyStatementNo#,#EmployeeID#,#EmployeeID#
+	      )
+      </insert>
 
-        <procedure id="UpdateOrderDetails" parameterMap="UpdateOrderDetailsParam">
-            proc_UpdateOrderDetails
-        </procedure>
+      <procedure id="UpdateOrderDetails" parameterMap="UpdateOrderDetailsParam">
+        proc_UpdateOrderDetails
+      </procedure>
 
-        <update id="UpdateOrderDetailsDiscount" parameterClass="OrderDetails">
-            UPDATE OrderDetails
-            SET TotalDiscount = #TotalDiscount#, Wait = #Wait#
-            WHERE OrderDetailsID = #OrderDetailsID#
-        </update>
+      <update id="UpdateOrderDetailsDiscount" parameterClass="OrderDetails">
+        UPDATE OrderDetails
+        SET TotalDiscount = #TotalDiscount#, Wait = #Wait#, Transfered = 0
+        WHERE OrderDetailsID = #OrderDetailsID#
+      </update>
 
-        <update id="UpdateDeletedOrderDetails" parameterClass="DeletedOrder">
-            UPDATE OrderDetails
-            SET AuthorisedManager = #AuthorisedManager#, CancelEmployeeNo = #CancelEmployeeNo#, CancelReasonName = #CancelReasonName#,
-			IsVoided = 1, <![CDATA[ LastModifiedTime = getdate() ]]>, LastModifiedEmployeeID = #AuthorisedManager#
-            WHERE OrderID = #OrderID#
-        </update>
+      <update id="UpdateDeletedOrderDetails" parameterClass="DeletedOrder">
+        UPDATE OrderDetails
+        SET AuthorisedManager = #AuthorisedManager#, CancelEmployeeNo = #CancelEmployeeNo#, CancelReasonName = #CancelReasonName#,
+          IsVoided = 1, LastModifiedEmployeeID = #AuthorisedManager#, <![CDATA[ LastModifiedTime = getdate(), Transfered = 0 ]]>
+        WHERE OrderID = #OrderID# AND IsVoided = 0
+      </update>
 
-        <procedure id="DeleteSingleOrderDetails" parameterMap="DeleteSingleOrderDetailsParam">
-            proc_DeleteSingleOrderDetails
-        </procedure>
+      <procedure id="DeleteSingleOrderDetails" parameterMap="DeleteSingleOrderDetailsParam">
+        proc_DeleteSingleOrderDetails
+      </procedure>
 
-        <select id="SelectMaxSequenceNum" parameterClass="Guid" resultClass="Int32">
-          SELECT TOP 1 OrderBy
-          FROM OrderDetails
-          WHERE OrderID = #value# ORDER BY OrderBy DESC
-        </select>
+      <select id="SelectMaxSequenceNum" parameterClass="Guid" resultClass="Int32">
+        SELECT TOP 1 OrderBy
+        FROM OrderDetails
+        WHERE OrderID = #value# ORDER BY OrderBy DESC
+      </select>
 
-        <select id="GetOrderDetailsByOrderID" parameterClass="Guid" resultMap="OrderDetailsResult">
-            SELECT OrderDetailsID, OrderID, DeviceNo, TotalSellPrice, TotalDiscount, ItemQty, OrderBy, ItemType,
-                GoodsID, GoodsNo, GoodsName, Unit, CanDiscount, ItemLevel, SellPrice, Wait, PrintSolutionName, DepartID, InputEmployeeID
-            FROM OrderDetails
-            WHERE OrderID = #value# AND IsVoided = 0
-            ORDER BY OrderBy
-        </select>
+      <select id="GetOrderDetailsByOrderID" parameterClass="Guid" resultMap="OrderDetailsResult">
+        SELECT OrderDetailsID, OrderID, DeviceNo, TotalSellPrice, TotalDiscount, ItemQty, OrderBy, ItemType,
+            GoodsID, GoodsNo, GoodsName, Unit, CanDiscount, ItemLevel, SellPrice, Wait, PrintSolutionName, DepartID, InputEmployeeID
+        FROM OrderDetails
+        WHERE OrderID = #value# AND IsVoided = 0
+        ORDER BY OrderBy
+      </select>
 
-        <select id="GetOrderDetailsByOrderDetailsID" parameterClass="Guid" resultMap="OrderDetailsResult">
-            SELECT OrderDetailsID, OrderID, DeviceNo, TotalSellPrice, TotalDiscount, ItemQty, OrderBy, ItemType,
-                GoodsID, GoodsNo, GoodsName, Unit, CanDiscount, ItemLevel, SellPrice, Wait, PrintSolutionName, DepartID, InputEmployeeID
-            FROM OrderDetails
-            WHERE OrderDetailsID = #OrderDetailsID#
-            ORDER BY OrderBy
-        </select>
+      <select id="GetDeletedOrderDetails" parameterClass="Guid" resultMap="OrderDetailsResult">
+        SELECT OrderDetailsID, OrderID, DeviceNo, TotalSellPrice, TotalDiscount, ItemQty, OrderBy, ItemType,
+        GoodsID, GoodsNo, GoodsName, Unit, CanDiscount, ItemLevel, SellPrice, Wait, PrintSolutionName, DepartID, InputEmployeeID
+        FROM OrderDetails
+        WHERE OrderID = #value# AND IsVoided = 1
+        ORDER BY OrderBy
+      </select>
 
-        <update id="UpdateLadeOrderDetails" parameterClass="OrderDetails">
-            UPDATE OrderDetails
-            SET Wait = #Wait#
-            WHERE OrderDetailsID = #OrderDetailsID# AND IsVoided = 0
-        </update>
+      <select id="GetOrderDetailsByOrderDetailsID" parameterClass="Guid" resultMap="OrderDetailsResult">
+        SELECT OrderDetailsID, OrderID, DeviceNo, TotalSellPrice, TotalDiscount, ItemQty, OrderBy, ItemType,
+            GoodsID, GoodsNo, GoodsName, Unit, CanDiscount, ItemLevel, SellPrice, Wait, PrintSolutionName, DepartID, InputEmployeeID
+        FROM OrderDetails
+        WHERE OrderDetailsID = #OrderDetailsID#
+        ORDER BY OrderBy
+      </select>
 
-        <procedure id="SubtractSalesSplitOrder" parameterMap="SubSplitOrderParam">
-            proc_SubtractSplitOrder
-        </procedure>
+      <update id="UpdateLadeOrderDetails" parameterClass="OrderDetails">
+        UPDATE OrderDetails
+        SET Wait = #Wait#
+        WHERE OrderDetailsID = #OrderDetailsID# AND IsVoided = 0
+      </update>
+
+      <procedure id="SubtractSalesSplitOrder" parameterMap="SubSplitOrderParam">
+        proc_SubtractSplitOrder
+      </procedure>
     </statements>
 </sqlMap>

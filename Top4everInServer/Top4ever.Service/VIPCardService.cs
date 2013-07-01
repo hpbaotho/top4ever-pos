@@ -90,6 +90,15 @@ namespace Top4ever.Service
             return password;
         }
 
+        public decimal GetCardDiscountRate(string cardNo)
+        {
+            decimal discountRate = 0M;
+            _daoManager.OpenConnection();
+            discountRate = _VIPCardDao.GetCardDiscountRate(cardNo);
+            _daoManager.CloseConnection();
+            return discountRate;
+        }
+
         public bool UpdateCardPassword(string cardNo, string currentPassword, string newPassword)
         {
             bool result = false;

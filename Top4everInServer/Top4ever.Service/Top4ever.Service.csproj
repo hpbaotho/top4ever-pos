@@ -52,6 +52,7 @@
     <Compile Include="GoodsService.cs" />
     <Compile Include="HandoverService.cs" />
     <Compile Include="ModifyOrderService.cs" />
+    <Compile Include="NoticeService.cs" />
     <Compile Include="OrderDetailsService.cs" />
     <Compile Include="OrderDiscountService.cs" />
     <Compile Include="OrderPayoffService.cs" />

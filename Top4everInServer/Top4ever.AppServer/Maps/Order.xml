@@ -32,8 +32,6 @@
         <result property="EmployeeNo" column="InputEmployeeNo"></result>
         <result property="PayEmployeeID" column="PayEmployeeID"></result>
         <result property="PayEmployeeNo" column="PayEmployeeNo"></result>
-        <result property="OrderLastTime" column="OrderLastTime"></result>
-        <result property="PayLastTime" column="PayLastTime"></result>
         <result property="CheckoutDeviceNo" column="CheckoutDeviceNo"></result>
       </resultMap>
 
@@ -70,7 +68,6 @@
         <parameter property="PeopleNum"/>
         <parameter property="EmployeeID"/>
         <parameter property="EmployeeNo"/>
-        <parameter property="OrderLastTime"/>
         <parameter property="DailyStatementNo"/>
       </parameterMap>
 
@@ -94,14 +91,14 @@
     <statements>
       <select id="GetOrderByDeskName" parameterClass="String" resultMap="OrderResult">
         SELECT OrderID,OrderNo,TotalSellPrice,ActualSellPrice,DiscountPrice,CutOffPrice,ServiceFee,PaymentMoney,NeedChangePay,DeviceNo,DeskName,WorkSequence,TranSequence,EatType,[Status],
-        SubOrderNo,PeopleNum,MembershipCard,MemberDiscount,InputEmployeeID,InputEmployeeNo,PayEmployeeID,PayEmployeeNo,OrderLastTime,PayLastTime,CheckoutDeviceNo
+        SubOrderNo,PeopleNum,MembershipCard,MemberDiscount,InputEmployeeID,InputEmployeeNo,PayEmployeeID,PayEmployeeNo,CheckoutDeviceNo
         FROM [Order]
         WHERE DeskName = #value# AND ([Status] = 0 OR [Status] = 3) AND IsVoided = 0
       </select>
 
       <select id="GetOrderByID" parameterClass="Guid" resultMap="OrderResult">
         SELECT OrderID,OrderNo,TotalSellPrice,ActualSellPrice,DiscountPrice,CutOffPrice,ServiceFee,PaymentMoney,NeedChangePay,DeviceNo,DeskName,WorkSequence,TranSequence,EatType,[Status],
-        SubOrderNo,PeopleNum,MembershipCard,MemberDiscount,InputEmployeeID,InputEmployeeNo,PayEmployeeID,PayEmployeeNo,OrderLastTime,PayLastTime,CheckoutDeviceNo
+        SubOrderNo,PeopleNum,MembershipCard,MemberDiscount,InputEmployeeID,InputEmployeeNo,PayEmployeeID,PayEmployeeNo,CheckoutDeviceNo
         FROM [Order]
         WHERE OrderID = #value#
       </select>
@@ -117,7 +114,7 @@
       <update id="UpdateOrder" parameterClass="Order">
         UPDATE [Order]
         SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#, CutOffPrice = #CutOffPrice#, ServiceFee = #ServiceFee#, DeskName = #DeskName#,
-            PeopleNum = #PeopleNum#, InputEmployeeID = #EmployeeID#, InputEmployeeNo = #EmployeeNo#, OrderLastTime = OrderLastTime + #OrderLastTime#, <![CDATA[ LastModifiedTime = getdate() ]]>, LastModifiedEmployeeID = #EmployeeID#
+            PeopleNum = #PeopleNum#, InputEmployeeID = #EmployeeID#, InputEmployeeNo = #EmployeeNo#, <![CDATA[ LastModifiedTime = getdate() ]]>, LastModifiedEmployeeID = #EmployeeID#
         WHERE OrderID = #OrderID#
       </update>
 
@@ -138,7 +135,7 @@
         UPDATE [Order]
         SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#, CutOffPrice = #CutOffPrice#, ServiceFee = #ServiceFee#, PaymentMoney = #PaymentMoney#, NeedChangePay = #NeedChangePay#,
             <![CDATA[ PayTime = getdate(), LastModifiedTime = getdate() ]]>, PayEmployeeID = #PayEmployeeID#, PayEmployeeNo = #PayEmployeeNo#, LastModifiedEmployeeID = #PayEmployeeID#, [Status] = 1,
-            MembershipCard = #MembershipCard#, MemberDiscount = #MemberDiscount#, PayLastTime = PayLastTime + #PayLastTime#, CheckoutDeviceNo = #CheckoutDeviceNo#
+            MembershipCard = #MembershipCard#, MemberDiscount = #MemberDiscount#, CheckoutDeviceNo = #CheckoutDeviceNo#
         WHERE OrderID = #OrderID#
       </update>
 
@@ -159,7 +156,7 @@
       <update id="UpdateSplitOrderPrice" parameterClass="Order">
         UPDATE [Order]
         SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#,
-                CutOffPrice = #CutOffPrice#, PeopleNum = #PeopleNum#, OrderLastTime = #OrderLastTime#
+                CutOffPrice = #CutOffPrice#, PeopleNum = #PeopleNum#
         WHERE OrderID = #OrderID#
       </update>
 

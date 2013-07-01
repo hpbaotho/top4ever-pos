@@ -60,6 +60,7 @@
     <Compile Include="EmployeeBLL.cs" />
     <Compile Include="ReminderBLL.cs" />
     <Compile Include="SalesOrderBLL.cs" />
+    <Compile Include="ShopBLL.cs" />
     <Compile Include="SysBasicDataBLL.cs" />
     <Compile Include="VIPCardBLL.cs" />
     <Compile Include="VIPCardTradeBLL.cs" />

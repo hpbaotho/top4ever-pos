@@ -99,14 +99,6 @@ namespace Top4ever.Domain.OrderRelated
         /// </summary>
         public string PayEmployeeNo { get; set; }
         /// <summary>
-        /// 点单持续时间
-        /// </summary>
-        public int OrderLastTime { get; set; }
-        /// <summary>
-        /// 结账持续时间
-        /// </summary>
-        public int PayLastTime { get; set; }
-        /// <summary>
         /// 结账设备号
         /// </summary>
         public string CheckoutDeviceNo { get; set; }

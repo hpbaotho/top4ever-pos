@@ -1,128 +1,129 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <sqlMap namespace="BusinessReport" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-  <alias>
-    <typeAlias alias="OrderDiscountSum" type="Top4ever.Domain.Transfer.OrderDiscountSum, Top4ever.Domain" />
-    <typeAlias alias="OrderPayoffSum" type="Top4ever.Domain.Transfer.OrderPayoffSum, Top4ever.Domain" />
-    <typeAlias alias="ItemsPrice" type="Top4ever.Domain.Transfer.ItemsPrice, Top4ever.Domain" />
-    <typeAlias alias="BusinessReport" type="Top4ever.Domain.Transfer.BusinessReport, Top4ever.Domain" />
-    <typeAlias alias="HandoverInfo" type="Top4ever.Domain.HandoverRecord, Top4ever.Domain" />
-  </alias>
+    <alias>
+      <typeAlias alias="OrderDiscountSum" type="Top4ever.Domain.Transfer.OrderDiscountSum, Top4ever.Domain" />
+      <typeAlias alias="OrderPayoffSum" type="Top4ever.Domain.Transfer.OrderPayoffSum, Top4ever.Domain" />
+      <typeAlias alias="ItemsPrice" type="Top4ever.Domain.Transfer.ItemsPrice, Top4ever.Domain" />
+      <typeAlias alias="BusinessReport" type="Top4ever.Domain.Transfer.BusinessReport, Top4ever.Domain" />
+      <typeAlias alias="HandoverInfo" type="Top4ever.Domain.HandoverRecord, Top4ever.Domain" />
+    </alias>
 
-  <resultMaps>
-    <resultMap  id="OrderDiscountSumResult" class="OrderDiscountSum">
-      <result property="DiscountID" column="DiscountID"></result>
-      <result property="DiscountName" column="DiscountName"></result>
-      <result property="DiscountMoney" column="DiscountMoney"></result>
-    </resultMap>
+    <resultMaps>
+      <resultMap id="OrderDiscountSumResult" class="OrderDiscountSum">
+        <result property="DiscountID" column="DiscountID"></result>
+        <result property="DiscountName" column="DiscountName"></result>
+        <result property="DiscountMoney" column="DiscountMoney"></result>
+      </resultMap>
 
-    <resultMap  id="OrderPayoffSumResult" class="OrderPayoffSum">
-      <result property="PayoffID" column="PayoffID"></result>
-      <result property="PayoffName" column="PayoffName"></result>
-      <result property="Times" column="Times"></result>
-      <result property="PayoffMoney" column="PayoffMoney"></result>
-    </resultMap>
+      <resultMap id="OrderPayoffSumResult" class="OrderPayoffSum">
+        <result property="PayoffID" column="PayoffID"></result>
+        <result property="PayoffName" column="PayoffName"></result>
+        <result property="Times" column="Times"></result>
+        <result property="PayoffMoney" column="PayoffMoney"></result>
+      </resultMap>
 
-    <resultMap id="ItemsPriceResult" class="ItemsPrice">
-      <result property="DepartName" column="DepartName"></result>
-      <result property="ItemsName" column="ItemsName"></result>
-      <result property="ItemsTotalQty" column="ItemsTotalQty"></result>
-      <result property="ItemsTotalPrice" column="ItemsTotalPrice"></result>
-    </resultMap>
+      <resultMap id="ItemsPriceResult" class="ItemsPrice">
+        <result property="DepartName" column="DepartName"></result>
+        <result property="ItemsName" column="ItemsName"></result>
+        <result property="ItemsTotalQty" column="ItemsTotalQty"></result>
+        <result property="ItemsTotalPrice" column="ItemsTotalPrice"></result>
+      </resultMap>
 
-    <resultMap id="HandoverReportResult" class="BusinessReport">
-      <result property="WorkSequence" column="WorkSequence"></result>
-      <result property="LastHandoverTime" column="LastHandoverTime"></result>
-      <result property="BillTotalQty" column="BillTotalQty"></result>
-      <result property="PeopleTotalNum" column="PeopleTotalNum"></result>
-      <result property="TotalRevenue" column="TotalRevenue"></result>
-      <result property="CutOffTotalPrice" column="CutOffTotalPrice"></result>
-      <result property="DiscountTotalPrice" column="DiscountTotalPrice"></result>
-      <result property="ActualTotalIncome" column="ActualTotalIncome"></result>
-      <result property="TotalServiceFee" column="TotalServiceFee"></result>
-    </resultMap>
+      <resultMap id="HandoverReportResult" class="BusinessReport">
+        <result property="WorkSequence" column="WorkSequence"></result>
+        <result property="LastHandoverTime" column="LastHandoverTime"></result>
+        <result property="BillTotalQty" column="BillTotalQty"></result>
+        <result property="PeopleTotalNum" column="PeopleTotalNum"></result>
+        <result property="TotalRevenue" column="TotalRevenue"></result>
+        <result property="CutOffTotalPrice" column="CutOffTotalPrice"></result>
+        <result property="DiscountTotalPrice" column="DiscountTotalPrice"></result>
+        <result property="ActualTotalIncome" column="ActualTotalIncome"></result>
+        <result property="TotalServiceFee" column="TotalServiceFee"></result>
+      </resultMap>
 
-    <resultMap id="DailyStatementReportResult" class="BusinessReport">
-      <result property="LastDailyStatementTime" column="LastDailyStatementTime"></result>
-      <result property="BillTotalQty" column="BillTotalQty"></result>
-      <result property="PeopleTotalNum" column="PeopleTotalNum"></result>
-      <result property="TotalRevenue" column="TotalRevenue"></result>
-      <result property="CutOffTotalPrice" column="CutOffTotalPrice"></result>
-      <result property="DiscountTotalPrice" column="DiscountTotalPrice"></result>
-      <result property="ActualTotalIncome" column="ActualTotalIncome"></result>
-      <result property="TotalServiceFee" column="TotalServiceFee"></result>
-    </resultMap>
-  </resultMaps>
+      <resultMap id="DailyStatementReportResult" class="BusinessReport">
+        <result property="LastDailyStatementTime" column="LastDailyStatementTime"></result>
+        <result property="BillTotalQty" column="BillTotalQty"></result>
+        <result property="PeopleTotalNum" column="PeopleTotalNum"></result>
+        <result property="TotalRevenue" column="TotalRevenue"></result>
+        <result property="CutOffTotalPrice" column="CutOffTotalPrice"></result>
+        <result property="DiscountTotalPrice" column="DiscountTotalPrice"></result>
+        <result property="ActualTotalIncome" column="ActualTotalIncome"></result>
+        <result property="TotalServiceFee" column="TotalServiceFee"></result>
+      </resultMap>
+    </resultMaps>
 
-  <parameterMaps>
+    <parameterMaps>
       <parameterMap id="HandoverParam" class="Hashtable">
-          <parameter property="DailyStatementNo" />
-          <parameter property="DeviceNo" />
+        <parameter property="DailyStatementNo" />
+        <parameter property="DeviceNo" />
       </parameterMap>
 
       <parameterMap id="DailyStatementParam" class="Hashtable">
-          <parameter property="DailyStatementNo" />
+        <parameter property="DailyStatementNo" />
       </parameterMap>
-  </parameterMaps>
-  <!-- =============================================
+    </parameterMaps>
+
+    <!-- =============================================
         MAPPED STATEMENTS 
     ============================================= 
     -->
-  <statements>
-    <select id="GetDiscountSumByDailyStatement" parameterClass="String" resultMap="OrderDiscountSumResult">
-      SELECT DiscountID, DiscountName, SUM(OffPay) AS DiscountMoney
-      FROM OrderDiscount od JOIN [Order] o ON o.OrderID = od.OrderID
-      WHERE od.DailyStatementNo = #value# AND o.[Status] = 1 AND od.IsVoided = 0
-      GROUP BY DiscountID, DiscountName
-    </select>
+    <statements>
+      <select id="GetDiscountSumByDailyStatement" parameterClass="String" resultMap="OrderDiscountSumResult">
+        SELECT DiscountID, DiscountName, SUM(OffPay) AS DiscountMoney
+        FROM OrderDiscount od JOIN [Order] o ON o.OrderID = od.OrderID
+        WHERE od.DailyStatementNo = #value# AND o.[Status] = 1 AND od.IsVoided = 0
+        GROUP BY DiscountID, DiscountName
+      </select>
 
-    <select id="GetDiscountSumByHandover" parameterClass="HandoverInfo" resultMap="OrderDiscountSumResult">
-      SELECT DiscountID, DiscountName, SUM(OffPay) AS DiscountMoney
-      FROM OrderDiscount od JOIN [Order] o ON o.OrderID = od.OrderID
-      WHERE od.DailyStatementNo = #DailyStatementNo# AND o.WorkSequence = #WorkSequence# AND o.[Status] = 1 AND od.IsVoided = 0
-      GROUP BY DiscountID, DiscountName
-    </select>
+      <select id="GetDiscountSumByHandover" parameterClass="HandoverInfo" resultMap="OrderDiscountSumResult">
+        SELECT DiscountID, DiscountName, SUM(OffPay) AS DiscountMoney
+        FROM OrderDiscount od JOIN [Order] o ON o.OrderID = od.OrderID
+        WHERE od.DailyStatementNo = #DailyStatementNo# AND o.WorkSequence = #WorkSequence# AND o.[Status] = 1 AND od.IsVoided = 0
+        GROUP BY DiscountID, DiscountName
+      </select>
 
-    <select id="GetPayoffSumByDailyStatement" parameterClass="String" resultMap="OrderPayoffSumResult">
-      SELECT PayoffID, PayoffName, COUNT(PayoffID) AS Times, SUM(Quantity * AsPay) - SUM(op.NeedChangePay) AS PayoffMoney
-      FROM OrderPayoff op JOIN [Order] o ON o.OrderID = op.OrderID
-      WHERE op.DailyStatementNo = #value# AND o.[Status] = 1 AND op.IsVoided = 0
-      GROUP BY PayoffID, PayoffName
-    </select>
+      <select id="GetPayoffSumByDailyStatement" parameterClass="String" resultMap="OrderPayoffSumResult">
+        SELECT PayoffID, PayoffName, COUNT(PayoffName) AS Times, SUM(Quantity * AsPay) - SUM(op.NeedChangePay) AS PayoffMoney
+        FROM OrderPayoff op JOIN [Order] o ON o.OrderID = op.OrderID
+        WHERE op.DailyStatementNo = #value# AND o.[Status] = 1 AND op.IsVoided = 0
+        GROUP BY PayoffID, PayoffName
+      </select>
 
-    <select id="GetPayoffSumByHandover" parameterClass="HandoverInfo" resultMap="OrderPayoffSumResult">
-      SELECT PayoffID, PayoffName, COUNT(PayoffID) AS Times, SUM(Quantity * AsPay) - SUM(op.NeedChangePay) AS PayoffMoney
-      FROM OrderPayoff op JOIN [Order] o ON o.OrderID = op.OrderID
-      WHERE op.DailyStatementNo = #DailyStatementNo# AND o.WorkSequence = #WorkSequence# AND o.[Status] = 1 AND op.IsVoided = 0
-      GROUP BY PayoffID, PayoffName
-    </select>
+      <select id="GetPayoffSumByHandover" parameterClass="HandoverInfo" resultMap="OrderPayoffSumResult">
+        SELECT PayoffID, PayoffName, COUNT(PayoffID) AS Times, SUM(Quantity * AsPay) - SUM(op.NeedChangePay) AS PayoffMoney
+        FROM OrderPayoff op JOIN [Order] o ON o.OrderID = op.OrderID
+        WHERE op.DailyStatementNo = #DailyStatementNo# AND o.WorkSequence = #WorkSequence# AND o.[Status] = 1 AND op.IsVoided = 0
+        GROUP BY PayoffID, PayoffName
+      </select>
 
-    <select id="GetItemsPriceByDailyStatement" parameterClass="String" resultMap="ItemsPriceResult">
-      SELECT T.DepartName, T.ItemsName, T.ItemsTotalQty, T.ItemsTotalPrice FROM
-      (SELECT ISNULL(d.DepartName, 'unknown') AS DepartName, od.GoodsName AS ItemsName, SUM(od.ItemQty) AS ItemsTotalQty, SUM(od.TotalSellPrice) AS ItemsTotalPrice
-      FROM OrderDetails od JOIN [Order] o ON o.OrderID = od.OrderID LEFT JOIN Depart d ON d.DepartID = od.DepartID
-      WHERE od.DailyStatementNo = #value# AND o.[Status] = 1 AND od.IsVoided = 0
-      GROUP BY d.DepartName, od.GoodsName) T
-      WHERE T.ItemsTotalPrice > 0
-      ORDER BY DepartName
-    </select>
+      <select id="GetItemsPriceByDailyStatement" parameterClass="String" resultMap="ItemsPriceResult">
+        SELECT T.DepartName, T.ItemsName, T.ItemsTotalQty, T.ItemsTotalPrice FROM
+        (SELECT ISNULL(d.DepartName, 'unknown') AS DepartName, od.GoodsName AS ItemsName, SUM(od.ItemQty) AS ItemsTotalQty, SUM(od.TotalSellPrice) AS ItemsTotalPrice
+        FROM OrderDetails od JOIN [Order] o ON o.OrderID = od.OrderID LEFT JOIN Depart d ON d.DepartID = od.DepartID
+        WHERE od.DailyStatementNo = #value# AND o.[Status] = 1 AND od.IsVoided = 0
+        GROUP BY d.DepartName, od.GoodsName) T
+        WHERE T.ItemsTotalPrice > 0
+        ORDER BY DepartName
+      </select>
 
-    <select id="GetItemsPriceByHandover" parameterClass="HandoverInfo" resultMap="ItemsPriceResult">
-      SELECT T.DepartName, T.ItemsName, T.ItemsTotalQty, T.ItemsTotalPrice FROM
-      (SELECT ISNULL(d.DepartName, 'unknown') AS DepartName, od.GoodsName AS ItemsName, SUM(od.ItemQty) AS ItemsTotalQty, SUM(od.TotalSellPrice) AS ItemsTotalPrice
-      FROM OrderDetails od JOIN [Order] o ON o.OrderID = od.OrderID LEFT JOIN Depart d ON d.DepartID = od.DepartID
-      WHERE od.DailyStatementNo = #DailyStatementNo# AND o.WorkSequence = #WorkSequence# AND o.[Status] = 1 AND od.IsVoided = 0
-      GROUP BY d.DepartName, od.GoodsName) T
-      WHERE T.ItemsTotalPrice > 0
-      ORDER BY DepartName
-    </select>
+      <select id="GetItemsPriceByHandover" parameterClass="HandoverInfo" resultMap="ItemsPriceResult">
+        SELECT T.DepartName, T.ItemsName, T.ItemsTotalQty, T.ItemsTotalPrice FROM
+        (SELECT ISNULL(d.DepartName, 'unknown') AS DepartName, od.GoodsName AS ItemsName, SUM(od.ItemQty) AS ItemsTotalQty, SUM(od.TotalSellPrice) AS ItemsTotalPrice
+        FROM OrderDetails od JOIN [Order] o ON o.OrderID = od.OrderID LEFT JOIN Depart d ON d.DepartID = od.DepartID
+        WHERE od.DailyStatementNo = #DailyStatementNo# AND o.WorkSequence = #WorkSequence# AND o.[Status] = 1 AND od.IsVoided = 0
+        GROUP BY d.DepartName, od.GoodsName) T
+        WHERE T.ItemsTotalPrice > 0
+        ORDER BY DepartName
+      </select>
 
-    <procedure id="GetTurnoverByHandover" parameterMap="HandoverParam" resultMap="HandoverReportResult">
+      <procedure id="GetTurnoverByHandover" parameterMap="HandoverParam" resultMap="HandoverReportResult">
         proc_GetTurnoverByHandover
-    </procedure>
+      </procedure>
 
-    <procedure id="GetTurnoverByDailyStatement" parameterMap="DailyStatementParam" resultMap="DailyStatementReportResult">
+      <procedure id="GetTurnoverByDailyStatement" parameterMap="DailyStatementParam" resultMap="DailyStatementReportResult">
         proc_GetTurnoverByDailyStatement
-    </procedure>
-  </statements>
+      </procedure>
+    </statements>
 </sqlMap>
