@@ -86,5 +86,37 @@ namespace Top4ever.ClientService
             }
             return result;
         }
+
+        public Int32 AddVIPCardPayment(VIPCardPayment cardPayment, out string tradePayNo)
+        {
+            string json = JsonConvert.SerializeObject(cardPayment);
+            byte[] jsonByte = Encoding.UTF8.GetBytes(json);
+
+            int cByte = ParamFieldLength.PACKAGE_HEAD + jsonByte.Length;
+            byte[] sendByte = new byte[cByte];
+            int byteOffset = 0;
+            Array.Copy(BitConverter.GetBytes((int)Command.ID_ADD_CARDPAYMENT), sendByte, BasicTypeLength.INT32);
+            byteOffset = BasicTypeLength.INT32;
+            Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
+            byteOffset += BasicTypeLength.INT32;
+            Array.Copy(jsonByte, 0, sendByte, byteOffset, jsonByte.Length);
+            byteOffset += jsonByte.Length;
+
+            int result = 0;
+            tradePayNo = string.Empty;
+            using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
+            {
+                socket.Connect();
+                Byte[] receiveData = null;
+                Int32 operCode = socket.SendReceive(sendByte, out receiveData);
+                if (operCode == (int)RET_VALUE.SUCCEEDED)
+                {
+                    result = BitConverter.ToInt32(receiveData, ParamFieldLength.PACKAGE_HEAD);
+                    tradePayNo = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32, receiveData.Length - ParamFieldLength.PACKAGE_HEAD - BasicTypeLength.INT32).Trim('\0');
+                }
+                socket.Disconnect();
+            }
+            return result;
+        }
     }
 }

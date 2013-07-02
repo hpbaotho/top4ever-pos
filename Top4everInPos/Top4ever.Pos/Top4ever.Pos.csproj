@@ -462,6 +462,10 @@
       <Project>{6A72C1D5-3FD9-4BAD-9040-14949737B60F}</Project>
       <Name>Top4ever.Hardware</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Top4ever.LocalService\Top4ever.LocalService.csproj">
+      <Project>{E54818E0-B5AD-4F89-9BB7-34BAF16AE732}</Project>
+      <Name>Top4ever.LocalService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Top4ever.Print\Top4ever.Print.csproj">
       <Project>{87C75A48-7827-4053-B141-5BEC2C792E6B}</Project>
       <Name>Top4ever.Print</Name>

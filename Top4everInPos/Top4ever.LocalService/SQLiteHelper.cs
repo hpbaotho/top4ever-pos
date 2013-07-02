@@ -12,43 +12,16 @@ namespace Top4ever.LocalService
     /// </summary>
     public class SQLiteHelper
     {
-        private readonly string connectionString;
+        private string connectionString;
 
-        private static SQLiteHelper instance;
-        private static object obj = new object();
-
-        private SQLiteHelper()
+        public SQLiteHelper(string connectionString)
         {
-            string path = "DataBase";
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-            connectionString = "Data Source=" + path + "\\top4ever.db3;Pooling=true;FailIfMissing=false";
-        }
-
-        /// <summary>
-        /// 获取SQLite单例
-        /// </summary>
-        /// <returns></returns>
-        public static SQLiteHelper GetInstance()
-        {
-            if (instance == null)
-            {
-                lock (obj)
-                {
-                    if (instance == null)
-                    {
-                        instance = new SQLiteHelper();
-                    }
-                }
-            }
-            return instance;
+            this.connectionString = connectionString;
         }
 
         public string ConnectionString
         {
-            get { return connectionString; }
+            set { connectionString = value; }
         }
 
         /// <summary>
@@ -226,20 +199,20 @@ namespace Top4ever.LocalService
         }
 
         /// <summary>
-        /// 执行查询语句，返回DataSet
+        /// 执行查询语句，返回DataTable
         /// </summary>
         /// <param name="SQLString">查询语句</param>
-        /// <returns>DataSet</returns>
-        public DataSet Query(string SQLString)
+        /// <returns>DataTable</returns>
+        public DataTable Query(string SQLString)
         {
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
-                DataSet ds = new DataSet();
+                DataTable dt = new DataTable();
                 try
                 {
                     connection.Open();
                     SQLiteDataAdapter command = new SQLiteDataAdapter(SQLString, connection);
-                    command.Fill(ds, "ds");
+                    command.Fill(dt);
                 }
                 catch (SQLiteException ex)
                 {
@@ -249,7 +222,7 @@ namespace Top4ever.LocalService
                 {
                     connection.Close();
                 }
-                return ds;
+                return dt;
             }
         }
 
@@ -371,11 +344,11 @@ namespace Top4ever.LocalService
         }
 
         /// <summary>
-        /// 执行查询语句，返回DataSet
+        /// 执行查询语句，返回DataTable
         /// </summary>
         /// <param name="SQLString">查询语句</param>
-        /// <returns>DataSet</returns>
-        public DataSet Query(string SQLString, params SQLiteParameter[] cmdParms)
+        /// <returns>DataTable</returns>
+        public DataTable Query(string SQLString, params SQLiteParameter[] cmdParms)
         {
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
@@ -383,21 +356,20 @@ namespace Top4ever.LocalService
                 PrepareCommand(cmd, connection, null, SQLString, cmdParms);
                 using (SQLiteDataAdapter da = new SQLiteDataAdapter(cmd))
                 {
-                    DataSet ds = new DataSet();
+                    DataTable dt = new DataTable();
                     try
                     {
-                        da.Fill(ds, "ds");
+                        da.Fill(dt);
                         cmd.Parameters.Clear();
                     }
                     catch (SQLiteException ex)
                     {
                         throw new Exception(ex.Message);
                     }
-                    return ds;
+                    return dt;
                 }
             }
         }
-
 
         private static void PrepareCommand(SQLiteCommand cmd, SQLiteConnection conn, SQLiteTransaction trans, string cmdText, SQLiteParameter[] cmdParms)
         {
