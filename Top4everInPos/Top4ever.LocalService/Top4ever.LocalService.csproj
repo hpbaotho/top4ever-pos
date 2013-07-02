@@ -41,6 +41,8 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CardRefundPayService.cs" />
+    <Compile Include="Entity\CardRefundPay.cs" />
     <Compile Include="SQLiteHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
