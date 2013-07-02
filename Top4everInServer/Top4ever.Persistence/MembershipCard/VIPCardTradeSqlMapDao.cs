@@ -56,5 +56,31 @@ namespace Top4ever.Persistence.MembershipCard
             }
             return returnValue;
         }
+
+        public Int32 AddVIPCardPayment(string cardNo, decimal payAmount, int payIntegral, string orderNo, string employeeNo, string deviceNo, string dailyStatementNo, out string tradePayNo)
+        {
+            int returnValue = 0;
+            Hashtable htParam = new Hashtable();
+            htParam["CardNo"] = cardNo;
+            htParam["PayAmount"] = payAmount;
+            htParam["PayIntegral"] = payIntegral;
+            htParam["OrderNo"] = orderNo;
+            htParam["EmployeeNo"] = employeeNo;
+            htParam["DeviceNo"] = deviceNo;
+            htParam["DailyStatementNo"] = dailyStatementNo;
+            htParam["ReturnValue"] = 0;
+
+            object result = ExecuteInsert("AddVIPCardPayment", htParam);
+            returnValue = (int)htParam["ReturnValue"];    //返回值
+            if (returnValue == 1)
+            {
+                tradePayNo = result.ToString();
+            }
+            else
+            {
+                tradePayNo = string.Empty;
+            }
+            return returnValue;
+        }
     }
 }

@@ -54,6 +54,7 @@ namespace Top4ever.BLL.Enum
         ID_UPDATE_CARDPASSWORD = 46,
         ID_UPDATE_CARDSTATUS = 47,
         ID_ADD_CARDSTOREDVALUE = 48,
-        ID_GET_SHOP = 49
+        ID_ADD_CARDPAYMENT = 49,
+        ID_GET_SHOP = 50
     }
 }

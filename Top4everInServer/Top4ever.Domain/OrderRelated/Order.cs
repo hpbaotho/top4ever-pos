@@ -106,5 +106,13 @@ namespace Top4ever.Domain.OrderRelated
         /// 日结号
         /// </summary>
         public string DailyStatementNo { get; set; }
+        /// <summary>
+        /// 交易流水号
+        /// </summary>
+        public string TradePayNo { get; set; }
+        /// <summary>
+        /// 参与促销活动
+        /// </summary>
+        public bool InPromotion { get; set; }
     }
 }

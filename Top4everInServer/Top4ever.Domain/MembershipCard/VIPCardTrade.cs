@@ -17,19 +17,19 @@ namespace Top4ever.Domain.MembershipCard
         /// </summary>
         public int TradeType { get; set; }
         /// <summary>
-        /// 
+        /// 交易金额
         /// </summary>
         public decimal TradeAmount { get; set; }
         /// <summary>
-        /// 
+        /// 交易积分
         /// </summary>
         public int TradeIntegral { get; set; }
         /// <summary>
-        /// 
+        /// 交易时间
         /// </summary>
         public DateTime TradeTime { get; set; }
         /// <summary>
-        /// 
+        /// 支付方式名称
         /// </summary>
         public string PayoffName { get; set; }
         /// <summary>

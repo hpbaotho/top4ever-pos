@@ -97,6 +97,7 @@
     <Compile Include="Transfer\SysBasicData.cs" />
     <Compile Include="Transfer\SalesOrder.cs" />
     <Compile Include="Transfer\VIPCardAddMoney.cs" />
+    <Compile Include="Transfer\VIPCardPayment.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

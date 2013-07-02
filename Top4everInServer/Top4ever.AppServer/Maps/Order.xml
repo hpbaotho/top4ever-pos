@@ -135,7 +135,7 @@
         UPDATE [Order]
         SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#, CutOffPrice = #CutOffPrice#, ServiceFee = #ServiceFee#, PaymentMoney = #PaymentMoney#, NeedChangePay = #NeedChangePay#,
             <![CDATA[ PayTime = getdate(), LastModifiedTime = getdate() ]]>, PayEmployeeID = #PayEmployeeID#, PayEmployeeNo = #PayEmployeeNo#, LastModifiedEmployeeID = #PayEmployeeID#, [Status] = 1,
-            MembershipCard = #MembershipCard#, MemberDiscount = #MemberDiscount#, CheckoutDeviceNo = #CheckoutDeviceNo#
+            MembershipCard = #MembershipCard#, MemberDiscount = #MemberDiscount#, CheckoutDeviceNo = #CheckoutDeviceNo#, TradePayNo = #TradePayNo#
         WHERE OrderID = #OrderID#
       </update>
 
