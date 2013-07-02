@@ -60,5 +60,25 @@ namespace Top4ever.BLL
 
             return objRet;
         }
+
+        public static byte[] AddVIPCardPayment(byte[] itemBuffer)
+        {
+            byte[] objRet = null;
+            string strReceive = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, itemBuffer.Length - ParamFieldLength.PACKAGE_HEAD).Trim('\0');
+            VIPCardPayment cardPayment = JsonConvert.DeserializeObject<VIPCardPayment>(strReceive);
+
+            string tradePayNo = string.Empty;
+            int result = VIPCardTradeService.GetInstance().AddVIPCardPayment(cardPayment, out tradePayNo);
+
+            byte[] buffer = Encoding.UTF8.GetBytes(tradePayNo);
+            int transCount = ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32 + ParamFieldLength.TRADEPAYNO;
+            objRet = new byte[transCount];
+            Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes(transCount), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes(result), 0, objRet, ParamFieldLength.PACKAGE_HEAD, BasicTypeLength.INT32);
+            Array.Copy(buffer, 0, objRet, ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32, buffer.Length);
+
+            return objRet;
+        }
     }
 }

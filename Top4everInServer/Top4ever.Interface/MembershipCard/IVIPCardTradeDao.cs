@@ -15,5 +15,7 @@ namespace Top4ever.Interface.MembershipCard
         VIPCardStoredVaule GetVIPCardStoredVaule(string cardNo, decimal storedVauleAmount);
 
         Int32 AddVIPCardStoredValue(string cardNo, decimal storeMoney, decimal giftAmount, int giftIntegral, string employeeNo, string deviceNo, string dailyStatementNo, Guid payoffID, string payoffName, out string tradePayNo);
+
+        Int32 AddVIPCardPayment(string cardNo, decimal payAmount, int payIntegral, string orderNo, string employeeNo, string deviceNo, string dailyStatementNo, out string tradePayNo);
     }
 }

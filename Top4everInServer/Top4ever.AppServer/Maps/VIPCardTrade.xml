@@ -54,6 +54,17 @@
       <parameter property="PayoffName" column="PayoffName" />
       <parameter property="ReturnValue" column="ReturnValue"  direction="Output" />
     </parameterMap>
+
+    <parameterMap id="VIPCardPaymentParam" class="Hashtable">
+      <parameter property="CardNo" column="CardNo" />
+      <parameter property="PayAmount" column="PayAmount" />
+      <parameter property="PayIntegral" column="PayIntegral" />
+      <parameter property="OrderNo" column="OrderNo" />
+      <parameter property="EmployeeNo" column="EmployeeNo" />
+      <parameter property="DeviceNo" column="DeviceNo" />
+      <parameter property="DailyStatementNo" column="DailyStatementNo" />
+      <parameter property="ReturnValue" column="ReturnValue"  direction="Output" />
+    </parameterMap>
   </parameterMaps>
 
   <!-- =============================================
@@ -73,6 +84,10 @@
 
     <procedure id="AddVIPCardStoredValue" parameterMap="VIPCardStoredValueParam">
       proc_AddVIPCardStoredValue
+    </procedure>
+
+    <procedure id="AddVIPCardPayment" parameterMap="VIPCardPaymentParam">
+      proc_AddVIPCardPayment
     </procedure>
   </statements>
 </sqlMap>
