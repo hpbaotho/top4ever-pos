@@ -10,6 +10,7 @@ using Top4ever.ClientService;
 using Top4ever.Domain;
 using Top4ever.Domain.Transfer;
 using Top4ever.Entity;
+using Top4ever.Print;
 
 namespace Top4ever.Pos.Feature
 {
@@ -392,7 +393,20 @@ namespace Top4ever.Pos.Feature
 
         private void btnPrint_Click(object sender, EventArgs e)
         {
-
+            List<String> printData = new List<String>();
+            foreach (DataGridViewRow dgr in dgvSalesReport.Rows)
+            {
+                if (dgr.Cells[0].Value != null && !string.IsNullOrEmpty(dgr.Cells[0].Value.ToString().Trim()))
+                {
+                    printData.Add(dgr.Cells[0].Value.ToString());
+                }
+                else
+                {
+                    printData.Add("  ");
+                }
+            }
+            DriverSinglePrint driverPrint = new DriverSinglePrint("Microsoft XPS Document Writer", "SpecimenLabel");
+            driverPrint.DoPrint(printData);
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

@@ -28,14 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgvSalesReport = new System.Windows.Forms.DataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lbWeather = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.btnPrint = new Top4ever.CustomControl.CrystalButton();
             this.btnCancel = new Top4ever.CustomControl.CrystalButton();
             this.btnSalesReport = new Top4ever.CustomControl.CrystalButton();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalesReport)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,6 +56,14 @@
             this.dgvSalesReport.RowTemplate.Height = 23;
             this.dgvSalesReport.Size = new System.Drawing.Size(568, 617);
             this.dgvSalesReport.TabIndex = 0;
+            // 
+            // Column1
+            // 
+            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Courier New", 12F);
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle4;
+            this.Column1.HeaderText = "Column1";
+            this.Column1.Name = "Column1";
             // 
             // lbWeather
             // 
@@ -120,14 +128,6 @@
             this.btnSalesReport.Text = "日结";
             this.btnSalesReport.UseVisualStyleBackColor = false;
             this.btnSalesReport.Click += new System.EventHandler(this.btnSalesReport_Click);
-            // 
-            // Column1
-            // 
-            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Courier New", 12F);
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle1;
-            this.Column1.HeaderText = "Column1";
-            this.Column1.Name = "Column1";
             // 
             // FormSalesReport
             // 

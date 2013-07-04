@@ -54,6 +54,9 @@
     <Compile Include="CrystalButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DataGirdViewExt.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ExButton.cs">
       <SubType>Component</SubType>
     </Compile>

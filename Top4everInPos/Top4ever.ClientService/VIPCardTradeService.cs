@@ -118,5 +118,40 @@ namespace Top4ever.ClientService
             }
             return result;
         }
+
+        public Int32 RefundVIPCardPayment(string cardNo, string tradePayNo)
+        {
+            int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.CARD_NO + ParamFieldLength.TRADEPAYNO;
+            byte[] sendByte = new byte[cByte];
+            int byteOffset = 0;
+            Array.Copy(BitConverter.GetBytes((int)Command.ID_REFUNDPAYMENT), sendByte, BasicTypeLength.INT32);
+            byteOffset = BasicTypeLength.INT32;
+            Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
+            byteOffset += BasicTypeLength.INT32;
+
+            byte[] tempByte = null;
+            //cardNo
+            tempByte = Encoding.UTF8.GetBytes(cardNo);
+            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
+            byteOffset += ParamFieldLength.CARD_NO;
+            //tradePayNo
+            tempByte = Encoding.UTF8.GetBytes(tradePayNo);
+            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
+            byteOffset += ParamFieldLength.TRADEPAYNO;
+
+            int result = 0;
+            using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
+            {
+                socket.Connect();
+                Byte[] receiveData = null;
+                Int32 operCode = socket.SendReceive(sendByte, out receiveData);
+                if (operCode == (int)RET_VALUE.SUCCEEDED)
+                {
+                    result = BitConverter.ToInt32(receiveData, ParamFieldLength.PACKAGE_HEAD);
+                }
+                socket.Disconnect();
+            }
+            return result;
+        }
     }
 }

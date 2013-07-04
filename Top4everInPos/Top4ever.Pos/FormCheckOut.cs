@@ -853,8 +853,9 @@ namespace Top4ever.Pos
                         foreach (KeyValuePair<string, VIPCardPayment> item in dicCardPayment)
                         {
                             //将支付成功的会员卡取消支付
-                            bool returnValue = false;
-                            if (!returnValue)
+                            VIPCardTradeService tradeService = new VIPCardTradeService();
+                            int returnValue = tradeService.RefundVIPCardPayment(item.Value.CardNo, dicCardTradePayNo[item.Value.CardNo]);
+                            if (returnValue == 0)
                             {
                                 string cardNo = item.Value.CardNo;
                                 CardRefundPay cardRefundPay = new CardRefundPay();
@@ -1365,8 +1366,9 @@ namespace Top4ever.Pos
                     foreach (KeyValuePair<string, VIPCardPayment> item in dicCardPayment)
                     {
                         //将支付成功的会员卡取消支付
-                        bool returnValue = false;
-                        if (!returnValue)
+                        VIPCardTradeService tradeService = new VIPCardTradeService();
+                        int returnValue = tradeService.RefundVIPCardPayment(item.Value.CardNo, dicCardTradePayNo[item.Value.CardNo]);
+                        if (returnValue == 0)
                         {
                             string cardNo = item.Value.CardNo;
                             CardRefundPay cardRefundPay = new CardRefundPay();

@@ -30,7 +30,7 @@ namespace Top4ever.Print
             m_PaperType = paperType;
             pDoc = new PrintDocument();
             pDoc.PrinterSettings.PrinterName = printerName;
-            PaperSize paperSize = new PaperSize(paperName, 300, 480);//页面大小;
+            PaperSize paperSize = new PaperSize(paperName, 300, 680);//页面大小;
             foreach (PaperSize ps in pDoc.PrinterSettings.PaperSizes)
             {
                 if (ps.PaperName.Equals(paperName))
