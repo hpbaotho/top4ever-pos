@@ -52,6 +52,7 @@
     <Compile Include="DriverPrintConfig\PrintLine.cs" />
     <Compile Include="DriverPrintConfig\PrintLineCollection.cs" />
     <Compile Include="DriverPrintSetting.cs" />
+    <Compile Include="DriverSinglePrint.cs" />
     <Compile Include="Entity\GoodsOrder.cs" />
     <Compile Include="Entity\KitchenPrintData.cs" />
     <Compile Include="Entity\PayingGoodsOrder.cs" />

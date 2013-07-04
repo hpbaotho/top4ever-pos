@@ -58,6 +58,13 @@ namespace Top4ever.Pos.Feature
             btnMemberSearch.ForeColor = Color.White;
             btnMemberSearch.Click += new EventHandler(this.btnMemberSearch_Click);
             btnList.Add(btnMemberSearch);
+            CrystalButton btnMemberTradeRecord = new CrystalButton();
+            btnMemberTradeRecord.Name = "btnMemberTradeRecord";
+            btnMemberTradeRecord.Text = "会员交易记录";
+            btnMemberTradeRecord.BackColor = Color.Teal;
+            btnMemberTradeRecord.ForeColor = Color.White;
+            btnMemberTradeRecord.Click += new EventHandler(this.btnMemberTradeRecord_Click);
+            btnList.Add(btnMemberTradeRecord);
             CrystalButton btnMemberStatus = new CrystalButton();
             btnMemberStatus.Name = "btnMemberStatus";
             btnMemberStatus.Text = "会员状态管理";
@@ -280,6 +287,12 @@ namespace Top4ever.Pos.Feature
         {
             Membership.FormVIPCardSearch formSearch = new Membership.FormVIPCardSearch();
             formSearch.ShowDialog();
+        }
+
+        private void btnMemberTradeRecord_Click(object sender, EventArgs e)
+        {
+            Membership.FormVIPCardTradeRecord formTradeRecord = new Membership.FormVIPCardTradeRecord();
+            formTradeRecord.ShowDialog();
         }
 
         private void btnMemberStatus_Click(object sender, EventArgs e)

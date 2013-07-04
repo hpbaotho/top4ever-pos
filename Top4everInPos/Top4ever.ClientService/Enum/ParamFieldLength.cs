@@ -25,5 +25,6 @@ namespace Top4ever.ClientService.Enum
         public const int CARD_PASSWORD = 128;
         public const int BEGINDATE = 20;
         public const int ENDDATE = 20;
+        public const int TRADEPAYNO = 30;
     }
 }
