@@ -12,7 +12,7 @@ namespace Top4ever.Persistence.MembershipCard
     /// </summary>
     public class VIPCardTradeSqlMapDao : BaseSqlMapDao, IVIPCardTradeDao
     {
-        public IList<VIPCardTrade> GetVIPCardTradeList(string cardNo, string beginDate, string endDate)
+        public IList<VIPCardTrade> GetVIPCardTradeList(string cardNo, DateTime beginDate, DateTime endDate)
         {
             Hashtable htParam = new Hashtable();
             htParam["CardNo"] = cardNo;
@@ -81,6 +81,17 @@ namespace Top4ever.Persistence.MembershipCard
                 tradePayNo = string.Empty;
             }
             return returnValue;
+        }
+
+        public Int32 RefundVIPCardPayment(string cardNo, string tradePayNo)
+        {
+            Hashtable htParam = new Hashtable();
+            htParam["CardNo"] = cardNo;
+            htParam["TradePayNo"] = tradePayNo;
+            htParam["ReturnValue"] = 0;
+
+            ExecuteUpdate("RefundVIPCardPayment", htParam);
+            return (int)htParam["ReturnValue"];
         }
     }
 }

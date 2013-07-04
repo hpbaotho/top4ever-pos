@@ -5,7 +5,7 @@ namespace Top4ever.Domain.MembershipCard
     public class VIPCardTrade
     {
         /// <summary>
-        /// 
+        /// 卡号
         /// </summary>
         public string CardNo { get; set; }
         /// <summary>
@@ -29,16 +29,20 @@ namespace Top4ever.Domain.MembershipCard
         /// </summary>
         public DateTime TradeTime { get; set; }
         /// <summary>
+        /// 单号
+        /// </summary>
+        public string OrderNo { get; set; }
+        /// <summary>
         /// 支付方式名称
         /// </summary>
         public string PayoffName { get; set; }
         /// <summary>
-        /// 
+        /// 员工号
+        /// </summary>
+        public string EmployeeNo { get; set; }
+        /// <summary>
+        /// 设备号
         /// </summary>
         public string DeviceNo { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool IsVoided { get; set; }
     }
 }

@@ -14,9 +14,10 @@
       <result property="TradeAmount" column="TradeAmount"></result>
       <result property="TradeIntegral" column="TradeIntegral"></result>
       <result property="TradeTime" column="TradeTime"></result>
+      <result property="OrderNo" column="OrderNo"></result>
       <result property="PayoffName" column="PayoffName"></result>
+      <result property="EmployeeNo" column="EmployeeNo"></result>
       <result property="DeviceNo" column="DeviceNo"></result>
-      <result property="IsVoided" column="IsVoided"></result>
     </resultMap>
 
     <resultMap id="VIPCardStoredVauleResult" class="VIPCardStoredVaule">
@@ -63,7 +64,13 @@
       <parameter property="EmployeeNo" column="EmployeeNo" />
       <parameter property="DeviceNo" column="DeviceNo" />
       <parameter property="DailyStatementNo" column="DailyStatementNo" />
-      <parameter property="ReturnValue" column="ReturnValue"  direction="Output" />
+      <parameter property="ReturnValue" column="ReturnValue" direction="Output" />
+    </parameterMap>
+
+    <parameterMap id="RefundPaymentParam" class="Hashtable">
+      <parameter property="CardNo" column="CardNo" />
+      <parameter property="TradePayNo" column="TradePayNo" />
+      <parameter property="ReturnValue" column="ReturnValue" direction="Output" />
     </parameterMap>
   </parameterMaps>
 
@@ -72,11 +79,9 @@
     ============================================= 
     -->
   <statements>
-    <select id="GetVIPCardTradeList" resultMap="VIPCardTradeResult" parameterMap="VIPCardTradeParam">
-      SELECT CardNo,TradePayNo,TradeType,TradeAmount,TradeIntegral,TradeTime,PayoffName,DeviceNo,IsVoided
-      FROM VIPCardTrade_Offline
-      WHERE CardNo = #CardNo# AND <![CDATA[ TradeTime >= #BeginDate# AND TradeTime <= #EndDate# ]]>
-    </select>
+    <procedure id="GetVIPCardTradeList" resultMap="VIPCardTradeResult" parameterMap="VIPCardTradeParam">
+      proc_GetVIPCardTradeList
+    </procedure>
 
     <procedure id="GetVIPCardStoredVaule" resultMap="VIPCardStoredVauleResult" parameterMap="StoredAmountParam">
       proc_GetVIPCardStoredVaule
@@ -88,6 +93,10 @@
 
     <procedure id="AddVIPCardPayment" parameterMap="VIPCardPaymentParam">
       proc_AddVIPCardPayment
+    </procedure>
+
+    <procedure id="RefundVIPCardPayment" parameterMap="RefundPaymentParam">
+      proc_RefundVIPCardPayment
     </procedure>
   </statements>
 </sqlMap>
