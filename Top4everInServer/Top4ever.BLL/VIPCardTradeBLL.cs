@@ -19,7 +19,7 @@ namespace Top4ever.BLL
             string beginDate = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.CARD_NO, ParamFieldLength.BEGINDATE).Trim('\0');
             string endDate = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.CARD_NO + ParamFieldLength.BEGINDATE, ParamFieldLength.ENDDATE).Trim('\0');
 
-            IList<VIPCardTrade> cardTradeList = VIPCardTradeService.GetInstance().GetVIPCardTradeList(cardNo, beginDate, endDate);
+            IList<VIPCardTrade> cardTradeList = VIPCardTradeService.GetInstance().GetVIPCardTradeList(cardNo, DateTime.Parse(beginDate), DateTime.Parse(endDate));
             if (cardTradeList == null)
             {
                 //数据获取失败
@@ -78,6 +78,21 @@ namespace Top4ever.BLL
             Array.Copy(BitConverter.GetBytes(result), 0, objRet, ParamFieldLength.PACKAGE_HEAD, BasicTypeLength.INT32);
             Array.Copy(buffer, 0, objRet, ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32, buffer.Length);
 
+            return objRet;
+        }
+
+        public static byte[] RefundVIPCardPayment(byte[] itemBuffer)
+        {
+            byte[] objRet = null;
+            string cardNo = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, ParamFieldLength.CARD_NO).Trim('\0');
+            string tradePayNo = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.CARD_NO, ParamFieldLength.TRADEPAYNO).Trim('\0');
+
+            int result = VIPCardTradeService.GetInstance().RefundVIPCardPayment(cardNo, tradePayNo);
+            //返回
+            objRet = new byte[ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32];
+            Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes(ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes(result), 0, objRet, ParamFieldLength.PACKAGE_HEAD, BasicTypeLength.INT32);
             return objRet;
         }
     }

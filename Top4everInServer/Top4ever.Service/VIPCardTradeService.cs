@@ -46,7 +46,7 @@ namespace Top4ever.Service
             return _instance;
         }
 
-        public IList<VIPCardTrade> GetVIPCardTradeList(string cardNo, string beginDate, string endDate)
+        public IList<VIPCardTrade> GetVIPCardTradeList(string cardNo, DateTime beginDate, DateTime endDate)
         {
             IList<VIPCardTrade> cardTradeList = null;
 
@@ -104,6 +104,15 @@ namespace Top4ever.Service
             //日结号
             string dailyStatementNo = _dailyStatementDao.GetCurrentDailyStatementNo();
             result = _VIPCardTradeDao.AddVIPCardPayment(cardPayment.cardNo, cardPayment.payAmount, cardPayment.payIntegral, cardPayment.orderNo, cardPayment.employeeNo, cardPayment.deviceNo, dailyStatementNo, out tradePayNo);
+            _daoManager.CloseConnection();
+            return result;
+        }
+
+        public Int32 RefundVIPCardPayment(string cardNo, string tradePayNo)
+        {
+            int result = 0;
+            _daoManager.OpenConnection();
+            result = _VIPCardTradeDao.RefundVIPCardPayment(cardNo, tradePayNo);
             _daoManager.CloseConnection();
             return result;
         }

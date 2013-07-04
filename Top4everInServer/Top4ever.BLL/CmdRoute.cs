@@ -160,6 +160,9 @@ namespace Top4ever.BLL
                 case Command.ID_ADD_CARDPAYMENT:
                     byteRet = VIPCardTradeBLL.AddVIPCardPayment(itemBuffer);
                     break;
+                case Command.ID_REFUNDPAYMENT:
+                    byteRet = VIPCardTradeBLL.RefundVIPCardPayment(itemBuffer);
+                    break;
                 case Command.ID_GET_SHOP:
                     byteRet = ShopBLL.GetCurrentShop();
                     break;
