@@ -54,6 +54,9 @@ namespace Top4ever.ClientService.Enum
         ID_ADD_CARDSTOREDVALUE = 48,
         ID_ADD_CARDPAYMENT = 49,
         ID_REFUNDPAYMENT = 50,
-        ID_GET_SHOP = 51
+        ID_GET_SHOP = 51,
+        ID_GET_ITEMPRICELISTBYGROUP = 52,
+        ID_GET_ALLDELETEDITEMS = 53,
+        ID_UPDATE_EMPLOYEEPASSWORD = 54
     }
 }

@@ -41,15 +41,6 @@ namespace Top4ever.CustomControl
         }
 
         #region DataGridView的鼠标跟随效果
-        //移到单元格时的颜色
-        protected override void OnCellMouseMove(DataGridViewCellMouseEventArgs e)
-        {
-            base.OnCellMouseMove(e);
-            if (e.RowIndex >= 0)
-            {
-                Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromKnownColor(System.Drawing.KnownColor.InactiveCaptionText);
-            }
-        }
 
         //进入单元格时保存当前的颜色
         protected override void OnCellMouseEnter(DataGridViewCellEventArgs e)
@@ -58,6 +49,7 @@ namespace Top4ever.CustomControl
             if (e.RowIndex >= 0)
             {
                 defaultcolor = Rows[e.RowIndex].DefaultCellStyle.BackColor;
+                Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromKnownColor(System.Drawing.KnownColor.InactiveCaptionText);
             }
         }
 

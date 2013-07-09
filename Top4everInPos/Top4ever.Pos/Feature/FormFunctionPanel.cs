@@ -313,7 +313,8 @@ namespace Top4ever.Pos.Feature
 
         private void btnModifyPassword_Click(object sender, EventArgs e)
         {
-
+            FormEmployeePassword form = new FormEmployeePassword();
+            form.ShowDialog();
         }
 
         private void btnCheckStock_Click(object sender, EventArgs e)
@@ -361,11 +362,13 @@ namespace Top4ever.Pos.Feature
 
         private void btnSingleGoodsStatistics_Click(object sender, EventArgs e)
         {
-
+            FormItemSalesReport form = new FormItemSalesReport();
+            form.ShowDialog();
         }
         private void btnDeletedGoodsReport_Click(object sender, EventArgs e)
         {
-
+            FormDeletedItemReport form = new FormDeletedItemReport();
+            form.ShowDialog();
         }
 
         private void btnPettyCashReport_Click(object sender, EventArgs e)

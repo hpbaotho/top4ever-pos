@@ -15,7 +15,7 @@ namespace Top4ever.ClientService
         public VIPCardTradeService()
         { }
 
-        public IList<VIPCardTrade> GetCardTradeList(string cardNo, string beginDate, string endDate)
+        public Int32 GetVIPCardTradeList(string cardNo, string beginDate, string endDate, ref VIPCardTradeRecord cardTradeRecord)
         {
             int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.CARD_NO + ParamFieldLength.BEGINDATE + ParamFieldLength.ENDDATE;
             byte[] sendByte = new byte[cByte];
@@ -39,20 +39,20 @@ namespace Top4ever.ClientService
             Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
             byteOffset += ParamFieldLength.ENDDATE;
 
-            IList<VIPCardTrade> cardTradeList = null;
+            int result = 0;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
                 {
-                    string strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD, receiveData.Length - ParamFieldLength.PACKAGE_HEAD).Trim('\0');
-                    cardTradeList = JsonConvert.DeserializeObject<IList<VIPCardTrade>>(strReceive);
+                    result = BitConverter.ToInt32(receiveData, ParamFieldLength.PACKAGE_HEAD);
+                    string strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32, receiveData.Length - ParamFieldLength.PACKAGE_HEAD - BasicTypeLength.INT32).Trim('\0');
+                    cardTradeRecord = JsonConvert.DeserializeObject<VIPCardTradeRecord>(strReceive);
                 }
-                socket.Disconnect();
+                socket.Close();
             }
-            return cardTradeList;
+            return result;
         }
 
         public Int32 AddVIPCardStoredValue(VIPCardAddMoney cardAddMoney, out string tradePayNo)
@@ -74,7 +74,6 @@ namespace Top4ever.ClientService
             tradePayNo = string.Empty;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
@@ -82,7 +81,7 @@ namespace Top4ever.ClientService
                     result = BitConverter.ToInt32(receiveData, ParamFieldLength.PACKAGE_HEAD);
                     tradePayNo = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32, receiveData.Length - ParamFieldLength.PACKAGE_HEAD - BasicTypeLength.INT32).Trim('\0');
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return result;
         }
@@ -106,7 +105,6 @@ namespace Top4ever.ClientService
             tradePayNo = string.Empty;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
@@ -114,7 +112,7 @@ namespace Top4ever.ClientService
                     result = BitConverter.ToInt32(receiveData, ParamFieldLength.PACKAGE_HEAD);
                     tradePayNo = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32, receiveData.Length - ParamFieldLength.PACKAGE_HEAD - BasicTypeLength.INT32).Trim('\0');
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return result;
         }
@@ -142,14 +140,13 @@ namespace Top4ever.ClientService
             int result = 0;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
                 {
                     result = BitConverter.ToInt32(receiveData, ParamFieldLength.PACKAGE_HEAD);
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return result;
         }

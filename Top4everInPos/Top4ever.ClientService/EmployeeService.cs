@@ -41,7 +41,6 @@ namespace Top4ever.ClientService
             employee = null;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
@@ -58,7 +57,7 @@ namespace Top4ever.ClientService
                 {
                     result = 0;
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return result;
         }
@@ -86,7 +85,6 @@ namespace Top4ever.ClientService
             employee = null;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
@@ -103,7 +101,7 @@ namespace Top4ever.ClientService
                 {
                     result = 0;
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return result;
         }
@@ -131,7 +129,6 @@ namespace Top4ever.ClientService
             employee = null;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
@@ -148,7 +145,7 @@ namespace Top4ever.ClientService
                 {
                     result = 0;
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return result;
         }
@@ -176,7 +173,6 @@ namespace Top4ever.ClientService
             IList<String> rightsCodeList = null;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
@@ -184,9 +180,47 @@ namespace Top4ever.ClientService
                     string strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD, receiveData.Length - ParamFieldLength.PACKAGE_HEAD);
                     rightsCodeList = JsonConvert.DeserializeObject<IList<String>>(strReceive);
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return rightsCodeList;
+        }
+
+        public int UpdateEmployeePassword(string employeeNo, string currentPassword, string newPassword)
+        {
+            int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.EMPLOYEE_NO + ParamFieldLength.EMPLOYEE_PASSWORD + ParamFieldLength.EMPLOYEE_PASSWORD;
+            byte[] sendByte = new byte[cByte];
+            int byteOffset = 0;
+            Array.Copy(BitConverter.GetBytes((int)Command.ID_UPDATE_EMPLOYEEPASSWORD), sendByte, BasicTypeLength.INT32);
+            byteOffset = BasicTypeLength.INT32;
+            Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
+            byteOffset += BasicTypeLength.INT32;
+
+            byte[] tempByte = null;
+            //employeeNo
+            tempByte = Encoding.UTF8.GetBytes(employeeNo);
+            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
+            byteOffset += ParamFieldLength.EMPLOYEE_NO;
+            //currentPassword
+            tempByte = Encoding.UTF8.GetBytes(currentPassword);
+            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
+            byteOffset += ParamFieldLength.EMPLOYEE_PASSWORD;
+            //newPassword
+            tempByte = Encoding.UTF8.GetBytes(newPassword);
+            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
+            byteOffset += ParamFieldLength.EMPLOYEE_PASSWORD;
+
+            int result = 0;
+            using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
+            {
+                Byte[] receiveData = null;
+                Int32 operCode = socket.SendReceive(sendByte, out receiveData);
+                if (operCode == (int)RET_VALUE.SUCCEEDED)
+                {
+                    result = BitConverter.ToInt32(receiveData, ParamFieldLength.PACKAGE_HEAD);
+                }
+                socket.Close();
+            }
+            return result;
         }
     }
 }

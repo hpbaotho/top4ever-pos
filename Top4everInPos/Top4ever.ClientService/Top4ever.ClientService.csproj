@@ -65,6 +65,10 @@
     <Compile Include="VIPCardTradeService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Top4ever.Common\Top4ever.Common.csproj">
+      <Project>{A7630CE5-49F7-40A8-9C92-96708201C756}</Project>
+      <Name>Top4ever.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Top4ever.Domain\Top4ever.Domain.csproj">
       <Project>{D8EA3645-CE2C-4A83-9D8C-C478B50FB926}</Project>
       <Name>Top4ever.Domain</Name>

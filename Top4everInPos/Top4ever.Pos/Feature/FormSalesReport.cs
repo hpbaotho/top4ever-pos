@@ -10,7 +10,10 @@ using Top4ever.ClientService;
 using Top4ever.Domain;
 using Top4ever.Domain.Transfer;
 using Top4ever.Entity;
+using Top4ever.Entity.Enum;
 using Top4ever.Print;
+using Top4ever.Domain.MembershipCard;
+using Top4ever.Common;
 
 namespace Top4ever.Pos.Feature
 {
@@ -60,6 +63,14 @@ namespace Top4ever.Pos.Feature
             }
             if (bizReport != null)
             {
+                if (m_ModelType == 1)
+                {
+                    InsertNewDataGridViewItem("---交班报表---");
+                }
+                if (m_ModelType == 2)
+                {
+                    InsertNewDataGridViewItem("---日结报表---");
+                }
                 string str = string.Empty;
                 InsertNewDataGridViewItem(str);
                 str = GetDataType2("店铺名称：", ConstantValuePool.CurrentShop.ShopName);
@@ -103,8 +114,7 @@ namespace Top4ever.Pos.Feature
 
                 str = string.Empty;
                 InsertNewDataGridViewItem(str);
-                str = "现金核数";
-                InsertNewDataGridViewItem(str);
+                InsertNewDataGridViewItem("现金核数");
                 decimal totalSellPrice = 0;
                 foreach (OrderPayoffSum item in bizReport.orderPayoffSumList)
                 {
@@ -117,14 +127,24 @@ namespace Top4ever.Pos.Feature
                     str = GetDataType3(item.PayoffName, item.Times.ToString(), item.PayoffMoney.ToString("f2"));
                     InsertNewDataGridViewItem(str);
                 }
-                decimal moreOrLess = bizReport.ActualTotalIncome + bizReport.TotalServiceFee - totalSellPrice;
-                str = GetDataType3("金额过多(-)/不足(+)：", string.Empty, moreOrLess.ToString("f2"));
-                InsertNewDataGridViewItem(str);
+                decimal moreOrLess = totalSellPrice - (bizReport.ActualTotalIncome + bizReport.TotalServiceFee);
+                str = GetDataType3("金额过多(+)/不足(-)：", string.Empty, moreOrLess.ToString("f2"));
+                if (moreOrLess < 0)
+                {
+                    InsertNewDataGridViewItem(str, Color.Red);
+                }
+                else if (moreOrLess > 0)
+                {
+                    InsertNewDataGridViewItem(str, Color.Green);
+                }
+                else
+                {
+                    InsertNewDataGridViewItem(str);
+                }
 
                 str = string.Empty;
                 InsertNewDataGridViewItem(str);
-                str = "折扣详细资料";
-                InsertNewDataGridViewItem(str);
+                InsertNewDataGridViewItem("折扣详细资料");
                 decimal totalDiscountPrice = 0;
                 foreach (OrderDiscountSum item in bizReport.orderDiscountSumList)
                 {
@@ -146,10 +166,54 @@ namespace Top4ever.Pos.Feature
                 str = GetDataType3("人数/平均", bizReport.PeopleTotalNum.ToString(), (totalSellPrice / bizReport.PeopleTotalNum).ToString("f2"));
                 InsertNewDataGridViewItem(str);
 
+                if (m_ModelType == 2)
+                {
+                    str = string.Empty;
+                    InsertNewDataGridViewItem(str);
+                    InsertNewDataGridViewItem("会员卡预存金额");
+                    str = GetDataType4Ext("时间", "卡号", "金额", "支付方式");
+                    InsertNewDataGridViewItem(str);
+                    foreach (VIPCardTrade item in bizReport.cardStoredValueList)
+                    {
+                        str = GetDataType4Ext(item.TradeTime.ToString("MM-dd HH:mm"), item.CardNo, item.TradeAmount.ToString("f2"), item.PayoffName);
+                        InsertNewDataGridViewItem(str);
+                    }
+                    str = string.Empty;
+                    InsertNewDataGridViewItem(str);
+                    InsertNewDataGridViewItem("支付方式合计（包含会员卡预存金额）");
+                    Dictionary<string, decimal> dicPayoffWay = new Dictionary<string, decimal>();
+                    foreach (OrderPayoffSum item in bizReport.orderPayoffSumList)
+                    {
+                        if (dicPayoffWay.ContainsKey(item.PayoffName))
+                        {
+                            dicPayoffWay[item.PayoffName] += item.PayoffMoney;
+                        }
+                        else
+                        {
+                            dicPayoffWay.Add(item.PayoffName, item.PayoffMoney);
+                        }
+                    }
+                    foreach (VIPCardTrade item in bizReport.cardStoredValueList)
+                    {
+                        if (dicPayoffWay.ContainsKey(item.PayoffName))
+                        {
+                            dicPayoffWay[item.PayoffName] += item.TradeAmount;
+                        }
+                        else
+                        {
+                            dicPayoffWay.Add(item.PayoffName, item.TradeAmount);
+                        }
+                    }
+                    foreach (KeyValuePair<string, decimal> item in dicPayoffWay)
+                    {
+                        str = GetDataType2Ex(item.Key, item.Value.ToString("f2"));
+                        InsertNewDataGridViewItem(str);
+                    }
+                }
+
                 str = string.Empty;
                 InsertNewDataGridViewItem(str);
-                str = "部门营业报表";
-                InsertNewDataGridViewItem(str);
+                InsertNewDataGridViewItem("部门营业报表");
                 decimal totalDepartPriceSum = 0;
                 foreach (SalesPriceByDepart item in bizReport.salesPriceByDepartList)
                 {
@@ -281,10 +345,42 @@ namespace Top4ever.Pos.Feature
             return result;
         }
 
+        private string GetDataType4Ext(string strText, string strValue1st, string strValue2nd, string strValue3rd)
+        {
+            string result = string.Empty;
+
+            string strNull = string.Empty;
+            int len1st = CheckTextLength(strText);
+            for (int i = 0; i < (14 - len1st); i++)
+                strNull += " ";
+            result += strText + strNull;
+
+            strNull = string.Empty;
+            int len2nd = CheckTextLength(strValue1st);
+            for (int i = 0; i < (14 - len2nd); i++)
+                strNull += " ";
+            result += strValue1st + strNull;
+
+            strNull = string.Empty;
+            int len3rd = CheckTextLength(strValue2nd);
+            for (int i = 0; i < (10 - len3rd); i++)
+                strNull += " ";
+            result += strValue2nd + strNull + strValue3rd;
+
+            return result;
+        }
+
         private void InsertNewDataGridViewItem(string strText)
         {
             int index = this.dgvSalesReport.Rows.Add();
             this.dgvSalesReport.Rows[index].Cells[0].Value = strText;
+        }
+
+        private void InsertNewDataGridViewItem(string strText, Color foreColor)
+        {
+            int index = this.dgvSalesReport.Rows.Add();
+            this.dgvSalesReport.Rows[index].Cells[0].Value = strText;
+            this.dgvSalesReport.Rows[index].Cells[0].Style.ForeColor = foreColor;
         }
 
         private int CheckTextLength(string strText)
@@ -405,8 +501,12 @@ namespace Top4ever.Pos.Feature
                     printData.Add("  ");
                 }
             }
-            DriverSinglePrint driverPrint = new DriverSinglePrint("Microsoft XPS Document Writer", "SpecimenLabel");
-            driverPrint.DoPrint(printData);
+            if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
+            {
+                string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                DriverSinglePrint driverPrint = new DriverSinglePrint(printerName, "SpecimenLabel");
+                driverPrint.DoPrint(printData);
+            }
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

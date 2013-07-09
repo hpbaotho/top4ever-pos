@@ -32,14 +32,13 @@ namespace Top4ever.ClientService
             bool result = false;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
                 {
                     result = true;
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return result;
         }
@@ -62,14 +61,13 @@ namespace Top4ever.ClientService
             bool result = false;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
                 {
                     result = true;
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return result;
         }

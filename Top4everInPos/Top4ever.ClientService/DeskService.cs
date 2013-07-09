@@ -32,7 +32,6 @@ namespace Top4ever.ClientService
             BizDesk desk = null;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
@@ -40,7 +39,7 @@ namespace Top4ever.ClientService
                     string strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD, receiveData.Length - ParamFieldLength.PACKAGE_HEAD).Trim('\0');
                     desk = JsonConvert.DeserializeObject<BizDesk>(strReceive);
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return desk;
         }
@@ -71,14 +70,13 @@ namespace Top4ever.ClientService
             bool result = false;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
                 {
                     result = true;
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return result;
         }
@@ -101,7 +99,6 @@ namespace Top4ever.ClientService
             IList<DeskRealTimeInfo> deskInfoList = null;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
@@ -109,7 +106,7 @@ namespace Top4ever.ClientService
                     string strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD, receiveData.Length - ParamFieldLength.PACKAGE_HEAD).Trim('\0');
                     deskInfoList = JsonConvert.DeserializeObject<IList<DeskRealTimeInfo>>(strReceive);
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return deskInfoList;
         }
