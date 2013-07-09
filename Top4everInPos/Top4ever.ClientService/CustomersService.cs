@@ -35,14 +35,13 @@ namespace Top4ever.ClientService
             int result = 0;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
                 {
                     result = BitConverter.ToInt32(receiveData, ParamFieldLength.PACKAGE_HEAD);
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return result;
         }
@@ -65,14 +64,13 @@ namespace Top4ever.ClientService
             bool result = false;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
                 {
                     result = true;
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return result;
         }
@@ -96,7 +94,6 @@ namespace Top4ever.ClientService
             CustomerInfo customerInfo = null;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
@@ -104,7 +101,7 @@ namespace Top4ever.ClientService
                     string strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD, receiveData.Length - ParamFieldLength.PACKAGE_HEAD).Trim('\0');
                     customerInfo = JsonConvert.DeserializeObject<CustomerInfo>(strReceive);
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return customerInfo;
         }
@@ -123,7 +120,6 @@ namespace Top4ever.ClientService
             IList<CustomerInfo> customerInfoList = null;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
@@ -131,7 +127,7 @@ namespace Top4ever.ClientService
                     string strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD, receiveData.Length - ParamFieldLength.PACKAGE_HEAD).Trim('\0');
                     customerInfoList = JsonConvert.DeserializeObject<IList<CustomerInfo>>(strReceive);
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return customerInfoList;
         }
@@ -155,7 +151,6 @@ namespace Top4ever.ClientService
             CustomerOrder customerOrder = null;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
@@ -163,7 +158,7 @@ namespace Top4ever.ClientService
                     string strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD, receiveData.Length - ParamFieldLength.PACKAGE_HEAD).Trim('\0');
                     customerOrder = JsonConvert.DeserializeObject<CustomerOrder>(strReceive);
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return customerOrder;
         }
@@ -186,14 +181,13 @@ namespace Top4ever.ClientService
             bool result = false;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
                 {
                     result = true;
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return result;
         }
@@ -216,14 +210,13 @@ namespace Top4ever.ClientService
             bool result = false;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
                 {
                     result = true;
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return result;
         }

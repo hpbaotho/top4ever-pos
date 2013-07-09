@@ -73,11 +73,23 @@
     <Compile Include="Feature\FormCustomDetails.designer.cs">
       <DependentUpon>FormCustomDetails.cs</DependentUpon>
     </Compile>
+    <Compile Include="Feature\FormDeletedItemReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\FormDeletedItemReport.Designer.cs">
+      <DependentUpon>FormDeletedItemReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="Feature\FormDiscount.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Feature\FormDiscount.designer.cs">
       <DependentUpon>FormDiscount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Feature\FormEmployeePassword.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\FormEmployeePassword.designer.cs">
+      <DependentUpon>FormEmployeePassword.cs</DependentUpon>
     </Compile>
     <Compile Include="Feature\FormFunctionPanel.cs">
       <SubType>Form</SubType>
@@ -90,6 +102,12 @@
     </Compile>
     <Compile Include="Feature\FormGoodsSetMeal.Designer.cs">
       <DependentUpon>FormGoodsSetMeal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Feature\FormItemSalesReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\FormItemSalesReport.Designer.cs">
+      <DependentUpon>FormItemSalesReport.cs</DependentUpon>
     </Compile>
     <Compile Include="Feature\FormModifyOrder.cs">
       <SubType>Form</SubType>
@@ -308,14 +326,23 @@
     <EmbeddedResource Include="Feature\FormCustomDetails.resx">
       <DependentUpon>FormCustomDetails.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Feature\FormDeletedItemReport.resx">
+      <DependentUpon>FormDeletedItemReport.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Feature\FormDiscount.resx">
       <DependentUpon>FormDiscount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Feature\FormEmployeePassword.resx">
+      <DependentUpon>FormEmployeePassword.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\FormFunctionPanel.resx">
       <DependentUpon>FormFunctionPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\FormGoodsSetMeal.resx">
       <DependentUpon>FormGoodsSetMeal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Feature\FormItemSalesReport.resx">
+      <DependentUpon>FormItemSalesReport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\FormModifyOrder.resx">
       <DependentUpon>FormModifyOrder.cs</DependentUpon>

@@ -16,6 +16,7 @@ namespace Top4ever.ClientService.Enum
         public const int ORDER_ID = 36;
         public const int EMPLOYEE_ID = 36;
         public const int EMPLOYEE_NO = 20;
+        public const int EMPLOYEE_PASSWORD = 36;
         public const int SQL_WHERE = 200;
         public const int SQL_ORDERBY = 100;
         public const int TELEPHONE = 24;

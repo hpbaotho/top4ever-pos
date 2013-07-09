@@ -13,6 +13,7 @@ namespace Top4ever.Print
         private IList<String> printData;
         private float PX = 0;
         private float PY = 0;
+        private Font font = new Font("simsun", 8.25F);
 
         public DriverSinglePrint(string printerName, string paperName)
         {
@@ -55,6 +56,31 @@ namespace Top4ever.Print
             }
         }
 
+        public bool DoPrint(IList<String> printData, Font font)
+        {
+            if (printData != null && printData.Count > 0)
+            {
+                this.printData = printData;
+                this.font = font;
+                bool printResult = false;
+                try
+                {
+                    pDoc.Print();
+                    printResult = true;
+                }
+                catch (Exception ex)
+                {
+                    //log ex;
+                    printResult = false;
+                }
+                return printResult;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private void pDoc_PrintPage(object sender, PrintPageEventArgs e)
         {
             m_Graphics = e.Graphics;
@@ -65,7 +91,6 @@ namespace Top4ever.Print
 
         private void DrawPaper()
         {
-            Font font = new Font("simsun", 8.25F);
             foreach (String text in printData)
             {
                 Brush brush = new SolidBrush(Color.Black);

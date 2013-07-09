@@ -24,7 +24,6 @@ namespace Top4ever.ClientService
             SysBasicData sysBasicData = null;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
@@ -32,7 +31,7 @@ namespace Top4ever.ClientService
                     string strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD, receiveData.Length - ParamFieldLength.PACKAGE_HEAD);
                     sysBasicData = JsonConvert.DeserializeObject<SysBasicData>(strReceive);
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return sysBasicData;
         }

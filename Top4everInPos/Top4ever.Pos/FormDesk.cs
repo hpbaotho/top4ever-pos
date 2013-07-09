@@ -321,47 +321,52 @@ namespace Top4ever.Pos
 
         private void btnRegion_Click(object sender, EventArgs e)
         {
-            //禁止引发Layout事件
-            this.pnlDesk.SuspendLayout();
-            this.SuspendLayout();
-            //清除pnlDesk内所有控件
-            this.pnlDesk.Controls.Clear();
-            //获取Desk List
-            CrystalButton btnRegion = sender as CrystalButton;
-            prevRegionButton.BackColor = prevRegionButton.DisplayColor;
-            btnRegion.BackColor = ConstantValuePool.PressedColor;
-            prevRegionButton = btnRegion;
-            BizRegion region = btnRegion.Tag as BizRegion;
-            m_CurrentRegionID = region.RegionID;
-            if (!dicDeskInRegion.ContainsKey(m_CurrentRegionID))
+            currentFormActivate = false;
+            lock (dicDeskInRegion)
             {
-                List<CrystalButton> btnList = new List<CrystalButton>();
-                foreach (BizDesk desk in region.BizDeskList)
+                //禁止引发Layout事件
+                this.pnlDesk.SuspendLayout();
+                this.SuspendLayout();
+                //清除pnlDesk内所有控件
+                this.pnlDesk.Controls.Clear();
+                //获取Desk List
+                CrystalButton btnRegion = sender as CrystalButton;
+                prevRegionButton.BackColor = prevRegionButton.DisplayColor;
+                btnRegion.BackColor = ConstantValuePool.PressedColor;
+                prevRegionButton = btnRegion;
+                BizRegion region = btnRegion.Tag as BizRegion;
+                m_CurrentRegionID = region.RegionID;
+                if (!dicDeskInRegion.ContainsKey(m_CurrentRegionID))
                 {
-                    CrystalButton btn = new CrystalButton();
-                    btn.Name = desk.DeskID.ToString();
-                    btn.Text = desk.DeskName;
-                    btn.Width = desk.Width;
-                    btn.Height = desk.Height;
-                    btn.Location = new Point(desk.PX, desk.PY);
-                    btn.Tag = desk;
-                    btn.BackColor = GetColorByStatus(desk.Status, desk.DeviceNo);
-                    btn.Click += new System.EventHandler(this.btnDesk_Click);
-                    btnList.Add(btn);
+                    List<CrystalButton> btnList = new List<CrystalButton>();
+                    foreach (BizDesk desk in region.BizDeskList)
+                    {
+                        CrystalButton btn = new CrystalButton();
+                        btn.Name = desk.DeskID.ToString();
+                        btn.Text = desk.DeskName;
+                        btn.Width = desk.Width;
+                        btn.Height = desk.Height;
+                        btn.Location = new Point(desk.PX, desk.PY);
+                        btn.Tag = desk;
+                        btn.BackColor = GetColorByStatus(desk.Status, desk.DeviceNo);
+                        btn.Click += new System.EventHandler(this.btnDesk_Click);
+                        btnList.Add(btn);
+                    }
+                    dicDeskInRegion.Add(region.RegionID, btnList);
                 }
-                dicDeskInRegion.Add(region.RegionID, btnList);
+                foreach (CrystalButton btn in dicDeskInRegion[region.RegionID])
+                {
+                    this.pnlDesk.Controls.Add(btn);
+                }
+                this.pnlDesk.Controls.Add(btnFreeColor);
+                this.pnlDesk.Controls.Add(btnTakeColor);
+                this.pnlDesk.Controls.Add(btnLookColor);
+                //恢复引发Layout事件
+                this.pnlDesk.ResumeLayout(false);
+                this.pnlDesk.PerformLayout();
+                this.ResumeLayout(false);
             }
-            foreach (CrystalButton btn in dicDeskInRegion[region.RegionID])
-            {
-                this.pnlDesk.Controls.Add(btn);
-            }
-            this.pnlDesk.Controls.Add(btnFreeColor);
-            this.pnlDesk.Controls.Add(btnTakeColor);
-            this.pnlDesk.Controls.Add(btnLookColor);
-            //恢复引发Layout事件
-            this.pnlDesk.ResumeLayout(false);
-            this.pnlDesk.PerformLayout();
-            this.ResumeLayout(false);
+            currentFormActivate = true;
         }
 
         private void btnDesk_Click(object sender, EventArgs e)

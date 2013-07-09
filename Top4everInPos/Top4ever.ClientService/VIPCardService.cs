@@ -41,7 +41,6 @@ namespace Top4ever.ClientService
             card = null;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
@@ -58,7 +57,7 @@ namespace Top4ever.ClientService
                 {
                     result = 0;
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return result;
         }
@@ -82,19 +81,18 @@ namespace Top4ever.ClientService
             double discountRate = 0;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
                 {
                     discountRate = BitConverter.ToDouble(receiveData, ParamFieldLength.PACKAGE_HEAD);
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return (decimal)discountRate;
         }
 
-        public bool UpdateCardPassword(string cardNo, string currentPassword, string newPassword)
+        public int UpdateCardPassword(string cardNo, string currentPassword, string newPassword)
         {
             int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.CARD_NO + ParamFieldLength.CARD_PASSWORD + ParamFieldLength.CARD_PASSWORD;
             byte[] sendByte = new byte[cByte];
@@ -118,17 +116,16 @@ namespace Top4ever.ClientService
             Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
             byteOffset += ParamFieldLength.CARD_PASSWORD;
 
-            bool result = false;
+            int result = 0;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
                 {
-                    result = true;
+                    result = BitConverter.ToInt32(receiveData, ParamFieldLength.PACKAGE_HEAD);
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return result;
         }
@@ -159,14 +156,13 @@ namespace Top4ever.ClientService
             int result = 0;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
-                socket.Connect();
                 Byte[] receiveData = null;
                 Int32 operCode = socket.SendReceive(sendByte, out receiveData);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
                 {
                     result = BitConverter.ToInt32(receiveData, ParamFieldLength.PACKAGE_HEAD);
                 }
-                socket.Disconnect();
+                socket.Close();
             }
             return result;
         }
