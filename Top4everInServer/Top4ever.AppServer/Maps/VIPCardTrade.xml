@@ -83,6 +83,13 @@
       proc_GetVIPCardTradeList
     </procedure>
 
+    <select id="GetAllStoredAmount" resultMap="VIPCardTradeResult" parameterClass="String">
+      SELECT TradeTime,CardNo,TradePayNo,TradeType,TradeAmount,TradeIntegral,OrderNo,PayoffName,EmployeeNo,DeviceNo
+      FROM VIPCardTrade_Offline
+      WHERE DailyStatementNo = #value# AND TradeType = 1 AND IsVoided = 0
+      ORDER BY TradeTime
+    </select>
+
     <procedure id="GetVIPCardStoredVaule" resultMap="VIPCardStoredVauleResult" parameterMap="StoredAmountParam">
       proc_GetVIPCardStoredVaule
     </procedure>

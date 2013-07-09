@@ -12,16 +12,16 @@ namespace Top4ever.AppServer
     {
         static void Main(string[] args)
         {
-            DateTime? dt = GetStandardDataTime();
-            if (dt != null)
-            {
-                DateTime localTime = Convert.ToDateTime(dt).AddHours(8);
-                TimeSpan ts = localTime - DateTime.Now;
-                if (Math.Abs(ts.Hours) > 0)
-                { 
-                    
-                }
-            }
+            //DateTime? dt = GetStandardDataTime();
+            //if (dt != null)
+            //{
+            //    DateTime localTime = Convert.ToDateTime(dt).AddHours(8);
+            //    TimeSpan ts = localTime - DateTime.Now;
+            //    if (Math.Abs(ts.Hours) > 0)
+            //    { 
+                    //set system time
+            //    }
+            //}
             try
             {
                 Int32 port = 5689;

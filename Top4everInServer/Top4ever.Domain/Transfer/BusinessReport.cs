@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Top4ever.Domain.MembershipCard;
+
 namespace Top4ever.Domain.Transfer
 {
     [Serializable]
@@ -50,6 +52,10 @@ namespace Top4ever.Domain.Transfer
         /// 折扣合计
         /// </summary>
         public IList<OrderDiscountSum> orderDiscountSumList { get; set; }
+        /// <summary>
+        /// 储值金额列表
+        /// </summary>
+        public IList<VIPCardTrade> cardStoredValueList { get; set; }
         /// <summary>
         /// 支付方式合计
         /// </summary>

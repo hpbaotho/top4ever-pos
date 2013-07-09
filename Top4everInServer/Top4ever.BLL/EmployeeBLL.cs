@@ -151,5 +151,21 @@ namespace Top4ever.BLL
             }
             return objRet;
         }
+
+        public static byte[] UpdateEmployeePassword(byte[] itemBuffer)
+        {
+            byte[] objRet = null;
+            string employeeNo = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, ParamFieldLength.EMPLOYEE_NO).Trim('\0');
+            string currentPassword = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.EMPLOYEE_NO, ParamFieldLength.EMPLOYEE_PASSWORD).Trim('\0');
+            string newPassword = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.EMPLOYEE_NO + ParamFieldLength.EMPLOYEE_PASSWORD, ParamFieldLength.EMPLOYEE_PASSWORD).Trim('\0');
+
+            Int32 result = EmployeeService.GetInstance().UpdateEmployeePassword(employeeNo, currentPassword, newPassword);
+            //返回
+            objRet = new byte[ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32];
+            Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes(ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes(result), 0, objRet, ParamFieldLength.PACKAGE_HEAD, BasicTypeLength.INT32);
+            return objRet;
+        }
     }
 }

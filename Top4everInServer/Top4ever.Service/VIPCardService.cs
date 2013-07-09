@@ -99,9 +99,9 @@ namespace Top4ever.Service
             return discountRate;
         }
 
-        public bool UpdateCardPassword(string cardNo, string currentPassword, string newPassword)
+        public Int32 UpdateCardPassword(string cardNo, string currentPassword, string newPassword)
         {
-            bool result = false;
+            int result = 0;
             _daoManager.OpenConnection();
             //加密的密码
             string str = string.Empty;

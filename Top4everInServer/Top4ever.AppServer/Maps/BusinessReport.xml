@@ -5,6 +5,7 @@
       <typeAlias alias="OrderDiscountSum" type="Top4ever.Domain.Transfer.OrderDiscountSum, Top4ever.Domain" />
       <typeAlias alias="OrderPayoffSum" type="Top4ever.Domain.Transfer.OrderPayoffSum, Top4ever.Domain" />
       <typeAlias alias="ItemsPrice" type="Top4ever.Domain.Transfer.ItemsPrice, Top4ever.Domain" />
+      <typeAlias alias="GroupPrice" type="Top4ever.Domain.Transfer.GroupPrice, Top4ever.Domain" />
       <typeAlias alias="BusinessReport" type="Top4ever.Domain.Transfer.BusinessReport, Top4ever.Domain" />
       <typeAlias alias="HandoverInfo" type="Top4ever.Domain.HandoverRecord, Top4ever.Domain" />
     </alias>
@@ -25,6 +26,13 @@
 
       <resultMap id="ItemsPriceResult" class="ItemsPrice">
         <result property="DepartName" column="DepartName"></result>
+        <result property="ItemsName" column="ItemsName"></result>
+        <result property="ItemsTotalQty" column="ItemsTotalQty"></result>
+        <result property="ItemsTotalPrice" column="ItemsTotalPrice"></result>
+      </resultMap>
+
+      <resultMap id="GroupPriceResult" class="GroupPrice">
+        <result property="GroupName" column="GroupName"></result>
         <result property="ItemsName" column="ItemsName"></result>
         <result property="ItemsTotalQty" column="ItemsTotalQty"></result>
         <result property="ItemsTotalPrice" column="ItemsTotalPrice"></result>
@@ -63,6 +71,11 @@
       <parameterMap id="DailyStatementParam" class="Hashtable">
         <parameter property="DailyStatementNo" />
       </parameterMap>
+
+      <parameterMap id="GroupPriceParam" class="Hashtable">
+        <parameter property="BeginDate" />
+        <parameter property="EndDate" />
+      </parameterMap>
     </parameterMaps>
 
     <!-- =============================================
@@ -85,7 +98,7 @@
       </select>
 
       <select id="GetPayoffSumByDailyStatement" parameterClass="String" resultMap="OrderPayoffSumResult">
-        SELECT PayoffID, PayoffName, COUNT(PayoffName) AS Times, SUM(Quantity * AsPay) - SUM(op.NeedChangePay) AS PayoffMoney
+        SELECT PayoffID, PayoffName, COUNT(PayoffName) AS Times, SUM(Quantity * AsPay - op.NeedChangePay) AS PayoffMoney
         FROM OrderPayoff op JOIN [Order] o ON o.OrderID = op.OrderID
         WHERE op.DailyStatementNo = #value# AND o.[Status] = 1 AND op.IsVoided = 0
         GROUP BY PayoffID, PayoffName
@@ -117,6 +130,10 @@
         WHERE T.ItemsTotalPrice > 0
         ORDER BY DepartName
       </select>
+
+      <procedure id="GetItemsPriceByGroup" parameterMap="GroupPriceParam" resultMap="GroupPriceResult">
+        proc_GetItemsPriceByGroup
+      </procedure>
 
       <procedure id="GetTurnoverByHandover" parameterMap="HandoverParam" resultMap="HandoverReportResult">
         proc_GetTurnoverByHandover

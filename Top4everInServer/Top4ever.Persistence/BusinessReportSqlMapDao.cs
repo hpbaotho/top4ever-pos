@@ -74,6 +74,14 @@ namespace Top4ever.Persistence
             return ExecuteQueryForList<ItemsPrice>("GetItemsPriceByDailyStatement", dailyStatementNo);
         }
 
+        public IList<GroupPrice> GetItemsPriceByGroup(DateTime beginDate, DateTime endDate)
+        {
+            Hashtable htParam = new Hashtable();
+            htParam["BeginDate"] = beginDate;
+            htParam["EndDate"] = endDate;
+            return ExecuteQueryForList<GroupPrice>("GetItemsPriceByGroup", htParam);
+        }
+
         #endregion
     }
 }

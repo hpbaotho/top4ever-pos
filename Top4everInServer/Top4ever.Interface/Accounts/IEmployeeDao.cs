@@ -17,5 +17,7 @@ namespace Top4ever.Interface.Accounts
         Employee GetEmployeeByNo(string employeeNo);
 
         IList<String> GetRightsCodeList(string userName, string password);
+
+        Int32 UpdateEmployeePassword(string employeeNo, string password, string newPassword);
     }
 }
