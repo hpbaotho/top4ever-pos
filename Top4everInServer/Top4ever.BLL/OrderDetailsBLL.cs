@@ -42,5 +42,24 @@ namespace Top4ever.BLL
             }
             return objRet;
         }
+
+        public static byte[] GetAllDeletedItems(byte[] itemBuffer)
+        {
+            byte[] objRet = null;
+            string beginDate = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, ParamFieldLength.BEGINDATE).Trim('\0');
+            string endDate = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.BEGINDATE, ParamFieldLength.ENDDATE).Trim('\0');
+            int dateType = BitConverter.ToInt32(itemBuffer, ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.BEGINDATE + ParamFieldLength.ENDDATE);
+
+            DeletedAllItems deletedAllItems = OrderDetailsService.GetInstance().GetAllDeletedItems(DateTime.Parse(beginDate), DateTime.Parse(endDate), dateType);
+            string json = JsonConvert.SerializeObject(deletedAllItems);
+            byte[] jsonByte = Encoding.UTF8.GetBytes(json);
+
+            int transCount = BasicTypeLength.INT32 + BasicTypeLength.INT32 + jsonByte.Length;
+            objRet = new byte[transCount];
+            Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes(transCount), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            Array.Copy(jsonByte, 0, objRet, 2 * BasicTypeLength.INT32, jsonByte.Length);
+            return objRet;
+        }
     }
 }

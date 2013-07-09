@@ -32,5 +32,9 @@ namespace Top4ever.Interface.OrderRelated
         bool LadeOrderDetails(OrderDetails orderDetails);
 
         bool SubtractSalesSplitOrder(OrderDetails orderDetails);
+
+        IList<DeletedItem> GetDeletedOrderItemList(DateTime beginDate, DateTime endDate, int dateType);
+
+        IList<DeletedItem> GetDeletedGoodsItemList(DateTime beginDate, DateTime endDate, int dateType);
     }
 }

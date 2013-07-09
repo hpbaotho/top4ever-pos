@@ -22,6 +22,11 @@ namespace Top4ever.Persistence.MembershipCard
             return ExecuteQueryForObject("GetVIPCardInfo", card) as VIPCard;
         }
 
+        public VIPCard GetVIPCard(string cardNo)
+        {
+            return ExecuteQueryForObject("GetVIPCardByCardNo", cardNo) as VIPCard;
+        }
+
         public string GetCardPassword(string cardNo)
         {
             string password = string.Empty;
@@ -44,15 +49,16 @@ namespace Top4ever.Persistence.MembershipCard
             return discountRate;
         }
 
-        public bool UpdateVIPCardPassword(string cardNo, string password, string newPassword)
+        public Int32 UpdateVIPCardPassword(string cardNo, string password, string newPassword)
         {
-            int result = 0;
             Hashtable htParam = new Hashtable();
             htParam["CardNo"] = cardNo;
             htParam["Password"] = password;
             htParam["NewPassword"] = newPassword;
-            result = ExecuteUpdate("UpdateVIPCardPassword", htParam);
-            return result > 0;
+            htParam["ReturnValue"] = 0;
+            ExecuteQueryForObject("UpdateVIPCardPassword", htParam);
+            int i = (int)htParam["ReturnValue"];    //返回值
+            return i;
         }
 
         public Int32 UpdateVIPCardStatus(string cardNo, string password, int status)

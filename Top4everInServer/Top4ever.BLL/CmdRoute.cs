@@ -166,6 +166,15 @@ namespace Top4ever.BLL
                 case Command.ID_GET_SHOP:
                     byteRet = ShopBLL.GetCurrentShop();
                     break;
+                case Command.ID_GET_ITEMPRICELISTBYGROUP:
+                    byteRet = BusinessReportBLL.GetItemPriceListByGroup(itemBuffer);
+                    break;
+                case Command.ID_GET_ALLDELETEDITEMS:
+                    byteRet = OrderDetailsBLL.GetAllDeletedItems(itemBuffer);
+                    break;
+                case Command.ID_UPDATE_EMPLOYEEPASSWORD:
+                    byteRet = EmployeeBLL.UpdateEmployeePassword(itemBuffer);
+                    break;
 
                 default:
                     byteRet = null;

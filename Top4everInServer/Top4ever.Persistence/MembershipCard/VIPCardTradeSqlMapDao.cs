@@ -21,6 +21,11 @@ namespace Top4ever.Persistence.MembershipCard
             return ExecuteQueryForList<VIPCardTrade>("GetVIPCardTradeList", htParam);
         }
 
+        public IList<VIPCardTrade> GetAllStoredAmount(string dailyStatementNo)
+        {
+            return ExecuteQueryForList<VIPCardTrade>("GetAllStoredAmount", dailyStatementNo);
+        }
+
         public VIPCardStoredVaule GetVIPCardStoredVaule(string cardNo, decimal storedVauleAmount)
         {
             Hashtable htParam = new Hashtable();

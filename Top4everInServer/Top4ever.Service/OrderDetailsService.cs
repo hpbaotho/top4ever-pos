@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using IBatisNet.DataAccess;
 
 using Top4ever.Domain.OrderRelated;
+using Top4ever.Domain.Transfer;
 using Top4ever.Interface.OrderRelated;
 
 namespace Top4ever.Service
@@ -95,6 +96,16 @@ namespace Top4ever.Service
             _daoManager.CloseConnection();
 
             return result;
+        }
+
+        public DeletedAllItems GetAllDeletedItems(DateTime beginDate, DateTime endDate, int dateType)
+        {
+            DeletedAllItems deletedItems = new DeletedAllItems();
+            _daoManager.OpenConnection();
+            deletedItems.DeletedOrderItemList = _orderDetailsDao.GetDeletedOrderItemList(beginDate, endDate, dateType);
+            deletedItems.DeletedGoodsItemList = _orderDetailsDao.GetDeletedGoodsItemList(beginDate, endDate, dateType);
+            _daoManager.CloseConnection();
+            return deletedItems;
         }
 
         #endregion

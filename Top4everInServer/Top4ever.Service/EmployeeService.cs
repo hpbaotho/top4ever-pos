@@ -148,6 +148,15 @@ namespace Top4ever.Service
             return rightsCodeList;
         }
 
+        public Int32 UpdateEmployeePassword(string employeeNo, string password, string newPassword)
+        {
+            int result = 0;
+            _daoManager.OpenConnection();
+            result = _employeeDao.UpdateEmployeePassword(employeeNo, password, newPassword);
+            _daoManager.CloseConnection();
+            return result;
+        }
+
         #endregion
     }
 }

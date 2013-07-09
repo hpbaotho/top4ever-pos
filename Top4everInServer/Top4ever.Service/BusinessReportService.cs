@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using IBatisNet.DataAccess;
 
 using Top4ever.Domain.Transfer;
+using Top4ever.Domain.MembershipCard;
 using Top4ever.Interface;
+using Top4ever.Interface.MembershipCard;
 
 namespace Top4ever.Service
 {
@@ -19,6 +21,7 @@ namespace Top4ever.Service
         private IDaoManager _daoManager = null;
         private IBusinessReportDao _businessReportDao = null;
         private IDailyStatementDao _dailyStatementDao = null;
+        private IVIPCardTradeDao _VIPCardTradeDao = null;
 
         #endregion
 
@@ -29,6 +32,7 @@ namespace Top4ever.Service
             _daoManager = ServiceConfig.GetInstance().DaoManager;
             _businessReportDao = _daoManager.GetDao(typeof(IBusinessReportDao)) as IBusinessReportDao;
             _dailyStatementDao = _daoManager.GetDao(typeof(IDailyStatementDao)) as IDailyStatementDao;
+            _VIPCardTradeDao = _daoManager.GetDao(typeof(IVIPCardTradeDao)) as IVIPCardTradeDao;
         }
 
         #endregion
@@ -130,6 +134,7 @@ namespace Top4ever.Service
                 {
                     BusinessReport businessReport = _businessReportDao.GetTurnoverByDailyStatement(dailyStatementNo);
                     IList<OrderDiscountSum> orderDiscountSumList = _businessReportDao.GetOrderDiscountSumByDailyStatement(dailyStatementNo);
+                    IList<VIPCardTrade> cardStoredValueList = _VIPCardTradeDao.GetAllStoredAmount(dailyStatementNo);
                     IList<OrderPayoffSum> orderPayoffSumList = _businessReportDao.GetOrderPayoffSumByDailyStatement(dailyStatementNo);
                     IList<ItemsPrice> itemsPriceList = _businessReportDao.GetItemsPriceByDailyStatement(dailyStatementNo);
 
@@ -181,6 +186,7 @@ namespace Top4ever.Service
                     reportData.BillTotalQty = businessReport.BillTotalQty;
                     reportData.PeopleTotalNum = businessReport.PeopleTotalNum;
                     reportData.orderDiscountSumList = orderDiscountSumList;
+                    reportData.cardStoredValueList = cardStoredValueList;
                     reportData.orderPayoffSumList = orderPayoffSumList;
                     reportData.salesPriceByDepartList = priceByDepartList;
                 }
@@ -193,6 +199,16 @@ namespace Top4ever.Service
             }
             return reportData;
         }
+
+        public IList<GroupPrice> GetItemPriceListByGroup(DateTime beginDate, DateTime endDate)
+        {
+            IList<GroupPrice> groupPriceList = null;
+            _daoManager.OpenConnection();
+            groupPriceList = _businessReportDao.GetItemsPriceByGroup(beginDate, endDate);
+            _daoManager.CloseConnection();
+            return groupPriceList;
+        }
+
         #endregion
     }
 }

@@ -69,21 +69,12 @@ namespace Top4ever.BLL
             string currentPassword = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.CARD_NO, ParamFieldLength.CARD_PASSWORD).Trim('\0');
             string newPassword = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.CARD_NO + ParamFieldLength.CARD_PASSWORD, ParamFieldLength.CARD_PASSWORD).Trim('\0');
 
-            bool result = VIPCardService.GetInstance().UpdateCardPassword(cardNo, currentPassword, newPassword);
-            if (result)
-            {
-                //成功
-                objRet = new byte[ParamFieldLength.PACKAGE_HEAD];
-                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
-                Array.Copy(BitConverter.GetBytes(ParamFieldLength.PACKAGE_HEAD), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
-            }
-            else
-            {
-                //更新密码失败
-                objRet = new byte[ParamFieldLength.PACKAGE_HEAD];
-                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.ERROR_DB), 0, objRet, 0, BasicTypeLength.INT32);
-                Array.Copy(BitConverter.GetBytes(ParamFieldLength.PACKAGE_HEAD), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
-            }
+            Int32 result = VIPCardService.GetInstance().UpdateCardPassword(cardNo, currentPassword, newPassword);
+            //返回
+            objRet = new byte[ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32];
+            Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes(ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes(result), 0, objRet, ParamFieldLength.PACKAGE_HEAD, BasicTypeLength.INT32);
             return objRet;
         }
 

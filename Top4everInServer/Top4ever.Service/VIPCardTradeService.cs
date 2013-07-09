@@ -23,6 +23,7 @@ namespace Top4ever.Service
 
         private static VIPCardTradeService _instance = new VIPCardTradeService();
         private IDaoManager _daoManager = null;
+        private IVIPCardDao _VIPCardDao = null;
         private IVIPCardTradeDao _VIPCardTradeDao = null;
         private IDailyStatementDao _dailyStatementDao = null;
 
@@ -33,6 +34,7 @@ namespace Top4ever.Service
         private VIPCardTradeService()
         {
             _daoManager = ServiceConfig.GetInstance().DaoManager;
+            _VIPCardDao = _daoManager.GetDao(typeof(IVIPCardDao)) as IVIPCardDao;
             _VIPCardTradeDao = _daoManager.GetDao(typeof(IVIPCardTradeDao)) as IVIPCardTradeDao;
             _dailyStatementDao = _daoManager.GetDao(typeof(IDailyStatementDao)) as IDailyStatementDao;
         }
@@ -46,15 +48,22 @@ namespace Top4ever.Service
             return _instance;
         }
 
-        public IList<VIPCardTrade> GetVIPCardTradeList(string cardNo, DateTime beginDate, DateTime endDate)
+        public Int32 GetVIPCardTradeList(string cardNo, DateTime beginDate, DateTime endDate, ref VIPCardTradeRecord cardTradeRecord)
         {
-            IList<VIPCardTrade> cardTradeList = null;
-
+            cardTradeRecord = new VIPCardTradeRecord();
             _daoManager.OpenConnection();
-            cardTradeList = _VIPCardTradeDao.GetVIPCardTradeList(cardNo, beginDate, endDate);
+            VIPCard card = _VIPCardDao.GetVIPCard(cardNo);
+            int result = card.Status;
+            if (result == 1)
+            {
+                IList<VIPCardTrade> cardTradeList = _VIPCardTradeDao.GetVIPCardTradeList(cardNo, beginDate, endDate);
+                cardTradeRecord.Balance = card.Balance;
+                cardTradeRecord.Integral = card.Integral;
+                cardTradeRecord.DiscountRate = card.DiscountRate;
+                cardTradeRecord.VIPCardTradeList = cardTradeList;
+            }
             _daoManager.CloseConnection();
-
-            return cardTradeList;
+            return result;
         }
 
         public Int32 AddVIPCardStoredValue(VIPCardAddMoney cardMoney, out string tradePayNo)

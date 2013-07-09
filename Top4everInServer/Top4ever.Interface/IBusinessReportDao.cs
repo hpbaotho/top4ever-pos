@@ -27,5 +27,7 @@ namespace Top4ever.Interface
         IList<OrderPayoffSum> GetOrderPayoffSumByDailyStatement(string dailyStatementNo);
 
         IList<ItemsPrice> GetItemsPriceByDailyStatement(string dailyStatementNo);
+
+        IList<GroupPrice> GetItemsPriceByGroup(DateTime beginDate, DateTime endDate);
     }
 }

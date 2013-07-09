@@ -87,6 +87,24 @@ namespace Top4ever.Persistence.OrderRelated
             result = ExecuteUpdate("SubtractSalesSplitOrder", orderDetails);
             return result > 0;
         }
+
+        public IList<DeletedItem> GetDeletedOrderItemList(DateTime beginDate, DateTime endDate, int dateType)
+        {
+            Hashtable htParam = new Hashtable();
+            htParam["BeginDate"] = beginDate;
+            htParam["EndDate"] = endDate;
+            htParam["DateType"] = dateType;
+            return ExecuteQueryForList<DeletedItem>("GetDeletedOrderItem", htParam);
+        }
+
+        public IList<DeletedItem> GetDeletedGoodsItemList(DateTime beginDate, DateTime endDate, int dateType)
+        {
+            Hashtable htParam = new Hashtable();
+            htParam["BeginDate"] = beginDate;
+            htParam["EndDate"] = endDate;
+            htParam["DateType"] = dateType;
+            return ExecuteQueryForList<DeletedItem>("GetDeletedGoodsItem", htParam);
+        }
         #endregion
     }
 }

@@ -12,11 +12,13 @@ namespace Top4ever.Interface.MembershipCard
     {
         VIPCard GetVIPCard(string cardNo, string password);
 
+        VIPCard GetVIPCard(string cardNo);
+
         string GetCardPassword(string cardNo);
 
         decimal GetCardDiscountRate(string cardNo);
 
-        bool UpdateVIPCardPassword(string cardNo, string password, string newPassword);
+        Int32 UpdateVIPCardPassword(string cardNo, string password, string newPassword);
 
         Int32 UpdateVIPCardStatus(string cardNo, string password, int status);
     }

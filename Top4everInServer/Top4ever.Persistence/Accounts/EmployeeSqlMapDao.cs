@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using Top4ever.Domain.Accounts;
@@ -37,6 +38,18 @@ namespace Top4ever.Persistence.Accounts
             emp.EmployeeNo = userName;
             emp.Password = password;
             return ExecuteQueryForList<String>("GetRightsCodeListByEmployee", emp); ;
+        }
+
+        public Int32 UpdateEmployeePassword(string employeeNo, string password, string newPassword)
+        {
+            Hashtable htParam = new Hashtable();
+            htParam["EmployeeNo"] = employeeNo;
+            htParam["Password"] = password;
+            htParam["NewPassword"] = newPassword;
+            htParam["ReturnValue"] = 0;
+            ExecuteQueryForObject("UpdateEmployeePassword", htParam);
+            int i = (int)htParam["ReturnValue"];    //返回值
+            return i;
         }
 
         #endregion

@@ -30,6 +30,7 @@
       <parameter property="CardNo" column="CardNo" />
       <parameter property="Password" column="Password" />
       <parameter property="NewPassword" column="NewPassword" />
+      <parameter property="ReturnValue" column="ReturnValue" direction="Output" />
     </parameterMap>
 
     <parameterMap id="UpdateCardStatusParam" class="Hashtable">
@@ -45,10 +46,16 @@
     ============================================= 
     -->
   <statements>
-    <select id="GetVIPCardInfo" resultMap="VIPCardResult" parameterClass="VIPCard">
+    <select id="GetVIPCardInfo" parameterClass="VIPCard" resultMap="VIPCardResult">
       SELECT VIPCardID,CardNo,Password,Balance,DiscountRate,Integral,[Name],Telephone,Birthday,[Address],[Status],LastConsumeTime,OpenCardTime,Remark
       FROM VIPCard_Offline WITH(NOLOCK)
       WHERE CardNo = #CardNo# AND [Password] = #Password#
+    </select>
+
+    <select id="GetVIPCardByCardNo" parameterClass="String" resultMap="VIPCardResult">
+      SELECT VIPCardID,CardNo,Password,Balance,DiscountRate,Integral,[Name],Telephone,Birthday,[Address],[Status],LastConsumeTime,OpenCardTime,Remark
+      FROM VIPCard_Offline WITH(NOLOCK)
+      WHERE CardNo = #value#
     </select>
 
     <select id="GetCardPassword" parameterClass="String" resultClass="String">
