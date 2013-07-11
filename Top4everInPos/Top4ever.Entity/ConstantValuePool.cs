@@ -76,6 +76,10 @@ namespace Top4ever.Entity
 
         public static IList<PromotionPresent> PromotionPresentList { get; set; }
 
+        public static IList<GoodsLimitedTimeSale> GroupLimitedTimeSaleList { get; set; }
+
+        public static IList<GoodsLimitedTimeSale> GoodsLimitedTimeSaleList { get; set; }
+
         /// <summary>
         /// 程序的配置
         /// </summary>
