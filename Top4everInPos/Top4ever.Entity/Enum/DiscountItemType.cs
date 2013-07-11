@@ -11,6 +11,10 @@ namespace Top4ever.Entity.Enum
         /// <summary>
         /// 固定折扣
         /// </summary>
-        OffFixPay = 2
+        OffFixPay = 2,
+        /// <summary>
+        /// 折扣到
+        /// </summary>
+        OffSaleTo = 3
     }
 }

@@ -18,6 +18,7 @@ using Top4ever.Entity;
 using Top4ever.Entity.Config;
 using Top4ever.Print;
 using Top4ever.Entity.Enum;
+using Top4ever.Domain.GoodsRelated;
 
 namespace Top4ever.Pos
 {
@@ -142,6 +143,22 @@ namespace Top4ever.Pos
                     ConstantValuePool.PromotionConditionList = sysBasicData.PromotionConditionList;
                     ConstantValuePool.PromotionCronTriggerList = sysBasicData.PromotionCronTriggerList;
                     ConstantValuePool.PromotionPresentList = sysBasicData.PromotionPresentList;
+                    
+                    IList<GoodsLimitedTimeSale> groupLimitedTimeSaleList = new List<GoodsLimitedTimeSale>();
+                    IList<GoodsLimitedTimeSale> goodsLimitedTimeSaleList = new List<GoodsLimitedTimeSale>();
+                    foreach (GoodsLimitedTimeSale item in sysBasicData.TotalLimitedTimeSaleList)
+                    {
+                        if (item.ItemType == 1) //Group
+                        {
+                            groupLimitedTimeSaleList.Add(item);
+                        }
+                        if (item.ItemType == 2) //Item
+                        {
+                            goodsLimitedTimeSaleList.Add(item);
+                        }
+                    }
+                    ConstantValuePool.GroupLimitedTimeSaleList = groupLimitedTimeSaleList;
+                    ConstantValuePool.GoodsLimitedTimeSaleList = goodsLimitedTimeSaleList;
 
                     if (ConstantValuePool.BizSettingConfig.SaleType == ShopSaleType.Takeout)
                     {
@@ -272,6 +289,26 @@ namespace Top4ever.Pos
                     ConstantValuePool.GoodsSetMealList = sysBasicData.GoodsSetMealList;
                     ConstantValuePool.GoodsCronTriggerList = sysBasicData.GoodsCronTriggerList;
                     ConstantValuePool.ButtonStyleList = sysBasicData.ButtonStyleList;
+                    ConstantValuePool.PromotionList = sysBasicData.PromotionList;
+                    ConstantValuePool.PromotionConditionList = sysBasicData.PromotionConditionList;
+                    ConstantValuePool.PromotionCronTriggerList = sysBasicData.PromotionCronTriggerList;
+                    ConstantValuePool.PromotionPresentList = sysBasicData.PromotionPresentList;
+
+                    IList<GoodsLimitedTimeSale> groupLimitedTimeSaleList = new List<GoodsLimitedTimeSale>();
+                    IList<GoodsLimitedTimeSale> goodsLimitedTimeSaleList = new List<GoodsLimitedTimeSale>();
+                    foreach (GoodsLimitedTimeSale item in sysBasicData.TotalLimitedTimeSaleList)
+                    {
+                        if (item.ItemType == 1) //Group
+                        {
+                            groupLimitedTimeSaleList.Add(item);
+                        }
+                        if (item.ItemType == 2) //Item
+                        {
+                            goodsLimitedTimeSaleList.Add(item);
+                        }
+                    }
+                    ConstantValuePool.GroupLimitedTimeSaleList = groupLimitedTimeSaleList;
+                    ConstantValuePool.GoodsLimitedTimeSaleList = goodsLimitedTimeSaleList;
 
                     if (ConstantValuePool.BizSettingConfig.SaleType == ShopSaleType.Takeout)
                     {

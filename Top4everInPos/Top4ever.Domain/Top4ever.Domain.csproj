@@ -52,8 +52,10 @@
     <Compile Include="GoodsRelated\DetailsGroup.cs" />
     <Compile Include="GoodsRelated\Goods.cs" />
     <Compile Include="GoodsRelated\GoodsCheckStock.cs" />
+    <Compile Include="GoodsRelated\GoodsCombinedSale.cs" />
     <Compile Include="GoodsRelated\GoodsCronTrigger.cs" />
     <Compile Include="GoodsRelated\GoodsGroup.cs" />
+    <Compile Include="GoodsRelated\GoodsLimitedTimeSale.cs" />
     <Compile Include="GoodsRelated\GoodsSetMeal.cs" />
     <Compile Include="HandoverRecord.cs" />
     <Compile Include="HandoverTurnover.cs" />
