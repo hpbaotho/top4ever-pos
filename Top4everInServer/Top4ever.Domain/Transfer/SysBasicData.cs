@@ -39,7 +39,13 @@ namespace Top4ever.Domain.Transfer
         public IList<PromotionCronTrigger> PromotionCronTriggerList { get; set; }
 
         public IList<PromotionPresent> PromotionPresentList { get; set; }
-
+        /// <summary>
+        /// 限时特价
+        /// </summary>
         public IList<GoodsLimitedTimeSale> TotalLimitedTimeSaleList { get; set; }
+        /// <summary>
+        /// 组合销售
+        /// </summary>
+        public IList<GoodsCombinedSale> GoodsCombinedSaleList { get; set; }
     }
 }
