@@ -80,8 +80,6 @@ namespace Top4ever.Service
             _daoManager.BeginTransaction();
             try
             {
-                // notice
-                IList<Notice> noticeList = _noticeDao.GetAllNotice();
                 // region
                 IList<BizRegion> regionList = _regionDao.GetAllBizRegion();
                 if (regionList != null && regionList.Count > 0)
@@ -92,12 +90,6 @@ namespace Top4ever.Service
                         region.BizDeskList = deskList;
                     }
                 }
-                // discount
-                IList<Discount> discountList = _discountDao.GetAllDiscount();
-                // payoffWay
-                IList<PayoffWay> payoffWayList = _payoffWayDao.GetAllPayoffWay();
-                // reason
-                IList<Reason> reasonList = _reasonDao.GetAllReason();
                 // goodsGroup
                 IList<GoodsGroup> goodsGroupList = _goodsGroupDao.GetAllGoodsGroup();
                 if (goodsGroupList != null && goodsGroupList.Count > 0)
@@ -134,36 +126,26 @@ namespace Top4ever.Service
                         item.DetailsList = detailsList;
                     }
                 }
-                IList<GoodsSetMeal> goodsSetMealList = _goodsSetMealDao.GetAllGoodsSetMeal();
-                IList<GoodsCronTrigger> goodsCronTriggerList = _goodsGroupDao.GetAllGoodsCronTrigger();
-                //ButtonStyle
-                IList<ButtonStyle> buttonStyleList = _buttonStyleDao.GetButtonStyleList();
-                //SystemConfig
-                SystemConfig systemConfig = _sysConfigDao.GetSystemConfigInfo();
-                //Promotion
-                IList<Promotion> promotionList = _promotionDao.GetPromotionList();
-                //PromotionCondition
-                IList<PromotionCondition> promotionConditionList = _promotionDao.GetPromotionConditionList();
-                //PromotionCronTrigger
-                IList<PromotionCronTrigger> promotionCronTriggerList = _promotionDao.GetPromotionCronTriggerList();
-                //PromotionPresent
-                IList<PromotionPresent> promotionPresentList = _promotionDao.GetPromotionPresentList();
                 // SysBasicData
-                basicData.NoticeList = noticeList;
                 basicData.RegionList = regionList;
-                basicData.DiscountList = discountList;
-                basicData.PayoffWayList = payoffWayList;
-                basicData.ReasonList = reasonList;
                 basicData.GoodsGroupList = goodsGroupList;
                 basicData.DetailsGroupList = detailsGroupList;
-                basicData.GoodsSetMealList = goodsSetMealList;
-                basicData.GoodsCronTriggerList = goodsCronTriggerList;
-                basicData.ButtonStyleList = buttonStyleList;
-                basicData.SysConfig = systemConfig;
-                basicData.PromotionList = promotionList;
-                basicData.PromotionConditionList = promotionConditionList;
-                basicData.PromotionCronTriggerList = promotionCronTriggerList;
-                basicData.PromotionPresentList = promotionPresentList;
+                basicData.NoticeList = _noticeDao.GetAllNotice();
+                basicData.DiscountList = _discountDao.GetAllDiscount();
+                basicData.PayoffWayList = _payoffWayDao.GetAllPayoffWay();
+                basicData.ReasonList = _reasonDao.GetAllReason();
+                basicData.GoodsSetMealList = _goodsSetMealDao.GetAllGoodsSetMeal();
+                basicData.GoodsCronTriggerList = _goodsGroupDao.GetAllGoodsCronTrigger();
+                basicData.ButtonStyleList = _buttonStyleDao.GetButtonStyleList();
+                basicData.SysConfig = _sysConfigDao.GetSystemConfigInfo();
+                basicData.PromotionList = _promotionDao.GetPromotionList();
+                basicData.PromotionConditionList = _promotionDao.GetPromotionConditionList();
+                basicData.PromotionCronTriggerList = _promotionDao.GetPromotionCronTriggerList();
+                basicData.PromotionPresentList = _promotionDao.GetPromotionPresentList();
+                //限时特价
+                basicData.TotalLimitedTimeSaleList = _goodsGroupDao.GetAllGoodsLimitedTimeSale();
+                //组合销售
+                basicData.GoodsCombinedSaleList = _goodsGroupDao.GetAllGoodsCombinedSale();
 
                 _daoManager.CommitTransaction();
             }

@@ -4,6 +4,8 @@
     <alias>
       <typeAlias alias="GoodsGroup" type="Top4ever.Domain.GoodsRelated.GoodsGroup, Top4ever.Domain" />
       <typeAlias alias="GoodsCronTrigger" type="Top4ever.Domain.GoodsRelated.GoodsCronTrigger, Top4ever.Domain" />
+      <typeAlias alias="GoodsLimitedTimeSale" type="Top4ever.Domain.GoodsRelated.GoodsLimitedTimeSale, Top4ever.Domain" />
+      <typeAlias alias="GoodsCombinedSale" type="Top4ever.Domain.GoodsRelated.GoodsCombinedSale, Top4ever.Domain" />
     </alias>
 
     <resultMaps>
@@ -26,6 +28,46 @@
         <result property="Minute" column="Minute"></result>
       </resultMap>
 
+      <resultMap id="GoodsLimitedTimeSaleResult" class="GoodsLimitedTimeSale">
+        <result property="ItemID" column="ItemID"></result>
+        <result property="ItemType" column="ItemType"></result>
+        <result property="BeginDate" column="BeginDate"></result>
+        <result property="EndDate" column="EndDate"></result>
+        <result property="Week" column="Week"></result>
+        <result property="Day" column="Day"></result>
+        <result property="Hour" column="Hour"></result>
+        <result property="Minute" column="Minute"></result>
+        <result property="DiscountType" column="DiscountType"></result>
+        <result property="DiscountRate" column="DiscountRate"></result>
+        <result property="OffFixPay" column="OffFixPay"></result>
+        <result property="OffSaleTo" column="OffSaleTo"></result>
+      </resultMap>
+
+      <resultMap id="GoodsCombinedSaleResult" class="GoodsCombinedSale">
+        <result property="ItemID" column="ItemID"></result>
+        <result property="ItemType" column="ItemType"></result>
+        <result property="BeginDate" column="BeginDate"></result>
+        <result property="EndDate" column="EndDate"></result>
+        <result property="Week" column="Week"></result>
+        <result property="Day" column="Day"></result>
+        <result property="Hour" column="Hour"></result>
+        <result property="Minute" column="Minute"></result>
+        <result property="Quantity" column="Quantity"></result>
+        <result property="SellPrice" column="SellPrice"></result>
+        <result property="MoreOrLess" column="MoreOrLess"></result>
+        <result property="LeastDiscountRate" column="LeastDiscountRate"></result>
+        <result property="PreferentialInterval" column="PreferentialInterval"></result>
+        <result property="IsMultiple" column="IsMultiple"></result>
+        <result property="DiscountType2" column="DiscountType2"></result>
+        <result property="DiscountRate2" column="DiscountRate2"></result>
+        <result property="OffFixPay2" column="OffFixPay2"></result>
+        <result property="OffSaleTo2" column="OffSaleTo2"></result>
+        <result property="DiscountType3" column="DiscountType3"></result>
+        <result property="DiscountRate3" column="DiscountRate3"></result>
+        <result property="OffFixPay3" column="OffFixPay3"></result>
+        <result property="OffSaleTo3" column="OffSaleTo3"></result>
+      </resultMap>
+
     </resultMaps>
     <!-- =============================================
         MAPPED STATEMENTS 
@@ -42,6 +84,22 @@
       <select id="GetGoodsCronTriggerList" resultMap="GoodsCronTriggerResult">
         SELECT ItemID,ItemType,BeginDate,EndDate,Week,[Day],Hour,Minute
         FROM GoodsCronTrigger
+        WHERE IsVoided = 0
+      </select>
+
+      <select id="GetGoodsLimitedTimeSaleList" resultMap="GoodsLimitedTimeSaleResult">
+        SELECT ItemID,ItemType,BeginDate,EndDate,Week,[Day],Hour,
+            Minute,DiscountType,DiscountRate,OffFixPay,OffSaleTo
+        FROM GoodsLimitedTimeSale
+        WHERE IsVoided = 0
+        ORDER BY OrderBy
+      </select>
+
+      <select id="GetGoodsCombinedSaleList" resultMap="GoodsCombinedSaleResult">
+        SELECT ItemID,ItemType,BeginDate,EndDate,Week,[Day],Hour,Minute,
+            Quantity,SellPrice,MoreOrLess,LeastDiscountRate,PreferentialInterval,IsMultiple,
+            DiscountType2,DiscountRate2,OffFixPay2,OffSaleTo2,DiscountType3,DiscountRate3,OffFixPay3,OffSaleTo3
+        FROM GoodsCombinedSale
         WHERE IsVoided = 0
       </select>
 

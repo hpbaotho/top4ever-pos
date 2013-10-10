@@ -13,5 +13,9 @@ namespace Top4ever.Interface.GoodsRelated
         IList<GoodsGroup> GetAllGoodsGroup();
 
         IList<GoodsCronTrigger> GetAllGoodsCronTrigger();
+
+        IList<GoodsLimitedTimeSale> GetAllGoodsLimitedTimeSale();
+
+        IList<GoodsCombinedSale> GetAllGoodsCombinedSale();
     }
 }
