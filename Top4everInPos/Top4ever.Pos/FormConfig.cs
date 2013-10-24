@@ -49,6 +49,11 @@ namespace Top4ever.Pos
             }
             this.txtFont.Text = ConstantValuePool.BizSettingConfig.FontSize.ToString();
             this.cmbSaleType.SelectedIndex = GetIndexByValue(cmbSaleType, Convert.ToString((int)ConstantValuePool.BizSettingConfig.SaleType));
+            this.txtLoginImage.Text = ConstantValuePool.BizSettingConfig.LoginImagePath;
+            this.txtDeskImage.Text = ConstantValuePool.BizSettingConfig.DeskImagePath;
+            this.ckbSecondScreen.Checked = ConstantValuePool.BizSettingConfig.SecondScreenEnabled;
+            this.txtVideoPath.Text = ConstantValuePool.BizSettingConfig.ScreenVideoPath;
+            this.txtImagePath.Text = ConstantValuePool.BizSettingConfig.ScreenImagePath;
             if (ConstantValuePool.BizSettingConfig.UsePettyCash)
             {
                 ckbPettyCash.Checked = true;
@@ -512,6 +517,11 @@ namespace Top4ever.Pos
             appConfig.FontSize = float.Parse(txtFont.Text);
             ListItem itemType = cmbSaleType.SelectedItem as ListItem;
             appConfig.SaleType = (ShopSaleType)int.Parse(itemType.Value);
+            appConfig.LoginImagePath = txtLoginImage.Text.Trim();
+            appConfig.DeskImagePath = txtDeskImage.Text.Trim();
+            appConfig.SecondScreenEnabled = ckbSecondScreen.Checked;
+            appConfig.ScreenVideoPath = txtVideoPath.Text.Trim();
+            appConfig.ScreenImagePath = txtImagePath.Text.Trim();
             appConfig.UsePettyCash = ckbPettyCash.Checked;
             appConfig.ShowBrevityCode = ckbBriefCode.Checked;
             appConfig.TakeAwayCash = ckbTakeAwayCash.Checked;
@@ -663,6 +673,74 @@ namespace Top4ever.Pos
                 txtClientVID.Enabled = false;
                 txtClientPID.Enabled = false;
                 cmbClientShowModel.Enabled = false;
+            }
+        }
+
+        private void btnLoadLogin_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fileDialog1 = new OpenFileDialog();
+            fileDialog1.InitialDirectory = Application.StartupPath;//初始目录
+            fileDialog1.Filter = "picture（*.jpg;*.bmp;*.gif）|*.jpg;*.bmp;*.gif|All files (*.*)|*.*";//文件的类型
+            fileDialog1.FilterIndex = 1;
+            fileDialog1.RestoreDirectory = true;
+            if (fileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                txtLoginImage.Text = fileDialog1.FileName;
+            }
+        }
+
+        private void btnLoadDesk_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fileDialog1 = new OpenFileDialog();
+            fileDialog1.InitialDirectory = Application.StartupPath;//初始目录
+            fileDialog1.Filter = "picture（*.jpg;*.bmp;*.gif）|*.jpg;*.bmp;*.gif|All files (*.*)|*.*";//文件的类型
+            fileDialog1.FilterIndex = 1;
+            fileDialog1.RestoreDirectory = true;
+            if (fileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                txtDeskImage.Text = fileDialog1.FileName;
+            }
+        }
+
+        private void btnLoadFile_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog dialog = new FolderBrowserDialog();
+            dialog.Description = "请选择文件路径";
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                txtVideoPath.Text = dialog.SelectedPath;
+            }
+        }
+
+        private void btnLoadImage_Click(object sender, EventArgs e)
+        {
+            string strPath = txtImagePath.Text;
+            OpenFileDialog fileDialog1 = new OpenFileDialog();
+            fileDialog1.InitialDirectory = strPath;//初始目录
+            fileDialog1.Filter = "picture（*.jpg;*.bmp;*.gif）|*.jpg;*.bmp;*.gif|All files (*.*)|*.*";//文件的类型
+            fileDialog1.FilterIndex = 1;
+            fileDialog1.RestoreDirectory = true;
+            if (fileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                txtImagePath.Text = fileDialog1.FileName;
+            }
+        }
+
+        private void ckbSecondScreen_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ckbSecondScreen.Checked)
+            {
+                txtVideoPath.Enabled = true;
+                txtImagePath.Enabled = true;
+                btnLoadFile.Enabled = true;
+                btnLoadImage.Enabled = true;
+            }
+            else
+            {
+                txtVideoPath.Enabled = false;
+                txtImagePath.Enabled = false;
+                btnLoadFile.Enabled = false;
+                btnLoadImage.Enabled = false;
             }
         }
     }

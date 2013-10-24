@@ -75,10 +75,22 @@ namespace Top4ever.Entity
         public static IList<PromotionCronTrigger> PromotionCronTriggerList { get; set; }
 
         public static IList<PromotionPresent> PromotionPresentList { get; set; }
-
+        /// <summary>
+        /// 品项组限时特价
+        /// </summary>
         public static IList<GoodsLimitedTimeSale> GroupLimitedTimeSaleList { get; set; }
-
+        /// <summary>
+        /// 品项限时特价
+        /// </summary>
         public static IList<GoodsLimitedTimeSale> GoodsLimitedTimeSaleList { get; set; }
+        /// <summary>
+        /// 品项组组合销售
+        /// </summary>
+        public static IList<GoodsCombinedSale> GroupCombinedSaleList { get; set; }
+        /// <summary>
+        /// 品项组合销售
+        /// </summary>
+        public static IList<GoodsCombinedSale> GoodsCombinedSaleList { get; set; }
 
         /// <summary>
         /// 程序的配置
@@ -93,6 +105,10 @@ namespace Top4ever.Entity
         /// </summary>
         public static bool IsTelCallWorking { get; set; }
 
+        /// <summary>
+        /// 第二屏对象
+        /// </summary>
+        public static Form SecondScreenForm { get; set; }
         /// <summary>
         /// 桌况对象
         /// </summary>

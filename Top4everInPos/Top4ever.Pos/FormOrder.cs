@@ -158,6 +158,14 @@ namespace Top4ever.Pos
                     m_EmployeeNo = m_SalesOrder.order.EmployeeNo;
                     BindGoodsOrderInfo();   //绑定订单信息
                     BindOrderInfoSum();
+                    //更新第二屏信息
+                    if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+                    {
+                        if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
+                        {
+                            ((FormSecondScreen)ConstantValuePool.SecondScreenForm).BindGoodsOrderInfo(dgvGoodsOrder);
+                        }
+                    }
                 }
                 this.btnEmployee.Text = "服务员：" + m_EmployeeNo;
                 this.btnPersonNum.Text = "人数：" + m_PersonNum;
@@ -627,6 +635,8 @@ namespace Top4ever.Pos
         private void btnGroup_Click(object sender, EventArgs e)
         {
             CrystalButton btnGroup = sender as CrystalButton;
+            if (prevPressedButton != null && prevPressedButton.Text == btnGroup.Text)
+                return;
             if (btnGroup.Tag is GoodsGroup)
             {
                 m_CurrentGoodsGroup = btnGroup.Tag as GoodsGroup;
@@ -686,6 +696,7 @@ namespace Top4ever.Pos
                 decimal goodsDiscount = 0;
                 Discount _discount = null;
                 bool IsContainsSalePrice = false;   //是否包含特价
+                bool IsContainsCombinedSale = false;    //是否包含组合销售
 
                 #region 判断是否限时特价
                 //所属组特价
@@ -777,8 +788,38 @@ namespace Top4ever.Pos
                 dgvGoodsOrder.Rows[index].Cells["CanDiscount"].Value = goods.CanDiscount;
                 dgvGoodsOrder.Rows[index].Cells["ItemUnit"].Value = goods.Unit;
 
-                #region 判断是否套餐
+                #region 判断是否存在组合销售
                 if (!IsContainsSalePrice)
+                {
+                    bool IsInCombinedGroup = false;
+                    foreach (GoodsCombinedSale item in ConstantValuePool.GroupCombinedSaleList)
+                    {
+                        if (item.ItemID == m_CurrentGoodsGroup.GoodsGroupID)
+                        {
+                            //组合
+                            IsInCombinedGroup = true;
+                            IsContainsCombinedSale = true;
+                            break;
+                        }
+                    }
+                    //品项组合销售
+                    if (!IsInCombinedGroup)
+                    {
+                        foreach (GoodsCombinedSale item in ConstantValuePool.GoodsCombinedSaleList)
+                        {
+                            if (item.ItemID == goods.GoodsID)
+                            {
+                                //组合
+                                IsContainsCombinedSale = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                #endregion
+
+                #region 判断是否套餐
+                if (!IsContainsSalePrice && !IsContainsCombinedSale)
                 {
                     bool haveCirculate = false;
                     IList<GoodsSetMeal> goodsSetMealList = new List<GoodsSetMeal>();
@@ -1019,6 +1060,14 @@ namespace Top4ever.Pos
                     BindOrderInfoSum();
                 }
             }
+            //更新第二屏信息
+            if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+            {
+                if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
+                {
+                    ((FormSecondScreen)ConstantValuePool.SecondScreenForm).BindGoodsOrderInfo(dgvGoodsOrder);
+                }
+            }
         }
 
         #endregion
@@ -1132,7 +1181,7 @@ namespace Top4ever.Pos
             this.lbTotalPrice.Text = "总金额：" + totalPrice.ToString("f2");
             this.lbDiscount.Text = "折扣：" + totalDiscount.ToString("f2");
             decimal wholePayMoney = totalPrice + totalDiscount;
-            decimal actualPayMoney = CutOffDecimal.HandleCutOff(wholePayMoney, CutOffType.ROUND_OFF, 0);
+            decimal actualPayMoney = CutOffDecimal.HandleCutOff(wholePayMoney, ConstantValuePool.SysConfig.IsCutTail, ConstantValuePool.SysConfig.CutTailType, ConstantValuePool.SysConfig.CutTailDigit);
             m_ActualPayMoney = actualPayMoney;
             m_CutOff = wholePayMoney - actualPayMoney;
             this.lbNeedPayMoney.Text = "实际应付：" + actualPayMoney.ToString("f2");
@@ -1533,7 +1582,7 @@ namespace Top4ever.Pos
                                 }
                             }
                             decimal wholePayMoney = totalPrice + totalDiscount;
-                            decimal actualPayMoney = CutOffDecimal.HandleCutOff(wholePayMoney, CutOffType.ROUND_OFF, 0);
+                            decimal actualPayMoney = CutOffDecimal.HandleCutOff(wholePayMoney, ConstantValuePool.SysConfig.IsCutTail, ConstantValuePool.SysConfig.CutTailType, ConstantValuePool.SysConfig.CutTailDigit);
                             //构造DeletedSingleOrder对象
                             DeletedSingleOrder deletedSingleOrder = new DeletedSingleOrder();
                             deletedSingleOrder.OrderID = m_SalesOrder.order.OrderID;
@@ -1625,7 +1674,7 @@ namespace Top4ever.Pos
                                 }
                             }
                             decimal wholePayMoney = totalPrice + totalDiscount;
-                            decimal actualPayMoney = CutOffDecimal.HandleCutOff(wholePayMoney, CutOffType.ROUND_OFF, 0);
+                            decimal actualPayMoney = CutOffDecimal.HandleCutOff(wholePayMoney, ConstantValuePool.SysConfig.IsCutTail, ConstantValuePool.SysConfig.CutTailType, ConstantValuePool.SysConfig.CutTailDigit);
                             //构造DeletedSingleOrder对象
                             DeletedSingleOrder deletedSingleOrder = new DeletedSingleOrder();
                             deletedSingleOrder.OrderID = m_SalesOrder.order.OrderID;
@@ -1684,6 +1733,14 @@ namespace Top4ever.Pos
                 }
                 //统计
                 BindOrderInfoSum();
+                //更新第二屏信息
+                if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+                {
+                    if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
+                    {
+                        ((FormSecondScreen)ConstantValuePool.SecondScreenForm).BindGoodsOrderInfo(dgvGoodsOrder);
+                    }
+                }
             }
         }
 
@@ -1698,6 +1755,14 @@ namespace Top4ever.Pos
                     DeskService deskService = new DeskService();
                     if (deskService.UpdateDeskStatus(m_CurrentDeskName, string.Empty, status))
                     {
+                        //更新第二屏信息
+                        if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+                        {
+                            if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
+                            {
+                                ((FormSecondScreen)ConstantValuePool.SecondScreenForm).ClearGoodsOrderInfo();
+                            }
+                        }
                         m_OnShow = false;
                         this.Hide();
                     }
@@ -1722,6 +1787,14 @@ namespace Top4ever.Pos
                 DeskService deskService = new DeskService();
                 if(deskService.UpdateDeskStatus(m_CurrentDeskName, string.Empty, status))
                 {
+                    //更新第二屏信息
+                    if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+                    {
+                        if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
+                        {
+                            ((FormSecondScreen)ConstantValuePool.SecondScreenForm).ClearGoodsOrderInfo();
+                        }
+                    }
                     m_OnShow = false;
                     this.Hide();
                 }
@@ -1737,6 +1810,14 @@ namespace Top4ever.Pos
                 DeskService deskService = new DeskService();
                 if (deskService.UpdateDeskStatus(m_CurrentDeskName, string.Empty, status))
                 {
+                    //更新第二屏信息
+                    if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+                    {
+                        if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
+                        {
+                            ((FormSecondScreen)ConstantValuePool.SecondScreenForm).ClearGoodsOrderInfo();
+                        }
+                    }
                     m_OnShow = false;
                     this.Hide();
                 }
@@ -1831,6 +1912,14 @@ namespace Top4ever.Pos
                             }
                             //统计
                             BindOrderInfoSum();
+                            //更新第二屏信息
+                            if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+                            {
+                                if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
+                                {
+                                    ((FormSecondScreen)ConstantValuePool.SecondScreenForm).BindGoodsOrderInfo(dgvGoodsOrder);
+                                }
+                            }
                         }
                     }
                 }
@@ -1872,6 +1961,14 @@ namespace Top4ever.Pos
                     checkForm.ShowDialog();
                     if (checkForm.IsPaidOrder)
                     {
+                        //更新第二屏信息
+                        if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+                        {
+                            if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
+                            {
+                                ((FormSecondScreen)ConstantValuePool.SecondScreenForm).ClearGoodsOrderInfo();
+                            }
+                        }
                         m_OnShow = false;
                         this.Hide();
                     }
@@ -1879,6 +1976,14 @@ namespace Top4ever.Pos
                     {
                         if (checkForm.IsPreCheckOut)
                         {
+                            //更新第二屏信息
+                            if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+                            {
+                                if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
+                                {
+                                    ((FormSecondScreen)ConstantValuePool.SecondScreenForm).ClearGoodsOrderInfo();
+                                }
+                            }
                             m_OnShow = false;
                             this.Hide();
                         }
@@ -1946,6 +2051,14 @@ namespace Top4ever.Pos
             DeskService deskService = new DeskService();
             if (deskService.UpdateDeskStatus(m_CurrentDeskName, string.Empty, status))
             {
+                //更新第二屏信息
+                if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+                {
+                    if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
+                    {
+                        ((FormSecondScreen)ConstantValuePool.SecondScreenForm).ClearGoodsOrderInfo();
+                    }
+                }
                 m_OnShow = false;
                 this.Hide();
             }

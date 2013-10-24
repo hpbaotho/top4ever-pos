@@ -685,7 +685,7 @@ namespace Top4ever.Pos.Feature
             m_TotalPrice = totalPrice;
             m_Discount = totalDiscount;
             decimal wholePayMoney = totalPrice + totalDiscount;
-            decimal actualPayMoney = CutOffDecimal.HandleCutOff(wholePayMoney, CutOffType.ROUND_OFF, 0);
+            decimal actualPayMoney = CutOffDecimal.HandleCutOff(wholePayMoney, ConstantValuePool.SysConfig.IsCutTail, ConstantValuePool.SysConfig.CutTailType, ConstantValuePool.SysConfig.CutTailDigit);
             m_ActualPayMoney = actualPayMoney;
             m_CutOff = wholePayMoney - actualPayMoney;
             if (m_CutServiceFee)
@@ -722,7 +722,7 @@ namespace Top4ever.Pos.Feature
                         }
                     }
                     decimal tempServiceFee = actualPayMoney * serviceFeePercent / 100;
-                    serviceFee = CutOffDecimal.HandleCutOff(tempServiceFee, CutOffType.ROUND_OFF, 0);
+                    serviceFee = CutOffDecimal.HandleCutOff(tempServiceFee, ConstantValuePool.SysConfig.IsCutTail, ConstantValuePool.SysConfig.CutTailType, ConstantValuePool.SysConfig.CutTailDigit);
                 }
                 m_ServiceFee = serviceFee;
             }

@@ -76,10 +76,10 @@ namespace Top4ever.Pos
             this.btnCustomPrice = new Top4ever.CustomControl.CrystalButton();
             this.btnShowDetails = new Top4ever.CustomControl.CrystalButton();
             this.btnPriceCode = new Top4ever.CustomControl.CrystalButton();
-            this.btnCancelOrder = new System.Windows.Forms.Button();
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.btnSub = new System.Windows.Forms.Button();
-            this.btnAdd = new System.Windows.Forms.Button();
+            this.btnCancelOrder = new Top4ever.CustomControl.CrystalButton();
+            this.btnCancel = new Top4ever.CustomControl.CrystalButton();
+            this.btnSub = new Top4ever.CustomControl.CrystalButton();
+            this.btnAdd = new Top4ever.CustomControl.CrystalButton();
             this.btnTasteRemark = new Top4ever.CustomControl.CrystalButton();
             this.pnlRight = new System.Windows.Forms.Panel();
             this.pnlItem = new System.Windows.Forms.Panel();
@@ -251,7 +251,7 @@ namespace Top4ever.Pos
             this.pnlCustomerInfo.Controls.Add(this.btnAddress);
             this.pnlCustomerInfo.Controls.Add(this.txtTelephone);
             this.pnlCustomerInfo.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlCustomerInfo.Location = new System.Drawing.Point(0, 715);
+            this.pnlCustomerInfo.Location = new System.Drawing.Point(0, 733);
             this.pnlCustomerInfo.Name = "pnlCustomerInfo";
             this.pnlCustomerInfo.Size = new System.Drawing.Size(1024, 35);
             this.pnlCustomerInfo.TabIndex = 0;
@@ -350,7 +350,7 @@ namespace Top4ever.Pos
             this.pnlDelivery.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlDelivery.Location = new System.Drawing.Point(0, 58);
             this.pnlDelivery.Name = "pnlDelivery";
-            this.pnlDelivery.Size = new System.Drawing.Size(129, 657);
+            this.pnlDelivery.Size = new System.Drawing.Size(129, 675);
             this.pnlDelivery.TabIndex = 2;
             // 
             // pnlPage
@@ -358,7 +358,7 @@ namespace Top4ever.Pos
             this.pnlPage.Controls.Add(this.btnPgDown);
             this.pnlPage.Controls.Add(this.btnPgUp);
             this.pnlPage.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlPage.Location = new System.Drawing.Point(0, 604);
+            this.pnlPage.Location = new System.Drawing.Point(0, 622);
             this.pnlPage.Name = "pnlPage";
             this.pnlPage.Size = new System.Drawing.Size(129, 53);
             this.pnlPage.TabIndex = 0;
@@ -397,7 +397,7 @@ namespace Top4ever.Pos
             this.pnlGoodsOrder.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlGoodsOrder.Location = new System.Drawing.Point(129, 58);
             this.pnlGoodsOrder.Name = "pnlGoodsOrder";
-            this.pnlGoodsOrder.Size = new System.Drawing.Size(398, 657);
+            this.pnlGoodsOrder.Size = new System.Drawing.Size(398, 675);
             this.pnlGoodsOrder.TabIndex = 2;
             // 
             // dgvGoodsOrder
@@ -435,7 +435,7 @@ namespace Top4ever.Pos
             this.dgvGoodsOrder.RowHeadersVisible = false;
             this.dgvGoodsOrder.RowTemplate.Height = 23;
             this.dgvGoodsOrder.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvGoodsOrder.Size = new System.Drawing.Size(398, 445);
+            this.dgvGoodsOrder.Size = new System.Drawing.Size(398, 463);
             this.dgvGoodsOrder.TabIndex = 3;
             this.dgvGoodsOrder.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgvGoodsOrder_MouseDown);
             // 
@@ -594,7 +594,7 @@ namespace Top4ever.Pos
             this.pnlToolBar.Controls.Add(this.btnAdd);
             this.pnlToolBar.Controls.Add(this.btnTasteRemark);
             this.pnlToolBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlToolBar.Location = new System.Drawing.Point(0, 549);
+            this.pnlToolBar.Location = new System.Drawing.Point(0, 567);
             this.pnlToolBar.Name = "pnlToolBar";
             this.pnlToolBar.Size = new System.Drawing.Size(398, 108);
             this.pnlToolBar.TabIndex = 0;
@@ -639,46 +639,49 @@ namespace Top4ever.Pos
             // 
             // btnCancelOrder
             // 
-            this.btnCancelOrder.BackgroundImage = global::Top4ever.Pos.Properties.Resources.no;
+            this.btnCancelOrder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnCancelOrder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnCancelOrder.Image = global::Top4ever.Pos.Properties.Resources.no;
             this.btnCancelOrder.Location = new System.Drawing.Point(303, 55);
             this.btnCancelOrder.Name = "btnCancelOrder";
             this.btnCancelOrder.Size = new System.Drawing.Size(95, 53);
             this.btnCancelOrder.TabIndex = 0;
-            this.btnCancelOrder.UseVisualStyleBackColor = true;
+            this.btnCancelOrder.UseVisualStyleBackColor = false;
             this.btnCancelOrder.Click += new System.EventHandler(this.btnCancelOrder_Click);
             // 
             // btnCancel
             // 
-            this.btnCancel.BackgroundImage = global::Top4ever.Pos.Properties.Resources.cancel;
+            this.btnCancel.BackColor = System.Drawing.Color.Coral;
             this.btnCancel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnCancel.Image = global::Top4ever.Pos.Properties.Resources.cancel;
             this.btnCancel.Location = new System.Drawing.Point(202, 55);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(95, 53);
             this.btnCancel.TabIndex = 0;
-            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnSub
             // 
-            this.btnSub.BackgroundImage = global::Top4ever.Pos.Properties.Resources.minus;
+            this.btnSub.BackColor = System.Drawing.Color.SeaGreen;
             this.btnSub.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnSub.Image = global::Top4ever.Pos.Properties.Resources.minus;
             this.btnSub.Location = new System.Drawing.Point(101, 55);
             this.btnSub.Name = "btnSub";
             this.btnSub.Size = new System.Drawing.Size(95, 53);
             this.btnSub.TabIndex = 0;
-            this.btnSub.UseVisualStyleBackColor = true;
+            this.btnSub.UseVisualStyleBackColor = false;
             this.btnSub.Click += new System.EventHandler(this.btnSub_Click);
             // 
             // btnAdd
             // 
-            this.btnAdd.BackgroundImage = global::Top4ever.Pos.Properties.Resources.plus;
-            this.btnAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btnAdd.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.btnAdd.Image = global::Top4ever.Pos.Properties.Resources.plus;
             this.btnAdd.Location = new System.Drawing.Point(0, 55);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(95, 53);
             this.btnAdd.TabIndex = 0;
-            this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.UseVisualStyleBackColor = false;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // btnTasteRemark
@@ -702,7 +705,7 @@ namespace Top4ever.Pos
             this.pnlRight.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlRight.Location = new System.Drawing.Point(527, 58);
             this.pnlRight.Name = "pnlRight";
-            this.pnlRight.Size = new System.Drawing.Size(497, 657);
+            this.pnlRight.Size = new System.Drawing.Size(497, 675);
             this.pnlRight.TabIndex = 2;
             // 
             // pnlItem
@@ -713,7 +716,7 @@ namespace Top4ever.Pos
             this.pnlItem.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlItem.Location = new System.Drawing.Point(0, 232);
             this.pnlItem.Name = "pnlItem";
-            this.pnlItem.Size = new System.Drawing.Size(497, 372);
+            this.pnlItem.Size = new System.Drawing.Size(497, 390);
             this.pnlItem.TabIndex = 4;
             // 
             // btnBack
@@ -785,7 +788,7 @@ namespace Top4ever.Pos
             this.pnlCodeSearch.Controls.Add(this.txtSearch);
             this.pnlCodeSearch.Controls.Add(this.lbGoodsCode);
             this.pnlCodeSearch.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlCodeSearch.Location = new System.Drawing.Point(0, 604);
+            this.pnlCodeSearch.Location = new System.Drawing.Point(0, 622);
             this.pnlCodeSearch.Name = "pnlCodeSearch";
             this.pnlCodeSearch.Size = new System.Drawing.Size(497, 53);
             this.pnlCodeSearch.TabIndex = 0;
@@ -826,7 +829,7 @@ namespace Top4ever.Pos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1024, 750);
+            this.ClientSize = new System.Drawing.Size(1024, 768);
             this.Controls.Add(this.pnlRight);
             this.Controls.Add(this.pnlGoodsOrder);
             this.Controls.Add(this.pnlDelivery);
@@ -876,9 +879,9 @@ namespace Top4ever.Pos
         private Top4ever.CustomControl.CrystalButton btnCustomPrice;
         private Top4ever.CustomControl.CrystalButton btnShowDetails;
         private Top4ever.CustomControl.CrystalButton btnPriceCode;
-        private System.Windows.Forms.Button btnCancelOrder;
-        private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.Button btnAdd;
+        private Top4ever.CustomControl.CrystalButton btnCancelOrder;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.CrystalButton btnAdd;
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Label lbGoodsCode;
         private Top4ever.CustomControl.CrystalButton btnCheckout;
@@ -898,7 +901,7 @@ namespace Top4ever.Pos
         public System.Windows.Forms.TextBox txtAddress;
         private Top4ever.CustomControl.CrystalButton btnAddress;
         public System.Windows.Forms.TextBox txtTelephone;
-        private System.Windows.Forms.Button btnSub;
+        private Top4ever.CustomControl.CrystalButton btnSub;
         private System.Windows.Forms.Panel pnlBasicInfo;
         private System.Windows.Forms.Label lbNeedPayMoney;
         private System.Windows.Forms.Label lbDiscount;
@@ -916,11 +919,11 @@ namespace Top4ever.Pos
         private System.Windows.Forms.DataGridViewTextBoxColumn Wait;
         private System.Windows.Forms.DataGridViewTextBoxColumn OrderDetailsID;
         private System.Windows.Forms.Panel pnlGroup;
-        private CustomControl.CrystalButton btnPageDown;
-        private CustomControl.CrystalButton btnPageUp;
+        private Top4ever.CustomControl.CrystalButton btnPageDown;
+        private Top4ever.CustomControl.CrystalButton btnPageUp;
         private System.Windows.Forms.Panel pnlItem;
-        private CustomControl.CrystalButton btnBack;
-        private CustomControl.CrystalButton btnHead;
-        private CustomControl.CrystalButton btnBeNew;
+        private Top4ever.CustomControl.CrystalButton btnBack;
+        private Top4ever.CustomControl.CrystalButton btnHead;
+        private Top4ever.CustomControl.CrystalButton btnBeNew;
     }
 }
