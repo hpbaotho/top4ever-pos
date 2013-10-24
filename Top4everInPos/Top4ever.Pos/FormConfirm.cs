@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using Top4ever.Domain.OrderRelated;
+using Top4ever.Entity;
 using Top4ever.Entity.Enum;
 
 namespace Top4ever.Pos
@@ -40,6 +41,14 @@ namespace Top4ever.Pos
 
         private void btnConfirm_Click(object sender, EventArgs e)
         {
+            //更新第二屏信息
+            if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+            {
+                if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
+                {
+                    ((FormSecondScreen)ConstantValuePool.SecondScreenForm).InitGoodsOrderInfo();
+                }
+            }
             this.Close();
         }
     }

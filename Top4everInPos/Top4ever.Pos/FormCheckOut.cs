@@ -100,6 +100,15 @@ namespace Top4ever.Pos
             DisplayPayoffButton();
             BindGoodsOrderInfo();
             BindOrderInfoSum();
+            //更新第二屏信息
+            if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+            {
+                if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
+                {
+                    ((FormSecondScreen)ConstantValuePool.SecondScreenForm).BindGoodsOrderInfo(dgvGoodsOrder);
+                    ((FormSecondScreen)ConstantValuePool.SecondScreenForm).ShowOrderServiceFee(m_ActualPayMoney + m_ServiceFee, m_ServiceFee);
+                }
+            }
             ResizeNumericPad();
             if (!RightsItemCode.FindRights(RightsItemCode.PAYMENT))
             {
@@ -274,7 +283,7 @@ namespace Top4ever.Pos
             this.lbTotalPrice.Text = "总金额：" + totalPrice.ToString("f2");
             this.lbDiscount.Text = "折扣：" + totalDiscount.ToString("f2");
             decimal wholePayMoney = totalPrice + totalDiscount;
-            decimal actualPayMoney = CutOffDecimal.HandleCutOff(wholePayMoney, CutOffType.ROUND_OFF, 0);
+            decimal actualPayMoney = CutOffDecimal.HandleCutOff(wholePayMoney, ConstantValuePool.SysConfig.IsCutTail, ConstantValuePool.SysConfig.CutTailType, ConstantValuePool.SysConfig.CutTailDigit);
             m_ActualPayMoney = actualPayMoney;
             m_CutOff = wholePayMoney - actualPayMoney;
             this.lbNeedPayMoney.Text = "实际应付：" + actualPayMoney.ToString("f2");
@@ -315,7 +324,7 @@ namespace Top4ever.Pos
                         }
                     }
                     decimal tempServiceFee = actualPayMoney * serviceFeePercent / 100;
-                    serviceFee = CutOffDecimal.HandleCutOff(tempServiceFee, CutOffType.ROUND_OFF, 0);
+                    serviceFee = CutOffDecimal.HandleCutOff(tempServiceFee, ConstantValuePool.SysConfig.IsCutTail, ConstantValuePool.SysConfig.CutTailType, ConstantValuePool.SysConfig.CutTailDigit);
                 }
                 m_ServiceFee = serviceFee;
                 this.lbServiceFee.Text = serviceFee.ToString("f2");
@@ -424,6 +433,14 @@ namespace Top4ever.Pos
 
         private void btnExit_Click(object sender, EventArgs e)
         {
+            //更新第二屏信息
+            if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+            {
+                if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
+                {
+                    ((FormSecondScreen)ConstantValuePool.SecondScreenForm).ShowOrderServiceFee(m_ActualPayMoney, 0M);
+                }
+            }
             m_IsPaidOrder = false;
             this.Close();
         }
@@ -704,6 +721,16 @@ namespace Top4ever.Pos
                         }
                         //统计
                         BindOrderInfoSum();
+                        this.lbUnpaidAmount.Text = (decimal.Parse(lbReceMoney.Text) + decimal.Parse(lbServiceFee.Text) - decimal.Parse(lbPaidInMoney.Text)).ToString("f2");
+                        //更新第二屏信息
+                        if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+                        {
+                            if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
+                            {
+                                ((FormSecondScreen)ConstantValuePool.SecondScreenForm).BindGoodsOrderInfo(dgvGoodsOrder);
+                                ((FormSecondScreen)ConstantValuePool.SecondScreenForm).ShowOrderServiceFee(m_ActualPayMoney + m_ServiceFee, m_ServiceFee);
+                            }
+                        }
                     }
                 }
             }
@@ -940,7 +967,18 @@ namespace Top4ever.Pos
                 //更新桌况为空闲状态
                 int status = (int)DeskButtonStatus.IDLE_MODE;
                 DeskService deskService = new DeskService();
-                deskService.UpdateDeskStatus(m_CurrentDeskName, string.Empty, status);
+                if (!deskService.UpdateDeskStatus(m_CurrentDeskName, string.Empty, status))
+                {
+                    deskService.UpdateDeskStatus(m_CurrentDeskName, string.Empty, status);
+                }
+                //更新第二屏信息
+                if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+                {
+                    if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
+                    {
+                        ((FormSecondScreen)ConstantValuePool.SecondScreenForm).DisplayOrderInfoSum(receMoney + m_ServiceFee, needChangePay, orderPayoffList);
+                    }
+                }
                 FormConfirm form = new FormConfirm(receMoney + m_ServiceFee, needChangePay, orderPayoffList);
                 form.ShowDialog();
                 this.Close();
@@ -1259,6 +1297,16 @@ namespace Top4ever.Pos
                     }
                     //统计
                     BindOrderInfoSum();
+                    this.lbUnpaidAmount.Text = (decimal.Parse(lbReceMoney.Text) + decimal.Parse(lbServiceFee.Text) - decimal.Parse(lbPaidInMoney.Text)).ToString("f2");
+                    //更新第二屏信息
+                    if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+                    {
+                        if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
+                        {
+                            ((FormSecondScreen)ConstantValuePool.SecondScreenForm).BindGoodsOrderInfo(dgvGoodsOrder);
+                            ((FormSecondScreen)ConstantValuePool.SecondScreenForm).ShowOrderServiceFee(m_ActualPayMoney + m_ServiceFee, m_ServiceFee);
+                        }
+                    }
                 }
             }
         }
@@ -1277,6 +1325,14 @@ namespace Top4ever.Pos
             }
             BindOrderInfoSum();
             this.lbUnpaidAmount.Text = (decimal.Parse(lbReceMoney.Text) + decimal.Parse(lbServiceFee.Text) - decimal.Parse(lbPaidInMoney.Text)).ToString("f2");
+            //更新第二屏信息
+            if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+            {
+                if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
+                {
+                    ((FormSecondScreen)ConstantValuePool.SecondScreenForm).ShowOrderServiceFee(m_ActualPayMoney + m_ServiceFee, m_ServiceFee);
+                }
+            }
         }
 
         private bool IsVIPCardPaySuccess(ref Dictionary<string, VIPCardPayment> dicCardPayment, ref Dictionary<string, string> dicCardTradePayNo)

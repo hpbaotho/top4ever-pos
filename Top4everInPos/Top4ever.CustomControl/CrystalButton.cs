@@ -71,7 +71,7 @@ namespace Top4ever.CustomControl
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.CrystalButton_MouseDown);
         }
         #endregion
-        
+
         protected GraphicsPath GetGraphicsPath(Rectangle rect)
         {
             GraphicsPath ClientPath = new System.Drawing.Drawing2D.GraphicsPath();
@@ -83,18 +83,15 @@ namespace Top4ever.CustomControl
             {
                 rect.Height = 1;
             }
-
             ClientPath.AddRectangle(rect);
-
             ClientPath.CloseFigure();
             return ClientPath;
         }
 
-        private void DrawGaoLiang(Graphics g, bool xiacen)
+        private void DrawLinearGradient(Graphics g, bool xiacen)
         {
             Rectangle rect = this.ClientRectangle;
             rect.Inflate(-1, -1);
-
             if (xiacen)
             {
                 rect.Y = rect.Y + 1;
@@ -103,43 +100,20 @@ namespace Top4ever.CustomControl
             int red = backColor.R;
             int green = backColor.G;
             int blue = backColor.B;
-            red = red + 3;
-            green = green + 20;
-            blue = blue + 30;
-            if (red > 255) red = 255;
-            if (green > 255) green = 255;
-            if (blue > 255) blue = 255;
+            int beginRed = red + 3 > 255 ? 255 : red + 3;
+            int beginGreen = green + 20 > 255 ? 255 : green + 20;
+            int beginBlue = blue + 30 > 255 ? 255 : blue + 30;
+            int endRed = red - 15 < 0 ? 0 : red - 15;
+            int endGreen = green - 15 < 0 ? 0 : green - 15;
+            int endBlue = blue - 10 < 0 ? 0 : blue - 10;
 
             GraphicsPath path = GetGraphicsPath(rect);
             RectangleF rect1 = path.GetBounds();
             rect1.Height = rect1.Height + 1;
+
             g.FillPath(new LinearGradientBrush(rect1,
-             Color.FromArgb(0xff, red, green, blue),
-             Color.FromArgb(0xff, backColor), LinearGradientMode.ForwardDiagonal), path);
-        }
-
-        private void DrawText(Graphics g, bool xiacen)
-        {
-            Rectangle rect = this.ClientRectangle;
-            Rectangle rect1 = this.ClientRectangle;
-            StringFormat stringFormat = new StringFormat();
-            stringFormat.Alignment = StringAlignment.Center;
-            stringFormat.LineAlignment = StringAlignment.Center;
-            rect.Y = this.ClientRectangle.Height / 5;
-            if (xiacen)
-            {
-                rect.Y = rect.Y + 1;
-                rect1.Y = rect1.Y + 1;
-            }
-
-            Font font = this.Font;
-            
-            if (mouseMove)
-            {
-                font = new Font(this.Font, FontStyle.Underline);
-            }
-
-            g.DrawString(this.Text, font, new SolidBrush(this.ForeColor), rect1, stringFormat);
+             Color.FromArgb(0xff, beginRed, beginGreen, beginBlue),
+             Color.FromArgb(0xff, endRed, endGreen, endBlue), LinearGradientMode.ForwardDiagonal), path);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -148,17 +122,28 @@ namespace Top4ever.CustomControl
             e.Graphics.FillRectangle(new SolidBrush(backColor), 0, 0, this.Width, this.Height);
             e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
             e.Graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-            Rectangle rect = new Rectangle(0, 0, this.Width, this.Height);
-            GraphicsPath ClientPath = GetGraphicsPath(rect);
-            e.Graphics.FillPath(new SolidBrush(backColor), ClientPath);
-            this.Region = new System.Drawing.Region(ClientPath);
-            DrawGaoLiang(e.Graphics, XiaCen);
-            DrawText(e.Graphics, XiaCen);
+            DrawLinearGradient(e.Graphics, XiaCen);
 
-            if (this.Focused)
+            Rectangle imageRect, textRect;
+            CalculateRect(out imageRect, out textRect);
+            if (Image != null)
             {
-                e.Graphics.DrawPath(new Pen(Color.FromArgb(0x22, 0xff, 0xff, 0xff), 3), ClientPath);
+                e.Graphics.DrawImage(Image, imageRect, 0, 0, Image.Width, Image.Height, GraphicsUnit.Pixel);
             }
+            if (XiaCen)
+            {
+                textRect.Y = textRect.Y + 1;
+            }
+            Font font = this.Font;
+            if (mouseMove)
+            {
+                font = new Font(this.Font, FontStyle.Underline);
+            }
+            Color textColor = this.Enabled ? this.ForeColor : SystemColors.GrayText;
+            StringFormat stringFormat = new StringFormat();
+            stringFormat.Alignment = StringAlignment.Center;
+            stringFormat.LineAlignment = StringAlignment.Center;
+            e.Graphics.DrawString(this.Text, font, new SolidBrush(textColor), textRect, stringFormat);
         }
 
         private void CrystalButton_BackColorChanged(object sender, System.EventArgs e)
@@ -175,7 +160,7 @@ namespace Top4ever.CustomControl
             backColor = Color.FromArgb(r, g, b);
         }
 
-        private void CrystalButton_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        private void CrystalButton_KeyDown(object sender, KeyEventArgs e)
         {
             if (XiaCen == false && e.KeyCode == Keys.Space)
             {
@@ -184,7 +169,7 @@ namespace Top4ever.CustomControl
             }
         }
 
-        private void CrystalButton_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
+        private void CrystalButton_KeyUp(object sender, KeyEventArgs e)
         {
             if (XiaCen == true && e.KeyCode == Keys.Space)
             {
@@ -193,7 +178,7 @@ namespace Top4ever.CustomControl
             }
         }
 
-        private void CrystalButton_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void CrystalButton_MouseDown(object sender, MouseEventArgs e)
         {
             if (XiaCen == false)
             {
@@ -202,7 +187,7 @@ namespace Top4ever.CustomControl
             }
         }
 
-        private void CrystalButton_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void CrystalButton_MouseUp(object sender, MouseEventArgs e)
         {
             if (XiaCen == true)
             {
@@ -211,7 +196,7 @@ namespace Top4ever.CustomControl
             }
         }
 
-        private void CrystalButton_MouseEnter(object sender, System.EventArgs e)
+        private void CrystalButton_MouseEnter(object sender, EventArgs e)
         {
             if (mouseMove == false)
             {
@@ -220,13 +205,169 @@ namespace Top4ever.CustomControl
             }
         }
 
-        private void CrystalButton_MouseLeave(object sender, System.EventArgs e)
+        private void CrystalButton_MouseLeave(object sender, EventArgs e)
         {
             if (mouseMove == true)
             {
                 mouseMove = false;
                 this.Refresh();
             }
+        }
+
+        private void CalculateRect(out Rectangle imageRect, out Rectangle textRect)
+        {
+            imageRect = Rectangle.Empty;
+            textRect = Rectangle.Empty;
+            if (Image == null)
+            {
+                textRect = new Rectangle(
+                   3,
+                   0,
+                   Width - 6,
+                   Height);
+                return;
+            }
+            switch (TextImageRelation)
+            {
+                case TextImageRelation.Overlay:
+                    imageRect = new Rectangle(
+                        (this.Width - ImageWidth) / 2,
+                        (this.Height - ImageHeight) / 2,
+                        ImageWidth,
+                        ImageHeight);
+                    textRect = new Rectangle(
+                        3,
+                        0,
+                        Width - 6,
+                        Height);
+                    break;
+                case TextImageRelation.ImageAboveText:
+                    imageRect = new Rectangle(
+                        (this.Width - ImageWidth) / 2,
+                        (this.Height - ImageHeight - 12) / 2,
+                        ImageWidth,
+                        ImageHeight);
+                    textRect = new Rectangle(
+                        3,
+                        imageRect.Bottom,
+                        Width - 6,
+                        Height - imageRect.Bottom - 2);
+                    break;
+                case TextImageRelation.ImageBeforeText:
+                    imageRect = new Rectangle(
+                        3,
+                        (Height - ImageWidth) / 2,
+                        ImageWidth,
+                        ImageWidth);
+                    textRect = new Rectangle(
+                        imageRect.Right + 3,
+                        0,
+                        Width - imageRect.Right - 6,
+                        Height);
+                    break;
+                case TextImageRelation.TextAboveImage:
+                    imageRect = new Rectangle(
+                        (this.Width - ImageWidth) / 2,
+                        this.Height / 3,
+                        ImageWidth,
+                        ImageHeight);
+                    textRect = new Rectangle(
+                        3,
+                        this.Height / 9,
+                        Width - 6,
+                        this.Height / 3 - this.Height / 9);
+                    break;
+                case TextImageRelation.TextBeforeImage:
+                    imageRect = new Rectangle(
+                        Width - ImageWidth - 6,
+                        (Height - ImageWidth) / 2,
+                        ImageWidth,
+                        ImageWidth);
+                    textRect = new Rectangle(
+                        3,
+                        0,
+                        imageRect.X - 3,
+                        Height);
+                    break;
+            }
+            if (RightToLeft == RightToLeft.Yes)
+            {
+                imageRect.X = Width - imageRect.Right;
+                textRect.X = Width - textRect.Right;
+            }
+        }
+
+        private int ImageWidth
+        {
+            get
+            {
+                if (Image == null)
+                {
+                    return 32;
+                }
+                else
+                {
+                    return Image.Width;
+                }
+            }
+        }
+
+        private int ImageHeight
+        {
+            get
+            {
+                if (Image == null)
+                {
+                    return 32;
+                }
+                else
+                {
+                    return Image.Height;
+                }
+            }
+        }
+
+        internal TextFormatFlags GetTextFormatFlags(ContentAlignment alignment, bool rightToleft)
+        {
+            TextFormatFlags flags = TextFormatFlags.WordBreak |
+                TextFormatFlags.SingleLine;
+            if (rightToleft)
+            {
+                flags |= TextFormatFlags.RightToLeft | TextFormatFlags.Right;
+            }
+
+            switch (alignment)
+            {
+                case ContentAlignment.BottomCenter:
+                    flags |= TextFormatFlags.Bottom | TextFormatFlags.HorizontalCenter;
+                    break;
+                case ContentAlignment.BottomLeft:
+                    flags |= TextFormatFlags.Bottom | TextFormatFlags.Left;
+                    break;
+                case ContentAlignment.BottomRight:
+                    flags |= TextFormatFlags.Bottom | TextFormatFlags.Right;
+                    break;
+                case ContentAlignment.MiddleCenter:
+                    flags |= TextFormatFlags.HorizontalCenter |
+                        TextFormatFlags.VerticalCenter;
+                    break;
+                case ContentAlignment.MiddleLeft:
+                    flags |= TextFormatFlags.VerticalCenter | TextFormatFlags.Left;
+                    break;
+                case ContentAlignment.MiddleRight:
+                    flags |= TextFormatFlags.VerticalCenter | TextFormatFlags.Right;
+                    break;
+                case ContentAlignment.TopCenter:
+                    flags |= TextFormatFlags.Top | TextFormatFlags.HorizontalCenter;
+                    break;
+                case ContentAlignment.TopLeft:
+                    flags |= TextFormatFlags.Top | TextFormatFlags.Left;
+                    break;
+                case ContentAlignment.TopRight:
+                    flags |= TextFormatFlags.Top | TextFormatFlags.Right;
+                    break;
+            }
+            return flags;
         }
     }
 }

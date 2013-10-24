@@ -50,6 +50,31 @@ namespace Top4ever.Entity.Config
         [XmlElement("SaleType")]
         public ShopSaleType SaleType { get; set; }
         /// <summary>
+        /// 登录图片路径
+        /// </summary>
+        [XmlElement("LoginImagePath")]
+        public string LoginImagePath { get; set; }
+        /// <summary>
+        /// 桌面图片路径
+        /// </summary>
+        [XmlElement("DeskImagePath")]
+        public string DeskImagePath { get; set; }
+        /// <summary>
+        /// 第二屏是否启用
+        /// </summary>
+        [XmlElement("SecondScreenEnabled")]
+        public bool SecondScreenEnabled { get; set; }
+        /// <summary>
+        /// 第二屏视频路径
+        /// </summary>
+        [XmlElement("ScreenVideoPath")]
+        public string ScreenVideoPath { get; set; }
+        /// <summary>
+        /// 第二屏图片路径
+        /// </summary>
+        [XmlElement("ScreenImagePath")]
+        public string ScreenImagePath { get; set; }
+        /// <summary>
         /// 启用零用金
         /// </summary>
         [XmlElement("UsePettyCash")]

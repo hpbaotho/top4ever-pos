@@ -358,7 +358,7 @@ namespace Top4ever.Pos.Feature
             }
             rowIndex = dgvGoodsOrderSum.Rows.Add(new DataGridViewRow());
             dgvGoodsOrderSum.Rows[rowIndex].Cells[0].Value = "实际应付";
-            decimal actualSellPrice = CutOffDecimal.HandleCutOff(totalPrice + totalDiscount, CutOffType.ROUND_OFF, 0);
+            decimal actualSellPrice = CutOffDecimal.HandleCutOff(totalPrice + totalDiscount, ConstantValuePool.SysConfig.IsCutTail, ConstantValuePool.SysConfig.CutTailType, ConstantValuePool.SysConfig.CutTailDigit);
             dgvGoodsOrderSum.Rows[rowIndex].Cells[1].Value = actualSellPrice;
         }
 

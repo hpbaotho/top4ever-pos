@@ -31,6 +31,10 @@ namespace Top4ever.Pos
         public FormLogin()
         {
             InitializeComponent();
+            if (!string.IsNullOrEmpty(ConstantValuePool.BizSettingConfig.LoginImagePath) && File.Exists(ConstantValuePool.BizSettingConfig.LoginImagePath))
+            {
+                this.BackgroundImage = Image.FromFile(ConstantValuePool.BizSettingConfig.LoginImagePath);
+            }
         }
 
         private void FormLogin_Load(object sender, EventArgs e)
@@ -39,6 +43,12 @@ namespace Top4ever.Pos
             int px = (this.Width - this.pnlSystemLogin.Width) / 2;
             int py = (this.Height - this.pnlSystemLogin.Height) / 2;
             this.pnlSystemLogin.Location = new Point(px, py);
+            //第二屏
+            if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+            {
+                ConstantValuePool.SecondScreenForm = new FormSecondScreen();
+                ConstantValuePool.SecondScreenForm.Show();
+            }
         }
 
         private void btnNumber_Click(object sender, EventArgs e)
@@ -146,19 +156,41 @@ namespace Top4ever.Pos
                     
                     IList<GoodsLimitedTimeSale> groupLimitedTimeSaleList = new List<GoodsLimitedTimeSale>();
                     IList<GoodsLimitedTimeSale> goodsLimitedTimeSaleList = new List<GoodsLimitedTimeSale>();
-                    foreach (GoodsLimitedTimeSale item in sysBasicData.TotalLimitedTimeSaleList)
+                    if (sysBasicData.TotalLimitedTimeSaleList != null && sysBasicData.TotalLimitedTimeSaleList.Count > 0)
                     {
-                        if (item.ItemType == 1) //Group
+                        foreach (GoodsLimitedTimeSale item in sysBasicData.TotalLimitedTimeSaleList)
                         {
-                            groupLimitedTimeSaleList.Add(item);
-                        }
-                        if (item.ItemType == 2) //Item
-                        {
-                            goodsLimitedTimeSaleList.Add(item);
+                            if (item.ItemType == 1) //Group
+                            {
+                                groupLimitedTimeSaleList.Add(item);
+                            }
+                            if (item.ItemType == 2) //Item
+                            {
+                                goodsLimitedTimeSaleList.Add(item);
+                            }
                         }
                     }
                     ConstantValuePool.GroupLimitedTimeSaleList = groupLimitedTimeSaleList;
                     ConstantValuePool.GoodsLimitedTimeSaleList = goodsLimitedTimeSaleList;
+
+                    IList<GoodsCombinedSale> groupCombinedSaleList = new List<GoodsCombinedSale>();
+                    IList<GoodsCombinedSale> goodsCombinedSaleList = new List<GoodsCombinedSale>();
+                    if (sysBasicData.TotalCombinedSaleList != null && sysBasicData.TotalCombinedSaleList.Count > 0)
+                    {
+                        foreach (GoodsCombinedSale item in sysBasicData.TotalCombinedSaleList)
+                        {
+                            if (item.ItemType == 1) //Group
+                            {
+                                groupCombinedSaleList.Add(item);
+                            }
+                            if (item.ItemType == 2) //Item
+                            {
+                                goodsCombinedSaleList.Add(item);
+                            }
+                        }
+                    }
+                    ConstantValuePool.GroupCombinedSaleList = groupCombinedSaleList;
+                    ConstantValuePool.GoodsCombinedSaleList = goodsCombinedSaleList;
 
                     if (ConstantValuePool.BizSettingConfig.SaleType == ShopSaleType.Takeout)
                     {
@@ -296,19 +328,41 @@ namespace Top4ever.Pos
 
                     IList<GoodsLimitedTimeSale> groupLimitedTimeSaleList = new List<GoodsLimitedTimeSale>();
                     IList<GoodsLimitedTimeSale> goodsLimitedTimeSaleList = new List<GoodsLimitedTimeSale>();
-                    foreach (GoodsLimitedTimeSale item in sysBasicData.TotalLimitedTimeSaleList)
+                    if (sysBasicData.TotalLimitedTimeSaleList != null && sysBasicData.TotalLimitedTimeSaleList.Count > 0)
                     {
-                        if (item.ItemType == 1) //Group
+                        foreach (GoodsLimitedTimeSale item in sysBasicData.TotalLimitedTimeSaleList)
                         {
-                            groupLimitedTimeSaleList.Add(item);
-                        }
-                        if (item.ItemType == 2) //Item
-                        {
-                            goodsLimitedTimeSaleList.Add(item);
+                            if (item.ItemType == 1) //Group
+                            {
+                                groupLimitedTimeSaleList.Add(item);
+                            }
+                            if (item.ItemType == 2) //Item
+                            {
+                                goodsLimitedTimeSaleList.Add(item);
+                            }
                         }
                     }
                     ConstantValuePool.GroupLimitedTimeSaleList = groupLimitedTimeSaleList;
                     ConstantValuePool.GoodsLimitedTimeSaleList = goodsLimitedTimeSaleList;
+
+                    IList<GoodsCombinedSale> groupCombinedSaleList = new List<GoodsCombinedSale>();
+                    IList<GoodsCombinedSale> goodsCombinedSaleList = new List<GoodsCombinedSale>();
+                    if (sysBasicData.TotalCombinedSaleList != null && sysBasicData.TotalCombinedSaleList.Count > 0)
+                    {
+                        foreach (GoodsCombinedSale item in sysBasicData.TotalCombinedSaleList)
+                        {
+                            if (item.ItemType == 1) //Group
+                            {
+                                groupCombinedSaleList.Add(item);
+                            }
+                            if (item.ItemType == 2) //Item
+                            {
+                                goodsCombinedSaleList.Add(item);
+                            }
+                        }
+                    }
+                    ConstantValuePool.GroupCombinedSaleList = groupCombinedSaleList;
+                    ConstantValuePool.GoodsCombinedSaleList = goodsCombinedSaleList;
 
                     if (ConstantValuePool.BizSettingConfig.SaleType == ShopSaleType.Takeout)
                     {

@@ -1248,7 +1248,7 @@ namespace Top4ever.Pos
             this.lbTotalPrice.Text = "总金额：" + totalPrice.ToString("f2");
             this.lbDiscount.Text = "折扣：" + totalDiscount.ToString("f2");
             decimal wholePayMoney = totalPrice + totalDiscount;
-            decimal actualPayMoney = CutOffDecimal.HandleCutOff(wholePayMoney, CutOffType.ROUND_OFF, 0);
+            decimal actualPayMoney = CutOffDecimal.HandleCutOff(wholePayMoney, ConstantValuePool.SysConfig.IsCutTail, ConstantValuePool.SysConfig.CutTailType, ConstantValuePool.SysConfig.CutTailDigit);
             m_ActualPayMoney = actualPayMoney;
             m_CutOff = wholePayMoney - actualPayMoney;
             this.lbNeedPayMoney.Text = "实际应付：" + actualPayMoney.ToString("f2");
@@ -2721,7 +2721,7 @@ namespace Top4ever.Pos
                                 }
                             }
                             decimal wholePayMoney = totalPrice + totalDiscount;
-                            decimal actualPayMoney = CutOffDecimal.HandleCutOff(wholePayMoney, CutOffType.ROUND_OFF, 0);
+                            decimal actualPayMoney = CutOffDecimal.HandleCutOff(wholePayMoney, ConstantValuePool.SysConfig.IsCutTail, ConstantValuePool.SysConfig.CutTailType, ConstantValuePool.SysConfig.CutTailDigit);
                             //构造DeletedSingleOrder对象
                             DeletedSingleOrder deletedSingleOrder = new DeletedSingleOrder();
                             deletedSingleOrder.OrderID = m_SalesOrder.order.OrderID;
@@ -2813,7 +2813,7 @@ namespace Top4ever.Pos
                                 }
                             }
                             decimal wholePayMoney = totalPrice + totalDiscount;
-                            decimal actualPayMoney = CutOffDecimal.HandleCutOff(wholePayMoney, CutOffType.ROUND_OFF, 0);
+                            decimal actualPayMoney = CutOffDecimal.HandleCutOff(wholePayMoney, ConstantValuePool.SysConfig.IsCutTail, ConstantValuePool.SysConfig.CutTailType, ConstantValuePool.SysConfig.CutTailDigit);
                             //构造DeletedSingleOrder对象
                             DeletedSingleOrder deletedSingleOrder = new DeletedSingleOrder();
                             deletedSingleOrder.OrderID = m_SalesOrder.order.OrderID;
