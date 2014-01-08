@@ -120,6 +120,11 @@ namespace Top4ever.Pos.Membership
 
         private void btnConsume_Click(object sender, EventArgs e)
         {
+            if (m_Card == null || string.IsNullOrEmpty(m_Card.CardNo))
+            {
+                MessageBox.Show("请重新输入您的会员卡号！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             if (m_Card.Balance < m_UnPaidPrice)
             {
                 if (DialogResult.Yes == MessageBox.Show("卡内余额不足，是否继续使用余额支付？", "信息提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question))

@@ -81,5 +81,31 @@ namespace Top4ever.ClientService
             }
             return deletedAllItems;
         }
+
+        public decimal GetLastCustomPrice(Guid goodsID)
+        {
+            byte[] bufferByte = Encoding.UTF8.GetBytes(goodsID.ToString());
+            int cByte = ParamFieldLength.PACKAGE_HEAD + bufferByte.Length;
+            byte[] sendByte = new byte[cByte];
+            Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_LASTCUSTOMPRICE), sendByte, BasicTypeLength.INT32);
+            int byteOffset = BasicTypeLength.INT32;
+            Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
+            byteOffset += BasicTypeLength.INT32;
+            Array.Copy(bufferByte, 0, sendByte, byteOffset, bufferByte.Length);
+            byteOffset += bufferByte.Length;
+
+            double result = 0;
+            using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
+            {
+                Byte[] receiveData = null;
+                Int32 operCode = socket.SendReceive(sendByte, out receiveData);
+                if (operCode == (int)RET_VALUE.SUCCEEDED)
+                {
+                    result = BitConverter.ToDouble(receiveData, ParamFieldLength.PACKAGE_HEAD);
+                }
+                socket.Close();
+            }
+            return (decimal)result;
+        }
     }
 }

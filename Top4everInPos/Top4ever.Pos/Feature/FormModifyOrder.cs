@@ -79,6 +79,11 @@ namespace Top4ever.Pos.Feature
             BindGoodsOrderInfo();
             BindPayoffWay();
             txtReceAmount.Text = (m_SalesOrder.order.ActualSellPrice + m_SalesOrder.order.ServiceFee).ToString("f2");
+            if (m_SalesOrder.order.ServiceFee == 0)
+            {
+                btnCutServiceFee.Enabled = false;
+                btnCutServiceFee.BackColor = ConstantValuePool.DisabledColor;
+            }
         }
 
         private void CalculateButtonSize()

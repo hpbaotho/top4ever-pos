@@ -36,7 +36,7 @@ namespace Top4ever.Pos.TakeawayCall
             {
                 this.txtTranSeq.Text = Convert.ToString(_salesOrder.order.TranSequence);
                 this.txtEmployeeNo.Text = _salesOrder.order.EmployeeNo;
-                this.txtOrderAmount.Text = Convert.ToString(_salesOrder.order.ActualSellPrice + _salesOrder.order.ServiceFee);
+                this.txtOrderAmount.Text = (_salesOrder.order.ActualSellPrice + _salesOrder.order.ServiceFee).ToString("f2");
                 
                 IList<OrderDetails> orderDetailsList = _salesOrder.orderDetailsList;
                 if (orderDetailsList != null && orderDetailsList.Count > 0)

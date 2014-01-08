@@ -165,9 +165,31 @@ namespace Top4ever.Pos.Membership
 
         private void btnConfirm_Click(object sender, EventArgs e)
         {
+            string cardNo = txtCardNo.Text.Trim();
+            if (string.IsNullOrEmpty(cardNo))
+            {
+                MessageBox.Show("请输入您的会员卡号！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (string.IsNullOrEmpty(txtStoreAmout.Text.Trim()))
+            {
+                MessageBox.Show("请输入充值金额！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            decimal storeAmout = 0;
+            if (!decimal.TryParse(txtStoreAmout.Text.Trim(), out storeAmout))
+            {
+                MessageBox.Show("请输入正确的充值金额格式！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (_curPayoffWay == null)
+            {
+                MessageBox.Show("请输入充值付款方式！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             VIPCardAddMoney cardAddMoney = new VIPCardAddMoney();
-            cardAddMoney.CardNo = txtCardNo.Text.Trim();
-            cardAddMoney.StoreMoney = decimal.Parse(txtStoreAmout.Text.Trim());
+            cardAddMoney.CardNo = cardNo;
+            cardAddMoney.StoreMoney = storeAmout;
             cardAddMoney.EmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
             cardAddMoney.DeviceNo = ConstantValuePool.BizSettingConfig.DeviceNo;
             cardAddMoney.PayoffID = _curPayoffWay.PayoffID;

@@ -610,6 +610,7 @@ namespace Top4ever.Pos
             this.btnCustomPrice.TabIndex = 0;
             this.btnCustomPrice.Text = "Ê±¼Û";
             this.btnCustomPrice.UseVisualStyleBackColor = false;
+            this.btnCustomPrice.Click += new System.EventHandler(this.btnCustomPrice_Click);
             // 
             // btnShowDetails
             // 

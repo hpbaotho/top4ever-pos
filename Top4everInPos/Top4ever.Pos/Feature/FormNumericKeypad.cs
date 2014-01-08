@@ -109,9 +109,9 @@ namespace Top4ever.Pos.Feature
         private void btnBackSpace_Click(object sender, EventArgs e)
         {
             string text = this.txtNumeric.Text;
-            if (text.Length > 0)
+            if (!string.IsNullOrEmpty(text))
             {
-                this.txtNumeric.Text = text.Substring(0, text.Length - 1);
+                SendKeys.Send("{BACKSPACE}");
             }
         }
 

@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Top4ever.ClientService;
 using Top4ever.Domain.Customers;
 using Top4ever.Entity;
+using Top4ever.CustomControl;
 
 namespace Top4ever.Pos.TakeawayCall
 {
@@ -24,7 +25,7 @@ namespace Top4ever.Pos.TakeawayCall
 
         private void FormInputCustomer_Load(object sender, EventArgs e)
         {
-            m_ActiveTextBox = this.txtTelephone;
+            m_ActiveTextBox = this.txtName;
             ShowHandwriting();
         }
 
@@ -32,6 +33,7 @@ namespace Top4ever.Pos.TakeawayCall
         {
             m_HandwritingEnabled = !m_HandwritingEnabled;
             ShowHandwriting();
+            this.txtName.Focus();
         }
 
         private void ShowHandwriting()
@@ -115,6 +117,13 @@ namespace Top4ever.Pos.TakeawayCall
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void handwritingPad1_UserHandWriting(object sender, InkWritingEventArgs e)
+        {
+            m_ActiveTextBox.Text += e.InkPadValue;
+            m_ActiveTextBox.TabIndex = 0;
+            m_ActiveTextBox.Focus();
         }
     }
 }

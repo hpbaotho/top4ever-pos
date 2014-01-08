@@ -16,10 +16,13 @@ namespace Top4ever.Pos.Feature
         public FormDeletedItemReport()
         {
             InitializeComponent();
+            cmbDateType.Text = "营业日";
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            dataGirdViewExt1.Rows.Clear();
+            dataGirdViewExt2.Rows.Clear();
             string beginDate = dateTimePicker1.Value.ToString("yyyy-MM-dd 00:00:00");
             string endDate = dateTimePicker2.Value.ToString("yyyy-MM-dd 23:59:59");
             int dateType = 1;
@@ -63,10 +66,6 @@ namespace Top4ever.Pos.Feature
                 txtTotalQty.Text = deletedAllItems.DeletedGoodsItemList.Count.ToString();
                 txtTotalAmount.Text = totalAmount.ToString("f2");
             }
-            else
-            {
-                dataGirdViewExt1.Rows.Clear();
-            }
             //绑定整单删除品项
             if (deletedAllItems.DeletedOrderItemList != null && deletedAllItems.DeletedOrderItemList.Count > 0)
             {
@@ -96,10 +95,6 @@ namespace Top4ever.Pos.Feature
                 }
                 txtTotalNum.Text = deletedAllItems.DeletedOrderItemList.Count.ToString();
                 txtTotalMoney.Text = totalMoney.ToString("f2");
-            }
-            else
-            {
-                dataGirdViewExt1.Rows.Clear();
             }
         }
 

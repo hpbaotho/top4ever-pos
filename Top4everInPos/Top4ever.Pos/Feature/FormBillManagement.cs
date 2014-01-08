@@ -209,7 +209,7 @@ namespace Top4ever.Pos.Feature
                     dataGridView1.Rows[index].Cells["TotalSellPrice"].Value = order.TotalSellPrice.ToString("f2");
                     dataGridView1.Rows[index].Cells["ActualSellPrice"].Value = order.ActualSellPrice.ToString("f2");
                     dataGridView1.Rows[index].Cells["DiscountPrice"].Value = order.DiscountPrice.ToString("f2");
-                    dataGridView1.Rows[index].Cells["CutOffPrice"].Value = order.CutOffPrice.ToString("f2");
+                    dataGridView1.Rows[index].Cells["CutOffPrice"].Value = (-order.CutOffPrice).ToString("f2");
                     dataGridView1.Rows[index].Cells["ServiceFee"].Value = order.ServiceFee.ToString("f2");
                     dataGridView1.Rows[index].Cells["PaymentMoney"].Value = order.PaymentMoney.ToString("f2");
                     dataGridView1.Rows[index].Cells["NeedChangePay"].Value = order.NeedChangePay.ToString("f2");

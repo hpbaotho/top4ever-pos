@@ -711,15 +711,8 @@ namespace Top4ever.Pos
 
         private void btnTakeOut_Click(object sender, EventArgs e)
         {
-            if (haveDailyClose)
-            {
-                m_FormTakeout.VisibleShow = true;
-                m_FormTakeout.Show();
-            }
-            else
-            {
-                MessageBox.Show("上次未日结，请先进行日结操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            m_FormTakeout.VisibleShow = true;
+            m_FormTakeout.Show();
         }
 
         private Color GetColorByStatus(int deskStatus, string deviceNo)
