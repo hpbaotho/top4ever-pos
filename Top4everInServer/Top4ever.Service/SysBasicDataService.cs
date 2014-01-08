@@ -127,13 +127,13 @@ namespace Top4ever.Service
                     }
                 }
                 // SysBasicData
-                basicData.RegionList = regionList;
-                basicData.GoodsGroupList = goodsGroupList;
-                basicData.DetailsGroupList = detailsGroupList;
                 basicData.NoticeList = _noticeDao.GetAllNotice();
+                basicData.RegionList = regionList;
                 basicData.DiscountList = _discountDao.GetAllDiscount();
                 basicData.PayoffWayList = _payoffWayDao.GetAllPayoffWay();
                 basicData.ReasonList = _reasonDao.GetAllReason();
+                basicData.GoodsGroupList = goodsGroupList;
+                basicData.DetailsGroupList = detailsGroupList;
                 basicData.GoodsSetMealList = _goodsSetMealDao.GetAllGoodsSetMeal();
                 basicData.GoodsCronTriggerList = _goodsGroupDao.GetAllGoodsCronTrigger();
                 basicData.ButtonStyleList = _buttonStyleDao.GetButtonStyleList();
@@ -145,7 +145,7 @@ namespace Top4ever.Service
                 //限时特价
                 basicData.TotalLimitedTimeSaleList = _goodsGroupDao.GetAllGoodsLimitedTimeSale();
                 //组合销售
-                basicData.GoodsCombinedSaleList = _goodsGroupDao.GetAllGoodsCombinedSale();
+                basicData.TotalCombinedSaleList = _goodsGroupDao.GetAllGoodsCombinedSale();
 
                 _daoManager.CommitTransaction();
             }

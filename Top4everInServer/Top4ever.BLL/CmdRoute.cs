@@ -175,6 +175,12 @@ namespace Top4ever.BLL
                 case Command.ID_UPDATE_EMPLOYEEPASSWORD:
                     byteRet = EmployeeBLL.UpdateEmployeePassword(itemBuffer);
                     break;
+                case Command.ID_GET_LASTCUSTOMPRICE:
+                    byteRet = OrderDetailsBLL.GetLastCustomPrice(itemBuffer);
+                    break;
+                case Command.ID_GET_HOURSALESREPORT:
+                    byteRet = OrderBLL.GetHourSalesReport(itemBuffer);
+                    break;
 
                 default:
                     byteRet = null;

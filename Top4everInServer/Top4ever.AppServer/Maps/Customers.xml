@@ -41,6 +41,8 @@
       <parameter property="Telephone" column="Telephone" />
       <parameter property="CustomerName" column="CustomerName" />
       <parameter property="Address" column="Address" />
+      <parameter property="Remark" column="Remark" />
+      <parameter property="DeliveryEmployeeNo" column="DeliveryEmployeeNo" />
     </parameterMap>
   </parameterMaps>
   <!-- =============================================
@@ -79,11 +81,5 @@
       FROM CustomerOrder
       WHERE OrderID = #OrderID#
     </select>
-
-    <update id="UpdateCustomerOrder" parameterClass="CustomerOrder">
-      UPDATE CustomerOrder
-      SET Remark = #Remark#, DeliveryEmployeeNo = #DeliveryEmployeeNo#, <![CDATA[ DeliveryTime = getdate() ]]>
-      WHERE OrderID = #OrderID#
-    </update>
   </statements>
 </sqlMap>

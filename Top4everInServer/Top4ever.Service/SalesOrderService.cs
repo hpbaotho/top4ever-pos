@@ -137,11 +137,14 @@ namespace Top4ever.Service
                 {
                     if (_orderDao.UpdateOrder(order))
                     {
+                        //日结号
+                        string dailyStatementNo = _dailyStatementDao.GetCurrentDailyStatementNo();
                         //菜单品项序号
                         int seqNumber = _orderDetailsDao.GetSequenceNum(order.OrderID);
                         foreach (OrderDetails item in salesOrder.orderDetailsList)
                         {
                             item.OrderBy = seqNumber;
+                            item.DailyStatementNo = dailyStatementNo;
                             _orderDetailsDao.UpdateOrderDetails(item);
                             seqNumber++;
                         }

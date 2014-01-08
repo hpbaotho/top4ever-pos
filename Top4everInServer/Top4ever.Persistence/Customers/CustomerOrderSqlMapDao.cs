@@ -14,26 +14,21 @@ namespace Top4ever.Persistence.Customers
     {
         #region ICustomerOrderDao Members
 
-        public void CreateCustomerOrder(CustomerOrder customerOrder)
+        public void CreateOrUpdateCustomerOrder(CustomerOrder customerOrder)
         {
             Hashtable htParam = new Hashtable();
             htParam["OrderID"] = customerOrder.OrderID;
             htParam["Telephone"] = customerOrder.Telephone;
             htParam["CustomerName"] = customerOrder.CustomerName;
             htParam["Address"] = customerOrder.Address;
+            htParam["Remark"] = customerOrder.Remark ?? string.Empty;
+            htParam["DeliveryEmployeeNo"] = customerOrder.DeliveryEmployeeNo ?? string.Empty;
             ExecuteInsert("InsertCustomerOrder", htParam);
         }
 
         public CustomerOrder GetCustomerOrder(Guid orderID)
         {
             return (ExecuteQueryForObject("GetCustomerOrder", orderID) as CustomerOrder);
-        }
-
-        public bool UpdateCustomerOrder(CustomerOrder customerOrder)
-        {
-            int result = 0;
-            result = ExecuteUpdate("UpdateCustomerOrder", customerOrder);
-            return result > 0;
         }
 
         #endregion

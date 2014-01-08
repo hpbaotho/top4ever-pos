@@ -99,9 +99,12 @@ namespace Top4ever.Service
                     if (_orderDao.UpdatePayingOrder(payingOrder.order))
                     { 
                         //更新OrderDetails
-                        foreach (OrderDetails item in payingOrder.orderDetailsList)
+                        if (payingOrder.orderDetailsList != null && payingOrder.orderDetailsList.Count > 0)
                         {
-                            _orderDetailsDao.UpdateOrderDetailsDiscount(item);
+                            foreach (OrderDetails item in payingOrder.orderDetailsList)
+                            {
+                                _orderDetailsDao.UpdateOrderDetailsDiscount(item);
+                            }
                         }
                         //插入OrderDiscount
                         if (payingOrder.orderDiscountList != null && payingOrder.orderDiscountList.Count > 0)

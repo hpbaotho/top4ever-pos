@@ -178,6 +178,20 @@ namespace Top4ever.Persistence.OrderRelated
             return ExecuteQueryForList<DeliveryOrder>("SelectDeliveryOrder", dailyStatementNo);
         }
 
+        public IList<HourOrderSales> GetHourSalesReport(string dailyStatementNo)
+        {
+            return ExecuteQueryForList<HourOrderSales>("GetHourSalesReport", dailyStatementNo);
+        }
+
+        public IList<HourOrderSales> GetHourSalesReportByTime(DateTime beginTime, DateTime endTime)
+        {
+            Hashtable htParam = new Hashtable();
+            htParam["BeginTime"] = beginTime;
+            htParam["EndTime"] = endTime;
+
+            return ExecuteQueryForList<HourOrderSales>("GetHourSalesReportByTime", htParam);
+        }
+
         #endregion
     }
 }

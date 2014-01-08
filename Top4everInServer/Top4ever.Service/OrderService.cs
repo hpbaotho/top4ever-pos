@@ -185,6 +185,30 @@ namespace Top4ever.Service
 
             return deliveryOrderList;
         }
+
+        public IList<HourOrderSales> GetHourSalesReport(DateTime beginTime, DateTime endTime)
+        {
+            IList<HourOrderSales> hourSalesList = null;
+
+            _daoManager.OpenConnection();
+            if (beginTime == DateTime.MinValue && endTime == DateTime.MinValue)
+            {
+                //日结号
+                string dailyStatementNo = _dailyStatementDao.GetCurrentDailyStatementNo();
+                if (!string.IsNullOrEmpty(dailyStatementNo))
+                {
+                    hourSalesList = _orderDao.GetHourSalesReport(dailyStatementNo);
+                }
+            }
+            else
+            {
+                hourSalesList = _orderDao.GetHourSalesReportByTime(beginTime, endTime);
+            }
+            _daoManager.CloseConnection();
+
+            return hourSalesList;
+        }
+
         #endregion
     }
 }

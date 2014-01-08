@@ -61,5 +61,21 @@ namespace Top4ever.BLL
             Array.Copy(jsonByte, 0, objRet, 2 * BasicTypeLength.INT32, jsonByte.Length);
             return objRet;
         }
+
+        public static byte[] GetLastCustomPrice(byte[] itemBuffer)
+        {
+            byte[] objRet = null;
+            string strReceive = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, itemBuffer.Length - ParamFieldLength.PACKAGE_HEAD).Trim('\0');
+            Guid goodsID = new Guid(strReceive);
+
+            decimal result = OrderDetailsService.GetInstance().GetLastCustomPrice(goodsID);
+
+            int transCount = BasicTypeLength.INT32 + BasicTypeLength.INT32 + BasicTypeLength.DOUBLE_DECIMAL;
+            objRet = new byte[transCount];
+            Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes(transCount), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            Array.Copy(BitConverter.GetBytes((double)result), 0, objRet, 2 * BasicTypeLength.INT32, BasicTypeLength.DOUBLE_DECIMAL);
+            return objRet;
+        }
     }
 }
