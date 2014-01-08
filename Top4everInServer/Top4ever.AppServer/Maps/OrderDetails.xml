@@ -31,22 +31,6 @@
         <result property="EmployeeID" column="InputEmployeeID"></result>
       </resultMap>
 
-      <resultMap id="DeletedOrderResult" class="DeletedOrder">
-        <result property="OrderID" column="OrderID"></result>
-        <result property="AuthorisedManager" column="AuthorisedManager"></result>
-        <result property="CancelEmployeeNo" column="CancelEmployeeNo"></result>
-        <result property="CancelReasonName" column="CancelReasonName"></result>
-      </resultMap>
-
-      <resultMap id="DeletedOrderDetailsResult" class="DeletedOrderDetails">
-        <result property="OrderDetailsID" column="OrderDetailsID"></result>
-        <result property="RemainQuantity" column="RemainQuantity"></result>
-        <result property="OffPay" column="OffPay"></result>
-        <result property="AuthorisedManager" column="AuthorisedManager"></result>
-        <result property="CancelEmployeeNo" column="CancelEmployeeNo"></result>
-        <result property="CancelReasonName" column="CancelReasonName"></result>
-      </resultMap>
-
       <resultMap id="DeletedItemResult" class="DeletedItem">
         <result property="OrderNo" column="OrderNo"></result>
         <result property="TranSequence" column="TranSequence"></result>
@@ -81,9 +65,10 @@
         <parameter property="ItemQty"/>
         <parameter property="SellPrice"/>
         <parameter property="Wait"/>
-        <parameter property="EmployeeID" column="InputEmployeeID"/>
+        <parameter property="DailyStatementNo"/>
+        <parameter property="EmployeeID"/>
       </parameterMap>
-        
+      
       <parameterMap id="DeleteSingleOrderDetailsParam" class="DeletedOrderDetails">
         <parameter property="OrderDetailsID"/>
         <parameter property="RemainQuantity"/>
@@ -192,5 +177,12 @@
       <procedure id="GetDeletedGoodsItem" parameterMap="DeletedItemParam" resultMap="DeletedItemResult">
         proc_GetDeletedGoodsItem
       </procedure>
+
+      <select id="GetLastCustomPrice" parameterClass="OrderDetails" resultClass="System.Decimal">
+        SELECT ISNULL(SellPrice, 0) AS SellPrice
+        FROM OrderDetails
+        WHERE DailyStatementNo = #DailyStatementNo# AND GoodsID = #GoodsID# AND IsVoided = 0
+        ORDER BY LastModifiedTime DESC
+      </select>
     </statements>
 </sqlMap>

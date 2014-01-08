@@ -46,6 +46,6 @@ namespace Top4ever.Domain.Transfer
         /// <summary>
         /// 组合销售
         /// </summary>
-        public IList<GoodsCombinedSale> GoodsCombinedSaleList { get; set; }
+        public IList<GoodsCombinedSale> TotalCombinedSaleList { get; set; }
     }
 }

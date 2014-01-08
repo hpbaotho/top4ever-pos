@@ -46,5 +46,9 @@ namespace Top4ever.Interface.OrderRelated
         bool DeliveryTakeoutOrder(Guid orderID, string employeeNo);
 
         IList<DeliveryOrder> GetDeliveryOrderList(string dailyStatementNo);
+
+        IList<HourOrderSales> GetHourSalesReport(string dailyStatementNo);
+
+        IList<HourOrderSales> GetHourSalesReportByTime(DateTime beginTime, DateTime endTime);
     }
 }

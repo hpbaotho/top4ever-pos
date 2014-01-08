@@ -164,7 +164,7 @@ namespace Top4ever.BLL
             string strReceive = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, itemBuffer.Length - ParamFieldLength.PACKAGE_HEAD).Trim('\0');
             CustomerOrder customerOrder = JsonConvert.DeserializeObject<CustomerOrder>(strReceive);
 
-            bool result = CustomersService.GetInstance().CreateCustomerOrder(customerOrder);
+            bool result = CustomersService.GetInstance().CreateOrUpdateCustomerOrder(customerOrder);
             if (result)
             {
                 //成功

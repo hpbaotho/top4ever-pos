@@ -6,6 +6,7 @@ using IBatisNet.DataAccess;
 using Top4ever.Domain.OrderRelated;
 using Top4ever.Domain.Transfer;
 using Top4ever.Interface.OrderRelated;
+using Top4ever.Interface;
 
 namespace Top4ever.Service
 {
@@ -16,6 +17,7 @@ namespace Top4ever.Service
         private static OrderDetailsService _instance = new OrderDetailsService();
         private IDaoManager _daoManager = null;
         private IOrderDetailsDao _orderDetailsDao = null;
+        private IDailyStatementDao _dailyStatementDao = null;
 
         #endregion
 
@@ -25,6 +27,7 @@ namespace Top4ever.Service
         {
             _daoManager = ServiceConfig.GetInstance().DaoManager;
             _orderDetailsDao = _daoManager.GetDao(typeof(IOrderDetailsDao)) as IOrderDetailsDao;
+            _dailyStatementDao = _daoManager.GetDao(typeof(IDailyStatementDao)) as IDailyStatementDao;
         }
 
         #endregion
@@ -106,6 +109,18 @@ namespace Top4ever.Service
             deletedItems.DeletedGoodsItemList = _orderDetailsDao.GetDeletedGoodsItemList(beginDate, endDate, dateType);
             _daoManager.CloseConnection();
             return deletedItems;
+        }
+
+        public decimal GetLastCustomPrice(Guid goodsID)
+        {
+            decimal price = 0M;
+            //日结号
+            string dailyStatementNo = _dailyStatementDao.GetCurrentDailyStatementNo();
+            if (!string.IsNullOrEmpty(dailyStatementNo))
+            {
+                price = _orderDetailsDao.GetLastCustomPrice(dailyStatementNo, goodsID);
+            }
+            return price;
         }
 
         #endregion

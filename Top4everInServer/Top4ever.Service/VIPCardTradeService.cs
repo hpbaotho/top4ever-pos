@@ -53,7 +53,11 @@ namespace Top4ever.Service
             cardTradeRecord = new VIPCardTradeRecord();
             _daoManager.OpenConnection();
             VIPCard card = _VIPCardDao.GetVIPCard(cardNo);
-            int result = card.Status;
+            int result = 0;
+            if (card != null)
+            {
+                result = card.Status;
+            }
             if (result == 1)
             {
                 IList<VIPCardTrade> cardTradeList = _VIPCardTradeDao.GetVIPCardTradeList(cardNo, beginDate, endDate);

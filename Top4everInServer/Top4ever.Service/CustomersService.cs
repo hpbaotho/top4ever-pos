@@ -136,7 +136,7 @@ namespace Top4ever.Service
                 if (!string.IsNullOrEmpty(customerOrder.Telephone))
                 {
                     //更新外送人员
-                    _customerOrderDao.UpdateCustomerOrder(customerOrder);
+                    _customerOrderDao.CreateOrUpdateCustomerOrder(customerOrder);
                 }
                 _orderDao.DeliveryTakeoutOrder(customerOrder.OrderID, customerOrder.DeliveryEmployeeNo);
                 returnValue = true;
@@ -150,13 +150,13 @@ namespace Top4ever.Service
             return returnValue;
         }
 
-        public bool CreateCustomerOrder(CustomerOrder customerOrder)
+        public bool CreateOrUpdateCustomerOrder(CustomerOrder customerOrder)
         {
             bool result = false;
             try
             {
                 _daoManager.OpenConnection();
-                _customerOrderDao.CreateCustomerOrder(customerOrder);
+                _customerOrderDao.CreateOrUpdateCustomerOrder(customerOrder);
                 _daoManager.CloseConnection();
                 result = true;
             }

@@ -105,6 +105,20 @@ namespace Top4ever.Persistence.OrderRelated
             htParam["DateType"] = dateType;
             return ExecuteQueryForList<DeletedItem>("GetDeletedGoodsItem", htParam);
         }
+
+        public decimal GetLastCustomPrice(string dailyStatementNo, Guid goodsID)
+        {
+            decimal result = 0M;
+            OrderDetails orderDetails = new OrderDetails();
+            orderDetails.DailyStatementNo = dailyStatementNo;
+            orderDetails.GoodsID = goodsID;
+            object objValue = ExecuteQueryForObject("GetLastCustomPrice", orderDetails);
+            if (objValue != null)
+            {
+                result = (decimal)objValue;
+            }
+            return result;
+        }
         #endregion
     }
 }

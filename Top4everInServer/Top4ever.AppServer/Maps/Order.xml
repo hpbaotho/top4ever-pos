@@ -5,6 +5,7 @@
       <typeAlias alias="Order" type="Top4ever.Domain.OrderRelated.Order, Top4ever.Domain" />
       <typeAlias alias="DeletedOrder" type="Top4ever.Domain.Transfer.DeletedOrder, Top4ever.Domain" />
       <typeAlias alias="DeliveryOrder" type="Top4ever.Domain.Transfer.DeliveryOrder, Top4ever.Domain" />
+      <typeAlias alias="HourOrderSales" type="Top4ever.Domain.Transfer.HourOrderSales, Top4ever.Domain" />
     </alias>
 
     <resultMaps>
@@ -35,19 +36,20 @@
         <result property="CheckoutDeviceNo" column="CheckoutDeviceNo"></result>
       </resultMap>
 
-      <resultMap id="DeletedOrderResult" class="DeletedOrder">
-        <result property="OrderID" column="OrderID"></result>
-        <result property="AuthorisedManager" column="AuthorisedManager"></result>
-        <result property="CancelEmployeeNo" column="CancelEmployeeNo"></result>
-        <result property="CancelReasonName" column="CancelReasonName"></result>
-      </resultMap>
-
       <resultMap id="DeliveryOrderResult" class="DeliveryOrder">
         <result property="OrderID" column="OrderID"></result>
         <result property="TranSequence" column="TranSequence"></result>
         <result property="EatType" column="EatType"></result>
         <result property="PayTime" column="PayTime"></result>
         <result property="DeliveryTime" column="DeliveryTime"></result>
+      </resultMap>
+
+      <resultMap id="HourOrderSalesResult" class="HourOrderSales">
+        <result property="OrderCount" column="OrderCount"></result>
+        <result property="OrderDate" column="OrderDate"></result>
+        <result property="OrderHour" column="OrderHour"></result>
+        <result property="OrderPrice" column="OrderPrice"></result>
+        <result property="PeopleNum" column="PeopleNum"></result>
       </resultMap>
     </resultMaps>
 
@@ -209,6 +211,28 @@
         FROM [Order]
         WHERE DailyStatementNo = #DailyStatementNo# AND [Status] = 0 AND EatType = 3
         ORDER BY TranSequence
+      </select>
+
+      <select id="GetHourSalesReport" parameterClass="String" resultMap="HourOrderSalesResult">
+        SELECT COUNT(OrderId) AS OrderCount,
+          LEFT(CONVERT(VARCHAR(13), PayTime, 120),10) AS OrderDate,
+          RIGHT(CONVERT(VARCHAR(13), PayTime, 120),2) AS OrderHour,
+          SUM(PaymentMoney - NeedChangePay) AS OrderPrice,
+          SUM(PeopleNum) AS PeopleNum
+        FROM [Order]
+        WHERE DailyStatementNo=#DailyStatementNo# AND PayTime IS NOT NULL AND IsVoided = 0
+        GROUP BY CONVERT(VARCHAR(13), PayTime, 120)
+      </select>
+
+      <select id="GetHourSalesReportByTime" parameterClass="System.Collections.Hashtable" resultMap="HourOrderSalesResult">
+        SELECT COUNT(OrderId) AS OrderCount,
+          LEFT(CONVERT(VARCHAR(13), PayTime, 120),10) AS OrderDate,
+          RIGHT(CONVERT(VARCHAR(13), PayTime, 120),2) AS OrderHour,
+          SUM(PaymentMoney - NeedChangePay) AS OrderPrice,
+          SUM(PeopleNum) AS PeopleNum
+        FROM [Order]
+        WHERE (PayTime BETWEEN #BeginTime# AND #EndTime#) AND IsVoided = 0
+        GROUP BY CONVERT(VARCHAR(13), PayTime, 120)
       </select>
     </statements>
 </sqlMap>
