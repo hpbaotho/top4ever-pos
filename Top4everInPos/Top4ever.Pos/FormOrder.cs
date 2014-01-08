@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO.Ports;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -483,6 +484,7 @@ namespace Top4ever.Pos
                     btn.Visible = true;
                     btn.Text = detailsGroup.DetailsGroupName;
                     btn.Tag = detailsGroup;
+                    btn.BackColor = btn.DisplayColor = Color.DodgerBlue;
                     foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
                     {
                         if (detailsGroup.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
@@ -635,8 +637,6 @@ namespace Top4ever.Pos
         private void btnGroup_Click(object sender, EventArgs e)
         {
             CrystalButton btnGroup = sender as CrystalButton;
-            if (prevPressedButton != null && prevPressedButton.Text == btnGroup.Text)
-                return;
             if (btnGroup.Tag is GoodsGroup)
             {
                 m_CurrentGoodsGroup = btnGroup.Tag as GoodsGroup;
@@ -656,7 +656,10 @@ namespace Top4ever.Pos
                 }
                 else
                 {
-                    prevPressedButton.BackColor = prevPressedButton.DisplayColor;
+                    if (btnGroup.Text != prevPressedButton.Text)
+                    {
+                        prevPressedButton.BackColor = prevPressedButton.DisplayColor;
+                    }
                     prevPressedButton = btnGroup;
                 }
                 m_ItemPageIndex = 0;
@@ -696,51 +699,46 @@ namespace Top4ever.Pos
                 decimal goodsDiscount = 0;
                 Discount _discount = null;
                 bool IsContainsSalePrice = false;   //是否包含特价
-                bool IsContainsCombinedSale = false;    //是否包含组合销售
 
-                #region 判断是否限时特价
-                //所属组特价
-                bool IsInGroup = false;
-                foreach (GoodsLimitedTimeSale item in ConstantValuePool.GroupLimitedTimeSaleList)
+                decimal goodsPrice = goods.SellPrice;
+                decimal goodsNum = 1M;
+                if (goods.IsCustomQty || goods.IsCustomPrice)
                 {
-                    if (item.ItemID == m_CurrentGoodsGroup.GoodsGroupID)
+                    OrderDetailsService orderDetailsService = new OrderDetailsService();
+                    decimal sellPrice = orderDetailsService.GetLastCustomPrice(goods.GoodsID);
+                    if (sellPrice > 0)
                     {
-                        _discount = new Discount();
-                        _discount.DiscountID = new Guid("66666666-6666-6666-6666-666666666666");
-                        _discount.DiscountName = "促销折扣";
-                        if (item.DiscountType == (int)DiscountItemType.DiscountRate)
-                        {
-                            goodsDiscount = goods.SellPrice * item.DiscountRate;
-                            _discount.DiscountType = (int)DiscountItemType.DiscountRate;
-                            _discount.DiscountRate = item.DiscountRate;
-                            _discount.OffFixPay = 0;
-                        }
-                        if (item.DiscountType == (int)DiscountItemType.OffFixPay)
-                        {
-                            goodsDiscount = item.OffFixPay;
-                            _discount.DiscountType = (int)DiscountItemType.OffFixPay;
-                            _discount.DiscountRate = 0;
-                            _discount.OffFixPay = item.OffFixPay;
-                        }
-                        if (item.DiscountType == (int)DiscountItemType.OffSaleTo)
-                        {
-                            goodsDiscount = goods.SellPrice - item.OffSaleTo;
-                            _discount.DiscountType = (int)DiscountItemType.OffFixPay;
-                            _discount.DiscountRate = 0;
-                            _discount.OffFixPay = goods.SellPrice - item.OffSaleTo;
-                        }
-                        IsInGroup = true;
-                        IsContainsSalePrice = true;
-                        break;
+                        goodsPrice = sellPrice;
                     }
-                }
-                //品项特价
-                if (!IsInGroup)
-                {
-                    foreach (GoodsLimitedTimeSale item in ConstantValuePool.GoodsLimitedTimeSaleList)
+                    if (goods.IsCustomQty || sellPrice == 0)
                     {
-                        if (item.ItemID == goods.GoodsID)
+                        FormCustomQty form = new FormCustomQty(goods.IsCustomQty, goodsNum, goods.IsCustomPrice, goodsPrice);
+                        form.ShowDialog();
+                        if (form.CustomPrice > 0)
                         {
+                            goodsPrice = form.CustomPrice;
+                        }
+                        if (form.CustomQty > 0)
+                        {
+                            goodsNum = form.CustomQty;
+                        }
+                    }
+                    goods.SellPrice = goodsPrice;
+                    btnItem.Tag = goods;
+                }
+                else
+                {
+                    #region 判断是否限时特价
+                    //所属组特价
+                    bool IsInGroup = false;
+                    foreach (GoodsLimitedTimeSale item in ConstantValuePool.GroupLimitedTimeSaleList)
+                    {
+                        if (item.ItemID == m_CurrentGoodsGroup.GoodsGroupID)
+                        {
+                            if (!IsValidDate(item.BeginDate, item.EndDate, item.Week, item.Day, item.Hour, item.Minute))
+                            {
+                                continue;
+                            }
                             _discount = new Discount();
                             _discount.DiscountID = new Guid("66666666-6666-6666-6666-666666666666");
                             _discount.DiscountName = "促销折扣";
@@ -765,20 +763,61 @@ namespace Top4ever.Pos
                                 _discount.DiscountRate = 0;
                                 _discount.OffFixPay = goods.SellPrice - item.OffSaleTo;
                             }
+                            IsInGroup = true;
                             IsContainsSalePrice = true;
                             break;
                         }
                     }
+                    //品项特价
+                    if (!IsInGroup)
+                    {
+                        foreach (GoodsLimitedTimeSale item in ConstantValuePool.GoodsLimitedTimeSaleList)
+                        {
+                            if (item.ItemID == goods.GoodsID)
+                            {
+                                if (!IsValidDate(item.BeginDate, item.EndDate, item.Week, item.Day, item.Hour, item.Minute))
+                                {
+                                    continue;
+                                }
+                                _discount = new Discount();
+                                _discount.DiscountID = new Guid("66666666-6666-6666-6666-666666666666");
+                                _discount.DiscountName = "促销折扣";
+                                if (item.DiscountType == (int)DiscountItemType.DiscountRate)
+                                {
+                                    goodsDiscount = goods.SellPrice * item.DiscountRate;
+                                    _discount.DiscountType = (int)DiscountItemType.DiscountRate;
+                                    _discount.DiscountRate = item.DiscountRate;
+                                    _discount.OffFixPay = 0;
+                                }
+                                if (item.DiscountType == (int)DiscountItemType.OffFixPay)
+                                {
+                                    goodsDiscount = item.OffFixPay;
+                                    _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                    _discount.DiscountRate = 0;
+                                    _discount.OffFixPay = item.OffFixPay;
+                                }
+                                if (item.DiscountType == (int)DiscountItemType.OffSaleTo)
+                                {
+                                    goodsDiscount = goods.SellPrice - item.OffSaleTo;
+                                    _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                    _discount.DiscountRate = 0;
+                                    _discount.OffFixPay = goods.SellPrice - item.OffSaleTo;
+                                }
+                                IsContainsSalePrice = true;
+                                break;
+                            }
+                        }
+                    }
+                    #endregion
                 }
-                #endregion
 
                 int index, selectedIndex;
                 index = selectedIndex = dgvGoodsOrder.Rows.Add(new DataGridViewRow());
                 dgvGoodsOrder.Rows[index].Cells["ItemID"].Value = goods.GoodsID;
                 dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag = goods;
-                dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = 1;
+                dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = goodsNum;
                 dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = goods.GoodsName;
-                dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = goods.SellPrice;
+                dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = goodsPrice * goodsNum;
                 dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = (-goodsDiscount).ToString("f2");
                 if (_discount != null)
                 {
@@ -787,39 +826,9 @@ namespace Top4ever.Pos
                 dgvGoodsOrder.Rows[index].Cells["ItemType"].Value = OrderItemType.Goods;
                 dgvGoodsOrder.Rows[index].Cells["CanDiscount"].Value = goods.CanDiscount;
                 dgvGoodsOrder.Rows[index].Cells["ItemUnit"].Value = goods.Unit;
-
-                #region 判断是否存在组合销售
-                if (!IsContainsSalePrice)
-                {
-                    bool IsInCombinedGroup = false;
-                    foreach (GoodsCombinedSale item in ConstantValuePool.GroupCombinedSaleList)
-                    {
-                        if (item.ItemID == m_CurrentGoodsGroup.GoodsGroupID)
-                        {
-                            //组合
-                            IsInCombinedGroup = true;
-                            IsContainsCombinedSale = true;
-                            break;
-                        }
-                    }
-                    //品项组合销售
-                    if (!IsInCombinedGroup)
-                    {
-                        foreach (GoodsCombinedSale item in ConstantValuePool.GoodsCombinedSaleList)
-                        {
-                            if (item.ItemID == goods.GoodsID)
-                            {
-                                //组合
-                                IsContainsCombinedSale = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-                #endregion
-
+                
                 #region 判断是否套餐
-                if (!IsContainsSalePrice && !IsContainsCombinedSale)
+                if (!IsContainsSalePrice)
                 {
                     bool haveCirculate = false;
                     IList<GoodsSetMeal> goodsSetMealList = new List<GoodsSetMeal>();
@@ -1366,17 +1375,18 @@ namespace Top4ever.Pos
 
         private void btnManual_Click(object sender, EventArgs e)
         {
-            Feature.FormNumericKeypad keyForm = new Feature.FormNumericKeypad();
-            keyForm.DisplayText = "请输入品项数量";
-            keyForm.ShowDialog();
-            decimal quantity = 0;
-            if (!string.IsNullOrEmpty(keyForm.KeypadValue) && decimal.TryParse(keyForm.KeypadValue, out quantity))
+            if (dgvGoodsOrder.CurrentRow != null)
             {
-                if (dgvGoodsOrder.CurrentRow != null)
+                int selectIndex = dgvGoodsOrder.CurrentRow.Index;
+                if (dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value == null)
                 {
-                    int selectIndex = dgvGoodsOrder.CurrentRow.Index;
-                    if (dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value == null)
+                    Feature.FormNumericKeypad keyForm = new Feature.FormNumericKeypad();
+                    keyForm.DisplayText = "请输入品项数量";
+                    keyForm.ShowDialog();
+                    decimal quantity = 0;
+                    if (!string.IsNullOrEmpty(keyForm.KeypadValue) && decimal.TryParse(keyForm.KeypadValue, out quantity))
                     {
+
                         int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value);
                         if (itemType == (int)OrderItemType.Goods)
                         {
@@ -1748,6 +1758,9 @@ namespace Top4ever.Pos
         {
             if (dgvGoodsOrder.Rows.Count > 0)
             {
+                //判断参加限时组合销售
+                JoinGoodsCombinedSale(this.dgvGoodsOrder);
+                BindOrderInfoSum();
                 if (SubmitSalesOrder())
                 {
                     //更新桌况为占用状态
@@ -1768,13 +1781,13 @@ namespace Top4ever.Pos
                     }
                     else
                     {
-                        MessageBox.Show("更新桌况失败！");
+                        MessageBox.Show("更新桌况失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
             else
             {
-                MessageBox.Show("请先选择菜品！");
+                MessageBox.Show("请先选择菜品！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -1800,7 +1813,7 @@ namespace Top4ever.Pos
                 }
                 else
                 {
-                    MessageBox.Show("更新桌况失败！");
+                    MessageBox.Show("更新桌况失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
@@ -1823,7 +1836,7 @@ namespace Top4ever.Pos
                 }
                 else
                 {
-                    MessageBox.Show("更新桌况失败！");
+                    MessageBox.Show("更新桌况失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -1953,6 +1966,9 @@ namespace Top4ever.Pos
                 {
                     return;
                 }
+                //判断参加限时组合销售
+                JoinGoodsCombinedSale(this.dgvGoodsOrder);
+                BindOrderInfoSum();
                 if (SubmitSalesOrder())
                 {
                     //转入结账页面
@@ -1992,7 +2008,7 @@ namespace Top4ever.Pos
             }
             else
             {
-                MessageBox.Show("请先选择菜品！");
+                MessageBox.Show("请先选择菜品！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);;
             }
         }
 
@@ -2037,7 +2053,7 @@ namespace Top4ever.Pos
                     DeletedOrderService orderService = new DeletedOrderService();
                     if (!orderService.DeleteWholeOrder(deletedOrder))
                     {
-                        MessageBox.Show("删除账单失败！");
+                        MessageBox.Show("删除账单失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);;
                         return;
                     }
                 }
@@ -2082,7 +2098,7 @@ namespace Top4ever.Pos
             }
             if (IsContainsNewItem)
             {
-                MessageBox.Show("存在新单，不能印单！");
+                MessageBox.Show("存在新单，不能印单！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);;
             }
             else
             {
@@ -2357,12 +2373,12 @@ namespace Top4ever.Pos
                 }
                 else
                 {
-                    MessageBox.Show("没有需要提单的品项！");
+                    MessageBox.Show("没有需要提单的品项！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);;
                 }
             }
             else
             {
-                MessageBox.Show("有新单，不能整单提单！");
+                MessageBox.Show("有新单，不能整单提单！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);;
             }
             this.exTabControl1.SelectedIndex = 0;
         }
@@ -2907,7 +2923,7 @@ namespace Top4ever.Pos
                 }
                 else
                 {
-                    MessageBox.Show("结账提交失败！");
+                    MessageBox.Show("结账提交失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);;
                     return false;
                 }
             }
@@ -2944,12 +2960,12 @@ namespace Top4ever.Pos
                     }
                     else if (result == 2)
                     {
-                        MessageBox.Show("当前桌号被其他设备占用，请退出后重试！");
+                        MessageBox.Show("当前桌号被其他设备占用，请退出后重试！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);;
                         return false;
                     }
                     else
                     {
-                        MessageBox.Show("结账提交失败，请重新操作！");
+                        MessageBox.Show("结账提交失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);;
                         return false;
                     }
                 }
@@ -3092,230 +3108,621 @@ namespace Top4ever.Pos
             {
                 if (itemID == trigger.ItemID && (int)itemType == trigger.ItemType)
                 {
-                    if (DateTime.Now >= DateTime.Parse(trigger.BeginDate) && DateTime.Now <= DateTime.Parse(trigger.EndDate))
-                    {
-                        DayOfWeek curWeek = DateTime.Now.DayOfWeek;
-                        string curMonth = DateTime.Now.Month.ToString();
-                        string curDay = DateTime.Now.Day.ToString();
-                        int curHour = DateTime.Now.Hour;
-                        int curMinute = DateTime.Now.Minute;
-                        //判断周或者日
-                        if (trigger.Week == "?")
-                        {
-                            //判断是否包含当日
-                            if (trigger.Day != "*")
-                            {
-                                string[] dayArr = trigger.Day.Split(',');
-                                bool IsContainDay = false;
-                                foreach (string day in dayArr)
-                                {
-                                    if (curDay == day)
-                                    {
-                                        IsContainDay = true;
-                                        break;
-                                    }
-                                }
-                                if (!IsContainDay)
-                                {
-                                    IsEnabled = false;
-                                    break;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            //判断是否包含周几
-                            //判断包含# 例:当月第几周星期几
-                            if (trigger.Week.IndexOf('#') > 0)
-                            {
-                                string weekIndex = trigger.Week.Split('#')[0];
-                                string weekDay = trigger.Week.Split('#')[1];
-                                //计算当日是当月的第几周
-                                DateTime FirstofMonth = Convert.ToDateTime(DateTime.Now.Year + "-" + DateTime.Now.Month.ToString().PadLeft(2, '0') + "-" + "01");
-                                int i = (int)FirstofMonth.Date.DayOfWeek;
-                                if (i == 0)
-                                {
-                                    i = 7;
-                                }
-                                int curWeekIndex = (DateTime.Now.Day + i - 1) / 7;
-                                if (curWeekIndex != int.Parse(weekIndex))
-                                {
-                                    IsEnabled = false;
-                                    break;
-                                }
-                                else
-                                {
-                                    if ((int)curWeek != int.Parse(weekDay))
-                                    {
-                                        IsEnabled = false;
-                                        break;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                //不包含# 例:当月每个星期几
-                                string[] weekArr = trigger.Week.Split(',');
-                                bool IsContainWeek = false;
-                                foreach (string week in weekArr)
-                                {
-                                    if ((int)curWeek == int.Parse(week))
-                                    {
-                                        IsContainWeek = true;
-                                        break;
-                                    }
-                                }
-                                if (!IsContainWeek)
-                                {
-                                    IsEnabled = false;
-                                    break;
-                                }
-                            }
-                        }
-                        //判断时
-                        if (trigger.Hour != "*")
-                        {
-                            if (trigger.Hour.IndexOf('-') > 0)
-                            {
-                                string hourMinute = curHour.ToString().PadLeft(2, '0') + ":" + curMinute.ToString().PadLeft(2, '0');
-                                if (trigger.Hour.IndexOf(',') > 0) //多个小时时间段
-                                {
-                                    string[] hourArr = trigger.Hour.Split(',');
-                                    bool IsContainHour = false;
-                                    foreach (string hour in hourArr)
-                                    {
-                                        string beginHour = hour.Split('-')[0].Trim();
-                                        string endHour = hour.Split('-')[1].Trim();
-                                        if (string.Compare(hourMinute, beginHour) >= 0 && string.Compare(hourMinute, endHour) <= 0)
-                                        {
-                                            IsContainHour = true;
-                                            break;
-                                        }
-                                    }
-                                    if (!IsContainHour)
-                                    {
-                                        IsEnabled = false;
-                                        break;
-                                    }
-                                }
-                                else
-                                {
-                                    string beginHour = trigger.Hour.Split('-')[0].Trim();
-                                    string endHour = trigger.Hour.Split('-')[1].Trim();
-                                    if (string.Compare(hourMinute, beginHour) < 0 || string.Compare(hourMinute, endHour) > 0)
-                                    {
-                                        IsEnabled = false;
-                                        break;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (trigger.Hour.IndexOf(',') > 0) //多个小时
-                                {
-                                    string[] hourArr = trigger.Hour.Split(',');
-                                    bool IsContainHour = false;
-                                    foreach (string hour in hourArr)
-                                    {
-                                        if (curHour == int.Parse(hour))
-                                        {
-                                            IsContainHour = true;
-                                            break;
-                                        }
-                                    }
-                                    if (!IsContainHour)
-                                    {
-                                        IsEnabled = false;
-                                        break;
-                                    }
-                                }
-                                else
-                                {
-                                    if (curHour != int.Parse(trigger.Hour))
-                                    {
-                                        IsEnabled = false;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        //判断分
-                        if (trigger.Minute != "*")
-                        {
-                            if (trigger.Minute.IndexOf('-') > 0)
-                            {
-                                if (trigger.Minute.IndexOf(',') > 0) //多个分钟时间段
-                                {
-                                    string[] minuteArr = trigger.Minute.Split(',');
-                                    bool IsContainMinute = false;
-                                    foreach (string minute in minuteArr)
-                                    {
-                                        string beginMinute = minute.Split('-')[0];
-                                        string endMinute = minute.Split('-')[1];
-                                        if (curMinute >= int.Parse(beginMinute) && curMinute <= int.Parse(endMinute))
-                                        {
-                                            IsContainMinute = true;
-                                            break;
-                                        }
-                                    }
-                                    if (!IsContainMinute)
-                                    {
-                                        IsEnabled = false;
-                                        break;
-                                    }
-                                }
-                                else
-                                {
-                                    string beginMinute = trigger.Minute.Split('-')[0];
-                                    string endMinute = trigger.Minute.Split('-')[1];
-                                    if (curMinute < int.Parse(beginMinute) || curMinute > int.Parse(endMinute))
-                                    {
-                                        IsEnabled = false;
-                                        break;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (trigger.Minute.IndexOf(',') > 0) //多个分钟
-                                {
-                                    string[] minuteArr = trigger.Minute.Split(',');
-                                    bool IsContainMinute = false;
-                                    foreach (string minute in minuteArr)
-                                    {
-                                        if (curMinute == int.Parse(minute))
-                                        {
-                                            IsContainMinute = true;
-                                            break;
-                                        }
-                                    }
-                                    if (!IsContainMinute)
-                                    {
-                                        IsEnabled = false;
-                                        break;
-                                    }
-                                }
-                                else
-                                {
-                                    if (curMinute != int.Parse(trigger.Minute))
-                                    {
-                                        IsEnabled = false;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        IsEnabled = false;
-                    }
+                    IsEnabled = IsValidDate(trigger.BeginDate, trigger.EndDate, trigger.Week, trigger.Day, trigger.Hour, trigger.Minute);
                     break;
                 }
             }
             return IsEnabled;
         }
-        
+
+        private bool IsValidDate(string beginDate, string endDate, string week, string day, string hour, string minute)
+        {
+            bool IsValid = true;
+            if (DateTime.Now >= DateTime.Parse(beginDate) && DateTime.Now <= DateTime.Parse(endDate))
+            {
+                DayOfWeek curWeek = DateTime.Now.DayOfWeek;
+                string curMonth = DateTime.Now.Month.ToString();
+                string curDay = DateTime.Now.Day.ToString();
+                int curHour = DateTime.Now.Hour;
+                int curMinute = DateTime.Now.Minute;
+                //判断周或者日
+                if (week == "?")
+                {
+                    //判断是否包含当日
+                    if (day != "*")
+                    {
+                        string[] dayArr = day.Split(',');
+                        bool IsContainDay = false;
+                        foreach (string item in dayArr)
+                        {
+                            if (curDay == item)
+                            {
+                                IsContainDay = true;
+                                break;
+                            }
+                        }
+                        if (!IsContainDay)
+                        {
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    //判断是否包含周几
+                    //判断包含# 例:当月第几周星期几
+                    if (week.IndexOf('#') > 0)
+                    {
+                        string weekIndex = week.Split('#')[0];
+                        string weekDay = week.Split('#')[1];
+                        //计算当日是当月的第几周
+                        DateTime FirstofMonth = Convert.ToDateTime(DateTime.Now.Year + "-" + DateTime.Now.Month.ToString().PadLeft(2, '0') + "-" + "01");
+                        int i = (int)FirstofMonth.Date.DayOfWeek;
+                        if (i == 0)
+                        {
+                            i = 7;
+                        }
+                        int curWeekIndex = (DateTime.Now.Day + i - 1) / 7;
+                        if (curWeekIndex != int.Parse(weekIndex))
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            if ((int)curWeek != int.Parse(weekDay))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //不包含# 例:当月每个星期几
+                        string[] weekArr = week.Split(',');
+                        bool IsContainWeek = false;
+                        foreach (string item in weekArr)
+                        {
+                            if ((int)curWeek == int.Parse(item))
+                            {
+                                IsContainWeek = true;
+                                break;
+                            }
+                        }
+                        if (!IsContainWeek)
+                        {
+                            return false;
+                        }
+                    }
+                }
+                //判断时
+                if (hour != "*")
+                {
+                    if (hour.IndexOf('-') > 0)
+                    {
+                        string hourMinute = curHour.ToString().PadLeft(2, '0') + ":" + curMinute.ToString().PadLeft(2, '0');
+                        if (hour.IndexOf(',') > 0) //多个小时时间段
+                        {
+                            string[] hourArr = hour.Split(',');
+                            bool IsContainHour = false;
+                            foreach (string item in hourArr)
+                            {
+                                string beginHour = item.Split('-')[0].Trim();
+                                string endHour = item.Split('-')[1].Trim();
+                                if (string.Compare(hourMinute, beginHour) >= 0 && string.Compare(hourMinute, endHour) <= 0)
+                                {
+                                    IsContainHour = true;
+                                    break;
+                                }
+                            }
+                            if (!IsContainHour)
+                            {
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            string beginHour = hour.Split('-')[0].Trim();
+                            string endHour = hour.Split('-')[1].Trim();
+                            if (string.Compare(hourMinute, beginHour) < 0 || string.Compare(hourMinute, endHour) > 0)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (hour.IndexOf(',') > 0) //多个小时
+                        {
+                            string[] hourArr = hour.Split(',');
+                            bool IsContainHour = false;
+                            foreach (string item in hourArr)
+                            {
+                                if (curHour == int.Parse(item))
+                                {
+                                    IsContainHour = true;
+                                    break;
+                                }
+                            }
+                            if (!IsContainHour)
+                            {
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            if (curHour != int.Parse(hour))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+                //判断分
+                if (minute != "*")
+                {
+                    if (minute.IndexOf('-') > 0)
+                    {
+                        if (minute.IndexOf(',') > 0) //多个分钟时间段
+                        {
+                            string[] minuteArr = minute.Split(',');
+                            bool IsContainMinute = false;
+                            foreach (string item in minuteArr)
+                            {
+                                string beginMinute = item.Split('-')[0];
+                                string endMinute = item.Split('-')[1];
+                                if (curMinute >= int.Parse(beginMinute) && curMinute <= int.Parse(endMinute))
+                                {
+                                    IsContainMinute = true;
+                                    break;
+                                }
+                            }
+                            if (!IsContainMinute)
+                            {
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            string beginMinute = minute.Split('-')[0];
+                            string endMinute = minute.Split('-')[1];
+                            if (curMinute < int.Parse(beginMinute) || curMinute > int.Parse(endMinute))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (minute.IndexOf(',') > 0) //多个分钟
+                        {
+                            string[] minuteArr = minute.Split(',');
+                            bool IsContainMinute = false;
+                            foreach (string item in minuteArr)
+                            {
+                                if (curMinute == int.Parse(item))
+                                {
+                                    IsContainMinute = true;
+                                    break;
+                                }
+                            }
+                            if (!IsContainMinute)
+                            {
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            if (curMinute != int.Parse(minute))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                IsValid = false;
+            }
+            return IsValid;
+        }
+
+        /// <summary>
+        /// 判断是否存在限时组合销售
+        /// </summary>
+        /// <param name="dgvGoodsOrder"></param>
+        private void JoinGoodsCombinedSale(DataGridView dgvGoodsOrder)
+        {
+            List<Guid> hasExistGoodsId = new List<Guid>();
+            for (int index = 0; index < dgvGoodsOrder.Rows.Count; index++)
+            {
+                DataGridViewRow dr = dgvGoodsOrder.Rows[index];
+                int itemType = Convert.ToInt32(dr.Cells["ItemType"].Value);
+                //限时组合销售只针对主品项
+                if (itemType == (int)OrderItemType.Goods)
+                {
+                    Guid goodsId = new Guid(dr.Cells["ItemID"].Value.ToString());
+                    decimal goodsQty = Convert.ToDecimal(dr.Cells["GoodsNum"].Value);
+                    decimal totalSellPrice = Convert.ToDecimal(dr.Cells["GoodsPrice"].Value);
+                    decimal totalDiscount = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value);
+                    if (hasExistGoodsId.Exists(p => p == goodsId) || hasExistGoodsId.Exists(p => GoodsUtil.IsGoodsInGroup(goodsId, p)))
+                    {
+                        continue;
+                    }
+                    //在品项中是否存在
+                    bool IsInItem = false;
+                    foreach (GoodsCombinedSale item in ConstantValuePool.GoodsCombinedSaleList)
+                    {
+                        if (item.ItemID == goodsId)
+                        {
+                            if (!IsValidDate(item.BeginDate, item.EndDate, item.Week, item.Day, item.Hour, item.Minute))
+                            {
+                                continue;
+                            }
+                            //组合优惠
+                            decimal discountRate = Math.Abs(totalDiscount) / totalSellPrice;
+                            bool IsFit = goodsQty >= item.Quantity;
+                            if (item.MoreOrLess == 1)
+                            {
+                                IsFit = totalSellPrice / goodsQty > item.SellPrice;
+                            }
+                            if (item.MoreOrLess == 2)
+                            {
+                                IsFit = totalSellPrice / goodsQty == item.SellPrice;
+                            }
+                            if (item.MoreOrLess == 3)
+                            {
+                                IsFit = totalSellPrice / goodsQty < item.SellPrice;
+                            }
+                            IsFit = discountRate <= item.LeastDiscountRate;
+                            if (IsFit)
+                            {
+                                //优惠区间 第二杯半价
+                                if (item.PreferentialInterval == 2)
+                                {
+                                    int count = 0;
+                                    for (int m = index + 1; m < dgvGoodsOrder.Rows.Count; m++)
+                                    {
+                                        //限时组合销售只针对主品项
+                                        if (Convert.ToInt32(dgvGoodsOrder.Rows[m].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                                        {
+                                            Guid tempGoodsId = new Guid(dgvGoodsOrder.Rows[m].Cells["ItemID"].Value.ToString());
+                                            decimal tempTotalPrice = Convert.ToDecimal(dgvGoodsOrder.Rows[m].Cells["GoodsPrice"].Value);
+                                            if (tempGoodsId == item.ItemID)
+                                            {
+                                                if (count % 2 == 1)
+                                                {
+                                                    count++;
+                                                    continue;
+                                                }
+                                                Discount _discount = new Discount();
+                                                _discount.DiscountID = new Guid("66666666-6666-6666-6666-666666666666");
+                                                _discount.DiscountName = "促销折扣";
+                                                decimal goodsDiscount = 0;
+                                                if (item.DiscountType2 == (int)DiscountItemType.DiscountRate)
+                                                {
+                                                    goodsDiscount = tempTotalPrice * item.DiscountRate2;
+                                                    _discount.DiscountType = (int)DiscountItemType.DiscountRate;
+                                                    _discount.DiscountRate = item.DiscountRate2;
+                                                    _discount.OffFixPay = 0;
+                                                }
+                                                if (item.DiscountType2 == (int)DiscountItemType.OffFixPay)
+                                                {
+                                                    goodsDiscount = item.OffFixPay2;
+                                                    _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                    _discount.DiscountRate = 0;
+                                                    _discount.OffFixPay = item.OffFixPay2;
+                                                }
+                                                if (item.DiscountType2 == (int)DiscountItemType.OffSaleTo)
+                                                {
+                                                    goodsDiscount = tempTotalPrice - item.OffSaleTo2;
+                                                    _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                    _discount.DiscountRate = 0;
+                                                    _discount.OffFixPay = tempTotalPrice - item.OffSaleTo2;
+                                                }
+                                                dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Value = (-goodsDiscount).ToString("f2");
+                                                dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Tag = _discount;
+                                                if (item.IsMultiple)
+                                                {
+                                                    count++;
+                                                }
+                                                else
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                //优惠区间 第二件半价 第三件免费
+                                if (item.PreferentialInterval == 3)
+                                {
+                                    int count = 1;
+                                    for (int m = index + 1; m < dgvGoodsOrder.Rows.Count; m++)
+                                    {
+                                        //限时组合销售只针对主品项
+                                        if (Convert.ToInt32(dgvGoodsOrder.Rows[m].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                                        {
+                                            Guid tempGoodsId = new Guid(dgvGoodsOrder.Rows[m].Cells["ItemID"].Value.ToString());
+                                            decimal tempTotalPrice = Convert.ToDecimal(dgvGoodsOrder.Rows[m].Cells["GoodsPrice"].Value);
+                                            if (tempGoodsId == item.ItemID)
+                                            {
+                                                if (count % 3 == 0)
+                                                {
+                                                    count++;
+                                                    continue;
+                                                }
+                                                if (count % 3 == 1)
+                                                {
+                                                    Discount _discount = new Discount();
+                                                    _discount.DiscountID = new Guid("66666666-6666-6666-6666-666666666666");
+                                                    _discount.DiscountName = "促销折扣";
+                                                    decimal goodsDiscount = 0;
+                                                    if (item.DiscountType2 == (int)DiscountItemType.DiscountRate)
+                                                    {
+                                                        goodsDiscount = tempTotalPrice * item.DiscountRate2;
+                                                        _discount.DiscountType = (int)DiscountItemType.DiscountRate;
+                                                        _discount.DiscountRate = item.DiscountRate2;
+                                                        _discount.OffFixPay = 0;
+                                                    }
+                                                    if (item.DiscountType2 == (int)DiscountItemType.OffFixPay)
+                                                    {
+                                                        goodsDiscount = item.OffFixPay2;
+                                                        _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                        _discount.DiscountRate = 0;
+                                                        _discount.OffFixPay = item.OffFixPay2;
+                                                    }
+                                                    if (item.DiscountType2 == (int)DiscountItemType.OffSaleTo)
+                                                    {
+                                                        goodsDiscount = tempTotalPrice - item.OffSaleTo2;
+                                                        _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                        _discount.DiscountRate = 0;
+                                                        _discount.OffFixPay = tempTotalPrice - item.OffSaleTo2;
+                                                    }
+                                                    dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Value = (-goodsDiscount).ToString("f2");
+                                                    dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Tag = _discount;
+                                                    count++;
+                                                    continue;
+                                                }
+                                                if (count % 3 == 2)
+                                                {
+                                                    Discount _discount = new Discount();
+                                                    _discount.DiscountID = new Guid("66666666-6666-6666-6666-666666666666");
+                                                    _discount.DiscountName = "促销折扣";
+                                                    decimal goodsDiscount = 0;
+                                                    if (item.DiscountType3 == (int)DiscountItemType.DiscountRate)
+                                                    {
+                                                        goodsDiscount = tempTotalPrice * item.DiscountRate3;
+                                                        _discount.DiscountType = (int)DiscountItemType.DiscountRate;
+                                                        _discount.DiscountRate = item.DiscountRate3;
+                                                        _discount.OffFixPay = 0;
+                                                    }
+                                                    if (item.DiscountType3 == (int)DiscountItemType.OffFixPay)
+                                                    {
+                                                        goodsDiscount = item.OffFixPay3;
+                                                        _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                        _discount.DiscountRate = 0;
+                                                        _discount.OffFixPay = item.OffFixPay3;
+                                                    }
+                                                    if (item.DiscountType3 == (int)DiscountItemType.OffSaleTo)
+                                                    {
+                                                        goodsDiscount = tempTotalPrice - item.OffSaleTo3;
+                                                        _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                        _discount.DiscountRate = 0;
+                                                        _discount.OffFixPay = tempTotalPrice - item.OffSaleTo3;
+                                                    }
+                                                    dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Value = (-goodsDiscount).ToString("f2");
+                                                    dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Tag = _discount;
+                                                    if (item.IsMultiple)
+                                                    {
+                                                        count++;
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            IsInItem = true;
+                            hasExistGoodsId.Add(goodsId);
+                            break;
+                        }
+                    }
+                    if (!IsInItem)
+                    {
+                        //在品项组中是否存在
+                        foreach (GoodsCombinedSale item in ConstantValuePool.GroupCombinedSaleList)
+                        {
+                            if (!IsValidDate(item.BeginDate, item.EndDate, item.Week, item.Day, item.Hour, item.Minute))
+                            {
+                                continue;
+                            }
+                            if (GoodsUtil.IsGoodsInGroup(goodsId, item.ItemID))
+                            {
+                                if (!IsValidDate(item.BeginDate, item.EndDate, item.Week, item.Day, item.Hour, item.Minute))
+                                {
+                                    continue;
+                                }
+                                //组合优惠
+                                decimal discountRate = Math.Abs(totalDiscount) / totalSellPrice;
+                                bool IsFit = goodsQty >= item.Quantity;
+                                if (item.MoreOrLess == 1)
+                                {
+                                    IsFit = totalSellPrice / goodsQty > item.SellPrice;
+                                }
+                                if (item.MoreOrLess == 2)
+                                {
+                                    IsFit = totalSellPrice / goodsQty == item.SellPrice;
+                                }
+                                if (item.MoreOrLess == 3)
+                                {
+                                    IsFit = totalSellPrice / goodsQty < item.SellPrice;
+                                }
+                                IsFit = discountRate <= item.LeastDiscountRate;
+                                if (IsFit)
+                                {
+                                    //优惠区间 第二杯半价
+                                    if (item.PreferentialInterval == 2)
+                                    {
+                                        int count = 0;
+                                        for (int m = index + 1; m < dgvGoodsOrder.Rows.Count; m++)
+                                        {
+                                            //限时组合销售只针对主品项
+                                            if (Convert.ToInt32(dgvGoodsOrder.Rows[m].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                                            {
+                                                Guid tempGoodsId = new Guid(dgvGoodsOrder.Rows[m].Cells["ItemID"].Value.ToString());
+                                                decimal tempTotalPrice = Convert.ToDecimal(dgvGoodsOrder.Rows[m].Cells["GoodsPrice"].Value);
+                                                if (GoodsUtil.IsGoodsInGroup(tempGoodsId, item.ItemID))
+                                                {
+                                                    if (count % 2 == 1)
+                                                    {
+                                                        count++;
+                                                        continue;
+                                                    }
+                                                    Discount _discount = new Discount();
+                                                    _discount.DiscountID = new Guid("66666666-6666-6666-6666-666666666666");
+                                                    _discount.DiscountName = "促销折扣";
+                                                    decimal goodsDiscount = 0;
+                                                    if (item.DiscountType2 == (int)DiscountItemType.DiscountRate)
+                                                    {
+                                                        goodsDiscount = tempTotalPrice * item.DiscountRate2;
+                                                        _discount.DiscountType = (int)DiscountItemType.DiscountRate;
+                                                        _discount.DiscountRate = item.DiscountRate2;
+                                                        _discount.OffFixPay = 0;
+                                                    }
+                                                    if (item.DiscountType2 == (int)DiscountItemType.OffFixPay)
+                                                    {
+                                                        goodsDiscount = item.OffFixPay2;
+                                                        _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                        _discount.DiscountRate = 0;
+                                                        _discount.OffFixPay = item.OffFixPay2;
+                                                    }
+                                                    if (item.DiscountType2 == (int)DiscountItemType.OffSaleTo)
+                                                    {
+                                                        goodsDiscount = tempTotalPrice - item.OffSaleTo2;
+                                                        _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                        _discount.DiscountRate = 0;
+                                                        _discount.OffFixPay = tempTotalPrice - item.OffSaleTo2;
+                                                    }
+                                                    dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Value = (-goodsDiscount).ToString("f2");
+                                                    dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Tag = _discount;
+                                                    if (item.IsMultiple)
+                                                    {
+                                                        count++;
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    //优惠区间 第二件半价 第三件免费
+                                    if (item.PreferentialInterval == 3)
+                                    {
+                                        int count = 1;
+                                        for (int m = index + 1; m < dgvGoodsOrder.Rows.Count; m++)
+                                        {
+                                            //限时组合销售只针对主品项
+                                            if (Convert.ToInt32(dgvGoodsOrder.Rows[m].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                                            {
+                                                Guid tempGoodsId = new Guid(dgvGoodsOrder.Rows[m].Cells["ItemID"].Value.ToString());
+                                                decimal tempTotalPrice = Convert.ToDecimal(dgvGoodsOrder.Rows[m].Cells["GoodsPrice"].Value);
+                                                if (GoodsUtil.IsGoodsInGroup(tempGoodsId, item.ItemID))
+                                                {
+                                                    if (count % 3 == 0)
+                                                    {
+                                                        count++;
+                                                        continue;
+                                                    }
+                                                    if (count % 3 == 1)
+                                                    {
+                                                        Discount _discount = new Discount();
+                                                        _discount.DiscountID = new Guid("66666666-6666-6666-6666-666666666666");
+                                                        _discount.DiscountName = "促销折扣";
+                                                        decimal goodsDiscount = 0;
+                                                        if (item.DiscountType2 == (int)DiscountItemType.DiscountRate)
+                                                        {
+                                                            goodsDiscount = tempTotalPrice * item.DiscountRate2;
+                                                            _discount.DiscountType = (int)DiscountItemType.DiscountRate;
+                                                            _discount.DiscountRate = item.DiscountRate2;
+                                                            _discount.OffFixPay = 0;
+                                                        }
+                                                        if (item.DiscountType2 == (int)DiscountItemType.OffFixPay)
+                                                        {
+                                                            goodsDiscount = item.OffFixPay2;
+                                                            _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                            _discount.DiscountRate = 0;
+                                                            _discount.OffFixPay = item.OffFixPay2;
+                                                        }
+                                                        if (item.DiscountType2 == (int)DiscountItemType.OffSaleTo)
+                                                        {
+                                                            goodsDiscount = tempTotalPrice - item.OffSaleTo2;
+                                                            _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                            _discount.DiscountRate = 0;
+                                                            _discount.OffFixPay = tempTotalPrice - item.OffSaleTo2;
+                                                        }
+                                                        dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Value = (-goodsDiscount).ToString("f2");
+                                                        dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Tag = _discount;
+                                                        count++;
+                                                        continue;
+                                                    }
+                                                    if (count % 3 == 2)
+                                                    {
+                                                        Discount _discount = new Discount();
+                                                        _discount.DiscountID = new Guid("66666666-6666-6666-6666-666666666666");
+                                                        _discount.DiscountName = "促销折扣";
+                                                        decimal goodsDiscount = 0;
+                                                        if (item.DiscountType3 == (int)DiscountItemType.DiscountRate)
+                                                        {
+                                                            goodsDiscount = tempTotalPrice * item.DiscountRate3;
+                                                            _discount.DiscountType = (int)DiscountItemType.DiscountRate;
+                                                            _discount.DiscountRate = item.DiscountRate3;
+                                                            _discount.OffFixPay = 0;
+                                                        }
+                                                        if (item.DiscountType3 == (int)DiscountItemType.OffFixPay)
+                                                        {
+                                                            goodsDiscount = item.OffFixPay3;
+                                                            _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                            _discount.DiscountRate = 0;
+                                                            _discount.OffFixPay = item.OffFixPay3;
+                                                        }
+                                                        if (item.DiscountType3 == (int)DiscountItemType.OffSaleTo)
+                                                        {
+                                                            goodsDiscount = tempTotalPrice - item.OffSaleTo3;
+                                                            _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                            _discount.DiscountRate = 0;
+                                                            _discount.OffFixPay = tempTotalPrice - item.OffSaleTo3;
+                                                        }
+                                                        dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Value = (-goodsDiscount).ToString("f2");
+                                                        dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Tag = _discount;
+                                                        if (item.IsMultiple)
+                                                        {
+                                                            count++;
+                                                        }
+                                                        else
+                                                        {
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    hasExistGoodsId.Add(item.ItemID);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
         #endregion
     }
 }

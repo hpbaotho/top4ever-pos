@@ -352,7 +352,8 @@ namespace Top4ever.Pos.Feature
 
         private void btnHoursTurnover_Click(object sender, EventArgs e)
         {
-
+            FormHourSalesReport form = new FormHourSalesReport();
+            form.ShowDialog();
         }
 
         private void btnHistorySearch_Click(object sender, EventArgs e)

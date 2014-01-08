@@ -225,7 +225,7 @@
             this.btnConfirm.Location = new System.Drawing.Point(278, 278);
             this.btnConfirm.Name = "btnConfirm";
             this.btnConfirm.Size = new System.Drawing.Size(78, 46);
-            this.btnConfirm.TabIndex = 8;
+            this.btnConfirm.TabIndex = 0;
             this.btnConfirm.Text = "确定";
             this.btnConfirm.UseVisualStyleBackColor = false;
             this.btnConfirm.Click += new System.EventHandler(this.btnConfirm_Click);

@@ -25,6 +25,8 @@ namespace Top4ever.Pos.Feature
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            dicItemPriceByGroup.Clear();
+            dataGirdViewExt1.Rows.Clear();
             string beginDate = dateTimePicker1.Value.ToString("yyyy-MM-dd 00:00:00");
             string endDate = dateTimePicker2.Value.ToString("yyyy-MM-dd 23:59:59");
             BusinessReportService bizReportService = new BusinessReportService();
@@ -62,11 +64,6 @@ namespace Top4ever.Pos.Feature
                 }
                 txtTotalQty.Text = totalQty.ToString("f1");
                 txtTotalAmount.Text = totalAmount.ToString("f2");
-            }
-            else
-            {
-                dicItemPriceByGroup.Clear();
-                dataGirdViewExt1.Rows.Clear();
             }
         }
 

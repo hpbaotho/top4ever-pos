@@ -741,6 +741,11 @@ namespace Top4ever.Pos
             decimal needChangePay = 0;  //找零
             decimal receMoney = decimal.Parse(lbReceMoney.Text);    //应收
             decimal paidInMoney = decimal.Parse(lbPaidInMoney.Text);    //实收
+            if (paidInMoney == 0)
+            {
+                //判断是否直接支付
+                if (DialogResult.No == MessageBox.Show("警告，当前未选择任何支付方式，是否以现金继续结账？", "信息提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question)) return;
+            }
             if (receMoney + m_ServiceFee < paidInMoney)
             {
                 decimal cash = 0, noCash = 0;
@@ -892,7 +897,6 @@ namespace Top4ever.Pos
                                 cardRefundPay.PayAmount = item.Value.PayAmount;
                                 cardRefundPay.EmployeeNo = item.Value.EmployeeNo;
                                 cardRefundPay.DeviceNo = item.Value.DeviceNo;
-                                cardRefundPay.CreateDate = DateTime.Now;
                                 CardRefundPayService refundPayService = new CardRefundPayService();
                                 refundPayService.AddRefundPayInfo(cardRefundPay);
                             }
@@ -1434,7 +1438,6 @@ namespace Top4ever.Pos
                             cardRefundPay.PayAmount = item.Value.PayAmount;
                             cardRefundPay.EmployeeNo = item.Value.EmployeeNo;
                             cardRefundPay.DeviceNo = item.Value.DeviceNo;
-                            cardRefundPay.CreateDate = DateTime.Now;
                             CardRefundPayService refundPayService = new CardRefundPayService();
                             refundPayService.AddRefundPayInfo(cardRefundPay);
                         }

@@ -121,6 +121,9 @@ namespace Top4ever.Pos.TakeawayCall
         {
             CustomerOrder customerOrder = new CustomerOrder();
             customerOrder.OrderID = _salesOrder.order.OrderID;
+            customerOrder.Telephone = this.txtTelephone.Text.Trim();
+            customerOrder.CustomerName = this.txtName.Text.Trim();
+            customerOrder.Address = this.txtAddress.Text.Trim();
             customerOrder.Remark = this.txtRemark.Text.Trim();
             customerOrder.DeliveryEmployeeNo = this.txtEmployeeNo.Text.Trim();
             CustomersService customerService = new CustomersService();

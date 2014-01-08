@@ -22,6 +22,11 @@ namespace Top4ever.Pos.Membership
         private void btnSearch_Click(object sender, EventArgs e)
         {
             string cardNo = txtCardNo.Text.Trim();
+            if (string.IsNullOrEmpty(cardNo))
+            {
+                MessageBox.Show("请输入您的会员卡号！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             string beginDate = dtBeginDate.Value.ToString("yyyy-MM-dd");
             string endDate = dtEndDate.Value.ToString("yyyy-MM-dd");
             VIPCardTradeService cardTradeService = new VIPCardTradeService();

@@ -14,6 +14,9 @@ using Top4ever.Entity.Enum;
 using Top4ever.Print;
 using Top4ever.Domain.MembershipCard;
 using Top4ever.Common;
+using Top4ever.LocalService;
+using Top4ever.LocalService.Entity;
+using Top4ever.Pos.Membership;
 
 namespace Top4ever.Pos.Feature
 {
@@ -403,6 +406,14 @@ namespace Top4ever.Pos.Feature
             {
                 if (m_ModelType == 1)
                 {
+                    //判断是否存在退款失败的账单
+                    CardRefundPayService refundPayService = new CardRefundPayService();
+                    List<CardRefundPay> cardRefundPayList = refundPayService.GetCardRefundPayList();
+                    if (cardRefundPayList != null && cardRefundPayList.Count > 0)
+                    {
+                        FormVIPCardRefundPay refundPayForm = new FormVIPCardRefundPay(cardRefundPayList);
+                        refundPayForm.ShowDialog();
+                    }
                     Guid handoverRecordID = Guid.NewGuid();
                     HandoverRecord handoverRecord = new HandoverRecord();
                     handoverRecord.HandoverRecordID = handoverRecordID;
@@ -436,6 +447,14 @@ namespace Top4ever.Pos.Feature
                 }
                 else if (m_ModelType == 2)
                 {
+                    //判断是否存在退款失败的账单
+                    CardRefundPayService refundPayService = new CardRefundPayService();
+                    List<CardRefundPay> cardRefundPayList = refundPayService.GetCardRefundPayList();
+                    if (cardRefundPayList != null && cardRefundPayList.Count > 0)
+                    {
+                        FormVIPCardRefundPay refundPayForm = new FormVIPCardRefundPay(cardRefundPayList);
+                        refundPayForm.ShowDialog();
+                    }
                     FormChooseDate form = new FormChooseDate(bizReport.LastDailyStatementTime);
                     form.ShowDialog();
                     if (form.DailyStatementDate != null)
@@ -467,20 +486,20 @@ namespace Top4ever.Pos.Feature
                         int result = dailyBalanceService.CreateDailyBalance(dailyBalance);
                         if (result == 1)
                         {
-                            MessageBox.Show("日结成功！");
+                            MessageBox.Show("日结成功！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             m_HandleSuccess = true;
                         }
                         else if (result == 2)
                         {
-                            MessageBox.Show("存在未结账单据，请先结完账！");
+                            MessageBox.Show("存在未结账单据，请先结完账！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         else if (result == 3)
                         {
-                            MessageBox.Show("存在未交班的POS，请先交班！");
+                            MessageBox.Show("存在未交班的POS，请先交班！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         else
                         {
-                            MessageBox.Show("出现异常错误，请重新日结！");
+                            MessageBox.Show("出现异常错误，请重新日结！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                 }

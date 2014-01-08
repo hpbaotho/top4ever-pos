@@ -34,11 +34,17 @@ namespace Top4ever.Pos.Membership
             {
                 cmbCardStatus.Items.Add("作废");
             }
+            cmbCardStatus.SelectedIndex = 0;
         }
 
         private void btnConfirm_Click(object sender, EventArgs e)
         {
             string cardNo = txtCardNo.Text.Trim();
+            if (string.IsNullOrEmpty(cardNo))
+            {
+                MessageBox.Show("请输入您的会员卡号！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             string password = txtPassword.Text.Trim();
             int status = 0;
             string strStatus = cmbCardStatus.Text;

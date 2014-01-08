@@ -28,7 +28,6 @@ namespace Top4ever.Pos
     public partial class FormTakeout : Form
     {
         private const int m_Space = 2;
-        private string deskName = "W001";
         private List<CrystalButton> btnDeliveryList = new List<CrystalButton>();
         private List<CrystalButton> btnGroupList = new List<CrystalButton>();
         private List<CrystalButton> btnItemList = new List<CrystalButton>();
@@ -41,6 +40,7 @@ namespace Top4ever.Pos
         //品项列表
         private int m_ItemPageSize = 0;
         private int m_ItemPageIndex = 0;
+        private CrystalButton prevDeliveryButton = null;
         private IList<DeliveryOrder> m_DeliveryOrderList = new List<DeliveryOrder>();
         private GoodsGroup m_CurrentGoodsGroup;
         private DetailsGroup m_CurrentDetailsGroup;
@@ -79,6 +79,9 @@ namespace Top4ever.Pos
             btnPgDown.DisplayColor = btnPgDown.BackColor;
             btnDeliveryGoods.DisplayColor = btnDeliveryGoods.BackColor;
             btnOutsideOrder.DisplayColor = btnOutsideOrder.BackColor;
+            btnDiscount.DisplayColor = btnDiscount.BackColor;
+            btnWholeDiscount.DisplayColor = btnWholeDiscount.BackColor;
+            btnTakeOut.DisplayColor = btnTakeOut.BackColor;
         }
 
         private void FormTakeout_Load(object sender, EventArgs e)
@@ -194,6 +197,7 @@ namespace Top4ever.Pos
         {
             if (m_OnShow)
             {
+                this.dgvGoodsOrder.Rows.Clear();
                 //初始化外卖单按钮
                 InitDeliveryButton();
                 //初始化品项组按钮
@@ -204,6 +208,7 @@ namespace Top4ever.Pos
                 LoadDefaultGoodsGroupButton();
                 m_GoodsOrDetails = true;
                 m_DetailsPrefix = string.Empty;
+                prevDeliveryButton = null;
                 prevPressedButton = null;
                 m_ShowSilverCode = false;
                 //清除
@@ -250,7 +255,7 @@ namespace Top4ever.Pos
                     CrystalButton btnDelivery = new CrystalButton();
                     btnDelivery.Name = "btnDelivery" + i;
                     btnDelivery.BackColor = btnDelivery.DisplayColor = Color.DodgerBlue;
-                    btnDelivery.Font = new Font("Microsoft YaHei", 9.75F);
+                    btnDelivery.Font = new Font("Microsoft YaHei", 12F);
                     btnDelivery.ForeColor = Color.White;
                     btnDelivery.Location = new Point(px, py);
                     btnDelivery.Size = new Size(pnlDelivery.Width - space, height);
@@ -750,7 +755,10 @@ namespace Top4ever.Pos
                 }
                 else
                 {
-                    prevPressedButton.BackColor = prevPressedButton.DisplayColor;
+                    if (btnGroup.Text != prevPressedButton.Text)
+                    {
+                        prevPressedButton.BackColor = prevPressedButton.DisplayColor;
+                    }
                     prevPressedButton = btnGroup;
                 }
                 m_ItemPageIndex = 0;
@@ -791,48 +799,40 @@ namespace Top4ever.Pos
                 Discount _discount = null;
                 bool IsContainsSalePrice = false;   //是否包含特价
 
-                #region 判断是否限时特价
-                //所属组特价
-                bool IsInGroup = false;
-                foreach (GoodsLimitedTimeSale item in ConstantValuePool.GroupLimitedTimeSaleList)
+                decimal goodsPrice = goods.SellPrice;
+                decimal goodsNum = 1M;
+                if (goods.IsCustomQty || goods.IsCustomPrice)
                 {
-                    if (item.ItemID == m_CurrentGoodsGroup.GoodsGroupID)
+                    OrderDetailsService orderDetailsService = new OrderDetailsService();
+                    decimal sellPrice = orderDetailsService.GetLastCustomPrice(goods.GoodsID);
+                    if (sellPrice > 0)
                     {
-                        _discount = new Discount();
-                        _discount.DiscountID = new Guid("66666666-6666-6666-6666-666666666666");
-                        _discount.DiscountName = "促销折扣";
-                        if (item.DiscountType == (int)DiscountItemType.DiscountRate)
-                        {
-                            goodsDiscount = goods.SellPrice * item.DiscountRate;
-                            _discount.DiscountType = (int)DiscountItemType.DiscountRate;
-                            _discount.DiscountRate = item.DiscountRate;
-                            _discount.OffFixPay = 0;
-                        }
-                        if (item.DiscountType == (int)DiscountItemType.OffFixPay)
-                        {
-                            goodsDiscount = item.OffFixPay;
-                            _discount.DiscountType = (int)DiscountItemType.OffFixPay;
-                            _discount.DiscountRate = 0;
-                            _discount.OffFixPay = item.OffFixPay;
-                        }
-                        if (item.DiscountType == (int)DiscountItemType.OffSaleTo)
-                        {
-                            goodsDiscount = goods.SellPrice - item.OffSaleTo;
-                            _discount.DiscountType = (int)DiscountItemType.OffFixPay;
-                            _discount.DiscountRate = 0;
-                            _discount.OffFixPay = goods.SellPrice - item.OffSaleTo;
-                        }
-                        IsInGroup = true;
-                        IsContainsSalePrice = true;
-                        break;
+                        goodsPrice = sellPrice;
                     }
-                }
-                //品项特价
-                if (!IsInGroup)
-                {
-                    foreach (GoodsLimitedTimeSale item in ConstantValuePool.GoodsLimitedTimeSaleList)
+                    if (goods.IsCustomQty || sellPrice == 0)
                     {
-                        if (item.ItemID == goods.GoodsID)
+                        FormCustomQty form = new FormCustomQty(goods.IsCustomQty, goodsNum, goods.IsCustomPrice, goodsPrice);
+                        form.ShowDialog();
+                        if (form.CustomPrice > 0)
+                        {
+                            goodsPrice = form.CustomPrice;
+                        }
+                        if (form.CustomQty > 0)
+                        {
+                            goodsNum = form.CustomQty;
+                        }
+                    }
+                    goods.SellPrice = goodsPrice;
+                    btnItem.Tag = goods;
+                }
+                else
+                {
+                    #region 判断是否限时特价
+                    //所属组特价
+                    bool IsInGroup = false;
+                    foreach (GoodsLimitedTimeSale item in ConstantValuePool.GroupLimitedTimeSaleList)
+                    {
+                        if (item.ItemID == m_CurrentGoodsGroup.GoodsGroupID)
                         {
                             _discount = new Discount();
                             _discount.DiscountID = new Guid("66666666-6666-6666-6666-666666666666");
@@ -858,20 +858,56 @@ namespace Top4ever.Pos
                                 _discount.DiscountRate = 0;
                                 _discount.OffFixPay = goods.SellPrice - item.OffSaleTo;
                             }
+                            IsInGroup = true;
                             IsContainsSalePrice = true;
                             break;
                         }
                     }
+                    //品项特价
+                    if (!IsInGroup)
+                    {
+                        foreach (GoodsLimitedTimeSale item in ConstantValuePool.GoodsLimitedTimeSaleList)
+                        {
+                            if (item.ItemID == goods.GoodsID)
+                            {
+                                _discount = new Discount();
+                                _discount.DiscountID = new Guid("66666666-6666-6666-6666-666666666666");
+                                _discount.DiscountName = "促销折扣";
+                                if (item.DiscountType == (int)DiscountItemType.DiscountRate)
+                                {
+                                    goodsDiscount = goods.SellPrice * item.DiscountRate;
+                                    _discount.DiscountType = (int)DiscountItemType.DiscountRate;
+                                    _discount.DiscountRate = item.DiscountRate;
+                                    _discount.OffFixPay = 0;
+                                }
+                                if (item.DiscountType == (int)DiscountItemType.OffFixPay)
+                                {
+                                    goodsDiscount = item.OffFixPay;
+                                    _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                    _discount.DiscountRate = 0;
+                                    _discount.OffFixPay = item.OffFixPay;
+                                }
+                                if (item.DiscountType == (int)DiscountItemType.OffSaleTo)
+                                {
+                                    goodsDiscount = goods.SellPrice - item.OffSaleTo;
+                                    _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                    _discount.DiscountRate = 0;
+                                    _discount.OffFixPay = goods.SellPrice - item.OffSaleTo;
+                                }
+                                IsContainsSalePrice = true;
+                                break;
+                            }
+                        }
+                    }
+                    #endregion
                 }
-                #endregion
-
                 int index, selectedIndex;
                 index = selectedIndex = dgvGoodsOrder.Rows.Add(new DataGridViewRow());
                 dgvGoodsOrder.Rows[index].Cells["ItemID"].Value = goods.GoodsID;
                 dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag = goods;
-                dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = 1;
+                dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = goodsNum;
                 dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = goods.GoodsName;
-                dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = goods.SellPrice;
+                dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = goodsPrice * goodsNum;
                 dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = (-goodsDiscount).ToString("f2");
                 if (_discount != null)
                 {
@@ -1043,6 +1079,8 @@ namespace Top4ever.Pos
                 dgvGoodsOrder.CurrentCell = dgvGoodsOrder.Rows[selectedIndex].Cells["GoodsNum"];
                 //统计
                 BindOrderInfoSum();
+                //清空
+                txtSearch.Text = string.Empty;
             }
             if (btnItem.Tag is Details)
             {
@@ -1121,6 +1159,14 @@ namespace Top4ever.Pos
                     }
                     //统计
                     BindOrderInfoSum();
+                }
+            }
+            //更新第二屏信息
+            if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+            {
+                if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
+                {
+                    ((FormSecondScreen)ConstantValuePool.SecondScreenForm).BindGoodsOrderInfo(dgvGoodsOrder);
                 }
             }
         }
@@ -1361,160 +1407,190 @@ namespace Top4ever.Pos
 
         private void btnWholeDiscount_Click(object sender, EventArgs e)
         {
-            //权限验证
-            bool hasRights = false;
-            if (RightsItemCode.FindRights(RightsItemCode.WHOLEDISCOUNT))
+            if (dgvGoodsOrder.Rows.Count > 0 && dgvGoodsOrder.CurrentRow != null)
             {
-                hasRights = true;
-            }
-            else
-            {
-                FormRightsCode form = new FormRightsCode();
-                form.ShowDialog();
-                if (form.ReturnValue)
+                //权限验证
+                bool hasRights = false;
+                if (RightsItemCode.FindRights(RightsItemCode.WHOLEDISCOUNT))
                 {
-                    IList<string> rightsCodeList = form.RightsCodeList;
-                    if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.WHOLEDISCOUNT))
+                    hasRights = true;
+                }
+                else
+                {
+                    FormRightsCode form = new FormRightsCode();
+                    form.ShowDialog();
+                    if (form.ReturnValue)
                     {
-                        hasRights = true;
+                        IList<string> rightsCodeList = form.RightsCodeList;
+                        if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.WHOLEDISCOUNT))
+                        {
+                            hasRights = true;
+                        }
                     }
                 }
-            }
-            if (!hasRights)
-            {
-                return;
-            }
-            //计算未打折金额
-            decimal noDiscountPrice = 0;
-            foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
-            {
-                bool canDiscount = Convert.ToBoolean(dr.Cells["CanDiscount"].Value);
-                if (canDiscount)
+                if (!hasRights)
                 {
-                    decimal itemPrice = Convert.ToDecimal(dr.Cells["GoodsPrice"].Value);
-                    noDiscountPrice += itemPrice;
+                    return;
                 }
-            }
-            FormDiscount formDiscount = new FormDiscount(DiscountDisplayModel.WholeDiscount, noDiscountPrice, m_ActualPayMoney);
-            formDiscount.ShowDialog();
-            if (formDiscount.CurrentDiscount != null)
-            {
-                Discount discount = formDiscount.CurrentDiscount;
-                int firstIndex = -1; //折价索引
-                decimal offFixedPay = 0;
-                for (int index = 0; index < dgvGoodsOrder.Rows.Count; index++)
+                //计算未打折金额
+                decimal noDiscountPrice = 0;
+                foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
                 {
-                    DataGridViewRow dr = dgvGoodsOrder.Rows[index];
                     bool canDiscount = Convert.ToBoolean(dr.Cells["CanDiscount"].Value);
                     if (canDiscount)
                     {
-                        if (discount.DiscountType == (int)DiscountItemType.DiscountRate)
-                        {
-                            dr.Cells["GoodsDiscount"].Value = -Convert.ToDecimal(dr.Cells["GoodsPrice"].Value) * discount.DiscountRate;
-                        }
-                        else
-                        {
-                            if (firstIndex < 0)
-                            {
-                                firstIndex = index;
-                            }
-                            decimal itemPrice = Convert.ToDecimal(dr.Cells["GoodsPrice"].Value);
-                            decimal discountPrice = itemPrice / noDiscountPrice * discount.OffFixPay;
-                            discountPrice = Math.Round(discountPrice, 2);
-                            dr.Cells["GoodsDiscount"].Value = -discountPrice;
-                            offFixedPay += discountPrice;
-                        }
-                        dr.Cells["GoodsDiscount"].Tag = discount;
+                        decimal itemPrice = Convert.ToDecimal(dr.Cells["GoodsPrice"].Value);
+                        noDiscountPrice += itemPrice;
                     }
                 }
-                if (firstIndex >= 0)
+                FormDiscount formDiscount = new FormDiscount(DiscountDisplayModel.WholeDiscount, noDiscountPrice, m_ActualPayMoney);
+                formDiscount.ShowDialog();
+                if (formDiscount.CurrentDiscount != null)
                 {
-                    decimal gap = discount.OffFixPay - offFixedPay;
-                    gap = Math.Round(gap, 2);
-                    decimal discountPrice = Math.Abs(Convert.ToDecimal(dgvGoodsOrder.Rows[firstIndex].Cells["GoodsDiscount"].Value));
-                    discountPrice += gap;
-                    dgvGoodsOrder.Rows[firstIndex].Cells["GoodsDiscount"].Value = -discountPrice;
+                    Discount discount = formDiscount.CurrentDiscount;
+                    int firstIndex = -1; //折价索引
+                    decimal offFixedPay = 0;
+                    for (int index = 0; index < dgvGoodsOrder.Rows.Count; index++)
+                    {
+                        DataGridViewRow dr = dgvGoodsOrder.Rows[index];
+                        bool canDiscount = Convert.ToBoolean(dr.Cells["CanDiscount"].Value);
+                        if (canDiscount)
+                        {
+                            if (discount.DiscountType == (int)DiscountItemType.DiscountRate)
+                            {
+                                dr.Cells["GoodsDiscount"].Value = -Convert.ToDecimal(dr.Cells["GoodsPrice"].Value) * discount.DiscountRate;
+                            }
+                            else
+                            {
+                                if (firstIndex < 0)
+                                {
+                                    firstIndex = index;
+                                }
+                                decimal itemPrice = Convert.ToDecimal(dr.Cells["GoodsPrice"].Value);
+                                decimal discountPrice = itemPrice / noDiscountPrice * discount.OffFixPay;
+                                discountPrice = Math.Round(discountPrice, 2);
+                                dr.Cells["GoodsDiscount"].Value = -discountPrice;
+                                offFixedPay += discountPrice;
+                            }
+                            dr.Cells["GoodsDiscount"].Tag = discount;
+                        }
+                    }
+                    if (firstIndex >= 0)
+                    {
+                        decimal gap = discount.OffFixPay - offFixedPay;
+                        gap = Math.Round(gap, 2);
+                        decimal discountPrice = Math.Abs(Convert.ToDecimal(dgvGoodsOrder.Rows[firstIndex].Cells["GoodsDiscount"].Value));
+                        discountPrice += gap;
+                        dgvGoodsOrder.Rows[firstIndex].Cells["GoodsDiscount"].Value = -discountPrice;
+                    }
+                    //统计
+                    BindOrderInfoSum();
                 }
-                //统计
-                BindOrderInfoSum();
             }
         }
 
         private void btnTakeOut_Click(object sender, EventArgs e)
         {
-            if (haveDailyClose)
+            if (dgvGoodsOrder.Rows.Count <= 0)
             {
-                if (dgvGoodsOrder.Rows.Count > 0)
+                MessageBox.Show("请先选择菜品！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (!haveDailyClose)
+            {
+                MessageBox.Show("上次未日结，不能新增菜单，请先进行日结操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (m_SalesOrder == null || m_SalesOrder.order.EatType == (int)EatWayType.Takeout)
+            {
+                string deskName = string.Empty;
+                if (m_SalesOrder == null)
                 {
-                    if (m_SalesOrder == null || m_SalesOrder.order.EatType == (int)EatWayType.Takeout)
+                    if (ConstantValuePool.BizSettingConfig.CarteMode)
                     {
-                        if (m_SalesOrder == null && ConstantValuePool.BizSettingConfig.CarteMode)
+                        FormNumericKeypad form = new FormNumericKeypad();
+                        form.DisplayText = "请输入餐牌号";
+                        form.ShowDialog();
+                        if (string.IsNullOrEmpty(form.KeypadValue))
                         {
-                            FormNumericKeypad form = new FormNumericKeypad();
-                            form.DisplayText = "请输入餐牌号";
-                            form.ShowDialog();
-                            if (string.IsNullOrEmpty(form.KeypadValue))
+                            MessageBox.Show("餐牌号不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+                        else
+                        {
+                            if (form.KeypadValue.Length > 3)
                             {
-                                MessageBox.Show("餐牌号不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                MessageBox.Show("您输入的餐牌号码过大！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                                 return;
                             }
                             else
                             {
-                                if (form.KeypadValue.Length > 3)
-                                {
-                                    MessageBox.Show("您输入的餐牌号码过大！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                    return;
-                                }
-                                else
-                                {
-                                    deskName = "W" + form.KeypadValue.PadLeft(3, '0');
-                                }
+                                deskName = "W" + form.KeypadValue.PadLeft(3, '0');
                             }
-                        }
-                        int result = SubmitSalesOrder(deskName, EatWayType.Takeout);
-                        if (result == 1)
-                        {
-                            this.lbTotalPrice.Text = "总金额：";
-                            this.lbDiscount.Text = "折扣：";
-                            this.lbNeedPayMoney.Text = "实际应付：";
-                            this.lbCutOff.Text = "去零：";
-                            dgvGoodsOrder.Rows.Clear();
-                            m_SalesOrder = null;
-                            btnDeliveryGoods.Enabled = false;
-                            btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
-                            txtTelephone.Text = string.Empty;
-                            txtName.Text = string.Empty;
-                            txtAddress.Text = string.Empty;
-                            txtTelephone.ReadOnly = false;
-                            txtName.ReadOnly = false;
-                            //加载外卖单列表
-                            OrderService orderService = new OrderService();
-                            IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
-                            if (deliveryOrderList != null)
-                            {
-                                m_PageIndex = 0;
-                                m_DeliveryOrderList = deliveryOrderList;
-                                DisplayDeliveryOrderButton();
-                            }
-                        }
-                        else if (result == 0)
-                        {
-                            MessageBox.Show("外带提交失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                        else if (result == 2)
-                        {
-                            MessageBox.Show("没有数据可以提交！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                     else
                     {
-                        MessageBox.Show("类型不一致，请更改类型后再进行操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        deskName = "W001";
                     }
+                }
+                else
+                {
+                    deskName = m_SalesOrder.order.DeskName;
+                }
+                int result = SubmitSalesOrder(deskName, EatWayType.Takeout);
+                if (result == 1)
+                {
+                    this.lbTotalPrice.Text = "总金额：";
+                    this.lbDiscount.Text = "折扣：";
+                    this.lbNeedPayMoney.Text = "实际应付：";
+                    this.lbCutOff.Text = "去零：";
+                    dgvGoodsOrder.Rows.Clear();
+                    m_SalesOrder = null;
+                    btnDeliveryGoods.Enabled = false;
+                    btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
+                    txtTelephone.Text = string.Empty;
+                    txtName.Text = string.Empty;
+                    txtAddress.Text = string.Empty;
+                    txtTelephone.ReadOnly = false;
+                    txtName.ReadOnly = false;
+                    //加载外卖单列表
+                    OrderService orderService = new OrderService();
+                    IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
+                    if (deliveryOrderList != null)
+                    {
+                        m_PageIndex = 0;
+                        m_DeliveryOrderList = deliveryOrderList;
+                        DisplayDeliveryOrderButton();
+                    }
+                    //更新第二屏信息
+                    if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+                    {
+                        if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
+                        {
+                            ((FormSecondScreen)ConstantValuePool.SecondScreenForm).ClearGoodsOrderInfo();
+                        }
+                    }
+                }
+                else if (result == 0)
+                {
+                    MessageBox.Show("外带提交失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else if (result == 2)
+                {
+                    MessageBox.Show("没有数据可以提交！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
             {
-                MessageBox.Show("上次未日结，请先进行日结操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                if (m_SalesOrder.order.EatType == (int)EatWayType.OutsideOrder)
+                {
+                    MessageBox.Show("当前账单状态为[外送]，请更改类型后再进行操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else if (m_SalesOrder.order.EatType == (int)EatWayType.DineIn)
+                {
+                    MessageBox.Show("当前账单状态为[堂食]，请更改类型后再进行操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -1530,93 +1606,109 @@ namespace Top4ever.Pos
             btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
             btnOutsideOrder.Enabled = true;
             btnOutsideOrder.BackColor = btnOutsideOrder.DisplayColor;
+            btnDiscount.Enabled = true;
+            btnDiscount.BackColor = btnDiscount.DisplayColor;
+            btnWholeDiscount.Enabled = true;
+            btnWholeDiscount.BackColor = btnWholeDiscount.DisplayColor;
+            btnTakeOut.Enabled = true;
+            btnTakeOut.BackColor = btnTakeOut.DisplayColor;
             txtTelephone.Text = string.Empty;
             txtName.Text = string.Empty;
             txtAddress.Text = string.Empty;
             txtTelephone.ReadOnly = false;
             txtName.ReadOnly = false;
+            if (prevDeliveryButton != null)
+            {
+                prevDeliveryButton.ForeColor = Color.White;
+            }
         }
 
         private void btnOutsideOrder_Click(object sender, EventArgs e)
         {
-            if (haveDailyClose)
+            if (dgvGoodsOrder.Rows.Count <= 0)
             {
-                if (dgvGoodsOrder.Rows.Count > 0)
+                MessageBox.Show("请先选择菜品！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (!haveDailyClose)
+            {
+                MessageBox.Show("上次未日结，不能新增菜单，请先进行日结操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (m_SalesOrder == null || m_SalesOrder.order.EatType == (int)EatWayType.OutsideOrder)
+            {
+                string deskName = string.Empty;
+                if (m_SalesOrder == null)
                 {
-                    if (m_SalesOrder == null || m_SalesOrder.order.EatType == (int)EatWayType.OutsideOrder)
+                    deskName = "W001";
+                }
+                else
+                {
+                    deskName = m_SalesOrder.order.DeskName;
+                }
+                int result = SubmitSalesOrder(deskName, EatWayType.OutsideOrder);
+                if (result == 1)
+                {
+                    this.lbTotalPrice.Text = "总金额：";
+                    this.lbDiscount.Text = "折扣：";
+                    this.lbNeedPayMoney.Text = "实际应付：";
+                    this.lbCutOff.Text = "去零：";
+                    dgvGoodsOrder.Rows.Clear();
+                    m_SalesOrder = null;
+                    btnDeliveryGoods.Enabled = false;
+                    btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
+                    txtTelephone.Text = string.Empty;
+                    txtName.Text = string.Empty;
+                    txtAddress.Text = string.Empty;
+                    txtTelephone.ReadOnly = false;
+                    txtName.ReadOnly = false;
+                    //加载外卖单列表
+                    OrderService orderService = new OrderService();
+                    IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
+                    if (deliveryOrderList != null)
                     {
-                        if (m_SalesOrder == null && ConstantValuePool.BizSettingConfig.CarteMode)
+                        m_PageIndex = 0;
+                        m_DeliveryOrderList = deliveryOrderList;
+                        DisplayDeliveryOrderButton();
+                    }
+                    //更新第二屏信息
+                    if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+                    {
+                        if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
                         {
-                            FormNumericKeypad form = new FormNumericKeypad();
-                            form.DisplayText = "请输入餐牌号";
-                            form.ShowDialog();
-                            if (string.IsNullOrEmpty(form.KeypadValue))
-                            {
-                                MessageBox.Show("餐牌号不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                return;
-                            }
-                            else
-                            {
-                                if (form.KeypadValue.Length > 3)
-                                {
-                                    MessageBox.Show("您输入的餐牌号码过大！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                    return;
-                                }
-                                else
-                                {
-                                    deskName = "W" + form.KeypadValue.PadLeft(3, '0');
-                                }
-                            }
-                        }
-                        int result = SubmitSalesOrder(deskName, EatWayType.OutsideOrder);
-                        if (result == 1)
-                        {
-                            this.lbTotalPrice.Text = "总金额：";
-                            this.lbDiscount.Text = "折扣：";
-                            this.lbNeedPayMoney.Text = "实际应付：";
-                            this.lbCutOff.Text = "去零：";
-                            dgvGoodsOrder.Rows.Clear();
-                            m_SalesOrder = null;
-                            btnDeliveryGoods.Enabled = false;
-                            btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
-                            txtTelephone.Text = string.Empty;
-                            txtName.Text = string.Empty;
-                            txtAddress.Text = string.Empty;
-                            txtTelephone.ReadOnly = false;
-                            txtName.ReadOnly = false;
-                            //加载外卖单列表
-                            OrderService orderService = new OrderService();
-                            IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
-                            if (deliveryOrderList != null)
-                            {
-                                m_PageIndex = 0;
-                                m_DeliveryOrderList = deliveryOrderList;
-                                DisplayDeliveryOrderButton();
-                            }
-                        }
-                        else if (result == 0)
-                        {
-                            MessageBox.Show("外送提交失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                        else if (result == 2)
-                        {
-                            MessageBox.Show("没有数据可以提交！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            ((FormSecondScreen)ConstantValuePool.SecondScreenForm).ClearGoodsOrderInfo();
                         }
                     }
-                    else
-                    {
-                        MessageBox.Show("类型不一致，请更改类型后再进行操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                }
+                else if (result == 0)
+                {
+                    MessageBox.Show("外送提交失败，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else if (result == 2)
+                {
+                    MessageBox.Show("没有数据可以提交！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
             {
-                MessageBox.Show("上次未日结，请先进行日结操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                if (m_SalesOrder.order.EatType == (int)EatWayType.Takeout)
+                {
+                    MessageBox.Show("当前账单状态为[外带]，请更改类型后再进行操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else if (m_SalesOrder.order.EatType == (int)EatWayType.DineIn)
+                {
+                    MessageBox.Show("当前账单状态为[堂食]，请更改类型后再进行操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
         private void btnDeliveryGoods_Click(object sender, EventArgs e)
         {
+            if (dgvGoodsOrder.Rows.Count <= 0)
+            {
+                MessageBox.Show("请选择外送账单进行出货！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             bool IsContainsNewItem = false;
             foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
             {
@@ -1633,7 +1725,7 @@ namespace Top4ever.Pos
             }
             PrintData printData = new PrintData();
             printData.ShopName = ConstantValuePool.CurrentShop.ShopName;
-            printData.DeskName = deskName;
+            printData.DeskName = m_SalesOrder.order.DeskName;
             printData.PersonNum = "1";
             printData.PrintTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
             printData.EmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
@@ -1702,7 +1794,7 @@ namespace Top4ever.Pos
                         //打印
                         PrintData printData = new PrintData();
                         printData.ShopName = ConstantValuePool.CurrentShop.ShopName;
-                        printData.DeskName = deskName;
+                        printData.DeskName = m_SalesOrder.order.DeskName;
                         printData.PersonNum = "1";
                         printData.PrintTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
                         printData.EmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
@@ -1723,10 +1815,19 @@ namespace Top4ever.Pos
                             goodsOrder.Unit = dr.Cells["ItemUnit"].Value.ToString();
                             printData.GoodsOrderList.Add(goodsOrder);
                         }
+                        printData.CustomerPhone = this.txtTelephone.Text.Trim();
+                        printData.CustomerName = this.txtName.Text.Trim();
+                        printData.DeliveryAddress = this.txtAddress.Text.Trim();
+                        printData.Remark = string.Empty;
+                        printData.DeliveryEmployeeName = string.Empty;
                         int copies = ConstantValuePool.BizSettingConfig.printConfig.Copies;
                         string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
                         string configPath = @"PrintConfig\InstructionPrintOrderSetting.config";
-                        string layoutPath = @"PrintConfig\PrintOrder.ini";
+                        string layoutPath = @"PrintConfig\DeliveryOrder.ini";
+                        if (m_SalesOrder.order.EatType == (int)EatWayType.Takeout)
+                        {
+                            layoutPath = @"PrintConfig\PrintOrder.ini";
+                        }
                         if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
                         {
                             configPath = @"PrintConfig\PrintOrderSetting.config";
@@ -1777,11 +1878,6 @@ namespace Top4ever.Pos
             }
         }
 
-        private void btnPromotion_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnClose_Click(object sender, EventArgs e)
         {
             m_OnShow = false;
@@ -1798,7 +1894,14 @@ namespace Top4ever.Pos
         private void btnPriceCode_Click(object sender, EventArgs e)
         {
             m_ShowSilverCode = !m_ShowSilverCode;
-            DisplayGoodsButton();
+            if (m_GoodsOrDetails)
+            {
+                DisplayGoodsButton();
+            }
+            else
+            {
+                DisplayDetailButton();
+            }
         }
 
         private void btnDelivery_Click(object sender, EventArgs e)
@@ -1809,6 +1912,20 @@ namespace Top4ever.Pos
                 DeliveryOrder deliveryOrder = btnDelivery.Tag as DeliveryOrder;
                 if (deliveryOrder.PayTime == null)
                 {
+                    if (prevDeliveryButton == null)
+                    {
+                        btnDelivery.ForeColor = Color.DodgerBlue;
+                        prevDeliveryButton = btnDelivery;
+                    }
+                    else
+                    {
+                        if (btnDelivery.Text != prevDeliveryButton.Text)
+                        {
+                            prevDeliveryButton.ForeColor = Color.White;
+                            btnDelivery.ForeColor = Color.DodgerBlue;
+                        }
+                        prevDeliveryButton = btnDelivery;
+                    }
                     if (deliveryOrder.EatType == (int)EatWayType.OutsideOrder && deliveryOrder.DeliveryTime == null)
                     {
                         btnDeliveryGoods.Enabled = true;
@@ -1823,11 +1940,23 @@ namespace Top4ever.Pos
                     {
                         btnOutsideOrder.Enabled = false;
                         btnOutsideOrder.BackColor = ConstantValuePool.DisabledColor;
+                        btnDiscount.Enabled = false;
+                        btnDiscount.BackColor = ConstantValuePool.DisabledColor;
+                        btnWholeDiscount.Enabled = false;
+                        btnWholeDiscount.BackColor = ConstantValuePool.DisabledColor;
+                        btnTakeOut.Enabled = false;
+                        btnTakeOut.BackColor = ConstantValuePool.DisabledColor;
                     }
                     else
                     {
                         btnOutsideOrder.Enabled = true;
                         btnOutsideOrder.BackColor = btnOutsideOrder.DisplayColor;
+                        btnDiscount.Enabled = true;
+                        btnDiscount.BackColor = btnDiscount.DisplayColor;
+                        btnWholeDiscount.Enabled = true;
+                        btnWholeDiscount.BackColor = btnWholeDiscount.DisplayColor;
+                        btnTakeOut.Enabled = true;
+                        btnTakeOut.BackColor = btnTakeOut.DisplayColor;
                     }
                     SalesOrderService salesOrderService = new SalesOrderService();
                     SalesOrder _salesOrder = salesOrderService.GetSalesOrder(deliveryOrder.OrderID);
@@ -2111,6 +2240,11 @@ namespace Top4ever.Pos
                 _tranSeq = orderService.CreateSalesOrder(salesOrder);
                 if (_tranSeq > 0)
                 {
+                    //重新加载
+                    SalesOrderService salesOrderService = new SalesOrderService();
+                    m_SalesOrder = salesOrderService.GetSalesOrder(orderID);
+                    BindGoodsOrderInfo();   //绑定订单信息
+                    BindOrderInfoSum();
                     result = 1;
                 }
             }
@@ -2137,6 +2271,11 @@ namespace Top4ever.Pos
                     SalesOrderService orderService = new SalesOrderService();
                     if (orderService.UpdateSalesOrder(salesOrder) == 1)
                     {
+                        //重新加载
+                        SalesOrderService salesOrderService = new SalesOrderService();
+                        m_SalesOrder = salesOrderService.GetSalesOrder(orderID);
+                        BindGoodsOrderInfo();   //绑定订单信息
+                        BindOrderInfoSum();
                         result = 1;
                     }
                     _tranSeq = m_SalesOrder.order.TranSequence;
@@ -2157,7 +2296,7 @@ namespace Top4ever.Pos
                     customerOrder.CustomerName = txtName.Text.Trim();
                     customerOrder.Address = txtAddress.Text.Trim();
                     CustomersService customerService = new CustomersService();
-                    if (customerService.CreateCustomerOrder(customerOrder))
+                    if (customerService.CreateOrUpdateCustomerOrder(customerOrder))
                     {
                         result = 1;
                     }
@@ -2278,6 +2417,7 @@ namespace Top4ever.Pos
             {
                 btnDeliveryList[i].Tag = null;
                 btnDeliveryList[i].Text = string.Empty;
+                btnDeliveryList[i].ForeColor = Color.White;
                 btnDeliveryList[i].BackColor = btnDeliveryList[i].DisplayColor;
                 btnDeliveryList[i].Enabled = true;
             }
@@ -2285,6 +2425,7 @@ namespace Top4ever.Pos
             for (int i = 0, j = startIndex; j < endIndex; i++, j++)
             {
                 btnDeliveryList[i].Tag = m_DeliveryOrderList[j];
+                btnDeliveryList[i].ForeColor = Color.White;
                 if (m_DeliveryOrderList[j].PayTime == null)
                 {
                     if (m_DeliveryOrderList[j].EatType == (int)EatWayType.Takeout)
@@ -2378,7 +2519,7 @@ namespace Top4ever.Pos
                 form.ShowDialog();
                 if (!string.IsNullOrEmpty(form.SelectedAddress))
                 {
-                    txtTelephone.Text = form.SelectedAddress;
+                    txtAddress.Text = form.SelectedAddress;
                 }
             }
         }
@@ -2872,6 +3013,14 @@ namespace Top4ever.Pos
                 }
                 //统计
                 BindOrderInfoSum();
+                //更新第二屏信息
+                if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+                {
+                    if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
+                    {
+                        ((FormSecondScreen)ConstantValuePool.SecondScreenForm).BindGoodsOrderInfo(dgvGoodsOrder);
+                    }
+                }
             }
         }
 
@@ -2952,6 +3101,14 @@ namespace Top4ever.Pos
             txtAddress.Text = string.Empty;
             txtTelephone.ReadOnly = false;
             txtName.ReadOnly = false;
+            //更新第二屏信息
+            if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+            {
+                if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
+                {
+                    ((FormSecondScreen)ConstantValuePool.SecondScreenForm).ClearGoodsOrderInfo();
+                }
+            }
         }
 
         private bool IsItemButtonEnabled(Guid itemID, ItemsType itemType)
@@ -3199,7 +3356,7 @@ namespace Top4ever.Pos
                         {
                             goodsList.Add(goods);
                         }
-                        if (!string.IsNullOrEmpty(goods.PinyinCode) && goods.PinyinCode.IndexOf(singleCode) >= 0)
+                        else if (!string.IsNullOrEmpty(goods.PinyinCode) && goods.PinyinCode.IndexOf(singleCode) >= 0)
                         {
                             goodsList.Add(goods);
                         }
@@ -3362,14 +3519,757 @@ namespace Top4ever.Pos
 
         private void btnCheckout_Click(object sender, EventArgs e)
         {
-            if (haveDailyClose)
+            if (dgvGoodsOrder.Rows.Count <= 0)
             {
-
+                MessageBox.Show("请先选择菜品！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (!haveDailyClose)
+            {
+                bool IsContainsNewItem = false;
+                foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
+                {
+                    if (dr.Cells["OrderDetailsID"].Value == null)
+                    {
+                        IsContainsNewItem = true;
+                        break;
+                    }
+                }
+                if (IsContainsNewItem)
+                {
+                    MessageBox.Show("上次未日结，不能新增菜单，请先进行日结操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+            //权限验证
+            bool hasRights = false;
+            if (RightsItemCode.FindRights(RightsItemCode.CHECKOUT))
+            {
+                hasRights = true;
             }
             else
             {
-                MessageBox.Show("上次未日结，请先进行日结操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                FormRightsCode form = new FormRightsCode();
+                form.ShowDialog();
+                if (form.ReturnValue)
+                {
+                    IList<string> rightsCodeList = form.RightsCodeList;
+                    if (RightsItemCode.FindRights(rightsCodeList, RightsItemCode.CHECKOUT))
+                    {
+                        hasRights = true;
+                    }
+                }
             }
+            if (!hasRights)
+            {
+                return;
+            }
+            //判断参加限时组合销售
+            JoinGoodsCombinedSale(this.dgvGoodsOrder);
+            BindOrderInfoSum();
+            string deskName = string.Empty;
+            if (m_SalesOrder == null)
+            {
+                if (ConstantValuePool.BizSettingConfig.CarteMode)
+                {
+                    FormNumericKeypad form = new FormNumericKeypad();
+                    form.DisplayText = "请输入餐牌号";
+                    form.ShowDialog();
+                    if (string.IsNullOrEmpty(form.KeypadValue))
+                    {
+                        MessageBox.Show("餐牌号不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    else
+                    {
+                        if (form.KeypadValue.Length > 3)
+                        {
+                            MessageBox.Show("您输入的餐牌号码过大！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+                        else
+                        {
+                            deskName = "W" + form.KeypadValue.PadLeft(3, '0');
+                        }
+                    }
+                }
+                else
+                {
+                    deskName = "W001";
+                }
+            }
+            else
+            {
+                deskName = m_SalesOrder.order.DeskName;
+            }
+            int result = SubmitSalesOrder(deskName, EatWayType.Takeout);
+            if (result == 0)
+            {
+                MessageBox.Show("提交菜单信息出现异常，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                //转入结账页面
+                FormPayment checkForm = new FormPayment(m_SalesOrder);
+                checkForm.ShowDialog();
+                if (checkForm.IsPaidOrder)
+                {
+                    this.lbTotalPrice.Text = "总金额：";
+                    this.lbDiscount.Text = "折扣：";
+                    this.lbNeedPayMoney.Text = "实际应付：";
+                    this.lbCutOff.Text = "去零：";
+                    dgvGoodsOrder.Rows.Clear();
+                    m_SalesOrder = null;
+                    btnDeliveryGoods.Enabled = false;
+                    btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
+                    txtTelephone.Text = string.Empty;
+                    txtName.Text = string.Empty;
+                    txtAddress.Text = string.Empty;
+                    txtTelephone.ReadOnly = false;
+                    txtName.ReadOnly = false;
+                    //加载外卖单列表
+                    OrderService orderService = new OrderService();
+                    IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
+                    if (deliveryOrderList != null)
+                    {
+                        m_PageIndex = 0;
+                        m_DeliveryOrderList = deliveryOrderList;
+                        DisplayDeliveryOrderButton();
+                    }
+                    //更新第二屏信息
+                    if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
+                    {
+                        if (ConstantValuePool.SecondScreenForm != null && ConstantValuePool.SecondScreenForm is FormSecondScreen)
+                        {
+                            ((FormSecondScreen)ConstantValuePool.SecondScreenForm).ClearGoodsOrderInfo();
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 判断是否存在限时组合销售
+        /// </summary>
+        /// <param name="dgvGoodsOrder"></param>
+        private void JoinGoodsCombinedSale(DataGridView dgvGoodsOrder)
+        {
+            List<Guid> hasExistGoodsId = new List<Guid>();
+            for (int index = 0; index < dgvGoodsOrder.Rows.Count; index++)
+            {
+                DataGridViewRow dr = dgvGoodsOrder.Rows[index];
+                int itemType = Convert.ToInt32(dr.Cells["ItemType"].Value);
+                //限时组合销售只针对主品项
+                if (itemType == (int)OrderItemType.Goods)
+                {
+                    Guid goodsId = new Guid(dr.Cells["ItemID"].Value.ToString());
+                    decimal goodsQty = Convert.ToDecimal(dr.Cells["GoodsNum"].Value);
+                    decimal totalSellPrice = Convert.ToDecimal(dr.Cells["GoodsPrice"].Value);
+                    decimal totalDiscount = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value);
+                    if (hasExistGoodsId.Exists(p => p == goodsId) || hasExistGoodsId.Exists(p => GoodsUtil.IsGoodsInGroup(goodsId, p)))
+                    {
+                        continue;
+                    }
+                    //在品项中是否存在
+                    bool IsInItem = false;
+                    foreach (GoodsCombinedSale item in ConstantValuePool.GoodsCombinedSaleList)
+                    {
+                        if (item.ItemID == goodsId)
+                        {
+                            if (!IsValidDate(item.BeginDate, item.EndDate, item.Week, item.Day, item.Hour, item.Minute))
+                            {
+                                continue;
+                            }
+                            //组合优惠
+                            if (goodsQty < item.Quantity)
+                            {
+                                continue;
+                            }
+                            decimal discountRate = Math.Abs(totalDiscount) / totalSellPrice;
+                            if (discountRate > item.LeastDiscountRate)
+                            {
+                                continue;
+                            }
+                            bool IsFit = false;
+                            if (item.MoreOrLess == 1)
+                            {
+                                IsFit = totalSellPrice / goodsQty > item.SellPrice;
+                            }
+                            if (item.MoreOrLess == 2)
+                            {
+                                IsFit = totalSellPrice / goodsQty == item.SellPrice;
+                            }
+                            if (item.MoreOrLess == 3)
+                            {
+                                IsFit = totalSellPrice / goodsQty < item.SellPrice;
+                            }
+                            if (!IsFit) continue;
+                            //优惠区间 第二杯半价
+                            if (item.PreferentialInterval == 2)
+                            {
+                                int count = 0;
+                                for (int m = index + 1; m < dgvGoodsOrder.Rows.Count; m++)
+                                {
+                                    //限时组合销售只针对主品项
+                                    if (Convert.ToInt32(dgvGoodsOrder.Rows[m].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                                    {
+                                        Guid tempGoodsId = new Guid(dgvGoodsOrder.Rows[m].Cells["ItemID"].Value.ToString());
+                                        decimal tempTotalPrice = Convert.ToDecimal(dgvGoodsOrder.Rows[m].Cells["GoodsPrice"].Value);
+                                        if (tempGoodsId == item.ItemID)
+                                        {
+                                            if (count % 2 == 1)
+                                            {
+                                                count++;
+                                                continue;
+                                            }
+                                            Discount _discount = new Discount();
+                                            _discount.DiscountID = new Guid("66666666-6666-6666-6666-666666666666");
+                                            _discount.DiscountName = "促销折扣";
+                                            decimal goodsDiscount = 0;
+                                            if (item.DiscountType2 == (int)DiscountItemType.DiscountRate)
+                                            {
+                                                goodsDiscount = tempTotalPrice * item.DiscountRate2;
+                                                _discount.DiscountType = (int)DiscountItemType.DiscountRate;
+                                                _discount.DiscountRate = item.DiscountRate2;
+                                                _discount.OffFixPay = 0;
+                                            }
+                                            if (item.DiscountType2 == (int)DiscountItemType.OffFixPay)
+                                            {
+                                                goodsDiscount = item.OffFixPay2;
+                                                _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                _discount.DiscountRate = 0;
+                                                _discount.OffFixPay = item.OffFixPay2;
+                                            }
+                                            if (item.DiscountType2 == (int)DiscountItemType.OffSaleTo)
+                                            {
+                                                goodsDiscount = tempTotalPrice - item.OffSaleTo2;
+                                                _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                _discount.DiscountRate = 0;
+                                                _discount.OffFixPay = tempTotalPrice - item.OffSaleTo2;
+                                            }
+                                            dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Value = (-goodsDiscount).ToString("f2");
+                                            dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Tag = _discount;
+                                            if (item.IsMultiple)
+                                            {
+                                                count++;
+                                            }
+                                            else
+                                            {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            //优惠区间 第二件半价 第三件免费
+                            if (item.PreferentialInterval == 3)
+                            {
+                                int count = 1;
+                                for (int m = index + 1; m < dgvGoodsOrder.Rows.Count; m++)
+                                {
+                                    //限时组合销售只针对主品项
+                                    if (Convert.ToInt32(dgvGoodsOrder.Rows[m].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                                    {
+                                        Guid tempGoodsId = new Guid(dgvGoodsOrder.Rows[m].Cells["ItemID"].Value.ToString());
+                                        decimal tempTotalPrice = Convert.ToDecimal(dgvGoodsOrder.Rows[m].Cells["GoodsPrice"].Value);
+                                        if (tempGoodsId == item.ItemID)
+                                        {
+                                            if (count % 3 == 0)
+                                            {
+                                                count++;
+                                                continue;
+                                            }
+                                            if (count % 3 == 1)
+                                            {
+                                                Discount _discount = new Discount();
+                                                _discount.DiscountID = new Guid("66666666-6666-6666-6666-666666666666");
+                                                _discount.DiscountName = "促销折扣";
+                                                decimal goodsDiscount = 0;
+                                                if (item.DiscountType2 == (int)DiscountItemType.DiscountRate)
+                                                {
+                                                    goodsDiscount = tempTotalPrice * item.DiscountRate2;
+                                                    _discount.DiscountType = (int)DiscountItemType.DiscountRate;
+                                                    _discount.DiscountRate = item.DiscountRate2;
+                                                    _discount.OffFixPay = 0;
+                                                }
+                                                if (item.DiscountType2 == (int)DiscountItemType.OffFixPay)
+                                                {
+                                                    goodsDiscount = item.OffFixPay2;
+                                                    _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                    _discount.DiscountRate = 0;
+                                                    _discount.OffFixPay = item.OffFixPay2;
+                                                }
+                                                if (item.DiscountType2 == (int)DiscountItemType.OffSaleTo)
+                                                {
+                                                    goodsDiscount = tempTotalPrice - item.OffSaleTo2;
+                                                    _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                    _discount.DiscountRate = 0;
+                                                    _discount.OffFixPay = tempTotalPrice - item.OffSaleTo2;
+                                                }
+                                                dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Value = (-goodsDiscount).ToString("f2");
+                                                dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Tag = _discount;
+                                                count++;
+                                                continue;
+                                            }
+                                            if (count % 3 == 2)
+                                            {
+                                                Discount _discount = new Discount();
+                                                _discount.DiscountID = new Guid("66666666-6666-6666-6666-666666666666");
+                                                _discount.DiscountName = "促销折扣";
+                                                decimal goodsDiscount = 0;
+                                                if (item.DiscountType3 == (int)DiscountItemType.DiscountRate)
+                                                {
+                                                    goodsDiscount = tempTotalPrice * item.DiscountRate3;
+                                                    _discount.DiscountType = (int)DiscountItemType.DiscountRate;
+                                                    _discount.DiscountRate = item.DiscountRate3;
+                                                    _discount.OffFixPay = 0;
+                                                }
+                                                if (item.DiscountType3 == (int)DiscountItemType.OffFixPay)
+                                                {
+                                                    goodsDiscount = item.OffFixPay3;
+                                                    _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                    _discount.DiscountRate = 0;
+                                                    _discount.OffFixPay = item.OffFixPay3;
+                                                }
+                                                if (item.DiscountType3 == (int)DiscountItemType.OffSaleTo)
+                                                {
+                                                    goodsDiscount = tempTotalPrice - item.OffSaleTo3;
+                                                    _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                    _discount.DiscountRate = 0;
+                                                    _discount.OffFixPay = tempTotalPrice - item.OffSaleTo3;
+                                                }
+                                                dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Value = (-goodsDiscount).ToString("f2");
+                                                dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Tag = _discount;
+                                                if (item.IsMultiple)
+                                                {
+                                                    count++;
+                                                }
+                                                else
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            IsInItem = true;
+                            hasExistGoodsId.Add(goodsId);
+                            break;
+                        }
+                    }
+                    if (!IsInItem)
+                    {
+                        //在品项组中是否存在
+                        foreach (GoodsCombinedSale item in ConstantValuePool.GroupCombinedSaleList)
+                        {
+                            if (!IsValidDate(item.BeginDate, item.EndDate, item.Week, item.Day, item.Hour, item.Minute))
+                            {
+                                continue;
+                            }
+                            if (GoodsUtil.IsGoodsInGroup(goodsId, item.ItemID))
+                            {
+                                if (!IsValidDate(item.BeginDate, item.EndDate, item.Week, item.Day, item.Hour, item.Minute))
+                                {
+                                    continue;
+                                }
+                                //组合优惠
+                                if (goodsQty < item.Quantity)
+                                {
+                                    continue;
+                                }
+                                decimal discountRate = Math.Abs(totalDiscount) / totalSellPrice;
+                                if (discountRate > item.LeastDiscountRate)
+                                {
+                                    continue;
+                                }
+                                bool IsFit = false;
+                                if (item.MoreOrLess == 1)
+                                {
+                                    IsFit = totalSellPrice / goodsQty > item.SellPrice;
+                                }
+                                if (item.MoreOrLess == 2)
+                                {
+                                    IsFit = totalSellPrice / goodsQty == item.SellPrice;
+                                }
+                                if (item.MoreOrLess == 3)
+                                {
+                                    IsFit = totalSellPrice / goodsQty < item.SellPrice;
+                                }
+                                if (!IsFit) continue;
+                                //优惠区间 第二杯半价
+                                if (item.PreferentialInterval == 2)
+                                {
+                                    int count = 0;
+                                    for (int m = index + 1; m < dgvGoodsOrder.Rows.Count; m++)
+                                    {
+                                        //限时组合销售只针对主品项
+                                        if (Convert.ToInt32(dgvGoodsOrder.Rows[m].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                                        {
+                                            Guid tempGoodsId = new Guid(dgvGoodsOrder.Rows[m].Cells["ItemID"].Value.ToString());
+                                            decimal tempTotalPrice = Convert.ToDecimal(dgvGoodsOrder.Rows[m].Cells["GoodsPrice"].Value);
+                                            if (GoodsUtil.IsGoodsInGroup(tempGoodsId, item.ItemID))
+                                            {
+                                                if (count % 2 == 1)
+                                                {
+                                                    count++;
+                                                    continue;
+                                                }
+                                                Discount _discount = new Discount();
+                                                _discount.DiscountID = new Guid("66666666-6666-6666-6666-666666666666");
+                                                _discount.DiscountName = "促销折扣";
+                                                decimal goodsDiscount = 0;
+                                                if (item.DiscountType2 == (int)DiscountItemType.DiscountRate)
+                                                {
+                                                    goodsDiscount = tempTotalPrice * item.DiscountRate2;
+                                                    _discount.DiscountType = (int)DiscountItemType.DiscountRate;
+                                                    _discount.DiscountRate = item.DiscountRate2;
+                                                    _discount.OffFixPay = 0;
+                                                }
+                                                if (item.DiscountType2 == (int)DiscountItemType.OffFixPay)
+                                                {
+                                                    goodsDiscount = item.OffFixPay2;
+                                                    _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                    _discount.DiscountRate = 0;
+                                                    _discount.OffFixPay = item.OffFixPay2;
+                                                }
+                                                if (item.DiscountType2 == (int)DiscountItemType.OffSaleTo)
+                                                {
+                                                    goodsDiscount = tempTotalPrice - item.OffSaleTo2;
+                                                    _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                    _discount.DiscountRate = 0;
+                                                    _discount.OffFixPay = tempTotalPrice - item.OffSaleTo2;
+                                                }
+                                                dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Value = (-goodsDiscount).ToString("f2");
+                                                dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Tag = _discount;
+                                                if (item.IsMultiple)
+                                                {
+                                                    count++;
+                                                }
+                                                else
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                //优惠区间 第二件半价 第三件免费
+                                if (item.PreferentialInterval == 3)
+                                {
+                                    int count = 1;
+                                    for (int m = index + 1; m < dgvGoodsOrder.Rows.Count; m++)
+                                    {
+                                        //限时组合销售只针对主品项
+                                        if (Convert.ToInt32(dgvGoodsOrder.Rows[m].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                                        {
+                                            Guid tempGoodsId = new Guid(dgvGoodsOrder.Rows[m].Cells["ItemID"].Value.ToString());
+                                            decimal tempTotalPrice = Convert.ToDecimal(dgvGoodsOrder.Rows[m].Cells["GoodsPrice"].Value);
+                                            if (GoodsUtil.IsGoodsInGroup(tempGoodsId, item.ItemID))
+                                            {
+                                                if (count % 3 == 0)
+                                                {
+                                                    count++;
+                                                    continue;
+                                                }
+                                                if (count % 3 == 1)
+                                                {
+                                                    Discount _discount = new Discount();
+                                                    _discount.DiscountID = new Guid("66666666-6666-6666-6666-666666666666");
+                                                    _discount.DiscountName = "促销折扣";
+                                                    decimal goodsDiscount = 0;
+                                                    if (item.DiscountType2 == (int)DiscountItemType.DiscountRate)
+                                                    {
+                                                        goodsDiscount = tempTotalPrice * item.DiscountRate2;
+                                                        _discount.DiscountType = (int)DiscountItemType.DiscountRate;
+                                                        _discount.DiscountRate = item.DiscountRate2;
+                                                        _discount.OffFixPay = 0;
+                                                    }
+                                                    if (item.DiscountType2 == (int)DiscountItemType.OffFixPay)
+                                                    {
+                                                        goodsDiscount = item.OffFixPay2;
+                                                        _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                        _discount.DiscountRate = 0;
+                                                        _discount.OffFixPay = item.OffFixPay2;
+                                                    }
+                                                    if (item.DiscountType2 == (int)DiscountItemType.OffSaleTo)
+                                                    {
+                                                        goodsDiscount = tempTotalPrice - item.OffSaleTo2;
+                                                        _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                        _discount.DiscountRate = 0;
+                                                        _discount.OffFixPay = tempTotalPrice - item.OffSaleTo2;
+                                                    }
+                                                    dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Value = (-goodsDiscount).ToString("f2");
+                                                    dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Tag = _discount;
+                                                    count++;
+                                                    continue;
+                                                }
+                                                if (count % 3 == 2)
+                                                {
+                                                    Discount _discount = new Discount();
+                                                    _discount.DiscountID = new Guid("66666666-6666-6666-6666-666666666666");
+                                                    _discount.DiscountName = "促销折扣";
+                                                    decimal goodsDiscount = 0;
+                                                    if (item.DiscountType3 == (int)DiscountItemType.DiscountRate)
+                                                    {
+                                                        goodsDiscount = tempTotalPrice * item.DiscountRate3;
+                                                        _discount.DiscountType = (int)DiscountItemType.DiscountRate;
+                                                        _discount.DiscountRate = item.DiscountRate3;
+                                                        _discount.OffFixPay = 0;
+                                                    }
+                                                    if (item.DiscountType3 == (int)DiscountItemType.OffFixPay)
+                                                    {
+                                                        goodsDiscount = item.OffFixPay3;
+                                                        _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                        _discount.DiscountRate = 0;
+                                                        _discount.OffFixPay = item.OffFixPay3;
+                                                    }
+                                                    if (item.DiscountType3 == (int)DiscountItemType.OffSaleTo)
+                                                    {
+                                                        goodsDiscount = tempTotalPrice - item.OffSaleTo3;
+                                                        _discount.DiscountType = (int)DiscountItemType.OffFixPay;
+                                                        _discount.DiscountRate = 0;
+                                                        _discount.OffFixPay = tempTotalPrice - item.OffSaleTo3;
+                                                    }
+                                                    dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Value = (-goodsDiscount).ToString("f2");
+                                                    dgvGoodsOrder.Rows[m].Cells["GoodsDiscount"].Tag = _discount;
+                                                    if (item.IsMultiple)
+                                                    {
+                                                        count++;
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                hasExistGoodsId.Add(item.ItemID);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private bool IsValidDate(string beginDate, string endDate, string week, string day, string hour, string minute)
+        {
+            bool IsValid = true;
+            if (DateTime.Now >= DateTime.Parse(beginDate) && DateTime.Now <= DateTime.Parse(endDate))
+            {
+                DayOfWeek curWeek = DateTime.Now.DayOfWeek;
+                string curMonth = DateTime.Now.Month.ToString();
+                string curDay = DateTime.Now.Day.ToString();
+                int curHour = DateTime.Now.Hour;
+                int curMinute = DateTime.Now.Minute;
+                //判断周或者日
+                if (week == "?")
+                {
+                    //判断是否包含当日
+                    if (day != "*")
+                    {
+                        string[] dayArr = day.Split(',');
+                        bool IsContainDay = false;
+                        foreach (string item in dayArr)
+                        {
+                            if (curDay == item)
+                            {
+                                IsContainDay = true;
+                                break;
+                            }
+                        }
+                        if (!IsContainDay)
+                        {
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    //判断是否包含周几
+                    //判断包含# 例:当月第几周星期几
+                    if (week.IndexOf('#') > 0)
+                    {
+                        string weekIndex = week.Split('#')[0];
+                        string weekDay = week.Split('#')[1];
+                        //计算当日是当月的第几周
+                        DateTime FirstofMonth = Convert.ToDateTime(DateTime.Now.Year + "-" + DateTime.Now.Month.ToString().PadLeft(2, '0') + "-" + "01");
+                        int i = (int)FirstofMonth.Date.DayOfWeek;
+                        if (i == 0)
+                        {
+                            i = 7;
+                        }
+                        int curWeekIndex = (DateTime.Now.Day + i - 1) / 7;
+                        if (curWeekIndex != int.Parse(weekIndex))
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            if ((int)curWeek != int.Parse(weekDay))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //不包含# 例:当月每个星期几
+                        string[] weekArr = week.Split(',');
+                        bool IsContainWeek = false;
+                        foreach (string item in weekArr)
+                        {
+                            if ((int)curWeek == int.Parse(item))
+                            {
+                                IsContainWeek = true;
+                                break;
+                            }
+                        }
+                        if (!IsContainWeek)
+                        {
+                            return false;
+                        }
+                    }
+                }
+                //判断时
+                if (hour != "*")
+                {
+                    if (hour.IndexOf('-') > 0)
+                    {
+                        string hourMinute = curHour.ToString().PadLeft(2, '0') + ":" + curMinute.ToString().PadLeft(2, '0');
+                        if (hour.IndexOf(',') > 0) //多个小时时间段
+                        {
+                            string[] hourArr = hour.Split(',');
+                            bool IsContainHour = false;
+                            foreach (string item in hourArr)
+                            {
+                                string beginHour = item.Split('-')[0].Trim();
+                                string endHour = item.Split('-')[1].Trim();
+                                if (string.Compare(hourMinute, beginHour) >= 0 && string.Compare(hourMinute, endHour) <= 0)
+                                {
+                                    IsContainHour = true;
+                                    break;
+                                }
+                            }
+                            if (!IsContainHour)
+                            {
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            string beginHour = hour.Split('-')[0].Trim();
+                            string endHour = hour.Split('-')[1].Trim();
+                            if (string.Compare(hourMinute, beginHour) < 0 || string.Compare(hourMinute, endHour) > 0)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (hour.IndexOf(',') > 0) //多个小时
+                        {
+                            string[] hourArr = hour.Split(',');
+                            bool IsContainHour = false;
+                            foreach (string item in hourArr)
+                            {
+                                if (curHour == int.Parse(item))
+                                {
+                                    IsContainHour = true;
+                                    break;
+                                }
+                            }
+                            if (!IsContainHour)
+                            {
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            if (curHour != int.Parse(hour))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+                //判断分
+                if (minute != "*")
+                {
+                    if (minute.IndexOf('-') > 0)
+                    {
+                        if (minute.IndexOf(',') > 0) //多个分钟时间段
+                        {
+                            string[] minuteArr = minute.Split(',');
+                            bool IsContainMinute = false;
+                            foreach (string item in minuteArr)
+                            {
+                                string beginMinute = item.Split('-')[0];
+                                string endMinute = item.Split('-')[1];
+                                if (curMinute >= int.Parse(beginMinute) && curMinute <= int.Parse(endMinute))
+                                {
+                                    IsContainMinute = true;
+                                    break;
+                                }
+                            }
+                            if (!IsContainMinute)
+                            {
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            string beginMinute = minute.Split('-')[0];
+                            string endMinute = minute.Split('-')[1];
+                            if (curMinute < int.Parse(beginMinute) || curMinute > int.Parse(endMinute))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (minute.IndexOf(',') > 0) //多个分钟
+                        {
+                            string[] minuteArr = minute.Split(',');
+                            bool IsContainMinute = false;
+                            foreach (string item in minuteArr)
+                            {
+                                if (curMinute == int.Parse(item))
+                                {
+                                    IsContainMinute = true;
+                                    break;
+                                }
+                            }
+                            if (!IsContainMinute)
+                            {
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            if (curMinute != int.Parse(minute))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                IsValid = false;
+            }
+            return IsValid;
+        }
+
+        private void btnCustomPrice_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

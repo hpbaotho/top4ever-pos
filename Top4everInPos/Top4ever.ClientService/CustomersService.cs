@@ -192,7 +192,7 @@ namespace Top4ever.ClientService
             return result;
         }
 
-        public bool CreateCustomerOrder(CustomerOrder customerOrder)
+        public bool CreateOrUpdateCustomerOrder(CustomerOrder customerOrder)
         {
             string json = JsonConvert.SerializeObject(customerOrder);
             byte[] jsonByte = Encoding.UTF8.GetBytes(json);

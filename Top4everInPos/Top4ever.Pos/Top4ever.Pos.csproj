@@ -73,6 +73,12 @@
     <Compile Include="Feature\FormCustomDetails.designer.cs">
       <DependentUpon>FormCustomDetails.cs</DependentUpon>
     </Compile>
+    <Compile Include="Feature\FormCustomQty.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\FormCustomQty.Designer.cs">
+      <DependentUpon>FormCustomQty.cs</DependentUpon>
+    </Compile>
     <Compile Include="Feature\FormDeletedItemReport.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,6 +108,12 @@
     </Compile>
     <Compile Include="Feature\FormGoodsSetMeal.Designer.cs">
       <DependentUpon>FormGoodsSetMeal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Feature\FormHourSalesReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\FormHourSalesReport.Designer.cs">
+      <DependentUpon>FormHourSalesReport.cs</DependentUpon>
     </Compile>
     <Compile Include="Feature\FormItemSalesReport.cs">
       <SubType>Form</SubType>
@@ -162,6 +174,12 @@
     </Compile>
     <Compile Include="Feature\FormSwipeCard.designer.cs">
       <DependentUpon>FormSwipeCard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormPayment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormPayment.Designer.cs">
+      <DependentUpon>FormPayment.cs</DependentUpon>
     </Compile>
     <Compile Include="Membership\FormVIPCardDiscount.cs">
       <SubType>Form</SubType>
@@ -235,6 +253,12 @@
     </Compile>
     <Compile Include="Membership\FormVIPCardPayment.designer.cs">
       <DependentUpon>FormVIPCardPayment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Membership\FormVIPCardRefundPay.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Membership\FormVIPCardRefundPay.Designer.cs">
+      <DependentUpon>FormVIPCardRefundPay.cs</DependentUpon>
     </Compile>
     <Compile Include="Membership\FormVIPCardSearch.cs">
       <SubType>Form</SubType>
@@ -326,6 +350,9 @@
     <EmbeddedResource Include="Feature\FormCustomDetails.resx">
       <DependentUpon>FormCustomDetails.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Feature\FormCustomQty.resx">
+      <DependentUpon>FormCustomQty.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Feature\FormDeletedItemReport.resx">
       <DependentUpon>FormDeletedItemReport.cs</DependentUpon>
     </EmbeddedResource>
@@ -340,6 +367,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\FormGoodsSetMeal.resx">
       <DependentUpon>FormGoodsSetMeal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Feature\FormHourSalesReport.resx">
+      <DependentUpon>FormHourSalesReport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\FormItemSalesReport.resx">
       <DependentUpon>FormItemSalesReport.cs</DependentUpon>
@@ -370,6 +400,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\FormSwipeCard.resx">
       <DependentUpon>FormSwipeCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormPayment.resx">
+      <DependentUpon>FormPayment.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Membership\FormVIPCardDiscount.resx">
       <DependentUpon>FormVIPCardDiscount.cs</DependentUpon>
@@ -406,6 +439,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Membership\FormVIPCardPayment.resx">
       <DependentUpon>FormVIPCardPayment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Membership\FormVIPCardRefundPay.resx">
+      <DependentUpon>FormVIPCardRefundPay.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Membership\FormVIPCardSearch.resx">
       <DependentUpon>FormVIPCardSearch.cs</DependentUpon>
@@ -555,6 +591,9 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\symbol-check.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

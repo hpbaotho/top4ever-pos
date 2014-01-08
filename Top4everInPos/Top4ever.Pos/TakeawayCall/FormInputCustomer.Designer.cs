@@ -128,7 +128,7 @@
             this.txtName.Location = new System.Drawing.Point(362, 28);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(117, 26);
-            this.txtName.TabIndex = 1;
+            this.txtName.TabIndex = 0;
             this.txtName.MouseDown += new System.Windows.Forms.MouseEventHandler(this.txtName_MouseDown);
             // 
             // label4
@@ -169,6 +169,7 @@
             this.handwritingPad1.Name = "handwritingPad1";
             this.handwritingPad1.Size = new System.Drawing.Size(498, 219);
             this.handwritingPad1.TabIndex = 4;
+            this.handwritingPad1.UserHandWriting += new Top4ever.CustomControl.InkWritingDelegate(this.handwritingPad1_UserHandWriting);
             // 
             // btnCancel
             // 

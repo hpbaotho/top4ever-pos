@@ -41,7 +41,7 @@ namespace Top4ever.Pos
                 ShopService shopService = new ShopService();
                 currentShop = shopService.GetCurrentShop();
             }
-            if(currentShop != null)
+            if (currentShop != null)
             {
                 ConstantValuePool.CurrentShop = currentShop;
                 //Check for registration

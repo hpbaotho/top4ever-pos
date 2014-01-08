@@ -42,12 +42,12 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.dataGirdViewExt1 = new Top4ever.CustomControl.DataGirdViewExt();
-            this.btnPrint = new Top4ever.CustomControl.CrystalButton();
-            this.btnCancel = new Top4ever.CustomControl.CrystalButton();
             this.colGroupName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colItemsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colItemsTotalQty = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colItemsTotalPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnPrint = new Top4ever.CustomControl.CrystalButton();
+            this.btnCancel = new Top4ever.CustomControl.CrystalButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGirdViewExt1)).BeginInit();
@@ -204,32 +204,6 @@
             this.dataGirdViewExt1.Size = new System.Drawing.Size(560, 409);
             this.dataGirdViewExt1.TabIndex = 0;
             // 
-            // btnPrint
-            // 
-            this.btnPrint.BackColor = System.Drawing.Color.Black;
-            this.btnPrint.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnPrint.ForeColor = System.Drawing.Color.White;
-            this.btnPrint.Location = new System.Drawing.Point(331, 565);
-            this.btnPrint.Name = "btnPrint";
-            this.btnPrint.Size = new System.Drawing.Size(111, 56);
-            this.btnPrint.TabIndex = 6;
-            this.btnPrint.Text = "打印";
-            this.btnPrint.UseVisualStyleBackColor = false;
-            this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(43)))), ((int)(((byte)(59)))));
-            this.btnCancel.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnCancel.ForeColor = System.Drawing.Color.White;
-            this.btnCancel.Location = new System.Drawing.Point(478, 565);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(111, 56);
-            this.btnCancel.TabIndex = 5;
-            this.btnCancel.Text = "取消";
-            this.btnCancel.UseVisualStyleBackColor = false;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-            // 
             // colGroupName
             // 
             this.colGroupName.HeaderText = "品项分类";
@@ -257,6 +231,32 @@
             this.colItemsTotalPrice.Name = "colItemsTotalPrice";
             this.colItemsTotalPrice.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.colItemsTotalPrice.Width = 120;
+            // 
+            // btnPrint
+            // 
+            this.btnPrint.BackColor = System.Drawing.Color.Black;
+            this.btnPrint.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnPrint.ForeColor = System.Drawing.Color.White;
+            this.btnPrint.Location = new System.Drawing.Point(331, 565);
+            this.btnPrint.Name = "btnPrint";
+            this.btnPrint.Size = new System.Drawing.Size(111, 56);
+            this.btnPrint.TabIndex = 6;
+            this.btnPrint.Text = "打印";
+            this.btnPrint.UseVisualStyleBackColor = false;
+            this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(43)))), ((int)(((byte)(59)))));
+            this.btnCancel.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnCancel.ForeColor = System.Drawing.Color.White;
+            this.btnCancel.Location = new System.Drawing.Point(478, 565);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(111, 56);
+            this.btnCancel.TabIndex = 5;
+            this.btnCancel.Text = "取消";
+            this.btnCancel.UseVisualStyleBackColor = false;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // FormItemSalesReport
             // 

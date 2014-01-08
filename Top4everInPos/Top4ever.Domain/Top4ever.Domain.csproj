@@ -90,6 +90,7 @@
     <Compile Include="Transfer\DeskChange.cs" />
     <Compile Include="Transfer\GroupPrice.cs" />
     <Compile Include="Transfer\HandoverInfo.cs" />
+    <Compile Include="Transfer\HourOrderSales.cs" />
     <Compile Include="Transfer\ItemsPrice.cs" />
     <Compile Include="Transfer\ModifiedPaidOrder.cs" />
     <Compile Include="Transfer\OrderDiscountSum.cs" />

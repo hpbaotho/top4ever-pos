@@ -21,10 +21,6 @@ namespace Top4ever.LocalService.Entity
         /// </summary>
         public string TradePayNo { get; set; }
         /// <summary>
-        /// 日结号
-        /// </summary>
-        public string DailyStatementNo { get; set; }
-        /// <summary>
         /// 支付金额
         /// </summary>
         public decimal PayAmount { get; set; }
@@ -37,8 +33,16 @@ namespace Top4ever.LocalService.Entity
         /// </summary>
         public string DeviceNo { get; set; }
         /// <summary>
+        /// 是否已处理
+        /// </summary>
+        public bool IsFixed { get; set; }
+        /// <summary>
         /// 创建时间
         /// </summary>
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateTime { get; set; }
+        /// <summary>
+        /// 最后更新时间
+        /// </summary>
+        public DateTime LastTime { get; set; }
     }
 }
