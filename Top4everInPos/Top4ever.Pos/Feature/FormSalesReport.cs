@@ -436,7 +436,7 @@ namespace Top4ever.Pos.Feature
                     bool result = handoverService.CreateHandover(handover);
                     if (result)
                     {
-                        MessageBox.Show("交班成功！");
+                        MessageBox.Show("交班成功！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         m_HandleSuccess = true;
                         this.Close();
                     }
@@ -482,12 +482,14 @@ namespace Top4ever.Pos.Feature
                         DailyBalance dailyBalance = new DailyBalance();
                         dailyBalance.dailyStatement = dailyStatement;
                         dailyBalance.dailyTurnover = dailyTurnover;
+                        string unCheckDeviceNo = string.Empty;  //未结账的设备号
                         DailyBalanceService dailyBalanceService = new DailyBalanceService();
-                        int result = dailyBalanceService.CreateDailyBalance(dailyBalance);
+                        int result = dailyBalanceService.CreateDailyBalance(dailyBalance, out unCheckDeviceNo);
                         if (result == 1)
                         {
                             MessageBox.Show("日结成功！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            m_HandleSuccess = true;
+                            m_HandleSuccess = true; 
+                            this.Close();
                         }
                         else if (result == 2)
                         {
@@ -495,7 +497,21 @@ namespace Top4ever.Pos.Feature
                         }
                         else if (result == 3)
                         {
-                            MessageBox.Show("存在未交班的POS，请先交班！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            if (string.IsNullOrEmpty(unCheckDeviceNo))
+                            {
+                                MessageBox.Show("存在未交班的POS，请先交班！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                            else
+                            {
+                                if (unCheckDeviceNo.IndexOf(',') == -1 && unCheckDeviceNo.IndexOf(ConstantValuePool.BizSettingConfig.DeviceNo) >= 0)
+                                {
+                                    MessageBox.Show("当前设备未交班，请交班后进行日结！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }
+                                else
+                                {
+                                    MessageBox.Show(string.Format("设备【{0}】未交班，请先交班！",unCheckDeviceNo), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }
+                            }
                         }
                         else
                         {
