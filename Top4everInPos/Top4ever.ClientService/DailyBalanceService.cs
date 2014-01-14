@@ -14,7 +14,13 @@ namespace Top4ever.ClientService
         public DailyBalanceService()
         { }
 
-        public Int32 CreateDailyBalance(DailyBalance dailyBalance)
+        /// <summary>
+        /// 日结操作
+        /// </summary>
+        /// <param name="dailyStatement">日结号</param>
+        /// <param name="unCheckDeviceNo">未结账的设备号</param>
+        /// <returns></returns>
+        public Int32 CreateDailyBalance(DailyBalance dailyBalance, out string unCheckDeviceNo)
         {
             string json = JsonConvert.SerializeObject(dailyBalance);
             byte[] jsonByte = Encoding.UTF8.GetBytes(json);
@@ -30,6 +36,7 @@ namespace Top4ever.ClientService
             byteOffset += jsonByte.Length;
 
             int result = 0;
+            unCheckDeviceNo = string.Empty;
             using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
             {
                 Byte[] receiveData = null;
@@ -37,6 +44,7 @@ namespace Top4ever.ClientService
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
                 {
                     result = BitConverter.ToInt32(receiveData, ParamFieldLength.PACKAGE_HEAD);
+                    unCheckDeviceNo = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32, receiveData.Length - ParamFieldLength.PACKAGE_HEAD - BasicTypeLength.INT32).Trim('\0');
                 }
                 socket.Close();
             }

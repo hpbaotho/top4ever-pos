@@ -27,5 +27,6 @@ namespace Top4ever.ClientService.Enum
         public const int BEGINDATE = 20;
         public const int ENDDATE = 20;
         public const int TRADEPAYNO = 30;
+        public const int UNCHECK_DEVICE_NO = 100;
     }
 }
