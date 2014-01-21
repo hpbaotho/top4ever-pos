@@ -7,6 +7,7 @@ using Top4ever.Domain;
 using Top4ever.Domain.Transfer;
 using Top4ever.Interface;
 using Top4ever.Interface.OrderRelated;
+using System.Collections.Generic;
 
 namespace Top4ever.Service
 {
@@ -43,8 +44,9 @@ namespace Top4ever.Service
             return _instance;
         }
 
-        public Int32 CreateDailyBalance(DailyBalance dailyBalance)
+        public Int32 CreateDailyBalance(DailyBalance dailyBalance, out string unCheckDeviceNo)
         {
+            unCheckDeviceNo = string.Empty;
             int returnValue = 0;    //日结失败
             _daoManager.BeginTransaction();
             try
@@ -54,7 +56,7 @@ namespace Top4ever.Service
                 //更新日结信息
                 DailyStatement dailyStatement = dailyBalance.dailyStatement;
                 dailyStatement.DailyStatementNo = dailyStatementNo;
-                returnValue = _dailyStatementDao.UpdateDailyStatement(dailyStatement);
+                returnValue = _dailyStatementDao.UpdateDailyStatement(dailyStatement, out unCheckDeviceNo);
                 if (returnValue == 1)
                 {
                     //插入日结金额
@@ -126,6 +128,23 @@ namespace Top4ever.Service
                 logger.Error("Database operation failed !", ex);
             }
             return status;
+        }
+
+        /// <summary>
+        /// 根据所属日期获取营业时间段
+        /// </summary>
+        /// <param name="belongToDate">所属日期</param>
+        /// <returns></returns>
+        public IList<DailyBalanceTime> GetDailyBalanceTime(DateTime belongToDate)
+        {
+            IList<DailyBalanceTime> dailyBalanceTimeList = null;
+            _daoManager.OpenConnection();
+            if (belongToDate > DateTime.MinValue)
+            {
+                dailyBalanceTimeList = _dailyStatementDao.GetDailyBalanceTime(belongToDate);
+            }
+            _daoManager.CloseConnection();
+            return dailyBalanceTimeList;
         }
 
         #endregion

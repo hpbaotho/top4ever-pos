@@ -44,159 +44,225 @@ namespace Top4ever.Service
             return _instance;
         }
 
+        /// <summary>
+        /// 获取营业额统计
+        /// </summary>
+        /// <param name="deviceNo">设备号</param>
+        /// <returns></returns>
         public BusinessReport GetReportDataByHandover(string deviceNo)
         {
             BusinessReport reportData = null;
-            _daoManager.BeginTransaction();
-            try
+            _daoManager.OpenConnection();
+            //日结
+            string dailyStatementNo = _dailyStatementDao.GetCurrentDailyStatementNo();
+            if (!string.IsNullOrEmpty(dailyStatementNo))
             {
-                //日结
-                string dailyStatementNo = _dailyStatementDao.GetCurrentDailyStatementNo();
-                if (!string.IsNullOrEmpty(dailyStatementNo))
+                BusinessReport businessReport = _businessReportDao.GetTurnoverByHandover(dailyStatementNo, deviceNo);
+                int workSequence = businessReport.WorkSequence;
+                IList<OrderDiscountSum> orderDiscountSumList = _businessReportDao.GetOrderDiscountSumByHandover(dailyStatementNo, workSequence);
+                IList<OrderPayoffSum> orderPayoffSumList = _businessReportDao.GetOrderPayoffSumByHandover(dailyStatementNo, workSequence);
+                IList<ItemsPrice> itemsPriceList = _businessReportDao.GetItemsPriceByHandover(dailyStatementNo, workSequence);
+
+                IList<SalesPriceByDepart> priceByDepartList = new List<SalesPriceByDepart>();
+                if (itemsPriceList.Count > 0)
                 {
-                    BusinessReport businessReport = _businessReportDao.GetTurnoverByHandover(dailyStatementNo, deviceNo);
-                    int workSequence = businessReport.WorkSequence;
-                    IList<OrderDiscountSum> orderDiscountSumList = _businessReportDao.GetOrderDiscountSumByHandover(dailyStatementNo, workSequence);
-                    IList<OrderPayoffSum> orderPayoffSumList = _businessReportDao.GetOrderPayoffSumByHandover(dailyStatementNo, workSequence);
-                    IList<ItemsPrice> itemsPriceList = _businessReportDao.GetItemsPriceByHandover(dailyStatementNo, workSequence);
-                    
-                    IList<SalesPriceByDepart> priceByDepartList = new List<SalesPriceByDepart>();
-                    if (itemsPriceList.Count > 0)
+                    string curDepartName = itemsPriceList[0].DepartName;
+                    decimal totalDepartPrice = 0;
+                    decimal totalItemsNum = 0;
+                    IList<ItemsPrice> tempItemsPriceList = new List<ItemsPrice>();
+                    foreach (ItemsPrice item in itemsPriceList)
                     {
-                        string curDepartName = itemsPriceList[0].DepartName;
-                        decimal totalDepartPrice = 0;
-                        decimal totalItemsNum = 0;
-                        IList<ItemsPrice> tempItemsPriceList = new List<ItemsPrice>();
-                        foreach (ItemsPrice item in itemsPriceList)
+                        if (item.DepartName != curDepartName)
                         {
-                            if (item.DepartName != curDepartName)
-                            {
-                                SalesPriceByDepart salesPrice = new SalesPriceByDepart();
-                                salesPrice.DepartName = curDepartName;
-                                salesPrice.TotalDepartPrice = totalDepartPrice;
-                                salesPrice.TotalItemsNum = totalItemsNum;
-                                salesPrice.ItemsPriceList = tempItemsPriceList;
-                                priceByDepartList.Add(salesPrice);
+                            SalesPriceByDepart salesPrice = new SalesPriceByDepart();
+                            salesPrice.DepartName = curDepartName;
+                            salesPrice.TotalDepartPrice = totalDepartPrice;
+                            salesPrice.TotalItemsNum = totalItemsNum;
+                            salesPrice.ItemsPriceList = tempItemsPriceList;
+                            priceByDepartList.Add(salesPrice);
 
-                                curDepartName = item.DepartName;
-                                totalDepartPrice = item.ItemsTotalPrice;
-                                totalItemsNum = item.ItemsTotalQty;
-                                tempItemsPriceList = new List<ItemsPrice>();
-                            }
-                            else
-                            {
-                                totalDepartPrice += item.ItemsTotalPrice;
-                                totalItemsNum += item.ItemsTotalQty;
-                            }
-                            tempItemsPriceList.Add(item);
+                            curDepartName = item.DepartName;
+                            totalDepartPrice = item.ItemsTotalPrice;
+                            totalItemsNum = item.ItemsTotalQty;
+                            tempItemsPriceList = new List<ItemsPrice>();
                         }
-                        SalesPriceByDepart tempSalesPrice = new SalesPriceByDepart();
-                        tempSalesPrice.DepartName = curDepartName;
-                        tempSalesPrice.TotalDepartPrice = totalDepartPrice;
-                        tempSalesPrice.TotalItemsNum = totalItemsNum;
-                        tempSalesPrice.ItemsPriceList = tempItemsPriceList;
-                        priceByDepartList.Add(tempSalesPrice);
+                        else
+                        {
+                            totalDepartPrice += item.ItemsTotalPrice;
+                            totalItemsNum += item.ItemsTotalQty;
+                        }
+                        tempItemsPriceList.Add(item);
                     }
-
-                    reportData = new BusinessReport();
-                    reportData.WorkSequence = businessReport.WorkSequence;
-                    reportData.LastHandoverTime = businessReport.LastHandoverTime;
-                    reportData.TotalRevenue = businessReport.TotalRevenue;
-                    reportData.CutOffTotalPrice = businessReport.CutOffTotalPrice;
-                    reportData.DiscountTotalPrice = businessReport.DiscountTotalPrice;
-                    reportData.ActualTotalIncome = businessReport.ActualTotalIncome;
-                    reportData.TotalServiceFee = businessReport.TotalServiceFee;
-                    reportData.BillTotalQty = businessReport.BillTotalQty;
-                    reportData.PeopleTotalNum = businessReport.PeopleTotalNum;
-                    reportData.orderDiscountSumList = orderDiscountSumList;
-                    reportData.orderPayoffSumList = orderPayoffSumList;
-                    reportData.salesPriceByDepartList = priceByDepartList;
+                    SalesPriceByDepart tempSalesPrice = new SalesPriceByDepart();
+                    tempSalesPrice.DepartName = curDepartName;
+                    tempSalesPrice.TotalDepartPrice = totalDepartPrice;
+                    tempSalesPrice.TotalItemsNum = totalItemsNum;
+                    tempSalesPrice.ItemsPriceList = tempItemsPriceList;
+                    priceByDepartList.Add(tempSalesPrice);
                 }
-                _daoManager.CommitTransaction();
+
+                reportData = new BusinessReport();
+                reportData.WorkSequence = businessReport.WorkSequence;
+                reportData.LastHandoverTime = businessReport.LastHandoverTime;
+                reportData.TotalRevenue = businessReport.TotalRevenue;
+                reportData.CutOffTotalPrice = businessReport.CutOffTotalPrice;
+                reportData.DiscountTotalPrice = businessReport.DiscountTotalPrice;
+                reportData.ActualTotalIncome = businessReport.ActualTotalIncome;
+                reportData.TotalServiceFee = businessReport.TotalServiceFee;
+                reportData.BillTotalQty = businessReport.BillTotalQty;
+                reportData.PeopleTotalNum = businessReport.PeopleTotalNum;
+                reportData.orderDiscountSumList = orderDiscountSumList;
+                reportData.orderPayoffSumList = orderPayoffSumList;
+                reportData.salesPriceByDepartList = priceByDepartList;
             }
-            catch
-            {
-                _daoManager.RollBackTransaction();
-                reportData = null;
-            }
+            _daoManager.CloseConnection();
             return reportData;
         }
 
-        public BusinessReport GetReportDataByDailyStatement()
+        /// <summary>
+        /// 获取营业额统计
+        /// </summary>
+        /// <param name="handoverRecordID">交班Id</param>
+        /// <returns></returns>
+        public BusinessReport GetReportDataByHandoverRecordID(Guid handoverRecordID)
+        {
+            _daoManager.OpenConnection();
+            BusinessReport businessReport = _businessReportDao.GetTurnoverByHandoverRecordID(handoverRecordID);
+            string dailyStatementNo = businessReport.DailyStatementNo;
+            int workSequence = businessReport.WorkSequence;
+            IList<OrderDiscountSum> orderDiscountSumList = _businessReportDao.GetOrderDiscountSumByHandover(dailyStatementNo, workSequence);
+            IList<OrderPayoffSum> orderPayoffSumList = _businessReportDao.GetOrderPayoffSumByHandover(dailyStatementNo, workSequence);
+            IList<ItemsPrice> itemsPriceList = _businessReportDao.GetItemsPriceByHandover(dailyStatementNo, workSequence);
+            _daoManager.CloseConnection();
+            IList<SalesPriceByDepart> priceByDepartList = new List<SalesPriceByDepart>();
+            if (itemsPriceList.Count > 0)
+            {
+                string curDepartName = itemsPriceList[0].DepartName;
+                decimal totalDepartPrice = 0;
+                decimal totalItemsNum = 0;
+                IList<ItemsPrice> tempItemsPriceList = new List<ItemsPrice>();
+                foreach (ItemsPrice item in itemsPriceList)
+                {
+                    if (item.DepartName != curDepartName)
+                    {
+                        SalesPriceByDepart salesPrice = new SalesPriceByDepart();
+                        salesPrice.DepartName = curDepartName;
+                        salesPrice.TotalDepartPrice = totalDepartPrice;
+                        salesPrice.TotalItemsNum = totalItemsNum;
+                        salesPrice.ItemsPriceList = tempItemsPriceList;
+                        priceByDepartList.Add(salesPrice);
+
+                        curDepartName = item.DepartName;
+                        totalDepartPrice = item.ItemsTotalPrice;
+                        totalItemsNum = item.ItemsTotalQty;
+                        tempItemsPriceList = new List<ItemsPrice>();
+                    }
+                    else
+                    {
+                        totalDepartPrice += item.ItemsTotalPrice;
+                        totalItemsNum += item.ItemsTotalQty;
+                    }
+                    tempItemsPriceList.Add(item);
+                }
+                SalesPriceByDepart tempSalesPrice = new SalesPriceByDepart();
+                tempSalesPrice.DepartName = curDepartName;
+                tempSalesPrice.TotalDepartPrice = totalDepartPrice;
+                tempSalesPrice.TotalItemsNum = totalItemsNum;
+                tempSalesPrice.ItemsPriceList = tempItemsPriceList;
+                priceByDepartList.Add(tempSalesPrice);
+            }
+            BusinessReport reportData = new BusinessReport();
+            reportData.WorkSequence = businessReport.WorkSequence;
+            reportData.LastHandoverTime = businessReport.LastHandoverTime;
+            reportData.TotalRevenue = businessReport.TotalRevenue;
+            reportData.CutOffTotalPrice = businessReport.CutOffTotalPrice;
+            reportData.DiscountTotalPrice = businessReport.DiscountTotalPrice;
+            reportData.ActualTotalIncome = businessReport.ActualTotalIncome;
+            reportData.TotalServiceFee = businessReport.TotalServiceFee;
+            reportData.BillTotalQty = businessReport.BillTotalQty;
+            reportData.PeopleTotalNum = businessReport.PeopleTotalNum;
+            reportData.orderDiscountSumList = orderDiscountSumList;
+            reportData.orderPayoffSumList = orderPayoffSumList;
+            reportData.salesPriceByDepartList = priceByDepartList;
+            return reportData;
+        }
+
+        /// <summary>
+        /// 获取日结营业额统计
+        /// </summary>
+        /// <param name="dailyStatementNo">日结号</param>
+        /// <returns></returns>
+        public BusinessReport GetReportDataByDailyStatement(string dailyStatementNo)
         {
             BusinessReport reportData = null;
-            _daoManager.BeginTransaction();
-            try
+            _daoManager.OpenConnection();
+            //日结
+            if (string.IsNullOrEmpty(dailyStatementNo))
             {
-                //日结
-                string dailyStatementNo = _dailyStatementDao.GetCurrentDailyStatementNo();
-                if (!string.IsNullOrEmpty(dailyStatementNo))
+                dailyStatementNo = _dailyStatementDao.GetCurrentDailyStatementNo();
+            }
+            if (!string.IsNullOrEmpty(dailyStatementNo))
+            {
+                BusinessReport businessReport = _businessReportDao.GetTurnoverByDailyStatement(dailyStatementNo);
+                IList<OrderDiscountSum> orderDiscountSumList = _businessReportDao.GetOrderDiscountSumByDailyStatement(dailyStatementNo);
+                IList<VIPCardTrade> cardStoredValueList = _VIPCardTradeDao.GetAllStoredAmount(dailyStatementNo);
+                IList<OrderPayoffSum> orderPayoffSumList = _businessReportDao.GetOrderPayoffSumByDailyStatement(dailyStatementNo);
+                IList<ItemsPrice> itemsPriceList = _businessReportDao.GetItemsPriceByDailyStatement(dailyStatementNo);
+
+                IList<SalesPriceByDepart> priceByDepartList = new List<SalesPriceByDepart>();
+                if (itemsPriceList.Count > 0)
                 {
-                    BusinessReport businessReport = _businessReportDao.GetTurnoverByDailyStatement(dailyStatementNo);
-                    IList<OrderDiscountSum> orderDiscountSumList = _businessReportDao.GetOrderDiscountSumByDailyStatement(dailyStatementNo);
-                    IList<VIPCardTrade> cardStoredValueList = _VIPCardTradeDao.GetAllStoredAmount(dailyStatementNo);
-                    IList<OrderPayoffSum> orderPayoffSumList = _businessReportDao.GetOrderPayoffSumByDailyStatement(dailyStatementNo);
-                    IList<ItemsPrice> itemsPriceList = _businessReportDao.GetItemsPriceByDailyStatement(dailyStatementNo);
-
-                    IList<SalesPriceByDepart> priceByDepartList = new List<SalesPriceByDepart>();
-                    if (itemsPriceList.Count > 0)
+                    string curDepartName = itemsPriceList[0].DepartName;
+                    decimal totalDepartPrice = 0;
+                    decimal totalItemsNum = 0;
+                    IList<ItemsPrice> tempItemsPriceList = new List<ItemsPrice>();
+                    foreach (ItemsPrice item in itemsPriceList)
                     {
-                        string curDepartName = itemsPriceList[0].DepartName;
-                        decimal totalDepartPrice = 0;
-                        decimal totalItemsNum = 0;
-                        IList<ItemsPrice> tempItemsPriceList = new List<ItemsPrice>();
-                        foreach (ItemsPrice item in itemsPriceList)
+                        if (item.DepartName != curDepartName)
                         {
-                            if (item.DepartName != curDepartName)
-                            {
-                                SalesPriceByDepart salesPrice = new SalesPriceByDepart();
-                                salesPrice.DepartName = curDepartName;
-                                salesPrice.TotalDepartPrice = totalDepartPrice;
-                                salesPrice.TotalItemsNum = totalItemsNum;
-                                salesPrice.ItemsPriceList = tempItemsPriceList;
-                                priceByDepartList.Add(salesPrice);
+                            SalesPriceByDepart salesPrice = new SalesPriceByDepart();
+                            salesPrice.DepartName = curDepartName;
+                            salesPrice.TotalDepartPrice = totalDepartPrice;
+                            salesPrice.TotalItemsNum = totalItemsNum;
+                            salesPrice.ItemsPriceList = tempItemsPriceList;
+                            priceByDepartList.Add(salesPrice);
 
-                                curDepartName = item.DepartName;
-                                totalDepartPrice = item.ItemsTotalPrice;
-                                totalItemsNum = item.ItemsTotalQty;
-                                tempItemsPriceList = new List<ItemsPrice>();
-                            }
-                            else
-                            {
-                                totalDepartPrice += item.ItemsTotalPrice;
-                                totalItemsNum += item.ItemsTotalQty;
-                            }
-                            tempItemsPriceList.Add(item);
+                            curDepartName = item.DepartName;
+                            totalDepartPrice = item.ItemsTotalPrice;
+                            totalItemsNum = item.ItemsTotalQty;
+                            tempItemsPriceList = new List<ItemsPrice>();
                         }
-                        SalesPriceByDepart tempSalesPrice = new SalesPriceByDepart();
-                        tempSalesPrice.DepartName = curDepartName;
-                        tempSalesPrice.TotalDepartPrice = totalDepartPrice;
-                        tempSalesPrice.TotalItemsNum = totalItemsNum;
-                        tempSalesPrice.ItemsPriceList = tempItemsPriceList;
-                        priceByDepartList.Add(tempSalesPrice);
+                        else
+                        {
+                            totalDepartPrice += item.ItemsTotalPrice;
+                            totalItemsNum += item.ItemsTotalQty;
+                        }
+                        tempItemsPriceList.Add(item);
                     }
-
-                    reportData = new BusinessReport();
-                    reportData.LastDailyStatementTime = businessReport.LastDailyStatementTime;
-                    reportData.TotalRevenue = businessReport.TotalRevenue;
-                    reportData.CutOffTotalPrice = businessReport.CutOffTotalPrice;
-                    reportData.DiscountTotalPrice = businessReport.DiscountTotalPrice;
-                    reportData.ActualTotalIncome = businessReport.ActualTotalIncome;
-                    reportData.TotalServiceFee = businessReport.TotalServiceFee;
-                    reportData.BillTotalQty = businessReport.BillTotalQty;
-                    reportData.PeopleTotalNum = businessReport.PeopleTotalNum;
-                    reportData.orderDiscountSumList = orderDiscountSumList;
-                    reportData.cardStoredValueList = cardStoredValueList;
-                    reportData.orderPayoffSumList = orderPayoffSumList;
-                    reportData.salesPriceByDepartList = priceByDepartList;
+                    SalesPriceByDepart tempSalesPrice = new SalesPriceByDepart();
+                    tempSalesPrice.DepartName = curDepartName;
+                    tempSalesPrice.TotalDepartPrice = totalDepartPrice;
+                    tempSalesPrice.TotalItemsNum = totalItemsNum;
+                    tempSalesPrice.ItemsPriceList = tempItemsPriceList;
+                    priceByDepartList.Add(tempSalesPrice);
                 }
-                _daoManager.CommitTransaction();
+
+                reportData = new BusinessReport();
+                reportData.DailyStatementNo = dailyStatementNo;
+                reportData.LastDailyStatementTime = businessReport.LastDailyStatementTime;
+                reportData.TotalRevenue = businessReport.TotalRevenue;
+                reportData.CutOffTotalPrice = businessReport.CutOffTotalPrice;
+                reportData.DiscountTotalPrice = businessReport.DiscountTotalPrice;
+                reportData.ActualTotalIncome = businessReport.ActualTotalIncome;
+                reportData.TotalServiceFee = businessReport.TotalServiceFee;
+                reportData.BillTotalQty = businessReport.BillTotalQty;
+                reportData.PeopleTotalNum = businessReport.PeopleTotalNum;
+                reportData.orderDiscountSumList = orderDiscountSumList;
+                reportData.cardStoredValueList = cardStoredValueList;
+                reportData.orderPayoffSumList = orderPayoffSumList;
+                reportData.salesPriceByDepartList = priceByDepartList;
             }
-            catch
-            {
-                _daoManager.RollBackTransaction();
-                reportData = null;
-            }
+            _daoManager.CloseConnection();
             return reportData;
         }
 

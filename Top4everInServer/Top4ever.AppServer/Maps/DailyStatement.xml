@@ -3,27 +3,27 @@
 
     <alias>
       <typeAlias alias="DailyStatement" type="Top4ever.Domain.DailyStatement, Top4ever.Domain" />
+      <typeAlias alias="DailyBalanceTime" type="Top4ever.Domain.Transfer.DailyBalanceTime, Top4ever.Domain" />
     </alias>
 
-    <parameterMaps>
-      <parameterMap id="DailyStatementResult" class="DailyStatement">
-        <parameter property="DailyStatementID" column="DailyStatementID"/>
-        <parameter property="DailyStatementNo" column="DailyStatementNo"/>
-        <parameter property="DeviceNo" column="DeviceNo"/>
-	      <parameter property="BelongToDate" column="BelongToDate"/>
-	      <parameter property="Weather" column="Weather"/>
-        <parameter property="EmployeeID" column="LastChangeEmpID"/>
-      </parameterMap>
+    <resultMaps>
+      <resultMap id="DailyBalanceTimeResult" class="DailyBalanceTime">
+        <result property="DailyStatementNo" column="DailyStatementNo"></result>
+        <result property="MinTime" column="MinTime"></result>
+        <result property="MaxTime" column="MaxTime"></result>
+      </resultMap>
+    </resultMaps>
 
-      <parameterMap id="DailyStatementParam" class="DailyStatement">
+    <parameterMaps>
+      <parameterMap id="DailyStatementParam" class="Hashtable">
         <parameter property="DailyStatementNo"/>
         <parameter property="DeviceNo"/>
         <parameter property="BelongToDate"/>
         <parameter property="Weather"/>
         <parameter property="EmployeeID"/>
+        <parameter property="ReturnValue" column="ReturnValue" direction="Output" />
       </parameterMap>
-
-	</parameterMaps>
+	  </parameterMaps>
 
     <!-- =============================================
         MAPPED STATEMENTS 
@@ -53,6 +53,14 @@
         SELECT TOP 1 ISNULL(BelongToDate, DATEADD(DAY,-1,GETDATE())) AS LastBelongDate
         FROM DailyStatement
         ORDER BY BelongToDate DESC
+      </select>
+
+      <select id="SelectDailyBalanceTime" parameterClass="DateTime" resultMap="DailyBalanceTimeResult">
+        SELECT ds.DailyStatementNo, MIN(o.PayTime) AS MinTime, MAX(o.PayTime) AS MaxTime
+        FROM [Order] o JOIN DailyStatement ds ON ds.DailyStatementNo = o.DailyStatementNo
+        WHERE ds.BelongToDate = #value# AND ds.IsVoided = 0 AND o.IsVoided = 0
+        GROUP BY ds.DailyStatementNo
+        ORDER BY ds.DailyStatementNo
       </select>
     </statements>
 </sqlMap>

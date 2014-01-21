@@ -39,6 +39,7 @@
       </resultMap>
 
       <resultMap id="HandoverReportResult" class="BusinessReport">
+        <result property="DailyStatementNo" column="DailyStatementNo"></result>
         <result property="WorkSequence" column="WorkSequence"></result>
         <result property="LastHandoverTime" column="LastHandoverTime"></result>
         <result property="BillTotalQty" column="BillTotalQty"></result>
@@ -129,6 +130,15 @@
         GROUP BY d.DepartName, od.GoodsName) T
         WHERE T.ItemsTotalPrice > 0
         ORDER BY DepartName
+      </select>
+
+      <select id="GetTurnoverByHandoverRecordID" parameterClass="Guid" resultMap="HandoverReportResult">
+        SELECT o.DailyStatementNo, o.WorkSequence, hr.LastChangeTime AS LastHandoverTime, COUNT(1) AS BillTotalQty, SUM(PeopleNum) AS PeopleTotalNum,
+        SUM(TotalSellPrice) AS TotalRevenue, SUM(CutOffPrice) AS CutOffTotalPrice, SUM(DiscountPrice) AS DiscountTotalPrice,
+        SUM(ActualSellPrice) AS ActualTotalIncome, SUM(ServiceFee) AS TotalServiceFee
+        FROM [Order] o JOIN HandoverRecord hr ON o.DailyStatementNo = hr.DailyStatementNo AND o.WorkSequence = hr.WorkSequence
+        WHERE hr.HandoverRecordID = #value#
+        GROUP BY o.DailyStatementNo, o.WorkSequence, hr.LastChangeTime
       </select>
 
       <procedure id="GetItemsPriceByGroup" parameterMap="GroupPriceParam" resultMap="GroupPriceResult">

@@ -15,6 +15,12 @@ namespace Top4ever.Persistence
     {
         #region IBusinessReportDao Members
 
+        /// <summary>
+        /// 获取营业额统计
+        /// </summary>
+        /// <param name="dailyStatementNo">日结号</param>
+        /// <param name="deviceNo">设备号</param>
+        /// <returns></returns>
         public BusinessReport GetTurnoverByHandover(string dailyStatementNo, string deviceNo)
         {
             Hashtable htParam = new Hashtable();
@@ -22,6 +28,16 @@ namespace Top4ever.Persistence
             htParam["DeviceNo"] = deviceNo;
 
             return ExecuteQueryForObject("GetTurnoverByHandover", htParam) as BusinessReport;
+        }
+
+        /// <summary>
+        /// 通过交班Id获取营业额统计
+        /// </summary>
+        /// <param name="handoverRecordID">交班Id</param>
+        /// <returns></returns>
+        public BusinessReport GetTurnoverByHandoverRecordID(Guid handoverRecordID)
+        {
+            return ExecuteQueryForObject("GetTurnoverByHandoverRecordID", handoverRecordID) as BusinessReport;
         }
 
         public BusinessReport GetTurnoverByDailyStatement(string dailyStatementNo)

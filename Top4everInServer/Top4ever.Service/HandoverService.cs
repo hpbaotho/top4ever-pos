@@ -76,6 +76,23 @@ namespace Top4ever.Service
             return returnValue;
         }
 
+        /// <summary>
+        /// 获取交班记录
+        /// </summary>
+        /// <param name="dailyStatementNo">日结号</param>
+        /// <returns></returns>
+        public IList<EmployeeHandoverRecord> GetHandoverRecord(string dailyStatementNo)
+        {
+            IList<EmployeeHandoverRecord> handoverRecordList = null;
+            _daoManager.OpenConnection();
+            if (!string.IsNullOrEmpty(dailyStatementNo))
+            {
+                handoverRecordList = _handoverRecord.GetHandoverRecord(dailyStatementNo);
+             }
+            _daoManager.CloseConnection();
+            return handoverRecordList;
+        }
+
         #endregion
     }
 }

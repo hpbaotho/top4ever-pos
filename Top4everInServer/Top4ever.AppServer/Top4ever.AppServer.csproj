@@ -78,7 +78,9 @@
     </Content>
     <Content Include="Maps\GoodsGroup.xml" />
     <Content Include="Maps\GoodsSetMeal.xml" />
-    <Content Include="Maps\HandoverRecord.xml" />
+    <Content Include="Maps\HandoverRecord.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Maps\HandoverTurnover.xml" />
     <Content Include="Maps\Notice.xml">
       <SubType>Designer</SubType>

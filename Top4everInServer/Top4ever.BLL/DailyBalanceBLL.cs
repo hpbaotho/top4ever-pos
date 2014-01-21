@@ -17,13 +17,16 @@ namespace Top4ever.BLL
             string strReceive = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, itemBuffer.Length - ParamFieldLength.PACKAGE_HEAD).Trim('\0');
             DailyBalance dailyBalance = JsonConvert.DeserializeObject<DailyBalance>(strReceive);
 
-            int result = DailyBalanceService.GetInstance().CreateDailyBalance(dailyBalance);
+            string unCheckDeviceNo = string.Empty;  //未结账的设备号
+            int result = DailyBalanceService.GetInstance().CreateDailyBalance(dailyBalance, out unCheckDeviceNo);
+            byte[] strBuffer = Encoding.UTF8.GetBytes(unCheckDeviceNo);
 
-            int transCount = BasicTypeLength.INT32 + BasicTypeLength.INT32 + BasicTypeLength.INT32;
+            int transCount = BasicTypeLength.INT32 + BasicTypeLength.INT32 + BasicTypeLength.INT32 + ParamFieldLength.UNCHECK_DEVICE_NO;
             objRet = new byte[transCount];
             Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
             Array.Copy(BitConverter.GetBytes(transCount), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
             Array.Copy(BitConverter.GetBytes(result), 0, objRet, 2 * BasicTypeLength.INT32, BasicTypeLength.INT32);
+            Array.Copy(strBuffer, 0, objRet, 3 * BasicTypeLength.INT32, strBuffer.Length);
             return objRet;
         }
 
@@ -52,6 +55,34 @@ namespace Top4ever.BLL
             Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
             Array.Copy(BitConverter.GetBytes(transCount), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
             Array.Copy(BitConverter.GetBytes(result), 0, objRet, 2 * BasicTypeLength.INT32, BasicTypeLength.INT32);
+            return objRet;
+        }
+
+        public static byte[] GetDailyBalanceTime(byte[] itemBuffer)
+        {
+            byte[] objRet = null;
+            string belongToDate = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, ParamFieldLength.BEGINDATE).Trim('\0');
+
+            IList<DailyBalanceTime> dailyBalanceTimeList = DailyBalanceService.GetInstance().GetDailyBalanceTime(DateTime.Parse(belongToDate));
+            if (dailyBalanceTimeList == null || dailyBalanceTimeList.Count <= 0)
+            {
+                //获取营业时间段失败或者没有数据
+                objRet = new byte[ParamFieldLength.PACKAGE_HEAD];
+                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.ERROR_DB), 0, objRet, 0, BasicTypeLength.INT32);
+                Array.Copy(BitConverter.GetBytes(ParamFieldLength.PACKAGE_HEAD), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            }
+            else
+            {
+                //成功
+                string json = JsonConvert.SerializeObject(dailyBalanceTimeList);
+                byte[] jsonByte = Encoding.UTF8.GetBytes(json);
+
+                int transCount = BasicTypeLength.INT32 + BasicTypeLength.INT32 + jsonByte.Length;
+                objRet = new byte[transCount];
+                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
+                Array.Copy(BitConverter.GetBytes(transCount), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+                Array.Copy(jsonByte, 0, objRet, 2 * BasicTypeLength.INT32, jsonByte.Length);
+            }
             return objRet;
         }
     }

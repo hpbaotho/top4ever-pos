@@ -81,6 +81,7 @@
     <Compile Include="SystemDictionary.cs" />
     <Compile Include="Transfer\BusinessReport.cs" />
     <Compile Include="Transfer\DailyBalance.cs" />
+    <Compile Include="Transfer\DailyBalanceTime.cs" />
     <Compile Include="Transfer\DeletedAllItems.cs" />
     <Compile Include="Transfer\DeletedOrderDetails.cs" />
     <Compile Include="Transfer\DeletedOrder.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Transfer\DeletedSingleOrder.cs" />
     <Compile Include="Transfer\DeliveryOrder.cs" />
     <Compile Include="Transfer\DeskChange.cs" />
+    <Compile Include="Transfer\EmployeeHandoverRecord.cs" />
     <Compile Include="Transfer\GroupPrice.cs" />
     <Compile Include="Transfer\HandoverInfo.cs" />
     <Compile Include="Transfer\HourOrderSales.cs" />

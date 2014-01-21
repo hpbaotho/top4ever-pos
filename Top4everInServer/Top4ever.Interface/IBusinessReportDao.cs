@@ -10,8 +10,20 @@ namespace Top4ever.Interface
     /// </summary>
     public interface IBusinessReportDao
     {
-        //交班
+        /// <summary>
+        /// 获取营业额统计
+        /// </summary>
+        /// <param name="dailyStatementNo">日结号</param>
+        /// <param name="deviceNo">设备号</param>
+        /// <returns></returns>
         BusinessReport GetTurnoverByHandover(string dailyStatementNo, string deviceNo);
+
+        /// <summary>
+        /// 通过交班Id获取营业额统计
+        /// </summary>
+        /// <param name="handoverRecordID">交班Id</param>
+        /// <returns></returns>
+        BusinessReport GetTurnoverByHandoverRecordID(Guid handoverRecordID);
 
         IList<OrderDiscountSum> GetOrderDiscountSumByHandover(string dailyStatementNo, int workSequence);
 

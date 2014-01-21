@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using Top4ever.Domain;
+using Top4ever.Domain.Transfer;
 using Top4ever.Interface;
 
 namespace Top4ever.Persistence
@@ -30,15 +31,34 @@ namespace Top4ever.Persistence
             ExecuteInsert("InsertDailyStatement", dailyStatement);
         }
 
-        public int UpdateDailyStatement(DailyStatement dailyStatement)
+        /// <summary>
+        /// 日结操作
+        /// </summary>
+        /// <param name="dailyStatement">日结号</param>
+        /// <param name="unCheckDeviceNo">未结账的设备号</param>
+        /// <returns></returns>
+        public int UpdateDailyStatement(DailyStatement dailyStatement, out string unCheckDeviceNo)
         {
-            int result = 0;
-            object objValue = ExecuteQueryForObject("UpdateDailyStatement", dailyStatement);
+            unCheckDeviceNo = string.Empty;
+
+            Hashtable htParam = new Hashtable();
+            htParam["DailyStatementNo"] = dailyStatement.DailyStatementNo;
+            htParam["DeviceNo"] = dailyStatement.DeviceNo;
+            htParam["BelongToDate"] = dailyStatement.BelongToDate;
+            htParam["Weather"] = dailyStatement.Weather;
+            htParam["EmployeeID"] = dailyStatement.EmployeeID;
+            htParam["ReturnValue"] = 0;
+
+            object objValue = ExecuteQueryForObject("UpdateDailyStatement", htParam);
             if (objValue != null)
             {
-                result = Convert.ToInt32(objValue);
+                unCheckDeviceNo = Convert.ToString(objValue).Trim();
+                if (unCheckDeviceNo.Length > 1)
+                {
+                    unCheckDeviceNo = unCheckDeviceNo.Substring(1);
+                }
             }
-            return result;
+            return (int)htParam["ReturnValue"];
         }
 
         public string GetDailyStatementTimeInterval(string dailyStatementNo)
@@ -56,6 +76,16 @@ namespace Top4ever.Persistence
         {
             object objValue = ExecuteQueryForObject("SelectLastDailyStatementDate", null);
             return Convert.ToDateTime(objValue);
+        }
+
+        /// <summary>
+        /// 根据所属日期获取营业时间段
+        /// </summary>
+        /// <param name="belongToDate"></param>
+        /// <returns></returns>
+        public IList<DailyBalanceTime> GetDailyBalanceTime(DateTime belongToDate)
+        {
+            return ExecuteQueryForList<DailyBalanceTime>("SelectDailyBalanceTime", belongToDate);
         }
         #endregion
     }
