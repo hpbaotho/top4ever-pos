@@ -358,7 +358,8 @@ namespace Top4ever.Pos.Feature
 
         private void btnHistorySearch_Click(object sender, EventArgs e)
         {
-
+            FormHistorySalesReport form = new FormHistorySalesReport();
+            form.ShowDialog();
         }
 
         private void btnSingleGoodsStatistics_Click(object sender, EventArgs e)
