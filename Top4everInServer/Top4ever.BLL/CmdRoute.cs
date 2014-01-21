@@ -181,6 +181,15 @@ namespace Top4ever.BLL
                 case Command.ID_GET_HOURSALESREPORT:
                     byteRet = OrderBLL.GetHourSalesReport(itemBuffer);
                     break;
+                case Command.ID_GET_DAILYBALANCETIME:
+                    byteRet = DailyBalanceBLL.GetDailyBalanceTime(itemBuffer);
+                    break;
+                case Command.ID_GET_HANDOVER_RECORD:
+                    byteRet = HandoverBLL.GetHandoverRecord(itemBuffer);
+                    break;
+                case Command.ID_GET_REPORTDATABYHANDOVERRECORDID:
+                    byteRet = BusinessReportBLL.GetReportDataByHandoverRecordID(itemBuffer);
+                    break;
 
                 default:
                     byteRet = null;

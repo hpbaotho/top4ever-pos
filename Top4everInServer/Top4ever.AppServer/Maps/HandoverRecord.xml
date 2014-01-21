@@ -3,17 +3,18 @@
 
 	<alias>
 		<typeAlias alias="HandoverRecord" type="Top4ever.Domain.HandoverRecord, Top4ever.Domain" />
+    <typeAlias alias="EmployeeHandoverRecord" type="Top4ever.Domain.Transfer.EmployeeHandoverRecord, Top4ever.Domain" />
 	</alias>
 
-	<resultMaps>
-		<resultMap id="HandoverRecordResult" class="HandoverRecord">
-			<parameter property="HandoverRecordID" column="HandoverRecordID"/>
-			<parameter property="DailyStatementNo" column="DailyStatementNo"/>
-			<parameter property="DeviceNo" column="DeviceNo"/>
-			<parameter property="WorkSequence" column="WorkSequence"/>
-			<parameter property="EmployeeID" column="LastChangeEmpID"/>
-		</resultMap>
-	</resultMaps>
+  <resultMaps>
+    <resultMap id="EmployeeHandoverRecordResult" class="EmployeeHandoverRecord">
+      <result property="HandoverRecordID" column="HandoverRecordID"></result>
+      <result property="DeviceNo" column="DeviceNo"></result>
+      <result property="WorkSequence" column="WorkSequence"></result>
+      <result property="HandoverTime" column="HandoverTime"></result>
+      <result property="EmployeeNo" column="EmployeeNo"></result>
+    </resultMap>
+  </resultMaps>
 
 	<parameterMaps>
 		<parameterMap id="InsertHandoverRecordParam" class="HandoverRecord">
@@ -32,5 +33,11 @@
 		<procedure id="InsertHandoverRecord" parameterMap="InsertHandoverRecordParam">
 			proc_InsertHandoverRecord
 		</procedure>
+
+    <select id="SelectHandoverRecord" parameterClass="String" resultMap="EmployeeHandoverRecordResult">
+      SELECT HandoverRecordID,DeviceNo,WorkSequence,hr.LastChangeTime AS HandoverTime,EmployeeNo
+      FROM HandoverRecord hr JOIN Employee e ON hr.LastChangeEmpID = e.EmployeeID
+      WHERE DailyStatementNo = #value# AND hr.IsVoided = 0
+    </select>
 	</statements>
 </sqlMap>
