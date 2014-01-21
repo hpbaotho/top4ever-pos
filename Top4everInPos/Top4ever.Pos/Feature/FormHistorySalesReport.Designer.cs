@@ -28,32 +28,34 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.monthCalendar1 = new Top4ever.MonthCalendar.MonthCalendar();
             this.label1 = new System.Windows.Forms.Label();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dgvDailyStatement = new System.Windows.Forms.DataGridView();
             this.colOrder = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colBeginTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colEndTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDailyStatementNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label2 = new System.Windows.Forms.Label();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.dgvDeviceNo = new System.Windows.Forms.DataGridView();
             this.colIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDeviceNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label3 = new System.Windows.Forms.Label();
-            this.dataGridView3 = new System.Windows.Forms.DataGridView();
+            this.dgvHandover = new System.Windows.Forms.DataGridView();
             this.colOrderIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colWorkSequence = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colEmployeeNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colHandoverTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colHandoverRecordID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnShowDailyStatement = new Top4ever.CustomControl.CrystalButton();
             this.btnCancel = new Top4ever.CustomControl.CrystalButton();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDailyStatement)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDeviceNo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvHandover)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -95,36 +97,38 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "选择营业时间段：";
             // 
-            // dataGridView1
+            // dgvDailyStatement
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AllowUserToResizeColumns = false;
-            this.dataGridView1.AllowUserToResizeRows = false;
-            this.dataGridView1.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle13.BackColor = System.Drawing.Color.SteelBlue;
-            dataGridViewCellStyle13.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
-            this.dataGridView1.ColumnHeadersHeight = 43;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgvDailyStatement.AllowUserToAddRows = false;
+            this.dgvDailyStatement.AllowUserToDeleteRows = false;
+            this.dgvDailyStatement.AllowUserToResizeColumns = false;
+            this.dgvDailyStatement.AllowUserToResizeRows = false;
+            this.dgvDailyStatement.BackgroundColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.SteelBlue;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9.75F);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvDailyStatement.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgvDailyStatement.ColumnHeadersHeight = 43;
+            this.dgvDailyStatement.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgvDailyStatement.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colOrder,
             this.colBeginTime,
-            this.colEndTime});
-            this.dataGridView1.EnableHeadersVisualStyles = false;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 314);
-            this.dataGridView1.MultiSelect = false;
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.RowTemplate.Height = 23;
-            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(332, 331);
-            this.dataGridView1.TabIndex = 2;
+            this.colEndTime,
+            this.colDailyStatementNo});
+            this.dgvDailyStatement.EnableHeadersVisualStyles = false;
+            this.dgvDailyStatement.Location = new System.Drawing.Point(12, 314);
+            this.dgvDailyStatement.MultiSelect = false;
+            this.dgvDailyStatement.Name = "dgvDailyStatement";
+            this.dgvDailyStatement.RowHeadersVisible = false;
+            this.dgvDailyStatement.RowTemplate.Height = 23;
+            this.dgvDailyStatement.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvDailyStatement.Size = new System.Drawing.Size(332, 331);
+            this.dgvDailyStatement.TabIndex = 2;
+            this.dgvDailyStatement.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDailyStatement_CellClick);
             // 
             // colOrder
             // 
@@ -144,6 +148,12 @@
             this.colEndTime.Name = "colEndTime";
             this.colEndTime.Width = 134;
             // 
+            // colDailyStatementNo
+            // 
+            this.colDailyStatementNo.HeaderText = "日结号";
+            this.colDailyStatementNo.Name = "colDailyStatementNo";
+            this.colDailyStatementNo.Visible = false;
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -154,35 +164,36 @@
             this.label2.TabIndex = 1;
             this.label2.Text = "选择设备号：";
             // 
-            // dataGridView2
+            // dgvDeviceNo
             // 
-            this.dataGridView2.AllowUserToAddRows = false;
-            this.dataGridView2.AllowUserToDeleteRows = false;
-            this.dataGridView2.AllowUserToResizeColumns = false;
-            this.dataGridView2.AllowUserToResizeRows = false;
-            this.dataGridView2.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle14.BackColor = System.Drawing.Color.SteelBlue;
-            dataGridViewCellStyle14.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            dataGridViewCellStyle14.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView2.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle14;
-            this.dataGridView2.ColumnHeadersHeight = 43;
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgvDeviceNo.AllowUserToAddRows = false;
+            this.dgvDeviceNo.AllowUserToDeleteRows = false;
+            this.dgvDeviceNo.AllowUserToResizeColumns = false;
+            this.dgvDeviceNo.AllowUserToResizeRows = false;
+            this.dgvDeviceNo.BackgroundColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.SteelBlue;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("微软雅黑", 9.75F);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvDeviceNo.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            this.dgvDeviceNo.ColumnHeadersHeight = 43;
+            this.dgvDeviceNo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgvDeviceNo.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colIndex,
             this.colDeviceNo});
-            this.dataGridView2.EnableHeadersVisualStyles = false;
-            this.dataGridView2.Location = new System.Drawing.Point(352, 74);
-            this.dataGridView2.MultiSelect = false;
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.RowHeadersVisible = false;
-            this.dataGridView2.RowTemplate.Height = 23;
-            this.dataGridView2.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView2.Size = new System.Drawing.Size(154, 571);
-            this.dataGridView2.TabIndex = 2;
+            this.dgvDeviceNo.EnableHeadersVisualStyles = false;
+            this.dgvDeviceNo.Location = new System.Drawing.Point(352, 74);
+            this.dgvDeviceNo.MultiSelect = false;
+            this.dgvDeviceNo.Name = "dgvDeviceNo";
+            this.dgvDeviceNo.RowHeadersVisible = false;
+            this.dgvDeviceNo.RowTemplate.Height = 23;
+            this.dgvDeviceNo.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvDeviceNo.Size = new System.Drawing.Size(154, 571);
+            this.dgvDeviceNo.TabIndex = 2;
+            this.dgvDeviceNo.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDeviceNo_CellClick);
             // 
             // colIndex
             // 
@@ -206,37 +217,38 @@
             this.label3.TabIndex = 1;
             this.label3.Text = "选择交班记录：";
             // 
-            // dataGridView3
+            // dgvHandover
             // 
-            this.dataGridView3.AllowUserToAddRows = false;
-            this.dataGridView3.AllowUserToDeleteRows = false;
-            this.dataGridView3.AllowUserToResizeColumns = false;
-            this.dataGridView3.AllowUserToResizeRows = false;
-            this.dataGridView3.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle15.BackColor = System.Drawing.Color.SteelBlue;
-            dataGridViewCellStyle15.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            dataGridViewCellStyle15.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView3.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle15;
-            this.dataGridView3.ColumnHeadersHeight = 43;
-            this.dataGridView3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.dataGridView3.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgvHandover.AllowUserToAddRows = false;
+            this.dgvHandover.AllowUserToDeleteRows = false;
+            this.dgvHandover.AllowUserToResizeColumns = false;
+            this.dgvHandover.AllowUserToResizeRows = false;
+            this.dgvHandover.BackgroundColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.SteelBlue;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("微软雅黑", 9.75F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvHandover.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            this.dgvHandover.ColumnHeadersHeight = 43;
+            this.dgvHandover.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgvHandover.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colOrderIndex,
             this.colWorkSequence,
             this.colEmployeeNo,
-            this.colHandoverTime});
-            this.dataGridView3.EnableHeadersVisualStyles = false;
-            this.dataGridView3.Location = new System.Drawing.Point(513, 74);
-            this.dataGridView3.MultiSelect = false;
-            this.dataGridView3.Name = "dataGridView3";
-            this.dataGridView3.RowHeadersVisible = false;
-            this.dataGridView3.RowTemplate.Height = 23;
-            this.dataGridView3.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView3.Size = new System.Drawing.Size(424, 571);
-            this.dataGridView3.TabIndex = 2;
+            this.colHandoverTime,
+            this.colHandoverRecordID});
+            this.dgvHandover.EnableHeadersVisualStyles = false;
+            this.dgvHandover.Location = new System.Drawing.Point(513, 74);
+            this.dgvHandover.MultiSelect = false;
+            this.dgvHandover.Name = "dgvHandover";
+            this.dgvHandover.RowHeadersVisible = false;
+            this.dgvHandover.RowTemplate.Height = 23;
+            this.dgvHandover.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvHandover.Size = new System.Drawing.Size(424, 571);
+            this.dgvHandover.TabIndex = 2;
             // 
             // colOrderIndex
             // 
@@ -261,16 +273,22 @@
             this.colHandoverTime.Name = "colHandoverTime";
             this.colHandoverTime.Width = 135;
             // 
+            // colHandoverRecordID
+            // 
+            this.colHandoverRecordID.HeaderText = "交班主键";
+            this.colHandoverRecordID.Name = "colHandoverRecordID";
+            this.colHandoverRecordID.Visible = false;
+            // 
             // btnShowDailyStatement
             // 
             this.btnShowDailyStatement.BackColor = System.Drawing.Color.Teal;
             this.btnShowDailyStatement.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnShowDailyStatement.ForeColor = System.Drawing.Color.White;
-            this.btnShowDailyStatement.Location = new System.Drawing.Point(835, 9);
+            this.btnShowDailyStatement.Location = new System.Drawing.Point(707, 8);
             this.btnShowDailyStatement.Name = "btnShowDailyStatement";
             this.btnShowDailyStatement.Size = new System.Drawing.Size(102, 58);
             this.btnShowDailyStatement.TabIndex = 1;
-            this.btnShowDailyStatement.Text = "确定";
+            this.btnShowDailyStatement.Text = "查看";
             this.btnShowDailyStatement.UseVisualStyleBackColor = false;
             this.btnShowDailyStatement.Click += new System.EventHandler(this.btnShowDailyStatement_Click);
             // 
@@ -279,7 +297,7 @@
             this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(43)))), ((int)(((byte)(59)))));
             this.btnCancel.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnCancel.ForeColor = System.Drawing.Color.White;
-            this.btnCancel.Location = new System.Drawing.Point(689, 9);
+            this.btnCancel.Location = new System.Drawing.Point(835, 8);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(102, 58);
             this.btnCancel.TabIndex = 1;
@@ -294,9 +312,9 @@
             this.ClientSize = new System.Drawing.Size(949, 657);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnShowDailyStatement);
-            this.Controls.Add(this.dataGridView3);
-            this.Controls.Add(this.dataGridView2);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.dgvHandover);
+            this.Controls.Add(this.dgvDeviceNo);
+            this.Controls.Add(this.dgvDailyStatement);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -310,9 +328,9 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FormHistorySalesReport";
             this.groupBox1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDailyStatement)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDeviceNo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvHandover)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -323,21 +341,23 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private MonthCalendar.MonthCalendar monthCalendar1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dgvDailyStatement;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.DataGridView dataGridView2;
+        private System.Windows.Forms.DataGridView dgvDeviceNo;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.DataGridView dataGridView3;
+        private System.Windows.Forms.DataGridView dgvHandover;
         private CustomControl.CrystalButton btnShowDailyStatement;
         private CustomControl.CrystalButton btnCancel;
         private System.Windows.Forms.DataGridViewTextBoxColumn colOrder;
         private System.Windows.Forms.DataGridViewTextBoxColumn colBeginTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn colEndTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDailyStatementNo;
         private System.Windows.Forms.DataGridViewTextBoxColumn colIndex;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDeviceNo;
         private System.Windows.Forms.DataGridViewTextBoxColumn colOrderIndex;
         private System.Windows.Forms.DataGridViewTextBoxColumn colWorkSequence;
         private System.Windows.Forms.DataGridViewTextBoxColumn colEmployeeNo;
         private System.Windows.Forms.DataGridViewTextBoxColumn colHandoverTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colHandoverRecordID;
     }
 }

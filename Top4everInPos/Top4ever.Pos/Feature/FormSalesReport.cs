@@ -38,6 +38,7 @@ namespace Top4ever.Pos.Feature
         {
             InitializeComponent();
             this.dgvSalesReport.BackgroundColor = SystemColors.ButtonFace;
+            BusinessReportService bizReportService = new BusinessReportService();
             m_ModelType = modelType;
             if (modelType == 1)
             {
@@ -45,26 +46,47 @@ namespace Top4ever.Pos.Feature
                 this.comboBox1.Visible = false;
                 btnSalesReport.Text = "交班";
                 this.Text = "交班报表";
+                bizReport = bizReportService.GetReportDataByHandover(ConstantValuePool.BizSettingConfig.DeviceNo);
             }
             else if (modelType == 2)
             {
                 btnSalesReport.Text = "日结";
                 this.Text = "日结报表";
+                bizReport = bizReportService.GetReportDataByDailyStatement(string.Empty);
+            }
+        }
+
+        public FormSalesReport(int modelType, object recordID)
+        {
+            InitializeComponent();
+            this.lbWeather.Visible = false;
+            this.comboBox1.Visible = false;
+            this.dgvSalesReport.BackgroundColor = SystemColors.ButtonFace;
+            BusinessReportService bizReportService = new BusinessReportService();
+            m_ModelType = modelType;
+            if (modelType == 1)
+            {
+                btnSalesReport.Text = "交班";
+                btnSalesReport.Enabled = false;
+                btnSalesReport.BackColor = ConstantValuePool.DisabledColor;
+                this.Text = "交班报表";
+                Guid handoverRecordID = recordID == null ? Guid.Empty : (Guid)recordID;
+                bizReport = bizReportService.GetReportDataByHandoverRecordID(handoverRecordID);
+            }
+            else if (modelType == 2)
+            {
+                btnSalesReport.Text = "日结";
+                btnSalesReport.Enabled = false;
+                btnSalesReport.BackColor = ConstantValuePool.DisabledColor;
+                this.Text = "日结报表";
+                string dailyStatementNo = recordID.ToString();
+                bizReport = bizReportService.GetReportDataByDailyStatement(dailyStatementNo);
             }
         }
 
         private void FormSalesReport_Load(object sender, EventArgs e)
         {
-            BusinessReportService bizReportService = new BusinessReportService();
-            if (m_ModelType == 1)
-            {
-                bizReport = bizReportService.GetReportDataByHandover(ConstantValuePool.BizSettingConfig.DeviceNo);
-            }
-            else if (m_ModelType == 2)
-            {
-                bizReport = bizReportService.GetReportDataByDailyStatement();
-            }
-            if (bizReport != null)
+            if (bizReport != null && bizReport.BillTotalQty > 0)
             {
                 if (m_ModelType == 1)
                 {
@@ -402,7 +424,7 @@ namespace Top4ever.Pos.Feature
 
         private void btnSalesReport_Click(object sender, EventArgs e)
         {
-            if (bizReport != null)
+            if (bizReport != null && bizReport.BillTotalQty > 0)
             {
                 if (m_ModelType == 1)
                 {
@@ -524,23 +546,26 @@ namespace Top4ever.Pos.Feature
 
         private void btnPrint_Click(object sender, EventArgs e)
         {
-            List<String> printData = new List<String>();
-            foreach (DataGridViewRow dgr in dgvSalesReport.Rows)
+            if (dgvSalesReport.Rows.Count > 0)
             {
-                if (dgr.Cells[0].Value != null && !string.IsNullOrEmpty(dgr.Cells[0].Value.ToString().Trim()))
+                List<String> printData = new List<String>();
+                foreach (DataGridViewRow dgr in dgvSalesReport.Rows)
                 {
-                    printData.Add(dgr.Cells[0].Value.ToString());
+                    if (dgr.Cells[0].Value != null && !string.IsNullOrEmpty(dgr.Cells[0].Value.ToString().Trim()))
+                    {
+                        printData.Add(dgr.Cells[0].Value.ToString());
+                    }
+                    else
+                    {
+                        printData.Add("  ");
+                    }
                 }
-                else
+                if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
                 {
-                    printData.Add("  ");
+                    string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                    DriverSinglePrint driverPrint = new DriverSinglePrint(printerName, "SpecimenLabel");
+                    driverPrint.DoPrint(printData);
                 }
-            }
-            if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
-            {
-                string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                DriverSinglePrint driverPrint = new DriverSinglePrint(printerName, "SpecimenLabel");
-                driverPrint.DoPrint(printData);
             }
         }
 

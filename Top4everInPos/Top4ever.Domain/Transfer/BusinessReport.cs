@@ -9,6 +9,10 @@ namespace Top4ever.Domain.Transfer
     public class BusinessReport
     {
         /// <summary>
+        /// 日结号
+        /// </summary>
+        public string DailyStatementNo { get; set; }
+        /// <summary>
         /// 班次
         /// </summary>
         public int WorkSequence { get; set; }
