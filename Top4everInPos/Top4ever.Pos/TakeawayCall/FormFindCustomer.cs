@@ -135,5 +135,15 @@ namespace Top4ever.Pos.TakeawayCall
                 dgvCustomerInfo.Rows[0].Selected = false;
             }
         }
+
+        private void dgvCustomerInfo_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dgvCustomerInfo.CurrentRow != null)
+            {
+                int selectedIndex = dgvCustomerInfo.CurrentRow.Index;
+                m_SelectedCustomerInfo = dgvCustomerInfo.Rows[selectedIndex].Cells["Telephone"].Tag as CustomerInfo;
+                this.Close();
+            }
+        }
     }
 }

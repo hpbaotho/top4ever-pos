@@ -327,6 +327,12 @@
     <Compile Include="TakeawayCall\FormFindCustomer.designer.cs">
       <DependentUpon>FormFindCustomer.cs</DependentUpon>
     </Compile>
+    <Compile Include="TakeawayCall\FormHistoryCallOrder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TakeawayCall\FormHistoryCallOrder.Designer.cs">
+      <DependentUpon>FormHistoryCallOrder.cs</DependentUpon>
+    </Compile>
     <Compile Include="TakeawayCall\FormIncomingCall.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -338,6 +344,12 @@
     </Compile>
     <Compile Include="TakeawayCall\FormInputCustomer.designer.cs">
       <DependentUpon>FormInputCustomer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TakeawayCall\FormRecentlyCallRecord.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TakeawayCall\FormRecentlyCallRecord.Designer.cs">
+      <DependentUpon>FormRecentlyCallRecord.cs</DependentUpon>
     </Compile>
     <Compile Include="TakeawayCall\FormTakeGoods.cs">
       <SubType>Form</SubType>
@@ -490,11 +502,17 @@
     <EmbeddedResource Include="TakeawayCall\FormFindCustomer.resx">
       <DependentUpon>FormFindCustomer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="TakeawayCall\FormHistoryCallOrder.resx">
+      <DependentUpon>FormHistoryCallOrder.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TakeawayCall\FormIncomingCall.resx">
       <DependentUpon>FormIncomingCall.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TakeawayCall\FormInputCustomer.resx">
       <DependentUpon>FormInputCustomer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TakeawayCall\FormRecentlyCallRecord.resx">
+      <DependentUpon>FormRecentlyCallRecord.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TakeawayCall\FormTakeGoods.resx">
       <DependentUpon>FormTakeGoods.cs</DependentUpon>

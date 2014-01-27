@@ -154,7 +154,15 @@ namespace Top4ever.Pos
                                     string strPhoneNo = LDT.GetNumber_Tel(1).ToString();
                                     if (strPhoneNo.Length > 0)
                                     {
-                                        //UpdateCallRecord(strTelNo, 0, ref strMessage);
+                                        //创建通话记录
+                                        CallRecord callRecord = new CallRecord();
+                                        callRecord.CallRecordID = Guid.NewGuid();
+                                        callRecord.Telephone = strPhoneNo;
+                                        callRecord.CallTime = DateTime.Now;
+                                        callRecord.Status = 0;
+                                        CustomersService customersService = new CustomersService();
+                                        customersService.CreateOrUpdateCallRecord(callRecord);
+                                        //委托弹出窗口
                                         SetIncomingCall(strPhoneNo);
                                     }
                                 }
@@ -184,11 +192,18 @@ namespace Top4ever.Pos
                 int callType = 1;  //程序
                 FormIncomingCall form = new FormIncomingCall(strPhoneNo, string.Empty, callType);
                 form.ShowDialog();
-                if (!string.IsNullOrEmpty(form.SelectedAddress) && form.CurCustomerInfo != null)
+                if (!string.IsNullOrEmpty(form.IncomingPhoneNo))
+                {
+                    txtTelephone.Text = form.IncomingPhoneNo;
+                }
+                if (!string.IsNullOrEmpty(form.SelectedAddress))
+                {
+                    txtAddress.Text = form.SelectedAddress;
+                }
+                if (form.CurCustomerInfo != null)
                 {
                     txtTelephone.Text = form.CurCustomerInfo.Telephone;
                     txtName.Text = form.CurCustomerInfo.CustomerName;
-                    txtAddress.Text = form.SelectedAddress;
                 }
             }
         }
@@ -795,6 +810,8 @@ namespace Top4ever.Pos
             if (btnItem.Tag is Goods)
             {
                 Goods goods = btnItem.Tag as Goods;
+                if (goods == null) return;
+
                 decimal goodsDiscount = 0;
                 Discount _discount = null;
                 bool IsContainsSalePrice = false;   //是否包含特价
@@ -834,6 +851,10 @@ namespace Top4ever.Pos
                     {
                         if (item.ItemID == m_CurrentGoodsGroup.GoodsGroupID)
                         {
+                            if (!IsValidDate(item.BeginDate, item.EndDate, item.Week, item.Day, item.Hour, item.Minute))
+                            {
+                                continue;
+                            }
                             _discount = new Discount();
                             _discount.DiscountID = new Guid("66666666-6666-6666-6666-666666666666");
                             _discount.DiscountName = "促销折扣";
@@ -870,6 +891,10 @@ namespace Top4ever.Pos
                         {
                             if (item.ItemID == goods.GoodsID)
                             {
+                                if (!IsValidDate(item.BeginDate, item.EndDate, item.Week, item.Day, item.Hour, item.Minute))
+                                {
+                                    continue;
+                                }
                                 _discount = new Discount();
                                 _discount.DiscountID = new Guid("66666666-6666-6666-6666-666666666666");
                                 _discount.DiscountName = "促销折扣";
@@ -1635,6 +1660,19 @@ namespace Top4ever.Pos
                 MessageBox.Show("上次未日结，不能新增菜单，请先进行日结操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            if (!string.IsNullOrEmpty(txtTelephone.Text.Trim()))
+            {
+                if (string.IsNullOrEmpty(txtName.Text.Trim()))
+                {
+                    if (DialogResult.Yes == MessageBox.Show("当前订单顾客姓名未填写，是否返回？", "信息提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                        return;
+                }
+                if (string.IsNullOrEmpty(txtAddress.Text.Trim()))
+                {
+                    if (DialogResult.Yes == MessageBox.Show("当前订单外送地址未填写，是否返回？", "信息提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                        return;
+                }
+            }
             if (m_SalesOrder == null || m_SalesOrder.order.EatType == (int)EatWayType.OutsideOrder)
             {
                 string deskName = string.Empty;
@@ -1753,6 +1791,12 @@ namespace Top4ever.Pos
             form.ShowDialog();
             if (form.HasDeliveried)
             {
+                btnDiscount.Enabled = false;
+                btnDiscount.BackColor = ConstantValuePool.DisabledColor;
+                btnWholeDiscount.Enabled = false;
+                btnWholeDiscount.BackColor = ConstantValuePool.DisabledColor;
+                btnTakeOut.Enabled = false;
+                btnTakeOut.BackColor = ConstantValuePool.DisabledColor;
                 btnOutsideOrder.Enabled = false;
                 btnOutsideOrder.BackColor = ConstantValuePool.DisabledColor;
                 btnDeliveryGoods.Enabled = false;
@@ -2517,9 +2561,17 @@ namespace Top4ever.Pos
                 int callType = 0;  //手动
                 FormIncomingCall form = new FormIncomingCall(telephone, address, callType);
                 form.ShowDialog();
+                if (!string.IsNullOrEmpty(form.IncomingPhoneNo))
+                {
+                    txtTelephone.Text = form.IncomingPhoneNo;
+                }
                 if (!string.IsNullOrEmpty(form.SelectedAddress))
                 {
                     txtAddress.Text = form.SelectedAddress;
+                }
+                if (form.CurCustomerInfo != null)
+                {
+                    txtName.Text = form.CurCustomerInfo.CustomerName;
                 }
             }
         }
@@ -4270,6 +4322,64 @@ namespace Top4ever.Pos
         private void btnCustomPrice_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnRecentlyCall_Click(object sender, EventArgs e)
+        {
+            TakeawayCall.FormRecentlyCallRecord recentlyCallForm = new TakeawayCall.FormRecentlyCallRecord();
+            recentlyCallForm.ShowDialog();
+            if (string.IsNullOrEmpty(txtTelephone.Text))
+            {
+                string telephone = recentlyCallForm.CurTelephone;
+                txtTelephone.Text = telephone;
+                if (!string.IsNullOrEmpty(telephone))
+                {
+                    CustomersService customersService = new CustomersService();
+                    CustomerInfo customerInfo = customersService.GetCustomerInfoByPhone(telephone);
+                    if (customerInfo != null)
+                    {
+                        string address = string.Empty;
+                        if (customerInfo.ActiveIndex == 1)
+                        {
+                            address = customerInfo.DeliveryAddress1;
+                        }
+                        else if (customerInfo.ActiveIndex == 2)
+                        {
+                            address = customerInfo.DeliveryAddress2;
+                        }
+                        else if (customerInfo.ActiveIndex == 3)
+                        {
+                            address = customerInfo.DeliveryAddress3;
+                        }
+                        txtTelephone.Text = customerInfo.Telephone;
+                        txtName.Text = customerInfo.CustomerName;
+                        txtAddress.Text = address;
+                        txtTelephone.ReadOnly = true;
+                        txtName.ReadOnly = true;
+                    }
+                }
+            }
+        }
+
+        private void btnRecords_Click(object sender, EventArgs e)
+        {
+            string telephone = this.txtTelephone.Text.Trim();
+            if (!string.IsNullOrEmpty(telephone))
+            {
+                GoodsGroup tempGoodsGroup = null;
+                if (m_CurrentGoodsGroup != null)
+                {
+                    //如果存在，则将对象暂存局部变量
+                    tempGoodsGroup = CopyExtension.Clone<GoodsGroup>(m_CurrentGoodsGroup);
+                }
+                else
+                {
+                    m_CurrentGoodsGroup = new GoodsGroup();
+                }
+                TakeawayCall.FormHistoryCallOrder formHistoryOrder = new TakeawayCall.FormHistoryCallOrder(telephone, btnItem_Click, ref m_CurrentGoodsGroup);
+                formHistoryOrder.ShowDialog();
+                m_CurrentGoodsGroup = tempGoodsGroup;
+            }
         }
     }
 }

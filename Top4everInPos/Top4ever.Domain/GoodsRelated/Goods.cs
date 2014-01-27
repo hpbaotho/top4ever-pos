@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Top4ever.Domain.GoodsRelated
 {
+    [Serializable]
     public class Goods
     {
         /// <summary>

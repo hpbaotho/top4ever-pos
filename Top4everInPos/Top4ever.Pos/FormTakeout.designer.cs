@@ -28,10 +28,10 @@ namespace Top4ever.Pos
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             this.pnlTools = new System.Windows.Forms.Panel();
             this.btnWholeDiscount = new Top4ever.CustomControl.CrystalButton();
             this.btnDiscount = new Top4ever.CustomControl.CrystalButton();
@@ -274,12 +274,13 @@ namespace Top4ever.Pos
             this.btnRecentlyCall.BackColor = System.Drawing.Color.Black;
             this.btnRecentlyCall.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnRecentlyCall.ForeColor = System.Drawing.Color.BlanchedAlmond;
-            this.btnRecentlyCall.Location = new System.Drawing.Point(935, 2);
+            this.btnRecentlyCall.Location = new System.Drawing.Point(938, 3);
             this.btnRecentlyCall.Name = "btnRecentlyCall";
             this.btnRecentlyCall.Size = new System.Drawing.Size(86, 32);
             this.btnRecentlyCall.TabIndex = 2;
             this.btnRecentlyCall.Text = "最近通话";
             this.btnRecentlyCall.UseVisualStyleBackColor = false;
+            this.btnRecentlyCall.Click += new System.EventHandler(this.btnRecentlyCall_Click);
             // 
             // txtName
             // 
@@ -299,7 +300,7 @@ namespace Top4ever.Pos
             this.lbName.Name = "lbName";
             this.lbName.Size = new System.Drawing.Size(90, 21);
             this.lbName.TabIndex = 1;
-            this.lbName.Text = "顾客信息：";
+            this.lbName.Text = "顾客姓名：";
             // 
             // btnRecords
             // 
@@ -312,6 +313,7 @@ namespace Top4ever.Pos
             this.btnRecords.TabIndex = 2;
             this.btnRecords.Text = "历史订餐";
             this.btnRecords.UseVisualStyleBackColor = false;
+            this.btnRecords.Click += new System.EventHandler(this.btnRecords_Click);
             // 
             // txtAddress
             // 
@@ -407,14 +409,14 @@ namespace Top4ever.Pos
             this.dgvGoodsOrder.AllowUserToResizeColumns = false;
             this.dgvGoodsOrder.AllowUserToResizeRows = false;
             this.dgvGoodsOrder.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvGoodsOrder.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvGoodsOrder.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.dgvGoodsOrder.ColumnHeadersHeight = 35;
             this.dgvGoodsOrder.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvGoodsOrder.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -449,8 +451,8 @@ namespace Top4ever.Pos
             // 
             // GoodsNum
             // 
-            dataGridViewCellStyle2.Format = "N1";
-            this.GoodsNum.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle10.Format = "N1";
+            this.GoodsNum.DefaultCellStyle = dataGridViewCellStyle10;
             this.GoodsNum.HeaderText = "数量";
             this.GoodsNum.Name = "GoodsNum";
             this.GoodsNum.ReadOnly = true;
@@ -467,10 +469,10 @@ namespace Top4ever.Pos
             // 
             // GoodsPrice
             // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(0, 0, 6, 0);
-            this.GoodsPrice.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle11.Format = "N2";
+            dataGridViewCellStyle11.Padding = new System.Windows.Forms.Padding(0, 0, 6, 0);
+            this.GoodsPrice.DefaultCellStyle = dataGridViewCellStyle11;
             this.GoodsPrice.HeaderText = "价格";
             this.GoodsPrice.Name = "GoodsPrice";
             this.GoodsPrice.ReadOnly = true;
@@ -479,11 +481,11 @@ namespace Top4ever.Pos
             // 
             // GoodsDiscount
             // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle4.Format = "N2";
-            dataGridViewCellStyle4.NullValue = null;
-            dataGridViewCellStyle4.Padding = new System.Windows.Forms.Padding(0, 0, 6, 0);
-            this.GoodsDiscount.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle12.Format = "N2";
+            dataGridViewCellStyle12.NullValue = null;
+            dataGridViewCellStyle12.Padding = new System.Windows.Forms.Padding(0, 0, 6, 0);
+            this.GoodsDiscount.DefaultCellStyle = dataGridViewCellStyle12;
             this.GoodsDiscount.HeaderText = "折扣";
             this.GoodsDiscount.Name = "GoodsDiscount";
             this.GoodsDiscount.ReadOnly = true;

@@ -10,6 +10,9 @@ namespace Top4ever.Entity.Config
         [XmlAttribute("Enabled")]
         public bool Enabled { get; set; }
 
+        /// <summary>
+        /// 0:纽曼NM-LD-U新版 1:纽曼NM-LD-U
+        /// </summary>
         [XmlElement("Model")]
         public int Model { get; set; }
     }

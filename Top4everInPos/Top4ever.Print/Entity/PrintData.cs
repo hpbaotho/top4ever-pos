@@ -86,5 +86,76 @@ namespace Top4ever.Print.Entity
         /// 外送员工姓名
         /// </summary>
         public string DeliveryEmployeeName { get; set; }
+
+        /// <summary>
+        /// 得到属性值
+        /// </summary>
+        /// <param name="fieldName">属性字符</param>
+        /// <returns></returns>
+        public string GetValue(string fieldName)
+        {
+            string result;
+            switch (fieldName.ToLower())
+            { 
+                case "shopname":
+                    result = this.ShopName;
+                    break;
+                case "deskname":
+                    result = this.DeskName;
+                    break;
+                case "personnum":
+                    result = this.PersonNum;
+                    break;
+                case "printtime":
+                    result = this.PrintTime;
+                    break;
+                case "transequence":
+                    result = this.TranSequence;
+                    break;
+                case "employeeno":
+                    result = this.EmployeeNo;
+                    break;
+                case "shopaddress":
+                    result = this.ShopAddress;
+                    break;
+                case "telephone":
+                    result = this.Telephone;
+                    break;
+                case "receivablemoney":
+                    result = this.ReceivableMoney;
+                    break;
+                case "servicefee":
+                    result = this.ServiceFee;
+                    break;
+                case "totalamount":
+                    result = this.TotalAmount;
+                    break;
+                case "paidinmoney":
+                    result = this.PaidInMoney;
+                    break;
+                case "needchangepay":
+                    result = this.NeedChangePay;
+                    break;
+                case "customerphone":
+                    result = this.CustomerPhone;
+                    break;
+                case "customername":
+                    result = this.CustomerName;
+                    break;
+                case "deliveryaddress":
+                    result = this.DeliveryAddress;
+                    break;
+                case "remark":
+                    result = this.Remark;
+                    break;
+                case "deliveryemployeename":
+                    result = this.DeliveryEmployeeName;
+                    break;
+                default :
+                    result = string.Empty;
+                    break;
+            }
+            return result;
+        }
     }
 }

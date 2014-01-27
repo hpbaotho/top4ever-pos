@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Top4ever.Domain.OrderRelated
 {
+    [Serializable]
     public class OrderPayoff
     {
         /// <summary>

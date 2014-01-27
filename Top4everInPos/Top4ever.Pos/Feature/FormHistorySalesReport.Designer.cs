@@ -123,6 +123,7 @@
             this.dgvDailyStatement.Location = new System.Drawing.Point(12, 314);
             this.dgvDailyStatement.MultiSelect = false;
             this.dgvDailyStatement.Name = "dgvDailyStatement";
+            this.dgvDailyStatement.ReadOnly = true;
             this.dgvDailyStatement.RowHeadersVisible = false;
             this.dgvDailyStatement.RowTemplate.Height = 23;
             this.dgvDailyStatement.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -134,24 +135,28 @@
             // 
             this.colOrder.HeaderText = "序";
             this.colOrder.Name = "colOrder";
+            this.colOrder.ReadOnly = true;
             this.colOrder.Width = 60;
             // 
             // colBeginTime
             // 
             this.colBeginTime.HeaderText = "开始时间";
             this.colBeginTime.Name = "colBeginTime";
+            this.colBeginTime.ReadOnly = true;
             this.colBeginTime.Width = 134;
             // 
             // colEndTime
             // 
             this.colEndTime.HeaderText = "结束时间";
             this.colEndTime.Name = "colEndTime";
+            this.colEndTime.ReadOnly = true;
             this.colEndTime.Width = 134;
             // 
             // colDailyStatementNo
             // 
             this.colDailyStatementNo.HeaderText = "日结号";
             this.colDailyStatementNo.Name = "colDailyStatementNo";
+            this.colDailyStatementNo.ReadOnly = true;
             this.colDailyStatementNo.Visible = false;
             // 
             // label2
@@ -188,6 +193,7 @@
             this.dgvDeviceNo.Location = new System.Drawing.Point(352, 74);
             this.dgvDeviceNo.MultiSelect = false;
             this.dgvDeviceNo.Name = "dgvDeviceNo";
+            this.dgvDeviceNo.ReadOnly = true;
             this.dgvDeviceNo.RowHeadersVisible = false;
             this.dgvDeviceNo.RowTemplate.Height = 23;
             this.dgvDeviceNo.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -199,12 +205,14 @@
             // 
             this.colIndex.HeaderText = "序";
             this.colIndex.Name = "colIndex";
+            this.colIndex.ReadOnly = true;
             this.colIndex.Width = 60;
             // 
             // colDeviceNo
             // 
             this.colDeviceNo.HeaderText = "设备号";
             this.colDeviceNo.Name = "colDeviceNo";
+            this.colDeviceNo.ReadOnly = true;
             this.colDeviceNo.Width = 90;
             // 
             // label3
@@ -244,6 +252,7 @@
             this.dgvHandover.Location = new System.Drawing.Point(513, 74);
             this.dgvHandover.MultiSelect = false;
             this.dgvHandover.Name = "dgvHandover";
+            this.dgvHandover.ReadOnly = true;
             this.dgvHandover.RowHeadersVisible = false;
             this.dgvHandover.RowTemplate.Height = 23;
             this.dgvHandover.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -254,29 +263,34 @@
             // 
             this.colOrderIndex.HeaderText = "序";
             this.colOrderIndex.Name = "colOrderIndex";
+            this.colOrderIndex.ReadOnly = true;
             this.colOrderIndex.Width = 60;
             // 
             // colWorkSequence
             // 
             this.colWorkSequence.HeaderText = "交班序号";
             this.colWorkSequence.Name = "colWorkSequence";
+            this.colWorkSequence.ReadOnly = true;
             // 
             // colEmployeeNo
             // 
             this.colEmployeeNo.HeaderText = "交班员工";
             this.colEmployeeNo.Name = "colEmployeeNo";
+            this.colEmployeeNo.ReadOnly = true;
             this.colEmployeeNo.Width = 125;
             // 
             // colHandoverTime
             // 
             this.colHandoverTime.HeaderText = "交班时间";
             this.colHandoverTime.Name = "colHandoverTime";
+            this.colHandoverTime.ReadOnly = true;
             this.colHandoverTime.Width = 135;
             // 
             // colHandoverRecordID
             // 
             this.colHandoverRecordID.HeaderText = "交班主键";
             this.colHandoverRecordID.Name = "colHandoverRecordID";
+            this.colHandoverRecordID.ReadOnly = true;
             this.colHandoverRecordID.Visible = false;
             // 
             // btnShowDailyStatement

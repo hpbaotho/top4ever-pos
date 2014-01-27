@@ -63,5 +63,8 @@ namespace Top4ever.ClientService.Enum
         ID_GET_DAILYBALANCETIME = 57,
         ID_GET_HANDOVER_RECORD = 58,
         ID_GET_REPORTDATABYHANDOVERRECORDID = 59,
+        ID_CREATE_CALLRECORD = 60,
+        ID_GET_TOPSELLGOODS = 61,
+        ID_GET_CALLRECORD = 62,
     }
 }
