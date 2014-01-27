@@ -2,8 +2,10 @@
 <sqlMap namespace="Customers" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <alias>
+    <typeAlias alias="CallRecord" type="Top4ever.Domain.Customers.CallRecord, Top4ever.Domain" />
     <typeAlias alias="CustomerInfo" type="Top4ever.Domain.Customers.CustomerInfo, Top4ever.Domain" />
     <typeAlias alias="CustomerOrder" type="Top4ever.Domain.Customers.CustomerOrder, Top4ever.Domain" />
+    <typeAlias alias="TopSellGoods" type="Top4ever.Domain.Customers.TopSellGoods, Top4ever.Domain" />
   </alias>
 
   <resultMaps>
@@ -22,6 +24,21 @@
       <result property="Address" column="Address"></result>
     </resultMap>
 
+    <resultMap id="TopSellGoodsResult" class="TopSellGoods">
+      <result property="Times" column="Times"></result>
+      <result property="GoodsID" column="GoodsID"></result>
+      <result property="GoodsName" column="GoodsName"></result>
+      <result property="SellPrice" column="SellPrice"></result>
+      <result property="CanDiscount" column="CanDiscount"></result>
+    </resultMap>
+
+    <resultMap id="CallRecordParam" class="CallRecord">
+      <parameter property="CallRecordID" column="CallRecordID" />
+      <parameter property="Telephone" column="Telephone" />
+      <parameter property="CallTime" column="CallTime" />
+      <parameter property="Status" column="Status" />
+      <parameter property="CustomerName" column="CustomerName" />
+    </resultMap>
   </resultMaps>
 
   <parameterMaps>
@@ -43,6 +60,13 @@
       <parameter property="Address" column="Address" />
       <parameter property="Remark" column="Remark" />
       <parameter property="DeliveryEmployeeNo" column="DeliveryEmployeeNo" />
+    </parameterMap>
+
+    <parameterMap id="CallRecordParam" class="CallRecord">
+      <parameter property="CallRecordID" column="CallRecordID" />
+      <parameter property="Telephone" column="Telephone" />
+      <parameter property="CallTime" column="CallTime" />
+      <parameter property="Status" column="Status" />
     </parameterMap>
   </parameterMaps>
   <!-- =============================================
@@ -80,6 +104,36 @@
       SELECT Telephone, CustomerName, [Address]
       FROM CustomerOrder
       WHERE OrderID = #OrderID#
+    </select>
+
+    <procedure id="CreateOrUpdateCallRecord" parameterMap="CallRecordParam">
+      proc_CreateOrUpdateCallRecord
+    </procedure>
+
+    <select id="GetCallRecordList" resultMap="CallRecordParam">
+      SELECT cr.CallRecordID, cr.Telephone, cr.CallTime, cr.[Status], ci.CustomerName
+      FROM CallRecord cr LEFT JOIN CustomerInfo ci ON cr.Telephone = ci.Telephone
+      WHERE cr.CallTime > DATEADD(MONTH,-1,GETDATE())
+      ORDER BY CallTime DESC
+    </select>
+
+    <select id="GetCallRecordByStatus" parameterClass="Int" resultMap="CallRecordParam">
+      SELECT cr.CallRecordID, cr.Telephone, cr.CallTime, cr.[Status], ci.CustomerName
+      FROM CallRecord cr LEFT JOIN CustomerInfo ci ON cr.Telephone = ci.Telephone
+      WHERE cr.Status = #value# AND cr.CallTime > DATEADD(MONTH,-1,GETDATE())
+      ORDER BY CallTime DESC
+    </select>
+
+    <select id="GetTopSellGoods" parameterClass="String" resultMap="TopSellGoodsResult">
+      SELECT TOP 10 *
+      FROM
+      (
+      SELECT COUNT(od.GoodsID) AS Times, od.GoodsID, od.GoodsName, od.SellPrice, od.CanDiscount
+      FROM OrderDetails od JOIN CustomerOrder co ON od.OrderID = co.OrderID
+      WHERE co.Telephone = #value# AND od.SellPrice > 0
+      GROUP BY od.GoodsID, od.GoodsName, od.SellPrice, od.CanDiscount
+      ) T
+      ORDER BY T.Times DESC
     </select>
   </statements>
 </sqlMap>

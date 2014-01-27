@@ -181,5 +181,94 @@ namespace Top4ever.BLL
             }
             return objRet;
         }
+
+        /// <summary>
+        /// 创建或者更新电话记录
+        /// </summary>
+        public static byte[] CreateOrUpdateCallRecord(byte[] itemBuffer)
+        {
+            byte[] objRet = null;
+            string strReceive = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, itemBuffer.Length - ParamFieldLength.PACKAGE_HEAD).Trim('\0');
+            CallRecord callRecord = JsonConvert.DeserializeObject<CallRecord>(strReceive);
+
+            bool result = CustomersService.GetInstance().CreateOrUpdateCallRecord(callRecord);
+            if (result)
+            {
+                //成功
+                objRet = new byte[ParamFieldLength.PACKAGE_HEAD];
+                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
+                Array.Copy(BitConverter.GetBytes(ParamFieldLength.PACKAGE_HEAD), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            }
+            else
+            {
+                //创建客户账单信息失败
+                objRet = new byte[ParamFieldLength.PACKAGE_HEAD];
+                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.ERROR_DB), 0, objRet, 0, BasicTypeLength.INT32);
+                Array.Copy(BitConverter.GetBytes(ParamFieldLength.PACKAGE_HEAD), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            }
+            return objRet;
+        }
+
+        /// <summary>
+        /// 获取最近一个月特定状态通话记录
+        /// </summary>
+        public static byte[] GetCallRecordByStatus(byte[] itemBuffer)
+        {
+            byte[] objRet = null;
+            int status = BitConverter.ToInt32(itemBuffer, ParamFieldLength.PACKAGE_HEAD);
+
+            IList<CallRecord> callRecordList = CustomersService.GetInstance().GetCallRecordByStatus(status);
+            if (callRecordList == null || callRecordList.Count == 0)
+            {
+                //获取单子失败
+                objRet = new byte[ParamFieldLength.PACKAGE_HEAD];
+                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.ERROR_DB), 0, objRet, 0, BasicTypeLength.INT32);
+                Array.Copy(BitConverter.GetBytes(ParamFieldLength.PACKAGE_HEAD), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            }
+            else
+            {
+                //成功
+                string json = JsonConvert.SerializeObject(callRecordList);
+                byte[] jsonByte = Encoding.UTF8.GetBytes(json);
+
+                int transCount = BasicTypeLength.INT32 + BasicTypeLength.INT32 + jsonByte.Length;
+                objRet = new byte[transCount];
+                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
+                Array.Copy(BitConverter.GetBytes(transCount), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+                Array.Copy(jsonByte, 0, objRet, 2 * BasicTypeLength.INT32, jsonByte.Length);
+            }
+            return objRet;
+        }
+
+        /// <summary>
+        /// 获取热销产品列表
+        /// </summary>
+        public static byte[] GetTopSellGoods(byte[] itemBuffer)
+        {
+            byte[] objRet = null;
+            string telephone = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, ParamFieldLength.TELEPHONE).Trim('\0');
+
+            IList<TopSellGoods> topSellGoodsList = CustomersService.GetInstance().GetTopSellGoods(telephone);
+            if (topSellGoodsList == null || topSellGoodsList.Count == 0)
+            {
+                //获取单子失败
+                objRet = new byte[ParamFieldLength.PACKAGE_HEAD];
+                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.ERROR_DB), 0, objRet, 0, BasicTypeLength.INT32);
+                Array.Copy(BitConverter.GetBytes(ParamFieldLength.PACKAGE_HEAD), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            }
+            else
+            {
+                //成功
+                string json = JsonConvert.SerializeObject(topSellGoodsList);
+                byte[] jsonByte = Encoding.UTF8.GetBytes(json);
+
+                int transCount = BasicTypeLength.INT32 + BasicTypeLength.INT32 + jsonByte.Length;
+                objRet = new byte[transCount];
+                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
+                Array.Copy(BitConverter.GetBytes(transCount), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+                Array.Copy(jsonByte, 0, objRet, 2 * BasicTypeLength.INT32, jsonByte.Length);
+            }
+            return objRet;
+        }
     }
 }

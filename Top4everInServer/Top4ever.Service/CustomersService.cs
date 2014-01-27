@@ -167,6 +167,66 @@ namespace Top4ever.Service
             return result;
         }
 
+        /// <summary>
+        /// 创建或者更新电话记录
+        /// </summary>
+        /// <param name="callRecord">电话记录</param>
+        /// <returns></returns>
+        public bool CreateOrUpdateCallRecord(CallRecord callRecord)
+        {
+            bool result = false;
+            try
+            {
+                _daoManager.OpenConnection();
+                _customerOrderDao.CreateOrUpdateCallRecord(callRecord);
+                _daoManager.CloseConnection();
+                result = true;
+            }
+            catch
+            {
+                result = false;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 获取最近一个月特定状态通话记录
+        /// </summary>
+        /// <returns></returns>
+        public IList<CallRecord> GetCallRecordByStatus(int status)
+        {
+            IList<CallRecord> callRecordList = null;
+
+            _daoManager.OpenConnection();
+            if (status == -1)
+            {
+                callRecordList = _customerOrderDao.GetCallRecordList();
+            }
+            else
+            {
+                callRecordList = _customerOrderDao.GetCallRecordByStatus(status);
+            }
+            _daoManager.CloseConnection();
+
+            return callRecordList;
+        }
+
+        /// <summary>
+        /// 获取热销产品列表
+        /// </summary>
+        /// <param name="telephone">电话号码</param>
+        /// <returns></returns>
+        public IList<TopSellGoods> GetTopSellGoods(string telephone)
+        {
+            IList<TopSellGoods> topSellGoodsList = null;
+
+            _daoManager.OpenConnection();
+            topSellGoodsList = _customerOrderDao.GetTopSellGoods(telephone);
+            _daoManager.CloseConnection();
+
+            return topSellGoodsList;
+        }
+
         #endregion
     }
 }

@@ -190,6 +190,15 @@ namespace Top4ever.BLL
                 case Command.ID_GET_REPORTDATABYHANDOVERRECORDID:
                     byteRet = BusinessReportBLL.GetReportDataByHandoverRecordID(itemBuffer);
                     break;
+                case Command.ID_CREATE_CALLRECORD:
+                    byteRet = CustomersBLL.CreateOrUpdateCallRecord(itemBuffer);
+                    break;
+                case Command.ID_GET_TOPSELLGOODS:
+                    byteRet = CustomersBLL.GetTopSellGoods(itemBuffer);
+                    break;
+                case Command.ID_GET_CALLRECORD:
+                    byteRet = CustomersBLL.GetCallRecordByStatus(itemBuffer);
+                    break;
 
                 default:
                     byteRet = null;
