@@ -31,6 +31,46 @@ namespace Top4ever.Persistence.Customers
             return (ExecuteQueryForObject("GetCustomerOrder", orderID) as CustomerOrder);
         }
 
+        /// <summary>
+        /// 创建或者更新电话记录
+        /// </summary>
+        /// <param name="callRecord">电话记录</param>
+        /// <returns></returns>
+        public bool CreateOrUpdateCallRecord(CallRecord callRecord)
+        {
+            int result = 0;
+            result = ExecuteUpdate("CreateOrUpdateCallRecord", callRecord);
+            return result > 0;
+        }
+
+        /// <summary>
+        /// 获取最近一个月所有通话记录
+        /// </summary>
+        /// <returns></returns>
+        public IList<CallRecord> GetCallRecordList()
+        {
+            return ExecuteQueryForList<CallRecord>("GetCallRecordList", null);
+        }
+
+        /// <summary>
+        /// 获取最近一个月特定状态通话记录
+        /// </summary>
+        /// <returns></returns>
+        public IList<CallRecord> GetCallRecordByStatus(int status)
+        {
+            return ExecuteQueryForList<CallRecord>("GetCallRecordByStatus", status);
+        }
+
+        /// <summary>
+        /// 获取热销产品列表
+        /// </summary>
+        /// <param name="telephone">电话号码</param>
+        /// <returns></returns>
+        public IList<TopSellGoods> GetTopSellGoods(string telephone)
+        {
+            return ExecuteQueryForList<TopSellGoods>("GetTopSellGoods", telephone);
+        }
+
         #endregion
     }
 }
