@@ -240,7 +240,7 @@ namespace Top4ever.Print
                             Font font = new Font(item.Font.FontName, item.Font.FontSize, item.Font.FontStyle);
                             Color color = Color.FromName(item.Font.ForeColor);
                             Brush brush = new SolidBrush(color);
-                            string itemName = item.ValuePrefix + GetPropertyValue(printData, item.Name).ToString();
+                            string itemName = item.ValuePrefix + printData.GetValue(item.Name);
                             SizeF size = m_Graphics.MeasureString(itemName, font);//测量字体的大小
                             float itemWidth = 0f;
                             if (item.Width.IndexOf('%') > 0)
@@ -387,7 +387,7 @@ namespace Top4ever.Print
                                 float px = MarginLeft;
                                 foreach (string property in propertyList)
                                 {
-                                    string itemValue = GetPropertyValue(goodsItem, property).ToString();
+                                    string itemValue = goodsItem.GetValue(property);
                                     foreach (PrintColumn column in item.PrintColumns.PrintColumnList)
                                     {
                                         if (property == column.Name)
@@ -526,7 +526,7 @@ namespace Top4ever.Print
                                 float px = MarginLeft;
                                 foreach (string property in propertyList)
                                 {
-                                    string itemValue = GetPropertyValue(payingOrder, property).ToString();
+                                    string itemValue = payingOrder.GetValue(property);
                                     foreach (PrintColumn column in item.PrintColumns.PrintColumnList)
                                     {
                                         if (property == column.Name)
@@ -587,12 +587,6 @@ namespace Top4ever.Print
                     }
                 }
             }
-        }
-
-        private object GetPropertyValue(object obj, string fieldName)
-        {
-            Type type = obj.GetType();
-            return type.GetProperty(fieldName).GetValue(obj, null);
         }
     }
 }

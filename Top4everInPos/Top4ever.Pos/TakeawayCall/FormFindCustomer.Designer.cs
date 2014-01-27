@@ -134,6 +134,7 @@
             this.dgvCustomerInfo.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvCustomerInfo.Size = new System.Drawing.Size(412, 256);
             this.dgvCustomerInfo.TabIndex = 4;
+            this.dgvCustomerInfo.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCustomerInfo_CellDoubleClick);
             // 
             // Telephone
             // 

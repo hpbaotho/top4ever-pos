@@ -220,5 +220,106 @@ namespace Top4ever.ClientService
             }
             return result;
         }
+
+        /// <summary>
+        /// 创建或者更新电话记录
+        /// </summary>
+        /// <param name="callRecord">电话记录</param>
+        /// <returns></returns>
+        public bool CreateOrUpdateCallRecord(CallRecord callRecord)
+        {
+            string json = JsonConvert.SerializeObject(callRecord);
+            byte[] jsonByte = Encoding.UTF8.GetBytes(json);
+
+            int cByte = ParamFieldLength.PACKAGE_HEAD + jsonByte.Length;
+            byte[] sendByte = new byte[cByte];
+            int byteOffset = 0;
+            Array.Copy(BitConverter.GetBytes((int)Command.ID_CREATE_CALLRECORD), sendByte, BasicTypeLength.INT32);
+            byteOffset = BasicTypeLength.INT32;
+            Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
+            byteOffset += BasicTypeLength.INT32;
+            Array.Copy(jsonByte, 0, sendByte, byteOffset, jsonByte.Length);
+            byteOffset += jsonByte.Length;
+
+            bool result = false;
+            using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
+            {
+                Byte[] receiveData = null;
+                Int32 operCode = socket.SendReceive(sendByte, out receiveData);
+                if (operCode == (int)RET_VALUE.SUCCEEDED)
+                {
+                    result = true;
+                }
+                socket.Close();
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 获取最近一个月特定状态通话记录
+        /// </summary>
+        /// <returns></returns>
+        public IList<CallRecord> GetCallRecordByStatus(int status)
+        {
+            int cByte = ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32;
+            byte[] sendByte = new byte[cByte];
+            int byteOffset = 0;
+            Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_CALLRECORD), sendByte, BasicTypeLength.INT32);
+            byteOffset = BasicTypeLength.INT32;
+            Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
+            byteOffset += BasicTypeLength.INT32;
+
+            //status
+            Array.Copy(BitConverter.GetBytes(status), 0, sendByte, byteOffset, BasicTypeLength.INT32);
+
+            IList<CallRecord> callRecordList = null;
+            using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
+            {
+                Byte[] receiveData = null;
+                Int32 operCode = socket.SendReceive(sendByte, out receiveData);
+                if (operCode == (int)RET_VALUE.SUCCEEDED)
+                {
+                    string strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD, receiveData.Length - ParamFieldLength.PACKAGE_HEAD);
+                    callRecordList = JsonConvert.DeserializeObject<IList<CallRecord>>(strReceive);
+                }
+                socket.Close();
+            }
+            return callRecordList;
+        }
+
+        /// <summary>
+        /// 获取热销产品列表
+        /// </summary>
+        /// <param name="telephone">电话号码</param>
+        /// <returns></returns>
+        public IList<TopSellGoods> GetTopSellGoods(string telephone)
+        {
+            int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.TELEPHONE;
+            byte[] sendByte = new byte[cByte];
+            int byteOffset = 0;
+            Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_TOPSELLGOODS), sendByte, BasicTypeLength.INT32);
+            byteOffset = BasicTypeLength.INT32;
+            Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
+            byteOffset += BasicTypeLength.INT32;
+
+            //telephone
+            byte[] tempByte = Encoding.UTF8.GetBytes(telephone);
+            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
+            byteOffset += ParamFieldLength.TELEPHONE;
+
+            IList<TopSellGoods> topSellGoodsList = null;
+            using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
+            {
+                Byte[] receiveData = null;
+                Int32 operCode = socket.SendReceive(sendByte, out receiveData);
+                if (operCode == (int)RET_VALUE.SUCCEEDED)
+                {
+                    string strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD, receiveData.Length - ParamFieldLength.PACKAGE_HEAD);
+                    topSellGoodsList = JsonConvert.DeserializeObject<IList<TopSellGoods>>(strReceive);
+                }
+                socket.Close();
+            }
+            return topSellGoodsList;
+        }
     }
 }

@@ -12,19 +12,19 @@ namespace Top4ever.Entity
             bool result = false;
             foreach (GoodsGroup goodsGroup in ConstantValuePool.GoodsGroupList)
             {
-                foreach (Goods goods in goodsGroup.GoodsList)
+                if (goodsGroup.GoodsGroupID == goodsGroupID)
                 {
-                    if (goods.GoodsID == goodsID)
+                    if (goodsGroup.GoodsList != null)
                     {
-                        if (goodsGroup.GoodsGroupID == goodsGroupID)
+                        foreach (Goods goods in goodsGroup.GoodsList)
                         {
-                            result = true;
+                            if (goods.GoodsID == goodsID)
+                            {
+                                result = true;
+                                break;
+                            }
                         }
-                        break;
                     }
-                }
-                if (result)
-                {
                     break;
                 }
             }

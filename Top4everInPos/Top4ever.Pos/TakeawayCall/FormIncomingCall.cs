@@ -33,6 +33,11 @@ namespace Top4ever.Pos.TakeawayCall
         {
             get { return m_CustomerInfo; }
         }
+        private string m_IncomingPhoneNo = string.Empty;
+        public string IncomingPhoneNo
+        {
+            get { return m_IncomingPhoneNo; }
+        }
 
         public FormIncomingCall(string telephone, string address, int callType)
         {
@@ -59,8 +64,16 @@ namespace Top4ever.Pos.TakeawayCall
                         string strPhoneNo = LDT.GetNumber_Tel(1).ToString();
                         if (strPhoneNo.Length > 0)
                         {
+                            //创建通话记录
+                            CallRecord callRecord = new CallRecord();
+                            callRecord.CallRecordID = Guid.NewGuid();
+                            callRecord.Telephone = strPhoneNo;
+                            callRecord.CallTime = DateTime.Now;
+                            callRecord.Status = 0;
+                            CustomersService customersService = new CustomersService();
+                            customersService.CreateOrUpdateCallRecord(callRecord);
+
                             this.lbTelephone.Text = strPhoneNo;
-                            //UpdateCallRecord(strTelNo, 0, ref strMessage);
                             this.txtCustomerName.Text = string.Empty;
                             this.txtAddress1.Text = string.Empty;
                             this.txtAddress2.Text = string.Empty;
@@ -155,7 +168,15 @@ namespace Top4ever.Pos.TakeawayCall
             }
             if (string.IsNullOrEmpty(address))
             {
-                MessageBox.Show("选择的地址不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (_customerInfo == null)
+                {
+                    m_IncomingPhoneNo = lbTelephone.Text;
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("选择的地址不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 return;
             }
             CustomerInfo customerInfo = new CustomerInfo();
