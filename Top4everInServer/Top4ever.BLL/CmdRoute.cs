@@ -199,6 +199,22 @@ namespace Top4ever.BLL
                 case Command.ID_GET_CALLRECORD:
                     byteRet = CustomersBLL.GetCallRecordByStatus(itemBuffer);
                     break;
+                case Command.ID_GET_TOPSELLGOODSBYTIME:
+                    byteRet = OrderDetailsBLL.GetTopSellGoodsByTime(itemBuffer);
+                    break;
+                case Command.ID_GET_DAILYSTATEMENTINDAYS:
+                    byteRet = DailyBalanceBLL.GetDailyStatementInDays(itemBuffer);
+                    break;
+
+                case Command.ANDROID_GET_GOODSGROUPLIST:
+                    byteRet = SysBasicDataBLL.GetGoodsGroupListInAndroid();
+                    break;
+                case Command.ANDROID_GET_GOODSIMAGE:
+                    byteRet = GoodsBLL.GetGoodsImageList(itemBuffer);
+                    break;
+                case Command.ANDROID_GET_DESKLIST:
+                    byteRet = BizDeskBLL.GetDeskList();
+                    break;
 
                 default:
                     byteRet = null;

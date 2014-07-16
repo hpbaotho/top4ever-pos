@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 
 using IBatisNet.DataAccess;
 
 using Top4ever.Domain.GoodsRelated;
 using Top4ever.Interface.GoodsRelated;
+using Top4ever.Domain.Transfer;
 
 namespace Top4ever.Service
 {
@@ -71,6 +74,68 @@ namespace Top4ever.Service
                 _daoManager.RollBackTransaction();
             }
             return goodsName;
+        }
+
+        public IList<GoodsImage> GetGoodsImageListInGroup(Guid goodsGroupID)
+        {
+            IList<GoodsImage> goodsImageList = null;
+
+            IList<Goods> goodsList = null;
+            _daoManager.OpenConnection();
+            goodsList = _goodsDao.GetGoodsListInGroup(goodsGroupID);
+            _daoManager.CloseConnection();
+
+            //获取图片逻辑
+            if (goodsList != null && goodsList.Count > 0) 
+            {
+                goodsImageList = new List<GoodsImage>();
+                string imageDirPath = GetImageDirPath(goodsGroupID);
+                foreach (Goods goods in goodsList)
+                {
+                    string saveImagePath = string.Format("{0}\\{1}.jpg", imageDirPath, goods.GoodsID);
+                    string saveThumbnailPath = string.Format("{0}\\{1}_s.jpg", imageDirPath, goods.GoodsID);
+                    GoodsImage goodsImage = new GoodsImage();
+                    goodsImage.GoodsID = goods.GoodsID;
+                    goodsImage.OriginalImage = ImageToByteArray(saveImagePath);
+                    goodsImage.GoodsThumb = ImageToByteArray(saveThumbnailPath);
+                    goodsImageList.Add(goodsImage);
+                }
+            }
+            return goodsImageList;
+        }
+
+        /// <summary>
+        /// 图片转为Byte字节数组
+        /// </summary>
+        /// <param name="FilePath">路径</param>
+        /// <returns>字节数组</returns>
+        private byte[] ImageToByteArray(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (Image imageIn = Image.FromFile(filePath))
+                    {
+                        using (Bitmap bmp = new Bitmap(imageIn))
+                        {
+                            bmp.Save(ms, imageIn.RawFormat);
+                        }
+                    }
+                    return ms.ToArray();
+                }
+            }
+            return null;
+        }
+
+        private string GetImageDirPath(Guid goodsGroupID)
+        {
+            string localDriver = "C";
+            if (Directory.Exists("D:\\"))
+            {
+                localDriver = "D";
+            }
+            return localDriver + ":\\VechImage\\" + goodsGroupID.ToString();
         }
 
         #endregion

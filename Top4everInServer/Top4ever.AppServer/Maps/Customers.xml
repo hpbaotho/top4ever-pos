@@ -135,5 +135,17 @@
       ) T
       ORDER BY T.Times DESC
     </select>
+    
+    <select id="GetTopSellGoodsByTime" parameterClass="System.Collections.Hashtable" resultMap="TopSellGoodsResult">
+      SELECT TOP 10 *
+      FROM
+      (
+      SELECT COUNT(GoodsID) AS Times, GoodsID, GoodsName, SellPrice, CanDiscount
+      FROM OrderDetails
+      WHERE SellPrice > 0 AND InputTime BETWEEN #BeginDate# AND #EndDate#
+      GROUP BY GoodsID, GoodsName, SellPrice, CanDiscount
+      ) T
+      ORDER BY T.Times DESC
+    </select>
   </statements>
 </sqlMap>

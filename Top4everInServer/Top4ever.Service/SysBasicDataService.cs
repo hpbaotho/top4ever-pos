@@ -40,6 +40,7 @@ namespace Top4ever.Service
         private IButtonStyleDao _buttonStyleDao = null;
         private ISystemConfigDao _sysConfigDao = null;
         private IPromotionDao _promotionDao = null;
+        private IShopDao _shopDao = null;
 
         #endregion
 
@@ -62,6 +63,7 @@ namespace Top4ever.Service
             _buttonStyleDao = _daoManager.GetDao(typeof(IButtonStyleDao)) as IButtonStyleDao;
             _sysConfigDao = _daoManager.GetDao(typeof(ISystemConfigDao)) as ISystemConfigDao;
             _promotionDao = _daoManager.GetDao(typeof(IPromotionDao)) as IPromotionDao;
+            _shopDao = _daoManager.GetDao(typeof(IShopDao)) as IShopDao;
         }
 
         #endregion
@@ -156,6 +158,38 @@ namespace Top4ever.Service
             }
 
             return basicData;
+        }
+
+        public IList<GoodsGroup> GetGoodsGroupListInAndroid()
+        {
+            IList<GoodsGroup> goodsGroupList = null;
+            _daoManager.OpenConnection();
+            try
+            {
+                goodsGroupList = _goodsGroupDao.GetAllGoodsGroup();
+                if (goodsGroupList != null && goodsGroupList.Count > 0)
+                {
+                    foreach (GoodsGroup item in goodsGroupList)
+                    {
+                        IList<Goods> goodsList = _goodsDao.GetGoodsListInGroup(item.GoodsGroupID);
+                        if (goodsList != null && goodsList.Count > 0)
+                        {
+                            foreach (Goods goods in goodsList)
+                            {
+                                IList<Guid> detailsGroupIDList = _goodsDao.GetDetailsGroupIDListInGoods(goods.GoodsID);
+                                goods.DetailsGroupIDList = detailsGroupIDList;
+                            }
+                        }
+                        item.GoodsList = goodsList;
+                    }
+                }
+            }
+            catch
+            {
+                //记录日志
+            }
+            _daoManager.CloseConnection();
+            return goodsGroupList;
         }
 
         #endregion

@@ -51,11 +51,11 @@ namespace Top4ever.Domain
         /// <summary>
         /// 固定服务费
         /// </summary>
-        public decimal FixedServiceFee { get; set; }
+        public decimal FixedServiceFee1 { get; set; }
         /// <summary>
         /// 按百分比收取服务费
         /// </summary>
-        public decimal ServiceFeePercent { get; set; }
+        public decimal ServiceFeePercent1 { get; set; }
         /// <summary>
         /// 服务费开始时间段1
         /// </summary>
@@ -64,6 +64,14 @@ namespace Top4ever.Domain
         /// 服务费结束时间段1
         /// </summary>
         public string ServiceFeeEndTime1 { get; set; }
+        /// <summary>
+        /// 固定服务费
+        /// </summary>
+        public decimal FixedServiceFee2 { get; set; }
+        /// <summary>
+        /// 按百分比收取服务费
+        /// </summary>
+        public decimal ServiceFeePercent2 { get; set; }
         /// <summary>
         /// 服务费开始时间段2
         /// </summary>

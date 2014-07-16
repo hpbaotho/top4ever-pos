@@ -85,5 +85,37 @@ namespace Top4ever.BLL
             }
             return objRet;
         }
+
+        /// <summary>
+        ///  获取一段时间内各个账务日的营业额
+        /// </summary>
+        public static byte[] GetDailyStatementInDays(byte[] itemBuffer)
+        {
+            byte[] objRet = null;
+            string beginDate = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, ParamFieldLength.BEGINDATE).Trim('\0');
+            string endDate = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.BEGINDATE, ParamFieldLength.ENDDATE).Trim('\0');
+
+            IList<DailyStatementInDay> dailyStatementList = DailyBalanceService.GetInstance().GetDailyStatementInDays(DateTime.Parse(beginDate), DateTime.Parse(endDate));
+            if (dailyStatementList == null || dailyStatementList.Count == 0)
+            {
+                //获取单子失败
+                objRet = new byte[ParamFieldLength.PACKAGE_HEAD];
+                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.ERROR_DB), 0, objRet, 0, BasicTypeLength.INT32);
+                Array.Copy(BitConverter.GetBytes(ParamFieldLength.PACKAGE_HEAD), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+            }
+            else
+            {
+                //成功
+                string json = JsonConvert.SerializeObject(dailyStatementList);
+                byte[] jsonByte = Encoding.UTF8.GetBytes(json);
+
+                int transCount = BasicTypeLength.INT32 + BasicTypeLength.INT32 + jsonByte.Length;
+                objRet = new byte[transCount];
+                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
+                Array.Copy(BitConverter.GetBytes(transCount), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
+                Array.Copy(jsonByte, 0, objRet, 2 * BasicTypeLength.INT32, jsonByte.Length);
+            }
+            return objRet;
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using Top4ever.Domain;
+using Top4ever.Domain.Transfer;
 using Top4ever.Interface;
 
 namespace Top4ever.Persistence
@@ -17,6 +18,11 @@ namespace Top4ever.Persistence
         public IList<BizDesk> GetAllBizDeskByRegion(Guid regionID)
         {
             return ExecuteQueryForList<BizDesk>("GetAllDeskInRegion", regionID);
+        }
+
+        public IList<string> GetAllDeskName()
+        {
+            return ExecuteQueryForList<string>("GetAllDeskName", null);
         }
 
         public BizDesk GetBizDeskByName(string deskName)
@@ -34,6 +40,11 @@ namespace Top4ever.Persistence
         public IList<DeskRealTimeInfo> GetDeskRealTimeInfo(Guid regionID)
         {
             return ExecuteQueryForList<DeskRealTimeInfo>("GetDeskInfo", new Hashtable { { "RegionID", regionID } });
+        }
+
+        public IList<DeskInfo> GetDeskList()
+        {
+            return ExecuteQueryForList<DeskInfo>("GetDeskList", null);
         }
 
         #endregion

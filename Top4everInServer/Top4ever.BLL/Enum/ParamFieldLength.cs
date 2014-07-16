@@ -23,7 +23,7 @@ namespace Top4ever.BLL.Enum
         public const int SQL_ORDERBY = 100;
         public const int TELEPHONE = 24;
         public const int CUSTOMER_NAME = 20;
-        public const int GOODS_NAME = 30;
+        public const int GOODS_NAME = 50;
         public const int CARD_NO = 50;
         public const int CARD_PASSWORD = 128;
         public const int BEGINDATE = 20;
@@ -32,5 +32,6 @@ namespace Top4ever.BLL.Enum
         public const int UNCHECK_DEVICE_NO = 100;
         public const int DAILY_STATEMENT_NO = 14;
         public const int HANDOVER_RECORD_ID = 36;
+        public const int GOODSORGROUP_ID = 36;
     }
 }

@@ -18,10 +18,12 @@
         <result property="FollowStyle" column="FollowStyle"></result>
         <result property="PrintType" column="PrintType"></result>
         <result property="LastDataSyncTime" column="LastDataSyncTime"></result>
-        <result property="FixedServiceFee" column="FixedServiceFee"></result>
-        <result property="ServiceFeePercent" column="ServiceFeePercent"></result>
+        <result property="FixedServiceFee1" column="FixedServiceFee1"></result>
+        <result property="ServiceFeePercent1" column="ServiceFeePercent1"></result>
         <result property="ServiceFeeBeginTime1" column="ServiceFeeBeginTime1"></result>
         <result property="ServiceFeeEndTime1" column="ServiceFeeEndTime1"></result>
+        <result property="FixedServiceFee2" column="FixedServiceFee2"></result>
+        <result property="ServiceFeePercent2" column="ServiceFeePercent2"></result>
         <result property="ServiceFeeBeginTime2" column="ServiceFeeBeginTime2"></result>
         <result property="ServiceFeeEndTime2" column="ServiceFeeEndTime2"></result>
       </resultMap>
@@ -44,10 +46,12 @@
         ,[FollowStyle]
         ,[PrintType]
         ,[LastDataSyncTime]
-        ,[FixedServiceFee]
-        ,[ServiceFeePercent]
+        ,[FixedServiceFee1]
+        ,[ServiceFeePercent1]
         ,[ServiceFeeBeginTime1]
         ,[ServiceFeeEndTime1]
+        ,[FixedServiceFee2]
+        ,[ServiceFeePercent2]
         ,[ServiceFeeBeginTime2]
         ,[ServiceFeeEndTime2]
         FROM SysConfig WITH(NOLOCK)
