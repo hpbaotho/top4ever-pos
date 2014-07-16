@@ -87,6 +87,21 @@ namespace Top4ever.Persistence
         {
             return ExecuteQueryForList<DailyBalanceTime>("SelectDailyBalanceTime", belongToDate);
         }
+
+        /// <summary>
+        ///  获取一段时间内各个账务日的营业额
+        /// </summary>
+        /// <param name="beginDate">开始日期</param>
+        /// <param name="endDate">结束日期</param>
+        /// <returns></returns>
+        public IList<DailyStatementInDay> GetDailyStatementInDays(DateTime beginDate, DateTime endDate)
+        {
+            Hashtable htParam = new Hashtable();
+            htParam["BeginDate"] = beginDate;
+            htParam["EndDate"] = endDate;
+
+            return ExecuteQueryForList<DailyStatementInDay>("GetDailyStatementInDays", htParam);
+        }
         #endregion
     }
 }

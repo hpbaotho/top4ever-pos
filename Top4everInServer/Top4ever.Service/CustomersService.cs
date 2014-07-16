@@ -227,6 +227,23 @@ namespace Top4ever.Service
             return topSellGoodsList;
         }
 
+        /// <summary>
+        ///  获取一段时间内热销产品列表
+        /// </summary>
+        /// <param name="beginDate">开始日期</param>
+        /// <param name="endDate">结束日期</param>
+        /// <returns></returns>
+        public IList<TopSellGoods> GetTopSellGoodsByTime(DateTime beginDate, DateTime endDate)
+        {
+            IList<TopSellGoods> topSellGoodsList = null;
+
+            _daoManager.OpenConnection();
+            topSellGoodsList = _customerOrderDao.GetTopSellGoodsByTime(beginDate, endDate);
+            _daoManager.CloseConnection();
+
+            return topSellGoodsList;
+        }
+
         #endregion
     }
 }

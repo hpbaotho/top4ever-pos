@@ -3,7 +3,8 @@
 
     <alias>
       <typeAlias alias="Desk" type="Top4ever.Domain.BizDesk, Top4ever.Domain" />
-      <typeAlias alias="DeskInfo" type="Top4ever.Domain.DeskRealTimeInfo, Top4ever.Domain" />
+      <typeAlias alias="DeskRealTimeInfo" type="Top4ever.Domain.DeskRealTimeInfo, Top4ever.Domain" />
+      <typeAlias alias="DeskInfo" type="Top4ever.Domain.Transfer.DeskInfo, Top4ever.Domain" />
     </alias>
 
     <resultMaps>
@@ -20,13 +21,19 @@
         <result property="Remark" column="Remark"></result>
       </resultMap>
 
-      <resultMap id="DeskInfoResult" class="DeskInfo">
+      <resultMap id="DeskRealTimeInfoResult" class="DeskRealTimeInfo">
         <result property="DeskName" column="DeskName"></result>
         <result property="DeskStatus" column="DeskStatus"></result>
         <result property="DeviceNo" column="DeviceNo"></result>
         <result property="IsSplitOrder" column="IsSplitOrder"></result>
         <result property="PeopleNum" column="PeopleNum"></result>
         <result property="ConsumptionMoney" column="ConsumptionMoney"></result>
+      </resultMap>
+
+      <resultMap id="DeskInfoResult" class="DeskInfo">
+        <result property="DeskName" column="DeskName"></result>
+        <result property="MinConsumption" column="MinConsumption"></result>
+        <result property="Remark" column="Remark"></result>
       </resultMap>
     </resultMaps>
 
@@ -46,6 +53,10 @@
         WHERE RegionID = #value# AND IsVoided = 0
       </select>
 
+      <select id="GetAllDeskName" resultClass="String">
+        SELECT DeskName FROM DeskButton WHERE IsVoided = 0 ORDER BY DeskName
+      </select>
+
       <select id="GetDeskByName" parameterClass="String" resultMap="DeskResult">
         SELECT DeskID, DeskName, [Status], MinConsumption, PX, PY, Width, Height, DeviceNo, Remark
         FROM DeskButton
@@ -58,8 +69,12 @@
         WHERE DeskName = #DeskName# AND IsVoided = 0
       </update>
 
-      <procedure id="GetDeskInfo" parameterMap="DeskInfoParam" resultMap="DeskInfoResult">
+      <procedure id="GetDeskInfo" parameterMap="DeskInfoParam" resultMap="DeskRealTimeInfoResult">
         proc_GetDeskRealTimeInfo
       </procedure>
+
+      <select id="GetDeskList" resultMap="DeskInfoResult">
+        SELECT DeskName, MinConsumption, Remark FROM DeskButton WHERE IsVoided = 0 ORDER BY DeskName
+      </select>
     </statements>
 </sqlMap>

@@ -4,6 +4,7 @@
     <alias>
       <typeAlias alias="DailyStatement" type="Top4ever.Domain.DailyStatement, Top4ever.Domain" />
       <typeAlias alias="DailyBalanceTime" type="Top4ever.Domain.Transfer.DailyBalanceTime, Top4ever.Domain" />
+      <typeAlias alias="DailyStatementInDay" type="Top4ever.Domain.Transfer.DailyStatementInDay, Top4ever.Domain" />
     </alias>
 
     <resultMaps>
@@ -11,6 +12,11 @@
         <result property="DailyStatementNo" column="DailyStatementNo"></result>
         <result property="MinTime" column="MinTime"></result>
         <result property="MaxTime" column="MaxTime"></result>
+      </resultMap>
+
+      <resultMap id="DailyStatementInDayResult" class="DailyStatementInDay">
+        <result property="BelongToDate" column="BelongToDate"></result>
+        <result property="ActualTotalIncome" column="ActualTotalIncome"></result>
       </resultMap>
     </resultMaps>
 
@@ -61,6 +67,13 @@
         WHERE ds.BelongToDate = #value# AND ds.IsVoided = 0 AND o.IsVoided = 0
         GROUP BY ds.DailyStatementNo
         ORDER BY ds.DailyStatementNo
+      </select>
+
+      <select id="GetDailyStatementInDays" parameterClass="System.Collections.Hashtable" resultMap="DailyStatementInDayResult">
+        SELECT ds.BelongToDate, dt.ActualTotalIncome + dt.TotalServiceFee AS ActualTotalIncome
+        FROM DailyStatement ds JOIN DailyTurnover dt ON dt.DailyStatementNo = ds.DailyStatementNo
+        WHERE ds.BelongToDate BETWEEN #BeginDate# AND #EndDate#
+        ORDER BY ds.BelongToDate
       </select>
     </statements>
 </sqlMap>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Top4ever.Domain;
+using Top4ever.Domain.Transfer;
 
 namespace Top4ever.Interface
 {
@@ -12,10 +13,14 @@ namespace Top4ever.Interface
     {
         IList<BizDesk> GetAllBizDeskByRegion(Guid regionID);
 
+        IList<string> GetAllDeskName();
+
         BizDesk GetBizDeskByName(string deskName);
 
         bool UpdateBizDeskStatus(BizDesk desk);
 
         IList<DeskRealTimeInfo> GetDeskRealTimeInfo(Guid regionID);
+
+        IList<DeskInfo> GetDeskList();
     }
 }

@@ -39,5 +39,13 @@ namespace Top4ever.Interface.Customers
         /// <param name="telephone">电话号码</param>
         /// <returns></returns>
         IList<TopSellGoods> GetTopSellGoods(string telephone);
+
+        /// <summary>
+        ///  获取一段时间内热销产品列表
+        /// </summary>
+        /// <param name="beginDate">开始日期</param>
+        /// <param name="endDate">结束日期</param>
+        /// <returns></returns>
+        IList<TopSellGoods> GetTopSellGoodsByTime(DateTime beginDate, DateTime endDate);
     }
 }

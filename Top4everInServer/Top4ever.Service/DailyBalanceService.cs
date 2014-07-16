@@ -147,6 +147,24 @@ namespace Top4ever.Service
             return dailyBalanceTimeList;
         }
 
+        /// <summary>
+        ///  获取一段时间内各个账务日的营业额
+        /// </summary>
+        /// <param name="beginDate">开始日期</param>
+        /// <param name="endDate">结束日期</param>
+        /// <returns></returns>
+        public IList<DailyStatementInDay> GetDailyStatementInDays(DateTime beginDate, DateTime endDate)
+        {
+            IList<DailyStatementInDay> dailyStatementList = null;
+            _daoManager.OpenConnection();
+            if (endDate > beginDate)
+            {
+                dailyStatementList = _dailyStatementDao.GetDailyStatementInDays(beginDate, endDate);
+            }
+            _daoManager.CloseConnection();
+            return dailyStatementList;
+        }
+
         #endregion
     }
 }

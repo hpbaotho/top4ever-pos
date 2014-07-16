@@ -33,5 +33,13 @@ namespace Top4ever.Interface
         /// <param name="belongToDate"></param>
         /// <returns></returns>
         IList<DailyBalanceTime> GetDailyBalanceTime(DateTime belongToDate);
+
+        /// <summary>
+        ///  获取一段时间内各个账务日的营业额
+        /// </summary>
+        /// <param name="beginDate">开始日期</param>
+        /// <param name="endDate">结束日期</param>
+        /// <returns></returns>
+        IList<DailyStatementInDay> GetDailyStatementInDays(DateTime beginDate, DateTime endDate);
     }
 }

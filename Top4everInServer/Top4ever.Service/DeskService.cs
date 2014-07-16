@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using IBatisNet.DataAccess;
 
 using Top4ever.Domain;
+using Top4ever.Domain.Transfer;
 using Top4ever.Interface;
 
 namespace Top4ever.Service
@@ -49,6 +50,17 @@ namespace Top4ever.Service
             return deskList;
         }
 
+        public IList<string> GetAllDeskName()
+        {
+            IList<string> deskNameList = null;
+
+            _daoManager.OpenConnection();
+            deskNameList = _deskDao.GetAllDeskName();
+            _daoManager.CloseConnection();
+
+            return deskNameList;
+        }
+
         public BizDesk GetBizDeskByName(string deskName)
         {
             BizDesk desk = null;
@@ -77,6 +89,17 @@ namespace Top4ever.Service
 
             _daoManager.OpenConnection();
             deskInfoList = _deskDao.GetDeskRealTimeInfo(regionID);
+            _daoManager.CloseConnection();
+
+            return deskInfoList;
+        }
+
+        public IList<DeskInfo> GetDeskList()
+        {
+            IList<DeskInfo> deskInfoList = null;
+
+            _daoManager.OpenConnection();
+            deskInfoList = _deskDao.GetDeskList();
             _daoManager.CloseConnection();
 
             return deskInfoList;
