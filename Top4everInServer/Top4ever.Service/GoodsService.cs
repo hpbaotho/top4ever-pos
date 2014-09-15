@@ -76,20 +76,20 @@ namespace Top4ever.Service
             return goodsName;
         }
 
-        public IList<GoodsImage> GetGoodsImageListInGroup(Guid goodsGroupID)
+        public IList<GoodsImage> GetGoodsImageListInGroup(Guid goodsGroupId)
         {
             IList<GoodsImage> goodsImageList = null;
 
             IList<Goods> goodsList = null;
             _daoManager.OpenConnection();
-            goodsList = _goodsDao.GetGoodsListInGroup(goodsGroupID);
+            goodsList = _goodsDao.GetGoodsListInGroup(goodsGroupId);
             _daoManager.CloseConnection();
 
             //获取图片逻辑
             if (goodsList != null && goodsList.Count > 0) 
             {
                 goodsImageList = new List<GoodsImage>();
-                string imageDirPath = GetImageDirPath(goodsGroupID);
+                string imageDirPath = GetImageDirPath();
                 foreach (Goods goods in goodsList)
                 {
                     string saveImagePath = string.Format("{0}\\{1}.jpg", imageDirPath, goods.GoodsID);
@@ -105,9 +105,25 @@ namespace Top4ever.Service
         }
 
         /// <summary>
+        /// 获取品项图片
+        /// </summary>
+        public GoodsImage GetGoodsImage(Guid goodsId)
+        {
+            string imageDirPath = GetImageDirPath();
+            string saveImagePath = string.Format("{0}\\{1}.jpg", imageDirPath, goodsId);
+            string saveThumbnailPath = string.Format("{0}\\{1}_s.jpg", imageDirPath, goodsId);
+            return new GoodsImage
+            {
+                GoodsID = goodsId,
+                OriginalImage = ImageToByteArray(saveImagePath),
+                GoodsThumb = ImageToByteArray(saveThumbnailPath)
+            };
+        }
+
+        /// <summary>
         /// 图片转为Byte字节数组
         /// </summary>
-        /// <param name="FilePath">路径</param>
+        /// <param name="filePath">路径</param>
         /// <returns>字节数组</returns>
         private byte[] ImageToByteArray(string filePath)
         {
@@ -128,14 +144,14 @@ namespace Top4ever.Service
             return null;
         }
 
-        private string GetImageDirPath(Guid goodsGroupID)
+        private string GetImageDirPath()
         {
             string localDriver = "C";
             if (Directory.Exists("D:\\"))
             {
                 localDriver = "D";
             }
-            return localDriver + ":\\VechImage\\" + goodsGroupID.ToString();
+            return localDriver + ":\\VechImage";
         }
 
         #endregion

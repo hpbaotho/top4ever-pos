@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using IBatisNet.DataAccess;
 
 using Top4ever.Domain;
+using Top4ever.Domain.GoodsRelated;
 using Top4ever.Domain.OrderRelated;
 using Top4ever.Domain.Transfer;
 using Top4ever.Interface;
+using Top4ever.Interface.GoodsRelated;
 using Top4ever.Interface.OrderRelated;
 
 namespace Top4ever.Service
@@ -27,6 +29,7 @@ namespace Top4ever.Service
         private ISystemDictionaryDao _sysDictionary = null;
         private IDeskDao _deskDao = null;
         private IPrintTaskDao _printTaskDao = null;
+        private IGoodsDao _goodsDao = null;
 
         #endregion
 
@@ -44,6 +47,7 @@ namespace Top4ever.Service
             _sysDictionary = _daoManager.GetDao(typeof(ISystemDictionaryDao)) as ISystemDictionaryDao;
             _deskDao = _daoManager.GetDao(typeof(IDeskDao)) as IDeskDao;
             _printTaskDao = _daoManager.GetDao(typeof(IPrintTaskDao)) as IPrintTaskDao;
+            _goodsDao = _daoManager.GetDao(typeof(IGoodsDao)) as IGoodsDao;
         }
 
         #endregion
@@ -285,6 +289,166 @@ namespace Top4ever.Service
 
             _daoManager.CloseConnection();
             return salesOrder;
+        }
+
+        public bool CreateOrderInAndroid(string deskName, int peopleNum, Guid employeeId, string employeeNo, IList<OrderDetail> orderDetailList)
+        {
+            bool isSuccess = false;
+            if (orderDetailList != null && orderDetailList.Count > 0)
+            {
+                _daoManager.BeginTransaction();
+                try
+                {
+                    //日结号
+                    string dailyStatementNo = _dailyStatementDao.GetCurrentDailyStatementNo();
+                    if (!string.IsNullOrEmpty(dailyStatementNo))
+                    {
+                        decimal totalPrice = 0, actualPayMoney = 0, totalDiscount = 0;
+                        foreach (var orderDetail in orderDetailList)
+                        {
+                            totalPrice += orderDetail.SellPrice*orderDetail.GoodsQty;
+                            actualPayMoney += orderDetail.SellPrice*orderDetail.GoodsQty - orderDetail.TotalDiscount;
+                            totalDiscount += orderDetail.TotalDiscount;
+                        }
+                        const string deviceNo = "AD";
+                        //批量获取品项
+                        List<Guid> goodsIdList = orderDetailList.Select(orderDetail => orderDetail.GoodsId).ToList();
+                        IList<Goods> goodsList = _goodsDao.GetGoodsList(goodsIdList);
+                        if (goodsList != null && goodsList.Count > 0)
+                        {
+                            //订单头部
+                            Order order = new Order
+                            {
+                                OrderID = Guid.NewGuid(),
+                                TotalSellPrice = totalPrice,
+                                ActualSellPrice = actualPayMoney,
+                                DiscountPrice = totalDiscount,
+                                CutOffPrice = 0,
+                                ServiceFee = 0,
+                                DeviceNo = deviceNo,
+                                DeskName = deskName,
+                                EatType = (int) EatWayType.DineIn,
+                                Status = 0,
+                                PeopleNum = peopleNum,
+                                EmployeeID = employeeId,
+                                EmployeeNo = employeeNo,
+                                DailyStatementNo = dailyStatementNo
+                            };
+                            //分单号
+                            Int32 curSubOrderNo = _orderDao.GetCurrentSubOrderNo(deskName);
+                            if (curSubOrderNo > 0)
+                            {
+                                curSubOrderNo++;
+                            }
+                            else
+                            {
+                                curSubOrderNo = 1;
+                            }
+                            order.SubOrderNo = curSubOrderNo;
+                            //流水号
+                            order.TranSequence = _sysDictionary.GetCurrentTranSequence();
+                            string orderNo = _orderDao.CreateOrder(order);
+                            order.OrderNo = orderNo;
+                            //菜单品项序号
+                            IList<OrderDetails> orderDetailsList = new List<OrderDetails>();
+                            int seqNumber = _orderDetailsDao.GetSequenceNum(order.OrderID);
+                            foreach (OrderDetail item in orderDetailList)
+                            {
+                                Goods goods = goodsList.FirstOrDefault(g => g.GoodsID.Equals(item.GoodsId));
+                                if (goods != null)
+                                {
+                                    OrderDetails orderDetails = new OrderDetails
+                                    {
+                                        OrderDetailsID = Guid.NewGuid(),
+                                        OrderID = order.OrderID,
+                                        DeviceNo = deviceNo,
+                                        TotalSellPrice = item.SellPrice*item.GoodsQty,
+                                        TotalDiscount = item.TotalDiscount,
+                                        ItemQty = item.GoodsQty,
+                                        EmployeeID = employeeId,
+                                        ItemType = (int) OrderItemType.Goods,
+                                        GoodsID = item.GoodsId,
+                                        GoodsNo = goods.GoodsNo,
+                                        GoodsName = item.GoodsName,
+                                        Unit = goods.Unit,
+                                        CanDiscount = goods.CanDiscount,
+                                        SellPrice = item.SellPrice,
+                                        PrintSolutionName = goods.PrintSolutionName,
+                                        DepartID = goods.DepartID,
+                                        DailyStatementNo = dailyStatementNo,
+                                        OrderBy = seqNumber
+                                    };
+                                    orderDetailsList.Add(orderDetails);
+                                    _orderDetailsDao.CreateOrderDetails(orderDetails);
+                                    seqNumber++;
+                                    if (!string.IsNullOrEmpty(item.Remark))
+                                    {
+                                        //自定义口味
+                                        orderDetails = new OrderDetails
+                                        {
+                                            OrderDetailsID = Guid.NewGuid(),
+                                            OrderID = order.OrderID,
+                                            DeviceNo = deviceNo,
+                                            TotalSellPrice = 0,
+                                            TotalDiscount = 0,
+                                            ItemLevel = 1,
+                                            ItemQty = item.GoodsQty,
+                                            EmployeeID = employeeId,
+                                            ItemType = (int) OrderItemType.Details,
+                                            GoodsID = new Guid("77777777-7777-7777-7777-777777777777"),
+                                            GoodsNo = "7777",
+                                            GoodsName = item.Remark,
+                                            Unit = "",
+                                            CanDiscount = false,
+                                            SellPrice = 0,
+                                            PrintSolutionName = goods.PrintSolutionName,
+                                            DepartID = goods.DepartID,
+                                            DailyStatementNo = dailyStatementNo,
+                                            OrderBy = seqNumber
+                                        };
+                                        orderDetailsList.Add(orderDetails);
+                                        _orderDetailsDao.CreateOrderDetails(orderDetails);
+                                        seqNumber++;
+                                    }
+                                }
+                            }
+                            //折扣信息
+                            //if (salesOrder.orderDiscountList != null && salesOrder.orderDiscountList.Count > 0)
+                            //{
+                            //    foreach (OrderDiscount item in salesOrder.orderDiscountList)
+                            //    {
+                            //        item.DailyStatementNo = dailyStatementNo;
+                            //        _orderDiscountDao.CreateOrderDiscount(item);
+                            //    }
+                            //}
+                            SalesOrder salesOrder = new SalesOrder
+                            {
+                                order = order,
+                                orderDetailsList = orderDetailsList
+                            };
+                            //salesOrder.orderDiscountList = newOrderDiscountList;
+                            //添加打印任务
+                            SystemConfig systemConfig = _sysConfigDao.GetSystemConfigInfo();
+                            if (systemConfig.IncludeKitchenPrint)
+                            {
+                                IList<PrintTask> printTaskList = PrintTaskService.GetInstance().GetPrintTaskList(salesOrder, systemConfig.PrintStyle, systemConfig.FollowStyle, systemConfig.PrintType, 1, string.Empty);
+                                foreach (PrintTask printTask in printTaskList)
+                                {
+                                    _printTaskDao.InsertPrintTask(printTask);
+                                }
+                            }
+                        }
+                    }
+                    _daoManager.CommitTransaction();
+                    isSuccess = true;
+                }
+                catch
+                {
+                    isSuccess = false;
+                    _daoManager.RollBackTransaction();
+                }
+            }
+            return isSuccess;
         }
 
         #endregion

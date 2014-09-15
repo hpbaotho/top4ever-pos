@@ -10,12 +10,16 @@ namespace Top4ever.Interface.GoodsRelated
     /// </summary>
     public interface IGoodsDao
     {
-        IList<Goods> GetGoodsListInGroup(Guid goodsGroupID);
+        IList<Goods> GetGoodsListInGroup(Guid goodsGroupId);
 
-        IList<Guid> GetDetailsGroupIDListInGoods(Guid goodsID);
+        IList<Goods> GetGoodsList(IList<Guid> goodsIdList);
+
+        IList<Guid> GetDetailsGroupIDListInGoods(Guid goodsId);
 
         IList<GoodsCheckStock> GetGoodsCheckStock();
 
-        Int32 UpdateReducedGoodsQty(Guid goodsID, decimal reducedQty);
+        Int32 UpdateReducedGoodsQty(Guid goodsId, decimal reducedQty);
+
+        IList<Guid> GetTopSaleGoodsId();
     }
 }

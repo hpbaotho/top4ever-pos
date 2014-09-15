@@ -56,83 +56,73 @@ namespace Top4ever.BLL
             return objRet;
         }
 
-        public static byte[] GetGoodsImageList(byte[] itemBuffer)
+        public static byte[] GetGoodsImage(byte[] itemBuffer)
         {
             byte[] objRet = null;
-            string goodsGroupId = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, ParamFieldLength.GOODSORGROUP_ID).Trim('\0');
-            IList<GoodsImage> goodsImageList = GoodsService.GetInstance().GetGoodsImageListInGroup(new Guid(goodsGroupId));
-            //构造返回值
-            if (goodsImageList != null && goodsImageList.Count > 0)
+            string goodsId = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, ParamFieldLength.GOODSORGROUP_ID).Trim('\0');
+            var goodsImage = GoodsService.GetInstance().GetGoodsImage(new Guid(goodsId));
+            if (goodsImage.OriginalImage != null || goodsImage.GoodsThumb != null)
             {
-                int totalBaseLength = goodsImageList.Count * (ParamFieldLength.GOODSORGROUP_ID + BasicTypeLength.INT32 * 4);
-                int imageOffset = ParamFieldLength.PACKAGE_HEAD + totalBaseLength;
-                int transCount = imageOffset;
-                foreach (GoodsImage goodsImage in goodsImageList)
+                //构造返回值
+                int transCount = ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32 * 4;
+                if (goodsImage.OriginalImage != null)
                 {
-                    if (goodsImage.OriginalImage != null)
-                    {
-                        transCount += goodsImage.OriginalImage.Length;
-                    }
-                    if (goodsImage.GoodsThumb != null)
-                    {
-                        transCount += goodsImage.GoodsThumb.Length;
-                    }
+                    transCount += goodsImage.OriginalImage.Length;
+                }
+                if (goodsImage.GoodsThumb != null)
+                {
+                    transCount += goodsImage.GoodsThumb.Length;
                 }
                 objRet = new byte[transCount];
                 int byteOffset = 0;
                 Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
-                byteOffset = BasicTypeLength.INT32;
-                Array.Copy(BitConverter.GetBytes(goodsImageList.Count), 0, objRet, byteOffset, BasicTypeLength.INT32);
                 byteOffset += BasicTypeLength.INT32;
-                foreach (GoodsImage goodsImage in goodsImageList)
+                Array.Copy(BitConverter.GetBytes(transCount), 0, objRet, byteOffset, BasicTypeLength.INT32);
+                byteOffset += BasicTypeLength.INT32;
+
+                int imageOffset = ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32 * 4;
+                //ImageOffset
+                Array.Copy(BitConverter.GetBytes(imageOffset), 0, objRet, byteOffset, BasicTypeLength.INT32);
+                byteOffset += BasicTypeLength.INT32;
+                if (goodsImage.OriginalImage != null)
                 {
-                    //GoodsID
-                    byte[] tempByte = Encoding.UTF8.GetBytes(goodsImage.GoodsID.ToString());
-                    Array.Copy(tempByte, 0, objRet, byteOffset, tempByte.Length);
-                    byteOffset += ParamFieldLength.GOODSORGROUP_ID;
-                    //ImageOffset
-                    Array.Copy(BitConverter.GetBytes(imageOffset), 0, objRet, byteOffset, BasicTypeLength.INT32);
+                    //ImageLength
+                    Array.Copy(BitConverter.GetBytes(goodsImage.OriginalImage.Length), 0, objRet, byteOffset, BasicTypeLength.INT32);
                     byteOffset += BasicTypeLength.INT32;
-                    if (goodsImage.OriginalImage != null)
-                    {
-                        //ImageLength
-                        Array.Copy(BitConverter.GetBytes(goodsImage.OriginalImage.Length), 0, objRet, byteOffset, BasicTypeLength.INT32);
-                        byteOffset += BasicTypeLength.INT32;
-                        //OriginalImage
-                        Array.Copy(goodsImage.OriginalImage, 0, objRet, imageOffset, goodsImage.OriginalImage.Length);
-                        imageOffset += goodsImage.OriginalImage.Length;
-                    }
-                    else
-                    {
-                        //ImageLength
-                        Array.Copy(BitConverter.GetBytes(0), 0, objRet, byteOffset, BasicTypeLength.INT32);
-                        byteOffset += BasicTypeLength.INT32;
-                    }
-                    //ThumbOffset
-                    Array.Copy(BitConverter.GetBytes(imageOffset), 0, objRet, byteOffset, BasicTypeLength.INT32);
+                    //OriginalImage
+                    Array.Copy(goodsImage.OriginalImage, 0, objRet, imageOffset, goodsImage.OriginalImage.Length);
+                    imageOffset += goodsImage.OriginalImage.Length;
+                }
+                else
+                {
+                    //ImageLength
+                    Array.Copy(BitConverter.GetBytes(0), 0, objRet, byteOffset, BasicTypeLength.INT32);
                     byteOffset += BasicTypeLength.INT32;
-                    if (goodsImage.GoodsThumb != null)
-                    {
-                        //ThumbLength
-                        Array.Copy(BitConverter.GetBytes(goodsImage.GoodsThumb.Length), 0, objRet, byteOffset, BasicTypeLength.INT32);
-                        byteOffset += BasicTypeLength.INT32;
-                        //GoodsThumb
-                        Array.Copy(goodsImage.GoodsThumb, 0, objRet, imageOffset, goodsImage.GoodsThumb.Length);
-                        imageOffset += goodsImage.GoodsThumb.Length;
-                    }
-                    else
-                    {
-                        //ThumbLength
-                        Array.Copy(BitConverter.GetBytes(0), 0, objRet, byteOffset, BasicTypeLength.INT32);
-                        byteOffset += BasicTypeLength.INT32;
-                    }
+                }
+                //ThumbOffset
+                Array.Copy(BitConverter.GetBytes(imageOffset), 0, objRet, byteOffset, BasicTypeLength.INT32);
+                byteOffset += BasicTypeLength.INT32;
+                if (goodsImage.GoodsThumb != null)
+                {
+                    //ThumbLength
+                    Array.Copy(BitConverter.GetBytes(goodsImage.GoodsThumb.Length), 0, objRet, byteOffset, BasicTypeLength.INT32);
+                    byteOffset += BasicTypeLength.INT32;
+                    //GoodsThumb
+                    Array.Copy(goodsImage.GoodsThumb, 0, objRet, imageOffset, goodsImage.GoodsThumb.Length);
+                    imageOffset += goodsImage.GoodsThumb.Length;
+                }
+                else
+                {
+                    //ThumbLength
+                    Array.Copy(BitConverter.GetBytes(0), 0, objRet, byteOffset, BasicTypeLength.INT32);
+                    byteOffset += BasicTypeLength.INT32;
                 }
                 return objRet;
             }
             else
             {
                 objRet = new byte[ParamFieldLength.PACKAGE_HEAD];
-                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.ERROR_DB), 0, objRet, 0, BasicTypeLength.INT32);
+                Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
                 Array.Copy(BitConverter.GetBytes(0), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
                 return objRet;
             }
