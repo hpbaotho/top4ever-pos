@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Linq;
 using IBatisNet.DataAccess;
 
 using Top4ever.Domain;
@@ -103,8 +103,8 @@ namespace Top4ever.Service
                         {
                             foreach (Goods goods in goodsList)
                             {
-                                IList<Guid> detailsGroupIDList = _goodsDao.GetDetailsGroupIDListInGoods(goods.GoodsID);
-                                goods.DetailsGroupIDList = detailsGroupIDList;
+                                IList<Guid> detailsGroupIdList = _goodsDao.GetDetailsGroupIDListInGoods(goods.GoodsID);
+                                goods.DetailsGroupIDList = detailsGroupIdList;
                             }
                         }
                         item.GoodsList = goodsList;
@@ -121,8 +121,8 @@ namespace Top4ever.Service
                         {
                             foreach (Details details in detailsList)
                             {
-                                IList<Guid> detailsGroupIDList = _detailsDao.GetDetailsGroupIDListInDetails(details.DetailsID);
-                                details.DetailsGroupIDList = detailsGroupIDList;
+                                IList<Guid> detailsGroupIdList = _detailsDao.GetDetailsGroupIDListInDetails(details.DetailsID);
+                                details.DetailsGroupIDList = detailsGroupIdList;
                             }
                         }
                         item.DetailsList = detailsList;
@@ -153,6 +153,7 @@ namespace Top4ever.Service
             }
             catch
             {
+                //记录日志 todo
                 _daoManager.RollBackTransaction();
                 basicData = null;
             }
@@ -160,36 +161,121 @@ namespace Top4ever.Service
             return basicData;
         }
 
-        public IList<GoodsGroup> GetGoodsGroupListInAndroid()
+        public IList<GoodsGroupInfo> GetGoodsGroupListInAndroid()
         {
-            IList<GoodsGroup> goodsGroupList = null;
-            _daoManager.OpenConnection();
+            IList<GoodsGroupInfo> goodsGroupInfoList = null;
             try
             {
-                goodsGroupList = _goodsGroupDao.GetAllGoodsGroup();
+                _daoManager.OpenConnection();
+                var goodsGroupList = _goodsGroupDao.GetAllGoodsGroup();
                 if (goodsGroupList != null && goodsGroupList.Count > 0)
                 {
+                    goodsGroupInfoList = new List<GoodsGroupInfo>();
                     foreach (GoodsGroup item in goodsGroupList)
                     {
-                        IList<Goods> goodsList = _goodsDao.GetGoodsListInGroup(item.GoodsGroupID);
-                        if (goodsList != null && goodsList.Count > 0)
+                        var goodsGroupInfo = new GoodsGroupInfo
                         {
-                            foreach (Goods goods in goodsList)
-                            {
-                                IList<Guid> detailsGroupIDList = _goodsDao.GetDetailsGroupIDListInGoods(goods.GoodsID);
-                                goods.DetailsGroupIDList = detailsGroupIDList;
-                            }
-                        }
-                        item.GoodsList = goodsList;
+                            GoodsGroupID = item.GoodsGroupID,
+                            GoodsGroupName = item.GoodsGroupName,
+                            GoodsGroupName2nd = item.GoodsGroupName2nd,
+                            GoodsGroupNo = item.GoodsGroupNo
+                        };
+                        goodsGroupInfoList.Add(goodsGroupInfo);
                     }
                 }
             }
             catch
             {
-                //记录日志
+                //记录日志 todo
             }
-            _daoManager.CloseConnection();
-            return goodsGroupList;
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
+            return goodsGroupInfoList;
+        }
+
+        public IList<GoodsInfo> GetGoodsListInAndroid(Guid goodsGroupId)
+        {
+            IList<GoodsInfo> goodsInfoList = null;
+            try
+            {
+                _daoManager.OpenConnection();
+                IList<Goods> goodsList = _goodsDao.GetGoodsListInGroup(goodsGroupId);
+                if (goodsList != null && goodsList.Count > 0)
+                {
+                    goodsInfoList = new List<GoodsInfo>();
+                    foreach (Goods item in goodsList)
+                    {
+                        var goodsInfo = new GoodsInfo
+                        {
+                            GoodsID = item.GoodsID,
+                            GoodsNo = item.GoodsNo,
+                            GoodsName = item.GoodsName,
+                            GoodsName2nd = item.GoodsName2nd,
+                            Unit = item.Unit,
+                            SellPrice = item.SellPrice,
+                            AutoShowDetails = item.AutoShowDetails,
+                            BrevityCode = item.BrevityCode,
+                            PinyinCode = item.PinyinCode,
+                            DetailsGroupIds = _goodsDao.GetDetailsGroupIDListInGoods(item.GoodsID)
+                        };
+                        goodsInfoList.Add(goodsInfo);
+                    }
+                }
+            }
+            catch
+            {
+                //记录日志 todo
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
+            return goodsInfoList;
+        }
+
+        public IList<GoodsInfo> GetTopSaleGoods()
+        {
+            IList<GoodsInfo> goodsInfoList = null;
+            try
+            {
+                _daoManager.OpenConnection();
+                var goodsIdList = _goodsDao.GetTopSaleGoodsId();
+                if (goodsIdList != null && goodsIdList.Count > 0)
+                {
+                    IList<Goods> goodsList = _goodsDao.GetGoodsList(goodsIdList);
+                    if (goodsList != null && goodsList.Count > 0)
+                    {
+                        goodsInfoList = new List<GoodsInfo>();
+                        foreach (Goods item in goodsList)
+                        {
+                            var goodsInfo = new GoodsInfo
+                            {
+                                GoodsID = item.GoodsID,
+                                GoodsNo = item.GoodsNo,
+                                GoodsName = item.GoodsName,
+                                GoodsName2nd = item.GoodsName2nd,
+                                Unit = item.Unit,
+                                SellPrice = item.SellPrice,
+                                AutoShowDetails = item.AutoShowDetails,
+                                BrevityCode = item.BrevityCode,
+                                PinyinCode = item.PinyinCode
+                            };
+                            goodsInfoList.Add(goodsInfo);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                //记录日志 todo
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
+            return goodsInfoList;
         }
 
         #endregion

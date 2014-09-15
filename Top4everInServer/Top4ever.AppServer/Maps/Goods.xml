@@ -69,6 +69,16 @@
         WHERE gr.GoodsGroupID = #value# AND g.IsVoided = 0
         ORDER BY gr.OrderBy
       </select>
+
+      <!--批量获取品项信息-->
+      <select id="GetGoodsList" parameterClass="List" resultMap="GoodsResult">
+        SELECT GoodsID,GoodsNo,BarCode,GoodsName,GoodsName_2nd,Unit,SellPrice,CanDiscount,AutoShowDetails,PrintSolutionName,
+            DepartID,BrevityCode,PinyinCode,IsCustomPrice,IsCustomQty,IsCheckStock,ButtonStyleID
+        FROM Goods WHERE GoodsID IN
+        <iterate conjunction="," open="(" close=")">
+          #[]#
+        </iterate>
+      </select>
         
       <select id="GetDetailsGroupIDListByGoodsID" parameterClass="Guid" resultClass="Guid">
         SELECT DetailsGroupID
@@ -85,5 +95,14 @@
       <procedure id="UpdateReducedGoodsQty" parameterMap="UpdateReducedQtyParam">
         proc_UpdateReducedGoodsQty
       </procedure>
+
+      <select id="GetTopSaleGoodsId" parameterClass="DateTime" resultClass="Guid">
+        SELECT TOP 10 GoodsID
+        FROM (SELECT GoodsID, COUNT(GoodsID) TotalNum
+          FROM OrderDetails
+          WHERE SellPrice > 5 AND IsVoided = 0 AND InputTime > #value#
+          GROUP BY GoodsID) T
+        ORDER BY TotalNum DESC
+      </select>
     </statements>
 </sqlMap>

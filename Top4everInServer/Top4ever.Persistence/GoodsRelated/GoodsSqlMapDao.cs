@@ -14,14 +14,19 @@ namespace Top4ever.Persistence.GoodsRelated
     {
         #region IGoodsDao Members
 
-        public IList<Goods> GetGoodsListInGroup(Guid goodsGroupID)
+        public IList<Goods> GetGoodsListInGroup(Guid goodsGroupId)
         {
-            return ExecuteQueryForList<Goods>("GetGoodsListByGroup", goodsGroupID);
+            return ExecuteQueryForList<Goods>("GetGoodsListByGroup", goodsGroupId);
         }
 
-        public IList<Guid> GetDetailsGroupIDListInGoods(Guid goodsID)
+        public IList<Goods> GetGoodsList(IList<Guid> goodsIdList)
         {
-            return ExecuteQueryForList<Guid>("GetDetailsGroupIDListByGoodsID", goodsID);
+            return ExecuteQueryForList<Goods>("GetGoodsList", goodsIdList);
+        }
+
+        public IList<Guid> GetDetailsGroupIDListInGoods(Guid goodsId)
+        {
+            return ExecuteQueryForList<Guid>("GetDetailsGroupIDListByGoodsID", goodsId);
         }
 
         public IList<GoodsCheckStock> GetGoodsCheckStock()
@@ -29,16 +34,23 @@ namespace Top4ever.Persistence.GoodsRelated
             return ExecuteQueryForList<GoodsCheckStock>("GetGoodsCheckStock", null);
         }
 
-        public Int32 UpdateReducedGoodsQty(Guid goodsID, decimal reducedQty)
+        public Int32 UpdateReducedGoodsQty(Guid goodsId, decimal reducedQty)
         {
             Hashtable htParam = new Hashtable();
-            htParam["GoodsID"] = goodsID;
+            htParam["GoodsID"] = goodsId;
             htParam["ReducedQty"] = reducedQty;
             htParam["ReturnValue"] = 0;
             ExecuteQueryForObject("UpdateReducedGoodsQty", htParam);
             int i = (int)htParam["ReturnValue"];    //返回值
             return i;
         }
+
+        public IList<Guid> GetTopSaleGoodsId()
+        {
+            DateTime date = DateTime.Today.AddMonths(-1);
+            return ExecuteQueryForList<Guid>("GetTopSaleGoodsId", date);
+        }
+
         #endregion
     }
 }

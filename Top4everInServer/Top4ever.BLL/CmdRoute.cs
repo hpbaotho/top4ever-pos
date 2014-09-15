@@ -209,11 +209,20 @@ namespace Top4ever.BLL
                 case Command.ANDROID_GET_GOODSGROUPLIST:
                     byteRet = SysBasicDataBLL.GetGoodsGroupListInAndroid();
                     break;
-                case Command.ANDROID_GET_GOODSIMAGE:
-                    byteRet = GoodsBLL.GetGoodsImageList(itemBuffer);
+                case Command.ANDROID_GET_GOODSLIST:
+                    byteRet = SysBasicDataBLL.GetGoodsListInAndroid(itemBuffer);
                     break;
                 case Command.ANDROID_GET_DESKLIST:
                     byteRet = BizDeskBLL.GetDeskList();
+                    break;
+                case Command.ANDROID_SUBMIT_ORDER:
+                    byteRet = SalesOrderBLL.SubmitOrderInAndroid(itemBuffer);
+                    break;
+                case Command.ANDROID_GET_GOODSIMAGE:
+                    byteRet = GoodsBLL.GetGoodsImage(itemBuffer);
+                    break;
+                case Command.ANDROID_GET_TOPSALEGOODS:
+                    byteRet = SysBasicDataBLL.GetTopSaleGoodsInAndroid();
                     break;
 
                 default:
