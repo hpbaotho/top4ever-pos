@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using IBatisNet.Common.Logging;
 using IBatisNet.DataAccess;
-
+using Newtonsoft.Json;
 using Top4ever.Domain.Customers;
 using Top4ever.Interface.Customers;
 using Top4ever.Interface.OrderRelated;
+using Top4ever.Utils;
 
 namespace Top4ever.Service
 {
@@ -17,11 +16,11 @@ namespace Top4ever.Service
     {
         #region Private Fields
 
-        private static CustomersService _instance = new CustomersService();
-        private IDaoManager _daoManager = null;
-        private ICustomerInfoDao _customerInfoDao = null;
-        private ICustomerOrderDao _customerOrderDao = null;
-        private IOrderDao _orderDao = null;
+        private static readonly CustomersService _instance = new CustomersService();
+        private readonly IDaoManager _daoManager;
+        private readonly ICustomerInfoDao _customerInfoDao;
+        private readonly ICustomerOrderDao _customerOrderDao;
+        private readonly IOrderDao _orderDao;
 
         #endregion
 
@@ -54,11 +53,15 @@ namespace Top4ever.Service
             {
                 _daoManager.OpenConnection();
                 result = _customerInfoDao.CreateCustomerInfo(customerInfo);
-                _daoManager.CloseConnection();
             }
-            catch
+            catch (Exception exception)
             {
                 result = 0;
+                LogHelper.GetInstance().Error(string.Format("[CreateCustomerInfo]参数：customerInfo_{0}", JsonConvert.SerializeObject(customerInfo)), exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
             }
             return result;
         }
@@ -70,11 +73,15 @@ namespace Top4ever.Service
             {
                 _daoManager.OpenConnection();
                 result = _customerInfoDao.UpdateCustomerInfo(customerInfo);
-                _daoManager.CloseConnection();
             }
-            catch
+            catch(Exception exception)
             {
                 result = false;
+                LogHelper.GetInstance().Error(string.Format("[UpdateCustomerInfo]参数：customerInfo_{0}", JsonConvert.SerializeObject(customerInfo)), exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
             }
             return result;
         }
@@ -86,11 +93,15 @@ namespace Top4ever.Service
             {
                 _daoManager.OpenConnection();
                 customerInfo = _customerInfoDao.GetCustomerInfoByPhone(telephone);
-                _daoManager.CloseConnection();
             }
-            catch
+            catch (Exception exception)
             {
                 customerInfo = null;
+                LogHelper.GetInstance().Error(string.Format("[GetCustomerInfoByPhone]参数：telephone_{0}", telephone), exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
             }
             return customerInfo;
         }
@@ -102,27 +113,35 @@ namespace Top4ever.Service
             {
                 _daoManager.OpenConnection();
                 customerInfoList = _customerInfoDao.GetAllCustomerInfo();
-                _daoManager.CloseConnection();
             }
-            catch
+            catch (Exception exception)
             {
                 customerInfoList = null;
+                LogHelper.GetInstance().Error("[GetAllCustomerInfo]", exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
             }
             return customerInfoList;
         }
 
-        public CustomerOrder GetCustomerOrder(Guid orderID)
+        public CustomerOrder GetCustomerOrder(Guid orderId)
         {
             CustomerOrder customerOrder = null;
             try
             {
                 _daoManager.OpenConnection();
-                customerOrder = _customerOrderDao.GetCustomerOrder(orderID);
-                _daoManager.CloseConnection();
+                customerOrder = _customerOrderDao.GetCustomerOrder(orderId);
             }
-            catch
+            catch (Exception exception)
             {
                 customerOrder = null;
+                LogHelper.GetInstance().Error(string.Format("[GetCustomerOrder]参数：orderId_{0}", orderId), exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
             }
             return customerOrder;
         }
@@ -142,10 +161,11 @@ namespace Top4ever.Service
                 returnValue = true;
                 _daoManager.CommitTransaction();
             }
-            catch
+            catch(Exception exception)
             {
                 _daoManager.RollBackTransaction();
                 returnValue = false;
+                LogHelper.GetInstance().Error(string.Format("[UpdateTakeoutOrderStatus]参数：customerOrder_{0}", JsonConvert.SerializeObject(customerOrder)), exception);
             }
             return returnValue;
         }
@@ -157,12 +177,16 @@ namespace Top4ever.Service
             {
                 _daoManager.OpenConnection();
                 _customerOrderDao.CreateOrUpdateCustomerOrder(customerOrder);
-                _daoManager.CloseConnection();
                 result = true;
             }
-            catch
+            catch (Exception exception)
             {
                 result = false;
+                LogHelper.GetInstance().Error(string.Format("[CreateOrUpdateCustomerOrder]参数：customerOrder_{0}", JsonConvert.SerializeObject(customerOrder)), exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
             }
             return result;
         }
@@ -179,12 +203,16 @@ namespace Top4ever.Service
             {
                 _daoManager.OpenConnection();
                 _customerOrderDao.CreateOrUpdateCallRecord(callRecord);
-                _daoManager.CloseConnection();
                 result = true;
             }
-            catch
+            catch (Exception exception)
             {
                 result = false;
+                LogHelper.GetInstance().Error(string.Format("[CreateOrUpdateCallRecord]参数：callRecord_{0}", JsonConvert.SerializeObject(callRecord)), exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
             }
             return result;
         }
@@ -196,18 +224,19 @@ namespace Top4ever.Service
         public IList<CallRecord> GetCallRecordByStatus(int status)
         {
             IList<CallRecord> callRecordList = null;
-
-            _daoManager.OpenConnection();
-            if (status == -1)
+            try
             {
-                callRecordList = _customerOrderDao.GetCallRecordList();
+                _daoManager.OpenConnection();
+                callRecordList = status == -1 ? _customerOrderDao.GetCallRecordList() : _customerOrderDao.GetCallRecordByStatus(status);
             }
-            else
+            catch (Exception exception)
             {
-                callRecordList = _customerOrderDao.GetCallRecordByStatus(status);
+                LogHelper.GetInstance().Error("[GetCallRecordByStatus]参数：status_" + status, exception);
             }
-            _daoManager.CloseConnection();
-
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return callRecordList;
         }
 
@@ -219,11 +248,19 @@ namespace Top4ever.Service
         public IList<TopSellGoods> GetTopSellGoods(string telephone)
         {
             IList<TopSellGoods> topSellGoodsList = null;
-
-            _daoManager.OpenConnection();
-            topSellGoodsList = _customerOrderDao.GetTopSellGoods(telephone);
-            _daoManager.CloseConnection();
-
+            try
+            {
+                _daoManager.OpenConnection();
+                topSellGoodsList = _customerOrderDao.GetTopSellGoods(telephone);
+            }
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error("[GetTopSellGoods]参数：telephone_" + telephone, exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return topSellGoodsList;
         }
 
@@ -236,11 +273,19 @@ namespace Top4ever.Service
         public IList<TopSellGoods> GetTopSellGoodsByTime(DateTime beginDate, DateTime endDate)
         {
             IList<TopSellGoods> topSellGoodsList = null;
-
-            _daoManager.OpenConnection();
-            topSellGoodsList = _customerOrderDao.GetTopSellGoodsByTime(beginDate, endDate);
-            _daoManager.CloseConnection();
-
+            try
+            {
+                _daoManager.OpenConnection();
+                topSellGoodsList = _customerOrderDao.GetTopSellGoodsByTime(beginDate, endDate);
+            }
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error(string.Format("[GetTopSellGoodsByTime]参数：beginDate_{0}, endDate_{1}", beginDate, endDate), exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return topSellGoodsList;
         }
 

@@ -21,9 +21,9 @@ namespace Top4ever.Interface
         /// <summary>
         /// 通过交班Id获取营业额统计
         /// </summary>
-        /// <param name="handoverRecordID">交班Id</param>
+        /// <param name="handoverRecordId">交班Id</param>
         /// <returns></returns>
-        BusinessReport GetTurnoverByHandoverRecordID(Guid handoverRecordID);
+        BusinessReport GetTurnoverByHandoverRecordID(Guid handoverRecordId);
 
         IList<OrderDiscountSum> GetOrderDiscountSumByHandover(string dailyStatementNo, int workSequence);
 

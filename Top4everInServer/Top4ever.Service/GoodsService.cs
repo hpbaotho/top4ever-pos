@@ -4,10 +4,11 @@ using System.Drawing;
 using System.IO;
 
 using IBatisNet.DataAccess;
-
+using Newtonsoft.Json;
 using Top4ever.Domain.GoodsRelated;
 using Top4ever.Interface.GoodsRelated;
 using Top4ever.Domain.Transfer;
+using Top4ever.Utils;
 
 namespace Top4ever.Service
 {
@@ -18,9 +19,9 @@ namespace Top4ever.Service
     {
         #region Private Fields
 
-        private static GoodsService _instance = new GoodsService();
-        private IDaoManager _daoManager = null;
-        private IGoodsDao _goodsDao = null;
+        private static readonly GoodsService _instance = new GoodsService();
+        private readonly IDaoManager _daoManager;
+        private readonly IGoodsDao _goodsDao;
 
         #endregion
 
@@ -44,11 +45,19 @@ namespace Top4ever.Service
         public IList<GoodsCheckStock> GetGoodsCheckStock()
         {
             IList<GoodsCheckStock> goodsCheckStockList = null;
-
-            _daoManager.OpenConnection();
-            goodsCheckStockList = _goodsDao.GetGoodsCheckStock();
-            _daoManager.CloseConnection();
-
+            try
+            {
+                _daoManager.OpenConnection();
+                goodsCheckStockList = _goodsDao.GetGoodsCheckStock();
+            }
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error("[GetGoodsCheckStock]", exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return goodsCheckStockList;
         }
 
@@ -56,21 +65,29 @@ namespace Top4ever.Service
         {
             string goodsName = string.Empty;
             _daoManager.BeginTransaction();
-            foreach (GoodsCheckStock item in goodsCheckStockList)
+            try
             {
-                int result = _goodsDao.UpdateReducedGoodsQty(item.GoodsID, item.ReducedQuantity);
-                if (result != 1)
+                foreach (GoodsCheckStock item in goodsCheckStockList)
                 {
-                    goodsName = item.GoodsName;
-                    break;
+                    int result = _goodsDao.UpdateReducedGoodsQty(item.GoodsID, item.ReducedQuantity);
+                    if (result != 1)
+                    {
+                        goodsName = item.GoodsName;
+                        break;
+                    }
+                }
+                if (string.IsNullOrEmpty(goodsName))
+                {
+                    _daoManager.CommitTransaction();
+                }
+                else
+                {
+                    _daoManager.RollBackTransaction();
                 }
             }
-            if (string.IsNullOrEmpty(goodsName))
+            catch (Exception exception)
             {
-                _daoManager.CommitTransaction();
-            }
-            else
-            {
+                LogHelper.GetInstance().Error(string.Format("[UpdateReducedGoodsQty]参数：goodsCheckStockList_{0}", JsonConvert.SerializeObject(goodsCheckStockList)), exception);
                 _daoManager.RollBackTransaction();
             }
             return goodsName;
@@ -78,13 +95,21 @@ namespace Top4ever.Service
 
         public IList<GoodsImage> GetGoodsImageListInGroup(Guid goodsGroupId)
         {
-            IList<GoodsImage> goodsImageList = null;
-
             IList<Goods> goodsList = null;
-            _daoManager.OpenConnection();
-            goodsList = _goodsDao.GetGoodsListInGroup(goodsGroupId);
-            _daoManager.CloseConnection();
-
+            try
+            {
+                _daoManager.OpenConnection();
+                goodsList = _goodsDao.GetGoodsListInGroup(goodsGroupId);
+            }
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error("[GetGoodsImageListInGroup]参数：goodsGroupId_" + goodsGroupId, exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
+            IList<GoodsImage> goodsImageList = null;
             //获取图片逻辑
             if (goodsList != null && goodsList.Count > 0) 
             {
@@ -94,10 +119,12 @@ namespace Top4ever.Service
                 {
                     string saveImagePath = string.Format("{0}\\{1}.jpg", imageDirPath, goods.GoodsID);
                     string saveThumbnailPath = string.Format("{0}\\{1}_s.jpg", imageDirPath, goods.GoodsID);
-                    GoodsImage goodsImage = new GoodsImage();
-                    goodsImage.GoodsID = goods.GoodsID;
-                    goodsImage.OriginalImage = ImageToByteArray(saveImagePath);
-                    goodsImage.GoodsThumb = ImageToByteArray(saveThumbnailPath);
+                    GoodsImage goodsImage = new GoodsImage
+                    {
+                        GoodsID = goods.GoodsID, 
+                        OriginalImage = ImageToByteArray(saveImagePath), 
+                        GoodsThumb = ImageToByteArray(saveThumbnailPath)
+                    };
                     goodsImageList.Add(goodsImage);
                 }
             }

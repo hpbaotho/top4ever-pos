@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 
 using IBatisNet.DataAccess;
-
+using Newtonsoft.Json;
 using Top4ever.Domain.OrderRelated;
 using Top4ever.Domain.Transfer;
 using Top4ever.Interface;
 using Top4ever.Interface.OrderRelated;
+using Top4ever.Utils;
 
 namespace Top4ever.Service
 {
@@ -14,13 +15,13 @@ namespace Top4ever.Service
     {
         #region Private Fields
 
-        private static ModifyOrderService _instance = new ModifyOrderService();
-        private IDaoManager _daoManager = null;
-        private IOrderDao _orderDao = null;
-        private IOrderDetailsDao _orderDetailsDao = null;
-        private IOrderDiscountDao _orderDiscountDao = null;
-        private IOrderPayoffDao _orderPayoffDao = null;
-        private IDailyStatementDao _dailyStatementDao = null;
+        private static readonly ModifyOrderService _instance = new ModifyOrderService();
+        private readonly IDaoManager _daoManager;
+        private readonly IOrderDao _orderDao;
+        private readonly IOrderDetailsDao _orderDetailsDao;
+        private readonly IOrderDiscountDao _orderDiscountDao;
+        private readonly IOrderPayoffDao _orderPayoffDao;
+        private readonly IDailyStatementDao _dailyStatementDao;
 
         #endregion
 
@@ -86,8 +87,9 @@ namespace Top4ever.Service
                 }
                 _daoManager.CommitTransaction();
             }
-            catch
+            catch(Exception exception)
             {
+                LogHelper.GetInstance().Error(string.Format("[ModifyForOrder]参数：modifiedOrder_{0}", JsonConvert.SerializeObject(modifiedOrder)), exception);
                 _daoManager.RollBackTransaction();
                 returnValue = false;
             }

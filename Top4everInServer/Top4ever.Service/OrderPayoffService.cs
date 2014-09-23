@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 
 using IBatisNet.DataAccess;
-
+using Newtonsoft.Json;
 using Top4ever.Domain.OrderRelated;
 using Top4ever.Interface.OrderRelated;
+using Top4ever.Utils;
 
 namespace Top4ever.Service
 {
@@ -12,9 +13,9 @@ namespace Top4ever.Service
     {
         #region Private Fields
 
-        private static OrderPayoffService _instance = new OrderPayoffService();
-        private IDaoManager _daoManager = null;
-        private IOrderPayoffDao _orderPayoffDao = null;
+        private static readonly OrderPayoffService _instance = new OrderPayoffService();
+        private readonly IDaoManager _daoManager;
+        private readonly IOrderPayoffDao _orderPayoffDao;
 
         #endregion
         
@@ -37,30 +38,56 @@ namespace Top4ever.Service
 
         public void CreateOrderPayoff(OrderPayoff orderPayoff)
         {
-            _daoManager.OpenConnection();
-            _orderPayoffDao.CreateOrderPayoff(orderPayoff);
-            _daoManager.CloseConnection();
+            try
+            {
+                _daoManager.OpenConnection();
+                _orderPayoffDao.CreateOrderPayoff(orderPayoff);
+            }
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error(string.Format("[CreateOrderPayoff]参数：orderPayoff_{0}", JsonConvert.SerializeObject(orderPayoff)), exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
         }
 
-        public bool DeleteOrderPayoff(Guid orderID)
+        public bool DeleteOrderPayoff(Guid orderId)
         {
             bool result = false;
-
-            _daoManager.OpenConnection();
-            result = _orderPayoffDao.DeleteOrderPayoff(orderID);
-            _daoManager.CloseConnection();
-
+            try
+            {
+                _daoManager.OpenConnection();
+                result = _orderPayoffDao.DeleteOrderPayoff(orderId);
+            }
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error(string.Format("[DeleteOrderPayoff]参数：orderId_{0}", orderId), exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return result;
         }
 
-        public IList<OrderPayoff> GetOrderPayoffList(Guid orderID)
+        public IList<OrderPayoff> GetOrderPayoffList(Guid orderId)
         {
             IList<OrderPayoff> orderPayoffList = null;
-
-            _daoManager.OpenConnection();
-            orderPayoffList = _orderPayoffDao.GetOrderPayoffList(orderID);
-            _daoManager.CloseConnection();
-
+            try
+            {
+                _daoManager.OpenConnection();
+                orderPayoffList = _orderPayoffDao.GetOrderPayoffList(orderId);
+            }
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error(string.Format("[GetOrderPayoffList]参数：orderId_{0}", orderId), exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return orderPayoffList;
         }
 

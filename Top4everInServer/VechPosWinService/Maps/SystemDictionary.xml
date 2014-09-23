@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="SystemDictionary" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<alias>
+		<typeAlias alias="SystemDictionary" type="Top4ever.Domain.SystemDictionary, Top4ever.Domain" />
+	</alias>
+
+	<resultMaps>
+		<resultMap id="SystemDictionaryResult" class="SystemDictionary">
+			<result property="SysDictionaryID" column="SysDictionaryID"></result>
+			<result property="Name" column="Name"></result>
+			<result property="Value" column="Value"></result>
+		</resultMap>
+	</resultMaps>
+
+	<parameterMaps>
+		<parameterMap id="TranSeqParam" class="Hashtable">
+			<parameter property="ReturnValue" column="ReturnValue" direction="Output" />
+		</parameterMap>
+	</parameterMaps>
+	
+	<!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+	<statements>
+		<procedure id="SelectCurrentTranSequence" parameterMap="TranSeqParam">
+			proc_GetCurrentTranSequence
+		</procedure>
+	</statements>
+</sqlMap>

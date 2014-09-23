@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 using IBatisNet.DataAccess;
-
+using Newtonsoft.Json;
 using Top4ever.Domain;
 using Top4ever.Domain.OrderRelated;
 using Top4ever.Domain.Transfer;
 using Top4ever.Interface;
 using Top4ever.Interface.OrderRelated;
+using Top4ever.Utils;
 
 namespace Top4ever.Service
 {
@@ -16,13 +16,13 @@ namespace Top4ever.Service
     {
         #region Private Fields
 
-        private static ReminderOrderService _instance = new ReminderOrderService();
-        private IDaoManager _daoManager = null;
-        private IOrderDao _orderDao = null;
-        private IOrderDetailsDao _orderDetailsDao = null;
-        private IReasonDao _reasonDao = null;
-        private ISystemConfigDao _sysConfigDao = null;
-        private IPrintTaskDao _printTaskDao = null;
+        private static readonly ReminderOrderService _instance = new ReminderOrderService();
+        private readonly IDaoManager _daoManager;
+        private readonly IOrderDao _orderDao;
+        private readonly IOrderDetailsDao _orderDetailsDao;
+        private readonly IReasonDao _reasonDao;
+        private readonly ISystemConfigDao _sysConfigDao;
+        private readonly IPrintTaskDao _printTaskDao;
 
         #endregion
 
@@ -53,14 +53,16 @@ namespace Top4ever.Service
                 if (order != null)
                 {
                     IList<OrderDetails> orderDetailsList = new List<OrderDetails>();
-                    foreach (Guid orderDetailsID in reminderOrder.OrderDetailsIDList)
+                    foreach (Guid orderDetailsId in reminderOrder.OrderDetailsIDList)
                     {
-                        OrderDetails orderDetails = _orderDetailsDao.GetOrderDetails(orderDetailsID);
+                        OrderDetails orderDetails = _orderDetailsDao.GetOrderDetails(orderDetailsId);
                         orderDetailsList.Add(orderDetails);
                     }
-                    SalesOrder salesOrder = new SalesOrder();
-                    salesOrder.order = order;
-                    salesOrder.orderDetailsList = orderDetailsList;
+                    SalesOrder salesOrder = new SalesOrder
+                    {
+                        order = order, 
+                        orderDetailsList = orderDetailsList
+                    };
                     //添加打印任务
                     SystemConfig systemConfig = _sysConfigDao.GetSystemConfigInfo();
                     if (systemConfig.IncludeKitchenPrint)
@@ -75,8 +77,9 @@ namespace Top4ever.Service
                 }
                 _daoManager.CommitTransaction();
             }
-            catch
+            catch(Exception exception)
             {
+                LogHelper.GetInstance().Error(string.Format("[CreateReminderOrder]参数：reminderOrder_{0}", JsonConvert.SerializeObject(reminderOrder)), exception);
                 _daoManager.RollBackTransaction();
                 returnValue = false;
             }

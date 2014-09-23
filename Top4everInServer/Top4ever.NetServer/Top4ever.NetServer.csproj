@@ -33,7 +33,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -46,6 +45,10 @@
     <ProjectReference Include="..\Top4ever.BLL\Top4ever.BLL.csproj">
       <Project>{4D8378E0-D34D-45C0-BCD2-DC9A7B4C2F50}</Project>
       <Name>Top4ever.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Top4ever.Utils\Top4ever.Utils.csproj">
+      <Project>{99C3AD99-F898-407B-BBE2-B1FA726738E2}</Project>
+      <Name>Top4ever.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
-using IBatisNet.Common.Logging;
 using IBatisNet.DataAccess;
 
 using Top4ever.Domain.Accounts;
 using Top4ever.Interface.Accounts;
+using Top4ever.Utils;
 
 namespace Top4ever.Service
 {
@@ -15,13 +14,11 @@ namespace Top4ever.Service
     /// </summary>
     public class EmployeeService
     {
-        private static readonly ILog logger = LogManager.GetLogger(typeof(EmployeeService));
-
         #region Private Fields
 
-        private static EmployeeService _instance = new EmployeeService();
-        private IDaoManager _daoManager = null;
-        private IEmployeeDao _employeeDao = null;
+        private static readonly EmployeeService _instance = new EmployeeService();
+        private readonly IDaoManager _daoManager;
+        private readonly IEmployeeDao _employeeDao;
 
         #endregion
 
@@ -61,13 +58,16 @@ namespace Top4ever.Service
                     employee.RightsCodeList = _employeeDao.GetRightsCodeList(userName, password);
                     result = 1;
                 }
-                _daoManager.CloseConnection();
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
                 employee = null;
                 result = 0;
-                logger.Error("Database operation failed !", ex);
+                LogHelper.GetInstance().Error("[GetEmployee]参数：UserName_" + userName, exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
             }
             return result;
         }
@@ -91,13 +91,16 @@ namespace Top4ever.Service
                     employee.RightsCodeList = _employeeDao.GetRightsCodeList(employee.EmployeeNo, employee.Password);
                     result = 1;
                 }
-                _daoManager.CloseConnection();
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
                 employee = null;
                 result = 0;
-                logger.Error("Database operation failed !", ex);
+                LogHelper.GetInstance().Error("[GetEmployee]参数：AttendanceCard_" + attendanceCard, exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
             }
             return result;
         }
@@ -112,21 +115,17 @@ namespace Top4ever.Service
             {
                 _daoManager.OpenConnection();
                 employee = _employeeDao.GetEmployeeByNo(employeeNo);
-                if (employee == null)
-                {
-                    result = 2;
-                }
-                else
-                {
-                    result = 1;
-                }
-                _daoManager.CloseConnection();
+                result = employee == null ? 2 : 1;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
                 employee = null;
                 result = 0;
-                logger.Error("Through employee No. to get employee operation failed !", ex);
+                LogHelper.GetInstance().Error("[GetEmployeeByNo]参数：EmployeeNo_" + employeeNo, exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
             }
             return result;
         }
@@ -138,12 +137,15 @@ namespace Top4ever.Service
             {
                 _daoManager.OpenConnection();
                 rightsCodeList = _employeeDao.GetRightsCodeList(userName, password);
-                _daoManager.CloseConnection();
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
                 rightsCodeList = null;
-                logger.Error("Database operation failed !", ex);
+                LogHelper.GetInstance().Error("[GetRightsCodeList]参数：UserName_" + userName, exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
             }
             return rightsCodeList;
         }
@@ -151,9 +153,19 @@ namespace Top4ever.Service
         public Int32 UpdateEmployeePassword(string employeeNo, string password, string newPassword)
         {
             int result = 0;
-            _daoManager.OpenConnection();
-            result = _employeeDao.UpdateEmployeePassword(employeeNo, password, newPassword);
-            _daoManager.CloseConnection();
+            try
+            {
+                _daoManager.OpenConnection();
+                result = _employeeDao.UpdateEmployeePassword(employeeNo, password, newPassword);
+            }
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error("[UpdateEmployeePassword]参数：EmployeeNo_" + employeeNo, exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return result;
         }
 

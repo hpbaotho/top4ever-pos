@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using Top4ever.BLL.Enum;
+﻿using Top4ever.BLL.Enum;
 
 namespace Top4ever.BLL
 {
     public class CmdRoute
     {
-        public static byte[] RouteHandler(int commandID, byte[] itemBuffer)
+        public static byte[] RouteHandler(int commandId, byte[] itemBuffer)
         {
-            byte[] byteRet = null;
-            switch ((Command)commandID)
+            byte[] byteRet;
+            switch ((Command)commandId)
             {
                 case Command.ID_USERLOGIN:
                     byteRet = EmployeeBLL.EmployeeLogin(itemBuffer);
@@ -226,7 +222,7 @@ namespace Top4ever.BLL
                     break;
 
                 default:
-                    byteRet = null;
+                    byteRet = new byte[0];
                     break;
             }
             return byteRet;

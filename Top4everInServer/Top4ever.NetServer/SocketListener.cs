@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
+using Top4ever.Utils;
 
 namespace Top4ever.NetServer
 {
@@ -174,8 +173,7 @@ namespace Top4ever.NetServer
                         readEventArgs.UserToken = new Token(s);
 
                         Interlocked.Increment(ref this.numConnectedSockets);
-                        Console.WriteLine("Client connection accepted. There are {0} clients connected to the server",
-                            this.numConnectedSockets);
+                        Console.WriteLine("Client connection accepted. There are {0} clients connected to the server", this.numConnectedSockets);
 
                         if (!s.ReceiveAsync(readEventArgs))
                         {
@@ -189,12 +187,17 @@ namespace Top4ever.NetServer
                 }
                 catch (SocketException ex)
                 {
+                    string errorMessage = "Socket process accept data error.";
                     Token token = e.UserToken as Token;
-                    Console.WriteLine("Error when processing data received from {0}:\r\n{1}", token.Connection.RemoteEndPoint, ex.ToString());
+                    if (token != null)
+                    {
+                        errorMessage = string.Format("Error when processing data received from {0}", token.Connection.RemoteEndPoint);
+                    }
+                    LogHelper.GetInstance().Error(errorMessage, ex);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    LogHelper.GetInstance().Error("Socket process accept data error.", ex);
                 }
 
                 // Accept the next connection request.
@@ -299,7 +302,7 @@ namespace Top4ever.NetServer
 
             this.CloseClientSocket(token, e);
 
-            Console.WriteLine("Socket error {0} on endpoint {1} during {2}.", (Int32)e.SocketError, localEp, e.LastOperation);
+            LogHelper.GetInstance().Error(string.Format("Socket error {0} on endpoint {1} during {2}.", (Int32)e.SocketError, localEp, e.LastOperation));
         }
 
         /// <summary>

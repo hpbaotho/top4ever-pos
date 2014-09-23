@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Top4ever.Domain;
 using Top4ever.Domain.OrderRelated;
 using Top4ever.Domain.Transfer;
-using Top4ever.Interface;
 
 namespace Top4ever.Service
 {
@@ -13,7 +12,7 @@ namespace Top4ever.Service
     /// </summary>
     public class PrintTaskService
     {
-        private static PrintTaskService _instance = new PrintTaskService();
+        private static readonly PrintTaskService _instance = new PrintTaskService();
 
         private PrintTaskService()
         { }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using IBatisNet.DataAccess;
-
+using Newtonsoft.Json;
 using Top4ever.Domain;
 using Top4ever.Domain.GoodsRelated;
 using Top4ever.Domain.OrderRelated;
@@ -10,26 +10,26 @@ using Top4ever.Domain.Transfer;
 using Top4ever.Interface;
 using Top4ever.Interface.GoodsRelated;
 using Top4ever.Interface.OrderRelated;
+using Top4ever.Utils;
 
 namespace Top4ever.Service
 {
     public class SalesOrderService
     {
-
         #region Private Fields
 
-        private static SalesOrderService _instance = new SalesOrderService();
-        private IDaoManager _daoManager = null;
-        private IOrderDao _orderDao = null;
-        private IOrderDetailsDao _orderDetailsDao = null;
-        private IOrderDiscountDao _orderDiscountDao = null;
-        private IOrderPayoffDao _orderPayoffDao = null;
-        private IDailyStatementDao _dailyStatementDao = null;
-        private ISystemConfigDao _sysConfigDao = null;
-        private ISystemDictionaryDao _sysDictionary = null;
-        private IDeskDao _deskDao = null;
-        private IPrintTaskDao _printTaskDao = null;
-        private IGoodsDao _goodsDao = null;
+        private static readonly SalesOrderService _instance = new SalesOrderService();
+        private readonly IDaoManager _daoManager;
+        private readonly IOrderDao _orderDao;
+        private readonly IOrderDetailsDao _orderDetailsDao;
+        private readonly IOrderDiscountDao _orderDiscountDao;
+        private readonly IOrderPayoffDao _orderPayoffDao;
+        private readonly IDailyStatementDao _dailyStatementDao;
+        private readonly ISystemConfigDao _sysConfigDao;
+        private readonly ISystemDictionaryDao _sysDictionary;
+        private readonly IDeskDao _deskDao;
+        private readonly IPrintTaskDao _printTaskDao;
+        private readonly IGoodsDao _goodsDao;
 
         #endregion
 
@@ -117,8 +117,9 @@ namespace Top4ever.Service
                 }
                 _daoManager.CommitTransaction();
             }
-            catch
+            catch(Exception exception)
             {
+                LogHelper.GetInstance().Error(string.Format("[CreateSalesOrder]参数：salesOrder_{0}", JsonConvert.SerializeObject(salesOrder)), exception);
                 tranSequence = 0;
                 _daoManager.RollBackTransaction();
             }
@@ -169,29 +170,40 @@ namespace Top4ever.Service
                 }
                 _daoManager.CommitTransaction();
             }
-            catch
+            catch(Exception exception)
             {
+                LogHelper.GetInstance().Error(string.Format("[UpdateSalesOrder]参数：salesOrder_{0}", JsonConvert.SerializeObject(salesOrder)), exception);
                 result = 0;
                 _daoManager.RollBackTransaction();
             }
             return result;
         }
 
-        public SalesOrder GetSalesOrder(Guid orderID)
+        public SalesOrder GetSalesOrder(Guid orderId)
         {
             SalesOrder salesOrder = null;
-            _daoManager.OpenConnection();
-
-            Order order = _orderDao.GetOrder(orderID);
-            if (order != null)
+            try
             {
-                IList<OrderDetails> orderDetailsList = _orderDetailsDao.GetOrderDetailsList(orderID);
-                salesOrder = new SalesOrder();
-                salesOrder.order = order;
-                salesOrder.orderDetailsList = orderDetailsList;
+                _daoManager.OpenConnection();
+                Order order = _orderDao.GetOrder(orderId);
+                if (order != null)
+                {
+                    IList<OrderDetails> orderDetailsList = _orderDetailsDao.GetOrderDetailsList(orderId);
+                    salesOrder = new SalesOrder
+                    {
+                        order = order, 
+                        orderDetailsList = orderDetailsList
+                    };
+                }
             }
-
-            _daoManager.CloseConnection();
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error(string.Format("[GetSalesOrder]参数：orderId_{0}", orderId), exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return salesOrder;
         }
 
@@ -240,54 +252,63 @@ namespace Top4ever.Service
                 }
                 _daoManager.CommitTransaction();
             }
-            catch
+            catch(Exception exception)
             {
+                LogHelper.GetInstance().Error(string.Format("[SplitSalesOrder]参数：salesSplitOrder_{0}", JsonConvert.SerializeObject(salesSplitOrder)), exception);
                 _daoManager.RollBackTransaction();
                 returnValue = false;
             }
             return returnValue;
         }
 
-        public SalesOrder GetSalesOrderByBillSearch(Guid orderID)
+        public SalesOrder GetSalesOrderByBillSearch(Guid orderId)
         {
             SalesOrder salesOrder = null;
-            _daoManager.OpenConnection();
-
-            Order order = _orderDao.GetOrder(orderID);
-            if (order != null)
+            try
             {
-                salesOrder = new SalesOrder();
-                salesOrder.order = order;
-                if (order.Status != 4)
+                _daoManager.OpenConnection();
+                Order order = _orderDao.GetOrder(orderId);
+                if (order != null)
                 {
-                    IList<OrderDetails> orderDetailsList = null;
-                    IList<OrderDiscount> orderDiscountList = null;
-                    if (order.Status == 0 || order.Status == 1 || order.Status == 3)
+                    salesOrder = new SalesOrder();
+                    salesOrder.order = order;
+                    if (order.Status != 4)
                     {
-                        orderDetailsList = _orderDetailsDao.GetOrderDetailsList(orderID);
-                        orderDiscountList = _orderDiscountDao.GetOrderDiscountList(orderID);
+                        IList<OrderDetails> orderDetailsList = null;
+                        IList<OrderDiscount> orderDiscountList = null;
+                        if (order.Status == 0 || order.Status == 1 || order.Status == 3)
+                        {
+                            orderDetailsList = _orderDetailsDao.GetOrderDetailsList(orderId);
+                            orderDiscountList = _orderDiscountDao.GetOrderDiscountList(orderId);
+                        }
+                        else if (order.Status == 2)
+                        {
+                            orderDetailsList = _orderDetailsDao.GetDeletedOrderDetailsList(orderId);
+                            orderDiscountList = _orderDiscountDao.GetDeletedOrderDiscountList(orderId);
+                        }
+                        IList<OrderPayoff> orderPayoffList = null;
+                        if (order.Status == 1)
+                        {
+                            orderPayoffList = _orderPayoffDao.GetOrderPayoffList(orderId);
+                        }
+                        else if (order.Status == 2)
+                        {
+                            orderPayoffList = _orderPayoffDao.GetDeletedOrderPayoffList(orderId);
+                        }
+                        salesOrder.orderDetailsList = orderDetailsList;
+                        salesOrder.orderDiscountList = orderDiscountList;
+                        salesOrder.orderPayoffList = orderPayoffList;
                     }
-                    else if (order.Status == 2)
-                    {
-                        orderDetailsList = _orderDetailsDao.GetDeletedOrderDetailsList(orderID);
-                        orderDiscountList = _orderDiscountDao.GetDeletedOrderDiscountList(orderID);
-                    }
-                    IList<OrderPayoff> orderPayoffList = null;
-                    if (order.Status == 1)
-                    {
-                        orderPayoffList = _orderPayoffDao.GetOrderPayoffList(orderID);
-                    }
-                    else if (order.Status == 2)
-                    {
-                        orderPayoffList = _orderPayoffDao.GetDeletedOrderPayoffList(orderID);
-                    }
-                    salesOrder.orderDetailsList = orderDetailsList;
-                    salesOrder.orderDiscountList = orderDiscountList;
-                    salesOrder.orderPayoffList = orderPayoffList;
                 }
             }
-
-            _daoManager.CloseConnection();
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error(string.Format("[GetSalesOrderByBillSearch]参数：orderId_{0}", orderId), exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return salesOrder;
         }
 
@@ -442,8 +463,9 @@ namespace Top4ever.Service
                     _daoManager.CommitTransaction();
                     isSuccess = true;
                 }
-                catch
+                catch(Exception exception)
                 {
+                    LogHelper.GetInstance().Error(string.Format("[CreateOrderInAndroid]参数：deskName_{0},peopleNum_{1},employeeId_{2},employeeNo_{3},orderDetailList_{4}", deskName, peopleNum, employeeId, employeeNo, JsonConvert.SerializeObject(orderDetailList)), exception);
                     isSuccess = false;
                     _daoManager.RollBackTransaction();
                 }

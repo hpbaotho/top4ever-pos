@@ -5,6 +5,7 @@ using IBatisNet.DataAccess;
 
 using Top4ever.Domain;
 using Top4ever.Interface;
+using Top4ever.Utils;
 
 namespace Top4ever.Service
 {
@@ -15,9 +16,9 @@ namespace Top4ever.Service
     {
         #region Private Fields
 
-        private static NoticeService _instance = new NoticeService();
-        private IDaoManager _daoManager = null;
-        private INoticeDao _noticeDao = null;
+        private static readonly NoticeService _instance = new NoticeService();
+        private readonly IDaoManager _daoManager;
+        private readonly INoticeDao _noticeDao;
 
         #endregion
 
@@ -41,11 +42,19 @@ namespace Top4ever.Service
         public IList<Notice> GetAllNotice()
         {
             IList<Notice> noticeList = null;
-
-            _daoManager.OpenConnection();
-            noticeList = _noticeDao.GetAllNotice();
-            _daoManager.CloseConnection();
-
+            try
+            {
+                _daoManager.OpenConnection();
+                noticeList = _noticeDao.GetAllNotice();
+            }
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error("[GetAllNotice]", exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return noticeList;
         }
 

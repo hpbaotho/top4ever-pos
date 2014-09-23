@@ -3,7 +3,6 @@
 using IBatisNet.Common.Utilities;
 using IBatisNet.DataAccess;
 using IBatisNet.DataAccess.Configuration;
-using IBatisNet.DataAccess.Interfaces;
 
 namespace Top4ever.Service
 {

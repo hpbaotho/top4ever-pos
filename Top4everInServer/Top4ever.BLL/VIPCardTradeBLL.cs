@@ -19,8 +19,8 @@ namespace Top4ever.BLL
             string beginDate = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.CARD_NO, ParamFieldLength.BEGINDATE).Trim('\0');
             string endDate = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.CARD_NO + ParamFieldLength.BEGINDATE, ParamFieldLength.ENDDATE).Trim('\0');
 
-            VIPCardTradeRecord cardTradeRecord = null;
-            Int32 result = VIPCardTradeService.GetInstance().GetVIPCardTradeList(cardNo, DateTime.Parse(beginDate), DateTime.Parse(endDate), ref cardTradeRecord);
+            VIPCardTradeRecord cardTradeRecord;
+            Int32 result = VIPCardTradeService.GetInstance().GetVIPCardTradeList(cardNo, DateTime.Parse(beginDate), DateTime.Parse(endDate), out cardTradeRecord);
 
             string json = JsonConvert.SerializeObject(cardTradeRecord);
             byte[] jsonByte = Encoding.UTF8.GetBytes(json);

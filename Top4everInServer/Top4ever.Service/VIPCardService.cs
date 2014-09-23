@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 
-using IBatisNet.Common.Logging;
 using IBatisNet.DataAccess;
 
-using Top4ever.Common;
 using Top4ever.Domain.MembershipCard;
 using Top4ever.Interface.MembershipCard;
+using Top4ever.Utils;
 
 namespace Top4ever.Service
 {
@@ -16,13 +13,13 @@ namespace Top4ever.Service
     /// </summary>
     public class VIPCardService
     {
-        private static readonly ILog logger = LogManager.GetLogger(typeof(VIPCardService));
-
         #region Private Fields
 
+        private const char Delim = '*';
+
         private static VIPCardService _instance = new VIPCardService();
-        private IDaoManager _daoManager = null;
-        private IVIPCardDao _VIPCardDao = null;
+        private readonly IDaoManager _daoManager;
+        private readonly IVIPCardDao _vipCardDao;
 
         #endregion
 
@@ -31,7 +28,7 @@ namespace Top4ever.Service
         private VIPCardService()
         {
             _daoManager = ServiceConfig.GetInstance().DaoManager;
-            _VIPCardDao = _daoManager.GetDao(typeof(IVIPCardDao)) as IVIPCardDao;
+            _vipCardDao = _daoManager.GetDao(typeof(IVIPCardDao)) as IVIPCardDao;
         }
 
         #endregion
@@ -54,92 +51,129 @@ namespace Top4ever.Service
                 _daoManager.OpenConnection();
                 //加密的密码
                 string str = string.Empty;
-                string saltedPassword = _VIPCardDao.GetCardPassword(cardNo);
+                string saltedPassword = _vipCardDao.GetCardPassword(cardNo);
                 if (!string.IsNullOrEmpty(saltedPassword))
                 {
-                    int index = saltedPassword.IndexOf("*");
+                    int index = saltedPassword.IndexOf(Delim);
                     string salt = saltedPassword.Substring(0, index);
-                    str = salt + "*" + PasswordCryptographer.SaltPassword(password, salt);
+                    str = salt + Delim + PasswordCryptographer.SaltPassword(password, salt);
                 }
-                card = _VIPCardDao.GetVIPCard(cardNo, str);
-                if (card == null)
-                {
-                    result = 2;
-                }
-                else
-                {
-                    result = 1;
-                }
-                _daoManager.CloseConnection();
+                card = _vipCardDao.GetVIPCard(cardNo, str);
+                result = card == null ? 2 : 1;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
                 card = null;
                 result = 0;
-                logger.Error("Database operation failed !", ex);
+                LogHelper.GetInstance().Error(string.Format("[GetVIPCard]参数：cardNo_{0}", cardNo), exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
             }
             return result;
         }
 
         public string GetCardPassword(string cardNo)
         {
-            string password = string.Empty;
-            _daoManager.OpenConnection();
-            password = _VIPCardDao.GetCardPassword(cardNo);
-            _daoManager.CloseConnection();
+            string password;
+            try
+            {
+                _daoManager.OpenConnection();
+                password = _vipCardDao.GetCardPassword(cardNo);
+            }
+            catch (Exception exception)
+            {
+                password = string.Empty;
+                LogHelper.GetInstance().Error(string.Format("[GetCardPassword]参数：cardNo_{0}", cardNo), exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return password;
         }
 
         public decimal GetCardDiscountRate(string cardNo)
         {
             decimal discountRate = 0M;
-            _daoManager.OpenConnection();
-            discountRate = _VIPCardDao.GetCardDiscountRate(cardNo);
-            _daoManager.CloseConnection();
+            try
+            {
+                _daoManager.OpenConnection();
+                discountRate = _vipCardDao.GetCardDiscountRate(cardNo);
+            }
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error(string.Format("[GetCardDiscountRate]参数：cardNo_{0}", cardNo), exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return discountRate;
         }
 
         public Int32 UpdateCardPassword(string cardNo, string currentPassword, string newPassword)
         {
             int result = 0;
-            _daoManager.OpenConnection();
-            //加密的密码
-            string str = string.Empty;
-            string saltedPassword = _VIPCardDao.GetCardPassword(cardNo);
-            if (!string.IsNullOrEmpty(saltedPassword))
+            try
             {
-                int index = saltedPassword.IndexOf("*");
-                string salt = saltedPassword.Substring(0, index);
-                str = salt + "*" + PasswordCryptographer.SaltPassword(currentPassword, salt);
+                _daoManager.OpenConnection();
+                //加密的密码
+                string str = string.Empty;
+                string saltedPassword = _vipCardDao.GetCardPassword(cardNo);
+                if (!string.IsNullOrEmpty(saltedPassword))
+                {
+                    int index = saltedPassword.IndexOf(Delim);
+                    string salt = saltedPassword.Substring(0, index);
+                    str = salt + Delim + PasswordCryptographer.SaltPassword(currentPassword, salt);
+                }
+                string newSaltedPassword = PasswordCryptographer.GenerateSaltedPassword(newPassword);
+                result = _vipCardDao.UpdateVIPCardPassword(cardNo, str, newSaltedPassword);
             }
-            string newSaltedPassword = PasswordCryptographer.GenerateSaltedPassword(newPassword);
-            result = _VIPCardDao.UpdateVIPCardPassword(cardNo, str, newSaltedPassword);
-            _daoManager.CloseConnection();
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error(string.Format("[UpdateCardPassword]参数：cardNo_{0}", cardNo), exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return result;
         }
 
         public Int32 UpdateVIPCardStatus(string cardNo, string password, int status)
         {
             int result = 0;
-            _daoManager.OpenConnection();
-            //加密的密码
-            string str = string.Empty;
-            if (status == 1)
+            try
             {
-                str = PasswordCryptographer.GenerateSaltedPassword(password);
-            }
-            else
-            {
-                string saltedPassword = _VIPCardDao.GetCardPassword(cardNo);
-                if (!string.IsNullOrEmpty(saltedPassword))
+                _daoManager.OpenConnection();
+                //加密的密码
+                string str = string.Empty;
+                if (status == 1)
                 {
-                    int index = saltedPassword.IndexOf("*");
-                    string salt = saltedPassword.Substring(0, index);
-                    str = salt + "*" + PasswordCryptographer.SaltPassword(password, salt);
+                    str = PasswordCryptographer.GenerateSaltedPassword(password);
                 }
+                else
+                {
+                    string saltedPassword = _vipCardDao.GetCardPassword(cardNo);
+                    if (!string.IsNullOrEmpty(saltedPassword))
+                    {
+                        int index = saltedPassword.IndexOf(Delim);
+                        string salt = saltedPassword.Substring(0, index);
+                        str = salt + Delim + PasswordCryptographer.SaltPassword(password, salt);
+                    }
+                }
+                result = _vipCardDao.UpdateVIPCardStatus(cardNo, str, status);
             }
-            result = _VIPCardDao.UpdateVIPCardStatus(cardNo, str, status);
-            _daoManager.CloseConnection();
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error(string.Format("[UpdateVIPCardStatus]参数：cardNo_{0},status_{1}", cardNo, status), exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return result;
         }
 

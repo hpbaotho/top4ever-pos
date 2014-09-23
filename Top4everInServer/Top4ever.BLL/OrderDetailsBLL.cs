@@ -19,12 +19,15 @@ namespace Top4ever.BLL
             string strReceive = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, itemBuffer.Length - ParamFieldLength.PACKAGE_HEAD).Trim('\0');
             List<OrderDetails> orderDetailsList = JsonConvert.DeserializeObject<List<OrderDetails>>(strReceive);
             bool result = true;
-            foreach (OrderDetails item in orderDetailsList)
+            if (orderDetailsList != null && orderDetailsList.Count > 0)
             {
-                result = OrderDetailsService.GetInstance().LadeOrderDetails(item);
-                if (!result)
+                foreach (OrderDetails item in orderDetailsList)
                 {
-                    break;
+                    result = OrderDetailsService.GetInstance().LadeOrderDetails(item);
+                    if (!result)
+                    {
+                        break;
+                    }
                 }
             }
             if (result)
