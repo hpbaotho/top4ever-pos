@@ -3,16 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using IBatisNet.DataAccess;
-
 using Top4ever.Domain;
 using Top4ever.Domain.GoodsRelated;
-using Top4ever.Domain.OrderRelated;
 using Top4ever.Domain.Transfer;
 using Top4ever.Interface;
-using Top4ever.Interface.Accounts;
 using Top4ever.Interface.GoodsRelated;
 using Top4ever.Interface.OrderRelated;
-using Top4ever.Domain.Promotions;
+using Top4ever.Utils;
 
 namespace Top4ever.Service
 {
@@ -23,24 +20,23 @@ namespace Top4ever.Service
     {
         #region Private Fields
 
-        private static SysBasicDataService _instance = new SysBasicDataService();
-        private IDaoManager _daoManager = null;
+        private static readonly SysBasicDataService _instance = new SysBasicDataService();
+        private readonly IDaoManager _daoManager;
 
-        private INoticeDao _noticeDao = null;
-        private IRegionDao _regionDao = null;
-        private IDeskDao _deskDao = null;
-        private IDiscountDao _discountDao = null;
-        private IPayoffWayDao _payoffWayDao = null;
-        private IReasonDao _reasonDao = null;
-        private IGoodsGroupDao _goodsGroupDao = null;
-        private IGoodsDao _goodsDao = null;
-        private IDetailsGroupDao _detailsGroupDao = null;
-        private IDetailsDao _detailsDao = null;
-        private IGoodsSetMealDao _goodsSetMealDao = null;
-        private IButtonStyleDao _buttonStyleDao = null;
-        private ISystemConfigDao _sysConfigDao = null;
-        private IPromotionDao _promotionDao = null;
-        private IShopDao _shopDao = null;
+        private readonly INoticeDao _noticeDao;
+        private readonly IRegionDao _regionDao;
+        private readonly IDeskDao _deskDao;
+        private readonly IDiscountDao _discountDao;
+        private readonly IPayoffWayDao _payoffWayDao;
+        private readonly IReasonDao _reasonDao;
+        private readonly IGoodsGroupDao _goodsGroupDao;
+        private readonly IGoodsDao _goodsDao;
+        private readonly IDetailsGroupDao _detailsGroupDao;
+        private readonly IDetailsDao _detailsDao;
+        private readonly IGoodsSetMealDao _goodsSetMealDao;
+        private readonly IButtonStyleDao _buttonStyleDao;
+        private readonly ISystemConfigDao _sysConfigDao;
+        private readonly IPromotionDao _promotionDao;
 
         #endregion
 
@@ -63,7 +59,6 @@ namespace Top4ever.Service
             _buttonStyleDao = _daoManager.GetDao(typeof(IButtonStyleDao)) as IButtonStyleDao;
             _sysConfigDao = _daoManager.GetDao(typeof(ISystemConfigDao)) as ISystemConfigDao;
             _promotionDao = _daoManager.GetDao(typeof(IPromotionDao)) as IPromotionDao;
-            _shopDao = _daoManager.GetDao(typeof(IShopDao)) as IShopDao;
         }
 
         #endregion
@@ -78,7 +73,6 @@ namespace Top4ever.Service
         public SysBasicData GetSysBasicData()
         {
             SysBasicData basicData = new SysBasicData();
-
             _daoManager.BeginTransaction();
             try
             {
@@ -151,13 +145,12 @@ namespace Top4ever.Service
 
                 _daoManager.CommitTransaction();
             }
-            catch
+            catch(Exception exception)
             {
-                //记录日志 todo
+                LogHelper.GetInstance().Error("[GetSysBasicData]", exception);
                 _daoManager.RollBackTransaction();
                 basicData = null;
             }
-
             return basicData;
         }
 
@@ -184,9 +177,9 @@ namespace Top4ever.Service
                     }
                 }
             }
-            catch
+            catch(Exception exception)
             {
-                //记录日志 todo
+                LogHelper.GetInstance().Error("[GetGoodsGroupListInAndroid]", exception);
             }
             finally
             {
@@ -224,9 +217,9 @@ namespace Top4ever.Service
                     }
                 }
             }
-            catch
+            catch(Exception exception)
             {
-                //记录日志 todo
+                LogHelper.GetInstance().Error("[GetGoodsListInAndroid]参数：goodsGroupId_" + goodsGroupId, exception);
             }
             finally
             {
@@ -267,9 +260,9 @@ namespace Top4ever.Service
                     }
                 }
             }
-            catch
+            catch(Exception exception)
             {
-                //记录日志 todo
+                LogHelper.GetInstance().Error("[GetTopSaleGoods]", exception);
             }
             finally
             {

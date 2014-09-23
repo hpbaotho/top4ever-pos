@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 
 using IBatisNet.DataAccess;
-
+using Newtonsoft.Json;
 using Top4ever.Domain.OrderRelated;
 using Top4ever.Interface.OrderRelated;
+using Top4ever.Utils;
 
 namespace Top4ever.Service
 {
@@ -12,9 +13,9 @@ namespace Top4ever.Service
     {
         #region Private Fields
 
-        private static OrderDiscountService _instance = new OrderDiscountService();
-        private IDaoManager _daoManager = null;
-        private IOrderDiscountDao _orderDiscountDao = null;
+        private static readonly OrderDiscountService _instance = new OrderDiscountService();
+        private readonly IDaoManager _daoManager;
+        private readonly IOrderDiscountDao _orderDiscountDao;
 
         #endregion
 
@@ -37,19 +38,37 @@ namespace Top4ever.Service
 
         public void CreateOrderDiscount(OrderDiscount orderDiscount)
         {
-            _daoManager.OpenConnection();
-            _orderDiscountDao.CreateOrderDiscount(orderDiscount);
-            _daoManager.CloseConnection();
+            try
+            {
+                _daoManager.OpenConnection();
+                _orderDiscountDao.CreateOrderDiscount(orderDiscount);
+            }
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error(string.Format("[CreateOrderDiscount]参数：orderDiscount_{0}", JsonConvert.SerializeObject(orderDiscount)), exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
         }
 
         public bool UpdateOrderDiscount(OrderDiscount orderDiscount)
         {
             bool result = false;
-
-            _daoManager.OpenConnection();
-            result = _orderDiscountDao.UpdateOrderDiscount(orderDiscount);
-            _daoManager.CloseConnection();
-
+            try
+            {
+                _daoManager.OpenConnection();
+                result = _orderDiscountDao.UpdateOrderDiscount(orderDiscount);
+            }
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error(string.Format("[UpdateOrderDiscount]参数：orderDiscount_{0}", JsonConvert.SerializeObject(orderDiscount)), exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return result;
         }
         #endregion

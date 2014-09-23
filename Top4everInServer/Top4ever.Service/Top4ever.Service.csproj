@@ -37,6 +37,9 @@
     <Reference Include="IBatisNet.DataAccess">
       <HintPath>bin\Release\IBatisNet.DataAccess.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\External-bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -71,10 +74,6 @@
     <Compile Include="VIPCardTradeService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Top4ever.Common\Top4ever.Common.csproj">
-      <Project>{A7630CE5-49F7-40A8-9C92-96708201C756}</Project>
-      <Name>Top4ever.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Top4ever.Domain\Top4ever.Domain.csproj">
       <Project>{D8EA3645-CE2C-4A83-9D8C-C478B50FB926}</Project>
       <Name>Top4ever.Domain</Name>
@@ -82,6 +81,10 @@
     <ProjectReference Include="..\Top4ever.Interface\Top4ever.Interface.csproj">
       <Project>{AAA27C54-1107-4BC8-8F9E-24DB63A288B1}</Project>
       <Name>Top4ever.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Top4ever.Utils\Top4ever.Utils.csproj">
+      <Project>{99C3AD99-F898-407B-BBE2-B1FA726738E2}</Project>
+      <Name>Top4ever.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

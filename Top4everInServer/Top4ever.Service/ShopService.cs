@@ -2,9 +2,10 @@
 using System.Collections;
 
 using IBatisNet.DataAccess;
-
+using Newtonsoft.Json;
 using Top4ever.Domain;
 using Top4ever.Interface;
+using Top4ever.Utils;
 
 namespace Top4ever.Service
 {
@@ -15,9 +16,9 @@ namespace Top4ever.Service
     {
         #region Private Fields
 
-        private static ShopService _instance = new ShopService();
-        private IDaoManager _daoManager = null;
-        private IShopDao _shopDao = null;
+        private static readonly ShopService _instance = new ShopService();
+        private readonly IDaoManager _daoManager;
+        private readonly IShopDao _shopDao;
 
         #endregion
 
@@ -41,11 +42,19 @@ namespace Top4ever.Service
         public Shop GetSingleShop()
         {
             Shop shop = null;
-
-            _daoManager.OpenConnection();
-            shop = _shopDao.GetSingleShop();
-            _daoManager.CloseConnection();
-
+            try
+            {
+                _daoManager.OpenConnection();
+                shop = _shopDao.GetSingleShop();
+            }
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error("[GetSingleShop]", exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return shop;
         }
 

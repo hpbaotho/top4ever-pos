@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="DailyTurnover" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <alias>
+      <typeAlias alias="DailyTurnover" type="Top4ever.Domain.DailyTurnover, Top4ever.Domain" />
+    </alias>
+
+    <resultMaps>
+      <resultMap id="DailyTurnoverResult" class="DailyTurnover">
+        <result property="DailyStatementNo" column="DailyStatementNo"></result>
+        <result property="TotalRevenue" column="TotalRevenue"></result>
+        <result property="CutOffTotalPrice" column="CutOffTotalPrice"></result>
+        <result property="DiscountTotalPrice" column="DiscountTotalPrice"></result>
+        <result property="ActualTotalIncome" column="ActualTotalIncome"></result>
+        <result property="TotalServiceFee" column="TotalServiceFee"></result>
+        <result property="StoredTotalPrice" column="StoredTotalPrice"></result>
+      </resultMap>
+    </resultMaps>
+
+    <!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+    <statements>
+      <select id="GetDailyTurnoverByStatementNo" parameterClass="String" resultMap="DailyTurnoverResult">
+        SELECT DailyStatementNo, TotalRevenue, CutOffTotalPrice, DiscountTotalPrice, ActualTotalIncome, TotalServiceFee, StoredTotalPrice
+        FROM DailyTurnover
+        WHERE DailyStatementNo = #value#
+      </select>
+        
+      <insert id="InsertDailyTurnover" parameterClass="DailyTurnover">
+        INSERT INTO DailyTurnover
+        (
+          DailyStatementNo,
+          TotalRevenue,
+          CutOffTotalPrice,
+          DiscountTotalPrice,
+          ActualTotalIncome,
+          TotalServiceFee,
+          StoredTotalPrice
+        )
+        VALUES
+        (
+          #DailyStatementNo#,
+          #TotalRevenue#,
+          #CutOffTotalPrice#,
+          #DiscountTotalPrice#,
+          #ActualTotalIncome#,
+          #TotalServiceFee#,
+          #StoredTotalPrice#
+        )
+      </insert>
+    </statements>
+</sqlMap>

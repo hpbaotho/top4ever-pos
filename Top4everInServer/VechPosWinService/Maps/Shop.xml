@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="Shop" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <alias>
+      <typeAlias alias="Shop" type="Top4ever.Domain.Shop, Top4ever.Domain" />
+    </alias>
+
+    <resultMaps>
+      <resultMap id="ShopResult" class="Shop">
+        <result property="ShopID" column="ShopID"></result>
+        <result property="ShopNo" column="ShopNo"></result>
+        <result property="ShopName" column="ShopName"></result>
+        <result property="CompanyAlias" column="CompanyAlias"></result>
+        <result property="Manager" column="Manager"></result>
+        <result property="Contact" column="Contact"></result>
+        <result property="Telephone" column="Telephone"></result>
+        <result property="Fax" column="Fax"></result>
+        <result property="Email" column="Email"></result>
+        <result property="RegAddress" column="Address_Reg"></result>
+        <result property="RunAddress" column="Address_Run"></result>
+        <result property="Area" column="Area"></result>
+        <result property="Remark" column="Remark"></result>
+      </resultMap>
+
+    </resultMaps>
+
+    <!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+    <statements>
+      <select id="GetShopInfo" resultMap="ShopResult">
+        SELECT [ShopID]
+        ,[ShopNo]
+        ,[ShopName]
+        ,[CompanyAlias]
+        ,[Manager]
+        ,[Contact]
+        ,[Telephone]
+        ,[Fax]
+        ,[Email]
+        ,[Address_Reg]
+        ,[Address_Run]
+        ,[Area]
+        ,[Remark]
+        FROM Shop WITH(NOLOCK)
+        WHERE IsVoided = 0
+      </select>
+
+    </statements>
+</sqlMap>

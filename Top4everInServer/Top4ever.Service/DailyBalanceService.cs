@@ -1,27 +1,25 @@
 ﻿using System;
 
-using IBatisNet.Common.Logging;
 using IBatisNet.DataAccess;
-
+using Newtonsoft.Json;
 using Top4ever.Domain;
 using Top4ever.Domain.Transfer;
 using Top4ever.Interface;
 using Top4ever.Interface.OrderRelated;
 using System.Collections.Generic;
+using Top4ever.Utils;
 
 namespace Top4ever.Service
 {
     public class DailyBalanceService
     {
-        private static readonly ILog logger = LogManager.GetLogger(typeof(DailyBalanceService));
-
         #region Private Fields
 
-        private static DailyBalanceService _instance = new DailyBalanceService();
-        private IDaoManager _daoManager = null;
-        private IOrderDao _orderDao = null;
-        private IDailyStatementDao _dailyStatementDao = null;
-        private IDailyTurnoverDao _dailyTurnoverDao = null;
+        private static readonly DailyBalanceService _instance = new DailyBalanceService();
+        private readonly IDaoManager _daoManager;
+        private readonly IOrderDao _orderDao;
+        private readonly IDailyStatementDao _dailyStatementDao;
+        private readonly IDailyTurnoverDao _dailyTurnoverDao;
 
         #endregion
 
@@ -71,10 +69,11 @@ namespace Top4ever.Service
                 }
                 _daoManager.CommitTransaction();
             }
-            catch
+            catch(Exception exception)
             {
                 _daoManager.RollBackTransaction();
                 returnValue = 0;
+                LogHelper.GetInstance().Error(string.Format("[CreateDailyBalance]参数：dailyBalance_{0}", JsonConvert.SerializeObject(dailyBalance)), exception);
             }
             return returnValue;
         }
@@ -82,14 +81,24 @@ namespace Top4ever.Service
         public string GetDailyStatementTimeInterval()
         {
             string timeInterval = string.Empty;
-            _daoManager.OpenConnection();
-            //日结号
-            string dailyStatementNo = _dailyStatementDao.GetCurrentDailyStatementNo();
-            if (!string.IsNullOrEmpty(dailyStatementNo))
+            try
             {
-                timeInterval = _dailyStatementDao.GetDailyStatementTimeInterval(dailyStatementNo);
+                _daoManager.OpenConnection();
+                //日结号
+                string dailyStatementNo = _dailyStatementDao.GetCurrentDailyStatementNo();
+                if (!string.IsNullOrEmpty(dailyStatementNo))
+                {
+                    timeInterval = _dailyStatementDao.GetDailyStatementTimeInterval(dailyStatementNo);
+                }
             }
-            _daoManager.CloseConnection();
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error("[GetDailyStatementTimeInterval]", exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return timeInterval;
         }
 
@@ -103,8 +112,8 @@ namespace Top4ever.Service
                 DateTime lastBelongDate = _dailyStatementDao.GetLastDailyStatementDate();
                 DateTime beginTime = DateTime.Parse(lastBelongDate.AddDays(1).ToString("yyyy-MM-dd 05:00:00"));
                 DateTime endTime = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd 05:00:00"));
-                bool IsExist = _orderDao.IsExistOrderInTimeInterval(beginTime, endTime);
-                if (IsExist)
+                bool isExist = _orderDao.IsExistOrderInTimeInterval(beginTime, endTime);
+                if (isExist)
                 {
                     status = 2;
                 }
@@ -120,12 +129,15 @@ namespace Top4ever.Service
                         status = 1;
                     }
                 }
-                _daoManager.CloseConnection();
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
                 status = 0;
-                logger.Error("Database operation failed !", ex);
+                LogHelper.GetInstance().Error("[CheckLastDailyStatement]", exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
             }
             return status;
         }
@@ -138,12 +150,22 @@ namespace Top4ever.Service
         public IList<DailyBalanceTime> GetDailyBalanceTime(DateTime belongToDate)
         {
             IList<DailyBalanceTime> dailyBalanceTimeList = null;
-            _daoManager.OpenConnection();
-            if (belongToDate > DateTime.MinValue)
+            try
             {
-                dailyBalanceTimeList = _dailyStatementDao.GetDailyBalanceTime(belongToDate);
+                _daoManager.OpenConnection();
+                if (belongToDate > DateTime.MinValue)
+                {
+                    dailyBalanceTimeList = _dailyStatementDao.GetDailyBalanceTime(belongToDate);
+                }
             }
-            _daoManager.CloseConnection();
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error("[GetDailyBalanceTime]参数：belongToDate_" + belongToDate, exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return dailyBalanceTimeList;
         }
 
@@ -156,12 +178,22 @@ namespace Top4ever.Service
         public IList<DailyStatementInDay> GetDailyStatementInDays(DateTime beginDate, DateTime endDate)
         {
             IList<DailyStatementInDay> dailyStatementList = null;
-            _daoManager.OpenConnection();
-            if (endDate > beginDate)
+            try
             {
-                dailyStatementList = _dailyStatementDao.GetDailyStatementInDays(beginDate, endDate);
+                _daoManager.OpenConnection();
+                if (endDate > beginDate)
+                {
+                    dailyStatementList = _dailyStatementDao.GetDailyStatementInDays(beginDate, endDate);
+                }
             }
-            _daoManager.CloseConnection();
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error(string.Format("[GetDailyStatementInDays]参数：beginDate_{0}, endDate_{1}", beginDate, endDate), exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return dailyStatementList;
         }
 

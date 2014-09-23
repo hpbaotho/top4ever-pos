@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="Discount" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <alias>
+      <typeAlias alias="Discount" type="Top4ever.Domain.OrderRelated.Discount, Top4ever.Domain" />
+    </alias>
+
+    <resultMaps>
+      <resultMap id="DiscountResult" class="Discount">
+        <result property="DiscountID" column="DiscountID"></result>
+        <result property="DiscountName" column="DiscountName"></result>
+        <result property="DiscountName2nd" column="DiscountName_2nd"></result>
+        <result property="DiscountType" column="DiscountType"></result>
+        <result property="DiscountRate" column="DiscountRate"></result>
+        <result property="MinQuotas" column="MinQuotas"></result>
+        <result property="OffFixPay" column="OffFixPay"></result>
+        <result property="DisplayModel" column="DisplayModel"></result>
+        <result property="ForcedDiscount" column="ForcedDiscount"></result>
+        <result property="ButtonStyleID" column="ButtonStyleID"></result>
+      </resultMap>
+
+    </resultMaps>
+    <!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+    <statements>
+      <select id="GetDiscountList" resultMap="DiscountResult">
+        SELECT DiscountID,DiscountName,DiscountName_2nd,DiscountType,DiscountRate,MinQuotas,OffFixPay,DisplayModel,ForcedDiscount,ButtonStyleID
+        FROM Discount
+        WHERE IsVoided = 0
+        ORDER BY OrderBy
+      </select>
+
+    </statements>
+</sqlMap>

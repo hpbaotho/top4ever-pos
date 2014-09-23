@@ -2,27 +2,29 @@
 using System.Collections.Generic;
 
 using IBatisNet.DataAccess;
-
+using Newtonsoft.Json;
 using Top4ever.Domain;
 using Top4ever.Domain.OrderRelated;
 using Top4ever.Domain.Transfer;
 using Top4ever.Interface;
 using Top4ever.Interface.OrderRelated;
+using Top4ever.Utils;
+
 namespace Top4ever.Service
 {
     public class DeletedOrderService
     {
         #region Private Fields
 
-        private static DeletedOrderService _instance = new DeletedOrderService();
-        private IDaoManager _daoManager = null;
-        private IOrderDao _orderDao = null;
-        private IOrderDetailsDao _orderDetailsDao = null;
-        private IOrderDiscountDao _orderDiscountDao = null;
-        private IOrderPayoffDao _orderPayoffDao = null;
-        private ISystemConfigDao _sysConfigDao = null;
-        private IPrintTaskDao _printTaskDao = null;
-        private IDailyStatementDao _dailyStatementDao = null;
+        private static readonly DeletedOrderService _instance = new DeletedOrderService();
+        private readonly IDaoManager _daoManager;
+        private readonly IOrderDao _orderDao;
+        private readonly IOrderDetailsDao _orderDetailsDao;
+        private readonly IOrderDiscountDao _orderDiscountDao;
+        private readonly IOrderPayoffDao _orderPayoffDao;
+        private readonly ISystemConfigDao _sysConfigDao;
+        private readonly IPrintTaskDao _printTaskDao;
+        private readonly IDailyStatementDao _dailyStatementDao;
 
         #endregion
 
@@ -55,12 +57,14 @@ namespace Top4ever.Service
             _daoManager.BeginTransaction();
             try
             {
-                Order order = new Order();
-                order.OrderID = deletedSingleOrder.OrderID;
-                order.TotalSellPrice = deletedSingleOrder.TotalSellPrice;
-                order.ActualSellPrice = deletedSingleOrder.ActualSellPrice;
-                order.DiscountPrice = deletedSingleOrder.DiscountPrice;
-                order.CutOffPrice = deletedSingleOrder.CutOffPrice;
+                Order order = new Order
+                {
+                    OrderID = deletedSingleOrder.OrderID, 
+                    TotalSellPrice = deletedSingleOrder.TotalSellPrice, 
+                    ActualSellPrice = deletedSingleOrder.ActualSellPrice, 
+                    DiscountPrice = deletedSingleOrder.DiscountPrice, 
+                    CutOffPrice = deletedSingleOrder.CutOffPrice
+                };
                 if (_orderDao.UpdateOrderPrice(order))
                 {
                     foreach (DeletedOrderDetails item in deletedSingleOrder.deletedOrderDetailsList)
@@ -101,10 +105,11 @@ namespace Top4ever.Service
                 }
                 _daoManager.CommitTransaction();
             }
-            catch
+            catch(Exception exception)
             {
                 _daoManager.RollBackTransaction();
                 returnValue = false;
+                LogHelper.GetInstance().Error(string.Format("[DeleteSingleOrder]参数：deletedSingleOrder_{0}", JsonConvert.SerializeObject(deletedSingleOrder)), exception);
             }
             return returnValue;
         }
@@ -121,9 +126,11 @@ namespace Top4ever.Service
                     //获取打印任务列表
                     Order order = _orderDao.GetOrder(deletedOrder.OrderID);
                     IList<OrderDetails> orderDetailsList = _orderDetailsDao.GetOrderDetailsList(deletedOrder.OrderID);
-                    SalesOrder salesOrder = new SalesOrder();
-                    salesOrder.order = order;
-                    salesOrder.orderDetailsList = orderDetailsList;
+                    SalesOrder salesOrder = new SalesOrder
+                    {
+                        order = order, 
+                        orderDetailsList = orderDetailsList
+                    };
                     IList<PrintTask> printTaskList = PrintTaskService.GetInstance().GetPrintTaskList(salesOrder, systemConfig.PrintStyle, systemConfig.FollowStyle, systemConfig.PrintType, 2, deletedOrder.CancelReasonName);
                     foreach (PrintTask printTask in printTaskList)
                     {
@@ -143,10 +150,11 @@ namespace Top4ever.Service
                 }
                 _daoManager.CommitTransaction();
             }
-            catch
+            catch(Exception exception)
             {
                 _daoManager.RollBackTransaction();
                 returnValue = false;
+                LogHelper.GetInstance().Error(string.Format("[DeleteWholeOrder]参数：deletedOrder_{0}", JsonConvert.SerializeObject(deletedOrder)), exception);
             }
             return returnValue;
         }
@@ -179,10 +187,11 @@ namespace Top4ever.Service
                 }
                 _daoManager.CommitTransaction();
             }
-            catch
+            catch(Exception exception)
             {
                 _daoManager.RollBackTransaction();
                 returnValue = false;
+                LogHelper.GetInstance().Error(string.Format("[DeletePaidSingleOrder]参数：deletedPaidOrder_{0}", JsonConvert.SerializeObject(deletedPaidOrder)), exception);
             }
             return returnValue;
         }
@@ -204,10 +213,11 @@ namespace Top4ever.Service
                 }
                 _daoManager.CommitTransaction();
             }
-            catch
+            catch(Exception exception)
             {
                 _daoManager.RollBackTransaction();
                 returnValue = false;
+                LogHelper.GetInstance().Error(string.Format("[DeletePaidWholeOrder]参数：deletedOrder_{0}", JsonConvert.SerializeObject(deletedOrder)), exception);
             }
             return returnValue;
         }

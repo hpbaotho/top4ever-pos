@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="Region" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <alias>
+      <typeAlias alias="Region" type="Top4ever.Domain.BizRegion, Top4ever.Domain" />
+    </alias>
+
+    <resultMaps>
+      <resultMap id="RegionResult" class="Region">
+        <result property="RegionID" column="RegionID"></result>
+        <result property="RegionName" column="RegionName"></result>
+        <result property="PX" column="PX"></result>
+        <result property="PY" column="PY"></result>
+        <result property="Width" column="Width"></result>
+        <result property="Height" column="Height"></result>
+        <result property="ButtonStyleID" column="ButtonStyleID"></result>
+      </resultMap>
+
+    </resultMaps>
+    <!-- =============================================
+        MAPPED STATEMENTS 
+    ============================================= 
+    -->
+    <statements>
+      <select id="GetBizRegionList" resultMap="RegionResult">
+        SELECT [RegionID]
+        ,[RegionName]
+        ,[PX]
+        ,[PY]
+        ,[Width]
+        ,[Height]
+        ,[ButtonStyleID]
+        FROM RegionButton
+        WHERE IsVoided = 0
+      </select>
+
+    </statements>
+</sqlMap>

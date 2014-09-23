@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Net.Sockets;
 
 using Top4ever.BLL;
+using Top4ever.Utils;
 
 namespace Top4ever.NetServer
 {
@@ -18,7 +17,7 @@ namespace Top4ever.NetServer
         private int m_CommandID;
         private byte[] m_ItemBuffer;
         private int m_Offset;
-        
+
         /// <summary>
         /// Class constructor.
         /// </summary>
@@ -83,9 +82,9 @@ namespace Top4ever.NetServer
             {
                 this.connection.Shutdown(SocketShutdown.Send);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Throw if client has closed, so it is not necessary to catch.
+                LogHelper.GetInstance().Error("client socket has closed.", ex);
             }
             finally
             {

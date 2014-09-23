@@ -33,11 +33,11 @@ namespace Top4ever.Persistence
         /// <summary>
         /// 通过交班Id获取营业额统计
         /// </summary>
-        /// <param name="handoverRecordID">交班Id</param>
+        /// <param name="handoverRecordId">交班Id</param>
         /// <returns></returns>
-        public BusinessReport GetTurnoverByHandoverRecordID(Guid handoverRecordID)
+        public BusinessReport GetTurnoverByHandoverRecordID(Guid handoverRecordId)
         {
-            return ExecuteQueryForObject("GetTurnoverByHandoverRecordID", handoverRecordID) as BusinessReport;
+            return ExecuteQueryForObject("GetTurnoverByHandoverRecordID", handoverRecordId) as BusinessReport;
         }
 
         public BusinessReport GetTurnoverByDailyStatement(string dailyStatementNo)

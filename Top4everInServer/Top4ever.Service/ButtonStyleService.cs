@@ -5,6 +5,7 @@ using IBatisNet.DataAccess;
 
 using Top4ever.Domain;
 using Top4ever.Interface;
+using Top4ever.Utils;
 
 namespace Top4ever.Service
 {
@@ -15,9 +16,9 @@ namespace Top4ever.Service
     {
         #region Private Fields
 
-        private static ButtonStyleService _instance = new ButtonStyleService();
-        private IDaoManager _daoManager = null;
-        private IButtonStyleDao _buttonStyleDao = null;
+        private static readonly ButtonStyleService _instance = new ButtonStyleService();
+        private readonly IDaoManager _daoManager;
+        private readonly IButtonStyleDao _buttonStyleDao;
 
         #endregion
 
@@ -41,11 +42,19 @@ namespace Top4ever.Service
         public IList<ButtonStyle> GetButtonStyleList()
         {
             IList<ButtonStyle> buttonStyleList = null;
-
-            _daoManager.OpenConnection();
-            buttonStyleList = _buttonStyleDao.GetButtonStyleList();
-            _daoManager.CloseConnection();
-
+            try
+            {
+                _daoManager.OpenConnection();
+                buttonStyleList = _buttonStyleDao.GetButtonStyleList();
+            }
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error("[GetButtonStyleList]", exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return buttonStyleList;
         }
 

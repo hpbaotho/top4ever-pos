@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 
 using IBatisNet.DataAccess;
-
+using Newtonsoft.Json;
 using Top4ever.Domain;
 using Top4ever.Domain.Transfer;
 using Top4ever.Interface;
+using Top4ever.Utils;
 
 namespace Top4ever.Service
 {
@@ -16,9 +17,9 @@ namespace Top4ever.Service
     {
         #region Private Fields
 
-        private static DeskService _instance = new DeskService();
-        private IDaoManager _daoManager = null;
-        private IDeskDao _deskDao = null;
+        private static readonly DeskService _instance = new DeskService();
+        private readonly IDaoManager _daoManager;
+        private readonly IDeskDao _deskDao;
 
         #endregion
 
@@ -39,69 +40,117 @@ namespace Top4ever.Service
             return _instance;
         }
 
-        public IList<BizDesk> GetAllBizDeskByRegion(Guid regionID)
+        public IList<BizDesk> GetAllBizDeskByRegion(Guid regionId)
         {
             IList<BizDesk> deskList = null;
-
-            _daoManager.OpenConnection();
-            deskList = _deskDao.GetAllBizDeskByRegion(regionID);
-            _daoManager.CloseConnection();
-
+            try
+            {
+                _daoManager.OpenConnection();
+                deskList = _deskDao.GetAllBizDeskByRegion(regionId);
+            }
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error(string.Format("[GetAllBizDeskByRegion]参数：regionId_{0}", regionId), exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return deskList;
         }
 
         public IList<string> GetAllDeskName()
         {
             IList<string> deskNameList = null;
-
-            _daoManager.OpenConnection();
-            deskNameList = _deskDao.GetAllDeskName();
-            _daoManager.CloseConnection();
-
+            try
+            {
+                _daoManager.OpenConnection();
+                deskNameList = _deskDao.GetAllDeskName();
+            }
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error("[GetAllDeskName]", exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return deskNameList;
         }
 
         public BizDesk GetBizDeskByName(string deskName)
         {
             BizDesk desk = null;
-
-            _daoManager.OpenConnection();
-            desk = _deskDao.GetBizDeskByName(deskName);
-            _daoManager.CloseConnection();
-
+            try
+            {
+                _daoManager.OpenConnection();
+                desk = _deskDao.GetBizDeskByName(deskName);
+            }
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error("[GetBizDeskByName]参数：deskName_" + deskName, exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return desk;
         }
 
         public bool UpdateBizDeskStatus(BizDesk desk)
         {
             bool result = false;
-
-            _daoManager.OpenConnection();
-            result = _deskDao.UpdateBizDeskStatus(desk);
-            _daoManager.CloseConnection();
-
+            try
+            {
+                _daoManager.OpenConnection();
+                result = _deskDao.UpdateBizDeskStatus(desk);
+            }
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error(string.Format("[UpdateBizDeskStatus]参数：desk_{0}", JsonConvert.SerializeObject(desk)), exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return result;
         }
 
-        public IList<DeskRealTimeInfo> GetDeskRealTimeInfo(Guid regionID)
+        public IList<DeskRealTimeInfo> GetDeskRealTimeInfo(Guid regionId)
         {
             IList<DeskRealTimeInfo> deskInfoList = null;
-
-            _daoManager.OpenConnection();
-            deskInfoList = _deskDao.GetDeskRealTimeInfo(regionID);
-            _daoManager.CloseConnection();
-
+            try
+            {
+                _daoManager.OpenConnection();
+                deskInfoList = _deskDao.GetDeskRealTimeInfo(regionId);
+            }
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error("[GetDeskRealTimeInfo]参数：regionId_" + regionId, exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return deskInfoList;
         }
 
         public IList<DeskInfo> GetDeskList()
         {
             IList<DeskInfo> deskInfoList = null;
-
-            _daoManager.OpenConnection();
-            deskInfoList = _deskDao.GetDeskList();
-            _daoManager.CloseConnection();
-
+            try
+            {
+                _daoManager.OpenConnection();
+                deskInfoList = _deskDao.GetDeskList();
+            }
+            catch (Exception exception)
+            {
+                LogHelper.GetInstance().Error("[GetDeskList]", exception);
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
+            }
             return deskInfoList;
         }
 

@@ -71,9 +71,9 @@ namespace Top4ever.BLL
         public static byte[] GetDeskRealTimeInfo(byte[] itemBuffer)
         {
             byte[] objRet = null;
-            string regionID = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, ParamFieldLength.REGION_ID).Trim('\0');
+            string regionId = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, ParamFieldLength.REGION_ID).Trim('\0');
 
-            IList<DeskRealTimeInfo> deskInfoList = DeskService.GetInstance().GetDeskRealTimeInfo(new Guid(regionID));
+            IList<DeskRealTimeInfo> deskInfoList = DeskService.GetInstance().GetDeskRealTimeInfo(new Guid(regionId));
             if (deskInfoList == null)
             {
                 //数据获取失败

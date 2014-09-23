@@ -47,12 +47,12 @@ namespace Top4ever.BLL
         public static byte[] GetReportDataByHandoverRecordID(byte[] itemBuffer)
         {
             byte[] objRet = null;
-            string handoverRecordID = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, ParamFieldLength.HANDOVER_RECORD_ID).Trim('\0');
+            string handoverRecordId = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, ParamFieldLength.HANDOVER_RECORD_ID).Trim('\0');
 
             BusinessReport bizReport = null;
-            if (!string.IsNullOrEmpty(handoverRecordID))
+            if (!string.IsNullOrEmpty(handoverRecordId))
             {
-                bizReport = BusinessReportService.GetInstance().GetReportDataByHandoverRecordID(new Guid(handoverRecordID));
+                bizReport = BusinessReportService.GetInstance().GetReportDataByHandoverRecordId(new Guid(handoverRecordId));
             }
             if (bizReport == null)
             {
