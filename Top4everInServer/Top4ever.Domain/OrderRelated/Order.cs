@@ -63,7 +63,7 @@ namespace Top4ever.Domain.OrderRelated
         /// </summary>
         public int EatType { get; set; }
         /// <summary>
-        /// 单据状态0 初始，1 结账，2作废，3预结，4并桌 
+        /// 单据状态0 初始，1 结账，2作废，3预结，4并桌
         /// </summary>
         public int Status { get; set; }
         /// <summary>

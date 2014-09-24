@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Top4ever.Domain.GoodsRelated;
 
 namespace Top4ever.Domain.Transfer
