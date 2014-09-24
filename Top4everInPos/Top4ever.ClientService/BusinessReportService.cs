@@ -11,8 +11,15 @@ namespace Top4ever.ClientService
 {
     public class BusinessReportService
     {
-        public BusinessReportService()
+        private static readonly BusinessReportService Instance = new BusinessReportService();
+
+        private BusinessReportService()
         { }
+
+        public static BusinessReportService GetInstance()
+        {
+            return Instance;
+        }
 
         public BusinessReport GetReportDataByHandover(string deviceNo)
         {
@@ -44,9 +51,9 @@ namespace Top4ever.ClientService
             return bizReport;
         }
 
-        public BusinessReport GetReportDataByHandoverRecordID(Guid handoverRecordID)
+        public BusinessReport GetReportDataByHandoverRecordId(Guid handoverRecordId)
         {
-            int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.HANDOVER_RECORD_ID;
+            const int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.HANDOVER_RECORD_ID;
             byte[] sendByte = new byte[cByte];
             int byteOffset = 0;
             Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_REPORTDATABYHANDOVERRECORDID), sendByte, BasicTypeLength.INT32);
@@ -55,7 +62,7 @@ namespace Top4ever.ClientService
             byteOffset += BasicTypeLength.INT32;
 
             //handoverRecordID
-            byte[] tempByte = Encoding.UTF8.GetBytes(handoverRecordID.ToString());
+            byte[] tempByte = Encoding.UTF8.GetBytes(handoverRecordId.ToString());
             Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
             byteOffset += ParamFieldLength.HANDOVER_RECORD_ID;
 
@@ -81,7 +88,7 @@ namespace Top4ever.ClientService
         /// <returns></returns>
         public BusinessReport GetReportDataByDailyStatement(string dailyStatementNo)
         {
-            int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.DAILY_STATEMENT_NO;
+            const int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.DAILY_STATEMENT_NO;
             byte[] sendByte = new byte[cByte];
             int byteOffset = 0;
             Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_REPORTDATABYDAILYSTATEMENT), sendByte, BasicTypeLength.INT32);
@@ -111,7 +118,7 @@ namespace Top4ever.ClientService
 
         public IList<GroupPrice> GetItemPriceListByGroup(string beginDate, string endDate)
         {
-            int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.BEGINDATE + ParamFieldLength.ENDDATE;
+            const int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.BEGINDATE + ParamFieldLength.ENDDATE;
             byte[] sendByte = new byte[cByte];
             int byteOffset = 0;
             Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_ITEMPRICELISTBYGROUP), sendByte, BasicTypeLength.INT32);

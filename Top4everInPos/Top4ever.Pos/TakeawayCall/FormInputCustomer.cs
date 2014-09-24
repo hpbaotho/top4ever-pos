@@ -98,8 +98,7 @@ namespace Top4ever.Pos.TakeawayCall
             customerInfo.ActiveIndex = 1;
             customerInfo.LastModifiedEmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
 
-            CustomersService customerService = new CustomersService();
-            int result = customerService.CreateCustomerInfo(customerInfo);
+            int result = CustomersService.GetInstance().CreateCustomerInfo(customerInfo);
             if (result == 1)
             {
                 MessageBox.Show("创建客户信息成功！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);

@@ -34,8 +34,7 @@ namespace Top4ever.Pos.Feature
             {
                 dateType = 2;
             }
-            OrderDetailsService orderDetailsService = new OrderDetailsService();
-            DeletedAllItems deletedAllItems = orderDetailsService.GetAllDeletedItems(beginDate, endDate, dateType);
+            DeletedAllItems deletedAllItems = OrderDetailsService.GetInstance().GetAllDeletedItems(beginDate, endDate, dateType);
             //绑定单品删除品项
             if (deletedAllItems.DeletedGoodsItemList != null && deletedAllItems.DeletedGoodsItemList.Count > 0)
             {

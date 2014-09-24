@@ -6,14 +6,22 @@ using Top4ever.ClientService.Enum;
 using Top4ever.Domain.OrderRelated;
 using Top4ever.Entity;
 using Newtonsoft.Json;
+using Top4ever.Domain.Customers;
 using Top4ever.Domain.Transfer;
 
 namespace Top4ever.ClientService
 {
     public class OrderDetailsService
     {
-        public OrderDetailsService()
+        private static readonly OrderDetailsService Instance = new OrderDetailsService();
+
+        private OrderDetailsService()
         { }
+
+        public static OrderDetailsService GetInstance()
+        {
+            return Instance;
+        }
 
         public bool LadeOrderDetails(List<OrderDetails> orderDetailsList)
         {
@@ -106,6 +114,47 @@ namespace Top4ever.ClientService
                 socket.Close();
             }
             return (decimal)result;
+        }
+
+        /// <summary>
+        ///  获取一段时间内热销产品列表
+        /// </summary>
+        /// <param name="beginDate">开始日期</param>
+        /// <param name="endDate">结束日期</param>
+        /// <returns></returns>
+        public IList<TopSellGoods> GetTopSellGoodsByTime(string beginDate, string endDate)
+        {
+            int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.BEGINDATE + ParamFieldLength.ENDDATE;
+            byte[] sendByte = new byte[cByte];
+            int byteOffset = 0;
+            Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_TOPSELLGOODSBYTIME), sendByte, BasicTypeLength.INT32);
+            byteOffset = BasicTypeLength.INT32;
+            Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
+            byteOffset += BasicTypeLength.INT32;
+
+            byte[] tempByte = null;
+            //beginDate
+            tempByte = Encoding.UTF8.GetBytes(beginDate);
+            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
+            byteOffset += ParamFieldLength.BEGINDATE;
+            //endDate
+            tempByte = Encoding.UTF8.GetBytes(endDate);
+            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
+            byteOffset += ParamFieldLength.ENDDATE;
+
+            IList<TopSellGoods> topSellGoodsList = null;
+            using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
+            {
+                Byte[] receiveData = null;
+                Int32 operCode = socket.SendReceive(sendByte, out receiveData);
+                if (operCode == (int)RET_VALUE.SUCCEEDED)
+                {
+                    string strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD, receiveData.Length - ParamFieldLength.PACKAGE_HEAD);
+                    topSellGoodsList = JsonConvert.DeserializeObject<IList<TopSellGoods>>(strReceive);
+                }
+                socket.Close();
+            }
+            return topSellGoodsList;
         }
     }
 }

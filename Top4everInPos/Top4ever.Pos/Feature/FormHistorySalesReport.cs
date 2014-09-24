@@ -24,9 +24,8 @@ namespace Top4ever.Pos.Feature
         private void monthCalendar1_DateSelected(object sender, DateRangeEventArgs e)
         {
             dgvDailyStatement.Rows.Clear();
-            DailyBalanceService service = new DailyBalanceService();
             DateTime selectedDate = e.Start;
-            IList<DailyBalanceTime> dailyBalanceTimeList = service.GetDailyBalanceTime(selectedDate);
+            IList<DailyBalanceTime> dailyBalanceTimeList = DailyBalanceService.GetInstance().GetDailyBalanceTime(selectedDate);
             if (dailyBalanceTimeList != null && dailyBalanceTimeList.Count > 0)
             {
                 for (int i = 0; i < dailyBalanceTimeList.Count; i++)
@@ -47,9 +46,8 @@ namespace Top4ever.Pos.Feature
             {
                 int index = dgvDailyStatement.CurrentRow.Index;
                 dgvDeviceNo.Rows.Clear();
-                HandoverService service = new HandoverService();
                 string dailyStatementNo = dgvDailyStatement.Rows[index].Cells["colDailyStatementNo"].Value.ToString();
-                m_HandoverRecordList = service.GetHandoverRecord(dailyStatementNo);
+                m_HandoverRecordList = HandoverService.GetInstance().GetHandoverRecord(dailyStatementNo);
                 if (m_HandoverRecordList != null && m_HandoverRecordList.Count > 0)
                 {
                     List<string> deviceNoList = m_HandoverRecordList.Select(p => p.DeviceNo).Distinct().ToList();

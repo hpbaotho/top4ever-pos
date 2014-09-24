@@ -73,8 +73,7 @@ namespace Top4ever.Pos
             { 
                 //前台登录
                 Employee employee = null;
-                EmployeeService employeeService = new EmployeeService();
-                int operCode = employeeService.EmployeeLogin(this.txtName.Text.Trim(), this.txtPassword.Text.Trim(), ref employee);
+                int operCode = EmployeeService.GetInstance().EmployeeLogin(this.txtName.Text.Trim(), this.txtPassword.Text.Trim(), ref employee);
                 if (operCode == (int)RET_VALUE.SUCCEEDED)
                 {
                     //保存静态池内

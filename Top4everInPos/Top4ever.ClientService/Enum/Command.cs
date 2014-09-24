@@ -66,5 +66,7 @@ namespace Top4ever.ClientService.Enum
         ID_CREATE_CALLRECORD = 60,
         ID_GET_TOPSELLGOODS = 61,
         ID_GET_CALLRECORD = 62,
+        ID_GET_TOPSELLGOODSBYTIME = 63,
+        ID_GET_DAILYSTATEMENTINDAYS = 64,
     }
 }

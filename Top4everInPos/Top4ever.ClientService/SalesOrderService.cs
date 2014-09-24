@@ -11,8 +11,15 @@ namespace Top4ever.ClientService
 {
     public class SalesOrderService
     {
-        public SalesOrderService()
+        private static readonly SalesOrderService Instance = new SalesOrderService();
+
+        private SalesOrderService()
         { }
+
+        public static SalesOrderService GetInstance()
+        {
+            return Instance;
+        }
 
         public Int32 CreateSalesOrder(SalesOrder salesOrder)
         {

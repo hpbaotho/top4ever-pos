@@ -16,7 +16,7 @@ namespace Top4ever.Pos.Feature
 {
     public partial class FormItemSalesReport : Form
     {
-        private Dictionary<string, List<GroupPrice>> dicItemPriceByGroup = new Dictionary<string, List<GroupPrice>>();
+        private readonly Dictionary<string, List<GroupPrice>> _dicItemPriceByGroup = new Dictionary<string, List<GroupPrice>>();
 
         public FormItemSalesReport()
         {
@@ -25,12 +25,11 @@ namespace Top4ever.Pos.Feature
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            dicItemPriceByGroup.Clear();
+            _dicItemPriceByGroup.Clear();
             dataGirdViewExt1.Rows.Clear();
             string beginDate = dateTimePicker1.Value.ToString("yyyy-MM-dd 00:00:00");
             string endDate = dateTimePicker2.Value.ToString("yyyy-MM-dd 23:59:59");
-            BusinessReportService bizReportService = new BusinessReportService();
-            IList<GroupPrice> groupPriceList = bizReportService.GetItemPriceListByGroup(beginDate, endDate);
+            IList<GroupPrice> groupPriceList = BusinessReportService.GetInstance().GetItemPriceListByGroup(beginDate, endDate);
             if (groupPriceList != null && groupPriceList.Count > 0)
             {
                 decimal totalQty = 0M;
@@ -39,18 +38,18 @@ namespace Top4ever.Pos.Feature
                 {
                     totalQty += item.ItemsTotalQty;
                     totalAmount += item.ItemsTotalPrice;
-                    if (dicItemPriceByGroup.ContainsKey(item.GroupName))
+                    if (_dicItemPriceByGroup.ContainsKey(item.GroupName))
                     {
-                        dicItemPriceByGroup[item.GroupName].Add(item);
+                        _dicItemPriceByGroup[item.GroupName].Add(item);
                     }
                     else
                     {
                         List<GroupPrice> temp = new List<GroupPrice>();
                         temp.Add(item);
-                        dicItemPriceByGroup.Add(item.GroupName, temp);
+                        _dicItemPriceByGroup.Add(item.GroupName, temp);
                     }
                 }
-                foreach (KeyValuePair<string, List<GroupPrice>> item in dicItemPriceByGroup)
+                foreach (KeyValuePair<string, List<GroupPrice>> item in _dicItemPriceByGroup)
                 {
                     int index = dataGirdViewExt1.Rows.Add();
                     dataGirdViewExt1.Rows[index].Cells["colGroupName"].Value = "[" + item.Key + "]";
@@ -74,14 +73,14 @@ namespace Top4ever.Pos.Feature
 
         private void btnPrint_Click(object sender, EventArgs e)
         {
-            if (dicItemPriceByGroup.Count > 0)
+            if (_dicItemPriceByGroup.Count > 0)
             {
                 List<String> printData = new List<String>();
                 printData.Add(GetDataType2("店铺名称：", ConstantValuePool.CurrentShop.ShopName));
                 printData.Add(GetDataType2("店铺编号：", ConstantValuePool.CurrentShop.ShopNo));
                 printData.Add(GetDataType2("营业日：", DateTime.Now.ToString("yyyy-MM-dd")));
                 printData.Add("  ");
-                foreach (KeyValuePair<string, List<GroupPrice>> item in dicItemPriceByGroup)
+                foreach (KeyValuePair<string, List<GroupPrice>> item in _dicItemPriceByGroup)
                 {
                     printData.Add("[" + item.Key + "]");
                     foreach (GroupPrice groupPrice in item.Value)

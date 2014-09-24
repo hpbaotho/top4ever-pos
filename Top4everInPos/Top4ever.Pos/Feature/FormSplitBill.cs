@@ -257,8 +257,7 @@ namespace Top4ever.Pos.Feature
                 salesSplitOrder.SubOrderDetailsList = subOrderDetailsList;
                 salesSplitOrder.NewOrder = newOrder;
                 salesSplitOrder.NewOrderDetailsList = newOrderDetailsList;
-                SalesOrderService salesOrderService = new SalesOrderService();
-                if (salesOrderService.SplitSalesOrder(salesSplitOrder))
+                if (SalesOrderService.GetInstance().SplitSalesOrder(salesSplitOrder))
                 {
                     m_SplitOrderSuccess = true;
                     this.Close();

@@ -33,20 +33,20 @@ namespace Top4ever.Pos
             Application.SetCompatibleTextRenderingDefault(false);
             //get config file
             Shop currentShop = null;
-            string appSettingPath = "Config/AppSetting.config";
+            const string appSettingPath = "Config/AppSetting.config";
             if (File.Exists(appSettingPath))
             {
                 AppSettingConfig appSettingConfig = XmlUtil.Deserialize<AppSettingConfig>(appSettingPath);
                 ConstantValuePool.BizSettingConfig = appSettingConfig;
                 ShopService shopService = new ShopService();
-                currentShop = shopService.GetCurrentShop();
+                currentShop = shopService.GetCurrentShop(appSettingConfig.IPAddress, appSettingConfig.Port);
             }
-            if (currentShop != null)
+            if (currentShop != null && !string.IsNullOrEmpty(currentShop.ShopNo))
             {
                 ConstantValuePool.CurrentShop = currentShop;
                 //Check for registration
                 int remainDays = 0;
-                if (true)//(ProductRegister.CheckProductRegistration(ref remainDays))
+                if (ProductRegister.CheckProductRegistration(ref remainDays))
                 {
                     Application.Run(new FormLogin());
                 }
@@ -69,15 +69,12 @@ namespace Top4ever.Pos
                     {
                         Application.Run(new FormLogin());
                     }
-                    else
-                    {
-                        return;
-                    }
                 }
             }
             else
             {
-                Application.Run(new FormLogin());
+                MessageBox.Show("找不到有效的服务端程序，请检查服务是否启动或者配置是否正确。", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Application.Run(new FormConfig());
             }
         }
 

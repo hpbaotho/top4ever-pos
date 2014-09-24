@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using log4net;
 
 namespace Top4ever.Common
@@ -11,9 +8,9 @@ namespace Top4ever.Common
     public class LogHelper : ILogHelper
     {
         //定义日志类
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private static LogHelper instance;
-        private static object obj = new object();
+        private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static LogHelper _instance;
+        private static readonly object Obj = new object();
 
         private LogHelper()
         {
@@ -26,19 +23,19 @@ namespace Top4ever.Common
         /// <returns></returns>
         public static LogHelper GetInstance()
         {
-            if (instance == null)
+            if (_instance == null)
             {
-                lock (obj)
+                lock (Obj)
                 {
-                    if (instance == null)
+                    if (_instance == null)
                     {
-                        instance = new LogHelper();
+                        _instance = new LogHelper();
                         FileInfo configFile = new FileInfo(AppDomain.CurrentDomain.BaseDirectory + "Config\\log4net.config");
                         log4net.Config.XmlConfigurator.Configure(configFile);
                     }
                 }
             }
-            return instance;
+            return _instance;
         }
 
         #region 错误日志记录
@@ -49,17 +46,17 @@ namespace Top4ever.Common
         /// <param name="exception">异常</param>
         public void Debug(object message, Exception exception)
         {
-            if (log.IsDebugEnabled)
+            if (Logger.IsDebugEnabled)
             {
-                log.Debug(message, exception);
+                Logger.Debug(message, exception);
             }
         }
 
         public void Debug(object message)
         {
-            if (log.IsDebugEnabled)
+            if (Logger.IsDebugEnabled)
             {
-                log.Debug(message);
+                Logger.Debug(message);
             }
         }
 
@@ -70,17 +67,17 @@ namespace Top4ever.Common
         /// <param name="exception"></param>
         public void Info(object message, Exception exception)
         {
-            if (log.IsInfoEnabled)
+            if (Logger.IsInfoEnabled)
             {
-                log.Info(message, exception);
+                Logger.Info(message, exception);
             }
         }
 
         public void Info(object message)
         {
-            if (log.IsInfoEnabled)
+            if (Logger.IsInfoEnabled)
             {
-                log.Info(message);
+                Logger.Info(message);
             }
         }
 
@@ -91,18 +88,12 @@ namespace Top4ever.Common
         /// <param name="exception"></param>
         public void Warn(object message, Exception exception)
         {
-            if (log.IsWarnEnabled)
-            {
-                log.Warn(message, exception);
-            }
+            Logger.Warn(message, exception);
         }
 
         public void Warn(object message)
         {
-            if (log.IsWarnEnabled)
-            {
-                log.Warn(message);
-            }
+            Logger.Warn(message);
         }
 
         /// <summary>
@@ -112,18 +103,12 @@ namespace Top4ever.Common
         /// <param name="exception"></param>
         public void Error(object message, Exception exception)
         {
-            if (log.IsErrorEnabled)
-            {
-                log.Error(message, exception);
-            }
+            Logger.Error(message, exception);
         }
 
         public void Error(object message)
         {
-            if (log.IsErrorEnabled)
-            {
-                log.Error(message);
-            }
+            Logger.Error(message);
         }
 
         /// <summary>
@@ -133,19 +118,14 @@ namespace Top4ever.Common
         /// <param name="exception"></param>
         public void Fatal(object message, Exception exception)
         {
-            if (log.IsFatalEnabled)
-            {
-                log.Fatal(message, exception);
-            }
+            Logger.Fatal(message, exception);
         }
 
         public void Fatal(object message)
         {
-            if (log.IsFatalEnabled)
-            {
-                log.Fatal(message);
-            }
+            Logger.Fatal(message);
         }
+
         #endregion
     }
 }

@@ -64,8 +64,7 @@ namespace Top4ever.Pos.Membership
             {
                 status = 4;
             }
-            VIPCardService cardService = new VIPCardService();
-            int result = cardService.UpdateCardStatus(cardNo, password, status);
+            int result = VIPCardService.GetInstance().UpdateCardStatus(cardNo, password, status);
             if (result == 0)
             {
                 MessageBox.Show("卡状态更新失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);

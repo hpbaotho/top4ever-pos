@@ -143,7 +143,7 @@ namespace Top4ever.Pos
                 this.txtShopNo.Text = "店铺号：" + ConstantValuePool.CurrentShop.ShopNo;
                 this.txtDeviceNo.Text = "设备号：" + ConstantValuePool.BizSettingConfig.DeviceNo;
                 this.txtSoftwareProvider.Width += this.Width - 1024;
-                this.txtSoftwareProvider.Text = "软件提供商：讯创科技有限公司";
+                this.txtSoftwareProvider.Text = "软件提供商：凡趣科技有限公司";
                 this.txtCurrentDateTime.Text = "日期：" + DateTime.Now.ToLongDateString() + " " + System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
 
                 this.dgvGoodsOrder.Rows.Clear();
@@ -704,8 +704,7 @@ namespace Top4ever.Pos
                 decimal goodsNum = 1M;
                 if (goods.IsCustomQty || goods.IsCustomPrice)
                 {
-                    OrderDetailsService orderDetailsService = new OrderDetailsService();
-                    decimal sellPrice = orderDetailsService.GetLastCustomPrice(goods.GoodsID);
+                    decimal sellPrice = OrderDetailsService.GetInstance().GetLastCustomPrice(goods.GoodsID);
                     if (sellPrice > 0)
                     {
                         goodsPrice = sellPrice;
@@ -1602,8 +1601,7 @@ namespace Top4ever.Pos
                             deletedSingleOrder.CutOffPrice = wholePayMoney - actualPayMoney;
                             deletedSingleOrder.deletedOrderDetailsList = deletedOrderDetailsList;
 
-                            DeletedOrderService orderService = new DeletedOrderService();
-                            if (orderService.DeleteSingleOrder(deletedSingleOrder))
+                            if (DeletedOrderService.GetInstance().DeleteSingleOrder(deletedSingleOrder))
                             {
                                 foreach (KeyValuePair<int, decimal> item in dicRemainNum)
                                 {
@@ -1694,8 +1692,7 @@ namespace Top4ever.Pos
                             deletedSingleOrder.CutOffPrice = wholePayMoney - actualPayMoney;
                             deletedSingleOrder.deletedOrderDetailsList = deletedOrderDetailsList;
 
-                            DeletedOrderService orderService = new DeletedOrderService();
-                            if (orderService.DeleteSingleOrder(deletedSingleOrder))
+                            if (DeletedOrderService.GetInstance().DeleteSingleOrder(deletedSingleOrder))
                             {
                                 for(int i = deletedIndexList.Count - 1; i >= 0; i--)
                                 {
@@ -1765,8 +1762,7 @@ namespace Top4ever.Pos
                 {
                     //更新桌况为占用状态
                     int status = (int)DeskButtonStatus.OCCUPIED;
-                    DeskService deskService = new DeskService();
-                    if (deskService.UpdateDeskStatus(m_CurrentDeskName, string.Empty, status))
+                    if (DeskService.GetInstance().UpdateDeskStatus(m_CurrentDeskName, string.Empty, status))
                     {
                         //更新第二屏信息
                         if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
@@ -1797,8 +1793,7 @@ namespace Top4ever.Pos
             {
                 //更新桌况为空闲状态
                 int status = (int)DeskButtonStatus.IDLE_MODE;
-                DeskService deskService = new DeskService();
-                if(deskService.UpdateDeskStatus(m_CurrentDeskName, string.Empty, status))
+                if (DeskService.GetInstance().UpdateDeskStatus(m_CurrentDeskName, string.Empty, status))
                 {
                     //更新第二屏信息
                     if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
@@ -1820,8 +1815,7 @@ namespace Top4ever.Pos
             {
                 //更新桌况为占用状态
                 int status = (int)DeskButtonStatus.OCCUPIED;
-                DeskService deskService = new DeskService();
-                if (deskService.UpdateDeskStatus(m_CurrentDeskName, string.Empty, status))
+                if (DeskService.GetInstance().UpdateDeskStatus(m_CurrentDeskName, string.Empty, status))
                 {
                     //更新第二屏信息
                     if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
@@ -2050,8 +2044,7 @@ namespace Top4ever.Pos
                     deletedOrder.CancelEmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
                     deletedOrder.CancelReasonName = form.CurrentReason.ReasonName;
 
-                    DeletedOrderService orderService = new DeletedOrderService();
-                    if (!orderService.DeleteWholeOrder(deletedOrder))
+                    if (!DeletedOrderService.GetInstance().DeleteWholeOrder(deletedOrder))
                     {
                         MessageBox.Show("删除账单失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);;
                         return;
@@ -2064,8 +2057,7 @@ namespace Top4ever.Pos
             }
             //更新桌况为空闲状态
             int status = (int)DeskButtonStatus.IDLE_MODE;
-            DeskService deskService = new DeskService();
-            if (deskService.UpdateDeskStatus(m_CurrentDeskName, string.Empty, status))
+            if (DeskService.GetInstance().UpdateDeskStatus(m_CurrentDeskName, string.Empty, status))
             {
                 //更新第二屏信息
                 if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
@@ -2272,8 +2264,7 @@ namespace Top4ever.Pos
                                 orderDetailsList.Add(orderDetails);
                             }
                         }
-                        OrderDetailsService orderDetailsService = new OrderDetailsService();
-                        if (orderDetailsService.LadeOrderDetails(orderDetailsList))
+                        if (OrderDetailsService.GetInstance().LadeOrderDetails(orderDetailsList))
                         {
                             //更新GridView
                             for (int i = 0; i < orderDetailsList.Count; i++)
@@ -2356,8 +2347,7 @@ namespace Top4ever.Pos
                 }
                 if (orderDetailsList.Count > 0)
                 {
-                    OrderDetailsService orderDetailsService = new OrderDetailsService();
-                    if (orderDetailsService.LadeOrderDetails(orderDetailsList))
+                    if (OrderDetailsService.GetInstance().LadeOrderDetails(orderDetailsList))
                     {
                         //更新GridView
                         foreach (DataGridViewRow dgr in dgvGoodsOrder.Rows)
@@ -2405,8 +2395,7 @@ namespace Top4ever.Pos
                 if (form.SplitOrderSuccess)
                 {
                     //重新加载
-                    SalesOrderService salesOrderService = new SalesOrderService();
-                    m_SalesOrder = salesOrderService.GetSalesOrder(m_SalesOrder.order.OrderID);
+                    m_SalesOrder = SalesOrderService.GetInstance().GetSalesOrder(m_SalesOrder.order.OrderID);
                     BindGoodsOrderInfo();   //绑定订单信息
                     BindOrderInfoSum();
                 }
@@ -2562,8 +2551,7 @@ namespace Top4ever.Pos
                             reminder.OrderDetailsIDList = orderDetailsIdList;
                             reminder.ReasonName = form.CurrentReason.ReasonName;
                             reminder.EmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
-                            ReminderService reminderService = new ReminderService();
-                            bool result = reminderService.CreateReminderOrder(reminder);
+                            bool result = ReminderService.GetInstance().CreateReminderOrder(reminder);
                             if (!result)
                             {
                                 MessageBox.Show("催单失败，请重新操作！", "错误提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -2859,8 +2847,7 @@ namespace Top4ever.Pos
                 }
             }
             //品项沽清
-            GoodsService goodsService = new GoodsService();
-            IList<GoodsCheckStock> tempGoodsStockList = goodsService.GetGoodsCheckStock();
+            IList<GoodsCheckStock> tempGoodsStockList = GoodsService.GetInstance().GetGoodsCheckStock();
             if (tempGoodsStockList != null && tempGoodsStockList.Count > 0 && temp.Count > 0)
             {
                 IList<GoodsCheckStock> goodsCheckStockList = new List<GoodsCheckStock>();
@@ -2882,7 +2869,7 @@ namespace Top4ever.Pos
                 }
                 if (goodsCheckStockList.Count > 0)
                 {
-                    string goodsName = goodsService.UpdateReducedGoodsQty(goodsCheckStockList);
+                    string goodsName = GoodsService.GetInstance().UpdateReducedGoodsQty(goodsCheckStockList);
                     if (!string.IsNullOrEmpty(goodsName))
                     {
                         MessageBox.Show(string.Format("<{0}> 的剩余数量不足！", goodsName), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -2911,13 +2898,11 @@ namespace Top4ever.Pos
                 salesOrder.order = order;
                 salesOrder.orderDetailsList = newOrderDetailsList;
                 salesOrder.orderDiscountList = newOrderDiscountList;
-                SalesOrderService orderService = new SalesOrderService();
-                int tranSequence = orderService.CreateSalesOrder(salesOrder);
+                int tranSequence = SalesOrderService.GetInstance().CreateSalesOrder(salesOrder);
                 if (tranSequence > 0)
                 {
                     //重新加载
-                    SalesOrderService salesOrderService = new SalesOrderService();
-                    m_SalesOrder = salesOrderService.GetSalesOrder(orderID);
+                    m_SalesOrder = SalesOrderService.GetInstance().GetSalesOrder(orderID);
                     BindGoodsOrderInfo();   //绑定订单信息
                     BindOrderInfoSum();
                 }
@@ -2948,13 +2933,11 @@ namespace Top4ever.Pos
                     salesOrder.order = order;
                     salesOrder.orderDetailsList = newOrderDetailsList;
                     salesOrder.orderDiscountList = newOrderDiscountList;
-                    SalesOrderService orderService = new SalesOrderService();
-                    Int32 result = orderService.UpdateSalesOrder(salesOrder);
+                    Int32 result = SalesOrderService.GetInstance().UpdateSalesOrder(salesOrder);
                     if (result == 1)
                     {
                         //重新加载
-                        SalesOrderService salesOrderService = new SalesOrderService();
-                        m_SalesOrder = salesOrderService.GetSalesOrder(orderID);
+                        m_SalesOrder = SalesOrderService.GetInstance().GetSalesOrder(orderID);
                         BindGoodsOrderInfo();   //绑定订单信息
                         BindOrderInfoSum();
                     }

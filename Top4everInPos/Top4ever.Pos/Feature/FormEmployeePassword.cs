@@ -42,8 +42,7 @@ namespace Top4ever.Pos.Feature
             }
             string currentPassword = this.txtCurrentPassword.Text.Trim();
             string newPassword = this.txtNewPassword.Text.Trim();
-            EmployeeService employeeService = new EmployeeService();
-            int result = employeeService.UpdateEmployeePassword(ConstantValuePool.CurrentEmployee.EmployeeNo, currentPassword, newPassword);
+            int result = EmployeeService.GetInstance().UpdateEmployeePassword(ConstantValuePool.CurrentEmployee.EmployeeNo, currentPassword, newPassword);
             if (result == 1)
             {
                 MessageBox.Show("密码修改成功！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);

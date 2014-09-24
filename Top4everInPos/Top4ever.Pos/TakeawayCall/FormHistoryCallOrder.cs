@@ -31,8 +31,7 @@ namespace Top4ever.Pos.TakeawayCall
         private void FormHistoryCallOrder_Load(object sender, EventArgs e)
         {
             this.lbTitle.Text = string.Format("电话为 {0} 的历史排行前10位订餐", m_Telephone);
-            CustomersService customersService = new CustomersService();
-            IList<TopSellGoods> topSellGoodsList = customersService.GetTopSellGoods(m_Telephone);
+            IList<TopSellGoods> topSellGoodsList = CustomersService.GetInstance().GetTopSellGoods(m_Telephone);
             if (topSellGoodsList != null && topSellGoodsList.Count > 0)
             {
                 foreach (TopSellGoods item in topSellGoodsList)

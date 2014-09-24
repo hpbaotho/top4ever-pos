@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 
 using Top4ever.ClientService.Enum;
-using Top4ever.Domain.Customers;
 using Top4ever.Domain.OrderRelated;
 using Top4ever.Domain.Transfer;
 using Top4ever.Entity;
@@ -13,8 +12,15 @@ namespace Top4ever.ClientService
 {
     public class OrderService
     {
-        public OrderService()
+        private static readonly OrderService Instance = new OrderService();
+
+        private OrderService()
         { }
+
+        public static OrderService GetInstance()
+        {
+            return Instance;
+        }
 
         public IList<Order> GetOrderList(string deskName)
         {

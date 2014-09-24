@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 using Top4ever.ClientService.Enum;
-using Top4ever.Domain.MembershipCard;
 using Top4ever.Domain.Transfer;
 using Top4ever.Entity;
 using Newtonsoft.Json;
@@ -12,8 +10,15 @@ namespace Top4ever.ClientService
 {
     public class VIPCardTradeService
     {
-        public VIPCardTradeService()
+        private static readonly VIPCardTradeService Instance = new VIPCardTradeService();
+
+        private VIPCardTradeService()
         { }
+
+        public static VIPCardTradeService GetInstance()
+        {
+            return Instance;
+        }
 
         public Int32 GetVIPCardTradeList(string cardNo, string beginDate, string endDate, ref VIPCardTradeRecord cardTradeRecord)
         {

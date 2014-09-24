@@ -48,8 +48,7 @@ namespace Top4ever.Pos.Membership
                 if (!string.IsNullOrEmpty(cardNo))
                 {
                     m_CardNo = cardNo;
-                    VIPCardService cardService = new VIPCardService();
-                    m_DiscountRate = cardService.GetCardDiscountRate(cardNo);
+                    m_DiscountRate = VIPCardService.GetInstance().GetCardDiscountRate(cardNo);
                     if (m_DiscountRate == 0M)
                     {
                         txtDiscountRate.Text = "无折扣";

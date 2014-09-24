@@ -11,8 +11,15 @@ namespace Top4ever.ClientService
 {
     public class DeletedOrderService
     {
-        public DeletedOrderService()
+        private static readonly DeletedOrderService Instance = new DeletedOrderService();
+
+        private DeletedOrderService()
         { }
+
+        public static DeletedOrderService GetInstance()
+        {
+            return Instance;
+        }
 
         public bool DeleteSingleOrder(DeletedSingleOrder deletedSingleOrder)
         {

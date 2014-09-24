@@ -118,8 +118,7 @@ namespace Top4ever.Pos.Feature
                 MessageBox.Show("用户名或者密码不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            EmployeeService employeeService = new EmployeeService();
-            IList<string> rightsCodeList = employeeService.GetRightsCodeList(userName, password);
+            IList<string> rightsCodeList = EmployeeService.GetInstance().GetRightsCodeList(userName, password);
             if (rightsCodeList != null && rightsCodeList.Count > 0)
             {
                 m_ReturnValue = true;

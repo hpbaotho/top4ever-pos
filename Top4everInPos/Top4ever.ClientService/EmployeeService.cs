@@ -11,8 +11,15 @@ namespace Top4ever.ClientService
 {
     public class EmployeeService
     {
-        public EmployeeService()
+        private static readonly EmployeeService Instance = new EmployeeService();
+
+        private EmployeeService()
         { }
+
+        public static EmployeeService GetInstance()
+        {
+            return Instance;
+        }
 
         /// <summary>
         /// 获取用户信息 0:数据库操作失败, 1:成功, 2:账号或者密码错误

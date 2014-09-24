@@ -39,8 +39,7 @@ namespace Top4ever.Pos.Membership
                 _inputPassword = keyForm.KeypadValue;
                 string cardNo = txtVIPCardNo.Text.Trim();
                 VIPCard card = new VIPCard();
-                VIPCardService service = new VIPCardService();
-                int result = service.SearchVIPCard(cardNo, _inputPassword, ref card);
+                int result = VIPCardService.GetInstance().SearchVIPCard(cardNo, _inputPassword, out card);
                 if (result == 1)
                 {
                     if (card.Status == 0)

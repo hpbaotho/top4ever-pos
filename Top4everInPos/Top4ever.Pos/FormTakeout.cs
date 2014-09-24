@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO.Ports;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -160,8 +157,7 @@ namespace Top4ever.Pos
                                         callRecord.Telephone = strPhoneNo;
                                         callRecord.CallTime = DateTime.Now;
                                         callRecord.Status = 0;
-                                        CustomersService customersService = new CustomersService();
-                                        customersService.CreateOrUpdateCallRecord(callRecord);
+                                        CustomersService.GetInstance().CreateOrUpdateCallRecord(callRecord);
                                         //委托弹出窗口
                                         SetIncomingCall(strPhoneNo);
                                     }
@@ -233,8 +229,7 @@ namespace Top4ever.Pos
                 btnDeliveryGoods.Enabled = false;
                 btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
                 //加载外卖单列表
-                OrderService orderService = new OrderService();
-                IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
+                IList<DeliveryOrder> deliveryOrderList = OrderService.GetInstance().GetDeliveryOrderList();
                 if (deliveryOrderList != null)
                 {
                     m_PageIndex = 0;
@@ -820,8 +815,7 @@ namespace Top4ever.Pos
                 decimal goodsNum = 1M;
                 if (goods.IsCustomQty || goods.IsCustomPrice)
                 {
-                    OrderDetailsService orderDetailsService = new OrderDetailsService();
-                    decimal sellPrice = orderDetailsService.GetLastCustomPrice(goods.GoodsID);
+                    decimal sellPrice = OrderDetailsService.GetInstance().GetLastCustomPrice(goods.GoodsID);
                     if (sellPrice > 0)
                     {
                         goodsPrice = sellPrice;
@@ -1580,8 +1574,7 @@ namespace Top4ever.Pos
                     txtTelephone.ReadOnly = false;
                     txtName.ReadOnly = false;
                     //加载外卖单列表
-                    OrderService orderService = new OrderService();
-                    IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
+                    IList<DeliveryOrder> deliveryOrderList = OrderService.GetInstance().GetDeliveryOrderList();
                     if (deliveryOrderList != null)
                     {
                         m_PageIndex = 0;
@@ -1701,8 +1694,7 @@ namespace Top4ever.Pos
                     txtTelephone.ReadOnly = false;
                     txtName.ReadOnly = false;
                     //加载外卖单列表
-                    OrderService orderService = new OrderService();
-                    IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
+                    IList<DeliveryOrder> deliveryOrderList = OrderService.GetInstance().GetDeliveryOrderList();
                     if (deliveryOrderList != null)
                     {
                         m_PageIndex = 0;
@@ -1802,8 +1794,7 @@ namespace Top4ever.Pos
                 btnDeliveryGoods.Enabled = false;
                 btnDeliveryGoods.BackColor = ConstantValuePool.DisabledColor;
                 //加载外卖单列表
-                OrderService orderService = new OrderService();
-                IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
+                IList<DeliveryOrder> deliveryOrderList = OrderService.GetInstance().GetDeliveryOrderList();
                 if (deliveryOrderList != null)
                 {
                     m_PageIndex = 0;
@@ -2002,15 +1993,13 @@ namespace Top4ever.Pos
                         btnTakeOut.Enabled = true;
                         btnTakeOut.BackColor = btnTakeOut.DisplayColor;
                     }
-                    SalesOrderService salesOrderService = new SalesOrderService();
-                    SalesOrder _salesOrder = salesOrderService.GetSalesOrder(deliveryOrder.OrderID);
+                    SalesOrder _salesOrder = SalesOrderService.GetInstance().GetSalesOrder(deliveryOrder.OrderID);
                     if (_salesOrder != null)
                     {
                         m_SalesOrder = _salesOrder;
                         BindGoodsOrderInfo();   //绑定订单信息
                         BindOrderInfoSum();
-                        CustomersService customerService = new CustomersService();
-                        CustomerOrder customerOrder = customerService.GetCustomerOrder(m_SalesOrder.order.OrderID);
+                        CustomerOrder customerOrder = CustomersService.GetInstance().GetCustomerOrder(m_SalesOrder.order.OrderID);
                         if (customerOrder != null)
                         {
                             this.txtTelephone.Text = customerOrder.Telephone;
@@ -2035,8 +2024,7 @@ namespace Top4ever.Pos
                 }
                 else
                 {
-                    SalesOrderService salesOrderService = new SalesOrderService();
-                    SalesOrder _salesOrder = salesOrderService.GetSalesOrder(deliveryOrder.OrderID);
+                    SalesOrder _salesOrder = SalesOrderService.GetInstance().GetSalesOrder(deliveryOrder.OrderID);
                     if (_salesOrder != null)
                     {
                         FormTakeGoods form = new FormTakeGoods(_salesOrder);
@@ -2227,8 +2215,7 @@ namespace Top4ever.Pos
                 }
             }
             //品项沽清
-            GoodsService goodsService = new GoodsService();
-            IList<GoodsCheckStock> tempGoodsStockList = goodsService.GetGoodsCheckStock();
+            IList<GoodsCheckStock> tempGoodsStockList = GoodsService.GetInstance().GetGoodsCheckStock();
             if (tempGoodsStockList != null && tempGoodsStockList.Count > 0 && temp.Count > 0)
             {
                 IList<GoodsCheckStock> goodsCheckStockList = new List<GoodsCheckStock>();
@@ -2250,7 +2237,7 @@ namespace Top4ever.Pos
                 }
                 if (goodsCheckStockList.Count > 0)
                 {
-                    string goodsName = goodsService.UpdateReducedGoodsQty(goodsCheckStockList);
+                    string goodsName = GoodsService.GetInstance().UpdateReducedGoodsQty(goodsCheckStockList);
                     if (!string.IsNullOrEmpty(goodsName))
                     {
                         MessageBox.Show(string.Format("<{0}> 的剩余数量不足！", goodsName), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -2280,13 +2267,11 @@ namespace Top4ever.Pos
                 salesOrder.order = order;
                 salesOrder.orderDetailsList = newOrderDetailsList;
                 salesOrder.orderDiscountList = newOrderDiscountList;
-                SalesOrderService orderService = new SalesOrderService();
-                _tranSeq = orderService.CreateSalesOrder(salesOrder);
+                _tranSeq = SalesOrderService.GetInstance().CreateSalesOrder(salesOrder);
                 if (_tranSeq > 0)
                 {
                     //重新加载
-                    SalesOrderService salesOrderService = new SalesOrderService();
-                    m_SalesOrder = salesOrderService.GetSalesOrder(orderID);
+                    m_SalesOrder = SalesOrderService.GetInstance().GetSalesOrder(orderID);
                     BindGoodsOrderInfo();   //绑定订单信息
                     BindOrderInfoSum();
                     result = 1;
@@ -2312,12 +2297,10 @@ namespace Top4ever.Pos
                     salesOrder.order = order;
                     salesOrder.orderDetailsList = newOrderDetailsList;
                     salesOrder.orderDiscountList = newOrderDiscountList;
-                    SalesOrderService orderService = new SalesOrderService();
-                    if (orderService.UpdateSalesOrder(salesOrder) == 1)
+                    if (SalesOrderService.GetInstance().UpdateSalesOrder(salesOrder) == 1)
                     {
                         //重新加载
-                        SalesOrderService salesOrderService = new SalesOrderService();
-                        m_SalesOrder = salesOrderService.GetSalesOrder(orderID);
+                        m_SalesOrder = SalesOrderService.GetInstance().GetSalesOrder(orderID);
                         BindGoodsOrderInfo();   //绑定订单信息
                         BindOrderInfoSum();
                         result = 1;
@@ -2339,8 +2322,7 @@ namespace Top4ever.Pos
                     customerOrder.Telephone = txtTelephone.Text.Trim();
                     customerOrder.CustomerName = txtName.Text.Trim();
                     customerOrder.Address = txtAddress.Text.Trim();
-                    CustomersService customerService = new CustomersService();
-                    if (customerService.CreateOrUpdateCustomerOrder(customerOrder))
+                    if (CustomersService.GetInstance().CreateOrUpdateCustomerOrder(customerOrder))
                     {
                         result = 1;
                     }
@@ -2924,8 +2906,7 @@ namespace Top4ever.Pos
                             deletedSingleOrder.CutOffPrice = wholePayMoney - actualPayMoney;
                             deletedSingleOrder.deletedOrderDetailsList = deletedOrderDetailsList;
 
-                            DeletedOrderService orderService = new DeletedOrderService();
-                            if (orderService.DeleteSingleOrder(deletedSingleOrder))
+                            if (DeletedOrderService.GetInstance().DeleteSingleOrder(deletedSingleOrder))
                             {
                                 foreach (KeyValuePair<int, decimal> item in dicRemainNum)
                                 {
@@ -3016,8 +2997,7 @@ namespace Top4ever.Pos
                             deletedSingleOrder.CutOffPrice = wholePayMoney - actualPayMoney;
                             deletedSingleOrder.deletedOrderDetailsList = deletedOrderDetailsList;
 
-                            DeletedOrderService orderService = new DeletedOrderService();
-                            if (orderService.DeleteSingleOrder(deletedSingleOrder))
+                            if (DeletedOrderService.GetInstance().DeleteSingleOrder(deletedSingleOrder))
                             {
                                 for (int i = deletedIndexList.Count - 1; i >= 0; i--)
                                 {
@@ -3114,12 +3094,10 @@ namespace Top4ever.Pos
                     deletedOrder.CancelEmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
                     deletedOrder.CancelReasonName = form.CurrentReason.ReasonName;
 
-                    DeletedOrderService deletedOrderService = new DeletedOrderService();
-                    if (deletedOrderService.DeleteWholeOrder(deletedOrder))
+                    if (DeletedOrderService.GetInstance().DeleteWholeOrder(deletedOrder))
                     {
                         //加载外卖单列表
-                        OrderService orderService = new OrderService();
-                        IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
+                        IList<DeliveryOrder> deliveryOrderList = OrderService.GetInstance().GetDeliveryOrderList();
                         if (deliveryOrderList != null)
                         {
                             m_PageIndex = 0;
@@ -3680,8 +3658,7 @@ namespace Top4ever.Pos
                     txtTelephone.ReadOnly = false;
                     txtName.ReadOnly = false;
                     //加载外卖单列表
-                    OrderService orderService = new OrderService();
-                    IList<DeliveryOrder> deliveryOrderList = orderService.GetDeliveryOrderList();
+                    IList<DeliveryOrder> deliveryOrderList = OrderService.GetInstance().GetDeliveryOrderList();
                     if (deliveryOrderList != null)
                     {
                         m_PageIndex = 0;
@@ -4334,8 +4311,7 @@ namespace Top4ever.Pos
                 txtTelephone.Text = telephone;
                 if (!string.IsNullOrEmpty(telephone))
                 {
-                    CustomersService customersService = new CustomersService();
-                    CustomerInfo customerInfo = customersService.GetCustomerInfoByPhone(telephone);
+                    CustomerInfo customerInfo = CustomersService.GetInstance().GetCustomerInfoByPhone(telephone);
                     if (customerInfo != null)
                     {
                         string address = string.Empty;

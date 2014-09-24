@@ -29,9 +29,8 @@ namespace Top4ever.Pos.Membership
             }
             string beginDate = dtBeginDate.Value.ToString("yyyy-MM-dd");
             string endDate = dtEndDate.Value.ToString("yyyy-MM-dd");
-            VIPCardTradeService cardTradeService = new VIPCardTradeService();
             VIPCardTradeRecord cardTradeRecord = null;
-            Int32 result = cardTradeService.GetVIPCardTradeList(cardNo, beginDate, endDate, ref cardTradeRecord);
+            Int32 result = VIPCardTradeService.GetInstance().GetVIPCardTradeList(cardNo, beginDate, endDate, ref cardTradeRecord);
             if (result == 1 && cardTradeRecord != null)
             {
                 txtBalance.Text = cardTradeRecord.Balance.ToString("f2");

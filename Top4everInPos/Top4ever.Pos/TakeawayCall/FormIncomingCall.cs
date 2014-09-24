@@ -41,8 +41,7 @@ namespace Top4ever.Pos.TakeawayCall
 
         public FormIncomingCall(string telephone, string address, int callType)
         {
-            CustomersService customerService = new CustomersService();
-            _customerInfo = customerService.GetCustomerInfoByPhone(telephone);
+            _customerInfo = CustomersService.GetInstance().GetCustomerInfoByPhone(telephone);
             _address = address;
             _callType = callType;
             InitializeComponent();
@@ -70,16 +69,14 @@ namespace Top4ever.Pos.TakeawayCall
                             callRecord.Telephone = strPhoneNo;
                             callRecord.CallTime = DateTime.Now;
                             callRecord.Status = 0;
-                            CustomersService customersService = new CustomersService();
-                            customersService.CreateOrUpdateCallRecord(callRecord);
+                            CustomersService.GetInstance().CreateOrUpdateCallRecord(callRecord);
 
                             this.lbTelephone.Text = strPhoneNo;
                             this.txtCustomerName.Text = string.Empty;
                             this.txtAddress1.Text = string.Empty;
                             this.txtAddress2.Text = string.Empty;
                             this.txtAddress3.Text = string.Empty;
-                            CustomersService customerService = new CustomersService();
-                            _customerInfo = customerService.GetCustomerInfoByPhone(strPhoneNo);
+                            _customerInfo = CustomersService.GetInstance().GetCustomerInfoByPhone(strPhoneNo);
                             if (_customerInfo != null)
                             {
                                 txtCustomerName.Text = _customerInfo.CustomerName;
@@ -188,10 +185,9 @@ namespace Top4ever.Pos.TakeawayCall
             customerInfo.ActiveIndex = activeIndex;
             customerInfo.LastModifiedEmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
 
-            CustomersService customerService = new CustomersService();
             if (_customerInfo == null)  //新增
             {
-                int result = customerService.CreateCustomerInfo(customerInfo);
+                int result = CustomersService.GetInstance().CreateCustomerInfo(customerInfo);
                 if (result == 1)
                 {
                     _selectedAddress = address;
@@ -209,7 +205,7 @@ namespace Top4ever.Pos.TakeawayCall
             }
             else  //更新
             {
-                if (customerService.UpdateCustomerInfo(customerInfo))
+                if (CustomersService.GetInstance().UpdateCustomerInfo(customerInfo))
                 {
                     _selectedAddress = address;
                     m_CustomerInfo = customerInfo;

@@ -11,8 +11,15 @@ namespace Top4ever.ClientService
 {
     public class ModifyOrderService
     {
-        public ModifyOrderService()
+        private static readonly ModifyOrderService Instance = new ModifyOrderService();
+
+        private ModifyOrderService()
         { }
+
+        public static ModifyOrderService GetInstance()
+        {
+            return Instance;
+        }
 
         public bool ModifyForOrder(ModifiedPaidOrder modifiedPaidOrder)
         {

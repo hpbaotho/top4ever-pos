@@ -11,8 +11,15 @@ namespace Top4ever.ClientService
 {
     public class CustomersService
     {
-        public CustomersService()
+        private static readonly CustomersService Instance = new CustomersService();
+
+        private CustomersService()
         { }
+
+        public static CustomersService GetInstance()
+        {
+            return Instance;
+        }
 
         /// <summary>
         /// 创建客户信息 0:数据库操作失败, 1:成功, 2:手机号已存在
