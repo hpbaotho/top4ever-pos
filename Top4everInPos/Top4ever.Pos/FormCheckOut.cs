@@ -296,35 +296,33 @@ namespace Top4ever.Pos
             }
             else
             {
-                decimal serviceFee = ConstantValuePool.SysConfig.FixedServiceFee;
-                if (serviceFee == 0)
+                decimal serviceFee = 0;
+                DateTime curTime = Convert.ToDateTime(DateTime.Now.ToString("T"));
+                //时段1服务费
+                if (curTime > Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeBeginTime1) && curTime < Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeEndTime1))
                 {
-                    decimal serviceFeePercent = 0;
-                    if (string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime1) && string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime1)
-                        && string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime2) && string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime2))
+                    if (ConstantValuePool.SysConfig.FixedServiceFee1 > 0)
                     {
-                        serviceFeePercent = ConstantValuePool.SysConfig.ServiceFeePercent;
+                        serviceFee = ConstantValuePool.SysConfig.FixedServiceFee1;
                     }
-                    else
+                    if (ConstantValuePool.SysConfig.ServiceFeePercent1 > 0)
                     {
-                        DateTime curTime = Convert.ToDateTime(DateTime.Now.ToString("T"));
-                        if (!string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime1) && !string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime1))
-                        {
-                            if (curTime > Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeBeginTime1) && curTime < Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeEndTime1))
-                            {
-                                serviceFeePercent = ConstantValuePool.SysConfig.ServiceFeePercent;
-                            }
-                        }
-                        if (!string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime2) && !string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime2))
-                        {
-                            if (curTime > Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeBeginTime2) && curTime < Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeEndTime2))
-                            {
-                                serviceFeePercent = ConstantValuePool.SysConfig.ServiceFeePercent;
-                            }
-                        }
+                        decimal tempServiceFee = actualPayMoney * ConstantValuePool.SysConfig.ServiceFeePercent1 / 100;
+                        serviceFee = CutOffDecimal.HandleCutOff(tempServiceFee, ConstantValuePool.SysConfig.IsCutTail, ConstantValuePool.SysConfig.CutTailType, ConstantValuePool.SysConfig.CutTailDigit);
                     }
-                    decimal tempServiceFee = actualPayMoney * serviceFeePercent / 100;
-                    serviceFee = CutOffDecimal.HandleCutOff(tempServiceFee, ConstantValuePool.SysConfig.IsCutTail, ConstantValuePool.SysConfig.CutTailType, ConstantValuePool.SysConfig.CutTailDigit);
+                }
+                //时段2服务费
+                if (curTime > Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeBeginTime2) && curTime < Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeEndTime2))
+                {
+                    if (ConstantValuePool.SysConfig.FixedServiceFee2 > 0)
+                    {
+                        serviceFee = ConstantValuePool.SysConfig.FixedServiceFee2;
+                    }
+                    if (ConstantValuePool.SysConfig.ServiceFeePercent2 > 0)
+                    {
+                        decimal tempServiceFee = actualPayMoney * ConstantValuePool.SysConfig.ServiceFeePercent2 / 100;
+                        serviceFee = CutOffDecimal.HandleCutOff(tempServiceFee, ConstantValuePool.SysConfig.IsCutTail, ConstantValuePool.SysConfig.CutTailType, ConstantValuePool.SysConfig.CutTailDigit);
+                    }
                 }
                 m_ServiceFee = serviceFee;
                 this.lbServiceFee.Text = serviceFee.ToString("f2");
@@ -885,8 +883,7 @@ namespace Top4ever.Pos
                         foreach (KeyValuePair<string, VIPCardPayment> item in dicCardPayment)
                         {
                             //将支付成功的会员卡取消支付
-                            VIPCardTradeService tradeService = new VIPCardTradeService();
-                            int returnValue = tradeService.RefundVIPCardPayment(item.Value.CardNo, dicCardTradePayNo[item.Value.CardNo]);
+                            int returnValue = VIPCardTradeService.GetInstance().RefundVIPCardPayment(item.Value.CardNo, dicCardTradePayNo[item.Value.CardNo]);
                             if (returnValue == 0)
                             {
                                 string cardNo = item.Value.CardNo;
@@ -970,10 +967,9 @@ namespace Top4ever.Pos
                 m_IsPaidOrder = true;
                 //更新桌况为空闲状态
                 int status = (int)DeskButtonStatus.IDLE_MODE;
-                DeskService deskService = new DeskService();
-                if (!deskService.UpdateDeskStatus(m_CurrentDeskName, string.Empty, status))
+                if (!DeskService.GetInstance().UpdateDeskStatus(m_CurrentDeskName, string.Empty, status))
                 {
-                    deskService.UpdateDeskStatus(m_CurrentDeskName, string.Empty, status);
+                    DeskService.GetInstance().UpdateDeskStatus(m_CurrentDeskName, string.Empty, status);
                 }
                 //更新第二屏信息
                 if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
@@ -1046,8 +1042,7 @@ namespace Top4ever.Pos
             payingOrder.orderDetailsList = orderDetailsList;
             payingOrder.orderDiscountList = newOrderDiscountList;
             payingOrder.orderPayoffList = orderPayoffList;
-            PayingOrderService payingOrderService = new PayingOrderService();
-            return payingOrderService.PayForOrder(payingOrder);
+            return PayingOrderService.GetInstance().PayForOrder(payingOrder);
         }
 
         private void ResizeNumericPad()
@@ -1130,8 +1125,7 @@ namespace Top4ever.Pos
                     payingOrder.order = submitOrder;
                     payingOrder.orderDetailsList = orderDetailsList;
                     payingOrder.orderDiscountList = newOrderDiscountList;
-                    PayingOrderService payingOrderService = new PayingOrderService();
-                    bool result = payingOrderService.CreatePrePayOrder(payingOrder);
+                    bool result = PayingOrderService.GetInstance().CreatePrePayOrder(payingOrder);
                     if (result)
                     {
                         btn.Text = "解锁";
@@ -1147,8 +1141,7 @@ namespace Top4ever.Pos
                 else
                 {
                     int status = 3;   //预结
-                    OrderService orderService = new OrderService();
-                    if (orderService.UpdateOrderStatus(order.OrderID, status))
+                    if (OrderService.GetInstance().UpdateOrderStatus(order.OrderID, status))
                     {
                         btn.Text = "解锁";
                         order.Status = status;
@@ -1228,8 +1221,7 @@ namespace Top4ever.Pos
                     return;
                 }
                 int status = 0;
-                OrderService orderService = new OrderService();
-                if (orderService.UpdateOrderStatus(order.OrderID, status))
+                if (OrderService.GetInstance().UpdateOrderStatus(order.OrderID, status))
                 {
                     btn.Text = "预结";
                     order.Status = status;
@@ -1360,8 +1352,7 @@ namespace Top4ever.Pos
                         cardPayment.EmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
                         cardPayment.DeviceNo = ConstantValuePool.BizSettingConfig.DeviceNo;
                         string tradePayNo = string.Empty;
-                        VIPCardTradeService cardTradeService = new VIPCardTradeService();
-                        int result = cardTradeService.AddVIPCardPayment(cardPayment, out tradePayNo);
+                        int result = VIPCardTradeService.GetInstance().AddVIPCardPayment(cardPayment, out tradePayNo);
                         if (result == 1)
                         {
                             //会员充值成功
@@ -1418,33 +1409,31 @@ namespace Top4ever.Pos
             {
                 return true;
             }
-            else
+            if (dicCardPayment.Count > 0)
             {
-                if (dicCardPayment.Count > 0)
+                //取消会员卡支付
+                foreach (KeyValuePair<string, VIPCardPayment> item in dicCardPayment)
                 {
-                    //取消会员卡支付
-                    foreach (KeyValuePair<string, VIPCardPayment> item in dicCardPayment)
+                    //将支付成功的会员卡取消支付
+                    int returnValue = VIPCardTradeService.GetInstance().RefundVIPCardPayment(item.Value.CardNo, dicCardTradePayNo[item.Value.CardNo]);
+                    if (returnValue == 0)
                     {
-                        //将支付成功的会员卡取消支付
-                        VIPCardTradeService tradeService = new VIPCardTradeService();
-                        int returnValue = tradeService.RefundVIPCardPayment(item.Value.CardNo, dicCardTradePayNo[item.Value.CardNo]);
-                        if (returnValue == 0)
+                        string cardNo = item.Value.CardNo;
+                        CardRefundPay cardRefundPay = new CardRefundPay
                         {
-                            string cardNo = item.Value.CardNo;
-                            CardRefundPay cardRefundPay = new CardRefundPay();
-                            cardRefundPay.CardNo = cardNo;
-                            cardRefundPay.ShopID = ConstantValuePool.CurrentShop.ShopID.ToString();
-                            cardRefundPay.TradePayNo = dicCardTradePayNo[cardNo];
-                            cardRefundPay.PayAmount = item.Value.PayAmount;
-                            cardRefundPay.EmployeeNo = item.Value.EmployeeNo;
-                            cardRefundPay.DeviceNo = item.Value.DeviceNo;
-                            CardRefundPayService refundPayService = new CardRefundPayService();
-                            refundPayService.AddRefundPayInfo(cardRefundPay);
-                        }
+                            CardNo = cardNo, 
+                            ShopID = ConstantValuePool.CurrentShop.ShopID.ToString(), 
+                            TradePayNo = dicCardTradePayNo[cardNo], 
+                            PayAmount = item.Value.PayAmount, 
+                            EmployeeNo = item.Value.EmployeeNo, 
+                            DeviceNo = item.Value.DeviceNo
+                        };
+                        CardRefundPayService refundPayService = new CardRefundPayService();
+                        refundPayService.AddRefundPayInfo(cardRefundPay);
                     }
                 }
-                return false;
             }
+            return false;
         }
     }
 }

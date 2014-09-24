@@ -11,8 +11,15 @@ namespace Top4ever.ClientService
 {
     public class PayingOrderService
     {
-        public PayingOrderService()
+        private static readonly PayingOrderService Instance = new PayingOrderService();
+
+        private PayingOrderService()
         { }
+
+        public static PayingOrderService GetInstance()
+        {
+            return Instance;
+        }
 
         public bool CreatePrePayOrder(PayingOrder payingOrder)
         {

@@ -11,12 +11,19 @@ namespace Top4ever.ClientService
 {
     public class GoodsService
     {
-        public GoodsService()
+        private static readonly GoodsService Instance = new GoodsService();
+
+        private GoodsService()
         { }
+
+        public static GoodsService GetInstance()
+        {
+            return Instance;
+        }
 
         public IList<GoodsCheckStock> GetGoodsCheckStock()
         {
-            int cByte = ParamFieldLength.PACKAGE_HEAD;
+            const int cByte = ParamFieldLength.PACKAGE_HEAD;
             byte[] sendByte = new byte[cByte];
             int byteOffset = 0;
             Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_GOODSCHECKSTOCK), sendByte, BasicTypeLength.INT32);

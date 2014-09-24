@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 using Top4ever.Entity;
@@ -217,7 +214,7 @@ namespace Top4ever.Pos
             CrystalButton btn = sender as CrystalButton;
             btn.BackColor = ConstantValuePool.PressedColor;
             curPayoffWay = btn.Tag as PayoffWay;
-            this.txtPayoff.Text = curPayoffWay.PayoffName + "(1:" + curPayoffWay.AsPay.ToString("f2") + ")";
+            this.txtPayoff.Text = string.Format("{0}(1:{1})", curPayoffWay.PayoffName, curPayoffWay.AsPay.ToString("f2"));
             if (dic.ContainsKey(curPayoffWay.PayoffID.ToString()))
             {
                 OrderPayoff orderPayoff = dic[curPayoffWay.PayoffID.ToString()];
@@ -617,8 +614,7 @@ namespace Top4ever.Pos
                         foreach (KeyValuePair<string, VIPCardPayment> item in dicCardPayment)
                         {
                             //将支付成功的会员卡取消支付
-                            VIPCardTradeService tradeService = new VIPCardTradeService();
-                            int returnValue = tradeService.RefundVIPCardPayment(item.Value.CardNo, dicCardTradePayNo[item.Value.CardNo]);
+                            int returnValue = VIPCardTradeService.GetInstance().RefundVIPCardPayment(item.Value.CardNo, dicCardTradePayNo[item.Value.CardNo]);
                             if (returnValue == 0)
                             {
                                 string cardNo = item.Value.CardNo;
@@ -735,8 +731,7 @@ namespace Top4ever.Pos
             PayingOrder payingOrder = new PayingOrder();
             payingOrder.order = order;
             payingOrder.orderPayoffList = orderPayoffList;
-            PayingOrderService payingOrderService = new PayingOrderService();
-            return payingOrderService.PayForOrder(payingOrder);
+            return PayingOrderService.GetInstance().PayForOrder(payingOrder);
         }
 
         private bool IsVIPCardPaySuccess(ref Dictionary<string, VIPCardPayment> dicCardPayment, ref Dictionary<string, string> dicCardTradePayNo)
@@ -760,8 +755,7 @@ namespace Top4ever.Pos
                         cardPayment.EmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
                         cardPayment.DeviceNo = ConstantValuePool.BizSettingConfig.DeviceNo;
                         string tradePayNo = string.Empty;
-                        VIPCardTradeService cardTradeService = new VIPCardTradeService();
-                        int result = cardTradeService.AddVIPCardPayment(cardPayment, out tradePayNo);
+                        int result = VIPCardTradeService.GetInstance().AddVIPCardPayment(cardPayment, out tradePayNo);
                         if (result == 1)
                         {
                             //会员充值成功
@@ -826,8 +820,7 @@ namespace Top4ever.Pos
                     foreach (KeyValuePair<string, VIPCardPayment> item in dicCardPayment)
                     {
                         //将支付成功的会员卡取消支付
-                        VIPCardTradeService tradeService = new VIPCardTradeService();
-                        int returnValue = tradeService.RefundVIPCardPayment(item.Value.CardNo, dicCardTradePayNo[item.Value.CardNo]);
+                        int returnValue = VIPCardTradeService.GetInstance().RefundVIPCardPayment(item.Value.CardNo, dicCardTradePayNo[item.Value.CardNo]);
                         if (returnValue == 0)
                         {
                             string cardNo = item.Value.CardNo;

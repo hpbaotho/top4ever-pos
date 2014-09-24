@@ -30,7 +30,6 @@ namespace Top4ever.Pos
         private CrystalButton prevRegionButton = null;
         private bool currentFormActivate = false;
         private int threadSleepTime = 1000;
-        private DeskService deskService = new DeskService();
         private Dictionary<Guid, List<CrystalButton>> dicDeskInRegion = new Dictionary<Guid, List<CrystalButton>>();
         private bool haveDailyClose;
 
@@ -254,7 +253,7 @@ namespace Top4ever.Pos
                 {
                     if (dicDeskInRegion.ContainsKey(m_CurrentRegionID))
                     {
-                        IList<DeskRealTimeInfo> deskInfoList = deskService.GetDeskRealTimeInfo(m_CurrentRegionID.ToString());
+                        IList<DeskRealTimeInfo> deskInfoList = DeskService.GetInstance().GetDeskRealTimeInfo(m_CurrentRegionID.ToString());
                         List<CrystalButton> btnDeskList = dicDeskInRegion[m_CurrentRegionID];
                         foreach (CrystalButton btnDesk in btnDeskList)
                         {
@@ -379,7 +378,7 @@ namespace Top4ever.Pos
             CrystalButton btnDesk = sender as CrystalButton;
             BizDesk tempDesk = btnDesk.Tag as BizDesk;
             //重新获取Desk信息
-            BizDesk desk = deskService.GetBizDeskByName(tempDesk.DeskName);
+            BizDesk desk = DeskService.GetInstance().GetBizDeskByName(tempDesk.DeskName);
             if (m_OperateType == ButtonOperateType.ORDER)
             {
                 if (desk.Status == (int)DeskButtonStatus.IDLE_MODE)
@@ -398,7 +397,7 @@ namespace Top4ever.Pos
                     }
                     //更新桌况为占用状态
                     int status = (int)DeskButtonStatus.OCCUPIED;
-                    if (deskService.UpdateDeskStatus(desk.DeskName, ConstantValuePool.BizSettingConfig.DeviceNo, status))
+                    if (DeskService.GetInstance().UpdateDeskStatus(desk.DeskName, ConstantValuePool.BizSettingConfig.DeviceNo, status))
                     {
                         desk.Status = status;
                         btnDesk.BackColor = GetColorByStatus(status, ConstantValuePool.BizSettingConfig.DeviceNo);
@@ -414,19 +413,17 @@ namespace Top4ever.Pos
                     {
                         //更新桌况为占用状态
                         int status = (int)DeskButtonStatus.OCCUPIED;
-                        if (deskService.UpdateDeskStatus(desk.DeskName, ConstantValuePool.BizSettingConfig.DeviceNo, status))
+                        if (DeskService.GetInstance().UpdateDeskStatus(desk.DeskName, ConstantValuePool.BizSettingConfig.DeviceNo, status))
                         {
                             //获取桌子的订单列表
-                            OrderService orderService = new OrderService();
-                            IList<Order> orderList = orderService.GetOrderList(desk.DeskName);
+                            IList<Order> orderList = OrderService.GetInstance().GetOrderList(desk.DeskName);
                             if (orderList != null && orderList.Count > 0)
                             {
                                 SalesOrder salesOrder = null;
                                 if (orderList.Count == 1)
                                 {
                                     Guid orderID = orderList[0].OrderID;
-                                    SalesOrderService salesOrderService = new SalesOrderService();
-                                    salesOrder = salesOrderService.GetSalesOrder(orderID);
+                                    salesOrder = SalesOrderService.GetInstance().GetSalesOrder(orderID);
                                 }
                                 else
                                 {
@@ -435,8 +432,7 @@ namespace Top4ever.Pos
                                     if (form.SelectedOrder != null)
                                     {
                                         Guid orderID = form.SelectedOrder.OrderID;
-                                        SalesOrderService salesOrderService = new SalesOrderService();
-                                        salesOrder = salesOrderService.GetSalesOrder(orderID);
+                                        salesOrder = SalesOrderService.GetInstance().GetSalesOrder(orderID);
                                     }
                                 }
                                 if (salesOrder != null)
@@ -467,7 +463,7 @@ namespace Top4ever.Pos
                 {
                     //更新桌况为非占用状态
                     int status = (int)DeskButtonStatus.OCCUPIED;
-                    if (deskService.UpdateDeskStatus(desk.DeskName, string.Empty, status))
+                    if (DeskService.GetInstance().UpdateDeskStatus(desk.DeskName, string.Empty, status))
                     {
                         btnDesk.BackColor = GetColorByStatus(status, string.Empty);
                     }
@@ -478,8 +474,7 @@ namespace Top4ever.Pos
                 if (string.IsNullOrEmpty(deskName1st))
                 {
                     //获取桌子的订单列表
-                    OrderService orderService = new OrderService();
-                    IList<Order> orderList = orderService.GetOrderList(desk.DeskName);
+                    IList<Order> orderList = OrderService.GetInstance().GetOrderList(desk.DeskName);
                     if (orderList != null && orderList.Count > 0)
                     {
                         if (orderList.Count > 1)
@@ -521,8 +516,7 @@ namespace Top4ever.Pos
                             return; //点击相同的第一张桌子
                         }
                         //获取桌子的订单列表
-                        OrderService orderService = new OrderService();
-                        IList<Order> orderList = orderService.GetOrderList(desk.DeskName);
+                        IList<Order> orderList = OrderService.GetInstance().GetOrderList(desk.DeskName);
                         if (orderList != null && orderList.Count > 0)
                         {
                             DeskChange deskChange = new DeskChange();
@@ -538,13 +532,13 @@ namespace Top4ever.Pos
                                 {
                                     //更新桌况为空闲状态
                                     status = (int)DeskButtonStatus.IDLE_MODE;
-                                    if (!deskService.UpdateDeskStatus(deskName1st, string.Empty, status))
+                                    if (!DeskService.GetInstance().UpdateDeskStatus(deskName1st, string.Empty, status))
                                     {
                                         MessageBox.Show("更新桌况失败！");
                                     }
                                 }
                                 status = (int)DeskButtonStatus.OCCUPIED;
-                                if (!deskService.UpdateDeskStatus(desk.DeskName, ConstantValuePool.BizSettingConfig.DeviceNo, status))
+                                if (!DeskService.GetInstance().UpdateDeskStatus(desk.DeskName, ConstantValuePool.BizSettingConfig.DeviceNo, status))
                                 {
                                     MessageBox.Show("更新桌况失败！");
                                 }
@@ -569,20 +563,20 @@ namespace Top4ever.Pos
                             deskChange.DeskName = desk.DeskName;
                             deskChange.OrderID1st = orderID1st;
                             deskChange.OrderID2nd = Guid.Empty;
-                            if (orderService.OrderDeskOperate(deskChange))
+                            if (OrderService.GetInstance().OrderDeskOperate(deskChange))
                             {
                                 int status = 0;
                                 if (firstDeskSingleOrder)
                                 {
                                     //更新桌况为空闲状态
                                     status = (int)DeskButtonStatus.IDLE_MODE;
-                                    if (!deskService.UpdateDeskStatus(deskName1st, string.Empty, status))
+                                    if (!DeskService.GetInstance().UpdateDeskStatus(deskName1st, string.Empty, status))
                                     {
                                         MessageBox.Show("更新桌况失败！");
                                     }
                                 }
                                 status = (int)DeskButtonStatus.OCCUPIED;
-                                if (!deskService.UpdateDeskStatus(desk.DeskName, ConstantValuePool.BizSettingConfig.DeviceNo, status))
+                                if (!DeskService.GetInstance().UpdateDeskStatus(desk.DeskName, ConstantValuePool.BizSettingConfig.DeviceNo, status))
                                 {
                                     MessageBox.Show("更新桌况失败！");
                                 }
@@ -604,19 +598,17 @@ namespace Top4ever.Pos
                     {
                         //更新桌况为占用状态
                         int status = (int)DeskButtonStatus.OCCUPIED;
-                        if (deskService.UpdateDeskStatus(desk.DeskName, ConstantValuePool.BizSettingConfig.DeviceNo, status))
+                        if (DeskService.GetInstance().UpdateDeskStatus(desk.DeskName, ConstantValuePool.BizSettingConfig.DeviceNo, status))
                         {
                             //获取桌子的订单列表
-                            OrderService orderService = new OrderService();
-                            IList<Order> orderList = orderService.GetOrderList(desk.DeskName);
+                            IList<Order> orderList = OrderService.GetInstance().GetOrderList(desk.DeskName);
                             if (orderList != null && orderList.Count > 0)
                             {
                                 SalesOrder salesOrder = null;
                                 if (orderList.Count == 1)
                                 {
                                     Guid orderID = orderList[0].OrderID;
-                                    SalesOrderService salesOrderService = new SalesOrderService();
-                                    salesOrder = salesOrderService.GetSalesOrder(orderID);
+                                    salesOrder = SalesOrderService.GetInstance().GetSalesOrder(orderID);
                                 }
                                 else
                                 {
@@ -625,8 +617,7 @@ namespace Top4ever.Pos
                                     if (form.SelectedOrder != null)
                                     {
                                         Guid orderID = form.SelectedOrder.OrderID;
-                                        SalesOrderService salesOrderService = new SalesOrderService();
-                                        salesOrder = salesOrderService.GetSalesOrder(orderID);
+                                        salesOrder = SalesOrderService.GetInstance().GetSalesOrder(orderID);
                                     }
                                 }
                                 if (salesOrder != null)

@@ -367,24 +367,29 @@ namespace Top4ever.Pos
         {
             //布局
             List<BizControl> bizControls = new List<BizControl>();
-            BizControl control = new BizControl();
-            control.Name = "Group";
-            control.RowsCount = int.Parse(this.txtGoodsGroupRows.Text);
-            control.ColumnsCount = int.Parse(this.txtGoodsGroupColumns.Text);
+            BizControl control = new BizControl
+            {
+                Name = "Group", 
+                RowsCount = int.Parse(this.txtGoodsGroupRows.Text), 
+                ColumnsCount = int.Parse(this.txtGoodsGroupColumns.Text)
+            };
             bizControls.Add(control);
-            control = new BizControl();
-            control.Name = "Item";
-            control.RowsCount = int.Parse(this.txtGoodsRows.Text);
-            control.ColumnsCount = int.Parse(this.txtGoodsColumns.Text);
+            control = new BizControl
+            {
+                Name = "Item", 
+                RowsCount = int.Parse(this.txtGoodsRows.Text), 
+                ColumnsCount = int.Parse(this.txtGoodsColumns.Text)
+            };
             bizControls.Add(control);
-            control = new BizControl();
-            control.Name = "Payoff";
-            control.RowsCount = int.Parse(this.txtPayoffWayRows.Text);
-            control.ColumnsCount = int.Parse(this.txtPayoffWayColumns.Text);
+            control = new BizControl
+            {
+                Name = "Payoff", 
+                RowsCount = int.Parse(this.txtPayoffWayRows.Text), 
+                ColumnsCount = int.Parse(this.txtPayoffWayColumns.Text)
+            };
             bizControls.Add(control);
             //打印
-            PrintConfig printConfig = new PrintConfig();
-            printConfig.Enabled = ckbPrinter.Checked;
+            PrintConfig printConfig = new PrintConfig {Enabled = ckbPrinter.Checked};
             if (rbDriverPrinter.Checked)
             {
                 printConfig.PrinterPort = PortType.DRIVER;
@@ -423,8 +428,7 @@ namespace Top4ever.Pos
                 cashboxConfig.PID = this.txtCashPID.Text;
             }
             //来电宝
-            TelCallConfig telCallConfig = new TelCallConfig();
-            telCallConfig.Enabled = ckbTelCall.Checked;
+            TelCallConfig telCallConfig = new TelCallConfig {Enabled = ckbTelCall.Checked};
             if (ckbTelCall.Checked)
             {
                 telCallConfig.Model = cmbTelCallModel.SelectedIndex;
@@ -463,8 +467,7 @@ namespace Top4ever.Pos
                 }
             }
             //客显
-            ClientShowConfig clientShowConfig = new ClientShowConfig();
-            clientShowConfig.Enabled = ckbClientShow.Checked;
+            ClientShowConfig clientShowConfig = new ClientShowConfig {Enabled = ckbClientShow.Checked};
             if (rbClientShow.Checked)
             {
                 clientShowConfig.IsUsbPort = false;
@@ -528,9 +531,7 @@ namespace Top4ever.Pos
             appConfig.ShowSoldOutQty = ckbSoldOutQty.Checked;
             appConfig.DirectShipping = ckbDirectShipping.Checked;
             appConfig.CarteMode = ckbCarteMode.Checked;
-            BizUIConfig bizUIConfig = new BizUIConfig();
-            bizUIConfig.BizControls = bizControls;
-            appConfig.bizUIConfig = bizUIConfig;
+            appConfig.bizUIConfig = new BizUIConfig { BizControls = bizControls };
             appConfig.printConfig = printConfig;
             appConfig.cashBoxConfig = cashboxConfig;
             appConfig.telCallConfig = telCallConfig;

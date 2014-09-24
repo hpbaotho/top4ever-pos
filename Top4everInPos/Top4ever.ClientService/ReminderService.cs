@@ -11,8 +11,15 @@ namespace Top4ever.ClientService
 {
     public class ReminderService
     {
-        public ReminderService()
+        private static readonly ReminderService Instance = new ReminderService();
+
+        private ReminderService()
         { }
+
+        public static ReminderService GetInstance()
+        {
+            return Instance;
+        }
 
         public bool CreateReminderOrder(ReminderOrder reminderOrder)
         {

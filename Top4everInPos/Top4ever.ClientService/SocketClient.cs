@@ -15,28 +15,20 @@ namespace Top4ever.ClientService
         /// <summary>
         /// Listener endpoint.
         /// </summary>
-        private IPEndPoint hostEndPoint;
+        private readonly IPEndPoint _hostEndPoint;
         /// <summary>
         /// The socket used to send/receive messages.
         /// </summary>
-        private Socket clientSocket;
+        private Socket _clientSocket;
 
         public SocketClient(String hostName, Int32 port)
         {
-            ////Instantiates the endpoint and socket.
-            //IPAddress ip = IPAddress.Parse(hostName);
-            //this.hostEndPoint = new IPEndPoint(ip, port);//把ip和端口转化为IPEndpoint实例 
-            //this.clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);//创建Socket 
-
-            // Get host related information.
-            IPHostEntry host = Dns.GetHostEntry(hostName);
-
-            // Addres of the host.
-            IPAddress[] addressList = host.AddressList;
-
-            // Instantiates the endpoint and socket.
-            this.hostEndPoint = new IPEndPoint(addressList[addressList.Length - 1], port);
-            this.clientSocket = new Socket(this.hostEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            //Instantiates the endpoint and socket.
+            IPAddress ipAddress = IPAddress.Parse(hostName);
+            //把ip和端口转化为IPEndpoint实例 
+            this._hostEndPoint = new IPEndPoint(ipAddress, port);
+            //创建Socket 
+            this._clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         }
 
         /// <summary>
@@ -48,61 +40,67 @@ namespace Top4ever.ClientService
         public Int32 SendReceive(Byte[] sendBuffer, out Byte[] receiveData)
         {
             int operateCode = 0;
+            receiveData = null;
             try
             {
-                clientSocket.Connect(hostEndPoint);
+                _clientSocket.Connect(_hostEndPoint);
                 //向服务器发送信息 
-                clientSocket.Send(sendBuffer, sendBuffer.Length, SocketFlags.None);
+                _clientSocket.Send(sendBuffer, sendBuffer.Length, SocketFlags.None);
 
                 byte[] receiveBuffer = new byte[1024];
-                int receiveSize = clientSocket.Receive(receiveBuffer, 2 * LEN_INT32, SocketFlags.None);
+                int receiveSize = _clientSocket.Receive(receiveBuffer, 2 * LEN_INT32, SocketFlags.None);
                 if (receiveSize != 2 * LEN_INT32) throw new Exception("the length of data what the client socket receive is error.");
 
                 // create buffer
                 int byteCount = BitConverter.ToInt32(receiveBuffer, LEN_INT32);
-                Byte[] _ItemBuffer = new byte[byteCount];
+                Byte[] itemBuffer = new byte[byteCount];
                 // set first data to buffer 
                 int bufferOffset = 0;
-                Array.Copy(receiveBuffer, 0, _ItemBuffer, bufferOffset, receiveSize);
+                Array.Copy(receiveBuffer, 0, itemBuffer, bufferOffset, receiveSize);
                 bufferOffset += receiveSize;
                 Array.Clear(receiveBuffer, 0, receiveBuffer.Length);
                 // recv data from server network 
                 while (bufferOffset < byteCount)
                 {
-                    receiveSize = clientSocket.Receive(receiveBuffer, receiveBuffer.Length, 0);
+                    receiveSize = _clientSocket.Receive(receiveBuffer, receiveBuffer.Length, 0);
                     // recv data and copy to buffer for next step
-                    Array.Copy(receiveBuffer, 0, _ItemBuffer, bufferOffset, receiveSize);
+                    Array.Copy(receiveBuffer, 0, itemBuffer, bufferOffset, receiveSize);
                     bufferOffset += receiveSize;
                     Array.Clear(receiveBuffer, 0, receiveBuffer.Length);
                 }
-                receiveData = _ItemBuffer;
+                receiveData = itemBuffer;
                 //set operate code
-                operateCode = BitConverter.ToInt32(_ItemBuffer, 0);
+                operateCode = BitConverter.ToInt32(itemBuffer, 0);
             }
             catch (Exception ex)
             {
                 LogHelper.GetInstance().Error("socket send and receive data error.", ex);
-                throw ex;
             }
             return operateCode;
         }
 
         public void Close()
         {
-            if (clientSocket != null)
+            if (_clientSocket != null)
             {
-                clientSocket.Shutdown(SocketShutdown.Both);
-                clientSocket.Close();
-                clientSocket = null;
+                if (_clientSocket.Connected)
+                {
+                    _clientSocket.Shutdown(SocketShutdown.Both);
+                    _clientSocket.Close();
+                    _clientSocket = null;
+                }
             }
         }
 
         public void Dispose()
         {
-            if (clientSocket != null)
+            if (_clientSocket != null)
             {
-                clientSocket.Shutdown(SocketShutdown.Both);
-                clientSocket.Close();
+                if (_clientSocket.Connected)
+                {
+                    _clientSocket.Shutdown(SocketShutdown.Both);
+                    _clientSocket.Close();
+                }
             }
         }
     }

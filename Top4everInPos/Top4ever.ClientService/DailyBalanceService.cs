@@ -11,13 +11,20 @@ namespace Top4ever.ClientService
 {
     public class DailyBalanceService
     {
-        public DailyBalanceService()
+        private static readonly DailyBalanceService Instance = new DailyBalanceService();
+
+        private DailyBalanceService()
         { }
+
+        public static DailyBalanceService GetInstance()
+        {
+            return Instance;
+        }
 
         /// <summary>
         /// 日结操作
         /// </summary>
-        /// <param name="dailyStatement">日结号</param>
+        /// <param name="dailyBalance">日结号</param>
         /// <param name="unCheckDeviceNo">未结账的设备号</param>
         /// <returns></returns>
         public Int32 CreateDailyBalance(DailyBalance dailyBalance, out string unCheckDeviceNo)
@@ -133,6 +140,47 @@ namespace Top4ever.ClientService
                 socket.Close();
             }
             return dailyBalanceTimeList;
+        }
+
+        /// <summary>
+        ///  获取一段时间内各个账务日的营业额
+        /// </summary>
+        /// <param name="beginDate">开始日期</param>
+        /// <param name="endDate">结束日期</param>
+        /// <returns></returns>
+        public IList<DailyStatementInDay> GetDailyStatementInDays(string beginDate, string endDate)
+        {
+            int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.BEGINDATE + ParamFieldLength.ENDDATE;
+            byte[] sendByte = new byte[cByte];
+            int byteOffset = 0;
+            Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_DAILYSTATEMENTINDAYS), sendByte, BasicTypeLength.INT32);
+            byteOffset = BasicTypeLength.INT32;
+            Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
+            byteOffset += BasicTypeLength.INT32;
+
+            byte[] tempByte = null;
+            //beginDate
+            tempByte = Encoding.UTF8.GetBytes(beginDate);
+            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
+            byteOffset += ParamFieldLength.BEGINDATE;
+            //endDate
+            tempByte = Encoding.UTF8.GetBytes(endDate);
+            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
+            byteOffset += ParamFieldLength.ENDDATE;
+
+            IList<DailyStatementInDay> dailyStatementList = null;
+            using (SocketClient socket = new SocketClient(ConstantValuePool.BizSettingConfig.IPAddress, ConstantValuePool.BizSettingConfig.Port))
+            {
+                Byte[] receiveData = null;
+                Int32 operCode = socket.SendReceive(sendByte, out receiveData);
+                if (operCode == (int)RET_VALUE.SUCCEEDED)
+                {
+                    string strReceive = Encoding.UTF8.GetString(receiveData, ParamFieldLength.PACKAGE_HEAD, receiveData.Length - ParamFieldLength.PACKAGE_HEAD);
+                    dailyStatementList = JsonConvert.DeserializeObject<IList<DailyStatementInDay>>(strReceive);
+                }
+                socket.Close();
+            }
+            return dailyStatementList;
         }
     }
 }

@@ -195,8 +195,7 @@ namespace Top4ever.Pos.Membership
             cardAddMoney.PayoffID = _curPayoffWay.PayoffID;
             cardAddMoney.PayoffName = _curPayoffWay.PayoffName;
             string tradePayNo = string.Empty;
-            VIPCardTradeService tradeservice = new VIPCardTradeService();
-            int result = tradeservice.AddVIPCardStoredValue(cardAddMoney, out tradePayNo);
+            int result = VIPCardTradeService.GetInstance().AddVIPCardStoredValue(cardAddMoney, out tradePayNo);
             if (result == 1)
             {
                 MessageBox.Show("会员充值成功！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);

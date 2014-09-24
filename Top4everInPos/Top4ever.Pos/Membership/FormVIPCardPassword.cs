@@ -46,8 +46,7 @@ namespace Top4ever.Pos.Membership
                 return;
             }
             string newPassword = this.txtNewPassword.Text.Trim();
-            VIPCardService cardService = new VIPCardService();
-            int result = cardService.UpdateCardPassword(cardNo, currentPassword, newPassword);
+            int result = VIPCardService.GetInstance().UpdateCardPassword(cardNo, currentPassword, newPassword);
             if (result == 1)
             {
                 _operResult = true;

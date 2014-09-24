@@ -20,8 +20,7 @@ namespace Top4ever.Pos.Feature
 
         private void FormHourSalesReport_Load(object sender, EventArgs e)
         {
-            OrderService orderService = new OrderService();
-            IList<HourOrderSales> hourSalesList = orderService.GetHourSalesReport(DateTime.MinValue, DateTime.MinValue);
+            IList<HourOrderSales> hourSalesList = OrderService.GetInstance().GetHourSalesReport(DateTime.MinValue, DateTime.MinValue);
             BindSalesReportData(hourSalesList);
         }
 
@@ -65,8 +64,7 @@ namespace Top4ever.Pos.Feature
         {
             string beginDate = dateTimePicker1.Value.ToString("yyyy-MM-dd 00:00:00");
             string endDate = dateTimePicker2.Value.ToString("yyyy-MM-dd 23:59:59");
-            OrderService orderService = new OrderService();
-            IList<HourOrderSales> hourSalesList = orderService.GetHourSalesReport(DateTime.Parse(beginDate), DateTime.Parse(endDate));
+            IList<HourOrderSales> hourSalesList = OrderService.GetInstance().GetHourSalesReport(DateTime.Parse(beginDate), DateTime.Parse(endDate));
             BindSalesReportData(hourSalesList);
         }
 

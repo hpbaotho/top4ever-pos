@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.IO;
 using System.Windows.Forms;
 
@@ -56,16 +53,16 @@ namespace Top4ever.Pos
                 foreach (DataGridViewRow dgr in dgvGoodsOrder.Rows)
                 {
                     int index = this.dgvItemOrder.Rows.Add();
-                    this.dgvItemOrder.Rows[index].Cells["GoodsNum"].Value = dgr.Cells["GoodsNum"].Value;
-                    this.dgvItemOrder.Rows[index].Cells["GoodsName"].Value = dgr.Cells["GoodsName"].Value;
-                    this.dgvItemOrder.Rows[index].Cells["GoodsPrice"].Value = dgr.Cells["GoodsPrice"].Value;
-                    this.dgvItemOrder.Rows[index].Cells["GoodsDiscount"].Value = dgr.Cells["GoodsDiscount"].Value;
+                    dgvItemOrder.Rows[index].Cells["GoodsNum"].Value = dgr.Cells["GoodsNum"].Value;
+                    dgvItemOrder.Rows[index].Cells["GoodsName"].Value = dgr.Cells["GoodsName"].Value;
+                    dgvItemOrder.Rows[index].Cells["GoodsPrice"].Value = dgr.Cells["GoodsPrice"].Value;
+                    dgvItemOrder.Rows[index].Cells["GoodsDiscount"].Value = dgr.Cells["GoodsDiscount"].Value;
                     //设置样式
-                    this.dgvItemOrder.CurrentRow.Selected = false;
-                    this.dgvItemOrder.Rows[index].DefaultCellStyle.ForeColor = Color.Red;
-                    this.dgvItemOrder.Rows[index].DefaultCellStyle.BackColor = Color.White;
+                    dgr.Selected = false;
+                    dgvItemOrder.Rows[index].DefaultCellStyle.ForeColor = Color.Red;
+                    dgvItemOrder.Rows[index].DefaultCellStyle.BackColor = Color.White;
                 }
-                this.dgvItemOrder.Rows[this.dgvItemOrder.RowCount - 1].Selected = true;
+                dgvItemOrder.Rows[this.dgvItemOrder.RowCount - 1].Selected = true;
                 BindOrderInfoSum();
             }
         }
@@ -96,7 +93,7 @@ namespace Top4ever.Pos
                     this.dgvItemOrder.Rows[index].Cells["GoodsPrice"].Value = orderDetails.TotalSellPrice;
                     this.dgvItemOrder.Rows[index].Cells["GoodsDiscount"].Value = orderDetails.TotalDiscount;
                     //设置样式
-                    this.dgvItemOrder.CurrentRow.Selected = false;
+                    this.dgvItemOrder.Rows[index].Selected = false;
                     this.dgvItemOrder.Rows[index].DefaultCellStyle.ForeColor = Color.Red;
                     this.dgvItemOrder.Rows[index].DefaultCellStyle.BackColor = Color.White;
                 }

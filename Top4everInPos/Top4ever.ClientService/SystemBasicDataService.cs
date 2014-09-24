@@ -11,6 +11,16 @@ namespace Top4ever.ClientService
 {
     public class SystemBasicDataService
     {
+        private static readonly SystemBasicDataService Instance = new SystemBasicDataService();
+
+        private SystemBasicDataService()
+        { }
+
+        public static SystemBasicDataService GetInstance()
+        {
+            return Instance;
+        }
+
         public SysBasicData GetSysBasicData()
         {
             int cByte = ParamFieldLength.PACKAGE_HEAD;

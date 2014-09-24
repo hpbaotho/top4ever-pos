@@ -33,8 +33,7 @@ namespace Top4ever.Pos.Feature
                 DateTime lastDailyStatementTime = (DateTime)m_LastDailyStatementTime;
                 this.txtLastTime.Text = lastDailyStatementTime.ToLongDateString() + " " + System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(lastDailyStatementTime.DayOfWeek);
             }
-            DailyBalanceService dailyBalanceService = new DailyBalanceService();
-            string dailyTimeInterval = dailyBalanceService.GetDailyStatementTimeInterval();
+            string dailyTimeInterval = DailyBalanceService.GetInstance().GetDailyStatementTimeInterval();
             if (string.IsNullOrEmpty(dailyTimeInterval))
             {
                 MessageBox.Show("未获取到销售数据，请确认后操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);

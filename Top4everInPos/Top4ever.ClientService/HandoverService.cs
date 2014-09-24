@@ -6,14 +6,20 @@ using Top4ever.ClientService.Enum;
 using Top4ever.Domain.Transfer;
 using Top4ever.Entity;
 using Newtonsoft.Json;
-using Top4ever.Domain;
 
 namespace Top4ever.ClientService
 {
     public class HandoverService
     {
-        public HandoverService()
+        private static readonly HandoverService Instance = new HandoverService();
+
+        private HandoverService()
         { }
+
+        public static HandoverService GetInstance()
+        {
+            return Instance;
+        }
 
         public bool CreateHandover(HandoverInfo handover)
         {

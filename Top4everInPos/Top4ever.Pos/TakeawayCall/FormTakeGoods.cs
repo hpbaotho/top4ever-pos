@@ -106,8 +106,7 @@ namespace Top4ever.Pos.TakeawayCall
             CustomerOrder customerOrder = new CustomerOrder();
             customerOrder.OrderID = _salesOrder.order.OrderID;
             customerOrder.DeliveryEmployeeNo = string.Empty;
-            CustomersService customerService = new CustomersService();
-            if (customerService.UpdateTakeoutOrderStatus(customerOrder))
+            if (CustomersService.GetInstance().UpdateTakeoutOrderStatus(customerOrder))
             {
                 _hasDeliveried = true;
                 this.Close();

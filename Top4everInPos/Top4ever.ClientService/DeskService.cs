@@ -11,8 +11,15 @@ namespace Top4ever.ClientService
 {
     public class DeskService
     {
-        public DeskService()
+        private static readonly DeskService Instance = new DeskService();
+
+        private DeskService()
         { }
+
+        public static DeskService GetInstance()
+        {
+            return Instance;
+        }
 
         public BizDesk GetBizDeskByName(string deskName)
         {

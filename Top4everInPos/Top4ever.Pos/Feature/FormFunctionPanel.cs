@@ -380,7 +380,8 @@ namespace Top4ever.Pos.Feature
 
         private void btnHistoryDailyReport_Click(object sender, EventArgs e)
         {
-
+            FormChartReport form = new FormChartReport();
+            form.ShowDialog();
         }
 
         private void btnPunchInReport_Click(object sender, EventArgs e)

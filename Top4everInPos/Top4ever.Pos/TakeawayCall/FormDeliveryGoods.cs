@@ -99,8 +99,7 @@ namespace Top4ever.Pos.TakeawayCall
                 string employeeNo = keyForm.KeypadValue;
                 this.txtEmployeeNo.Text = employeeNo;
                 Employee employee = null;
-                EmployeeService employeeService = new EmployeeService();
-                int result = employeeService.GetEmployeeByNo(employeeNo, ref employee);
+                int result = EmployeeService.GetInstance().GetEmployeeByNo(employeeNo, ref employee);
                 if (result == 1)
                 {
                     this.txtEmployeeNo.Text = employee.EmployeeNo;
@@ -126,8 +125,7 @@ namespace Top4ever.Pos.TakeawayCall
             customerOrder.Address = this.txtAddress.Text.Trim();
             customerOrder.Remark = this.txtRemark.Text.Trim();
             customerOrder.DeliveryEmployeeNo = this.txtEmployeeNo.Text.Trim();
-            CustomersService customerService = new CustomersService();
-            if (customerService.UpdateTakeoutOrderStatus(customerOrder))
+            if (CustomersService.GetInstance().UpdateTakeoutOrderStatus(customerOrder))
             {
                 //打印
                 _printData.CustomerPhone = this.txtTelephone.Text.Trim();

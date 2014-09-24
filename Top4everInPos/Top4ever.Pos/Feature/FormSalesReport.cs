@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -13,7 +11,6 @@ using Top4ever.Entity;
 using Top4ever.Entity.Enum;
 using Top4ever.Print;
 using Top4ever.Domain.MembershipCard;
-using Top4ever.Common;
 using Top4ever.LocalService;
 using Top4ever.LocalService.Entity;
 using Top4ever.Pos.Membership;
@@ -25,8 +22,8 @@ namespace Top4ever.Pos.Feature
         /// <summary>
         /// 1:交班 2:日结
         /// </summary>
-        private int m_ModelType;
-        private BusinessReport bizReport = null;
+        private readonly int m_ModelType;
+        private readonly BusinessReport bizReport = null;
 
         private bool m_HandleSuccess = false;
         public bool HandleSuccess
@@ -38,7 +35,6 @@ namespace Top4ever.Pos.Feature
         {
             InitializeComponent();
             this.dgvSalesReport.BackgroundColor = SystemColors.ButtonFace;
-            BusinessReportService bizReportService = new BusinessReportService();
             m_ModelType = modelType;
             if (modelType == 1)
             {
@@ -46,23 +42,22 @@ namespace Top4ever.Pos.Feature
                 this.comboBox1.Visible = false;
                 btnSalesReport.Text = "交班";
                 this.Text = "交班报表";
-                bizReport = bizReportService.GetReportDataByHandover(ConstantValuePool.BizSettingConfig.DeviceNo);
+                bizReport = BusinessReportService.GetInstance().GetReportDataByHandover(ConstantValuePool.BizSettingConfig.DeviceNo);
             }
             else if (modelType == 2)
             {
                 btnSalesReport.Text = "日结";
                 this.Text = "日结报表";
-                bizReport = bizReportService.GetReportDataByDailyStatement(string.Empty);
+                bizReport = BusinessReportService.GetInstance().GetReportDataByDailyStatement(string.Empty);
             }
         }
 
-        public FormSalesReport(int modelType, object recordID)
+        public FormSalesReport(int modelType, object recordId)
         {
             InitializeComponent();
             this.lbWeather.Visible = false;
             this.comboBox1.Visible = false;
             this.dgvSalesReport.BackgroundColor = SystemColors.ButtonFace;
-            BusinessReportService bizReportService = new BusinessReportService();
             m_ModelType = modelType;
             if (modelType == 1)
             {
@@ -70,8 +65,8 @@ namespace Top4ever.Pos.Feature
                 btnSalesReport.Enabled = false;
                 btnSalesReport.BackColor = ConstantValuePool.DisabledColor;
                 this.Text = "交班报表";
-                Guid handoverRecordID = recordID == null ? Guid.Empty : (Guid)recordID;
-                bizReport = bizReportService.GetReportDataByHandoverRecordID(handoverRecordID);
+                Guid handoverRecordId = recordId == null ? Guid.Empty : (Guid)recordId;
+                bizReport = BusinessReportService.GetInstance().GetReportDataByHandoverRecordId(handoverRecordId);
             }
             else if (modelType == 2)
             {
@@ -79,8 +74,8 @@ namespace Top4ever.Pos.Feature
                 btnSalesReport.Enabled = false;
                 btnSalesReport.BackColor = ConstantValuePool.DisabledColor;
                 this.Text = "日结报表";
-                string dailyStatementNo = recordID.ToString();
-                bizReport = bizReportService.GetReportDataByDailyStatement(dailyStatementNo);
+                string dailyStatementNo = recordId.ToString();
+                bizReport = BusinessReportService.GetInstance().GetReportDataByDailyStatement(dailyStatementNo);
             }
         }
 
@@ -454,8 +449,7 @@ namespace Top4ever.Pos.Feature
                     HandoverInfo handover = new HandoverInfo();
                     handover.handoverRecord = handoverRecord;
                     handover.handoverTurnoverList = handoverTurnoverList;
-                    HandoverService handoverService = new HandoverService();
-                    bool result = handoverService.CreateHandover(handover);
+                    bool result = HandoverService.GetInstance().CreateHandover(handover);
                     if (result)
                     {
                         MessageBox.Show("交班成功！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -505,8 +499,7 @@ namespace Top4ever.Pos.Feature
                         dailyBalance.dailyStatement = dailyStatement;
                         dailyBalance.dailyTurnover = dailyTurnover;
                         string unCheckDeviceNo = string.Empty;  //未结账的设备号
-                        DailyBalanceService dailyBalanceService = new DailyBalanceService();
-                        int result = dailyBalanceService.CreateDailyBalance(dailyBalance, out unCheckDeviceNo);
+                        int result = DailyBalanceService.GetInstance().CreateDailyBalance(dailyBalance, out unCheckDeviceNo);
                         if (result == 1)
                         {
                             MessageBox.Show("日结成功！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);

@@ -103,15 +103,13 @@ namespace Top4ever.Pos
                 return;
             }
             Employee employee = null;
-            EmployeeService employeeService = new EmployeeService();
-            int result = employeeService.EmployeeLogin(employeeName, password, ref employee);
+            int result = EmployeeService.GetInstance().EmployeeLogin(employeeName, password, ref employee);
             if (result == 1)
             {
                 bool haveDailyClose = true;
                 if (DateTime.Now.Hour > 5)
                 {
-                    DailyBalanceService dailyBalanceService = new DailyBalanceService();
-                    int status = dailyBalanceService.CheckLastDailyStatement();
+                    int status = DailyBalanceService.GetInstance().CheckLastDailyStatement();
                     if (status == 0)
                     {
                         MessageBox.Show("获取最后日结时间出错，请重新登录！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -134,8 +132,7 @@ namespace Top4ever.Pos
                 //保存静态池内
                 ConstantValuePool.CurrentEmployee = employee;
                 //获取基础数据
-                SystemBasicDataService basicDataService = new SystemBasicDataService();
-                SysBasicData sysBasicData = basicDataService.GetSysBasicData();
+                SysBasicData sysBasicData = SystemBasicDataService.GetInstance().GetSysBasicData();
                 if (sysBasicData != null)
                 {
                     ConstantValuePool.NoticeList = sysBasicData.NoticeList;
@@ -275,15 +272,13 @@ namespace Top4ever.Pos
             }
 
             Employee employee = null;
-            EmployeeService employeeService = new EmployeeService();
-            int result = employeeService.EmployeeLogin(attendanceCard, ref employee);
+            int result = EmployeeService.GetInstance().EmployeeLogin(attendanceCard, ref employee);
             if (result == 1)
             {
                 bool haveDailyClose = true;
                 if (DateTime.Now.Hour > 5)
                 {
-                    DailyBalanceService dailyBalanceService = new DailyBalanceService();
-                    int status = dailyBalanceService.CheckLastDailyStatement();
+                    int status = DailyBalanceService.GetInstance().CheckLastDailyStatement();
                     if (status == 0)
                     {
                         MessageBox.Show("获取最后日结时间出错，请重新登录！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -306,8 +301,7 @@ namespace Top4ever.Pos
                 //保存静态池内
                 ConstantValuePool.CurrentEmployee = employee;
                 //获取基础数据
-                SystemBasicDataService basicDataService = new SystemBasicDataService();
-                SysBasicData sysBasicData = basicDataService.GetSysBasicData();
+                SysBasicData sysBasicData = SystemBasicDataService.GetInstance().GetSysBasicData();
                 if (sysBasicData != null)
                 {
                     ConstantValuePool.NoticeList = sysBasicData.NoticeList;

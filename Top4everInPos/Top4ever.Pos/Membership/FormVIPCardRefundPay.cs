@@ -64,7 +64,6 @@ namespace Top4ever.Pos.Membership
             }
             bool result = true;
             CardRefundPayService refundPayService = new CardRefundPayService();
-            VIPCardTradeService tradeService = new VIPCardTradeService();
             foreach (DataGridViewRow row in this.dataGirdViewExt1.Rows)
             {
                 bool IsCheck = Convert.ToBoolean(row.Cells["colCheck"].Value);
@@ -72,7 +71,7 @@ namespace Top4ever.Pos.Membership
                 {
                     string cardNo = row.Cells["colCardNo"].Value.ToString();
                     string tradePayNo = row.Cells["colTradePayNo"].Value.ToString();
-                    int returnValue = tradeService.RefundVIPCardPayment(cardNo, tradePayNo);
+                    int returnValue = VIPCardTradeService.GetInstance().RefundVIPCardPayment(cardNo, tradePayNo);
                     if (returnValue == 0)
                     {
                         result = false;

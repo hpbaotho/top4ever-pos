@@ -40,6 +40,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization">
+      <HintPath>..\External-bin\System.Windows.Forms.DataVisualization.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Top4ever.MonthCalendar, Version=1.0.5128.2130, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -58,6 +61,12 @@
     </Compile>
     <Compile Include="Feature\FormBillManagement.Designer.cs">
       <DependentUpon>FormBillManagement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Feature\FormChartReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\FormChartReport.Designer.cs">
+      <DependentUpon>FormChartReport.cs</DependentUpon>
     </Compile>
     <Compile Include="Feature\FormChooseDate.cs">
       <SubType>Form</SubType>
@@ -362,6 +371,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\FormBillManagement.resx">
       <DependentUpon>FormBillManagement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Feature\FormChartReport.resx">
+      <DependentUpon>FormChartReport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\FormChooseDate.resx">
       <DependentUpon>FormChooseDate.cs</DependentUpon>

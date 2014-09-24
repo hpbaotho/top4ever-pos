@@ -699,35 +699,33 @@ namespace Top4ever.Pos.Feature
             }
             else
             {
-                decimal serviceFee = ConstantValuePool.SysConfig.FixedServiceFee;
-                if (serviceFee == 0)
+                decimal serviceFee = 0;
+                DateTime curTime = Convert.ToDateTime(DateTime.Now.ToString("T"));
+                //时段1服务费
+                if (curTime > Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeBeginTime1) && curTime < Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeEndTime1))
                 {
-                    decimal serviceFeePercent = 0;
-                    if (string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime1) && string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime1)
-                        && string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime2) && string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime2))
+                    if (ConstantValuePool.SysConfig.FixedServiceFee1 > 0)
                     {
-                        serviceFeePercent = ConstantValuePool.SysConfig.ServiceFeePercent;
+                        serviceFee = ConstantValuePool.SysConfig.FixedServiceFee1;
                     }
-                    else
+                    if (ConstantValuePool.SysConfig.ServiceFeePercent1 > 0)
                     {
-                        DateTime curTime = Convert.ToDateTime(DateTime.Now.ToString("T"));
-                        if (!string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime1) && !string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime1))
-                        {
-                            if (curTime > Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeBeginTime1) && curTime < Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeEndTime1))
-                            {
-                                serviceFeePercent = ConstantValuePool.SysConfig.ServiceFeePercent;
-                            }
-                        }
-                        if (!string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeBeginTime2) && !string.IsNullOrEmpty(ConstantValuePool.SysConfig.ServiceFeeEndTime2))
-                        {
-                            if (curTime > Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeBeginTime2) && curTime < Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeEndTime2))
-                            {
-                                serviceFeePercent = ConstantValuePool.SysConfig.ServiceFeePercent;
-                            }
-                        }
+                        decimal tempServiceFee = actualPayMoney * ConstantValuePool.SysConfig.ServiceFeePercent1 / 100;
+                        serviceFee = CutOffDecimal.HandleCutOff(tempServiceFee, ConstantValuePool.SysConfig.IsCutTail, ConstantValuePool.SysConfig.CutTailType, ConstantValuePool.SysConfig.CutTailDigit);
                     }
-                    decimal tempServiceFee = actualPayMoney * serviceFeePercent / 100;
-                    serviceFee = CutOffDecimal.HandleCutOff(tempServiceFee, ConstantValuePool.SysConfig.IsCutTail, ConstantValuePool.SysConfig.CutTailType, ConstantValuePool.SysConfig.CutTailDigit);
+                }
+                //时段2服务费
+                if (curTime > Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeBeginTime2) && curTime < Convert.ToDateTime(ConstantValuePool.SysConfig.ServiceFeeEndTime2))
+                {
+                    if (ConstantValuePool.SysConfig.FixedServiceFee2 > 0)
+                    {
+                        serviceFee = ConstantValuePool.SysConfig.FixedServiceFee2;
+                    }
+                    if (ConstantValuePool.SysConfig.ServiceFeePercent2 > 0)
+                    {
+                        decimal tempServiceFee = actualPayMoney * ConstantValuePool.SysConfig.ServiceFeePercent2 / 100;
+                        serviceFee = CutOffDecimal.HandleCutOff(tempServiceFee, ConstantValuePool.SysConfig.IsCutTail, ConstantValuePool.SysConfig.CutTailType, ConstantValuePool.SysConfig.CutTailDigit);
+                    }
                 }
                 m_ServiceFee = serviceFee;
             }
@@ -827,8 +825,7 @@ namespace Top4ever.Pos.Feature
             modifiedPaidOrder.orderDetailsList = orderDetailsList;
             modifiedPaidOrder.orderDiscountList = orderDiscountList;
             modifiedPaidOrder.orderPayoffList = orderPayoffList;
-            ModifyOrderService modifyOrderService = new ModifyOrderService();
-            return modifyOrderService.ModifyForOrder(modifiedPaidOrder);
+            return ModifyOrderService.GetInstance().ModifyForOrder(modifiedPaidOrder);
         }
     }
 }

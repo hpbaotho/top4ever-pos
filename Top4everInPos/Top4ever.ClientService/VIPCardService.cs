@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 using Top4ever.ClientService.Enum;
@@ -11,15 +10,22 @@ namespace Top4ever.ClientService
 {
     public class VIPCardService
     {
-        public VIPCardService()
+        private static readonly VIPCardService Instance = new VIPCardService();
+
+        private VIPCardService()
         { }
+
+        public static VIPCardService GetInstance()
+        {
+            return Instance;
+        }
 
         /// <summary>
         /// 获取会员卡信息 0:数据库操作失败, 1:成功, 2:会员卡号或者密码错误
         /// </summary>
-        public int SearchVIPCard(string cardNo, string password, ref VIPCard card)
+        public int SearchVIPCard(string cardNo, string password, out VIPCard card)
         {
-            int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.CARD_NO + ParamFieldLength.CARD_PASSWORD;
+            const int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.CARD_NO + ParamFieldLength.CARD_PASSWORD;
             byte[] sendByte = new byte[cByte];
             int byteOffset = 0;
             Array.Copy(BitConverter.GetBytes((int)Command.ID_GET_VIPCARD), sendByte, BasicTypeLength.INT32);

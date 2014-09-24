@@ -29,8 +29,7 @@ namespace Top4ever.Pos.TakeawayCall
         private void FormRecentlyCallRecord_Load(object sender, EventArgs e)
         {
             int status = 0; //未接来电
-            CustomersService customersService = new CustomersService();
-            IList<CallRecord> callRecordList = customersService.GetCallRecordByStatus(status);
+            IList<CallRecord> callRecordList = CustomersService.GetInstance().GetCallRecordByStatus(status);
             if (callRecordList != null && callRecordList.Count > 0)
             {
                 dgvCallRecord.Rows.Clear();
@@ -44,18 +43,17 @@ namespace Top4ever.Pos.TakeawayCall
                     dgvCallRecord.Rows[index].Cells[4].Value = item.CallRecordID;
                 }
             }
-            this.exTabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(this.exTabControl1_Selected);
+            this.exTabControl1.Selected += new TabControlEventHandler(this.exTabControl1_Selected);
         }
 
         private void exTabControl1_Selected(object sender, TabControlEventArgs e)
         {
-            CustomersService customersService = new CustomersService();
             if (e.TabPageIndex == 0)
             {
                 if (curIndex != 0)
                 {
                     int status = 0; //未接来电
-                    IList<CallRecord> callRecordList = customersService.GetCallRecordByStatus(status);
+                    IList<CallRecord> callRecordList = CustomersService.GetInstance().GetCallRecordByStatus(status);
                     if (callRecordList != null && callRecordList.Count > 0)
                     {
                         dgvCallRecord.Rows.Clear();
@@ -78,7 +76,7 @@ namespace Top4ever.Pos.TakeawayCall
                 if (curIndex != 1)
                 {
                     int status = 1; //已接来电
-                    IList<CallRecord> callRecordList = customersService.GetCallRecordByStatus(status);
+                    IList<CallRecord> callRecordList = CustomersService.GetInstance().GetCallRecordByStatus(status);
                     if (callRecordList != null && callRecordList.Count > 0)
                     {
                         dgvCallRecord.Rows.Clear();
@@ -100,7 +98,7 @@ namespace Top4ever.Pos.TakeawayCall
                 if (curIndex != 2)
                 {
                     int status = 2; //忽略来电
-                    IList<CallRecord> callRecordList = customersService.GetCallRecordByStatus(status);
+                    IList<CallRecord> callRecordList = CustomersService.GetInstance().GetCallRecordByStatus(status);
                     if (callRecordList != null && callRecordList.Count > 0)
                     {
                         dgvCallRecord.Rows.Clear();
@@ -122,7 +120,7 @@ namespace Top4ever.Pos.TakeawayCall
                 if (curIndex != 3)
                 {
                     int status = -1; //全部通话
-                    IList<CallRecord> callRecordList = customersService.GetCallRecordByStatus(status);
+                    IList<CallRecord> callRecordList = CustomersService.GetInstance().GetCallRecordByStatus(status);
                     if (callRecordList != null && callRecordList.Count > 0)
                     {
                         dgvCallRecord.Rows.Clear();
@@ -143,7 +141,6 @@ namespace Top4ever.Pos.TakeawayCall
 
         private void btnIgnore_Click(object sender, EventArgs e)
         {
-            CustomersService customersService = new CustomersService();
             int status = 2; //忽略
             bool hasChange = false;
             foreach (DataGridViewRow dgvRow in dgvCallRecord.Rows)
@@ -153,13 +150,13 @@ namespace Top4ever.Pos.TakeawayCall
                     CallRecord callRecord = new CallRecord();
                     callRecord.CallRecordID = new Guid(dgvRow.Cells[4].Value.ToString());
                     callRecord.Status = status;
-                    hasChange = customersService.CreateOrUpdateCallRecord(callRecord);
+                    hasChange = CustomersService.GetInstance().CreateOrUpdateCallRecord(callRecord);
                 }
             }
             if (hasChange)
             {
                 status = 0; //未接来电
-                IList<CallRecord> callRecordList = customersService.GetCallRecordByStatus(status);
+                IList<CallRecord> callRecordList = CustomersService.GetInstance().GetCallRecordByStatus(status);
                 if (callRecordList != null && callRecordList.Count > 0)
                 {
                     dgvCallRecord.Rows.Clear();
@@ -188,12 +185,13 @@ namespace Top4ever.Pos.TakeawayCall
             {
                 int selectIndex = dgvCallRecord.CurrentRow.Index;
                 telephone = dgvCallRecord.Rows[selectIndex].Cells[1].Value.ToString();
-                int status = 1; //已接来电
-                CallRecord callRecord = new CallRecord();
-                callRecord.CallRecordID = new Guid(dgvCallRecord.Rows[selectIndex].Cells[4].Value.ToString());
-                callRecord.Status = status;
-                CustomersService customersService = new CustomersService();
-                customersService.CreateOrUpdateCallRecord(callRecord);
+                const int status = 1; //已接来电
+                CallRecord callRecord = new CallRecord
+                {
+                    CallRecordID = new Guid(dgvCallRecord.Rows[selectIndex].Cells[4].Value.ToString()), 
+                    Status = status
+                };
+                CustomersService.GetInstance().CreateOrUpdateCallRecord(callRecord);
                 this.Close();
             }
         }

@@ -122,8 +122,7 @@ namespace Top4ever.Pos.Feature
                 strWhere = " TranSequence = " + this.txtSearchValue.Text;
                 strWhere += " AND (PayTime >= '" + currentDate + "' AND PayTime < DATEADD(DAY,1,'" + currentDate + "') )";
             }
-            OrderService orderService = new OrderService();
-            IList<Order> orderList = orderService.GetOrderListBySearch(strWhere, string.Empty, m_PageIndex, m_PageSize);
+            IList<Order> orderList = OrderService.GetInstance().GetOrderListBySearch(strWhere, string.Empty, m_PageIndex, m_PageSize);
             if (m_PageIndex > 0)
             {
                 this.btnPageUp.Enabled = true;
@@ -225,8 +224,7 @@ namespace Top4ever.Pos.Feature
                 this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
                 //默认加载第一行数据
                 Guid orderID = new Guid(dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value.ToString());
-                SalesOrderService salesOrderService = new SalesOrderService();
-                SalesOrder salesOrder = salesOrderService.GetSalesOrderByBillSearch(orderID);
+                SalesOrder salesOrder = SalesOrderService.GetInstance().GetSalesOrderByBillSearch(orderID);
                 m_SalesOrder = salesOrder;
                 //更新账单信息
                 this.lbOrderNo.Text = salesOrder.order.OrderNo;
@@ -394,8 +392,7 @@ namespace Top4ever.Pos.Feature
                 if (dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value != null)
                 {
                     Guid orderID = new Guid(dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value.ToString());
-                    SalesOrderService salesOrderService = new SalesOrderService();
-                    SalesOrder salesOrder = salesOrderService.GetSalesOrderByBillSearch(orderID);
+                    SalesOrder salesOrder = SalesOrderService.GetInstance().GetSalesOrderByBillSearch(orderID);
                     if (salesOrder != null)
                     {
                         m_SalesOrder = salesOrder;
@@ -583,8 +580,7 @@ namespace Top4ever.Pos.Feature
                             deletedOrder.CancelEmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
                             deletedOrder.CancelReasonName = form.CurrentReason.ReasonName;
 
-                            DeletedOrderService orderService = new DeletedOrderService();
-                            if (orderService.DeletePaidWholeOrder(deletedOrder))
+                            if (DeletedOrderService.GetInstance().DeletePaidWholeOrder(deletedOrder))
                             {
                                 dataGridView1.Rows[selectedIndex].Cells["BillType"].Value = "已删除";
                                 m_SalesOrder.order.Status = 2;
@@ -616,8 +612,7 @@ namespace Top4ever.Pos.Feature
                     if (form.IsChanged)
                     {
                         Guid orderID = new Guid(dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value.ToString());
-                        SalesOrderService salesOrderService = new SalesOrderService();
-                        SalesOrder salesOrder = salesOrderService.GetSalesOrderByBillSearch(orderID);
+                        SalesOrder salesOrder = SalesOrderService.GetInstance().GetSalesOrderByBillSearch(orderID);
                         m_SalesOrder = salesOrder;
                         //更新账单信息
                         dataGridView1.Rows[selectedIndex].Cells["TotalSellPrice"].Value = salesOrder.order.TotalSellPrice.ToString("f2");
@@ -647,8 +642,7 @@ namespace Top4ever.Pos.Feature
                     if (form.IsChanged)
                     {
                         Guid orderID = new Guid(dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value.ToString());
-                        SalesOrderService salesOrderService = new SalesOrderService();
-                        SalesOrder salesOrder = salesOrderService.GetSalesOrderByBillSearch(orderID);
+                        SalesOrder salesOrder = SalesOrderService.GetInstance().GetSalesOrderByBillSearch(orderID);
                         m_SalesOrder = salesOrder;
                         //更新账单信息
                         dataGridView1.Rows[selectedIndex].Cells["TotalSellPrice"].Value = salesOrder.order.TotalSellPrice.ToString("f2");

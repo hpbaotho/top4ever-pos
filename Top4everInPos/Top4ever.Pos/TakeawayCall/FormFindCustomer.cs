@@ -97,8 +97,7 @@ namespace Top4ever.Pos.TakeawayCall
 
         private void btnLoadCustomer_Click(object sender, EventArgs e)
         {
-            CustomersService customerService = new CustomersService();
-            IList<CustomerInfo> customerInfoList = customerService.GetAllCustomerInfo();
+            IList<CustomerInfo> customerInfoList = CustomersService.GetInstance().GetAllCustomerInfo();
             if (customerInfoList != null && customerInfoList.Count > 0)
             {
                 m_CustomerInfoList = customerInfoList;

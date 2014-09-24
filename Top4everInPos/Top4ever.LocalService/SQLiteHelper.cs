@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
-using System.IO;
 
 namespace Top4ever.LocalService
 {
@@ -12,16 +11,16 @@ namespace Top4ever.LocalService
     /// </summary>
     public class SQLiteHelper
     {
-        private string connectionString;
+        private string _connectionString;
 
         public SQLiteHelper(string connectionString)
         {
-            this.connectionString = connectionString;
+            this._connectionString = connectionString;
         }
 
         public string ConnectionString
         {
-            set { connectionString = value; }
+            set { _connectionString = value; }
         }
 
         /// <summary>
@@ -45,10 +44,7 @@ namespace Top4ever.LocalService
             {
                 return false;
             }
-            else
-            {
-                return true;
-            }
+            return true;
         }
 
         /// <summary>
@@ -82,13 +78,13 @@ namespace Top4ever.LocalService
         /// <summary>
         /// 执行SQL语句，返回影响的记录数
         /// </summary>
-        /// <param name="SQLString">SQL语句</param>
+        /// <param name="sqlString">SQL语句</param>
         /// <returns>影响的记录数</returns>
-        public int ExecuteSql(string SQLString)
+        public int ExecuteSql(string sqlString)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
             {
-                using (SQLiteCommand cmd = new SQLiteCommand(SQLString, connection))
+                using (SQLiteCommand cmd = new SQLiteCommand(sqlString, connection))
                 {
                     try
                     {
@@ -111,19 +107,21 @@ namespace Top4ever.LocalService
         /// <summary>
         /// 执行多条SQL语句，实现数据库事务。
         /// </summary>
-        /// <param name="SQLStringList">多条SQL语句</param>		
-        public void ExecuteSqlTran(IList<string> SQLStringList)
+        /// <param name="sqlStringList">多条SQL语句</param>		
+        public void ExecuteSqlTran(IList<string> sqlStringList)
         {
-            using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+            using (SQLiteConnection conn = new SQLiteConnection(_connectionString))
             {
                 conn.Open();
-                SQLiteCommand cmd = new SQLiteCommand();
-                cmd.Connection = conn;
+                SQLiteCommand cmd = new SQLiteCommand
+                {
+                    Connection = conn
+                };
                 SQLiteTransaction trans = conn.BeginTransaction();
                 cmd.Transaction = trans;
                 try
                 {
-                    foreach (string strSql in SQLStringList)
+                    foreach (string strSql in sqlStringList)
                     {
                         if (!string.IsNullOrEmpty(strSql))
                         {
@@ -144,13 +142,13 @@ namespace Top4ever.LocalService
         /// <summary>
         /// 执行一条计算查询结果语句，返回查询结果（object）。
         /// </summary>
-        /// <param name="SQLString">计算查询结果语句</param>
+        /// <param name="sqlString">计算查询结果语句</param>
         /// <returns>查询结果（object）</returns>
-        public object GetSingle(string SQLString)
+        public object GetSingle(string sqlString)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
             {
-                using (SQLiteCommand cmd = new SQLiteCommand(SQLString, connection))
+                using (SQLiteCommand cmd = new SQLiteCommand(sqlString, connection))
                 {
                     try
                     {
@@ -180,12 +178,12 @@ namespace Top4ever.LocalService
         /// <summary>
         /// 执行查询语句，返回SQLiteDataReader
         /// </summary>
-        /// <param name="strSQL">查询语句</param>
+        /// <param name="strSql">查询语句</param>
         /// <returns>SQLiteDataReader</returns>
-        public SQLiteDataReader ExecuteReader(string strSQL)
+        public SQLiteDataReader ExecuteReader(string strSql)
         {
-            SQLiteConnection connection = new SQLiteConnection(connectionString);
-            SQLiteCommand cmd = new SQLiteCommand(strSQL, connection);
+            SQLiteConnection connection = new SQLiteConnection(_connectionString);
+            SQLiteCommand cmd = new SQLiteCommand(strSql, connection);
             try
             {
                 connection.Open();
@@ -201,17 +199,17 @@ namespace Top4ever.LocalService
         /// <summary>
         /// 执行查询语句，返回DataTable
         /// </summary>
-        /// <param name="SQLString">查询语句</param>
+        /// <param name="sqlString">查询语句</param>
         /// <returns>DataTable</returns>
-        public DataTable Query(string SQLString)
+        public DataTable Query(string sqlString)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
             {
                 DataTable dt = new DataTable();
                 try
                 {
                     connection.Open();
-                    SQLiteDataAdapter command = new SQLiteDataAdapter(SQLString, connection);
+                    SQLiteDataAdapter command = new SQLiteDataAdapter(sqlString, connection);
                     command.Fill(dt);
                 }
                 catch (SQLiteException ex)
@@ -229,17 +227,18 @@ namespace Top4ever.LocalService
         /// <summary>
         /// 执行SQL语句，返回影响的记录数
         /// </summary>
-        /// <param name="SQLString">SQL语句</param>
+        /// <param name="sqlString">SQL语句</param>
+        /// <param name="cmdParms"></param>
         /// <returns>影响的记录数</returns>
-        public int ExecuteSql(string SQLString, params SQLiteParameter[] cmdParms)
+        public int ExecuteSql(string sqlString, params SQLiteParameter[] cmdParms)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
             {
                 using (SQLiteCommand cmd = new SQLiteCommand())
                 {
                     try
                     {
-                        PrepareCommand(cmd, connection, null, SQLString, cmdParms);
+                        PrepareCommand(cmd, connection, null, sqlString, cmdParms);
                         int rows = cmd.ExecuteNonQuery();
                         cmd.Parameters.Clear();
                         return rows;
@@ -256,10 +255,10 @@ namespace Top4ever.LocalService
         /// <summary>
         /// 执行多条SQL语句，实现数据库事务。
         /// </summary>
-        /// <param name="SQLStringList">SQL语句的哈希表（key为sql语句，value是该语句的SQLiteParameter[]）</param>
-        public void ExecuteSqlTran(Hashtable SQLStringList)
+        /// <param name="sqlStringList">SQL语句的哈希表（key为sql语句，value是该语句的SQLiteParameter[]）</param>
+        public void ExecuteSqlTran(Hashtable sqlStringList)
         {
-            using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+            using (SQLiteConnection conn = new SQLiteConnection(_connectionString))
             {
                 conn.Open();
                 using (SQLiteTransaction trans = conn.BeginTransaction())
@@ -268,10 +267,10 @@ namespace Top4ever.LocalService
                     try
                     {
                         //循环
-                        foreach (DictionaryEntry myDE in SQLStringList)
+                        foreach (DictionaryEntry myDe in sqlStringList)
                         {
-                            string cmdText = myDE.Key.ToString();
-                            SQLiteParameter[] cmdParms = (SQLiteParameter[])myDE.Value;
+                            string cmdText = myDe.Key.ToString();
+                            SQLiteParameter[] cmdParms = (SQLiteParameter[])myDe.Value;
                             PrepareCommand(cmd, conn, trans, cmdText, cmdParms);
                             int val = cmd.ExecuteNonQuery();
                             cmd.Parameters.Clear();
@@ -290,17 +289,18 @@ namespace Top4ever.LocalService
         /// <summary>
         /// 执行一条计算查询结果语句，返回查询结果（object）。
         /// </summary>
-        /// <param name="SQLString">计算查询结果语句</param>
+        /// <param name="sqlString">计算查询结果语句</param>
+        /// <param name="cmdParms"></param>
         /// <returns>查询结果（object）</returns>
-        public object GetSingle(string SQLString, params SQLiteParameter[] cmdParms)
+        public object GetSingle(string sqlString, params SQLiteParameter[] cmdParms)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
             {
                 using (SQLiteCommand cmd = new SQLiteCommand())
                 {
                     try
                     {
-                        PrepareCommand(cmd, connection, null, SQLString, cmdParms);
+                        PrepareCommand(cmd, connection, null, sqlString, cmdParms);
                         object obj = cmd.ExecuteScalar();
                         cmd.Parameters.Clear();
                         if ((Object.Equals(obj, null)) || (Object.Equals(obj, DBNull.Value)))
@@ -323,15 +323,16 @@ namespace Top4ever.LocalService
         /// <summary>
         /// 执行查询语句，返回SQLiteDataReader
         /// </summary>
-        /// <param name="strSQL">查询语句</param>
+        /// <param name="sqlString">查询语句</param>
+        /// <param name="cmdParms"></param>
         /// <returns>SQLiteDataReader</returns>
-        public SQLiteDataReader ExecuteReader(string SQLString, params SQLiteParameter[] cmdParms)
+        public SQLiteDataReader ExecuteReader(string sqlString, params SQLiteParameter[] cmdParms)
         {
-            SQLiteConnection connection = new SQLiteConnection(connectionString);
+            SQLiteConnection connection = new SQLiteConnection(_connectionString);
             SQLiteCommand cmd = new SQLiteCommand();
             try
             {
-                PrepareCommand(cmd, connection, null, SQLString, cmdParms);
+                PrepareCommand(cmd, connection, null, sqlString, cmdParms);
                 SQLiteDataReader myReader = cmd.ExecuteReader();
                 cmd.Parameters.Clear();
                 return myReader;
@@ -346,14 +347,15 @@ namespace Top4ever.LocalService
         /// <summary>
         /// 执行查询语句，返回DataTable
         /// </summary>
-        /// <param name="SQLString">查询语句</param>
+        /// <param name="sqlString">查询语句</param>
+        /// <param name="cmdParms"></param>
         /// <returns>DataTable</returns>
-        public DataTable Query(string SQLString, params SQLiteParameter[] cmdParms)
+        public DataTable Query(string sqlString, params SQLiteParameter[] cmdParms)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
             {
                 SQLiteCommand cmd = new SQLiteCommand();
-                PrepareCommand(cmd, connection, null, SQLString, cmdParms);
+                PrepareCommand(cmd, connection, null, sqlString, cmdParms);
                 using (SQLiteDataAdapter da = new SQLiteDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();

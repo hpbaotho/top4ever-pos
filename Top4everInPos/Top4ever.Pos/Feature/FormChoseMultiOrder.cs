@@ -166,8 +166,7 @@ namespace Top4ever.Pos.Feature
 
         private void btnMoveBill_Click(object sender, EventArgs e)
         {
-            OrderService orderService = new OrderService();
-            if (orderService.OrderDeskOperate(m_DeskChange))
+            if (OrderService.GetInstance().OrderDeskOperate(m_DeskChange))
             {
                 //通过m_Order是否为null判断转台是否成功
                 m_Order = new Order();
@@ -184,8 +183,7 @@ namespace Top4ever.Pos.Feature
             if (m_Order != null)
             {
                 m_DeskChange.OrderID2nd = m_Order.OrderID;
-                OrderService orderService = new OrderService();
-                if (orderService.OrderDeskOperate(m_DeskChange))
+                if (OrderService.GetInstance().OrderDeskOperate(m_DeskChange))
                 {
                     this.Close();
                 }
