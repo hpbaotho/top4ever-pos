@@ -139,7 +139,7 @@ namespace Top4ever.Service
                 _daoManager.OpenConnection();
                 //日结号
                 string dailyStatementNo = _dailyStatementDao.GetCurrentDailyStatementNo();
-                result = _VIPCardTradeDao.AddVIPCardPayment(cardPayment.cardNo, cardPayment.payAmount, cardPayment.payIntegral, cardPayment.orderNo, cardPayment.employeeNo, cardPayment.deviceNo, dailyStatementNo, out tradePayNo);
+                result = _VIPCardTradeDao.AddVIPCardPayment(cardPayment.CardNo, cardPayment.PayAmount, cardPayment.PayIntegral, cardPayment.OrderNo, cardPayment.EmployeeNo, cardPayment.DeviceNo, dailyStatementNo, out tradePayNo);
             }
             catch (Exception exception)
             {

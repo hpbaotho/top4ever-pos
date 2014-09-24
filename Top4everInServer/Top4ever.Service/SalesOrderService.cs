@@ -473,6 +473,38 @@ namespace Top4ever.Service
             return isSuccess;
         }
 
+        private enum EatWayType
+        {
+            /// <summary>
+            /// 堂食
+            /// </summary>
+            DineIn = 1,
+            /// <summary>
+            /// 外带
+            /// </summary>
+            Takeout = 2,
+            /// <summary>
+            /// 外送
+            /// </summary>
+            OutsideOrder = 3
+        }
+
+        private enum OrderItemType
+        {
+            /// <summary>
+            /// 菜品
+            /// </summary>
+            Goods = 1,
+            /// <summary>
+            /// 细项
+            /// </summary>
+            Details = 2,
+            /// <summary>
+            /// 套餐
+            /// </summary>
+            SetMeal = 3
+        }
+
         #endregion
     }
 }

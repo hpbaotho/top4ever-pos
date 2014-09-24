@@ -87,7 +87,9 @@ namespace Top4ever.NetServer
             IPAddress[] addressList = Dns.GetHostEntry(Environment.MachineName).AddressList;
 
             // Get endpoint for the listener.
-            IPEndPoint localEndPoint = new IPEndPoint(addressList[addressList.Length - 1], port);
+            IPAddress ipAddress = GetLocalIPv4(addressList);
+            if (ipAddress == null) throw new ArgumentNullException("IPAddress is null.");
+            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
 
             // Create the socket which listens for incoming connections.
             this.listenSocket = new Socket(localEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
@@ -116,6 +118,26 @@ namespace Top4ever.NetServer
 
             // Blocks the current thread to receive incoming messages.
             mutex.WaitOne();
+        }
+
+        private IPAddress GetLocalIPv4(IPAddress[] addressList)
+        {
+            IPAddress ipAddress = null;
+            if (addressList != null && addressList.Length > 0)
+            {
+                foreach (var item in addressList)
+                {
+                    //从IP地址列表中筛选出IPv4类型的IP地址
+                    //AddressFamily.InterNetwork表示此IP为IPv4,
+                    //AddressFamily.InterNetworkV6表示此地址为IPv6类型
+                    if (item.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        ipAddress = item;
+                        break;
+                    }
+                }
+            }
+            return ipAddress;
         }
 
         /// <summary>

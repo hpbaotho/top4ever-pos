@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Top4ever.Domain.GoodsRelated
 {
+    [Serializable]
     public class Goods
     {
         /// <summary>
@@ -89,7 +90,7 @@ namespace Top4ever.Domain.GoodsRelated
         /// 外键
         /// </summary>
         public Guid ButtonStyleID { get; set; }
-
+        
         /// <summary>
         /// 每个菜品所拥有的细项组ID
         /// </summary>

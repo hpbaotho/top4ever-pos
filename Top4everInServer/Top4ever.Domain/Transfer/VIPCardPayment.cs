@@ -7,26 +7,26 @@ namespace Top4ever.Domain.Transfer
         /// <summary>
         /// 卡号
         /// </summary>
-        public string cardNo { get; set; }
+        public string CardNo { get; set; }
         /// <summary>
         /// 支付金额
         /// </summary>
-        public decimal payAmount { get; set; }
+        public decimal PayAmount { get; set; }
         /// <summary>
         /// 支付积分
         /// </summary>
-        public int payIntegral { get; set; }
+        public int PayIntegral { get; set; }
         /// <summary>
         /// 单号
         /// </summary>
-        public string orderNo { get; set; }
+        public string OrderNo { get; set; }
         /// <summary>
         /// 员工号
         /// </summary>
-        public string employeeNo { get; set; }
+        public string EmployeeNo { get; set; }
         /// <summary>
         /// 设备号
         /// </summary>
-        public string deviceNo { get; set; }
+        public string DeviceNo { get; set; }
     }
 }
