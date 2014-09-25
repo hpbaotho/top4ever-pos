@@ -215,6 +215,8 @@ namespace Top4ever.Pos
                     btn.Height = desk.Height;
                     btn.Location = new Point(desk.PX, desk.PY);
                     btn.Tag = desk;
+                    btn.Font = new Font("Arial", 14.25F, FontStyle.Regular);
+                    btn.ForeColor = Color.White;
                     btn.BackColor = GetColorByStatus(desk.Status, desk.DeviceNo);
                     btn.Click += new System.EventHandler(this.btnDesk_Click);
                     btnList.Add(btn);
@@ -347,6 +349,8 @@ namespace Top4ever.Pos
                         btn.Height = desk.Height;
                         btn.Location = new Point(desk.PX, desk.PY);
                         btn.Tag = desk;
+                        btn.Font = new Font("Arial", 14.25F, FontStyle.Regular);
+                        btn.ForeColor = Color.White;
                         btn.BackColor = GetColorByStatus(desk.Status, desk.DeviceNo);
                         btn.Click += new System.EventHandler(this.btnDesk_Click);
                         btnList.Add(btn);

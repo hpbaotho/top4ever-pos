@@ -1,22 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.IO;
-using System.Text;
-using System.Xml;
-using System.Xml.Serialization;
 using System.Windows.Forms;
 
 using Top4ever.ClientService;
-using Top4ever.ClientService.Enum;
-using Top4ever.Common;
 using Top4ever.CustomControl;
 using Top4ever.Domain.Accounts;
 using Top4ever.Domain.Transfer;
 using Top4ever.Entity;
-using Top4ever.Entity.Config;
-using Top4ever.Print;
 using Top4ever.Entity.Enum;
 using Top4ever.Domain.GoodsRelated;
 
@@ -70,11 +62,6 @@ namespace Top4ever.Pos
                 m_ActiveTextBox.Select();
                 SendKeys.Send("{BACKSPACE}");
             }
-        }
-
-        private void btnClear_Click(object sender, EventArgs e)
-        {
-            m_ActiveTextBox.Text = string.Empty;
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
