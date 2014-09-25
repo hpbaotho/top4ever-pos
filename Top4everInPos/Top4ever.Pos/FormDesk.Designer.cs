@@ -55,12 +55,12 @@
             this.pnlToolBar.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlToolBar.Location = new System.Drawing.Point(0, 0);
             this.pnlToolBar.Name = "pnlToolBar";
-            this.pnlToolBar.Size = new System.Drawing.Size(1024, 108);
+            this.pnlToolBar.Size = new System.Drawing.Size(1024, 110);
             this.pnlToolBar.TabIndex = 0;
             // 
             // scrollingText1
             // 
-            this.scrollingText1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(108)))), ((int)(((byte)(128)))));
+            this.scrollingText1.BackColor = System.Drawing.Color.Tomato;
             this.scrollingText1.BorderColor = System.Drawing.Color.Black;
             this.scrollingText1.Cursor = System.Windows.Forms.Cursors.Default;
             this.scrollingText1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -109,7 +109,7 @@
             // 
             // btnTakeOut
             // 
-            this.btnTakeOut.BackColor = System.Drawing.Color.MidnightBlue;
+            this.btnTakeOut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(113)))), ((int)(((byte)(202)))));
             this.btnTakeOut.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnTakeOut.ForeColor = System.Drawing.Color.White;
             this.btnTakeOut.Location = new System.Drawing.Point(627, 0);
@@ -135,7 +135,7 @@
             // 
             // btnTurnTable
             // 
-            this.btnTurnTable.BackColor = System.Drawing.Color.Olive;
+            this.btnTurnTable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(233)))), ((int)(((byte)(154)))), ((int)(((byte)(0)))));
             this.btnTurnTable.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.btnTurnTable.ForeColor = System.Drawing.Color.White;
             this.btnTurnTable.Location = new System.Drawing.Point(383, 0);
@@ -148,7 +148,7 @@
             // 
             // btnClear
             // 
-            this.btnClear.BackColor = System.Drawing.Color.Red;
+            this.btnClear.BackColor = System.Drawing.Color.Teal;
             this.btnClear.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.btnClear.ForeColor = System.Drawing.Color.White;
             this.btnClear.Location = new System.Drawing.Point(278, 0);
@@ -161,7 +161,7 @@
             // 
             // btnOrder
             // 
-            this.btnOrder.BackColor = System.Drawing.Color.MidnightBlue;
+            this.btnOrder.BackColor = System.Drawing.Color.OrangeRed;
             this.btnOrder.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.btnOrder.ForeColor = System.Drawing.Color.White;
             this.btnOrder.Location = new System.Drawing.Point(173, 0);
@@ -174,7 +174,7 @@
             // 
             // btnManager
             // 
-            this.btnManager.BackColor = System.Drawing.Color.MidnightBlue;
+            this.btnManager.BackColor = System.Drawing.Color.RoyalBlue;
             this.btnManager.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnManager.ForeColor = System.Drawing.Color.White;
             this.btnManager.Location = new System.Drawing.Point(72, 0);
@@ -191,9 +191,9 @@
             this.pnlDesk.Controls.Add(this.btnTakeColor);
             this.pnlDesk.Controls.Add(this.btnFreeColor);
             this.pnlDesk.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlDesk.Location = new System.Drawing.Point(0, 108);
+            this.pnlDesk.Location = new System.Drawing.Point(0, 110);
             this.pnlDesk.Name = "pnlDesk";
-            this.pnlDesk.Size = new System.Drawing.Size(1024, 553);
+            this.pnlDesk.Size = new System.Drawing.Size(1024, 551);
             this.pnlDesk.TabIndex = 2;
             // 
             // btnLookColor
@@ -210,7 +210,7 @@
             // 
             // btnTakeColor
             // 
-            this.btnTakeColor.BackColor = System.Drawing.Color.Red;
+            this.btnTakeColor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(43)))), ((int)(((byte)(59)))));
             this.btnTakeColor.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnTakeColor.ForeColor = System.Drawing.Color.White;
             this.btnTakeColor.Location = new System.Drawing.Point(856, 510);
@@ -222,7 +222,7 @@
             // 
             // btnFreeColor
             // 
-            this.btnFreeColor.BackColor = System.Drawing.Color.Green;
+            this.btnFreeColor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(138)))), ((int)(((byte)(208)))));
             this.btnFreeColor.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnFreeColor.ForeColor = System.Drawing.Color.White;
             this.btnFreeColor.Location = new System.Drawing.Point(775, 510);
@@ -234,6 +234,7 @@
             // 
             // pnlRegion
             // 
+            this.pnlRegion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(123)))), ((int)(((byte)(199)))), ((int)(((byte)(172)))));
             this.pnlRegion.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pnlRegion.Location = new System.Drawing.Point(0, 661);
             this.pnlRegion.Name = "pnlRegion";

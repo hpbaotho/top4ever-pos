@@ -51,6 +51,9 @@
     <Compile Include="CommandLink.Designer.cs">
       <DependentUpon>CommandLink.cs</DependentUpon>
     </Compile>
+    <Compile Include="RoundPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="CrystalButton.cs">
       <SubType>Component</SubType>
     </Compile>
