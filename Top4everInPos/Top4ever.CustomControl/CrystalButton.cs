@@ -139,7 +139,7 @@ namespace Top4ever.CustomControl
             {
                 font = new Font(this.Font, FontStyle.Underline);
             }
-            Color textColor = this.Enabled ? this.ForeColor : SystemColors.GrayText;
+            Color textColor = this.Enabled ? this.ForeColor : Color.DimGray;
             StringFormat stringFormat = new StringFormat();
             stringFormat.Alignment = StringAlignment.Center;
             stringFormat.LineAlignment = StringAlignment.Center;
