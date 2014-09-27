@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
+using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 
 using Top4ever.ClientService;
-using Top4ever.ClientService.Enum;
 using Top4ever.Common;
 using Top4ever.CustomControl;
 using Top4ever.Domain;
@@ -36,7 +33,6 @@ namespace VechsoftPos
         #region 转台局部变量
         private string deskName1st = string.Empty;
         private Guid orderID1st = Guid.Empty;
-        private Guid orderID2nd = Guid.Empty;
         private bool firstDeskSingleOrder = false;
         #endregion
 
@@ -49,6 +45,11 @@ namespace VechsoftPos
                 m_FormTakeout = new FormTakeout(haveDailyClose);
             }
             InitializeComponent();
+            if (!string.IsNullOrEmpty(ConstantValuePool.BizSettingConfig.DeskImagePath) && File.Exists(ConstantValuePool.BizSettingConfig.DeskImagePath))
+            {
+                pnlDesk.BackgroundImage = Image.FromFile(ConstantValuePool.BizSettingConfig.DeskImagePath);
+                pnlDesk.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            }
         }
 
         private void FormDesk_Load(object sender, EventArgs e)
@@ -215,7 +216,7 @@ namespace VechsoftPos
                     btn.Height = desk.Height;
                     btn.Location = new Point(desk.PX, desk.PY);
                     btn.Tag = desk;
-                    btn.Font = new Font("Arial", 14.25F, FontStyle.Regular);
+                    btn.Font = new Font("Arial", ConstantValuePool.BizSettingConfig.FontSize, FontStyle.Regular);
                     btn.ForeColor = Color.White;
                     btn.BackColor = GetColorByStatus(desk.Status, desk.DeviceNo);
                     btn.Click += new System.EventHandler(this.btnDesk_Click);
@@ -349,7 +350,7 @@ namespace VechsoftPos
                         btn.Height = desk.Height;
                         btn.Location = new Point(desk.PX, desk.PY);
                         btn.Tag = desk;
-                        btn.Font = new Font("Arial", 14.25F, FontStyle.Regular);
+                        btn.Font = new Font("Arial", ConstantValuePool.BizSettingConfig.FontSize, FontStyle.Regular);
                         btn.ForeColor = Color.White;
                         btn.BackColor = GetColorByStatus(desk.Status, desk.DeviceNo);
                         btn.Click += new System.EventHandler(this.btnDesk_Click);
@@ -549,14 +550,12 @@ namespace VechsoftPos
 
                                 deskName1st = string.Empty;
                                 orderID1st = Guid.Empty;
-                                orderID2nd = Guid.Empty;
                                 firstDeskSingleOrder = false;
                             }
                             else
                             {
                                 deskName1st = string.Empty;
                                 orderID1st = Guid.Empty;
-                                orderID2nd = Guid.Empty;
                                 firstDeskSingleOrder = false;
                             }
                         }
@@ -587,7 +586,6 @@ namespace VechsoftPos
 
                                 deskName1st = string.Empty;
                                 orderID1st = Guid.Empty;
-                                orderID2nd = Guid.Empty;
                                 firstDeskSingleOrder = false;
                             }
                         }
@@ -680,7 +678,6 @@ namespace VechsoftPos
         {
             deskName1st = string.Empty;
             orderID1st = Guid.Empty;
-            orderID2nd = Guid.Empty;
             firstDeskSingleOrder = false;
             if (prevPressedButton != null)
             {

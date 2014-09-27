@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormConfig));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
@@ -124,6 +125,7 @@
             this.label23 = new System.Windows.Forms.Label();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.ckbSecondScreen = new System.Windows.Forms.CheckBox();
             this.btnLoadImage = new System.Windows.Forms.Button();
             this.txtImagePath = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
@@ -139,7 +141,6 @@
             this.label18 = new System.Windows.Forms.Label();
             this.btnSave = new Top4ever.CustomControl.CrystalButton();
             this.btnCancel = new Top4ever.CustomControl.CrystalButton();
-            this.ckbSecondScreen = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -226,7 +227,7 @@
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(74, 19);
             this.label13.TabIndex = 0;
-            this.label13.Text = "字体大小：";
+            this.label13.Text = "桌号字体：";
             this.label13.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // label16
@@ -258,7 +259,7 @@
             this.rbTimeSystem12H.AutoSize = true;
             this.rbTimeSystem12H.Font = new System.Drawing.Font("Cambria", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rbTimeSystem12H.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.rbTimeSystem12H.Location = new System.Drawing.Point(94, 36);
+            this.rbTimeSystem12H.Location = new System.Drawing.Point(98, 36);
             this.rbTimeSystem12H.Name = "rbTimeSystem12H";
             this.rbTimeSystem12H.Size = new System.Drawing.Size(39, 19);
             this.rbTimeSystem12H.TabIndex = 0;
@@ -918,14 +919,14 @@
             // 
             // txtClientPID
             // 
-            this.txtClientPID.Location = new System.Drawing.Point(429, 95);
+            this.txtClientPID.Location = new System.Drawing.Point(430, 97);
             this.txtClientPID.Name = "txtClientPID";
             this.txtClientPID.Size = new System.Drawing.Size(72, 25);
             this.txtClientPID.TabIndex = 0;
             // 
             // txtClientVID
             // 
-            this.txtClientVID.Location = new System.Drawing.Point(293, 93);
+            this.txtClientVID.Location = new System.Drawing.Point(295, 97);
             this.txtClientVID.Name = "txtClientVID";
             this.txtClientVID.Size = new System.Drawing.Size(72, 25);
             this.txtClientVID.TabIndex = 0;
@@ -934,7 +935,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label6.Location = new System.Drawing.Point(383, 102);
+            this.label6.Location = new System.Drawing.Point(383, 100);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(44, 19);
             this.label6.TabIndex = 0;
@@ -944,7 +945,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label7.Location = new System.Drawing.Point(248, 100);
+            this.label7.Location = new System.Drawing.Point(246, 100);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(45, 19);
             this.label7.TabIndex = 0;
@@ -978,7 +979,7 @@
             // 
             this.label32.AutoSize = true;
             this.label32.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label32.Location = new System.Drawing.Point(256, 144);
+            this.label32.Location = new System.Drawing.Point(254, 142);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(48, 19);
             this.label32.TabIndex = 0;
@@ -988,7 +989,7 @@
             // 
             this.label27.AutoSize = true;
             this.label27.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label27.Location = new System.Drawing.Point(28, 144);
+            this.label27.Location = new System.Drawing.Point(21, 142);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(74, 19);
             this.label27.TabIndex = 0;
@@ -1028,7 +1029,7 @@
             // 
             this.cmbClientShowPort.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.cmbClientShowPort.FormattingEnabled = true;
-            this.cmbClientShowPort.Location = new System.Drawing.Point(104, 99);
+            this.cmbClientShowPort.Location = new System.Drawing.Point(104, 97);
             this.cmbClientShowPort.Name = "cmbClientShowPort";
             this.cmbClientShowPort.Size = new System.Drawing.Size(84, 25);
             this.cmbClientShowPort.TabIndex = 0;
@@ -1037,7 +1038,7 @@
             // 
             this.label24.AutoSize = true;
             this.label24.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label24.Location = new System.Drawing.Point(54, 102);
+            this.label24.Location = new System.Drawing.Point(47, 100);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(48, 19);
             this.label24.TabIndex = 1;
@@ -1205,12 +1206,24 @@
             this.groupBox10.TabStop = false;
             this.groupBox10.Text = "第二屏设置";
             // 
+            // ckbSecondScreen
+            // 
+            this.ckbSecondScreen.AutoSize = true;
+            this.ckbSecondScreen.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ckbSecondScreen.Location = new System.Drawing.Point(36, 28);
+            this.ckbSecondScreen.Name = "ckbSecondScreen";
+            this.ckbSecondScreen.Size = new System.Drawing.Size(93, 23);
+            this.ckbSecondScreen.TabIndex = 1;
+            this.ckbSecondScreen.Text = "启用第二屏";
+            this.ckbSecondScreen.UseVisualStyleBackColor = true;
+            this.ckbSecondScreen.CheckedChanged += new System.EventHandler(this.ckbSecondScreen_CheckedChanged);
+            // 
             // btnLoadImage
             // 
             this.btnLoadImage.Enabled = false;
             this.btnLoadImage.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnLoadImage.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnLoadImage.Location = new System.Drawing.Point(462, 91);
+            this.btnLoadImage.Location = new System.Drawing.Point(462, 93);
             this.btnLoadImage.Name = "btnLoadImage";
             this.btnLoadImage.Size = new System.Drawing.Size(40, 26);
             this.btnLoadImage.TabIndex = 189;
@@ -1222,7 +1235,7 @@
             // 
             this.txtImagePath.Enabled = false;
             this.txtImagePath.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtImagePath.Location = new System.Drawing.Point(106, 92);
+            this.txtImagePath.Location = new System.Drawing.Point(106, 94);
             this.txtImagePath.Name = "txtImagePath";
             this.txtImagePath.Size = new System.Drawing.Size(350, 25);
             this.txtImagePath.TabIndex = 1;
@@ -1233,7 +1246,7 @@
             this.label19.AutoSize = true;
             this.label19.Font = new System.Drawing.Font("微软雅黑", 9.75F);
             this.label19.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label19.Location = new System.Drawing.Point(32, 95);
+            this.label19.Location = new System.Drawing.Point(32, 97);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(74, 19);
             this.label19.TabIndex = 1;
@@ -1245,7 +1258,7 @@
             this.btnLoadFile.Enabled = false;
             this.btnLoadFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnLoadFile.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnLoadFile.Location = new System.Drawing.Point(462, 55);
+            this.btnLoadFile.Location = new System.Drawing.Point(462, 57);
             this.btnLoadFile.Name = "btnLoadFile";
             this.btnLoadFile.Size = new System.Drawing.Size(40, 28);
             this.btnLoadFile.TabIndex = 1;
@@ -1257,7 +1270,7 @@
             // 
             this.txtVideoPath.Enabled = false;
             this.txtVideoPath.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtVideoPath.Location = new System.Drawing.Point(106, 57);
+            this.txtVideoPath.Location = new System.Drawing.Point(106, 59);
             this.txtVideoPath.Name = "txtVideoPath";
             this.txtVideoPath.Size = new System.Drawing.Size(350, 25);
             this.txtVideoPath.TabIndex = 1;
@@ -1268,7 +1281,7 @@
             this.label33.AutoSize = true;
             this.label33.Font = new System.Drawing.Font("微软雅黑", 9.75F);
             this.label33.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label33.Location = new System.Drawing.Point(6, 60);
+            this.label33.Location = new System.Drawing.Point(6, 62);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(100, 19);
             this.label33.TabIndex = 1;
@@ -1380,18 +1393,6 @@
             this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // ckbSecondScreen
-            // 
-            this.ckbSecondScreen.AutoSize = true;
-            this.ckbSecondScreen.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ckbSecondScreen.Location = new System.Drawing.Point(36, 28);
-            this.ckbSecondScreen.Name = "ckbSecondScreen";
-            this.ckbSecondScreen.Size = new System.Drawing.Size(93, 23);
-            this.ckbSecondScreen.TabIndex = 1;
-            this.ckbSecondScreen.Text = "启用第二屏";
-            this.ckbSecondScreen.UseVisualStyleBackColor = true;
-            this.ckbSecondScreen.CheckedChanged += new System.EventHandler(this.ckbSecondScreen_CheckedChanged);
-            // 
             // FormConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
@@ -1402,6 +1403,7 @@
             this.Controls.Add(this.tabControl1);
             this.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximizeBox = false;
             this.MinimizeBox = false;

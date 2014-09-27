@@ -26,6 +26,7 @@ namespace VechsoftPos
             if (!string.IsNullOrEmpty(ConstantValuePool.BizSettingConfig.LoginImagePath) && File.Exists(ConstantValuePool.BizSettingConfig.LoginImagePath))
             {
                 this.BackgroundImage = Image.FromFile(ConstantValuePool.BizSettingConfig.LoginImagePath);
+                this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             }
         }
 

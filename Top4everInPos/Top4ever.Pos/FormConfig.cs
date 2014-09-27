@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 using Top4ever.Common;
@@ -16,7 +12,7 @@ namespace VechsoftPos
 {
     public partial class FormConfig : Form
     {
-        private List<ListItem> m_ListItem = new List<ListItem>();
+        private readonly List<ListItem> _listItem = new List<ListItem>();
 
         public FormConfig()
         {
@@ -36,9 +32,9 @@ namespace VechsoftPos
 
         private void FormConfig_Load(object sender, EventArgs e)
         {
-            this.txtIP.Text = ConstantValuePool.BizSettingConfig.IPAddress;
-            this.txtPort.Text = ConstantValuePool.BizSettingConfig.Port.ToString();
-            this.txtDeviceNo.Text = ConstantValuePool.BizSettingConfig.DeviceNo;            
+            txtIP.Text = ConstantValuePool.BizSettingConfig.IPAddress;
+            txtPort.Text = ConstantValuePool.BizSettingConfig.Port.ToString();
+            txtDeviceNo.Text = ConstantValuePool.BizSettingConfig.DeviceNo;            
             if (ConstantValuePool.BizSettingConfig.TimeSystem24H)
             {
                 rbTimeSystem24H.Checked = true;
@@ -47,13 +43,13 @@ namespace VechsoftPos
             {
                 rbTimeSystem12H.Checked = true;
             }
-            this.txtFont.Text = ConstantValuePool.BizSettingConfig.FontSize.ToString();
-            this.cmbSaleType.SelectedIndex = GetIndexByValue(cmbSaleType, Convert.ToString((int)ConstantValuePool.BizSettingConfig.SaleType));
-            this.txtLoginImage.Text = ConstantValuePool.BizSettingConfig.LoginImagePath;
-            this.txtDeskImage.Text = ConstantValuePool.BizSettingConfig.DeskImagePath;
-            this.ckbSecondScreen.Checked = ConstantValuePool.BizSettingConfig.SecondScreenEnabled;
-            this.txtVideoPath.Text = ConstantValuePool.BizSettingConfig.ScreenVideoPath;
-            this.txtImagePath.Text = ConstantValuePool.BizSettingConfig.ScreenImagePath;
+            txtFont.Text = ConstantValuePool.BizSettingConfig.FontSize.ToString();
+            cmbSaleType.SelectedIndex = GetIndexByValue(cmbSaleType, Convert.ToString((int)ConstantValuePool.BizSettingConfig.SaleType));
+            txtLoginImage.Text = ConstantValuePool.BizSettingConfig.LoginImagePath;
+            txtDeskImage.Text = ConstantValuePool.BizSettingConfig.DeskImagePath;
+            ckbSecondScreen.Checked = ConstantValuePool.BizSettingConfig.SecondScreenEnabled;
+            txtVideoPath.Text = ConstantValuePool.BizSettingConfig.ScreenVideoPath;
+            txtImagePath.Text = ConstantValuePool.BizSettingConfig.ScreenImagePath;
             if (ConstantValuePool.BizSettingConfig.UsePettyCash)
             {
                 ckbPettyCash.Checked = true;
@@ -194,7 +190,7 @@ namespace VechsoftPos
                     cmbClientShowPort.Text = ConstantValuePool.BizSettingConfig.clientShowConfig.Port;
                 }
                 cmbClientShowModel.Text = ConstantValuePool.BizSettingConfig.clientShowConfig.ClientShowModel;
-                this.cmbClientShowType.SelectedIndex = GetIndexByValue(cmbClientShowType, ConstantValuePool.BizSettingConfig.clientShowConfig.ClientShowType);
+                cmbClientShowType.SelectedIndex = GetIndexByValue(cmbClientShowType, ConstantValuePool.BizSettingConfig.clientShowConfig.ClientShowType);
             }
             else
             {
@@ -210,24 +206,24 @@ namespace VechsoftPos
             {
                 if(control.Name == "Group")
                 {
-                    this.txtGoodsGroupRows.Text = control.RowsCount.ToString();
-                    this.txtGoodsGroupRows.Enabled = false;
-                    this.txtGoodsGroupColumns.Text = control.ColumnsCount.ToString();
-                    this.txtGoodsGroupColumns.Enabled = false;
+                    txtGoodsGroupRows.Text = control.RowsCount.ToString();
+                    txtGoodsGroupRows.Enabled = false;
+                    txtGoodsGroupColumns.Text = control.ColumnsCount.ToString();
+                    txtGoodsGroupColumns.Enabled = false;
                 }
                 else if (control.Name == "Item")
                 {
-                    this.txtGoodsRows.Text = control.RowsCount.ToString();
-                    this.txtGoodsRows.Enabled = false;
-                    this.txtGoodsColumns.Text = control.ColumnsCount.ToString();
-                    this.txtGoodsColumns.Enabled = false;
+                    txtGoodsRows.Text = control.RowsCount.ToString();
+                    txtGoodsRows.Enabled = false;
+                    txtGoodsColumns.Text = control.ColumnsCount.ToString();
+                    txtGoodsColumns.Enabled = false;
                 }
                 else if (control.Name == "Payoff")
                 {
-                    this.txtPayoffWayRows.Text = control.RowsCount.ToString();
-                    this.txtPayoffWayRows.Enabled = false;
-                    this.txtPayoffWayColumns.Text = control.ColumnsCount.ToString();
-                    this.txtPayoffWayColumns.Enabled = false;
+                    txtPayoffWayRows.Text = control.RowsCount.ToString();
+                    txtPayoffWayRows.Enabled = false;
+                    txtPayoffWayColumns.Text = control.ColumnsCount.ToString();
+                    txtPayoffWayColumns.Enabled = false;
                 }
             }
         }
@@ -249,15 +245,15 @@ namespace VechsoftPos
             List<string> alPrinters = Printer.GetPrinterList();
             for (int i = 0; i < alPrinters.Count; i++)
             {
-                this.cmbPrinter.Items.Add(alPrinters[i]);
+                cmbPrinter.Items.Add(alPrinters[i]);
             }
             alPrinters = null;
             List<string> alPorts = Printer.GetPortList();
             for (int i = 0; i < alPorts.Count; i++)
             {
-                this.cmbPrinterPort.Items.Add(alPorts[i]);
-                this.cmbCashDrawerPort.Items.Add(alPorts[i]);
-                this.cmbClientShowPort.Items.Add(alPorts[i]);
+                cmbPrinterPort.Items.Add(alPorts[i]);
+                cmbCashDrawerPort.Items.Add(alPorts[i]);
+                cmbClientShowPort.Items.Add(alPorts[i]);
             }
             alPorts = null;
         }
@@ -267,46 +263,46 @@ namespace VechsoftPos
             switch (ConstantValuePool.BizSettingConfig.Languge1st)
             {
                 case LanguageType.SIMPLIFIED:
-                    this.cmbLanguge1st.SelectedIndexChanged -= new System.EventHandler(this.cmbLanguge1st_SelectedIndexChanged);
-                    this.cmbLanguge2nd.SelectedIndexChanged -= new System.EventHandler(this.cmbLanguge2nd_SelectedIndexChanged);
-                    m_ListItem.Clear();
-                    m_ListItem.Add(new ListItem("简体", Convert.ToString((int)LanguageType.SIMPLIFIED)));
-                    m_ListItem.Add(new ListItem("繁体", Convert.ToString((int)LanguageType.TRADITIONAL)));
-                    m_ListItem.Add(new ListItem("英文", Convert.ToString((int)LanguageType.ENGLISH)));
+                    cmbLanguge1st.SelectedIndexChanged -= new System.EventHandler(cmbLanguge1st_SelectedIndexChanged);
+                    cmbLanguge2nd.SelectedIndexChanged -= new System.EventHandler(cmbLanguge2nd_SelectedIndexChanged);
+                    _listItem.Clear();
+                    _listItem.Add(new ListItem("简体", Convert.ToString((int)LanguageType.SIMPLIFIED)));
+                    _listItem.Add(new ListItem("繁体", Convert.ToString((int)LanguageType.TRADITIONAL)));
+                    _listItem.Add(new ListItem("英文", Convert.ToString((int)LanguageType.ENGLISH)));
                     BindFirstLanguage();
-                    this.cmbLanguge1st.SelectedIndex = GetIndexByValue(cmbLanguge1st, Convert.ToString((int)ConstantValuePool.BizSettingConfig.Languge1st));
+                    cmbLanguge1st.SelectedIndex = GetIndexByValue(cmbLanguge1st, Convert.ToString((int)ConstantValuePool.BizSettingConfig.Languge1st));
                     BindSecondLanguage();
-                    this.cmbLanguge2nd.SelectedIndex = GetIndexByValue(cmbLanguge2nd, Convert.ToString((int)ConstantValuePool.BizSettingConfig.Languge2nd));
-                    this.cmbLanguge1st.SelectedIndexChanged += new System.EventHandler(this.cmbLanguge1st_SelectedIndexChanged);
-                    this.cmbLanguge2nd.SelectedIndexChanged += new System.EventHandler(this.cmbLanguge2nd_SelectedIndexChanged);
+                    cmbLanguge2nd.SelectedIndex = GetIndexByValue(cmbLanguge2nd, Convert.ToString((int)ConstantValuePool.BizSettingConfig.Languge2nd));
+                    cmbLanguge1st.SelectedIndexChanged += new System.EventHandler(cmbLanguge1st_SelectedIndexChanged);
+                    cmbLanguge2nd.SelectedIndexChanged += new System.EventHandler(cmbLanguge2nd_SelectedIndexChanged);
                     break;
                 case LanguageType.TRADITIONAL:
-                    this.cmbLanguge1st.SelectedIndexChanged -= new System.EventHandler(this.cmbLanguge1st_SelectedIndexChanged);
-                    this.cmbLanguge2nd.SelectedIndexChanged -= new System.EventHandler(this.cmbLanguge2nd_SelectedIndexChanged);
-                    m_ListItem.Clear();
-                    m_ListItem.Add(new ListItem("簡體", Convert.ToString((int)LanguageType.SIMPLIFIED)));
-                    m_ListItem.Add(new ListItem("繁體", Convert.ToString((int)LanguageType.TRADITIONAL)));
-                    m_ListItem.Add(new ListItem("英文", Convert.ToString((int)LanguageType.ENGLISH)));
+                    cmbLanguge1st.SelectedIndexChanged -= new System.EventHandler(cmbLanguge1st_SelectedIndexChanged);
+                    cmbLanguge2nd.SelectedIndexChanged -= new System.EventHandler(cmbLanguge2nd_SelectedIndexChanged);
+                    _listItem.Clear();
+                    _listItem.Add(new ListItem("簡體", Convert.ToString((int)LanguageType.SIMPLIFIED)));
+                    _listItem.Add(new ListItem("繁體", Convert.ToString((int)LanguageType.TRADITIONAL)));
+                    _listItem.Add(new ListItem("英文", Convert.ToString((int)LanguageType.ENGLISH)));
                     BindFirstLanguage();
-                    this.cmbLanguge1st.SelectedIndex = GetIndexByValue(cmbLanguge1st, Convert.ToString((int)ConstantValuePool.BizSettingConfig.Languge1st));
+                    cmbLanguge1st.SelectedIndex = GetIndexByValue(cmbLanguge1st, Convert.ToString((int)ConstantValuePool.BizSettingConfig.Languge1st));
                     BindSecondLanguage();
-                    this.cmbLanguge2nd.SelectedIndex = GetIndexByValue(cmbLanguge2nd, Convert.ToString((int)ConstantValuePool.BizSettingConfig.Languge2nd));
-                    this.cmbLanguge1st.SelectedIndexChanged += new System.EventHandler(this.cmbLanguge1st_SelectedIndexChanged);
-                    this.cmbLanguge2nd.SelectedIndexChanged += new System.EventHandler(this.cmbLanguge2nd_SelectedIndexChanged);
+                    cmbLanguge2nd.SelectedIndex = GetIndexByValue(cmbLanguge2nd, Convert.ToString((int)ConstantValuePool.BizSettingConfig.Languge2nd));
+                    cmbLanguge1st.SelectedIndexChanged += new System.EventHandler(cmbLanguge1st_SelectedIndexChanged);
+                    cmbLanguge2nd.SelectedIndexChanged += new System.EventHandler(cmbLanguge2nd_SelectedIndexChanged);
                     break;
                 case LanguageType.ENGLISH:
-                    this.cmbLanguge1st.SelectedIndexChanged -= new System.EventHandler(this.cmbLanguge1st_SelectedIndexChanged);
-                    this.cmbLanguge2nd.SelectedIndexChanged -= new System.EventHandler(this.cmbLanguge2nd_SelectedIndexChanged);
-                    m_ListItem.Clear();
-                    m_ListItem.Add(new ListItem("Chinese-Simplified", Convert.ToString((int)LanguageType.SIMPLIFIED)));
-                    m_ListItem.Add(new ListItem("Chinese-Traditional", Convert.ToString((int)LanguageType.TRADITIONAL)));
-                    m_ListItem.Add(new ListItem("English", Convert.ToString((int)LanguageType.ENGLISH)));
+                    cmbLanguge1st.SelectedIndexChanged -= new System.EventHandler(cmbLanguge1st_SelectedIndexChanged);
+                    cmbLanguge2nd.SelectedIndexChanged -= new System.EventHandler(cmbLanguge2nd_SelectedIndexChanged);
+                    _listItem.Clear();
+                    _listItem.Add(new ListItem("Chinese-Simplified", Convert.ToString((int)LanguageType.SIMPLIFIED)));
+                    _listItem.Add(new ListItem("Chinese-Traditional", Convert.ToString((int)LanguageType.TRADITIONAL)));
+                    _listItem.Add(new ListItem("English", Convert.ToString((int)LanguageType.ENGLISH)));
                     BindFirstLanguage();
-                    this.cmbLanguge1st.SelectedIndex = GetIndexByValue(cmbLanguge1st, Convert.ToString((int)ConstantValuePool.BizSettingConfig.Languge1st));
+                    cmbLanguge1st.SelectedIndex = GetIndexByValue(cmbLanguge1st, Convert.ToString((int)ConstantValuePool.BizSettingConfig.Languge1st));
                     BindSecondLanguage();
-                    this.cmbLanguge2nd.SelectedIndex = GetIndexByValue(cmbLanguge2nd, Convert.ToString((int)ConstantValuePool.BizSettingConfig.Languge2nd));
-                    this.cmbLanguge1st.SelectedIndexChanged += new System.EventHandler(this.cmbLanguge1st_SelectedIndexChanged);
-                    this.cmbLanguge2nd.SelectedIndexChanged += new System.EventHandler(this.cmbLanguge2nd_SelectedIndexChanged);
+                    cmbLanguge2nd.SelectedIndex = GetIndexByValue(cmbLanguge2nd, Convert.ToString((int)ConstantValuePool.BizSettingConfig.Languge2nd));
+                    cmbLanguge1st.SelectedIndexChanged += new System.EventHandler(cmbLanguge1st_SelectedIndexChanged);
+                    cmbLanguge2nd.SelectedIndexChanged += new System.EventHandler(cmbLanguge2nd_SelectedIndexChanged);
                     break;
             }
         }
@@ -314,7 +310,7 @@ namespace VechsoftPos
         private void BindFirstLanguage()
         {
             cmbLanguge1st.Items.Clear();
-            foreach (ListItem item in m_ListItem)
+            foreach (ListItem item in _listItem)
             {
                 cmbLanguge1st.Items.Add(item);
             }
@@ -323,7 +319,7 @@ namespace VechsoftPos
         private void BindSecondLanguage()
         {
             cmbLanguge2nd.Items.Clear();
-            foreach (ListItem item in m_ListItem)
+            foreach (ListItem item in _listItem)
             {
                 if (int.Parse(item.Value) != (int)ConstantValuePool.BizSettingConfig.Languge1st)
                 {
@@ -370,22 +366,22 @@ namespace VechsoftPos
             BizControl control = new BizControl
             {
                 Name = "Group", 
-                RowsCount = int.Parse(this.txtGoodsGroupRows.Text), 
-                ColumnsCount = int.Parse(this.txtGoodsGroupColumns.Text)
+                RowsCount = int.Parse(txtGoodsGroupRows.Text), 
+                ColumnsCount = int.Parse(txtGoodsGroupColumns.Text)
             };
             bizControls.Add(control);
             control = new BizControl
             {
                 Name = "Item", 
-                RowsCount = int.Parse(this.txtGoodsRows.Text), 
-                ColumnsCount = int.Parse(this.txtGoodsColumns.Text)
+                RowsCount = int.Parse(txtGoodsRows.Text), 
+                ColumnsCount = int.Parse(txtGoodsColumns.Text)
             };
             bizControls.Add(control);
             control = new BizControl
             {
                 Name = "Payoff", 
-                RowsCount = int.Parse(this.txtPayoffWayRows.Text), 
-                ColumnsCount = int.Parse(this.txtPayoffWayColumns.Text)
+                RowsCount = int.Parse(txtPayoffWayRows.Text), 
+                ColumnsCount = int.Parse(txtPayoffWayColumns.Text)
             };
             bizControls.Add(control);
             //打印
@@ -424,8 +420,8 @@ namespace VechsoftPos
             if (rbUsbCashDrawer.Checked)
             {
                 cashboxConfig.IsUsbPort = true;
-                cashboxConfig.VID = this.txtCashVID.Text;
-                cashboxConfig.PID = this.txtCashPID.Text;
+                cashboxConfig.VID = txtCashVID.Text;
+                cashboxConfig.PID = txtCashPID.Text;
             }
             //来电宝
             TelCallConfig telCallConfig = new TelCallConfig {Enabled = ckbTelCall.Checked};
@@ -476,8 +472,8 @@ namespace VechsoftPos
             if (rbUsbClientShow.Checked)
             {
                 clientShowConfig.IsUsbPort = true;
-                clientShowConfig.VID = this.txtClientVID.Text;
-                clientShowConfig.PID = this.txtClientPID.Text;
+                clientShowConfig.VID = txtClientVID.Text;
+                clientShowConfig.PID = txtClientPID.Text;
             }
             string clientShowModel = cmbClientShowModel.Text;
             ListItem item = cmbClientShowType.SelectedItem as ListItem;
@@ -553,13 +549,13 @@ namespace VechsoftPos
         {
             if (ckbGoodsGroup.Checked)
             {
-                this.txtGoodsGroupRows.Enabled = true;
-                this.txtGoodsGroupColumns.Enabled = true;
+                txtGoodsGroupRows.Enabled = true;
+                txtGoodsGroupColumns.Enabled = true;
             }
             else
             {
-                this.txtGoodsGroupRows.Enabled = false;
-                this.txtGoodsGroupColumns.Enabled = false;
+                txtGoodsGroupRows.Enabled = false;
+                txtGoodsGroupColumns.Enabled = false;
             }
         }
 
@@ -567,13 +563,13 @@ namespace VechsoftPos
         {
             if (ckbGoods.Checked)
             {
-                this.txtGoodsRows.Enabled = true;
-                this.txtGoodsColumns.Enabled = true;
+                txtGoodsRows.Enabled = true;
+                txtGoodsColumns.Enabled = true;
             }
             else
             {
-                this.txtGoodsRows.Enabled = false;
-                this.txtGoodsColumns.Enabled = false;
+                txtGoodsRows.Enabled = false;
+                txtGoodsColumns.Enabled = false;
             }
         }
 
@@ -581,13 +577,13 @@ namespace VechsoftPos
         {
             if (ckbPayoffWay.Checked)
             {
-                this.txtPayoffWayRows.Enabled = true;
-                this.txtPayoffWayColumns.Enabled = true;
+                txtPayoffWayRows.Enabled = true;
+                txtPayoffWayColumns.Enabled = true;
             }
             else
             {
-                this.txtPayoffWayRows.Enabled = false;
-                this.txtPayoffWayColumns.Enabled = false;
+                txtPayoffWayRows.Enabled = false;
+                txtPayoffWayColumns.Enabled = false;
             }
         }
 
