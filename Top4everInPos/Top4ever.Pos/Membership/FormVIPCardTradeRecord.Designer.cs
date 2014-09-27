@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.Membership
+﻿namespace VechsoftPos.Membership
 {
     partial class FormVIPCardTradeRecord
     {
@@ -365,7 +365,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtCardNo;
         private System.Windows.Forms.Label label1;
-        private CustomControl.CrystalButton btnSearch;
+        private Top4ever.CustomControl.CrystalButton btnSearch;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox txtDiscount;
         private System.Windows.Forms.Label label6;
@@ -373,9 +373,9 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtBalance;
         private System.Windows.Forms.Label label4;
-        private CustomControl.CrystalButton btnClose;
-        private CustomControl.CrystalButton btnPrint;
-        private CustomControl.DataGirdViewExt dataGirdViewExt1;
+        private Top4ever.CustomControl.CrystalButton btnClose;
+        private Top4ever.CustomControl.CrystalButton btnPrint;
+        private Top4ever.CustomControl.DataGirdViewExt dataGirdViewExt1;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCardNo;
         private System.Windows.Forms.DataGridViewTextBoxColumn colTradePayNo;
         private System.Windows.Forms.DataGridViewTextBoxColumn colTradeType;

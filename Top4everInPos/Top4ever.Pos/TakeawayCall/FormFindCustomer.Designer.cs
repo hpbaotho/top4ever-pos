@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.TakeawayCall
+﻿namespace VechsoftPos.TakeawayCall
 {
     partial class FormFindCustomer
     {
@@ -229,12 +229,12 @@
         private System.Windows.Forms.TextBox txtTelephone;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dgvCustomerInfo;
-        private CustomControl.CrystalButton btnInputCustomer;
-        private CustomControl.CrystalButton btnCancel;
-        private CustomControl.CrystalButton btnConfirm;
+        private Top4ever.CustomControl.CrystalButton btnInputCustomer;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.CrystalButton btnConfirm;
         private System.Windows.Forms.DataGridViewTextBoxColumn Telephone;
         private System.Windows.Forms.DataGridViewTextBoxColumn CustomerName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Address;
-        private CustomControl.CrystalButton btnLoadCustomer;
+        private Top4ever.CustomControl.CrystalButton btnLoadCustomer;
     }
 }

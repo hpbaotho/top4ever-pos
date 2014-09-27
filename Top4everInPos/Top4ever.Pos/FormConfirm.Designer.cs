@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos
+﻿namespace VechsoftPos
 {
     partial class FormConfirm
     {
@@ -155,7 +155,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::Top4ever.Pos.Properties.Resources.symbol_check;
+            this.pictureBox1.Image = global::VechsoftPos.Properties.Resources.symbol_check;
             this.pictureBox1.Location = new System.Drawing.Point(117, 1);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(128, 128);
@@ -205,7 +205,7 @@
 
         #endregion
 
-        private CustomControl.CrystalButton btnConfirm;
+        private Top4ever.CustomControl.CrystalButton btnConfirm;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label lbReceAmount;

@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.TakeawayCall
+﻿namespace VechsoftPos.TakeawayCall
 {
     partial class FormInputCustomer
     {
@@ -258,10 +258,10 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
-        private CustomControl.HandwritingPad handwritingPad1;
-        private CustomControl.CrystalButton btnCancel;
-        private CustomControl.CrystalButton btnHandwriting;
-        private CustomControl.CrystalButton btnCreate;
-        private CustomControl.CrystalButton btnBackspace;
+        private Top4ever.CustomControl.HandwritingPad handwritingPad1;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.CrystalButton btnHandwriting;
+        private Top4ever.CustomControl.CrystalButton btnCreate;
+        private Top4ever.CustomControl.CrystalButton btnBackspace;
     }
 }

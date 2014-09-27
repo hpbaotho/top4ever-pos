@@ -17,7 +17,7 @@ using Top4ever.Domain.Transfer;
 using Top4ever.Entity;
 using Top4ever.Entity.Enum;
 
-namespace Top4ever.Pos
+namespace VechsoftPos
 {
     public partial class FormDesk : Form
     {

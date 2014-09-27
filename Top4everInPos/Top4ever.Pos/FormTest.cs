@@ -11,7 +11,7 @@ using Top4ever.CustomControl;
 using Top4ever.Domain.Accounts;
 using Top4ever.Entity;
 
-namespace Top4ever.Pos
+namespace VechsoftPos
 {
     public partial class FormTest : Form
     {

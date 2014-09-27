@@ -11,7 +11,7 @@ using Top4ever.ClientService;
 using Top4ever.Domain.Transfer;
 using Top4ever.Domain.Customers;
 
-namespace Top4ever.Pos.Feature
+namespace VechsoftPos.Feature
 {
     public partial class FormChartReport : Form
     {

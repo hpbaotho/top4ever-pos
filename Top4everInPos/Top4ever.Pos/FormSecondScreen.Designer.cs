@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos
+﻿namespace VechsoftPos
 {
     partial class FormSecondScreen
     {
@@ -419,7 +419,7 @@
         #endregion
 
         private System.Windows.Forms.Panel pnlBanner;
-        private CustomControl.ScrollingText scrollingText1;
+        private Top4ever.CustomControl.ScrollingText scrollingText1;
         private System.Windows.Forms.Panel pnlLeft;
         private System.Windows.Forms.Panel pnlRight;
         private System.Windows.Forms.Panel pnlGoodsInfo;

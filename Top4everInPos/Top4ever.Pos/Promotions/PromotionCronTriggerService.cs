@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Top4ever.Domain.Promotions;
 
-namespace Top4ever.Pos.Promotions
+namespace VechsoftPos.Promotions
 {
     public class PromotionCronTriggerService
     {

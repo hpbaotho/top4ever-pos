@@ -9,7 +9,7 @@ using System.Management;
 using System.Web;
 using System.Diagnostics;
 
-namespace Top4ever.Pos.Register
+namespace VechsoftPos.Register
 {
     public partial class FormProductTry : Form
     {

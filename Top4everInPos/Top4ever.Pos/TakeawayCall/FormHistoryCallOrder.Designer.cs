@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.TakeawayCall
+﻿namespace VechsoftPos.TakeawayCall
 {
     partial class FormHistoryCallOrder
     {
@@ -173,8 +173,8 @@
         #endregion
 
         private System.Windows.Forms.Label lbTitle;
-        private CustomControl.DataGirdViewExt dataGirdViewExt1;
-        private CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.DataGirdViewExt dataGirdViewExt1;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
         private System.Windows.Forms.DataGridViewTextBoxColumn colGoodsName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colGoodsPrice;
         private System.Windows.Forms.DataGridViewTextBoxColumn colTimes;

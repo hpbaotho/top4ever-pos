@@ -12,7 +12,7 @@ using Top4ever.Entity;
 using Top4ever.Entity.Enum;
 using Top4ever.Print;
 
-namespace Top4ever.Pos.Feature
+namespace VechsoftPos.Feature
 {
     public partial class FormItemSalesReport : Form
     {

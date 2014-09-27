@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.Feature
+﻿namespace VechsoftPos.Feature
 {
     partial class FormReason
     {
@@ -123,9 +123,9 @@
         #endregion
 
         private System.Windows.Forms.Panel pnlReason;
-        private CustomControl.CrystalButton btnConfirm;
-        private CustomControl.CrystalButton btnCancel;
-        private CustomControl.CrystalButton btnNumber;
+        private Top4ever.CustomControl.CrystalButton btnConfirm;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.CrystalButton btnNumber;
         private System.Windows.Forms.TextBox txtItemNun;
         private System.Windows.Forms.Label label1;
     }

@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.Feature
+﻿namespace VechsoftPos.Feature
 {
     partial class FormChoseMultiOrder
     {
@@ -116,7 +116,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel pnlContainer;
         private System.Windows.Forms.Panel pnlBottom;
-        private CustomControl.CrystalButton btnCancel;
-        private CustomControl.CrystalButton btnSave;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.CrystalButton btnSave;
     }
 }

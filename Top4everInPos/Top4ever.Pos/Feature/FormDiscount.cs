@@ -11,7 +11,7 @@ using Top4ever.Domain.OrderRelated;
 using Top4ever.Entity;
 using Top4ever.Entity.Enum;
 
-namespace Top4ever.Pos.Feature
+namespace VechsoftPos.Feature
 {
     public partial class FormDiscount : Form
     {

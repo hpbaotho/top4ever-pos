@@ -10,7 +10,7 @@ using Top4ever.CustomControl;
 using Top4ever.Domain.GoodsRelated;
 using Top4ever.Entity;
 
-namespace Top4ever.Pos.Feature
+namespace VechsoftPos.Feature
 {
     public partial class FormGoodsSetMeal : Form
     {

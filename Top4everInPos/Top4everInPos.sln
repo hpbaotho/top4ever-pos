@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Top4ever.Pos", "Top4ever.Pos\Top4ever.Pos.csproj", "{C4F8E93C-7A3A-462A-A3EF-8E1FEDC0D1A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VechsoftPos", "Top4ever.Pos\VechsoftPos.csproj", "{C4F8E93C-7A3A-462A-A3EF-8E1FEDC0D1A6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Top4ever.CustomControl", "Top4ever.CustomControl\Top4ever.CustomControl.csproj", "{CBD24195-4CD3-4D36-9113-70A3E48745D1}"
 EndProject

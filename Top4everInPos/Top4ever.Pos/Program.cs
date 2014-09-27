@@ -10,9 +10,9 @@ using Top4ever.Common;
 using Top4ever.Domain;
 using Top4ever.Entity;
 using Top4ever.Entity.Config;
-using Top4ever.Pos.Register;
+using VechsoftPos.Register;
 
-namespace Top4ever.Pos
+namespace VechsoftPos
 {
     static class Program
     {

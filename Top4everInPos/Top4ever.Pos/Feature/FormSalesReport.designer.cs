@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.Feature
+﻿namespace VechsoftPos.Feature
 {
     partial class FormSalesReport
     {
@@ -160,9 +160,9 @@
         private System.Windows.Forms.DataGridView dgvSalesReport;
         private System.Windows.Forms.Label lbWeather;
         private System.Windows.Forms.ComboBox comboBox1;
-        private CustomControl.CrystalButton btnSalesReport;
-        private CustomControl.CrystalButton btnCancel;
-        private CustomControl.CrystalButton btnPrint;
+        private Top4ever.CustomControl.CrystalButton btnSalesReport;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.CrystalButton btnPrint;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
     }
 }

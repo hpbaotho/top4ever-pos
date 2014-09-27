@@ -6,7 +6,7 @@ using Top4ever.Domain.OrderRelated;
 using Top4ever.Domain.Promotions;
 using Top4ever.Entity;
 
-namespace Top4ever.Pos.Promotions
+namespace VechsoftPos.Promotions
 {
     public class PromotionConditionService
     {

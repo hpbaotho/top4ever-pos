@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 using Top4ever.Domain.OrderRelated;
 
-namespace Top4ever.Pos.Promotions
+namespace VechsoftPos.Promotions
 {
     public abstract class PromotionPresentService
     {

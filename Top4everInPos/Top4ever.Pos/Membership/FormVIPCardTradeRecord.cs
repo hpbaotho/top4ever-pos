@@ -10,7 +10,7 @@ using Top4ever.ClientService;
 using Top4ever.Domain.MembershipCard;
 using Top4ever.Domain.Transfer;
 
-namespace Top4ever.Pos.Membership
+namespace VechsoftPos.Membership
 {
     public partial class FormVIPCardTradeRecord : Form
     {

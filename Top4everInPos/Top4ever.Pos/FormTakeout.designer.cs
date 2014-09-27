@@ -1,4 +1,4 @@
-namespace Top4ever.Pos
+namespace VechsoftPos
 {
     partial class FormTakeout
     {
@@ -644,7 +644,7 @@ namespace Top4ever.Pos
             // 
             this.btnCancelOrder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(88)))), ((int)(((byte)(88)))));
             this.btnCancelOrder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btnCancelOrder.Image = global::Top4ever.Pos.Properties.Resources.no;
+            this.btnCancelOrder.Image = global::VechsoftPos.Properties.Resources.no;
             this.btnCancelOrder.Location = new System.Drawing.Point(303, 55);
             this.btnCancelOrder.Name = "btnCancelOrder";
             this.btnCancelOrder.Size = new System.Drawing.Size(95, 53);
@@ -656,7 +656,7 @@ namespace Top4ever.Pos
             // 
             this.btnCancel.BackColor = System.Drawing.Color.Coral;
             this.btnCancel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btnCancel.Image = global::Top4ever.Pos.Properties.Resources.cancel;
+            this.btnCancel.Image = global::VechsoftPos.Properties.Resources.cancel;
             this.btnCancel.Location = new System.Drawing.Point(202, 55);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(95, 53);
@@ -668,7 +668,7 @@ namespace Top4ever.Pos
             // 
             this.btnSub.BackColor = System.Drawing.Color.SeaGreen;
             this.btnSub.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btnSub.Image = global::Top4ever.Pos.Properties.Resources.minus;
+            this.btnSub.Image = global::VechsoftPos.Properties.Resources.minus;
             this.btnSub.Location = new System.Drawing.Point(101, 55);
             this.btnSub.Name = "btnSub";
             this.btnSub.Size = new System.Drawing.Size(95, 53);
@@ -679,7 +679,7 @@ namespace Top4ever.Pos
             // btnAdd
             // 
             this.btnAdd.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.btnAdd.Image = global::Top4ever.Pos.Properties.Resources.plus;
+            this.btnAdd.Image = global::VechsoftPos.Properties.Resources.plus;
             this.btnAdd.Location = new System.Drawing.Point(0, 55);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(95, 53);

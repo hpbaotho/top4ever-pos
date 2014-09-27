@@ -12,7 +12,7 @@ using Top4ever.Domain.Customers;
 using Top4ever.Domain.GoodsRelated;
 using Top4ever.Entity;
 
-namespace Top4ever.Pos.TakeawayCall
+namespace VechsoftPos.TakeawayCall
 {
     public partial class FormHistoryCallOrder : Form
     {

@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.Feature
+﻿namespace VechsoftPos.Feature
 {
     partial class FormDeletedItemReport
     {
@@ -515,17 +515,17 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private CustomControl.CrystalButton btnSearch;
+        private Top4ever.CustomControl.CrystalButton btnSearch;
         private System.Windows.Forms.TextBox txtTotalAmount;
         private System.Windows.Forms.TextBox txtTotalQty;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
-        private CustomControl.DataGirdViewExt dataGirdViewExt1;
+        private Top4ever.CustomControl.DataGirdViewExt dataGirdViewExt1;
         private System.Windows.Forms.TextBox txtTotalMoney;
         private System.Windows.Forms.TextBox txtTotalNum;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label7;
-        private CustomControl.DataGirdViewExt dataGirdViewExt2;
+        private Top4ever.CustomControl.DataGirdViewExt dataGirdViewExt2;
         private System.Windows.Forms.DataGridViewTextBoxColumn colTranSequence;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDeskName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colOrderNo;
@@ -544,7 +544,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colCancelEmployeeNo1;
         private System.Windows.Forms.DataGridViewTextBoxColumn colLastModifiedTime1;
         private System.Windows.Forms.DataGridViewTextBoxColumn colType1;
-        private CustomControl.CrystalButton btnPrint;
-        private CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.CrystalButton btnPrint;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
     }
 }

@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using Top4ever.ClientService;
 using Top4ever.Entity;
 
-namespace Top4ever.Pos.Feature
+namespace VechsoftPos.Feature
 {
     public partial class FormEmployeePassword : Form
     {

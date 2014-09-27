@@ -10,7 +10,7 @@ using Top4ever.Domain.OrderRelated;
 using Top4ever.Entity;
 using Top4ever.Entity.Enum;
 
-namespace Top4ever.Pos
+namespace VechsoftPos
 {
     public partial class FormConfirm : Form
     {

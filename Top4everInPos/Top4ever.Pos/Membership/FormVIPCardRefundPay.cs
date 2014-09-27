@@ -10,7 +10,7 @@ using Top4ever.ClientService;
 using Top4ever.LocalService;
 using Top4ever.LocalService.Entity;
 
-namespace Top4ever.Pos.Membership
+namespace VechsoftPos.Membership
 {
     public partial class FormVIPCardRefundPay : Form
     {

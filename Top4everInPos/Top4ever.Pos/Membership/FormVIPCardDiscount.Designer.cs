@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.Membership
+﻿namespace VechsoftPos.Membership
 {
     partial class FormVIPCardDiscount
     {
@@ -132,7 +132,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtCardNo;
         private System.Windows.Forms.TextBox txtDiscountRate;
-        private CustomControl.CrystalButton btnCancel;
-        private CustomControl.CrystalButton btnConfirm;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.CrystalButton btnConfirm;
     }
 }

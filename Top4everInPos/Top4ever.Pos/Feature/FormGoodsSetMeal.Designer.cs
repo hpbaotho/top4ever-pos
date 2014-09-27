@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.Feature
+﻿namespace VechsoftPos.Feature
 {
     partial class FormGoodsSetMeal
     {
@@ -149,9 +149,9 @@
         private System.Windows.Forms.Panel pnlGroup;
         private System.Windows.Forms.Panel pnlTools;
         private System.Windows.Forms.Panel pnlItem;
-        private CustomControl.CrystalButton btnCancel;
-        private CustomControl.CrystalButton btnConfirm;
-        private CustomControl.CrystalButton btnPageDown;
-        private CustomControl.CrystalButton btnPageUp;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.CrystalButton btnConfirm;
+        private Top4ever.CustomControl.CrystalButton btnPageDown;
+        private Top4ever.CustomControl.CrystalButton btnPageUp;
     }
 }

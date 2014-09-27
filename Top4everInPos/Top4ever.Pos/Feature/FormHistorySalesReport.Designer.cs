@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.Feature
+﻿namespace VechsoftPos.Feature
 {
     partial class FormHistorySalesReport
     {
@@ -353,15 +353,15 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private MonthCalendar.MonthCalendar monthCalendar1;
+        private Top4ever.MonthCalendar.MonthCalendar monthCalendar1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dgvDailyStatement;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridView dgvDeviceNo;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.DataGridView dgvHandover;
-        private CustomControl.CrystalButton btnShowDailyStatement;
-        private CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.CrystalButton btnShowDailyStatement;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
         private System.Windows.Forms.DataGridViewTextBoxColumn colOrder;
         private System.Windows.Forms.DataGridViewTextBoxColumn colBeginTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn colEndTime;

@@ -14,7 +14,7 @@ using Top4ever.Entity;
 using Top4ever.Domain;
 using Top4ever.Domain.Transfer;
 
-namespace Top4ever.Pos.Membership
+namespace VechsoftPos.Membership
 {
     public partial class FormVIPCardStoreValue : Form
     {
