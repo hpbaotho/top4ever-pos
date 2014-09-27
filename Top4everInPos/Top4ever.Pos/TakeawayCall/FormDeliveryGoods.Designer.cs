@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.TakeawayCall
+﻿namespace VechsoftPos.TakeawayCall
 {
     partial class FormDeliveryGoods
     {
@@ -347,11 +347,11 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TextBox txtEmployeeNo;
         private System.Windows.Forms.Label label8;
-        private CustomControl.CrystalButton btnDelivery;
-        private CustomControl.CrystalButton btnCancel;
-        private CustomControl.CrystalButton btnHandwriting;
-        private CustomControl.HandwritingPad handwritingPad1;
-        private CustomControl.CrystalButton btnBackspace;
+        private Top4ever.CustomControl.CrystalButton btnDelivery;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.CrystalButton btnHandwriting;
+        private Top4ever.CustomControl.HandwritingPad handwritingPad1;
+        private Top4ever.CustomControl.CrystalButton btnBackspace;
         private System.Windows.Forms.TextBox txtEmployeeName;
     }
 }

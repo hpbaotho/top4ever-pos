@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using Top4ever.ClientService;
 using Top4ever.Domain.Customers;
 
-namespace Top4ever.Pos.TakeawayCall
+namespace VechsoftPos.TakeawayCall
 {
     public partial class FormRecentlyCallRecord : Form
     {

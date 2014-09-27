@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.TakeawayCall
+﻿namespace VechsoftPos.TakeawayCall
 {
     partial class FormTakeGoods
     {
@@ -316,8 +316,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn SellPrice;
         private System.Windows.Forms.DataGridViewTextBoxColumn Discount;
         private System.Windows.Forms.DataGridView dgvPayoffWay;
-        private CustomControl.CrystalButton btnTakeGoods;
-        private CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.CrystalButton btnTakeGoods;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
         private System.Windows.Forms.DataGridViewTextBoxColumn PayDefName;
         private System.Windows.Forms.DataGridViewTextBoxColumn TotalMoney;
         private System.Windows.Forms.DataGridViewTextBoxColumn ChangePay;

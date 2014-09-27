@@ -7,7 +7,7 @@ using Top4ever.Domain.Promotions;
 using Top4ever.Domain.GoodsRelated;
 using Top4ever.Entity.Enum;
 
-namespace Top4ever.Pos.Promotions
+namespace VechsoftPos.Promotions
 {
     public class PromotionPresentGiftService : PromotionPresentService
     {

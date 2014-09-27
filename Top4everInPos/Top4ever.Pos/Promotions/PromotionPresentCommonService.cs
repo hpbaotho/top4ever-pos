@@ -8,7 +8,7 @@ using Top4ever.Domain.Promotions;
 using Top4ever.Entity;
 using Top4ever.Entity.Enum;
 
-namespace Top4ever.Pos.Promotions
+namespace VechsoftPos.Promotions
 {
     public class PromotionPresentCommonService : PromotionPresentService
     {

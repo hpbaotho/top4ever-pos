@@ -15,13 +15,13 @@ using Top4ever.Domain.OrderRelated;
 using Top4ever.Domain.Transfer;
 using Top4ever.Entity;
 using Top4ever.Entity.Enum;
-using Top4ever.Pos.Feature;
+using VechsoftPos.Feature;
 using Top4ever.Print;
 using Top4ever.Print.Entity;
 using Top4ever.LocalService;
 using Top4ever.LocalService.Entity;
 
-namespace Top4ever.Pos
+namespace VechsoftPos
 {
     public partial class FormCheckOut : Form
     {

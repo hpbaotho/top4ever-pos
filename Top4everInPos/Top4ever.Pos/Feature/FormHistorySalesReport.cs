@@ -10,7 +10,7 @@ using Top4ever.ClientService;
 using Top4ever.Domain;
 using Top4ever.Domain.Transfer;
 
-namespace Top4ever.Pos.Feature
+namespace VechsoftPos.Feature
 {
     public partial class FormHistorySalesReport : Form
     {

@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos
+﻿namespace VechsoftPos
 {
     partial class FormCheckOut
     {
@@ -873,7 +873,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::Top4ever.Pos.Properties.Resources.cut;
+            this.pictureBox1.Image = global::VechsoftPos.Properties.Resources.cut;
             this.pictureBox1.Location = new System.Drawing.Point(121, 47);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(16, 16);
@@ -1022,10 +1022,10 @@
         private System.Windows.Forms.Label lbCutOff;
         private System.Windows.Forms.Label lbTotalPrice;
         private System.Windows.Forms.Panel pnlLeftBottom;
-        private CustomControl.CrystalButton btnExit;
-        private CustomControl.CrystalButton btnConfirm;
-        private CustomControl.CrystalButton btnDiscount;
-        private CustomControl.CrystalButton btnMember;
+        private Top4ever.CustomControl.CrystalButton btnExit;
+        private Top4ever.CustomControl.CrystalButton btnConfirm;
+        private Top4ever.CustomControl.CrystalButton btnDiscount;
+        private Top4ever.CustomControl.CrystalButton btnMember;
         private System.Windows.Forms.Panel pnlRight;
         private System.Windows.Forms.Panel pnlPayMoney;
         private System.Windows.Forms.Label lbPaidInAmount;
@@ -1036,41 +1036,41 @@
         private System.Windows.Forms.Panel pnlPayTypeNum;
         private System.Windows.Forms.Panel pnlBigNumeric;
         private System.Windows.Forms.Panel pnlNumeric;
-        private CustomControl.CrystalButton btnNumeric8;
-        private CustomControl.CrystalButton btnNumeric5;
-        private CustomControl.CrystalButton btnDot;
-        private CustomControl.CrystalButton btnNumeric2;
-        private CustomControl.CrystalButton btnNumeric9;
-        private CustomControl.CrystalButton btnNumeric6;
-        private CustomControl.CrystalButton btnClear;
-        private CustomControl.CrystalButton btnNumeric3;
-        private CustomControl.CrystalButton btnNumeric7;
-        private CustomControl.CrystalButton btnZero;
-        private CustomControl.CrystalButton btnNumeric4;
-        private CustomControl.CrystalButton btnNumeric1;
+        private Top4ever.CustomControl.CrystalButton btnNumeric8;
+        private Top4ever.CustomControl.CrystalButton btnNumeric5;
+        private Top4ever.CustomControl.CrystalButton btnDot;
+        private Top4ever.CustomControl.CrystalButton btnNumeric2;
+        private Top4ever.CustomControl.CrystalButton btnNumeric9;
+        private Top4ever.CustomControl.CrystalButton btnNumeric6;
+        private Top4ever.CustomControl.CrystalButton btnClear;
+        private Top4ever.CustomControl.CrystalButton btnNumeric3;
+        private Top4ever.CustomControl.CrystalButton btnNumeric7;
+        private Top4ever.CustomControl.CrystalButton btnZero;
+        private Top4ever.CustomControl.CrystalButton btnNumeric4;
+        private Top4ever.CustomControl.CrystalButton btnNumeric1;
         private System.Windows.Forms.Panel pnlPayoffWay;
-        private CustomControl.CrystalButton btnReal;
-        private CustomControl.CrystalButton btnAdd5;
-        private CustomControl.CrystalButton btnAdd10;
-        private CustomControl.CrystalButton btnAdd20;
-        private CustomControl.CrystalButton btnAdd50;
-        private CustomControl.CrystalButton btnAdd100;
-        private CustomControl.CrystalButton btnAdd200;
-        private CustomControl.CrystalButton btnAdd500;
+        private Top4ever.CustomControl.CrystalButton btnReal;
+        private Top4ever.CustomControl.CrystalButton btnAdd5;
+        private Top4ever.CustomControl.CrystalButton btnAdd10;
+        private Top4ever.CustomControl.CrystalButton btnAdd20;
+        private Top4ever.CustomControl.CrystalButton btnAdd50;
+        private Top4ever.CustomControl.CrystalButton btnAdd100;
+        private Top4ever.CustomControl.CrystalButton btnAdd200;
+        private Top4ever.CustomControl.CrystalButton btnAdd500;
         private System.Windows.Forms.TextBox txtPayoffWay;
         private System.Windows.Forms.TextBox txtAmount;
         private System.Windows.Forms.Label lbMulti;
         private System.Windows.Forms.TextBox txtPayoff;
-        private CustomControl.CrystalButton btnPageDown;
-        private CustomControl.CrystalButton btnPageUp;
+        private Top4ever.CustomControl.CrystalButton btnPageDown;
+        private Top4ever.CustomControl.CrystalButton btnPageUp;
         private System.Windows.Forms.Label lbPaidInMoney;
         private System.Windows.Forms.Label lbServiceFee;
         private System.Windows.Forms.Label lbReceMoney;
-        private CustomControl.CrystalButton btnPersonNum;
-        private CustomControl.CrystalButton btnEmployee;
-        private CustomControl.CrystalButton btnDeskNo;
+        private Top4ever.CustomControl.CrystalButton btnPersonNum;
+        private Top4ever.CustomControl.CrystalButton btnEmployee;
+        private Top4ever.CustomControl.CrystalButton btnDeskNo;
         private System.Windows.Forms.DataGridView dgvGoodsOrder;
-        private CustomControl.CrystalButton btnPreCheck;
+        private Top4ever.CustomControl.CrystalButton btnPreCheck;
         private System.Windows.Forms.Label lbUnpaidAmount;
         private System.Windows.Forms.Label lbUnpaidMoney;
         private System.Windows.Forms.DataGridViewTextBoxColumn ItemID;

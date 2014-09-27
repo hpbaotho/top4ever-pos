@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.TakeawayCall
+﻿namespace VechsoftPos.TakeawayCall
 {
     partial class FormRecentlyCallRecord
     {
@@ -128,7 +128,7 @@
             this.exTabControl1.SelectedIndex = 0;
             this.exTabControl1.Size = new System.Drawing.Size(455, 344);
             this.exTabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
-            this.exTabControl1.TabBackgroundImage = global::Top4ever.Pos.Properties.Resources.TabButtonBackground;
+            this.exTabControl1.TabBackgroundImage = global::VechsoftPos.Properties.Resources.TabButtonBackground;
             this.exTabControl1.TabIndex = 4;
             // 
             // tabPage1
@@ -464,18 +464,18 @@
 
         #endregion
 
-        private CustomControl.CrystalButton btnClose;
-        private CustomControl.CrystalButton btnIgnore;
+        private Top4ever.CustomControl.CrystalButton btnClose;
+        private Top4ever.CustomControl.CrystalButton btnIgnore;
         private System.Windows.Forms.ImageList imageList;
-        private CustomControl.ExTabControl exTabControl1;
+        private Top4ever.CustomControl.ExTabControl exTabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
-        private CustomControl.DataGirdViewExt dgvCallRecord;
-        private CustomControl.DataGirdViewExt dataGirdViewExt1;
-        private CustomControl.DataGirdViewExt dataGirdViewExt2;
-        private CustomControl.DataGirdViewExt dataGirdViewExt3;
+        private Top4ever.CustomControl.DataGirdViewExt dgvCallRecord;
+        private Top4ever.CustomControl.DataGirdViewExt dataGirdViewExt1;
+        private Top4ever.CustomControl.DataGirdViewExt dataGirdViewExt2;
+        private Top4ever.CustomControl.DataGirdViewExt dataGirdViewExt3;
         private System.Windows.Forms.DataGridViewCheckBoxColumn ckbSelect;
         private System.Windows.Forms.DataGridViewTextBoxColumn colTelephone;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCustomerName;

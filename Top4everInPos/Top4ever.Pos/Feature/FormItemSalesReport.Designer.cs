@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.Feature
+﻿namespace VechsoftPos.Feature
 {
     partial class FormItemSalesReport
     {
@@ -287,7 +287,7 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private CustomControl.CrystalButton btnSearch;
+        private Top4ever.CustomControl.CrystalButton btnSearch;
         private System.Windows.Forms.DateTimePicker dateTimePicker2;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.Label label2;
@@ -297,9 +297,9 @@
         private System.Windows.Forms.TextBox txtTotalQty;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
-        private CustomControl.DataGirdViewExt dataGirdViewExt1;
-        private CustomControl.CrystalButton btnPrint;
-        private CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.DataGirdViewExt dataGirdViewExt1;
+        private Top4ever.CustomControl.CrystalButton btnPrint;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
         private System.Windows.Forms.DataGridViewTextBoxColumn colGroupName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colItemsName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colItemsTotalQty;

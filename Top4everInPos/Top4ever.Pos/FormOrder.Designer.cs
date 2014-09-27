@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos
+﻿namespace VechsoftPos
 {
     partial class FormOrder
     {
@@ -586,7 +586,7 @@
             this.exTabControl1.SelectedIndex = 0;
             this.exTabControl1.Size = new System.Drawing.Size(309, 248);
             this.exTabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
-            this.exTabControl1.TabBackgroundImage = global::Top4ever.Pos.Properties.Resources.TabButtonBackground;
+            this.exTabControl1.TabBackgroundImage = global::VechsoftPos.Properties.Resources.TabButtonBackground;
             this.exTabControl1.TabIndex = 1;
             // 
             // tabPage1
@@ -1086,59 +1086,59 @@
         private System.Windows.Forms.Label lbDiscount;
         private System.Windows.Forms.Label lbCutOff;
         private System.Windows.Forms.Label lbTotalPrice;
-        private CustomControl.CrystalButton btnPersonNum;
-        private CustomControl.CrystalButton btnEmployee;
-        private CustomControl.CrystalButton btnDeskNo;
+        private Top4ever.CustomControl.CrystalButton btnPersonNum;
+        private Top4ever.CustomControl.CrystalButton btnEmployee;
+        private Top4ever.CustomControl.CrystalButton btnDeskNo;
         private System.Windows.Forms.Panel pnlToolBar;
         private System.Windows.Forms.Panel pnlItem;
         private System.Windows.Forms.Panel pnlGroup;
-        private CustomControl.CrystalButton btnPageDown;
-        private CustomControl.CrystalButton btnPageUp;
-        private CustomControl.CrystalButton btnBack;
-        private CustomControl.CrystalButton btnHead;
+        private Top4ever.CustomControl.CrystalButton btnPageDown;
+        private Top4ever.CustomControl.CrystalButton btnPageUp;
+        private Top4ever.CustomControl.CrystalButton btnBack;
+        private Top4ever.CustomControl.CrystalButton btnHead;
         private System.Windows.Forms.ImageList imageList;
         private System.Windows.Forms.Panel pnlSearch;
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Label lbGoodsCode;
-        private CustomControl.CrystalButton btnSearch;
+        private Top4ever.CustomControl.CrystalButton btnSearch;
         private System.Windows.Forms.DataGridView dgvGoodsOrder;
-        private CustomControl.CrystalButton btnCancel;
-        private CustomControl.CrystalButton btnDot;
-        private CustomControl.CrystalButton btnManual;
-        private CustomControl.CrystalButton btnAdd9;
-        private CustomControl.CrystalButton btnAdd8;
-        private CustomControl.CrystalButton btnAdd7;
-        private CustomControl.CrystalButton btnAdd6;
-        private CustomControl.CrystalButton btnAdd5;
-        private CustomControl.CrystalButton btnAdd4;
-        private CustomControl.CrystalButton btnAdd3;
-        private CustomControl.CrystalButton btnAdd2;
-        private CustomControl.CrystalButton btnAdd1;
-        private CustomControl.ExTabControl exTabControl1;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.CrystalButton btnDot;
+        private Top4ever.CustomControl.CrystalButton btnManual;
+        private Top4ever.CustomControl.CrystalButton btnAdd9;
+        private Top4ever.CustomControl.CrystalButton btnAdd8;
+        private Top4ever.CustomControl.CrystalButton btnAdd7;
+        private Top4ever.CustomControl.CrystalButton btnAdd6;
+        private Top4ever.CustomControl.CrystalButton btnAdd5;
+        private Top4ever.CustomControl.CrystalButton btnAdd4;
+        private Top4ever.CustomControl.CrystalButton btnAdd3;
+        private Top4ever.CustomControl.CrystalButton btnAdd2;
+        private Top4ever.CustomControl.CrystalButton btnAdd1;
+        private Top4ever.CustomControl.ExTabControl exTabControl1;
         private System.Windows.Forms.TabPage tabPage1;
-        private CustomControl.CrystalButton btnCheckOut;
-        private CustomControl.CrystalButton btnDiscount;
-        private CustomControl.CrystalButton btnShowDetails;
-        private CustomControl.CrystalButton btnPrintBill;
-        private CustomControl.CrystalButton btnPlaceOrder;
-        private CustomControl.CrystalButton btnTurnBack;
-        private CustomControl.CrystalButton btnExit;
-        private CustomControl.CrystalButton btnCancelOrder;
+        private Top4ever.CustomControl.CrystalButton btnCheckOut;
+        private Top4ever.CustomControl.CrystalButton btnDiscount;
+        private Top4ever.CustomControl.CrystalButton btnShowDetails;
+        private Top4ever.CustomControl.CrystalButton btnPrintBill;
+        private Top4ever.CustomControl.CrystalButton btnPlaceOrder;
+        private Top4ever.CustomControl.CrystalButton btnTurnBack;
+        private Top4ever.CustomControl.CrystalButton btnExit;
+        private Top4ever.CustomControl.CrystalButton btnCancelOrder;
         private System.Windows.Forms.TabPage tabPage2;
-        private CustomControl.CrystalButton btnSplitBill;
-        private CustomControl.CrystalButton btnRestGoods;
-        private CustomControl.CrystalButton btnTasteRemark;
-        private CustomControl.CrystalButton btnPriceCode;
+        private Top4ever.CustomControl.CrystalButton btnSplitBill;
+        private Top4ever.CustomControl.CrystalButton btnRestGoods;
+        private Top4ever.CustomControl.CrystalButton btnTasteRemark;
+        private Top4ever.CustomControl.CrystalButton btnPriceCode;
         private System.Windows.Forms.TabPage tabPage3;
-        private CustomControl.CrystalButton btnRestOrder;
-        private CustomControl.CrystalButton btnLadeOrder;
-        private CustomControl.CrystalButton btnLadeGoods;
-        private CustomControl.CrystalButton btnReminder;
+        private Top4ever.CustomControl.CrystalButton btnRestOrder;
+        private Top4ever.CustomControl.CrystalButton btnLadeOrder;
+        private Top4ever.CustomControl.CrystalButton btnLadeGoods;
+        private Top4ever.CustomControl.CrystalButton btnReminder;
         private System.Windows.Forms.TextBox txtDeviceNo;
         private System.Windows.Forms.TextBox txtSoftwareProvider;
         private System.Windows.Forms.TextBox txtCurrentDateTime;
-        private CustomControl.CrystalButton btnHandover;
-        private CustomControl.CrystalButton btnDailyStatement;
+        private Top4ever.CustomControl.CrystalButton btnHandover;
+        private Top4ever.CustomControl.CrystalButton btnDailyStatement;
         private System.Windows.Forms.DataGridViewTextBoxColumn ItemID;
         private System.Windows.Forms.DataGridViewTextBoxColumn GoodsNum;
         private System.Windows.Forms.DataGridViewTextBoxColumn GoodsName;
@@ -1149,7 +1149,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ItemUnit;
         private System.Windows.Forms.DataGridViewTextBoxColumn Wait;
         private System.Windows.Forms.DataGridViewTextBoxColumn OrderDetailsID;
-        private CustomControl.CrystalButton btnPromotion;
+        private Top4ever.CustomControl.CrystalButton btnPromotion;
         private System.Windows.Forms.TextBox txtShopNo;
     }
 }

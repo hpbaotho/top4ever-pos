@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.Feature
+﻿namespace VechsoftPos.Feature
 {
     partial class FormSplitBill
     {
@@ -524,12 +524,12 @@
 
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
-        private CustomControl.CrystalButton btnCancel;
-        private CustomControl.CrystalButton btnSave;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.CrystalButton btnSave;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Panel panel3;
-        private CustomControl.CrystalButton btnBack;
-        private CustomControl.CrystalButton btnHead;
+        private Top4ever.CustomControl.CrystalButton btnBack;
+        private Top4ever.CustomControl.CrystalButton btnHead;
         private System.Windows.Forms.DataGridView dgvGoodsOrder;
         private System.Windows.Forms.DataGridView dgvGoodsOrder2;
         private System.Windows.Forms.DataGridView dgvGoodsOrderSum;
@@ -548,12 +548,12 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ItemType;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Panel panel6;
-        private CustomControl.CrystalButton btnPersonNum;
-        private CustomControl.CrystalButton btnEmployee;
-        private CustomControl.CrystalButton btnDeskNo;
-        private CustomControl.CrystalButton btnPeopleNum;
-        private CustomControl.CrystalButton btnEmployee2;
-        private CustomControl.CrystalButton btnDeskNo2;
+        private Top4ever.CustomControl.CrystalButton btnPersonNum;
+        private Top4ever.CustomControl.CrystalButton btnEmployee;
+        private Top4ever.CustomControl.CrystalButton btnDeskNo;
+        private Top4ever.CustomControl.CrystalButton btnPeopleNum;
+        private Top4ever.CustomControl.CrystalButton btnEmployee2;
+        private Top4ever.CustomControl.CrystalButton btnDeskNo2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;

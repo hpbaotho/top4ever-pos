@@ -1,4 +1,4 @@
-namespace Top4ever.Pos.Register
+namespace VechsoftPos.Register
 {
     partial class FormRegister
     {

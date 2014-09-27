@@ -14,7 +14,7 @@ using Top4ever.Entity.Enum;
 using Top4ever.Print;
 using Top4ever.Print.Entity;
 
-namespace Top4ever.Pos.Feature
+namespace VechsoftPos.Feature
 {
     public partial class FormBillManagement : Form
     {

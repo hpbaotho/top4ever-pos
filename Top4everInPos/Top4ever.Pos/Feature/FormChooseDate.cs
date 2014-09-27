@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 using Top4ever.ClientService;
 
-namespace Top4ever.Pos.Feature
+namespace VechsoftPos.Feature
 {
     public partial class FormChooseDate : Form
     {

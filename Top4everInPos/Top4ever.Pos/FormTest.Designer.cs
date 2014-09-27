@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos
+﻿namespace VechsoftPos
 {
     partial class FormTest
     {
@@ -334,7 +334,7 @@
             this.ManageLink.DescriptionText = "后台管理用于系统相关的设置";
             this.ManageLink.Font = new System.Drawing.Font("Microsoft YaHei", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ManageLink.HeaderText = "后台管理";
-            this.ManageLink.Image = global::Top4ever.Pos.Properties.Resources.arrow_right_green;
+            this.ManageLink.Image = global::VechsoftPos.Properties.Resources.arrow_right_green;
             this.ManageLink.ImageVerticalAlign = Top4ever.CustomControl.CommandLink.VerticalAlign.Middle;
             this.ManageLink.Location = new System.Drawing.Point(30, 289);
             this.ManageLink.Name = "ManageLink";
@@ -348,7 +348,7 @@
             this.EmployeeClockIn.DescriptionText = "员工打卡用于员工日常的上下班打卡";
             this.EmployeeClockIn.Font = new System.Drawing.Font("Microsoft YaHei", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.EmployeeClockIn.HeaderText = "员工打卡";
-            this.EmployeeClockIn.Image = global::Top4ever.Pos.Properties.Resources.arrow_right_green;
+            this.EmployeeClockIn.Image = global::VechsoftPos.Properties.Resources.arrow_right_green;
             this.EmployeeClockIn.ImageVerticalAlign = Top4ever.CustomControl.CommandLink.VerticalAlign.Middle;
             this.EmployeeClockIn.Location = new System.Drawing.Point(30, 209);
             this.EmployeeClockIn.Name = "EmployeeClockIn";
@@ -362,7 +362,7 @@
             this.FrontLoginLink.DescriptionText = "前台登录系统是日常POS点单使用";
             this.FrontLoginLink.Font = new System.Drawing.Font("Microsoft YaHei", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.FrontLoginLink.HeaderText = "前台登录";
-            this.FrontLoginLink.Image = global::Top4ever.Pos.Properties.Resources.arrow_right_green;
+            this.FrontLoginLink.Image = global::VechsoftPos.Properties.Resources.arrow_right_green;
             this.FrontLoginLink.ImageVerticalAlign = Top4ever.CustomControl.CommandLink.VerticalAlign.Middle;
             this.FrontLoginLink.Location = new System.Drawing.Point(30, 129);
             this.FrontLoginLink.Name = "FrontLoginLink";
@@ -396,30 +396,30 @@
 
         #endregion
 
-        private CustomControl.CommandLink FrontLoginLink;
-        private CustomControl.CommandLink EmployeeClockIn;
-        private CustomControl.CommandLink ManageLink;
-        private CustomControl.ExPanel exPanel1;
+        private Top4ever.CustomControl.CommandLink FrontLoginLink;
+        private Top4ever.CustomControl.CommandLink EmployeeClockIn;
+        private Top4ever.CustomControl.CommandLink ManageLink;
+        private Top4ever.CustomControl.ExPanel exPanel1;
         private System.Windows.Forms.Label lbSystemName;
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Label lbPassword;
         private System.Windows.Forms.Label lbName;
-        private CustomControl.VistaButton btnThree;
-        private CustomControl.VistaButton btnTwo;
-        private CustomControl.VistaButton btnOne;
-        private CustomControl.VistaButton btnEight;
-        private CustomControl.VistaButton btnFive;
-        private CustomControl.VistaButton btnSeven;
-        private CustomControl.VistaButton btnFour;
-        private CustomControl.VistaButton vistaButton4;
-        private CustomControl.VistaButton btnClear;
-        private CustomControl.VistaButton btnNine;
-        private CustomControl.VistaButton btnSix;
-        private CustomControl.VistaButton btnBackspace;
-        private CustomControl.VistaButton btnZero;
-        private CustomControl.ExButton btnExit;
-        private CustomControl.ExButton btnLogin;
+        private Top4ever.CustomControl.VistaButton btnThree;
+        private Top4ever.CustomControl.VistaButton btnTwo;
+        private Top4ever.CustomControl.VistaButton btnOne;
+        private Top4ever.CustomControl.VistaButton btnEight;
+        private Top4ever.CustomControl.VistaButton btnFive;
+        private Top4ever.CustomControl.VistaButton btnSeven;
+        private Top4ever.CustomControl.VistaButton btnFour;
+        private Top4ever.CustomControl.VistaButton vistaButton4;
+        private Top4ever.CustomControl.VistaButton btnClear;
+        private Top4ever.CustomControl.VistaButton btnNine;
+        private Top4ever.CustomControl.VistaButton btnSix;
+        private Top4ever.CustomControl.VistaButton btnBackspace;
+        private Top4ever.CustomControl.VistaButton btnZero;
+        private Top4ever.CustomControl.ExButton btnExit;
+        private Top4ever.CustomControl.ExButton btnLogin;
 
 
     }

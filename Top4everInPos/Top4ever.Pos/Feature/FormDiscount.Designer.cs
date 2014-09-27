@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.Feature
+﻿namespace VechsoftPos.Feature
 {
     partial class FormDiscount
     {
@@ -136,7 +136,7 @@
             this.exTabControl1.SelectedIndex = 0;
             this.exTabControl1.Size = new System.Drawing.Size(437, 335);
             this.exTabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
-            this.exTabControl1.TabBackgroundImage = global::Top4ever.Pos.Properties.Resources.TabButtonBackground;
+            this.exTabControl1.TabBackgroundImage = global::VechsoftPos.Properties.Resources.TabButtonBackground;
             this.exTabControl1.TabIndex = 2;
             // 
             // tabPage1
@@ -240,19 +240,19 @@
 
         #endregion
 
-        private CustomControl.CrystalButton btnConfirm;
-        private CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.CrystalButton btnConfirm;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox txtDiscount;
         private System.Windows.Forms.Label lbDiscount;
         private System.Windows.Forms.ImageList imageList;
         private System.Windows.Forms.GroupBox groupBox2;
-        private CustomControl.ExTabControl exTabControl1;
+        private Top4ever.CustomControl.ExTabControl exTabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
-        private CustomControl.CrystalButton btnCustomPercent;
-        private CustomControl.CrystalButton btnCustomDiscountTo;
-        private CustomControl.CrystalButton btnCustomFixedAmount;
+        private Top4ever.CustomControl.CrystalButton btnCustomPercent;
+        private Top4ever.CustomControl.CrystalButton btnCustomDiscountTo;
+        private Top4ever.CustomControl.CrystalButton btnCustomFixedAmount;
     }
 }

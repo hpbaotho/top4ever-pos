@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.Membership
+﻿namespace VechsoftPos.Membership
 {
     partial class FormVIPCardRefundPay
     {
@@ -213,7 +213,7 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private CustomControl.DataGirdViewExt dataGirdViewExt1;
+        private Top4ever.CustomControl.DataGirdViewExt dataGirdViewExt1;
         private System.Windows.Forms.DataGridViewCheckBoxColumn colCheck;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCardNo;
         private System.Windows.Forms.DataGridViewTextBoxColumn colTradePayNo;
@@ -223,7 +223,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colEmployeeNo;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCreateTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn colStoreValueID;
-        private CustomControl.CrystalButton btnRefundPay;
-        private CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.CrystalButton btnRefundPay;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
     }
 }

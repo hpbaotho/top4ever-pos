@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 using Top4ever.ClientService;
 
-namespace Top4ever.Pos.Membership
+namespace VechsoftPos.Membership
 {
     public partial class FormVIPCardDiscount : Form
     {

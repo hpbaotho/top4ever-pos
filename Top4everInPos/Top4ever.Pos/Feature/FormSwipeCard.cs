@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Top4ever.Pos.Feature
+namespace VechsoftPos.Feature
 {
     public partial class FormSwipeCard : Form
     {

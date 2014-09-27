@@ -17,7 +17,7 @@ using Top4ever.Print;
 using Top4ever.Print.Entity;
 using Top4ever.ClientService;
 
-namespace Top4ever.Pos.Feature
+namespace VechsoftPos.Feature
 {
     public partial class FormBackGoods : Form
     {

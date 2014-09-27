@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.Feature
+﻿namespace VechsoftPos.Feature
 {
     partial class FormCustomQty
     {
@@ -305,20 +305,20 @@
 
         #endregion
 
-        private CustomControl.CrystalButton btnConfirm;
-        private CustomControl.CrystalButton btnCancel;
-        private CustomControl.CrystalButton btnDot;
-        private CustomControl.CrystalButton btnZero;
-        private CustomControl.CrystalButton btnNine;
-        private CustomControl.CrystalButton btnEight;
-        private CustomControl.CrystalButton btnSeven;
-        private CustomControl.CrystalButton btnSix;
-        private CustomControl.CrystalButton btnFive;
-        private CustomControl.CrystalButton btnFour;
-        private CustomControl.CrystalButton btnThree;
-        private CustomControl.CrystalButton btnTwo;
-        private CustomControl.CrystalButton btnOne;
-        private CustomControl.CrystalButton btnBackSpace;
+        private Top4ever.CustomControl.CrystalButton btnConfirm;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.CrystalButton btnDot;
+        private Top4ever.CustomControl.CrystalButton btnZero;
+        private Top4ever.CustomControl.CrystalButton btnNine;
+        private Top4ever.CustomControl.CrystalButton btnEight;
+        private Top4ever.CustomControl.CrystalButton btnSeven;
+        private Top4ever.CustomControl.CrystalButton btnSix;
+        private Top4ever.CustomControl.CrystalButton btnFive;
+        private Top4ever.CustomControl.CrystalButton btnFour;
+        private Top4ever.CustomControl.CrystalButton btnThree;
+        private Top4ever.CustomControl.CrystalButton btnTwo;
+        private Top4ever.CustomControl.CrystalButton btnOne;
+        private Top4ever.CustomControl.CrystalButton btnBackSpace;
         private System.Windows.Forms.TextBox txtCustomPrice;
         private System.Windows.Forms.Label lbInput;
         private System.Windows.Forms.Label label1;

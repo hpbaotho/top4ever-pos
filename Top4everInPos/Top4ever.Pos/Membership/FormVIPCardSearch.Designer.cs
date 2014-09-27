@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.Membership
+﻿namespace VechsoftPos.Membership
 {
     partial class FormVIPCardSearch
     {
@@ -325,7 +325,7 @@
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtVIPCardNo;
-        private CustomControl.CrystalButton btnCancel;
-        private CustomControl.CrystalButton btnModifyPassword;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.CrystalButton btnModifyPassword;
     }
 }

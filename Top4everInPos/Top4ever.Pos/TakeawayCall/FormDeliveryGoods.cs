@@ -14,11 +14,11 @@ using Top4ever.Domain.Customers;
 using Top4ever.Domain.Transfer;
 using Top4ever.Entity;
 using Top4ever.Entity.Enum;
-using Top4ever.Pos.Feature;
+using VechsoftPos.Feature;
 using Top4ever.Print;
 using Top4ever.Print.Entity;
 
-namespace Top4ever.Pos.TakeawayCall
+namespace VechsoftPos.TakeawayCall
 {
     public partial class FormDeliveryGoods : Form
     {

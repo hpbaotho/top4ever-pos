@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Top4ever.Pos
+namespace VechsoftPos
 {
     public delegate void LDTCallBack(int port);
 

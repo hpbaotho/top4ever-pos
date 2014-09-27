@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.Feature
+﻿namespace VechsoftPos.Feature
 {
     partial class FormReminder
     {
@@ -109,9 +109,9 @@
         #endregion
 
         private System.Windows.Forms.TextBox txtReason;
-        private CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
         private System.Windows.Forms.Label lbReminder;
-        private CustomControl.CrystalButton btnConfirm;
+        private Top4ever.CustomControl.CrystalButton btnConfirm;
         private System.Windows.Forms.Panel pnlReason;
 
     }

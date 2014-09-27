@@ -17,7 +17,7 @@ using Top4ever.LocalService;
 using Top4ever.Print.Entity;
 using Top4ever.Print;
 
-namespace Top4ever.Pos
+namespace VechsoftPos
 {
     public partial class FormPayment : Form
     {

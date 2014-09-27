@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos
+﻿namespace VechsoftPos
 {
     partial class FormDesk
     {
@@ -269,17 +269,17 @@
         private System.Windows.Forms.Panel pnlToolBar;
         private System.Windows.Forms.Panel pnlDesk;
         private System.Windows.Forms.Panel pnlRegion;
-        private CustomControl.CrystalButton btnFreeColor;
-        private CustomControl.CrystalButton btnLookColor;
-        private CustomControl.CrystalButton btnTakeColor;
+        private Top4ever.CustomControl.CrystalButton btnFreeColor;
+        private Top4ever.CustomControl.CrystalButton btnLookColor;
+        private Top4ever.CustomControl.CrystalButton btnTakeColor;
         private System.Windows.Forms.Panel pnlSysTools;
-        private CustomControl.CrystalButton btnExit;
-        private CustomControl.CrystalButton btnTakeOut;
-        private CustomControl.CrystalButton btnCheckOut;
-        private CustomControl.CrystalButton btnTurnTable;
-        private CustomControl.CrystalButton btnClear;
-        private CustomControl.CrystalButton btnOrder;
-        private CustomControl.CrystalButton btnManager;
-        private CustomControl.ScrollingText scrollingText1;
+        private Top4ever.CustomControl.CrystalButton btnExit;
+        private Top4ever.CustomControl.CrystalButton btnTakeOut;
+        private Top4ever.CustomControl.CrystalButton btnCheckOut;
+        private Top4ever.CustomControl.CrystalButton btnTurnTable;
+        private Top4ever.CustomControl.CrystalButton btnClear;
+        private Top4ever.CustomControl.CrystalButton btnOrder;
+        private Top4ever.CustomControl.CrystalButton btnManager;
+        private Top4ever.CustomControl.ScrollingText scrollingText1;
     }
 }

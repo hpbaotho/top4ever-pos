@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
+using Top4ever.Entity;
 
-namespace Top4ever.Pos.Feature
+namespace VechsoftPos.Feature
 {
     public partial class FormNumericKeypad : Form
     {
@@ -61,7 +57,7 @@ namespace Top4ever.Pos.Feature
             if (m_IsNaN)
             {
                 btnDot.Enabled = false;
-                btnDot.BackColor = Entity.ConstantValuePool.DisabledColor;
+                btnDot.BackColor = ConstantValuePool.DisabledColor;
             }
             if (m_IsPassword)
             {

@@ -17,10 +17,10 @@ using Top4ever.Entity;
 using Top4ever.Entity.Enum;
 using Top4ever.Print.Entity;
 using Top4ever.Print;
-using Top4ever.Pos.Feature;
-using Top4ever.Pos.TakeawayCall;
+using VechsoftPos.Feature;
+using VechsoftPos.TakeawayCall;
 
-namespace Top4ever.Pos
+namespace VechsoftPos
 {
     public partial class FormTakeout : Form
     {

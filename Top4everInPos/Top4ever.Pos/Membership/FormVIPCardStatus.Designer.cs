@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.Membership
+﻿namespace VechsoftPos.Membership
 {
     partial class FormVIPCardStatus
     {
@@ -165,8 +165,8 @@
 
         #endregion
 
-        private CustomControl.CrystalButton btnCancel;
-        private CustomControl.CrystalButton btnConfirm;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.CrystalButton btnConfirm;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ComboBox cmbCardStatus;
         private System.Windows.Forms.TextBox txtCardNo;

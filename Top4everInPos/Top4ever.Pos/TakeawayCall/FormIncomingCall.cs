@@ -11,7 +11,7 @@ using Top4ever.ClientService;
 using Top4ever.Domain.Customers;
 using Top4ever.Entity;
 
-namespace Top4ever.Pos.TakeawayCall
+namespace VechsoftPos.TakeawayCall
 {
     public partial class FormIncomingCall : Form
     {

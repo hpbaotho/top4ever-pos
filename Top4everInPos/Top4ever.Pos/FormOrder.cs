@@ -18,12 +18,12 @@ using Top4ever.Domain.Promotions;
 using Top4ever.Domain.Transfer;
 using Top4ever.Entity;
 using Top4ever.Entity.Enum;
-using Top4ever.Pos.Feature;
-using Top4ever.Pos.Promotions;
+using VechsoftPos.Feature;
+using VechsoftPos.Promotions;
 using Top4ever.Print;
 using Top4ever.Print.Entity;
 
-namespace Top4ever.Pos
+namespace VechsoftPos
 {
     public partial class FormOrder : Form
     {

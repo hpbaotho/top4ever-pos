@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Win32;
 
-namespace Top4ever.Pos.Register
+namespace VechsoftPos.Register
 {
     public class ProductRegister
     {

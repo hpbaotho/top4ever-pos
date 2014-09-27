@@ -1,6 +1,6 @@
 ﻿using Top4ever.CustomControl;
 
-namespace Top4ever.Pos
+namespace VechsoftPos
 {
     partial class FormLogin
     {
@@ -329,7 +329,7 @@ namespace Top4ever.Pos
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(193)))), ((int)(((byte)(212)))), ((int)(((byte)(229)))));
-            this.BackgroundImage = global::Top4ever.Pos.Properties.Resources.welcome_bg;
+            this.BackgroundImage = global::VechsoftPos.Properties.Resources.welcome_bg;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1024, 753);
             this.Controls.Add(this.pnlSystemLogin);
@@ -349,25 +349,25 @@ namespace Top4ever.Pos
         #endregion
 
         private Top4ever.CustomControl.RoundPanel pnlSystemLogin;
-        private CustomControl.CrystalButton btnThree;
-        private CustomControl.CrystalButton btnTwo;
-        private CustomControl.CrystalButton btnSix;
-        private CustomControl.CrystalButton btnFive;
-        private CustomControl.CrystalButton btnNine;
-        private CustomControl.CrystalButton btnEight;
-        private CustomControl.CrystalButton btnExit;
-        private CustomControl.CrystalButton btnLogin;
-        private CustomControl.CrystalButton btnBackspace;
-        private CustomControl.CrystalButton btnZero;
-        private CustomControl.CrystalButton btnSeven;
-        private CustomControl.CrystalButton btnFour;
-        private CustomControl.CrystalButton btnOne;
+        private Top4ever.CustomControl.CrystalButton btnThree;
+        private Top4ever.CustomControl.CrystalButton btnTwo;
+        private Top4ever.CustomControl.CrystalButton btnSix;
+        private Top4ever.CustomControl.CrystalButton btnFive;
+        private Top4ever.CustomControl.CrystalButton btnNine;
+        private Top4ever.CustomControl.CrystalButton btnEight;
+        private Top4ever.CustomControl.CrystalButton btnExit;
+        private Top4ever.CustomControl.CrystalButton btnLogin;
+        private Top4ever.CustomControl.CrystalButton btnBackspace;
+        private Top4ever.CustomControl.CrystalButton btnZero;
+        private Top4ever.CustomControl.CrystalButton btnSeven;
+        private Top4ever.CustomControl.CrystalButton btnFour;
+        private Top4ever.CustomControl.CrystalButton btnOne;
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Label lbPassword;
         private System.Windows.Forms.Label lbName;
         private System.Windows.Forms.Label lbSystemName;
-        private CustomControl.CrystalButton btnSwipeCard;
+        private Top4ever.CustomControl.CrystalButton btnSwipeCard;
 
     }
 }

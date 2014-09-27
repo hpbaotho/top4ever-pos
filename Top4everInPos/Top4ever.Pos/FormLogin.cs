@@ -12,7 +12,7 @@ using Top4ever.Entity;
 using Top4ever.Entity.Enum;
 using Top4ever.Domain.GoodsRelated;
 
-namespace Top4ever.Pos
+namespace VechsoftPos
 {
     public partial class FormLogin : Form
     {

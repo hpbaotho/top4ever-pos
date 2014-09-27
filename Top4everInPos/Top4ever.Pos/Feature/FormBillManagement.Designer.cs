@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.Feature
+﻿namespace VechsoftPos.Feature
 {
     partial class FormBillManagement
     {
@@ -768,15 +768,15 @@
 
         private System.Windows.Forms.Panel pnlTop;
         private System.Windows.Forms.TextBox txtSearchValue;
-        private CustomControl.CrystalButton btnDeskNo;
-        private CustomControl.CrystalButton btnTranSequence;
-        private CustomControl.CrystalButton btnPrint;
-        private CustomControl.CrystalButton btnExit;
-        private CustomControl.CrystalButton btnWholeDelete;
-        private CustomControl.CrystalButton btnSingleDelete;
-        private CustomControl.CrystalButton btnBillModify;
-        private CustomControl.CrystalButton btnClear;
-        private CustomControl.CrystalButton btnSearch;
+        private Top4ever.CustomControl.CrystalButton btnDeskNo;
+        private Top4ever.CustomControl.CrystalButton btnTranSequence;
+        private Top4ever.CustomControl.CrystalButton btnPrint;
+        private Top4ever.CustomControl.CrystalButton btnExit;
+        private Top4ever.CustomControl.CrystalButton btnWholeDelete;
+        private Top4ever.CustomControl.CrystalButton btnSingleDelete;
+        private Top4ever.CustomControl.CrystalButton btnBillModify;
+        private Top4ever.CustomControl.CrystalButton btnClear;
+        private Top4ever.CustomControl.CrystalButton btnSearch;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Panel pnlInformation;
         private System.Windows.Forms.DataGridView dataGridView2;
@@ -793,8 +793,8 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label lbEmployeeNo;
         private System.Windows.Forms.Label label5;
-        private CustomControl.CrystalButton btnPageUp;
-        private CustomControl.CrystalButton btnPageDown;
+        private Top4ever.CustomControl.CrystalButton btnPageUp;
+        private Top4ever.CustomControl.CrystalButton btnPageDown;
         private System.Windows.Forms.Label lbPage;
         private System.Windows.Forms.Label lbBill;
         private System.Windows.Forms.Label lbBillIndex;

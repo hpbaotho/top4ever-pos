@@ -8,8 +8,8 @@
     <ProjectGuid>{C4F8E93C-7A3A-462A-A3EF-8E1FEDC0D1A6}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Top4ever.Pos</RootNamespace>
-    <AssemblyName>Top4ever.Pos</AssemblyName>
+    <RootNamespace>VechsoftPos</RootNamespace>
+    <AssemblyName>VechsoftPos</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -636,7 +636,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\symbol-check.png" />
+    <None Include="Resources\symbol_check.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\welcome_bg.png" />

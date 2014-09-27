@@ -13,9 +13,9 @@ using Top4ever.Print;
 using Top4ever.Domain.MembershipCard;
 using Top4ever.LocalService;
 using Top4ever.LocalService.Entity;
-using Top4ever.Pos.Membership;
+using VechsoftPos.Membership;
 
-namespace Top4ever.Pos.Feature
+namespace VechsoftPos.Feature
 {
     public partial class FormSalesReport : Form
     {

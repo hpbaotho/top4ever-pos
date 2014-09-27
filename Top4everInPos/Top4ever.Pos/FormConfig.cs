@@ -12,7 +12,7 @@ using Top4ever.Entity.Config;
 using Top4ever.Entity.Enum;
 using Top4ever.Hardware;
 
-namespace Top4ever.Pos
+namespace VechsoftPos
 {
     public partial class FormConfig : Form
     {

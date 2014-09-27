@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Top4ever.Pos.Properties {
+namespace VechsoftPos.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Top4ever.Pos.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Top4ever.Pos.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("VechsoftPos.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -111,7 +111,7 @@ namespace Top4ever.Pos.Properties {
         
         internal static System.Drawing.Bitmap symbol_check {
             get {
-                object obj = ResourceManager.GetObject("symbol-check", resourceCulture);
+                object obj = ResourceManager.GetObject("symbol_check", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

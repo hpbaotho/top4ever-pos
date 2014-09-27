@@ -1,4 +1,4 @@
-﻿namespace Top4ever.Pos.TakeawayCall
+﻿namespace VechsoftPos.TakeawayCall
 {
     partial class FormIncomingCall
     {
@@ -272,7 +272,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox ckAddress3;
         private System.Windows.Forms.CheckBox ckAddress2;
-        private CustomControl.CrystalButton btnCancel;
-        private CustomControl.CrystalButton btnConfirm;
+        private Top4ever.CustomControl.CrystalButton btnCancel;
+        private Top4ever.CustomControl.CrystalButton btnConfirm;
     }
 }
