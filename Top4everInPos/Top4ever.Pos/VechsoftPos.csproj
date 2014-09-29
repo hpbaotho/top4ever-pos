@@ -537,10 +537,13 @@
     </None>
     <None Include="Config\log4net.config" />
     <None Include="PrintConfig\DeliveryOrder_80.ini" />
+    <None Include="PrintConfig\DeskChangePrint_80.ini" />
+    <None Include="PrintConfig\DeskChangePrint_58.ini" />
     <None Include="PrintConfig\InstructionPrintOrderSetting.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="PrintConfig\KitchenPrint.ini" />
+    <None Include="PrintConfig\KitchenPrint_80.ini" />
+    <None Include="PrintConfig\KitchenPrint_58.ini" />
     <None Include="PrintConfig\KitchenPrintSetting.config" />
     <None Include="PrintConfig\PrintOrder_80.ini" />
     <None Include="PrintConfig\PrintOrderSetting.config" />
@@ -553,6 +556,8 @@
     <None Include="PrintConfig\PrintOrder_76.ini" />
     <None Include="PrintConfig\PrintPaidOrder_76.ini" />
     <None Include="PrintConfig\PrintPrePayOrder_76.ini" />
+    <None Include="PrintConfig\KitchenPrint_76.ini" />
+    <None Include="PrintConfig\DeskChangePrint_76.ini" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

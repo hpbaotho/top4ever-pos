@@ -251,6 +251,7 @@
             // 
             // cmbLanguge2nd
             // 
+            this.cmbLanguge2nd.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbLanguge2nd.FormattingEnabled = true;
             this.cmbLanguge2nd.Location = new System.Drawing.Point(347, 33);
             this.cmbLanguge2nd.Name = "cmbLanguge2nd";
@@ -260,6 +261,7 @@
             // 
             // cmbLanguge1st
             // 
+            this.cmbLanguge1st.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbLanguge1st.FormattingEnabled = true;
             this.cmbLanguge1st.Location = new System.Drawing.Point(92, 33);
             this.cmbLanguge1st.Name = "cmbLanguge1st";
@@ -707,6 +709,7 @@
             this.rbUsbPort.TabStop = true;
             this.rbUsbPort.Text = "USB端口";
             this.rbUsbPort.UseVisualStyleBackColor = true;
+            this.rbUsbPort.CheckedChanged += new System.EventHandler(this.rbUsbPort_CheckedChanged);
             // 
             // rbPrinterPort
             // 
@@ -719,6 +722,7 @@
             this.rbPrinterPort.TabStop = true;
             this.rbPrinterPort.Text = "COM端口";
             this.rbPrinterPort.UseVisualStyleBackColor = true;
+            this.rbPrinterPort.CheckedChanged += new System.EventHandler(this.rbPrinterPort_CheckedChanged);
             // 
             // rbNetPrinter
             // 
@@ -731,6 +735,7 @@
             this.rbNetPrinter.TabStop = true;
             this.rbNetPrinter.Text = "网络端口";
             this.rbNetPrinter.UseVisualStyleBackColor = true;
+            this.rbNetPrinter.CheckedChanged += new System.EventHandler(this.rbNetPrinter_CheckedChanged);
             // 
             // rbDriverPrinter
             // 
@@ -743,6 +748,7 @@
             this.rbDriverPrinter.TabStop = true;
             this.rbDriverPrinter.Text = "驱动打印";
             this.rbDriverPrinter.UseVisualStyleBackColor = true;
+            this.rbDriverPrinter.CheckedChanged += new System.EventHandler(this.rbDriverPrinter_CheckedChanged);
             // 
             // txtCopies
             // 
@@ -753,6 +759,7 @@
             // 
             // cmbPaperWidth
             // 
+            this.cmbPaperWidth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbPaperWidth.FormattingEnabled = true;
             this.cmbPaperWidth.Items.AddRange(new object[] {
             "58mm",
@@ -765,6 +772,7 @@
             // 
             // cmbPrinterPort
             // 
+            this.cmbPrinterPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbPrinterPort.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.cmbPrinterPort.FormattingEnabled = true;
             this.cmbPrinterPort.Location = new System.Drawing.Point(406, 105);
@@ -774,6 +782,7 @@
             // 
             // cmbPrinter
             // 
+            this.cmbPrinter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbPrinter.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.cmbPrinter.FormattingEnabled = true;
             this.cmbPrinter.Location = new System.Drawing.Point(141, 105);
@@ -922,6 +931,7 @@
             this.rbUsbClientShow.TabStop = true;
             this.rbUsbClientShow.Text = "USB端口";
             this.rbUsbClientShow.UseVisualStyleBackColor = true;
+            this.rbUsbClientShow.CheckedChanged += new System.EventHandler(this.rbUsbClientShow_CheckedChanged);
             // 
             // rbClientShow
             // 
@@ -934,6 +944,7 @@
             this.rbClientShow.TabStop = true;
             this.rbClientShow.Text = "COM端口";
             this.rbClientShow.UseVisualStyleBackColor = true;
+            this.rbClientShow.CheckedChanged += new System.EventHandler(this.rbClientShow_CheckedChanged);
             // 
             // label32
             // 
@@ -957,6 +968,7 @@
             // 
             // cmbClientShowType
             // 
+            this.cmbClientShowType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbClientShowType.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.cmbClientShowType.FormattingEnabled = true;
             this.cmbClientShowType.Location = new System.Drawing.Point(308, 139);
@@ -966,6 +978,7 @@
             // 
             // cmbClientShowModel
             // 
+            this.cmbClientShowModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbClientShowModel.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.cmbClientShowModel.FormattingEnabled = true;
             this.cmbClientShowModel.Location = new System.Drawing.Point(104, 139);
@@ -987,6 +1000,7 @@
             // 
             // cmbClientShowPort
             // 
+            this.cmbClientShowPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbClientShowPort.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.cmbClientShowPort.FormattingEnabled = true;
             this.cmbClientShowPort.Location = new System.Drawing.Point(104, 97);
@@ -1026,6 +1040,7 @@
             // 
             // cmbTelCallModel
             // 
+            this.cmbTelCallModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbTelCallModel.Font = new System.Drawing.Font("微软雅黑", 9.75F);
             this.cmbTelCallModel.FormattingEnabled = true;
             this.cmbTelCallModel.Items.AddRange(new object[] {
@@ -1086,6 +1101,7 @@
             this.rbUsbCashDrawer.TabStop = true;
             this.rbUsbCashDrawer.Text = "USB端口";
             this.rbUsbCashDrawer.UseVisualStyleBackColor = true;
+            this.rbUsbCashDrawer.CheckedChanged += new System.EventHandler(this.rbUsbCashDrawer_CheckedChanged);
             // 
             // rbCashDrawer
             // 
@@ -1098,6 +1114,7 @@
             this.rbCashDrawer.TabStop = true;
             this.rbCashDrawer.Text = "串/并口";
             this.rbCashDrawer.UseVisualStyleBackColor = true;
+            this.rbCashDrawer.CheckedChanged += new System.EventHandler(this.rbCashDrawer_CheckedChanged);
             // 
             // label28
             // 
@@ -1121,6 +1138,7 @@
             // 
             // cmbCashDrawerPort
             // 
+            this.cmbCashDrawerPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbCashDrawerPort.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.cmbCashDrawerPort.FormattingEnabled = true;
             this.cmbCashDrawerPort.Location = new System.Drawing.Point(104, 96);
