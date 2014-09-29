@@ -626,7 +626,11 @@ namespace VechsoftPos
         {
             if (dgvGoodsOrder.RowCount > 0)
             {
-                if (m_SalesOrder.order.Status == 0)
+                if (m_SalesOrder.order.Status == 3)
+                {
+                    MessageBox.Show("当前处于预结状态，请先解锁！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else if (m_SalesOrder.order.Status == 0)
                 {
                     //权限验证
                     bool hasRights = false;
@@ -954,14 +958,11 @@ namespace VechsoftPos
                     printData.PayingOrderList.Add(payingOrder);
                 }
                 string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
-                string configPath = @"PrintConfig\InstructionPrintOrderSetting.config";
-                string layoutPath = @"PrintConfig\PrintPaidOrder.ini";
                 if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
                 {
-                    configPath = @"PrintConfig\PrintOrderSetting.config";
                     string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                    DriverOrderPrint printer = new DriverOrderPrint(printerName, paperWidth, "SpecimenLabel");
-                    printer.DoPrint(printData, layoutPath, configPath);
+                    DriverOrderPrint printer = DriverOrderPrint.GetInstance(printerName, paperWidth);
+                    printer.DoPrintPaidOrder(printData);
                 }
 
                 m_IsPaidOrder = true;
@@ -1185,14 +1186,11 @@ namespace VechsoftPos
                     printData.GoodsOrderList.Add(goodsOrder);
                 }
                 string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
-                string configPath = @"PrintConfig\InstructionPrintOrderSetting.config";
-                string layoutPath = @"PrintConfig\PrintPrePayOrder.ini";
                 if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
                 {
-                    configPath = @"PrintConfig\PrintOrderSetting.config";
                     string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                    DriverOrderPrint printer = new DriverOrderPrint(printerName, paperWidth, "SpecimenLabel");
-                    printer.DoPrint(printData, layoutPath, configPath);
+                    DriverOrderPrint printer = DriverOrderPrint.GetInstance(printerName, paperWidth);
+                    printer.DoPrintPrePayOrder(printData);
                 }
             }
             else if (order.Status == 3)
@@ -1237,7 +1235,11 @@ namespace VechsoftPos
 
         private void btnMember_Click(object sender, EventArgs e)
         {
-            if (m_SalesOrder.order.Status == 0)
+            if (m_SalesOrder.order.Status == 3)
+            {
+                MessageBox.Show("当前处于预结状态，请先解锁！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else if (m_SalesOrder.order.Status == 0)
             {
                 //权限验证
                 bool hasRights = false;

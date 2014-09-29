@@ -34,15 +34,7 @@ namespace VechsoftPos
         {
             txtIP.Text = ConstantValuePool.BizSettingConfig.IPAddress;
             txtPort.Text = ConstantValuePool.BizSettingConfig.Port.ToString();
-            txtDeviceNo.Text = ConstantValuePool.BizSettingConfig.DeviceNo;            
-            if (ConstantValuePool.BizSettingConfig.TimeSystem24H)
-            {
-                rbTimeSystem24H.Checked = true;
-            }
-            else
-            {
-                rbTimeSystem12H.Checked = true;
-            }
+            txtDeviceNo.Text = ConstantValuePool.BizSettingConfig.DeviceNo;
             txtFont.Text = ConstantValuePool.BizSettingConfig.FontSize.ToString();
             cmbSaleType.SelectedIndex = GetIndexByValue(cmbSaleType, Convert.ToString((int)ConstantValuePool.BizSettingConfig.SaleType));
             txtLoginImage.Text = ConstantValuePool.BizSettingConfig.LoginImagePath;
@@ -505,14 +497,6 @@ namespace VechsoftPos
             ListItem item2 = cmbLanguge2nd.SelectedItem as ListItem;
             appConfig.Languge1st = (LanguageType)int.Parse(item1.Value);
             appConfig.Languge2nd = (LanguageType)int.Parse(item2.Value);
-            if (rbTimeSystem24H.Checked)
-            {
-                appConfig.TimeSystem24H = true;
-            }
-            else
-            {
-                appConfig.TimeSystem24H = false;
-            }
             appConfig.FontSize = float.Parse(txtFont.Text);
             ListItem itemType = cmbSaleType.SelectedItem as ListItem;
             appConfig.SaleType = (ShopSaleType)int.Parse(itemType.Value);

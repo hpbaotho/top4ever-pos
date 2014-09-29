@@ -32,52 +32,22 @@ namespace Top4ever.Print
             pDoc.PrintPage += new PrintPageEventHandler(pDoc_PrintPage);
         }
 
-        public bool DoPrint(IList<String> printData)
+        public void DoPrint(IList<String> printData)
         {
             if (printData != null && printData.Count > 0)
             {
                 this.printData = printData;
-                bool printResult = false;
-                try
-                {
-                    pDoc.Print();
-                    printResult = true;
-                }
-                catch (Exception ex)
-                {
-                    //log ex;
-                    printResult = false;
-                }
-                return printResult;
-            }
-            else
-            {
-                return false;
+                pDoc.Print();
             }
         }
 
-        public bool DoPrint(IList<String> printData, Font font)
+        public void DoPrint(IList<String> printData, Font font)
         {
             if (printData != null && printData.Count > 0)
             {
                 this.printData = printData;
                 this.font = font;
-                bool printResult = false;
-                try
-                {
-                    pDoc.Print();
-                    printResult = true;
-                }
-                catch (Exception ex)
-                {
-                    //log ex;
-                    printResult = false;
-                }
-                return printResult;
-            }
-            else
-            {
-                return false;
+                pDoc.Print();
             }
         }
 
