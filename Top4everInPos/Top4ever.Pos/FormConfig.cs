@@ -724,5 +724,72 @@ namespace VechsoftPos
                 btnLoadImage.Enabled = false;
             }
         }
+
+        private void rbDriverPrinter_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbDriverPrinter.Checked)
+            {
+                cmbPrinter.Enabled = true;
+                cmbPrinterPort.Enabled = false;
+                txtIPAddress.Enabled = false;
+                txtPrinterVID.Enabled = false;
+                txtPrinterPID.Enabled = false;
+            }
+        }
+
+        private void rbPrinterPort_CheckedChanged(object sender, EventArgs e)
+        {
+            cmbPrinter.Enabled = false;
+            cmbPrinterPort.Enabled = true;
+            txtIPAddress.Enabled = false;
+            txtPrinterVID.Enabled = false;
+            txtPrinterPID.Enabled = false;
+        }
+
+        private void rbNetPrinter_CheckedChanged(object sender, EventArgs e)
+        {
+            cmbPrinter.Enabled = false;
+            cmbPrinterPort.Enabled = false;
+            txtIPAddress.Enabled = true;
+            txtPrinterVID.Enabled = false;
+            txtPrinterPID.Enabled = false;
+        }
+
+        private void rbUsbPort_CheckedChanged(object sender, EventArgs e)
+        {
+            cmbPrinter.Enabled = false;
+            cmbPrinterPort.Enabled = false;
+            txtIPAddress.Enabled = false;
+            txtPrinterVID.Enabled = true;
+            txtPrinterPID.Enabled = true;
+        }
+
+        private void rbCashDrawer_CheckedChanged(object sender, EventArgs e)
+        {
+            cmbCashDrawerPort.Enabled = true;
+            txtCashVID.Enabled = false;
+            txtCashPID.Enabled = false;
+        }
+
+        private void rbUsbCashDrawer_CheckedChanged(object sender, EventArgs e)
+        {
+            cmbCashDrawerPort.Enabled = false;
+            txtCashVID.Enabled = true;
+            txtCashPID.Enabled = true;
+        }
+
+        private void rbClientShow_CheckedChanged(object sender, EventArgs e)
+        {
+            cmbClientShowPort.Enabled = true;
+            txtClientVID.Enabled = false;
+            txtClientPID.Enabled = false;
+        }
+
+        private void rbUsbClientShow_CheckedChanged(object sender, EventArgs e)
+        {
+            cmbClientShowPort.Enabled = false;
+            txtClientVID.Enabled = true;
+            txtClientPID.Enabled = true;
+        }
     }
 }

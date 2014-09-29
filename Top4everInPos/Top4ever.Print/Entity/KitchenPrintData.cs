@@ -73,5 +73,61 @@ namespace Top4ever.Print.Entity
         /// 菜单列表
         /// </summary>
         public List<GoodsOrder> GoodsOrderList { get; set; }
+
+        /// <summary>
+        /// 得到属性值
+        /// </summary>
+        /// <param name="fieldName">属性字符</param>
+        /// <returns></returns>
+        public string GetValue(string fieldName)
+        {
+            string result;
+            switch (fieldName.ToLower())
+            {
+                case "billtitle":
+                    result = this.BillTitle;
+                    break;
+                case "orderno":
+                    result = this.OrderNo;
+                    break;
+                case "eattypename":
+                    result = this.EatTypeName;
+                    break;
+                case "tasktypename":
+                    result = this.TaskTypeName;
+                    break;
+                case "deskoperatetext":
+                    result = this.DeskOperateText;
+                    break;
+                case "printsolutionname":
+                    result = this.PrintSolutionName;
+                    break;
+                case "srcdeskname":
+                    result = this.SrcDeskName;
+                    break;
+                case "reason":
+                    result = this.Reason;
+                    break;
+                case "deskname":
+                    result = this.DeskName;
+                    break;
+                case "personnum":
+                    result = this.PersonNum;
+                    break;
+                case "printtime":
+                    result = this.PrintTime;
+                    break;
+                case "transequence":
+                    result = this.TranSequence;
+                    break;
+                case "employeeno":
+                    result = this.EmployeeNo;
+                    break;
+                default:
+                    result = string.Empty;
+                    break;
+            }
+            return result;
+        }
     }
 }
