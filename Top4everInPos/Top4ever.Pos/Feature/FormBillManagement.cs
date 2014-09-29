@@ -506,14 +506,11 @@ namespace VechsoftPos.Feature
                             printData.PayingOrderList.Add(payingOrder);
                         }
                         string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
-                        string configPath = @"PrintConfig\InstructionPrintOrderSetting.config";
-                        string layoutPath = @"PrintConfig\PrintPaidOrder.ini";
                         if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
                         {
-                            configPath = @"PrintConfig\PrintOrderSetting.config";
                             string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                            DriverOrderPrint printer = new DriverOrderPrint(printerName, paperWidth, "SpecimenLabel");
-                            printer.DoPrint(printData, layoutPath, configPath);
+                            DriverOrderPrint printer = DriverOrderPrint.GetInstance(printerName, paperWidth);
+                            printer.DoPrintPaidOrder(printData);
                         }
                     }
                 }

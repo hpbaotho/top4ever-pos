@@ -49,6 +49,8 @@
     <Compile Include="DriverPrintConfig\PrintColumnHeadCollection.cs" />
     <Compile Include="DriverPrintConfig\PrintConfig.cs" />
     <Compile Include="DriverPrintConfig\PrintFont.cs" />
+    <Compile Include="DriverPrintConfig\PrintLayout.cs" />
+    <Compile Include="DriverPrintConfig\PrintLayoutCollection.cs" />
     <Compile Include="DriverPrintConfig\PrintLine.cs" />
     <Compile Include="DriverPrintConfig\PrintLineCollection.cs" />
     <Compile Include="DriverPrintSetting.cs" />
@@ -69,6 +71,8 @@
     <Compile Include="InstructionPrintConfig\PrintColumnHead.cs" />
     <Compile Include="InstructionPrintConfig\PrintColumnHeadCollection.cs" />
     <Compile Include="InstructionPrintConfig\PrintConfig.cs" />
+    <Compile Include="InstructionPrintConfig\PrintLayout.cs" />
+    <Compile Include="InstructionPrintConfig\PrintLayoutCollection.cs" />
     <Compile Include="InstructionPrintConfig\PrintLine.cs" />
     <Compile Include="InstructionPrintConfig\PrintLineCollection.cs" />
     <Compile Include="PrintHelper.cs" />

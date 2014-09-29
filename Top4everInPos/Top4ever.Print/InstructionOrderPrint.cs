@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Printing;
 using System.IO;
 using System.IO.Ports;
 using System.Text;
@@ -15,59 +13,136 @@ namespace Top4ever.Print
 {
     public class InstructionOrderPrint
     {
-        private static Dictionary<string, InstructionOrderPrintSetting> dicPrintSetting = new Dictionary<string, InstructionOrderPrintSetting>();
-        private String m_PaperType;
-        private PrintHelper m_PrintHelper;
-        private PrintData printData = null;
-        private String printLayoutPath = null;
-        private PrintConfig curPrintConfig = null;
+        private readonly PrintHelper _printHelper;
+        private String _printLayoutPath;
+        private String _printOrderLayoutPath;
+        private String _printPrePayOrderLayoutPath;
+        private String _deliveryOrderLayoutPath;
+        private String _printPaidOrderLayoutPath;
+
+        private PrintData _printData = null;
+        private static PrintConfig _curPrintConfig = null;
 
         public InstructionOrderPrint(string portName, int baudRate, Parity parity, int dataBits, StopBits stopBits, string paperType)
         {
-            m_PaperType = paperType;
-            m_PrintHelper = new PrintHelper(portName, baudRate, parity, dataBits, stopBits);
+            _printHelper = new PrintHelper(portName, baudRate, parity, dataBits, stopBits);
+            InitPrintSetting(paperType);
         }
 
         public InstructionOrderPrint(string usbVID, string usbPID, string paperType)
         {
-            m_PaperType = paperType;
-            m_PrintHelper = new PrintHelper(usbVID, usbPID);
+            _printHelper = new PrintHelper(usbVID, usbPID);
+            InitPrintSetting(paperType);
         }
 
         public InstructionOrderPrint(string ip, int port, string paperType)
         {
-            m_PaperType = paperType;
-            m_PrintHelper = new PrintHelper(ip, port);
+            _printHelper = new PrintHelper(ip, port);
+            InitPrintSetting(paperType);
         }
 
-        public void DoPrint(PrintData printData, string printLayoutPath, string printConfigPath)
+        private void InitPrintSetting(string paperType)
         {
-            if (printData != null && File.Exists(printLayoutPath) && File.Exists(printConfigPath))
+            if (_curPrintConfig == null)
             {
-                this.printData = printData;
-                this.printLayoutPath = printLayoutPath;
-                InstructionOrderPrintSetting printSetting = null;
-                if (dicPrintSetting.ContainsKey(printConfigPath))
+                string printConfigPath = AppDomain.CurrentDomain.BaseDirectory + "PrintConfig\\InstructionPrintOrderSetting.config";
+                if (!File.Exists(printConfigPath))
                 {
-                    printSetting = dicPrintSetting[printConfigPath];
+                    throw new ArgumentNullException("Print config file does not exist.");
+                }
+                InstructionOrderPrintSetting printSetting = XmlUtil.Deserialize<InstructionOrderPrintSetting>(printConfigPath);
+                if (printSetting != null && printSetting.PrintConfigs != null && printSetting.PrintConfigs.Count > 0)
+                {
+                    foreach (PrintConfig printConfig in printSetting.PrintConfigs)
+                    {
+                        if (printConfig.PaperType == paperType)
+                        {
+                            _curPrintConfig = printConfig;
+                            break;
+                        }
+                    }
+                }
+                if (_curPrintConfig != null)
+                {
+                    if (_curPrintConfig.PrintLayouts != null && _curPrintConfig.PrintLayouts.LayoutList != null && _curPrintConfig.PrintLayouts.LayoutList.Count > 0)
+                    {
+                        foreach (var printLayout in _curPrintConfig.PrintLayouts.LayoutList)
+                        {
+                            if (printLayout.Key.Equals("PrintOrder", StringComparison.CurrentCultureIgnoreCase))
+                            {
+                                _printOrderLayoutPath = string.Format("{0}PrintConfig\\{1}", AppDomain.CurrentDomain.BaseDirectory, printLayout.Value);
+                            }
+                            else if (printLayout.Key.Equals("PrintPrePayOrder", StringComparison.CurrentCultureIgnoreCase))
+                            {
+                                _printPrePayOrderLayoutPath = string.Format("{0}PrintConfig\\{1}", AppDomain.CurrentDomain.BaseDirectory, printLayout.Value);
+                            }
+                            else if (printLayout.Key.Equals("DeliveryOrder", StringComparison.CurrentCultureIgnoreCase))
+                            {
+                                _deliveryOrderLayoutPath = string.Format("{0}PrintConfig\\{1}", AppDomain.CurrentDomain.BaseDirectory, printLayout.Value);
+                            }
+                            else if (printLayout.Key.Equals("PrintPaidOrder", StringComparison.CurrentCultureIgnoreCase))
+                            {
+                                _printPaidOrderLayoutPath = string.Format("{0}PrintConfig\\{1}", AppDomain.CurrentDomain.BaseDirectory, printLayout.Value);
+                            }
+                        }
+                    }
                 }
                 else
                 {
-                    printSetting = XmlUtil.Deserialize<InstructionOrderPrintSetting>(printConfigPath);
-                    dicPrintSetting.Add(printConfigPath, printSetting);
+                    throw new ArgumentNullException(string.Format("Can not find the {0} paper type.", paperType));
                 }
-                foreach (PrintConfig printConfig in printSetting.PrintConfigs)
-                {
-                    if (printConfig.PaperType == m_PaperType)
-                    {
-                        curPrintConfig = printConfig;
-                        break;
-                    }
-                }
-                m_PrintHelper.Open();
-                m_PrintHelper.SetPrinterInit();
+            }
+        }
+
+        public void DoPrintOrder(PrintData printData)
+        {
+            if (printData != null)
+            {
+                _printLayoutPath = _printOrderLayoutPath;
+                _printData = printData;
+                _printHelper.Open();
+                _printHelper.SetPrinterInit();
                 DrawPaper();
-                m_PrintHelper.Close();
+                _printHelper.Close();
+            }
+        }
+
+        public void DoPrintPrePayOrder(PrintData printData)
+        {
+            if (printData != null)
+            {
+                _printLayoutPath = _printPrePayOrderLayoutPath;
+                _printData = printData;
+                _printHelper.Open();
+                _printHelper.SetPrinterInit();
+                DrawPaper();
+                _printHelper.Close();
+            }
+        }
+
+        public void DoPrintDeliveryOrder(PrintData printData)
+        {
+            if (printData != null)
+            {
+                _printLayoutPath = _deliveryOrderLayoutPath;
+                _printData = printData;
+                _printHelper.Open();
+                _printHelper.SetPrinterInit();
+                DrawPaper();
+                _printHelper.Close();
+            }
+        }
+
+        public void DoPrintPaidOrder(PrintData printData)
+        {
+            if (printData != null)
+            {
+                _printLayoutPath = _printPaidOrderLayoutPath;
+                _printData = printData;
+                _printHelper.Open();
+                _printHelper.SetPrinterInit();
+                DrawPaper();
+                _printHelper.Close();
             }
         }
 
@@ -76,7 +151,7 @@ namespace Top4ever.Print
             string[] repeatedConfigArr = null;
             int braceCount = -1;    //{}个数计数
             bool inCirculation = false; //是否在循环内部
-            using (StreamReader stream = new StreamReader(printLayoutPath))
+            using (StreamReader stream = new StreamReader(_printLayoutPath))
             {
                 string strPrintConfig = stream.ReadToEnd();
                 List<string> repeatedConfigList = new List<string>();
@@ -147,7 +222,7 @@ namespace Top4ever.Print
             {
                 if (str.Contains("Line"))
                 {
-                    foreach (PrintLine line in curPrintConfig.PrintLines.LineList)
+                    foreach (PrintLine line in _curPrintConfig.PrintLines.LineList)
                     {
                         if (line.LineName == str)
                         {
@@ -156,7 +231,7 @@ namespace Top4ever.Print
                             {
                                 string strAlign = line.StartPX;
                                 string number = strAlign.Substring(0, strAlign.Length - 1);
-                                startPX = Convert.ToInt32(float.Parse(number) / 100f * curPrintConfig.TotalCharNum);
+                                startPX = Convert.ToInt32(float.Parse(number) / 100f * _curPrintConfig.TotalCharNum);
                             }
                             else
                             {
@@ -166,7 +241,7 @@ namespace Top4ever.Print
                             {
                                 string strAlign = line.EndPX;
                                 string number = strAlign.Substring(0, strAlign.Length - 1);
-                                endPX = Convert.ToInt32(float.Parse(number) / 100f * curPrintConfig.TotalCharNum);
+                                endPX = Convert.ToInt32(float.Parse(number) / 100f * _curPrintConfig.TotalCharNum);
                             }
                             else
                             {
@@ -174,26 +249,26 @@ namespace Top4ever.Print
                             }
                             string text = ArrangeLinePosition(line.LineText, startPX, endPX);
                             //打印设置
-                            m_PrintHelper.SetFontSize(0, 0);
-                            m_PrintHelper.SetCharSpacing(0);
-                            m_PrintHelper.Write(text);
+                            _printHelper.SetFontSize(0, 0);
+                            _printHelper.SetCharSpacing(0);
+                            _printHelper.Write(text);
                             break;
                         }
                     }
                 }
                 else
                 {
-                    foreach (NormalConfig item in curPrintConfig.NormalConfigs.NormalConfigList)
+                    foreach (NormalConfig item in _curPrintConfig.NormalConfigs.NormalConfigList)
                     {
                         if (item.Name == str)
                         {
-                            string itemName = item.ValuePrefix + GetPropertyValue(printData, item.Name).ToString();
+                            string itemName = item.ValuePrefix + _printData.GetValue(item.Name);
                             int width = 0;
                             if (item.Width.IndexOf('%') > 0)
                             {
                                 string strWidth = item.Width;
                                 string number = strWidth.Substring(0, strWidth.Length - 1);
-                                width = Convert.ToInt32(float.Parse(number) / 100f * curPrintConfig.TotalCharNum);
+                                width = Convert.ToInt32(float.Parse(number) / 100f * _curPrintConfig.TotalCharNum);
                             }
                             else
                             {
@@ -220,15 +295,15 @@ namespace Top4ever.Print
                             int widthTimes = int.Parse(times[0]);
                             int heightTimes = int.Parse(times[1]);
                             //打印设置
-                            m_PrintHelper.SetFontSize(widthTimes, heightTimes);
-                            m_PrintHelper.SetCharSpacing(0);
-                            m_PrintHelper.Write(itemName, align, width);
+                            _printHelper.SetFontSize(widthTimes, heightTimes);
+                            _printHelper.SetCharSpacing(0);
+                            _printHelper.Write(itemName, align, width);
                             break;
                         }
                     }
                 }
             }
-            m_PrintHelper.PrintAndFeedLines(1);
+            _printHelper.PrintAndFeedLines(1);
         }
 
         private void HandlerCirculationConfig(string repeatedConfig)
@@ -251,7 +326,7 @@ namespace Top4ever.Print
             }
             if (className == "GoodsOrder")
             {
-                foreach (DataListConfig item in curPrintConfig.DataListConfigs.DataListConfigList)
+                foreach (DataListConfig item in _curPrintConfig.DataListConfigs.DataListConfigList)
                 {
                     if (item.ClassName == className)
                     {
@@ -269,7 +344,7 @@ namespace Top4ever.Print
                                         {
                                             string strWidth = columnHead.Width;
                                             string number = strWidth.Substring(0, strWidth.Length - 1);
-                                            width = Convert.ToInt32(float.Parse(number) / 100f * curPrintConfig.TotalCharNum);
+                                            width = Convert.ToInt32(float.Parse(number) / 100f * _curPrintConfig.TotalCharNum);
                                         }
                                         else
                                         {
@@ -296,23 +371,23 @@ namespace Top4ever.Print
                                         int widthTimes = int.Parse(times[0]);
                                         int heightTimes = int.Parse(times[1]);
                                         //打印设置
-                                        m_PrintHelper.SetFontSize(widthTimes, heightTimes);
-                                        m_PrintHelper.SetCharSpacing(0);
-                                        m_PrintHelper.Write(columnHead.Text, align, width);
+                                        _printHelper.SetFontSize(widthTimes, heightTimes);
+                                        _printHelper.SetCharSpacing(0);
+                                        _printHelper.Write(columnHead.Text, align, width);
                                         break;
                                     }
                                 }
                             }
                         }
-                        m_PrintHelper.PrintAndFeedLines(1);
+                        _printHelper.PrintAndFeedLines(1);
                         //column
-                        foreach (GoodsOrder goodsItem in printData.GoodsOrderList)
+                        foreach (GoodsOrder goodsItem in _printData.GoodsOrderList)
                         {
                             foreach (List<string> propertyList in propertyArrList)
                             {
                                 foreach (string property in propertyList)
                                 {
-                                    string itemValue = GetPropertyValue(goodsItem, property).ToString();
+                                    string itemValue = goodsItem.GetValue(property);
                                     foreach (PrintColumn column in item.PrintColumns.PrintColumnList)
                                     {
                                         if (property == column.Name)
@@ -322,7 +397,7 @@ namespace Top4ever.Print
                                             {
                                                 string strWidth = column.Width;
                                                 string number = strWidth.Substring(0, strWidth.Length - 1);
-                                                width = Convert.ToInt32(float.Parse(number) / 100f * curPrintConfig.TotalCharNum);
+                                                width = Convert.ToInt32(float.Parse(number) / 100f * _curPrintConfig.TotalCharNum);
                                             }
                                             else
                                             {
@@ -349,26 +424,20 @@ namespace Top4ever.Print
                                             int widthTimes = int.Parse(times[0]);
                                             int heightTimes = int.Parse(times[1]);
                                             //打印设置
-                                            m_PrintHelper.SetFontSize(widthTimes, heightTimes);
-                                            m_PrintHelper.SetCharSpacing(0);
-                                            m_PrintHelper.Write(itemValue, align, width);
+                                            _printHelper.SetFontSize(widthTimes, heightTimes);
+                                            _printHelper.SetCharSpacing(0);
+                                            _printHelper.Write(itemValue, align, width);
                                             break;
                                         }
                                     }
                                 }
-                                m_PrintHelper.PrintAndFeedLines(1);
+                                _printHelper.PrintAndFeedLines(1);
                             }
                         }
                         break;
                     }
                 }
             }
-        }
-
-        private object GetPropertyValue(object obj, string fieldName)
-        {
-            Type type = obj.GetType();
-            return type.GetProperty(fieldName).GetValue(obj, null);
         }
 
         private string ArrangeLinePosition(string signChar, int startNum, int endNum)

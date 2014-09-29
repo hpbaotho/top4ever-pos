@@ -536,15 +536,23 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Config\log4net.config" />
-    <None Include="PrintConfig\DeliveryOrder.ini" />
+    <None Include="PrintConfig\DeliveryOrder_80.ini" />
     <None Include="PrintConfig\InstructionPrintOrderSetting.config">
       <SubType>Designer</SubType>
     </None>
     <None Include="PrintConfig\KitchenPrint.ini" />
     <None Include="PrintConfig\KitchenPrintSetting.config" />
-    <None Include="PrintConfig\PrintOrder.ini" />
+    <None Include="PrintConfig\PrintOrder_80.ini" />
     <None Include="PrintConfig\PrintOrderSetting.config" />
-    <None Include="PrintConfig\PrintPrePayOrder.ini" />
+    <None Include="PrintConfig\PrintPrePayOrder_80.ini" />
+    <None Include="PrintConfig\PrintOrder_58.ini" />
+    <None Include="PrintConfig\PrintPaidOrder_58.ini" />
+    <None Include="PrintConfig\PrintPrePayOrder_58.ini" />
+    <None Include="PrintConfig\DeliveryOrder_58.ini" />
+    <None Include="PrintConfig\DeliveryOrder_76.ini" />
+    <None Include="PrintConfig\PrintOrder_76.ini" />
+    <None Include="PrintConfig\PrintPaidOrder_76.ini" />
+    <None Include="PrintConfig\PrintPrePayOrder_76.ini" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -599,7 +607,7 @@
     <None Include="Resources\TabButtonBackground.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PrintConfig\PrintPaidOrder.ini" />
+    <None Include="PrintConfig\PrintPaidOrder_80.ini" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\cut.png" />

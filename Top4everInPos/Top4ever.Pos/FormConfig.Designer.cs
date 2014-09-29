@@ -36,9 +36,6 @@
             this.txtFont = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.rbTimeSystem12H = new System.Windows.Forms.RadioButton();
-            this.rbTimeSystem24H = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.cmbLanguge2nd = new System.Windows.Forms.ComboBox();
             this.cmbLanguge1st = new System.Windows.Forms.ComboBox();
@@ -193,12 +190,9 @@
             this.groupBox4.Controls.Add(this.txtFont);
             this.groupBox4.Controls.Add(this.label13);
             this.groupBox4.Controls.Add(this.label16);
-            this.groupBox4.Controls.Add(this.label10);
-            this.groupBox4.Controls.Add(this.rbTimeSystem12H);
-            this.groupBox4.Controls.Add(this.rbTimeSystem24H);
             this.groupBox4.Location = new System.Drawing.Point(8, 212);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(517, 114);
+            this.groupBox4.Size = new System.Drawing.Size(517, 78);
             this.groupBox4.TabIndex = 2;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "系统配置";
@@ -206,7 +200,7 @@
             // cmbSaleType
             // 
             this.cmbSaleType.FormattingEnabled = true;
-            this.cmbSaleType.Location = new System.Drawing.Point(92, 71);
+            this.cmbSaleType.Location = new System.Drawing.Point(92, 32);
             this.cmbSaleType.Name = "cmbSaleType";
             this.cmbSaleType.Size = new System.Drawing.Size(145, 27);
             this.cmbSaleType.TabIndex = 2;
@@ -235,50 +229,12 @@
             this.label16.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label16.AutoSize = true;
             this.label16.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label16.Location = new System.Drawing.Point(14, 74);
+            this.label16.Location = new System.Drawing.Point(14, 35);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(74, 19);
             this.label16.TabIndex = 0;
             this.label16.Text = "营业方式：";
             this.label16.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label10
-            // 
-            this.label10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label10.AutoSize = true;
-            this.label10.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label10.Location = new System.Drawing.Point(14, 35);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(74, 19);
-            this.label10.TabIndex = 0;
-            this.label10.Text = "时间格式：";
-            this.label10.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // rbTimeSystem12H
-            // 
-            this.rbTimeSystem12H.AutoSize = true;
-            this.rbTimeSystem12H.Font = new System.Drawing.Font("Cambria", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbTimeSystem12H.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.rbTimeSystem12H.Location = new System.Drawing.Point(98, 36);
-            this.rbTimeSystem12H.Name = "rbTimeSystem12H";
-            this.rbTimeSystem12H.Size = new System.Drawing.Size(39, 19);
-            this.rbTimeSystem12H.TabIndex = 0;
-            this.rbTimeSystem12H.TabStop = true;
-            this.rbTimeSystem12H.Text = "12";
-            this.rbTimeSystem12H.UseVisualStyleBackColor = true;
-            // 
-            // rbTimeSystem24H
-            // 
-            this.rbTimeSystem24H.AutoSize = true;
-            this.rbTimeSystem24H.Font = new System.Drawing.Font("Cambria", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbTimeSystem24H.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.rbTimeSystem24H.Location = new System.Drawing.Point(152, 36);
-            this.rbTimeSystem24H.Name = "rbTimeSystem24H";
-            this.rbTimeSystem24H.Size = new System.Drawing.Size(39, 19);
-            this.rbTimeSystem24H.TabIndex = 0;
-            this.rbTimeSystem24H.TabStop = true;
-            this.rbTimeSystem24H.Text = "24";
-            this.rbTimeSystem24H.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
@@ -798,6 +754,10 @@
             // cmbPaperWidth
             // 
             this.cmbPaperWidth.FormattingEnabled = true;
+            this.cmbPaperWidth.Items.AddRange(new object[] {
+            "58mm",
+            "76mm",
+            "80mm"});
             this.cmbPaperWidth.Location = new System.Drawing.Point(304, 316);
             this.cmbPaperWidth.Name = "cmbPaperWidth";
             this.cmbPaperWidth.Size = new System.Drawing.Size(84, 27);
@@ -1468,9 +1428,6 @@
         private System.Windows.Forms.CheckBox ckbPettyCash;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.RadioButton rbTimeSystem12H;
-        private System.Windows.Forms.RadioButton rbTimeSystem24H;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.TextBox txtGoodsColumns;
         private System.Windows.Forms.TextBox txtGoodsGroupColumns;

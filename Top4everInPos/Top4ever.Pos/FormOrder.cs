@@ -2122,16 +2122,13 @@ namespace VechsoftPos
                     }
                     int copies = ConstantValuePool.BizSettingConfig.printConfig.Copies;
                     string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
-                    string configPath = @"PrintConfig\InstructionPrintOrderSetting.config";
-                    string layoutPath = @"PrintConfig\PrintOrder.ini";
                     if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
                     {
-                        configPath = @"PrintConfig\PrintOrderSetting.config";
                         string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                        DriverOrderPrint printer = new DriverOrderPrint(printerName, paperWidth, "SpecimenLabel");
+                        DriverOrderPrint printer = DriverOrderPrint.GetInstance(printerName, paperWidth);
                         for (int i = 0; i < copies; i++)
                         {
-                            printer.DoPrint(printData, layoutPath, configPath);
+                            printer.DoPrintOrder(printData);
                         }
                     }
                     if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.COM)
@@ -2145,18 +2142,18 @@ namespace VechsoftPos
                                 InstructionOrderPrint printer = new InstructionOrderPrint(portName, 9600, Parity.None, 8, StopBits.One, paperWidth);
                                 for (int i = 0; i < copies; i++)
                                 {
-                                    printer.DoPrint(printData, layoutPath, configPath);
+                                    printer.DoPrintOrder(printData);
                                 }
                             }
                         }
                     }
                     if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.ETHERNET)
                     {
-                        string IPAddress = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                        InstructionOrderPrint printer = new InstructionOrderPrint(IPAddress, 9100, paperWidth);
+                        string ipAddress = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                        InstructionOrderPrint printer = new InstructionOrderPrint(ipAddress, 9100, paperWidth);
                         for (int i = 0; i < copies; i++)
                         {
-                            printer.DoPrint(printData, layoutPath, configPath);
+                            printer.DoPrintOrder(printData);
                         }
                     }
                     if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.USB)
@@ -2166,7 +2163,7 @@ namespace VechsoftPos
                         InstructionOrderPrint printer = new InstructionOrderPrint(VID, PID, paperWidth);
                         for (int i = 0; i < copies; i++)
                         {
-                            printer.DoPrint(printData, layoutPath, configPath);
+                            printer.DoPrintOrder(printData);
                         }
                     }
                 }
@@ -2990,16 +2987,13 @@ namespace VechsoftPos
                     }
                     int copies = ConstantValuePool.BizSettingConfig.printConfig.Copies;
                     string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
-                    string configPath = @"PrintConfig\InstructionPrintOrderSetting.config";
-                    string layoutPath = @"PrintConfig\PrintOrder.ini";
                     if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
                     {
-                        configPath = @"PrintConfig\PrintOrderSetting.config";
                         string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                        DriverOrderPrint printer = new DriverOrderPrint(printerName, paperWidth, "SpecimenLabel");
+                        DriverOrderPrint printer = DriverOrderPrint.GetInstance(printerName, paperWidth);
                         for (int i = 0; i < copies; i++)
                         {
-                            printer.DoPrint(printData, layoutPath, configPath);
+                            printer.DoPrintOrder(printData);
                         }
                     }
                     if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.COM)
@@ -3013,18 +3007,18 @@ namespace VechsoftPos
                                 InstructionOrderPrint printer = new InstructionOrderPrint(portName, 9600, Parity.None, 8, StopBits.One, paperWidth);
                                 for (int i = 0; i < copies; i++)
                                 {
-                                    printer.DoPrint(printData, layoutPath, configPath);
+                                    printer.DoPrintOrder(printData);
                                 }
                             }
                         }
                     }
                     if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.ETHERNET)
                     {
-                        string IPAddress = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                        InstructionOrderPrint printer = new InstructionOrderPrint(IPAddress, 9100, paperWidth);
+                        string ipAddress = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                        InstructionOrderPrint printer = new InstructionOrderPrint(ipAddress, 9100, paperWidth);
                         for (int i = 0; i < copies; i++)
                         {
-                            printer.DoPrint(printData, layoutPath, configPath);
+                            printer.DoPrintOrder(printData);
                         }
                     }
                     if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.USB)
@@ -3034,7 +3028,7 @@ namespace VechsoftPos
                         InstructionOrderPrint printer = new InstructionOrderPrint(VID, PID, paperWidth);
                         for (int i = 0; i < copies; i++)
                         {
-                            printer.DoPrint(printData, layoutPath, configPath);
+                            printer.DoPrintOrder(printData);
                         }
                     }
                 }
@@ -3050,26 +3044,12 @@ namespace VechsoftPos
             HideItemButton();
         }
 
-        private string formateTime(int time)
-        {
-            string result = string.Empty;
-            if (time.ToString().Length == 1)
-            {
-                result = "0" + time.ToString();
-            }
-            else
-            {
-                result = time.ToString();
-            }
-            return result;
-        }
-
         private void ResizeSearchPad()
         {
             if (this.Width > 1024 && pnlSearch.Visible)
             {
                 double widthRate = Convert.ToDouble(this.Width - this.pnlLeft.Width) / 504;
-                double heightRate = 1;
+                const double heightRate = 1;
                 foreach (Control c in this.pnlSearch.Controls)
                 {
                     SetControlSize(c, widthRate, heightRate);
@@ -3084,18 +3064,18 @@ namespace VechsoftPos
             ctl.Location = new Point(Convert.ToInt32(ctl.Location.X * widthRate), Convert.ToInt32(ctl.Location.Y * heightRate));
         }
 
-        private bool IsItemButtonEnabled(Guid itemID, ItemsType itemType)
+        private bool IsItemButtonEnabled(Guid itemId, ItemsType itemType)
         {
-            bool IsEnabled = true;
+            bool isEnabled = true;
             foreach (GoodsCronTrigger trigger in ConstantValuePool.GoodsCronTriggerList)
             {
-                if (itemID == trigger.ItemID && (int)itemType == trigger.ItemType)
+                if (itemId == trigger.ItemID && (int)itemType == trigger.ItemType)
                 {
-                    IsEnabled = IsValidDate(trigger.BeginDate, trigger.EndDate, trigger.Week, trigger.Day, trigger.Hour, trigger.Minute);
+                    isEnabled = IsValidDate(trigger.BeginDate, trigger.EndDate, trigger.Week, trigger.Day, trigger.Hour, trigger.Minute);
                     break;
                 }
             }
-            return IsEnabled;
+            return isEnabled;
         }
 
         private bool IsValidDate(string beginDate, string endDate, string week, string day, string hour, string minute)

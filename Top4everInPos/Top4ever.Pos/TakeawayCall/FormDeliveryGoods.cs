@@ -138,16 +138,13 @@ namespace VechsoftPos.TakeawayCall
                 {
                     int copies = ConstantValuePool.BizSettingConfig.printConfig.Copies;
                     string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
-                    string configPath = @"PrintConfig\InstructionPrintOrderSetting.config";
-                    string layoutPath = @"PrintConfig\DeliveryOrder.ini";
                     if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
                     {
-                        configPath = @"PrintConfig\PrintOrderSetting.config";
                         string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                        DriverOrderPrint printer = new DriverOrderPrint(printerName, paperWidth, "SpecimenLabel");
+                        DriverOrderPrint printer = DriverOrderPrint.GetInstance(printerName, paperWidth);
                         for (int i = 0; i < copies; i++)
                         {
-                            printer.DoPrint(_printData, layoutPath, configPath);
+                            printer.DoPrintDeliveryOrder(_printData);
                         }
                     }
                     if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.COM)
@@ -161,7 +158,7 @@ namespace VechsoftPos.TakeawayCall
                                 InstructionOrderPrint printer = new InstructionOrderPrint(portName, 9600, Parity.None, 8, StopBits.One, paperWidth);
                                 for (int i = 0; i < copies; i++)
                                 {
-                                    printer.DoPrint(_printData, layoutPath, configPath);
+                                    printer.DoPrintDeliveryOrder(_printData);
                                 }
                             }
                         }
@@ -172,7 +169,7 @@ namespace VechsoftPos.TakeawayCall
                         InstructionOrderPrint printer = new InstructionOrderPrint(IPAddress, 9100, paperWidth);
                         for (int i = 0; i < copies; i++)
                         {
-                            printer.DoPrint(_printData, layoutPath, configPath);
+                            printer.DoPrintDeliveryOrder(_printData);
                         }
                     }
                     if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.USB)
@@ -182,7 +179,7 @@ namespace VechsoftPos.TakeawayCall
                         InstructionOrderPrint printer = new InstructionOrderPrint(VID, PID, paperWidth);
                         for (int i = 0; i < copies; i++)
                         {
-                            printer.DoPrint(_printData, layoutPath, configPath);
+                            printer.DoPrintDeliveryOrder(_printData);
                         }
                     }
                 }

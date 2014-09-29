@@ -1,52 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
 namespace Top4ever.Print.DriverPrintConfig
 {
     public class PrintConfig
     {
-        private string m_PaperType;
-        private string m_Margin;
-        private PrintLineCollection m_PrintLines;
-        private NormalConfigCollection m_NormalConfigs;
-        private DataListConfigCollection m_DataListConfigs;
-        
+        [XmlAttribute("PaperName")]
+        public string PaperName { get; set; }
+
         [XmlAttribute("PaperType")]
-        public string PaperType
-        {
-            get { return m_PaperType; }
-            set { m_PaperType = value; }
-        }
+        public string PaperType { get; set; }
 
         [XmlAttribute("Margin")]
-        public string PaperMargin
-        {
-            get { return m_Margin; }
-            set { m_Margin = value; }
-        }
+        public string PaperMargin { get; set; }
+
+        [XmlElement("LayoutCollection")]
+        public PrintLayoutCollection PrintLayouts { get; set; }
 
         [XmlElement("LineCollection")]
-        public PrintLineCollection PrintLines
-        {
-            get { return m_PrintLines; }
-            set { m_PrintLines = value; }
-        }
+        public PrintLineCollection PrintLines { get; set; }
 
         [XmlElement("NormalConfigCollection")]
-        public NormalConfigCollection NormalConfigs
-        {
-            get { return m_NormalConfigs; }
-            set { m_NormalConfigs = value; }
-        }
+        public NormalConfigCollection NormalConfigs { get; set; }
 
         [XmlElement("DataListConfigCollection")]
-        public DataListConfigCollection DataListConfigs
-        {
-            get { return m_DataListConfigs; }
-            set { m_DataListConfigs = value; }
-        }
+        public DataListConfigCollection DataListConfigs { get; set; }
     }
 }

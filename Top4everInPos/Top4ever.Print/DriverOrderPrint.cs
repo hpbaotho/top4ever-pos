@@ -14,75 +14,170 @@ namespace Top4ever.Print
 {
     public class DriverOrderPrint
     {
-        private static Dictionary<string, DriverPrintSetting> dicPrintSetting = new Dictionary<string, DriverPrintSetting>();
-        private String m_PaperType;
-        private PrintDocument pDoc;
-        private PrintData printData = null;
-        private String printLayoutPath = null;
-        private PrintConfig curPrintConfig = null;
+        private static readonly object Obj = new object();
+        private static readonly Dictionary<string, DriverOrderPrint> DicInstance = new Dictionary<string, DriverOrderPrint>();
+
+        private readonly PrintDocument _printDocument;
+        private readonly PrintConfig _curPrintConfig;
+
+        private String _printLayoutPath;
+        private readonly String _printOrderLayoutPath;
+        private readonly String _printPrePayOrderLayoutPath;
+        private readonly String _deliveryOrderLayoutPath;
+        private readonly String _printPaidOrderLayoutPath;
+
+        private PrintData _printData = null;
         private Graphics m_Graphics;
         private Rectangle m_PageBounds;
         private float MarginLeft;
         private float PY;
 
-        public DriverOrderPrint(string printerName, string paperType, string paperName)
+        private DriverOrderPrint(string printerName, string paperType)
         {
-            m_PaperType = paperType;
-            pDoc = new PrintDocument();
-            pDoc.PrinterSettings.PrinterName = printerName;
-            PaperSize paperSize = new PaperSize(paperName, 300, 680);//页面大小;
-            foreach (PaperSize ps in pDoc.PrinterSettings.PaperSizes)
+            string printConfigPath = AppDomain.CurrentDomain.BaseDirectory + "PrintConfig\\PrintOrderSetting.config";
+            if (!File.Exists(printConfigPath))
+            {
+                throw new ArgumentNullException("Print config file does not exist.");
+            }
+            DriverPrintSetting printSetting = XmlUtil.Deserialize<DriverPrintSetting>(printConfigPath);
+            if (printSetting != null && printSetting.PrintConfigs != null && printSetting.PrintConfigs.Count > 0)
+            {
+                foreach (PrintConfig printConfig in printSetting.PrintConfigs)
+                {
+                    if (printConfig.PaperType == paperType)
+                    {
+                        _curPrintConfig = printConfig;
+                        break;
+                    }
+                }
+            }
+            string paperName;
+            if (_curPrintConfig != null)
+            {
+                paperName = _curPrintConfig.PaperName;
+                if (_curPrintConfig.PrintLayouts != null && _curPrintConfig.PrintLayouts.LayoutList != null && _curPrintConfig.PrintLayouts.LayoutList.Count > 0)
+                {
+                    foreach (var printLayout in _curPrintConfig.PrintLayouts.LayoutList)
+                    {
+                        if (printLayout.Key.Equals("PrintOrder", StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            _printOrderLayoutPath = string.Format("{0}PrintConfig\\{1}", AppDomain.CurrentDomain.BaseDirectory, printLayout.Value);
+                        }
+                        else if (printLayout.Key.Equals("PrintPrePayOrder", StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            _printPrePayOrderLayoutPath = string.Format("{0}PrintConfig\\{1}", AppDomain.CurrentDomain.BaseDirectory, printLayout.Value);
+                        }
+                        else if (printLayout.Key.Equals("DeliveryOrder", StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            _deliveryOrderLayoutPath = string.Format("{0}PrintConfig\\{1}", AppDomain.CurrentDomain.BaseDirectory, printLayout.Value);
+                        }
+                        else if (printLayout.Key.Equals("PrintPaidOrder", StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            _printPaidOrderLayoutPath = string.Format("{0}PrintConfig\\{1}", AppDomain.CurrentDomain.BaseDirectory, printLayout.Value);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                throw new ArgumentNullException(string.Format("Can not find the {0} paper type.", paperType));
+            }
+            int width = 300, height = 949;
+            if (paperType.Equals("58mm", StringComparison.CurrentCultureIgnoreCase))
+            {
+                width = 228;
+            }
+            else if (paperType.Equals("76mm", StringComparison.CurrentCultureIgnoreCase))
+            {
+                width = 300;
+            }
+            else if (paperType.Equals("80mm", StringComparison.CurrentCultureIgnoreCase))
+            {
+                width = 315;
+            }
+            _printDocument = new PrintDocument();
+            _printDocument.PrinterSettings.PrinterName = printerName;
+            PaperSize paperSize = new PaperSize(paperName, width, height);//页面大小;
+            foreach (PaperSize ps in _printDocument.PrinterSettings.PaperSizes)
             {
                 if (ps.PaperName.Equals(paperName))
                 {
                     paperSize = ps;
                 }
             }
-            pDoc.DefaultPageSettings.PaperSize = paperSize;
-            pDoc.DefaultPageSettings.Landscape = false;//横向打印
-            pDoc.PrintPage += new PrintPageEventHandler(pDoc_PrintPage);
+            _printDocument.DefaultPageSettings.PaperSize = paperSize;
+            _printDocument.DefaultPageSettings.Landscape = false;//横向打印
+            _printDocument.PrintPage += new PrintPageEventHandler(pDoc_PrintPage);
         }
 
-        public bool DoPrint(PrintData printData, string printLayoutPath, string printConfigPath)
+        /// <summary>
+        /// 获取DriverOrderPrint单例
+        /// </summary>
+        /// <returns></returns>
+        public static DriverOrderPrint GetInstance(string printerName, string paperType)
         {
-            if (printData != null && File.Exists(printLayoutPath) && File.Exists(printConfigPath))
+            if (string.IsNullOrEmpty(printerName))
             {
-                this.printData = printData;
-                this.printLayoutPath = printLayoutPath;
-                DriverPrintSetting printSetting = null;
-                if (dicPrintSetting.ContainsKey(printConfigPath))
+                throw new ArgumentNullException("Printer name is null.");
+            }
+            if (string.IsNullOrEmpty(paperType))
+            {
+                throw new ArgumentNullException("Paper type is null.");
+            }
+            lock (Obj)
+            {
+                string key = printerName + "_" + paperType;
+                DriverOrderPrint instance;
+                if (DicInstance.ContainsKey(key))
                 {
-                    printSetting = dicPrintSetting[printConfigPath];
+                    instance = DicInstance[key];
                 }
                 else
                 {
-                    printSetting = XmlUtil.Deserialize<DriverPrintSetting>(printConfigPath);
-                    dicPrintSetting.Add(printConfigPath, printSetting);
+                    instance = new DriverOrderPrint(printerName, paperType);
+                    DicInstance.Add(key, instance);
                 }
-                foreach (PrintConfig printConfig in printSetting.PrintConfigs)
-                {
-                    if (printConfig.PaperType == m_PaperType)
-                    {
-                        curPrintConfig = printConfig;
-                        break;
-                    }
-                }
-                bool printResult = false;
-                try
-                {
-                    pDoc.Print();
-                    printResult = true;
-                }
-                catch(Exception ex)
-                {
-                    //log ex;
-                    printResult = false;
-                }
-                return printResult;
+                return instance;
             }
-            else
+        }
+
+        public void DoPrintOrder(PrintData printData)
+        {
+            if (printData != null)
             {
-                return false;
+                _printLayoutPath = _printOrderLayoutPath;
+                _printData = printData;
+                _printDocument.Print();
+            }
+        }
+
+        public void DoPrintPrePayOrder(PrintData printData)
+        {
+            if (printData != null)
+            {
+                _printLayoutPath = _printPrePayOrderLayoutPath;
+                _printData = printData;
+                _printDocument.Print();
+            }
+        }
+
+        public void DoPrintDeliveryOrder(PrintData printData)
+        {
+            if (printData != null)
+            {
+                _printLayoutPath = _deliveryOrderLayoutPath;
+                _printData = printData;
+                _printDocument.Print();
+            }
+        }
+
+        public void DoPrintPaidOrder(PrintData printData)
+        {
+            if (printData != null)
+            {
+                _printLayoutPath = _printPaidOrderLayoutPath;
+                _printData = printData;
+                _printDocument.Print();
             }
         }
 
@@ -95,7 +190,7 @@ namespace Top4ever.Print
 
         private void DrawPaper()
         {
-            string paperMargin = curPrintConfig.PaperMargin;
+            string paperMargin = _curPrintConfig.PaperMargin;
             if (paperMargin.IndexOf(',') > 0)
             {
                 string[] marginArr = paperMargin.Split(',');
@@ -110,7 +205,7 @@ namespace Top4ever.Print
             string[] repeatedConfigArr = null;
             int braceCount = -1;    //{}个数计数
             bool inCirculation = false; //是否在循环内部
-            using (StreamReader stream = new StreamReader(printLayoutPath))
+            using (StreamReader stream = new StreamReader(_printLayoutPath))
             {
                 string strPrintConfig = stream.ReadToEnd();
                 List<string> repeatedConfigList = new List<string>();
@@ -183,7 +278,7 @@ namespace Top4ever.Print
             {
                 if (str.Contains("Line"))
                 {
-                    foreach (PrintLine line in curPrintConfig.PrintLines.LineList)
+                    foreach (PrintLine line in _curPrintConfig.PrintLines.LineList)
                     {
                         if (line.LineName == str)
                         {
@@ -233,14 +328,14 @@ namespace Top4ever.Print
                 }
                 else
                 {
-                    foreach (NormalConfig item in curPrintConfig.NormalConfigs.NormalConfigList)
+                    foreach (NormalConfig item in _curPrintConfig.NormalConfigs.NormalConfigList)
                     {
                         if (item.Name == str)
                         {
                             Font font = new Font(item.Font.FontName, item.Font.FontSize, item.Font.FontStyle);
                             Color color = Color.FromName(item.Font.ForeColor);
                             Brush brush = new SolidBrush(color);
-                            string itemName = item.ValuePrefix + printData.GetValue(item.Name);
+                            string itemName = item.ValuePrefix + _printData.GetValue(item.Name);
                             SizeF size = m_Graphics.MeasureString(itemName, font);//测量字体的大小
                             float itemWidth = 0f;
                             if (item.Width.IndexOf('%') > 0)
@@ -311,7 +406,7 @@ namespace Top4ever.Print
             }
             if (className == "GoodsOrder")
             {
-                foreach (DataListConfig item in curPrintConfig.DataListConfigs.DataListConfigList)
+                foreach (DataListConfig item in _curPrintConfig.DataListConfigs.DataListConfigList)
                 {
                     if (item.ClassName == className)
                     {
@@ -379,7 +474,7 @@ namespace Top4ever.Print
                         }
                         PY += maxHeight;
                         //column
-                        foreach (GoodsOrder goodsItem in printData.GoodsOrderList)
+                        foreach (GoodsOrder goodsItem in _printData.GoodsOrderList)
                         {
                             maxHeight = 0f;
                             foreach (List<string> propertyList in propertyArrList)
@@ -450,7 +545,7 @@ namespace Top4ever.Print
             }
             else if (className == "PayingGoodsOrder")
             {
-                foreach (DataListConfig item in curPrintConfig.DataListConfigs.DataListConfigList)
+                foreach (DataListConfig item in _curPrintConfig.DataListConfigs.DataListConfigList)
                 {
                     if (item.ClassName == className)
                     {
@@ -518,7 +613,7 @@ namespace Top4ever.Print
                             PY += maxHeight;
                         }
                         //column
-                        foreach (PayingGoodsOrder payingOrder in printData.PayingOrderList)
+                        foreach (PayingGoodsOrder payingOrder in _printData.PayingOrderList)
                         {
                             maxHeight = 0f;
                             foreach (List<string> propertyList in propertyArrList)
