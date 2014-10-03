@@ -16,9 +16,9 @@ namespace VechsoftPos
 {
     public partial class FormLogin : Form
     {
-        private int loginCount = 0;
+        private int _loginCount = 0;
         private const int MAX_LOGIN_COUNT = 5;
-        private TextBox m_ActiveTextBox;
+        private TextBox _activeTextBox;
 
         public FormLogin()
         {
@@ -26,13 +26,13 @@ namespace VechsoftPos
             if (!string.IsNullOrEmpty(ConstantValuePool.BizSettingConfig.LoginImagePath) && File.Exists(ConstantValuePool.BizSettingConfig.LoginImagePath))
             {
                 this.BackgroundImage = Image.FromFile(ConstantValuePool.BizSettingConfig.LoginImagePath);
-                this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+                this.BackgroundImageLayout = ImageLayout.Stretch;
             }
         }
 
         private void FormLogin_Load(object sender, EventArgs e)
         {
-            m_ActiveTextBox = this.txtName;
+            _activeTextBox = this.txtName;
             int px = (this.Width - this.pnlSystemLogin.Width) / 2;
             int py = (this.Height - this.pnlSystemLogin.Height) / 2;
             this.pnlSystemLogin.Location = new Point(px, py);
@@ -47,20 +47,21 @@ namespace VechsoftPos
         private void btnNumber_Click(object sender, EventArgs e)
         {
             CrystalButton btn = sender as CrystalButton;
-            int index = m_ActiveTextBox.SelectionStart;
-            string text = m_ActiveTextBox.Text;
+            if (btn == null) return;
+            int index = _activeTextBox.SelectionStart;
+            string text = _activeTextBox.Text;
             text = text.Insert(index, btn.Text);
-            m_ActiveTextBox.Text = text;
+            _activeTextBox.Text = text;
             //光标移动到下一位
-            m_ActiveTextBox.Select(index + 1, 0);
+            _activeTextBox.Select(index + 1, 0);
         }
 
         private void btnBackspace_Click(object sender, EventArgs e)
         {
-            string inputString = m_ActiveTextBox.Text;
+            string inputString = _activeTextBox.Text;
             if (!string.IsNullOrEmpty(inputString))
             {
-                m_ActiveTextBox.Select();
+                _activeTextBox.Select();
                 SendKeys.Send("{BACKSPACE}");
             }
         }
@@ -72,11 +73,13 @@ namespace VechsoftPos
             {
                 MessageBox.Show("找不到程序的配置文件！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
+                return;
             }
             if (ConstantValuePool.CurrentShop == null)
             {
                 MessageBox.Show("获取不到店铺信息，请检查服务器IP配置或者网络是否正确！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
+                return;
             }
             string employeeName = this.txtName.Text.Trim();
             string password = this.txtPassword.Text.Trim();
@@ -97,23 +100,23 @@ namespace VechsoftPos
                 bool haveDailyClose = true;
                 if (DateTime.Now.Hour > 5)
                 {
-                    int status = DailyBalanceService.GetInstance().CheckLastDailyStatement();
+                    int breakDays = ConstantValuePool.BizSettingConfig.BreakDays;
+                    int status = DailyBalanceService.GetInstance().CheckLastDailyStatement(breakDays);
                     if (status == 0)
                     {
                         MessageBox.Show("获取最后日结时间出错，请重新登录！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    else if (status == 2)    //未日结
+                    if (status == 2)    //未日结
                     {
                         haveDailyClose = false;
                         MessageBox.Show("警告，上次未日结，请联系店长处理！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     else
                     {
-                        haveDailyClose = true;
                         if (status == 3)
                         {
-                            MessageBox.Show("警告，营业日期出现异常，请联系店长处理！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBox.Show(string.Format("警告，您已经超过{0}天未营业，请联系店长检查营业日期是否正常！", breakDays), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         }
                     }
                 }
@@ -194,8 +197,8 @@ namespace VechsoftPos
                 }
                 else
                 {
-                    loginCount++;
-                    if (loginCount == MAX_LOGIN_COUNT)
+                    _loginCount++;
+                    if (_loginCount == MAX_LOGIN_COUNT)
                     {
                         MessageBox.Show("超出登录次数限制，请重新运行系统！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         this.DialogResult = DialogResult.Cancel;
@@ -203,14 +206,13 @@ namespace VechsoftPos
                     else
                     {
                         MessageBox.Show("获取的数据为空，请重新操作！", "错误提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
                     }
                 }
             }
             else if (result == 2)
             {
-                loginCount++;
-                if (loginCount == MAX_LOGIN_COUNT)
+                _loginCount++;
+                if (_loginCount == MAX_LOGIN_COUNT)
                 {
                     MessageBox.Show("超出登录次数限制，请重新运行系统！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.DialogResult = DialogResult.Cancel;
@@ -218,13 +220,12 @@ namespace VechsoftPos
                 else
                 {
                     MessageBox.Show("您输入的用户名或者密码错误，请重新输入！", "错误提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
                 }
             }
             else
             {
-                loginCount++;
-                if (loginCount == MAX_LOGIN_COUNT)
+                _loginCount++;
+                if (_loginCount == MAX_LOGIN_COUNT)
                 {
                     MessageBox.Show("超出登录次数限制，请重新运行系统！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.DialogResult = DialogResult.Cancel;
@@ -232,7 +233,6 @@ namespace VechsoftPos
                 else
                 {
                     MessageBox.Show("数据库操作失败，请重新输入！", "错误提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
                 }
             }
         }
@@ -252,11 +252,13 @@ namespace VechsoftPos
             {
                 MessageBox.Show("找不到程序的配置文件！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
+                return;
             }
             if (ConstantValuePool.CurrentShop == null)
             {
                 MessageBox.Show("获取不到店铺信息，请检查服务器IP配置或者网络是否正确！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
+                return;
             }
 
             Employee employee = null;
@@ -266,23 +268,23 @@ namespace VechsoftPos
                 bool haveDailyClose = true;
                 if (DateTime.Now.Hour > 5)
                 {
-                    int status = DailyBalanceService.GetInstance().CheckLastDailyStatement();
+                    int breakDays = ConstantValuePool.BizSettingConfig.BreakDays;
+                    int status = DailyBalanceService.GetInstance().CheckLastDailyStatement(breakDays);
                     if (status == 0)
                     {
                         MessageBox.Show("获取最后日结时间出错，请重新登录！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    else if (status == 2)    //未日结
+                    if (status == 2)    //未日结
                     {
                         haveDailyClose = false;
                         MessageBox.Show("警告，上次未日结，请联系店长处理！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     else
                     {
-                        haveDailyClose = true;
                         if (status == 3)
                         {
-                            MessageBox.Show("警告，营业日期出现异常，请联系店长处理！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBox.Show(string.Format("警告，您已经超过{0}天未营业，请联系店长检查营业日期是否正常！", breakDays), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         }
                     }
                 }
@@ -364,8 +366,8 @@ namespace VechsoftPos
                 }
                 else
                 {
-                    loginCount++;
-                    if (loginCount == MAX_LOGIN_COUNT)
+                    _loginCount++;
+                    if (_loginCount == MAX_LOGIN_COUNT)
                     {
                         MessageBox.Show("超出登录次数限制，请重新运行系统！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         this.DialogResult = DialogResult.Cancel;
@@ -373,14 +375,13 @@ namespace VechsoftPos
                     else
                     {
                         MessageBox.Show("获取的数据为空，请重新操作！", "错误提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
                     }
                 }
             }
             else if (result == 2)
             {
-                loginCount++;
-                if (loginCount == MAX_LOGIN_COUNT)
+                _loginCount++;
+                if (_loginCount == MAX_LOGIN_COUNT)
                 {
                     MessageBox.Show("超出登录次数限制，请重新运行系统！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.DialogResult = DialogResult.Cancel;
@@ -388,13 +389,12 @@ namespace VechsoftPos
                 else
                 {
                     MessageBox.Show("获取不到用户信息，请检查是否是本系统的卡号！", "错误提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
                 }
             }
             else
             {
-                loginCount++;
-                if (loginCount == MAX_LOGIN_COUNT)
+                _loginCount++;
+                if (_loginCount == MAX_LOGIN_COUNT)
                 {
                     MessageBox.Show("超出登录次数限制，请重新运行系统！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.DialogResult = DialogResult.Cancel;
@@ -402,19 +402,18 @@ namespace VechsoftPos
                 else
                 {
                     MessageBox.Show("数据库操作失败，请重新输入！", "错误提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
                 }
             }
         }
 
         private void txtName_MouseDown(object sender, MouseEventArgs e)
         {
-            m_ActiveTextBox = this.ActiveControl as TextBox;
+            _activeTextBox = this.ActiveControl as TextBox;
         }
 
         private void txtPassword_MouseDown(object sender, MouseEventArgs e)
         {
-            m_ActiveTextBox = this.ActiveControl as TextBox;
+            _activeTextBox = this.ActiveControl as TextBox;
         }
 
         private void btnExit_Click(object sender, EventArgs e)

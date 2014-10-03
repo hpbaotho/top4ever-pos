@@ -4,9 +4,6 @@ namespace Top4ever.Print.DriverPrintConfig
 {
     public class PrintConfig
     {
-        [XmlAttribute("PaperName")]
-        public string PaperName { get; set; }
-
         [XmlAttribute("PaperType")]
         public string PaperType { get; set; }
 
