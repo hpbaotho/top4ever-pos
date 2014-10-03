@@ -32,6 +32,9 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label34 = new System.Windows.Forms.Label();
+            this.txtBreakDays = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.cmbSaleType = new System.Windows.Forms.ComboBox();
             this.txtFont = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
@@ -74,6 +77,7 @@
             this.ckbPettyCash = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.cmbPaperName = new System.Windows.Forms.ComboBox();
             this.txtPrinterPID = new System.Windows.Forms.TextBox();
             this.txtPrinterVID = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -87,6 +91,7 @@
             this.cmbPaperWidth = new System.Windows.Forms.ComboBox();
             this.cmbPrinterPort = new System.Windows.Forms.ComboBox();
             this.cmbPrinter = new System.Windows.Forms.ComboBox();
+            this.label35 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -136,8 +141,8 @@
             this.btnLoadLogin = new System.Windows.Forms.Button();
             this.txtLoginImage = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
-            this.btnSave = new Top4ever.CustomControl.CrystalButton();
             this.btnCancel = new Top4ever.CustomControl.CrystalButton();
+            this.btnSave = new Top4ever.CustomControl.CrystalButton();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -167,7 +172,7 @@
             this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(540, 435);
+            this.tabControl1.Size = new System.Drawing.Size(540, 446);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -179,23 +184,51 @@
             this.tabPage1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabPage1.Size = new System.Drawing.Size(532, 403);
+            this.tabPage1.Size = new System.Drawing.Size(532, 414);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "基本设置";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.label34);
+            this.groupBox4.Controls.Add(this.txtBreakDays);
+            this.groupBox4.Controls.Add(this.label10);
             this.groupBox4.Controls.Add(this.cmbSaleType);
             this.groupBox4.Controls.Add(this.txtFont);
             this.groupBox4.Controls.Add(this.label13);
             this.groupBox4.Controls.Add(this.label16);
             this.groupBox4.Location = new System.Drawing.Point(8, 212);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(517, 78);
+            this.groupBox4.Size = new System.Drawing.Size(517, 116);
             this.groupBox4.TabIndex = 2;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "系统配置";
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(184, 75);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(295, 19);
+            this.label34.TabIndex = 5;
+            this.label34.Text = "天（注：超过此天数未营业，系统将会做出提示）";
+            // 
+            // txtBreakDays
+            // 
+            this.txtBreakDays.Location = new System.Drawing.Point(120, 73);
+            this.txtBreakDays.Name = "txtBreakDays";
+            this.txtBreakDays.Size = new System.Drawing.Size(60, 25);
+            this.txtBreakDays.TabIndex = 4;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(14, 75);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(100, 19);
+            this.label10.TabIndex = 3;
+            this.label10.Text = "营业中断日期：";
             // 
             // cmbSaleType
             // 
@@ -358,7 +391,7 @@
             this.tabPage2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabPage2.Size = new System.Drawing.Size(532, 403);
+            this.tabPage2.Size = new System.Drawing.Size(532, 414);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "页面设置";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -624,13 +657,14 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 28);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(532, 403);
+            this.tabPage3.Size = new System.Drawing.Size(532, 414);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "打印设置";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.cmbPaperName);
             this.groupBox6.Controls.Add(this.txtPrinterPID);
             this.groupBox6.Controls.Add(this.txtPrinterVID);
             this.groupBox6.Controls.Add(this.label9);
@@ -644,6 +678,7 @@
             this.groupBox6.Controls.Add(this.cmbPaperWidth);
             this.groupBox6.Controls.Add(this.cmbPrinterPort);
             this.groupBox6.Controls.Add(this.cmbPrinter);
+            this.groupBox6.Controls.Add(this.label35);
             this.groupBox6.Controls.Add(this.label31);
             this.groupBox6.Controls.Add(this.label21);
             this.groupBox6.Controls.Add(this.label8);
@@ -652,14 +687,22 @@
             this.groupBox6.Controls.Add(this.ckbPrinter);
             this.groupBox6.Location = new System.Drawing.Point(7, 10);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(518, 370);
+            this.groupBox6.Size = new System.Drawing.Size(518, 399);
             this.groupBox6.TabIndex = 4;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "打印设置";
             // 
+            // cmbPaperName
+            // 
+            this.cmbPaperName.FormattingEnabled = true;
+            this.cmbPaperName.Location = new System.Drawing.Point(141, 315);
+            this.cmbPaperName.Name = "cmbPaperName";
+            this.cmbPaperName.Size = new System.Drawing.Size(241, 27);
+            this.cmbPaperName.TabIndex = 2;
+            // 
             // txtPrinterPID
             // 
-            this.txtPrinterPID.Location = new System.Drawing.Point(304, 266);
+            this.txtPrinterPID.Location = new System.Drawing.Point(310, 266);
             this.txtPrinterPID.Name = "txtPrinterPID";
             this.txtPrinterPID.Size = new System.Drawing.Size(72, 25);
             this.txtPrinterPID.TabIndex = 0;
@@ -675,7 +718,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label9.Location = new System.Drawing.Point(257, 273);
+            this.label9.Location = new System.Drawing.Point(257, 269);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(44, 19);
             this.label9.TabIndex = 0;
@@ -685,7 +728,7 @@
             // 
             this.label25.AutoSize = true;
             this.label25.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label25.Location = new System.Drawing.Point(92, 273);
+            this.label25.Location = new System.Drawing.Point(92, 269);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(45, 19);
             this.label25.TabIndex = 0;
@@ -752,7 +795,7 @@
             // 
             // txtCopies
             // 
-            this.txtCopies.Location = new System.Drawing.Point(141, 316);
+            this.txtCopies.Location = new System.Drawing.Point(337, 358);
             this.txtCopies.Name = "txtCopies";
             this.txtCopies.Size = new System.Drawing.Size(72, 25);
             this.txtCopies.TabIndex = 0;
@@ -765,7 +808,7 @@
             "58mm",
             "76mm",
             "80mm"});
-            this.cmbPaperWidth.Location = new System.Drawing.Point(304, 316);
+            this.cmbPaperWidth.Location = new System.Drawing.Point(141, 357);
             this.cmbPaperWidth.Name = "cmbPaperWidth";
             this.cmbPaperWidth.Size = new System.Drawing.Size(84, 27);
             this.cmbPaperWidth.TabIndex = 0;
@@ -790,11 +833,21 @@
             this.cmbPrinter.Size = new System.Drawing.Size(173, 25);
             this.cmbPrinter.TabIndex = 0;
             // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label35.Location = new System.Drawing.Point(61, 318);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(74, 19);
+            this.label35.TabIndex = 1;
+            this.label35.Text = "纸张名称：";
+            // 
             // label31
             // 
             this.label31.AutoSize = true;
             this.label31.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label31.Location = new System.Drawing.Point(226, 323);
+            this.label31.Location = new System.Drawing.Point(59, 361);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(74, 19);
             this.label31.TabIndex = 1;
@@ -804,7 +857,7 @@
             // 
             this.label21.AutoSize = true;
             this.label21.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label21.Location = new System.Drawing.Point(354, 110);
+            this.label21.Location = new System.Drawing.Point(354, 108);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(48, 19);
             this.label21.TabIndex = 1;
@@ -824,7 +877,7 @@
             // 
             this.label22.AutoSize = true;
             this.label22.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label22.Location = new System.Drawing.Point(61, 323);
+            this.label22.Location = new System.Drawing.Point(257, 361);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(74, 19);
             this.label22.TabIndex = 1;
@@ -834,7 +887,7 @@
             // 
             this.label20.AutoSize = true;
             this.label20.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label20.Location = new System.Drawing.Point(48, 110);
+            this.label20.Location = new System.Drawing.Point(48, 108);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(87, 19);
             this.label20.TabIndex = 1;
@@ -859,7 +912,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 28);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(532, 403);
+            this.tabPage4.Size = new System.Drawing.Size(532, 414);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "硬件设置";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -1163,7 +1216,7 @@
             this.tabPage5.Location = new System.Drawing.Point(4, 28);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(532, 403);
+            this.tabPage5.Size = new System.Drawing.Size(532, 414);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "内容设置";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -1347,23 +1400,11 @@
             this.label18.Text = "登录图片：";
             this.label18.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // btnSave
-            // 
-            this.btnSave.BackColor = System.Drawing.Color.Teal;
-            this.btnSave.ForeColor = System.Drawing.Color.White;
-            this.btnSave.Location = new System.Drawing.Point(377, 448);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(79, 37);
-            this.btnSave.TabIndex = 1;
-            this.btnSave.Text = "保存设置";
-            this.btnSave.UseVisualStyleBackColor = false;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
             // btnCancel
             // 
             this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(43)))), ((int)(((byte)(59)))));
             this.btnCancel.ForeColor = System.Drawing.Color.White;
-            this.btnCancel.Location = new System.Drawing.Point(464, 448);
+            this.btnCancel.Location = new System.Drawing.Point(464, 470);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(79, 37);
             this.btnCancel.TabIndex = 1;
@@ -1371,11 +1412,23 @@
             this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // btnSave
+            // 
+            this.btnSave.BackColor = System.Drawing.Color.Teal;
+            this.btnSave.ForeColor = System.Drawing.Color.White;
+            this.btnSave.Location = new System.Drawing.Point(377, 470);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(79, 37);
+            this.btnSave.TabIndex = 1;
+            this.btnSave.Text = "保存设置";
+            this.btnSave.UseVisualStyleBackColor = false;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
             // FormConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(552, 493);
+            this.ClientSize = new System.Drawing.Size(552, 523);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.tabControl1);
@@ -1530,5 +1583,10 @@
         private System.Windows.Forms.TextBox txtVideoPath;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.CheckBox ckbSecondScreen;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.TextBox txtBreakDays;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label35;
+        private System.Windows.Forms.ComboBox cmbPaperName;
     }
 }

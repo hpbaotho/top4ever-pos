@@ -2125,7 +2125,8 @@ namespace VechsoftPos
                     if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
                     {
                         string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                        DriverOrderPrint printer = DriverOrderPrint.GetInstance(printerName, paperWidth);
+                        string paperName = ConstantValuePool.BizSettingConfig.printConfig.PaperName;
+                        DriverOrderPrint printer = DriverOrderPrint.GetInstance(printerName, paperName, paperWidth);
                         for (int i = 0; i < copies; i++)
                         {
                             printer.DoPrintOrder(printData);
@@ -2990,7 +2991,8 @@ namespace VechsoftPos
                     if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
                     {
                         string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                        DriverOrderPrint printer = DriverOrderPrint.GetInstance(printerName, paperWidth);
+                        string paperName = ConstantValuePool.BizSettingConfig.printConfig.PaperName;
+                        DriverOrderPrint printer = DriverOrderPrint.GetInstance(printerName, paperName, paperWidth);
                         for (int i = 0; i < copies; i++)
                         {
                             printer.DoPrintOrder(printData);

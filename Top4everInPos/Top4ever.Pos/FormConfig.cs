@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Windows.Forms;
 
 using Top4ever.Common;
@@ -19,6 +20,7 @@ namespace VechsoftPos
             InitializeComponent();
             BindClientShowInfo();
             BindPrinterInfo();
+            this.cmbPrinter.SelectedIndexChanged += new System.EventHandler(this.cmbPrinter_SelectedIndexChanged);
             //多语言
             InitMultiLanguageCombox();
             //营业方式
@@ -37,6 +39,7 @@ namespace VechsoftPos
             txtDeviceNo.Text = ConstantValuePool.BizSettingConfig.DeviceNo;
             txtFont.Text = ConstantValuePool.BizSettingConfig.FontSize.ToString();
             cmbSaleType.SelectedIndex = GetIndexByValue(cmbSaleType, Convert.ToString((int)ConstantValuePool.BizSettingConfig.SaleType));
+            txtBreakDays.Text = ConstantValuePool.BizSettingConfig.BreakDays.ToString();
             txtLoginImage.Text = ConstantValuePool.BizSettingConfig.LoginImagePath;
             txtDeskImage.Text = ConstantValuePool.BizSettingConfig.DeskImagePath;
             ckbSecondScreen.Checked = ConstantValuePool.BizSettingConfig.SecondScreenEnabled;
@@ -97,6 +100,7 @@ namespace VechsoftPos
                 {
                     rbDriverPrinter.Checked = true;
                     cmbPrinter.Text = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                    cmbPaperName.Text = ConstantValuePool.BizSettingConfig.printConfig.PaperName;
                 }
                 if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.COM)
                 {
@@ -239,7 +243,6 @@ namespace VechsoftPos
             {
                 cmbPrinter.Items.Add(alPrinters[i]);
             }
-            alPrinters = null;
             List<string> alPorts = Printer.GetPortList();
             for (int i = 0; i < alPorts.Count; i++)
             {
@@ -247,7 +250,6 @@ namespace VechsoftPos
                 cmbCashDrawerPort.Items.Add(alPorts[i]);
                 cmbClientShowPort.Items.Add(alPorts[i]);
             }
-            alPorts = null;
         }
 
         private void InitMultiLanguageCombox()
@@ -353,6 +355,14 @@ namespace VechsoftPos
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            if (ckbPrinter.Checked && rbDriverPrinter.Checked)
+            {
+                if (string.IsNullOrEmpty(cmbPaperName.Text))
+                {
+                    MessageBox.Show("打印机纸张名称不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
             //布局
             List<BizControl> bizControls = new List<BizControl>();
             BizControl control = new BizControl
@@ -382,6 +392,7 @@ namespace VechsoftPos
             {
                 printConfig.PrinterPort = PortType.DRIVER;
                 printConfig.Name = cmbPrinter.Text;
+                printConfig.PaperName = cmbPaperName.Text;
             }
             if (rbPrinterPort.Checked)
             {
@@ -500,6 +511,7 @@ namespace VechsoftPos
             appConfig.FontSize = float.Parse(txtFont.Text);
             ListItem itemType = cmbSaleType.SelectedItem as ListItem;
             appConfig.SaleType = (ShopSaleType)int.Parse(itemType.Value);
+            appConfig.BreakDays = int.Parse(txtBreakDays.Text);
             appConfig.LoginImagePath = txtLoginImage.Text.Trim();
             appConfig.DeskImagePath = txtDeskImage.Text.Trim();
             appConfig.SecondScreenEnabled = ckbSecondScreen.Checked;
@@ -520,7 +532,7 @@ namespace VechsoftPos
             ConstantValuePool.BizSettingConfig = appConfig;
             //输出到文件
             XmlUtil.Serialize<AppSettingConfig>(appConfig, "Config/AppSetting.config");
-            MessageBox.Show("保存成功！");
+            MessageBox.Show("保存成功，请退出系统后重新登录！");
             this.Close();
         }
 
@@ -734,6 +746,7 @@ namespace VechsoftPos
                 txtIPAddress.Enabled = false;
                 txtPrinterVID.Enabled = false;
                 txtPrinterPID.Enabled = false;
+                cmbPaperName.Enabled = true;
             }
         }
 
@@ -744,6 +757,7 @@ namespace VechsoftPos
             txtIPAddress.Enabled = false;
             txtPrinterVID.Enabled = false;
             txtPrinterPID.Enabled = false;
+            cmbPaperName.Enabled = false;
         }
 
         private void rbNetPrinter_CheckedChanged(object sender, EventArgs e)
@@ -753,6 +767,7 @@ namespace VechsoftPos
             txtIPAddress.Enabled = true;
             txtPrinterVID.Enabled = false;
             txtPrinterPID.Enabled = false;
+            cmbPaperName.Enabled = false;
         }
 
         private void rbUsbPort_CheckedChanged(object sender, EventArgs e)
@@ -762,6 +777,7 @@ namespace VechsoftPos
             txtIPAddress.Enabled = false;
             txtPrinterVID.Enabled = true;
             txtPrinterPID.Enabled = true;
+            cmbPaperName.Enabled = false;
         }
 
         private void rbCashDrawer_CheckedChanged(object sender, EventArgs e)
@@ -790,6 +806,23 @@ namespace VechsoftPos
             cmbClientShowPort.Enabled = false;
             txtClientVID.Enabled = true;
             txtClientPID.Enabled = true;
+        }
+
+        private void cmbPrinter_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox printer = sender as ComboBox;
+            if (printer == null) return;
+            string printerName = printer.Text;
+            PrintDocument printDocument = new PrintDocument();
+            if (!string.IsNullOrEmpty(printerName))
+            {
+                printDocument.PrinterSettings.PrinterName = printerName;
+            }
+            cmbPaperName.Items.Clear();
+            foreach (PaperSize ps in printDocument.PrinterSettings.PaperSizes)
+            {
+                cmbPaperName.Items.Add(ps.PaperName);
+            }
         }
     }
 }

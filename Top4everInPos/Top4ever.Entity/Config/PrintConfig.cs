@@ -27,6 +27,9 @@ namespace Top4ever.Entity.Config
         [XmlElement("Copies")]
         public int Copies { get; set; }
 
+        [XmlElement("PaperName")]
+        public string PaperName { get; set; }
+
         [XmlElement("PaperWidth")]
         public string PaperWidth { get; set; }
     }

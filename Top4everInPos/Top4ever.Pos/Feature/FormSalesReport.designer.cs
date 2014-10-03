@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgvSalesReport = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lbWeather = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.cmbWeather = new System.Windows.Forms.ComboBox();
             this.btnPrint = new Top4ever.CustomControl.CrystalButton();
             this.btnCancel = new Top4ever.CustomControl.CrystalButton();
             this.btnSalesReport = new Top4ever.CustomControl.CrystalButton();
@@ -60,8 +60,8 @@
             // Column1
             // 
             this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Courier New", 12F);
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Courier New", 12F);
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle1;
             this.Column1.HeaderText = "Column1";
             this.Column1.Name = "Column1";
             // 
@@ -75,20 +75,20 @@
             this.lbWeather.TabIndex = 1;
             this.lbWeather.Text = "天气情况：";
             // 
-            // comboBox1
+            // cmbWeather
             // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.cmbWeather.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbWeather.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.cmbWeather.FormattingEnabled = true;
+            this.cmbWeather.Items.AddRange(new object[] {
             "晴",
             "阴",
             "雨",
             "多云"});
-            this.comboBox1.Location = new System.Drawing.Point(580, 40);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(112, 29);
-            this.comboBox1.TabIndex = 2;
+            this.cmbWeather.Location = new System.Drawing.Point(580, 40);
+            this.cmbWeather.Name = "cmbWeather";
+            this.cmbWeather.Size = new System.Drawing.Size(112, 29);
+            this.cmbWeather.TabIndex = 2;
             // 
             // btnPrint
             // 
@@ -137,7 +137,7 @@
             this.Controls.Add(this.btnPrint);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSalesReport);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.cmbWeather);
             this.Controls.Add(this.lbWeather);
             this.Controls.Add(this.dgvSalesReport);
             this.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -159,7 +159,7 @@
 
         private System.Windows.Forms.DataGridView dgvSalesReport;
         private System.Windows.Forms.Label lbWeather;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox cmbWeather;
         private Top4ever.CustomControl.CrystalButton btnSalesReport;
         private Top4ever.CustomControl.CrystalButton btnCancel;
         private Top4ever.CustomControl.CrystalButton btnPrint;

@@ -546,7 +546,9 @@
     <None Include="PrintConfig\KitchenPrint_58.ini" />
     <None Include="PrintConfig\KitchenPrintSetting.config" />
     <None Include="PrintConfig\PrintOrder_80.ini" />
-    <None Include="PrintConfig\PrintOrderSetting.config" />
+    <None Include="PrintConfig\PrintOrderSetting.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="PrintConfig\PrintPrePayOrder_80.ini" />
     <None Include="PrintConfig\PrintOrder_58.ini" />
     <None Include="PrintConfig\PrintPaidOrder_58.ini" />

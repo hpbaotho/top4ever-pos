@@ -50,6 +50,11 @@ namespace Top4ever.Entity.Config
         [XmlElement("SaleType")]
         public ShopSaleType SaleType { get; set; }
         /// <summary>
+        /// 营业中断日期
+        /// </summary>
+        [XmlElement("BreakDays")]
+        public int BreakDays { get; set; }
+        /// <summary>
         /// 登录图片路径
         /// </summary>
         [XmlElement("LoginImagePath")]

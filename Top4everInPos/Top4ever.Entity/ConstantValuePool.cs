@@ -3,29 +3,27 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-using Top4ever.CustomControl;
 using Top4ever.Domain;
 using Top4ever.Domain.Accounts;
 using Top4ever.Domain.GoodsRelated;
 using Top4ever.Domain.OrderRelated;
 using Top4ever.Entity.Config;
 using Top4ever.Entity.Enum;
-using Top4ever.Print;
 using Top4ever.Domain.Promotions;
 
 namespace Top4ever.Entity
 {
     public class ConstantValuePool
     {
-        private static Color _PressedColor = Color.Black;
-        private static Color _DisabledColor = Color.Gray;
+        private static readonly Color _pressedColor = Color.Black;
+        private static readonly Color _disabledColor = Color.Gray;
 
         /// <summary>
         /// 按钮选择时的颜色
         /// </summary>
         public static Color PressedColor 
         {
-            get { return _PressedColor; }
+            get { return _pressedColor; }
         }
 
         /// <summary>
@@ -33,7 +31,7 @@ namespace Top4ever.Entity
         /// </summary>
         public static Color DisabledColor 
         {
-            get { return _DisabledColor; }
+            get { return _disabledColor; }
         }
         /// <summary>
         /// 当前语言
@@ -96,6 +94,7 @@ namespace Top4ever.Entity
         /// 程序的配置
         /// </summary>
         public static AppSettingConfig BizSettingConfig { get; set; }
+
         /// <summary>
         /// 来电宝编号
         /// </summary>

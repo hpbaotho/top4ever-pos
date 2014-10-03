@@ -961,7 +961,8 @@ namespace VechsoftPos
                 if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
                 {
                     string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                    DriverOrderPrint printer = DriverOrderPrint.GetInstance(printerName, paperWidth);
+                    string paperName = ConstantValuePool.BizSettingConfig.printConfig.PaperName;
+                    DriverOrderPrint printer = DriverOrderPrint.GetInstance(printerName, paperName, paperWidth);
                     printer.DoPrintPaidOrder(printData);
                 }
 
@@ -1189,7 +1190,8 @@ namespace VechsoftPos
                 if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
                 {
                     string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                    DriverOrderPrint printer = DriverOrderPrint.GetInstance(printerName, paperWidth);
+                    string paperName = ConstantValuePool.BizSettingConfig.printConfig.PaperName;
+                    DriverOrderPrint printer = DriverOrderPrint.GetInstance(printerName, paperName, paperWidth);
                     printer.DoPrintPrePayOrder(printData);
                 }
             }
@@ -1322,7 +1324,12 @@ namespace VechsoftPos
                 this.pictureBox1.Image = Properties.Resources.add;
             }
             BindOrderInfoSum();
-            this.lbUnpaidAmount.Text = (decimal.Parse(lbReceMoney.Text) + decimal.Parse(lbServiceFee.Text) - decimal.Parse(lbPaidInMoney.Text)).ToString("f2");
+            decimal unpaidAmount = decimal.Parse(lbReceMoney.Text) + decimal.Parse(lbServiceFee.Text) - decimal.Parse(lbPaidInMoney.Text);
+            if (unpaidAmount < 0)
+            {
+                unpaidAmount = 0;
+            }
+            this.lbUnpaidAmount.Text = unpaidAmount.ToString("f2");
             //更新第二屏信息
             if (Screen.AllScreens.Length > 1 && ConstantValuePool.BizSettingConfig.SecondScreenEnabled)
             {

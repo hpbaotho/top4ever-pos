@@ -129,7 +129,7 @@
             this.MinimizeBox = false;
             this.Name = "FormChooseDate";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "FormChooseDate";
+            this.Text = "选择日结所属日期";
             this.Load += new System.EventHandler(this.FormChooseDate_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

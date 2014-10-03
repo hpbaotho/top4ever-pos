@@ -32,7 +32,7 @@ namespace Top4ever.Print
         private float MarginLeft;
         private float PY;
 
-        private DriverOrderPrint(string printerName, string paperType)
+        private DriverOrderPrint(string printerName, string paperName, string paperType)
         {
             string printConfigPath = AppDomain.CurrentDomain.BaseDirectory + "PrintConfig\\PrintOrderSetting.config";
             if (!File.Exists(printConfigPath))
@@ -51,10 +51,8 @@ namespace Top4ever.Print
                     }
                 }
             }
-            string paperName;
             if (_curPrintConfig != null)
             {
-                paperName = _curPrintConfig.PaperName;
                 if (_curPrintConfig.PrintLayouts != null && _curPrintConfig.PrintLayouts.LayoutList != null && _curPrintConfig.PrintLayouts.LayoutList.Count > 0)
                 {
                     foreach (var printLayout in _curPrintConfig.PrintLayouts.LayoutList)
@@ -82,18 +80,18 @@ namespace Top4ever.Print
             {
                 throw new ArgumentNullException(string.Format("Can not find the {0} paper type.", paperType));
             }
-            int width = 300, height = 949;
+            int width = 283, height = 1869;
             if (paperType.Equals("58mm", StringComparison.CurrentCultureIgnoreCase))
             {
-                width = 228;
+                width = 203;
             }
             else if (paperType.Equals("76mm", StringComparison.CurrentCultureIgnoreCase))
             {
-                width = 300;
+                width = 268;
             }
             else if (paperType.Equals("80mm", StringComparison.CurrentCultureIgnoreCase))
             {
-                width = 315;
+                width = 283;
             }
             _printDocument = new PrintDocument();
             _printDocument.PrinterSettings.PrinterName = printerName;
@@ -114,11 +112,15 @@ namespace Top4ever.Print
         /// 获取DriverOrderPrint单例
         /// </summary>
         /// <returns></returns>
-        public static DriverOrderPrint GetInstance(string printerName, string paperType)
+        public static DriverOrderPrint GetInstance(string printerName, string paperName, string paperType)
         {
             if (string.IsNullOrEmpty(printerName))
             {
                 throw new ArgumentNullException("Printer name is null.");
+            }
+            if (string.IsNullOrEmpty(paperName))
+            {
+                throw new ArgumentNullException("Paper name is null.");
             }
             if (string.IsNullOrEmpty(paperType))
             {
@@ -126,7 +128,7 @@ namespace Top4ever.Print
             }
             lock (Obj)
             {
-                string key = printerName + "_" + paperType;
+                string key = printerName + "_" + paperName + "_" + paperType;
                 DriverOrderPrint instance;
                 if (DicInstance.ContainsKey(key))
                 {
@@ -134,7 +136,7 @@ namespace Top4ever.Print
                 }
                 else
                 {
-                    instance = new DriverOrderPrint(printerName, paperType);
+                    instance = new DriverOrderPrint(printerName, paperName, paperType);
                     DicInstance.Add(key, instance);
                 }
                 return instance;

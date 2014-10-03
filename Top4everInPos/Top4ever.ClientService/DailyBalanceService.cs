@@ -82,14 +82,16 @@ namespace Top4ever.ClientService
             return dailyTimeInterval;
         }
 
-        public Int32 CheckLastDailyStatement()
+        public Int32 CheckLastDailyStatement(int breakDays)
         {
-            int cByte = ParamFieldLength.PACKAGE_HEAD;
+            int cByte = ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32;
             byte[] sendByte = new byte[cByte];
             int byteOffset = 0;
             Array.Copy(BitConverter.GetBytes((int)Command.ID_CHECK_LASTDAILYSTATEMENT), sendByte, BasicTypeLength.INT32);
             byteOffset = BasicTypeLength.INT32;
             Array.Copy(BitConverter.GetBytes(cByte), 0, sendByte, byteOffset, BasicTypeLength.INT32);
+            byteOffset += BasicTypeLength.INT32;
+            Array.Copy(BitConverter.GetBytes(breakDays), 0, sendByte, byteOffset, BasicTypeLength.INT32);
             byteOffset += BasicTypeLength.INT32;
 
             int result = 0;

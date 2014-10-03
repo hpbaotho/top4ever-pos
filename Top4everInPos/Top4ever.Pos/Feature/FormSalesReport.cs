@@ -39,13 +39,14 @@ namespace VechsoftPos.Feature
             if (modelType == 1)
             {
                 this.lbWeather.Visible = false;
-                this.comboBox1.Visible = false;
+                this.cmbWeather.Visible = false;
                 btnSalesReport.Text = "交班";
                 this.Text = "交班报表";
                 bizReport = BusinessReportService.GetInstance().GetReportDataByHandover(ConstantValuePool.BizSettingConfig.DeviceNo);
             }
             else if (modelType == 2)
             {
+                this.cmbWeather.SelectedIndex = 0;
                 btnSalesReport.Text = "日结";
                 this.Text = "日结报表";
                 bizReport = BusinessReportService.GetInstance().GetReportDataByDailyStatement(string.Empty);
@@ -56,7 +57,7 @@ namespace VechsoftPos.Feature
         {
             InitializeComponent();
             this.lbWeather.Visible = false;
-            this.comboBox1.Visible = false;
+            this.cmbWeather.Visible = false;
             this.dgvSalesReport.BackgroundColor = SystemColors.ButtonFace;
             m_ModelType = modelType;
             if (modelType == 1)
@@ -475,7 +476,7 @@ namespace VechsoftPos.Feature
                     form.ShowDialog();
                     if (form.DailyStatementDate != null)
                     {
-                        string weather = this.comboBox1.Text;
+                        string weather = this.cmbWeather.Text;
                         if (string.IsNullOrEmpty(weather))
                         {
                             MessageBox.Show("请先选择当天天气情况！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
