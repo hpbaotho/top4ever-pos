@@ -30,7 +30,7 @@ namespace Top4ever.Print
         private float MarginLeft;
         private float PY;
 
-        public DriverKitchenPrint(string printerName, string paperName, string paperType)
+        private DriverKitchenPrint(string printerName, string paperName, string paperType)
         {
             string printConfigPath = AppDomain.CurrentDomain.BaseDirectory + "PrintConfig\\KitchenPrintSetting.config";
             if (!File.Exists(printConfigPath))
@@ -70,10 +70,10 @@ namespace Top4ever.Print
             {
                 throw new ArgumentNullException(string.Format("Can not find the {0} paper type.", paperType));
             }
-            int width = 268, height = 949;
+            int width = 283, height = 1869;
             if (paperType.Equals("58mm", StringComparison.CurrentCultureIgnoreCase))
             {
-                width = 205;
+                width = 203;
             }
             else if (paperType.Equals("76mm", StringComparison.CurrentCultureIgnoreCase))
             {

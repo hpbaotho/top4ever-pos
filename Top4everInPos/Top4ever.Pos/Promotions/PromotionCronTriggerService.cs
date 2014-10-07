@@ -7,21 +7,21 @@ namespace VechsoftPos.Promotions
 {
     public class PromotionCronTriggerService
     {
-        private PromotionCronTrigger promotionCronTrigger;
+        private PromotionCronTrigger _promotionCronTrigger;
 
         public PromotionCronTriggerService(PromotionCronTrigger promotionCronTrigger)
         {
-            this.promotionCronTrigger = promotionCronTrigger;
+            this._promotionCronTrigger = promotionCronTrigger;
         }
 
         public PromotionCronTrigger PromotionCronTriggers
         {
-            set { promotionCronTrigger = value; }
+            set { _promotionCronTrigger = value; }
         }
 
         public bool IsPromotionInTime()
         {
-            if (DateTime.Now >= DateTime.Parse(promotionCronTrigger.BeginDate) && DateTime.Now <= DateTime.Parse(promotionCronTrigger.EndDate))
+            if (DateTime.Now >= DateTime.Parse(_promotionCronTrigger.BeginDate) && DateTime.Now <= DateTime.Parse(_promotionCronTrigger.EndDate))
             {
                 bool IsEffective = true;
                 DayOfWeek curWeek = DateTime.Now.DayOfWeek;
@@ -30,12 +30,12 @@ namespace VechsoftPos.Promotions
                 int curHour = DateTime.Now.Hour;
                 int curMinute = DateTime.Now.Minute;
                 //判断周或者日
-                if (promotionCronTrigger.Week == "?")
+                if (_promotionCronTrigger.Week == "?")
                 {
                     //判断是否包含当日
-                    if (promotionCronTrigger.Day != "*")
+                    if (_promotionCronTrigger.Day != "*")
                     {
-                        string[] dayArr = promotionCronTrigger.Day.Split(',');
+                        string[] dayArr = _promotionCronTrigger.Day.Split(',');
                         bool IsContainDay = false;
                         foreach (string day in dayArr)
                         {
@@ -55,10 +55,10 @@ namespace VechsoftPos.Promotions
                 {
                     //判断是否包含周几
                     //判断包含# 例:当月第几周星期几
-                    if (promotionCronTrigger.Week.IndexOf('#') > 0)
+                    if (_promotionCronTrigger.Week.IndexOf('#') > 0)
                     {
-                        string weekIndex = promotionCronTrigger.Week.Split('#')[0];
-                        string weekDay = promotionCronTrigger.Week.Split('#')[1];
+                        string weekIndex = _promotionCronTrigger.Week.Split('#')[0];
+                        string weekDay = _promotionCronTrigger.Week.Split('#')[1];
                         //计算当日是当月的第几周
                         DateTime FirstofMonth = Convert.ToDateTime(DateTime.Now.Year + "-" + DateTime.Now.Month.ToString().PadLeft(2,'0') + "-" + "01");
                         int i = (int)FirstofMonth.Date.DayOfWeek;
@@ -82,7 +82,7 @@ namespace VechsoftPos.Promotions
                     else
                     {
                         //不包含# 例:当月每个星期几
-                        string[] weekArr = promotionCronTrigger.Week.Split(',');
+                        string[] weekArr = _promotionCronTrigger.Week.Split(',');
                         bool IsContainWeek = false;
                         foreach (string week in weekArr)
                         {
@@ -99,14 +99,14 @@ namespace VechsoftPos.Promotions
                     }
                 }
                 //判断时
-                if (promotionCronTrigger.Hour != "*")
+                if (_promotionCronTrigger.Hour != "*")
                 {
-                    if (promotionCronTrigger.Hour.IndexOf('-') > 0)
+                    if (_promotionCronTrigger.Hour.IndexOf('-') > 0)
                     {
                         string hourMinute = curHour.ToString().PadLeft(2, '0') + ":" + curMinute.ToString().PadLeft(2, '0');
-                        if (promotionCronTrigger.Hour.IndexOf(',') > 0) //多个小时时间段
+                        if (_promotionCronTrigger.Hour.IndexOf(',') > 0) //多个小时时间段
                         {
-                            string[] hourArr = promotionCronTrigger.Hour.Split(',');
+                            string[] hourArr = _promotionCronTrigger.Hour.Split(',');
                             bool IsContainHour = false;
                             foreach (string hour in hourArr)
                             {
@@ -125,8 +125,8 @@ namespace VechsoftPos.Promotions
                         }
                         else
                         {
-                            string beginHour = promotionCronTrigger.Hour.Split('-')[0].Trim();
-                            string endHour = promotionCronTrigger.Hour.Split('-')[1].Trim();
+                            string beginHour = _promotionCronTrigger.Hour.Split('-')[0].Trim();
+                            string endHour = _promotionCronTrigger.Hour.Split('-')[1].Trim();
                             if (string.Compare(hourMinute, beginHour) < 0 || string.Compare(hourMinute, endHour) > 0)
                             {
                                 IsEffective = false;
@@ -135,9 +135,9 @@ namespace VechsoftPos.Promotions
                     }
                     else
                     {
-                        if (promotionCronTrigger.Hour.IndexOf(',') > 0) //多个小时
+                        if (_promotionCronTrigger.Hour.IndexOf(',') > 0) //多个小时
                         {
-                            string[] hourArr = promotionCronTrigger.Hour.Split(',');
+                            string[] hourArr = _promotionCronTrigger.Hour.Split(',');
                             bool IsContainHour = false;
                             foreach (string hour in hourArr)
                             {
@@ -154,7 +154,7 @@ namespace VechsoftPos.Promotions
                         }
                         else
                         {
-                            if (curHour != int.Parse(promotionCronTrigger.Hour))
+                            if (curHour != int.Parse(_promotionCronTrigger.Hour))
                             {
                                 IsEffective = false;
                             }
@@ -162,13 +162,13 @@ namespace VechsoftPos.Promotions
                     }
                 }
                 //判断分
-                if (promotionCronTrigger.Minute != "*")
+                if (_promotionCronTrigger.Minute != "*")
                 {
-                    if (promotionCronTrigger.Minute.IndexOf('-') > 0)
+                    if (_promotionCronTrigger.Minute.IndexOf('-') > 0)
                     {
-                        if (promotionCronTrigger.Minute.IndexOf(',') > 0) //多个分钟时间段
+                        if (_promotionCronTrigger.Minute.IndexOf(',') > 0) //多个分钟时间段
                         {
-                            string[] minuteArr = promotionCronTrigger.Minute.Split(',');
+                            string[] minuteArr = _promotionCronTrigger.Minute.Split(',');
                             bool IsContainMinute = false;
                             foreach (string minute in minuteArr)
                             {
@@ -187,8 +187,8 @@ namespace VechsoftPos.Promotions
                         }
                         else
                         {
-                            string beginMinute = promotionCronTrigger.Minute.Split('-')[0];
-                            string endMinute = promotionCronTrigger.Minute.Split('-')[1];
+                            string beginMinute = _promotionCronTrigger.Minute.Split('-')[0];
+                            string endMinute = _promotionCronTrigger.Minute.Split('-')[1];
                             if (curMinute < int.Parse(beginMinute) || curMinute > int.Parse(endMinute))
                             {
                                 IsEffective = false;
@@ -197,9 +197,9 @@ namespace VechsoftPos.Promotions
                     }
                     else
                     {
-                        if (promotionCronTrigger.Minute.IndexOf(',') > 0) //多个分钟
+                        if (_promotionCronTrigger.Minute.IndexOf(',') > 0) //多个分钟
                         {
-                            string[] minuteArr = promotionCronTrigger.Minute.Split(',');
+                            string[] minuteArr = _promotionCronTrigger.Minute.Split(',');
                             bool IsContainMinute = false;
                             foreach (string minute in minuteArr)
                             {
@@ -216,7 +216,7 @@ namespace VechsoftPos.Promotions
                         }
                         else
                         {
-                            if (curMinute != int.Parse(promotionCronTrigger.Minute))
+                            if (curMinute != int.Parse(_promotionCronTrigger.Minute))
                             {
                                 IsEffective = false;
                             }
@@ -225,10 +225,7 @@ namespace VechsoftPos.Promotions
                 }
                 return IsEffective;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
     }
 }
