@@ -18,31 +18,31 @@ namespace VechsoftPos
 {
     public partial class FormDesk : Form
     {
-        private FormOrder m_FormOrder = null;
-        private FormTakeout m_FormTakeout = null;
+        private readonly FormOrder _formOrder;
+        private readonly FormTakeout _formTakeout;
 
-        private Guid m_CurrentRegionID = Guid.Empty;
-        private ButtonOperateType m_OperateType = ButtonOperateType.NONE;
-        private CrystalButton prevPressedButton = null;
-        private CrystalButton prevRegionButton = null;
-        private bool currentFormActivate = false;
-        private int threadSleepTime = 1000;
-        private Dictionary<Guid, List<CrystalButton>> dicDeskInRegion = new Dictionary<Guid, List<CrystalButton>>();
-        private bool haveDailyClose;
+        private Guid _currentRegionId = Guid.Empty;
+        private ButtonOperateType _operateType = ButtonOperateType.NONE;
+        private CrystalButton _prevPressedButton;
+        private CrystalButton _prevRegionButton;
+        private bool _currentFormActivate;
+        private const int ThreadSleepTime = 1000;
+        private readonly Dictionary<Guid, List<CrystalButton>> _dicDeskInRegion = new Dictionary<Guid, List<CrystalButton>>();
+        private readonly bool _haveDailyClose;
 
         #region 转台局部变量
-        private string deskName1st = string.Empty;
-        private Guid orderID1st = Guid.Empty;
-        private bool firstDeskSingleOrder = false;
+        private string _deskName1St = string.Empty;
+        private Guid _orderId1St = Guid.Empty;
+        private bool _firstDeskSingleOrder;
         #endregion
 
         public FormDesk(bool haveDailyClose)
         {
-            this.haveDailyClose = haveDailyClose;
-            m_FormOrder = new FormOrder();
+            this._haveDailyClose = haveDailyClose;
+            _formOrder = new FormOrder();
             if (ConstantValuePool.BizSettingConfig.SaleType == ShopSaleType.DineInAndTakeout)
             {
-                m_FormTakeout = new FormTakeout(haveDailyClose);
+                _formTakeout = new FormTakeout(haveDailyClose);
             }
             InitializeComponent();
             if (!string.IsNullOrEmpty(ConstantValuePool.BizSettingConfig.DeskImagePath) && File.Exists(ConstantValuePool.BizSettingConfig.DeskImagePath))
@@ -116,24 +116,24 @@ namespace VechsoftPos
 
             if (RightsItemCode.FindRights(RightsItemCode.TAKEORDER))
             {
-                if (haveDailyClose)
+                if (_haveDailyClose)
                 {
                     btnOrder.BackColor = ConstantValuePool.PressedColor;
-                    m_OperateType = ButtonOperateType.ORDER;
-                    prevPressedButton = btnOrder;
+                    _operateType = ButtonOperateType.ORDER;
+                    _prevPressedButton = btnOrder;
                 }
                 else
                 {
                     btnOrder.Enabled = false;
                     btnOrder.BackColor = ConstantValuePool.DisabledColor;
-                    m_OperateType = ButtonOperateType.NONE;
+                    _operateType = ButtonOperateType.NONE;
                 }
             }
             else
             {
                 btnOrder.Enabled = false;
                 btnOrder.BackColor = ConstantValuePool.DisabledColor;
-                m_OperateType = ButtonOperateType.NONE;
+                _operateType = ButtonOperateType.NONE;
             }
             if (!RightsItemCode.FindRights(RightsItemCode.CLEARDESK))
             {
@@ -160,7 +160,7 @@ namespace VechsoftPos
                 scrollingText1.ScrollText = strNotice;
             }
 
-            Thread backWork = new Thread(new ThreadStart(doWork));
+            Thread backWork = new Thread(new ThreadStart(DoWork));
             backWork.IsBackground = true;
             backWork.Start();
         }
@@ -185,26 +185,24 @@ namespace VechsoftPos
                 {
                     if (region.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
                     {
-                        float emSize = (float)btnStyle.FontSize;
-                        FontStyle style = FontStyle.Regular;
-                        btn.Font = new Font(btnStyle.FontName, emSize, style);
+                        btn.Font = new Font(btnStyle.FontName, btnStyle.FontSize, FontStyle.Regular);
                         btn.ForeColor = ColorConvert.RGB(btnStyle.ForeColor);
                         btn.BackColor = btn.DisplayColor = ColorConvert.RGB(btnStyle.BackColor);
                         break;
                     }
                 }
                 btn.Click += new System.EventHandler(this.btnRegion_Click);
-                if (prevRegionButton == null)
+                if (_prevRegionButton == null)
                 {
-                    prevRegionButton = btn;
-                    prevRegionButton.BackColor = ConstantValuePool.PressedColor;
+                    _prevRegionButton = btn;
+                    _prevRegionButton.BackColor = ConstantValuePool.PressedColor;
                 }
                 this.pnlRegion.Controls.Add(btn);
             }
             //动态加载第一区域的桌况信息
             BizRegion firstRegion =  ConstantValuePool.RegionList[0];
-            m_CurrentRegionID = firstRegion.RegionID;
-            if (!dicDeskInRegion.ContainsKey(m_CurrentRegionID))
+            _currentRegionId = firstRegion.RegionID;
+            if (!_dicDeskInRegion.ContainsKey(_currentRegionId))
             {
                 List<CrystalButton> btnList = new List<CrystalButton>();
                 foreach (BizDesk desk in firstRegion.BizDeskList)
@@ -222,9 +220,9 @@ namespace VechsoftPos
                     btn.Click += new System.EventHandler(this.btnDesk_Click);
                     btnList.Add(btn);
                 }
-                dicDeskInRegion.Add(firstRegion.RegionID, btnList);
+                _dicDeskInRegion.Add(firstRegion.RegionID, btnList);
             }
-            foreach (CrystalButton btn in dicDeskInRegion[firstRegion.RegionID])
+            foreach (CrystalButton btn in _dicDeskInRegion[firstRegion.RegionID])
             {
                 this.pnlDesk.Controls.Add(btn);
             }
@@ -238,35 +236,36 @@ namespace VechsoftPos
 
         protected override void OnActivated(EventArgs e)
         {
-            currentFormActivate = true;
+            _currentFormActivate = true;
             base.OnActivated(e);
         }
 
         protected override void OnDeactivate(EventArgs e)
         {
-            currentFormActivate = false;
+            _currentFormActivate = false;
             base.OnDeactivate(e);
         }
 
-        private void doWork()
+        private void DoWork()
         {
             while (true)
             {
-                if (currentFormActivate)
+                if (_currentFormActivate)
                 {
-                    if (dicDeskInRegion.ContainsKey(m_CurrentRegionID))
+                    if (_dicDeskInRegion.ContainsKey(_currentRegionId))
                     {
-                        IList<DeskRealTimeInfo> deskInfoList = DeskService.GetInstance().GetDeskRealTimeInfo(m_CurrentRegionID.ToString());
-                        List<CrystalButton> btnDeskList = dicDeskInRegion[m_CurrentRegionID];
+                        IList<DeskRealTimeInfo> deskInfoList = DeskService.GetInstance().GetDeskRealTimeInfo(_currentRegionId.ToString());
+                        List<CrystalButton> btnDeskList = _dicDeskInRegion[_currentRegionId];
                         foreach (CrystalButton btnDesk in btnDeskList)
                         {
                             BizDesk desk = btnDesk.Tag as BizDesk;
-                            bool IsContains = false;
+                            if(desk == null) continue;
+                            bool isContains = false;
                             foreach (DeskRealTimeInfo deskInfo in deskInfoList)
                             {
-                                if (desk.DeskName == deskInfo.DeskName)
+                                if (desk.DeskName.Equals(deskInfo.DeskName, StringComparison.CurrentCultureIgnoreCase))
                                 {
-                                    IsContains = true;
+                                    isContains = true;
                                     //更新状态
                                     desk.Status = deskInfo.DeskStatus;
                                     desk.DeviceNo = deskInfo.DeviceNo;
@@ -274,14 +273,14 @@ namespace VechsoftPos
                                     break;
                                 }
                             }
-                            if (!IsContains)
+                            if (!isContains)
                             {
                                 UpdateDeskButtonInfo(btnDesk, null);
                             }
                         }
                     }
                 }
-                Thread.Sleep(threadSleepTime);
+                Thread.Sleep(ThreadSleepTime);
             }
         }
 
@@ -295,15 +294,18 @@ namespace VechsoftPos
             }
             else
             {
-                if (currentFormActivate)
+                if (_currentFormActivate)
                 {
                     if (deskInfo == null)
                     {
                         BizDesk desk = btnDesk.Tag as BizDesk;
-                        desk.Status = (int)DeskButtonStatus.IDLE_MODE;
-                        desk.DeviceNo = string.Empty;
-                        btnDesk.BackColor = GetColorByStatus(desk.Status, desk.DeviceNo);
-                        btnDesk.Text = desk.DeskName;
+                        if (desk != null)
+                        {
+                            desk.Status = (int) DeskButtonStatus.IDLE_MODE;
+                            desk.DeviceNo = string.Empty;
+                            btnDesk.BackColor = GetColorByStatus(desk.Status, desk.DeviceNo);
+                            btnDesk.Text = desk.DeskName;
+                        }
                     }
                     else
                     {
@@ -323,8 +325,13 @@ namespace VechsoftPos
 
         private void btnRegion_Click(object sender, EventArgs e)
         {
-            currentFormActivate = false;
-            lock (dicDeskInRegion)
+            CrystalButton btnRegion = sender as CrystalButton;
+            if (btnRegion == null) return;
+            BizRegion region = btnRegion.Tag as BizRegion;
+            if (region == null) return;
+
+            _currentFormActivate = false;
+            lock (_dicDeskInRegion)
             {
                 //禁止引发Layout事件
                 this.pnlDesk.SuspendLayout();
@@ -332,33 +339,35 @@ namespace VechsoftPos
                 //清除pnlDesk内所有控件
                 this.pnlDesk.Controls.Clear();
                 //获取Desk List
-                CrystalButton btnRegion = sender as CrystalButton;
-                prevRegionButton.BackColor = prevRegionButton.DisplayColor;
+                _prevRegionButton.BackColor = _prevRegionButton.DisplayColor;
                 btnRegion.BackColor = ConstantValuePool.PressedColor;
-                prevRegionButton = btnRegion;
-                BizRegion region = btnRegion.Tag as BizRegion;
-                m_CurrentRegionID = region.RegionID;
-                if (!dicDeskInRegion.ContainsKey(m_CurrentRegionID))
+                _prevRegionButton = btnRegion;
+
+                _currentRegionId = region.RegionID;
+                if (!_dicDeskInRegion.ContainsKey(_currentRegionId))
                 {
                     List<CrystalButton> btnList = new List<CrystalButton>();
-                    foreach (BizDesk desk in region.BizDeskList)
+                    if (region.BizDeskList != null && region.BizDeskList.Count > 0)
                     {
-                        CrystalButton btn = new CrystalButton();
-                        btn.Name = desk.DeskID.ToString();
-                        btn.Text = desk.DeskName;
-                        btn.Width = desk.Width;
-                        btn.Height = desk.Height;
-                        btn.Location = new Point(desk.PX, desk.PY);
-                        btn.Tag = desk;
-                        btn.Font = new Font("Arial", ConstantValuePool.BizSettingConfig.FontSize, FontStyle.Regular);
-                        btn.ForeColor = Color.White;
-                        btn.BackColor = GetColorByStatus(desk.Status, desk.DeviceNo);
-                        btn.Click += new System.EventHandler(this.btnDesk_Click);
-                        btnList.Add(btn);
+                        foreach (BizDesk desk in region.BizDeskList)
+                        {
+                            CrystalButton btn = new CrystalButton();
+                            btn.Name = desk.DeskID.ToString();
+                            btn.Text = desk.DeskName;
+                            btn.Width = desk.Width;
+                            btn.Height = desk.Height;
+                            btn.Location = new Point(desk.PX, desk.PY);
+                            btn.Tag = desk;
+                            btn.Font = new Font("Arial", ConstantValuePool.BizSettingConfig.FontSize, FontStyle.Regular);
+                            btn.ForeColor = Color.White;
+                            btn.BackColor = GetColorByStatus(desk.Status, desk.DeviceNo);
+                            btn.Click += new System.EventHandler(this.btnDesk_Click);
+                            btnList.Add(btn);
+                        }
                     }
-                    dicDeskInRegion.Add(region.RegionID, btnList);
+                    _dicDeskInRegion.Add(region.RegionID, btnList);
                 }
-                foreach (CrystalButton btn in dicDeskInRegion[region.RegionID])
+                foreach (CrystalButton btn in _dicDeskInRegion[region.RegionID])
                 {
                     this.pnlDesk.Controls.Add(btn);
                 }
@@ -370,21 +379,24 @@ namespace VechsoftPos
                 this.pnlDesk.PerformLayout();
                 this.ResumeLayout(false);
             }
-            currentFormActivate = true;
+            _currentFormActivate = true;
         }
 
         private void btnDesk_Click(object sender, EventArgs e)
         {
-            if (m_OperateType == ButtonOperateType.NONE)
+            if (_operateType == ButtonOperateType.NONE)
             {
                 return;
             }
-            currentFormActivate = false;
             CrystalButton btnDesk = sender as CrystalButton;
+            if (btnDesk == null) return;
             BizDesk tempDesk = btnDesk.Tag as BizDesk;
+            if (tempDesk == null) return;
+
+            _currentFormActivate = false;
             //重新获取Desk信息
             BizDesk desk = DeskService.GetInstance().GetBizDeskByName(tempDesk.DeskName);
-            if (m_OperateType == ButtonOperateType.ORDER)
+            if (_operateType == ButtonOperateType.ORDER)
             {
                 if (desk.Status == (int)DeskButtonStatus.IDLE_MODE)
                 {
@@ -394,41 +406,40 @@ namespace VechsoftPos
                     keyForm.ShowDialog();
                     if (!string.IsNullOrEmpty(keyForm.KeypadValue) && keyForm.KeypadValue != "0" && keyForm.KeypadValue.IndexOf('.') == -1)
                     {
-                        m_FormOrder.PersonNum = int.Parse(keyForm.KeypadValue);
+                        _formOrder.PersonNum = int.Parse(keyForm.KeypadValue);
                     }
                     else
                     {
                         return;
                     }
                     //更新桌况为占用状态
-                    int status = (int)DeskButtonStatus.OCCUPIED;
+                    const int status = (int)DeskButtonStatus.OCCUPIED;
                     if (DeskService.GetInstance().UpdateDeskStatus(desk.DeskName, ConstantValuePool.BizSettingConfig.DeviceNo, status))
                     {
                         desk.Status = status;
                         btnDesk.BackColor = GetColorByStatus(status, ConstantValuePool.BizSettingConfig.DeviceNo);
-                        m_FormOrder.CurrentDeskName = desk.DeskName;
-                        m_FormOrder.PlaceSalesOrder = null;
-                        m_FormOrder.VisibleShow = true;
-                        m_FormOrder.Show();
+                        _formOrder.CurrentDeskName = desk.DeskName;
+                        _formOrder.PlaceSalesOrder = null;
+                        _formOrder.VisibleShow = true;
+                        _formOrder.Show();
                     }
                 }
                 else if (desk.Status == (int)DeskButtonStatus.OCCUPIED)
                 {
-                    if (desk.DeviceNo == ConstantValuePool.BizSettingConfig.DeviceNo || string.IsNullOrEmpty(desk.DeviceNo))
+                    if (string.IsNullOrEmpty(desk.DeviceNo) || desk.DeviceNo == ConstantValuePool.BizSettingConfig.DeviceNo)
                     {
                         //更新桌况为占用状态
-                        int status = (int)DeskButtonStatus.OCCUPIED;
+                        const int status = (int)DeskButtonStatus.OCCUPIED;
                         if (DeskService.GetInstance().UpdateDeskStatus(desk.DeskName, ConstantValuePool.BizSettingConfig.DeviceNo, status))
                         {
                             //获取桌子的订单列表
                             IList<Order> orderList = OrderService.GetInstance().GetOrderList(desk.DeskName);
                             if (orderList != null && orderList.Count > 0)
                             {
-                                SalesOrder salesOrder = null;
+                                Guid orderId = Guid.Empty;
                                 if (orderList.Count == 1)
                                 {
-                                    Guid orderID = orderList[0].OrderID;
-                                    salesOrder = SalesOrderService.GetInstance().GetSalesOrder(orderID);
+                                    orderId = orderList[0].OrderID;
                                 }
                                 else
                                 {
@@ -436,10 +447,10 @@ namespace VechsoftPos
                                     form.ShowDialog();
                                     if (form.SelectedOrder != null)
                                     {
-                                        Guid orderID = form.SelectedOrder.OrderID;
-                                        salesOrder = SalesOrderService.GetInstance().GetSalesOrder(orderID);
+                                        orderId = form.SelectedOrder.OrderID;
                                     }
                                 }
+                                SalesOrder salesOrder = SalesOrderService.GetInstance().GetSalesOrder(orderId);
                                 if (salesOrder != null)
                                 {
                                     if (salesOrder.order.Status == 3)   //已预结
@@ -451,10 +462,10 @@ namespace VechsoftPos
                                     else
                                     {
                                         //open order form
-                                        m_FormOrder.CurrentDeskName = desk.DeskName;
-                                        m_FormOrder.PlaceSalesOrder = salesOrder;
-                                        m_FormOrder.VisibleShow = true;
-                                        m_FormOrder.Show();
+                                        _formOrder.CurrentDeskName = desk.DeskName;
+                                        _formOrder.PlaceSalesOrder = salesOrder;
+                                        _formOrder.VisibleShow = true;
+                                        _formOrder.Show();
                                     }
                                 }
                             }
@@ -462,21 +473,21 @@ namespace VechsoftPos
                     }
                 }
             }
-            else if (m_OperateType == ButtonOperateType.CLEAR)
+            else if (_operateType == ButtonOperateType.CLEAR)
             {
                 if (desk.Status == (int)DeskButtonStatus.OCCUPIED && !string.IsNullOrEmpty(desk.DeviceNo))
                 {
                     //更新桌况为非占用状态
-                    int status = (int)DeskButtonStatus.OCCUPIED;
+                    const int status = (int)DeskButtonStatus.OCCUPIED;
                     if (DeskService.GetInstance().UpdateDeskStatus(desk.DeskName, string.Empty, status))
                     {
                         btnDesk.BackColor = GetColorByStatus(status, string.Empty);
                     }
                 }
             }
-            else if (m_OperateType == ButtonOperateType.CHANGE_DESK)
+            else if (_operateType == ButtonOperateType.CHANGE_DESK)
             {
-                if (string.IsNullOrEmpty(deskName1st))
+                if (string.IsNullOrEmpty(_deskName1St))
                 {
                     //获取桌子的订单列表
                     IList<Order> orderList = OrderService.GetInstance().GetOrderList(desk.DeskName);
@@ -488,36 +499,36 @@ namespace VechsoftPos
                             form.ShowDialog();
                             if (form.SelectedOrder != null)
                             {
-                                deskName1st = desk.DeskName;
-                                orderID1st = form.SelectedOrder.OrderID;
-                                firstDeskSingleOrder = false;
+                                _deskName1St = desk.DeskName;
+                                _orderId1St = form.SelectedOrder.OrderID;
+                                _firstDeskSingleOrder = false;
                             }
                             else
                             {
-                                currentFormActivate = true; //使线程重新活跃
+                                _currentFormActivate = true; //使线程重新活跃
                                 return;
                             }
                         }
                         else
                         {
-                            deskName1st = desk.DeskName;
-                            orderID1st = orderList[0].OrderID;
-                            firstDeskSingleOrder = true;
+                            _deskName1St = desk.DeskName;
+                            _orderId1St = orderList[0].OrderID;
+                            _firstDeskSingleOrder = true;
                         }
                     }
                     else
                     {
-                        currentFormActivate = true; //使线程重新活跃
+                        _currentFormActivate = true; //使线程重新活跃
                         return; //空桌
                     }
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(deskName1st))
+                    if (!string.IsNullOrEmpty(_deskName1St))
                     {
-                        if (desk.DeskName == deskName1st)
+                        if (desk.DeskName == _deskName1St)
                         {
-                            currentFormActivate = true; //使线程重新活跃
+                            _currentFormActivate = true; //使线程重新活跃
                             return; //点击相同的第一张桌子
                         }
                         //获取桌子的订单列表
@@ -526,18 +537,18 @@ namespace VechsoftPos
                         {
                             DeskChange deskChange = new DeskChange();
                             deskChange.DeskName = desk.DeskName;
-                            deskChange.OrderID1st = orderID1st;
+                            deskChange.OrderID1st = _orderId1St;
                             deskChange.OrderID2nd = Guid.Empty;
                             Feature.FormChoseMultiOrder form = new Feature.FormChoseMultiOrder(orderList, deskChange);
                             form.ShowDialog();
                             if (form.SelectedOrder != null)
                             {
                                 int status = 0;
-                                if (firstDeskSingleOrder)
+                                if (_firstDeskSingleOrder)
                                 {
                                     //更新桌况为空闲状态
                                     status = (int)DeskButtonStatus.IDLE_MODE;
-                                    if (!DeskService.GetInstance().UpdateDeskStatus(deskName1st, string.Empty, status))
+                                    if (!DeskService.GetInstance().UpdateDeskStatus(_deskName1St, string.Empty, status))
                                     {
                                         MessageBox.Show("更新桌况失败！");
                                     }
@@ -548,15 +559,15 @@ namespace VechsoftPos
                                     MessageBox.Show("更新桌况失败！");
                                 }
 
-                                deskName1st = string.Empty;
-                                orderID1st = Guid.Empty;
-                                firstDeskSingleOrder = false;
+                                _deskName1St = string.Empty;
+                                _orderId1St = Guid.Empty;
+                                _firstDeskSingleOrder = false;
                             }
                             else
                             {
-                                deskName1st = string.Empty;
-                                orderID1st = Guid.Empty;
-                                firstDeskSingleOrder = false;
+                                _deskName1St = string.Empty;
+                                _orderId1St = Guid.Empty;
+                                _firstDeskSingleOrder = false;
                             }
                         }
                         else
@@ -564,16 +575,16 @@ namespace VechsoftPos
                             //直接转台
                             DeskChange deskChange = new DeskChange();
                             deskChange.DeskName = desk.DeskName;
-                            deskChange.OrderID1st = orderID1st;
+                            deskChange.OrderID1st = _orderId1St;
                             deskChange.OrderID2nd = Guid.Empty;
                             if (OrderService.GetInstance().OrderDeskOperate(deskChange))
                             {
                                 int status = 0;
-                                if (firstDeskSingleOrder)
+                                if (_firstDeskSingleOrder)
                                 {
                                     //更新桌况为空闲状态
                                     status = (int)DeskButtonStatus.IDLE_MODE;
-                                    if (!DeskService.GetInstance().UpdateDeskStatus(deskName1st, string.Empty, status))
+                                    if (!DeskService.GetInstance().UpdateDeskStatus(_deskName1St, string.Empty, status))
                                     {
                                         MessageBox.Show("更新桌况失败！");
                                     }
@@ -584,33 +595,32 @@ namespace VechsoftPos
                                     MessageBox.Show("更新桌况失败！");
                                 }
 
-                                deskName1st = string.Empty;
-                                orderID1st = Guid.Empty;
-                                firstDeskSingleOrder = false;
+                                _deskName1St = string.Empty;
+                                _orderId1St = Guid.Empty;
+                                _firstDeskSingleOrder = false;
                             }
                         }
                     }
                 }
             }
-            else if (m_OperateType == ButtonOperateType.CHECKOUT)
+            else if (_operateType == ButtonOperateType.CHECKOUT)
             {
                 if (desk.Status == (int)DeskButtonStatus.OCCUPIED)
                 {
-                    if (desk.DeviceNo == ConstantValuePool.BizSettingConfig.DeviceNo || string.IsNullOrEmpty(desk.DeviceNo))
+                    if (string.IsNullOrEmpty(desk.DeviceNo) || desk.DeviceNo == ConstantValuePool.BizSettingConfig.DeviceNo)
                     {
                         //更新桌况为占用状态
-                        int status = (int)DeskButtonStatus.OCCUPIED;
+                        const int status = (int)DeskButtonStatus.OCCUPIED;
                         if (DeskService.GetInstance().UpdateDeskStatus(desk.DeskName, ConstantValuePool.BizSettingConfig.DeviceNo, status))
                         {
                             //获取桌子的订单列表
                             IList<Order> orderList = OrderService.GetInstance().GetOrderList(desk.DeskName);
                             if (orderList != null && orderList.Count > 0)
                             {
-                                SalesOrder salesOrder = null;
+                                Guid orderId = Guid.Empty;
                                 if (orderList.Count == 1)
                                 {
-                                    Guid orderID = orderList[0].OrderID;
-                                    salesOrder = SalesOrderService.GetInstance().GetSalesOrder(orderID);
+                                    orderId = orderList[0].OrderID;
                                 }
                                 else
                                 {
@@ -618,10 +628,11 @@ namespace VechsoftPos
                                     form.ShowDialog();
                                     if (form.SelectedOrder != null)
                                     {
-                                        Guid orderID = form.SelectedOrder.OrderID;
-                                        salesOrder = SalesOrderService.GetInstance().GetSalesOrder(orderID);
+                                        orderId = form.SelectedOrder.OrderID;
+
                                     }
                                 }
+                                SalesOrder salesOrder = SalesOrderService.GetInstance().GetSalesOrder(orderId);
                                 if (salesOrder != null)
                                 {
                                     FormCheckOut checkForm = new FormCheckOut(salesOrder, desk.DeskName);
@@ -632,7 +643,7 @@ namespace VechsoftPos
                     }
                 }
             }
-            currentFormActivate = true;
+            _currentFormActivate = true;
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -652,59 +663,63 @@ namespace VechsoftPos
 
         private void btnOrder_Click(object sender, EventArgs e)
         {
-            if (prevPressedButton != null)
+            if (_prevPressedButton != null)
             {
-                prevPressedButton.BackColor = prevPressedButton.DisplayColor;
+                _prevPressedButton.BackColor = _prevPressedButton.DisplayColor;
             }
             CrystalButton btn = sender as CrystalButton;
+            if(btn == null) return;
             btn.BackColor = ConstantValuePool.PressedColor;
-            m_OperateType = ButtonOperateType.ORDER;
-            prevPressedButton = btn;
+            _operateType = ButtonOperateType.ORDER;
+            _prevPressedButton = btn;
         }
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            if (prevPressedButton != null)
+            if (_prevPressedButton != null)
             {
-                prevPressedButton.BackColor = prevPressedButton.DisplayColor;
+                _prevPressedButton.BackColor = _prevPressedButton.DisplayColor;
             }
             CrystalButton btn = sender as CrystalButton;
+            if (btn == null) return;
             btn.BackColor = ConstantValuePool.PressedColor;
-            m_OperateType = ButtonOperateType.CLEAR;
-            prevPressedButton = btn;
+            _operateType = ButtonOperateType.CLEAR;
+            _prevPressedButton = btn;
         }
 
         private void btnTurnTable_Click(object sender, EventArgs e)
         {
-            deskName1st = string.Empty;
-            orderID1st = Guid.Empty;
-            firstDeskSingleOrder = false;
-            if (prevPressedButton != null)
+            _deskName1St = string.Empty;
+            _orderId1St = Guid.Empty;
+            _firstDeskSingleOrder = false;
+            if (_prevPressedButton != null)
             {
-                prevPressedButton.BackColor = prevPressedButton.DisplayColor;
+                _prevPressedButton.BackColor = _prevPressedButton.DisplayColor;
             }
             CrystalButton btn = sender as CrystalButton;
+            if (btn == null) return;
             btn.BackColor = ConstantValuePool.PressedColor;
-            m_OperateType = ButtonOperateType.CHANGE_DESK;
-            prevPressedButton = btn;
+            _operateType = ButtonOperateType.CHANGE_DESK;
+            _prevPressedButton = btn;
         }
 
         private void btnCheckOut_Click(object sender, EventArgs e)
         {
-            if (prevPressedButton != null)
+            if (_prevPressedButton != null)
             {
-                prevPressedButton.BackColor = prevPressedButton.DisplayColor;
+                _prevPressedButton.BackColor = _prevPressedButton.DisplayColor;
             }
             CrystalButton btn = sender as CrystalButton;
+            if (btn == null) return;
             btn.BackColor = ConstantValuePool.PressedColor;
-            m_OperateType = ButtonOperateType.CHECKOUT;
-            prevPressedButton = btn;
+            _operateType = ButtonOperateType.CHECKOUT;
+            _prevPressedButton = btn;
         }
 
         private void btnTakeOut_Click(object sender, EventArgs e)
         {
-            m_FormTakeout.VisibleShow = true;
-            m_FormTakeout.Show();
+            _formTakeout.VisibleShow = true;
+            _formTakeout.Show();
         }
 
         private Color GetColorByStatus(int deskStatus, string deviceNo)

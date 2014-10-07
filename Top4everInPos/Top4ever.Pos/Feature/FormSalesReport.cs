@@ -31,6 +31,10 @@ namespace VechsoftPos.Feature
             get { return m_HandleSuccess; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="modelType">1:交班 2:日结</param>
         public FormSalesReport(int modelType)
         {
             InitializeComponent();
@@ -53,6 +57,11 @@ namespace VechsoftPos.Feature
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="modelType">1:交班 2:日结</param>
+        /// <param name="recordId"></param>
         public FormSalesReport(int modelType, object recordId)
         {
             InitializeComponent();
@@ -557,7 +566,8 @@ namespace VechsoftPos.Feature
                 if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
                 {
                     string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                    DriverSinglePrint driverPrint = new DriverSinglePrint(printerName, "SpecimenLabel");
+                    string paperName = ConstantValuePool.BizSettingConfig.printConfig.PaperName;
+                    DriverSinglePrint driverPrint = new DriverSinglePrint(printerName, paperName);
                     driverPrint.DoPrint(printData);
                 }
             }

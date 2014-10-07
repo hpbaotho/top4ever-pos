@@ -109,7 +109,7 @@ namespace Top4ever.Entity
         /// </summary>
         public static Form SecondScreenForm { get; set; }
         /// <summary>
-        /// 桌况对象
+        /// 桌况对象(因为当前窗体是Show方法，所以不能通过返回值来判断)
         /// </summary>
         public static Form DeskForm { get; set; }
     }

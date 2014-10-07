@@ -11,10 +11,6 @@ namespace Top4ever.Entity.Enum
         /// <summary>
         /// 占用
         /// </summary>
-        OCCUPIED = 1,
-        /// <summary>
-        /// 锁定
-        /// </summary>
-        LOCK_WP = 10
+        OCCUPIED = 1
     }
 }
