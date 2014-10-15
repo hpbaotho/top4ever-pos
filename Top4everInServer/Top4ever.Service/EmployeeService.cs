@@ -62,7 +62,6 @@ namespace Top4ever.Service
             catch (Exception exception)
             {
                 employee = null;
-                result = 0;
                 LogHelper.GetInstance().Error("[GetEmployee]参数：UserName_" + userName, exception);
             }
             finally
@@ -95,7 +94,6 @@ namespace Top4ever.Service
             catch (Exception exception)
             {
                 employee = null;
-                result = 0;
                 LogHelper.GetInstance().Error("[GetEmployee]参数：AttendanceCard_" + attendanceCard, exception);
             }
             finally
@@ -120,7 +118,6 @@ namespace Top4ever.Service
             catch (Exception exception)
             {
                 employee = null;
-                result = 0;
                 LogHelper.GetInstance().Error("[GetEmployeeByNo]参数：EmployeeNo_" + employeeNo, exception);
             }
             finally
@@ -140,7 +137,6 @@ namespace Top4ever.Service
             }
             catch (Exception exception)
             {
-                rightsCodeList = null;
                 LogHelper.GetInstance().Error("[GetRightsCodeList]参数：UserName_" + userName, exception);
             }
             finally

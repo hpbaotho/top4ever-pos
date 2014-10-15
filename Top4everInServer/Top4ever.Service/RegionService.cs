@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using IBatisNet.DataAccess;
-using Newtonsoft.Json;
 using Top4ever.Domain;
 using Top4ever.Interface;
 using Top4ever.Utils;
@@ -50,10 +49,17 @@ namespace Top4ever.Service
                 regionList = _regionDao.GetAllBizRegion();
                 if (regionList != null && regionList.Count > 0)
                 {
-                    foreach (BizRegion region in regionList)
+                    IList<BizDesk> deskList = _deskDao.GetAllBizDesks();
+                    if (deskList != null && deskList.Count > 0)
                     {
-                        IList<BizDesk> deskList = _deskDao.GetAllBizDeskByRegion(region.RegionID);
-                        region.BizDeskList = deskList;
+                        foreach (BizRegion region in regionList)
+                        {
+                            IList<BizDesk> desks = deskList.Where(desk => desk.RegionID.Equals(region.RegionID)).ToList();
+                            if (desks.Count > 0)
+                            {
+                                region.BizDeskList = desks;
+                            }
+                        }
                     }
                 }
             }

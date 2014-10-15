@@ -23,22 +23,6 @@
       <result property="CustomerName" column="CustomerName"></result>
       <result property="Address" column="Address"></result>
     </resultMap>
-
-    <resultMap id="TopSellGoodsResult" class="TopSellGoods">
-      <result property="Times" column="Times"></result>
-      <result property="GoodsID" column="GoodsID"></result>
-      <result property="GoodsName" column="GoodsName"></result>
-      <result property="SellPrice" column="SellPrice"></result>
-      <result property="CanDiscount" column="CanDiscount"></result>
-    </resultMap>
-
-    <resultMap id="CallRecordParam" class="CallRecord">
-      <parameter property="CallRecordID" column="CallRecordID" />
-      <parameter property="Telephone" column="Telephone" />
-      <parameter property="CallTime" column="CallTime" />
-      <parameter property="Status" column="Status" />
-      <parameter property="CustomerName" column="CustomerName" />
-    </resultMap>
   </resultMaps>
 
   <parameterMaps>
@@ -79,10 +63,12 @@
     </procedure>
 
     <update id="UpdateCustomerInfo" parameterClass="CustomerInfo">
+      <![CDATA[ 
       UPDATE CustomerInfo
       SET CustomerName = #CustomerName#, DeliveryAddress1 = #DeliveryAddress1#, DeliveryAddress2 = #DeliveryAddress2#, DeliveryAddress3 = #DeliveryAddress3#,
-        ActiveIndex = #ActiveIndex#, LastModifiedEmployeeID = #LastModifiedEmployeeID#, <![CDATA[ LastModifiedTime = getdate() ]]>
+        ActiveIndex = #ActiveIndex#, LastModifiedEmployeeID = #LastModifiedEmployeeID#, LastModifiedTime = getdate()
       WHERE Telephone = #Telephone#
+       ]]>
     </update>
 
     <select id="GetCustomerInfoByPhone" parameterClass="String" resultMap="CustomerInfoResult">
@@ -110,21 +96,21 @@
       proc_CreateOrUpdateCallRecord
     </procedure>
 
-    <select id="GetCallRecordList" resultMap="CallRecordParam">
+    <select id="GetCallRecordList" resultClass="CallRecord">
       SELECT cr.CallRecordID, cr.Telephone, cr.CallTime, cr.[Status], ci.CustomerName
       FROM CallRecord cr LEFT JOIN CustomerInfo ci ON cr.Telephone = ci.Telephone
       WHERE cr.CallTime > DATEADD(MONTH,-1,GETDATE())
       ORDER BY CallTime DESC
     </select>
 
-    <select id="GetCallRecordByStatus" parameterClass="Int" resultMap="CallRecordParam">
+    <select id="GetCallRecordByStatus" parameterClass="Int" resultClass="CallRecord">
       SELECT cr.CallRecordID, cr.Telephone, cr.CallTime, cr.[Status], ci.CustomerName
       FROM CallRecord cr LEFT JOIN CustomerInfo ci ON cr.Telephone = ci.Telephone
       WHERE cr.Status = #value# AND cr.CallTime > DATEADD(MONTH,-1,GETDATE())
       ORDER BY CallTime DESC
     </select>
 
-    <select id="GetTopSellGoods" parameterClass="String" resultMap="TopSellGoodsResult">
+    <select id="GetTopSellGoods" parameterClass="String" resultClass="TopSellGoods">
       SELECT TOP 10 *
       FROM
       (
@@ -136,7 +122,7 @@
       ORDER BY T.Times DESC
     </select>
     
-    <select id="GetTopSellGoodsByTime" parameterClass="System.Collections.Hashtable" resultMap="TopSellGoodsResult">
+    <select id="GetTopSellGoodsByTime" parameterClass="System.Collections.Hashtable" resultClass="TopSellGoods">
       SELECT TOP 10 *
       FROM
       (

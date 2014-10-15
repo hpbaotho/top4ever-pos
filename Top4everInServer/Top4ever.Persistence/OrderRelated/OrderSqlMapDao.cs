@@ -20,9 +20,9 @@ namespace Top4ever.Persistence.OrderRelated
             return ExecuteQueryForList<Order>("GetOrderByDeskName", deskName);
         }
 
-        public Order GetOrder(Guid orderID)
+        public Order GetOrder(Guid orderId)
         {
-            return (ExecuteQueryForObject("GetOrderByID", orderID) as Order);
+            return (ExecuteQueryForObject("GetOrderByID", orderId) as Order);
         }
 
         public IList<Order> GetOrderListBySearch(string strWhere, string orderBy, int pageIndex, int pageSize)
@@ -42,51 +42,42 @@ namespace Top4ever.Persistence.OrderRelated
             {
                 return result.ToString();
             }
-            else
-            {
-                return string.Empty;
-            }
+            return string.Empty;
         }
 
         public bool UpdateOrder(Order order)
         {
-            int result = 0;
-            result = ExecuteUpdate("UpdateOrder", order);
+            int result = ExecuteUpdate("UpdateOrder", order);
             return result > 0;
         }
 
         public bool UpdateOrderPrice(Order order)
         {
-            int result = 0;
-            result = ExecuteUpdate("UpdateOrderPrice", order);
+            int result = ExecuteUpdate("UpdateOrderPrice", order);
             return result > 0;
         }
 
         public bool UpdatePrePayOrder(Order order)
         {
-            int result = 0;
-            result = ExecuteUpdate("UpdatePrePayOrder", order);
+            int result = ExecuteUpdate("UpdatePrePayOrder", order);
             return result > 0;
         }
 
         public bool UpdatePayingOrder(Order order)
         {
-            int result = 0;
-            result = ExecuteUpdate("UpdatePayingOrder", order);
+            int result = ExecuteUpdate("UpdatePayingOrder", order);
             return result > 0;
         }
 
         public bool UpdatePaidOrderPrice(Order order)
         {
-            int result = 0;
-            result = ExecuteUpdate("UpdatePaidOrderPrice", order);
+            int result = ExecuteUpdate("UpdatePaidOrderPrice", order);
             return result > 0;
         }
 
         public bool DeleteWholeOrder(DeletedOrder deletedOrder)
         {
-            int result = 0;
-            result = ExecuteUpdate("UpdateDeletedOrder", deletedOrder);
+            int result = ExecuteUpdate("UpdateDeletedOrder", deletedOrder);
             return result > 0;
         }
 
@@ -103,15 +94,13 @@ namespace Top4ever.Persistence.OrderRelated
 
         public bool UpdateSplitOrderPrice(Order order)
         {
-            int result = 0;
-            result = ExecuteUpdate("UpdateSplitOrderPrice", order);
+            int result = ExecuteUpdate("UpdateSplitOrderPrice", order);
             return result > 0;
         }
 
         public bool UpdateOrderDeskName(Order order)
         {
-            int result = 0;
-            result = ExecuteUpdate("UpdateOrderDeskName", order);
+            int result = ExecuteUpdate("UpdateOrderDeskName", order);
             return result > 0;
         }
 
@@ -138,38 +127,29 @@ namespace Top4ever.Persistence.OrderRelated
             htParam["BeginTime"] = beginTime;
             htParam["EndTime"] = endTime;
             object objValue = ExecuteQueryForObject("IsExistOrderInTime", htParam);
-            bool IsExist = true;
+            bool isExist = true;
             if (objValue != null)
             {
-                if (Convert.ToInt32(objValue) > 0)
-                {
-                    IsExist = true;
-                }
-                else
-                {
-                    IsExist = false;
-                }
+                isExist = Convert.ToInt32(objValue) > 0;
             }
-            return IsExist;
+            return isExist;
         }
 
-        public bool UpdateOrderStatus(Guid orderID, int status)
+        public bool UpdateOrderStatus(Guid orderId, int status)
         {
-            int result = 0;
             Hashtable htParam = new Hashtable();
-            htParam["OrderID"] = orderID;
+            htParam["OrderID"] = orderId;
             htParam["Status"] = status;
-            result = ExecuteUpdate("UpdateOrderStatus", htParam);
+            int result = ExecuteUpdate("UpdateOrderStatus", htParam);
             return result > 0;
         }
 
-        public bool DeliveryTakeoutOrder(Guid orderID, string employeeNo)
+        public bool DeliveryTakeoutOrder(Guid orderId, string employeeNo)
         {
-            int result = 0;
             Hashtable htParam = new Hashtable();
-            htParam["OrderID"] = orderID;
+            htParam["OrderID"] = orderId;
             htParam["EmployeeNo"] = employeeNo;
-            result = ExecuteUpdate("UpdateTakeoutOrderStatus", htParam);
+            int result = ExecuteUpdate("UpdateTakeoutOrderStatus", htParam);
             return result > 0;
         }
 

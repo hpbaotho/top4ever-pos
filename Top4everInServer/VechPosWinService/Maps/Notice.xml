@@ -21,9 +21,11 @@
     -->
   <statements>
     <select id="GetNoticeList" resultMap="NoticeResult">
+      <![CDATA[ 
       SELECT NoticeID, NoticeContent, BeginDateTime, EndDateTime
       FROM Notice WITH(NOLOCK)
-      WHERE <![CDATA[ BeginDateTime <= GETDATE() AND EndDateTime >= GETDATE() ]]>
+      WHERE BeginDateTime <= GETDATE() AND EndDateTime >= GETDATE() 
+      ]]>
     </select>
 
   </statements>

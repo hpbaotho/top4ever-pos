@@ -44,11 +44,11 @@ namespace Top4ever.BLL
             return objRet;
         }
 
-        public static byte[] CheckLastDailyStatement()
+        public static byte[] CheckLastDailyStatement(byte[] itemBuffer)
         {
             byte[] objRet = null;
-
-            int result = DailyBalanceService.GetInstance().CheckLastDailyStatement();
+            int breakDays = BitConverter.ToInt32(itemBuffer, ParamFieldLength.PACKAGE_HEAD);
+            int result = DailyBalanceService.GetInstance().CheckLastDailyStatement(breakDays);
 
             int transCount = BasicTypeLength.INT32 + BasicTypeLength.INT32 + BasicTypeLength.INT32;
             objRet = new byte[transCount];

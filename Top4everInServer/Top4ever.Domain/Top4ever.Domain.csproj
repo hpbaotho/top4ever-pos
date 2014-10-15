@@ -51,11 +51,13 @@
     <Compile Include="DailyTurnover.cs" />
     <Compile Include="DeskRealTimeInfo.cs" />
     <Compile Include="GoodsRelated\Details.cs" />
+    <Compile Include="GoodsRelated\DetailsDetailsGroup.cs" />
     <Compile Include="GoodsRelated\DetailsGroup.cs" />
     <Compile Include="GoodsRelated\Goods.cs" />
     <Compile Include="GoodsRelated\GoodsCheckStock.cs" />
     <Compile Include="GoodsRelated\GoodsCombinedSale.cs" />
     <Compile Include="GoodsRelated\GoodsCronTrigger.cs" />
+    <Compile Include="GoodsRelated\GoodsDetailsGroup.cs" />
     <Compile Include="GoodsRelated\GoodsGroup.cs" />
     <Compile Include="GoodsRelated\GoodsLimitedTimeSale.cs" />
     <Compile Include="GoodsRelated\GoodsSetMeal.cs" />

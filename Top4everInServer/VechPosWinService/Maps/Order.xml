@@ -114,10 +114,12 @@
       </procedure>
 
       <update id="UpdateOrder" parameterClass="Order">
+        <![CDATA[ 
         UPDATE [Order]
         SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#, CutOffPrice = #CutOffPrice#, ServiceFee = #ServiceFee#, DeskName = #DeskName#,
-            PeopleNum = #PeopleNum#, InputEmployeeID = #EmployeeID#, InputEmployeeNo = #EmployeeNo#, <![CDATA[ LastModifiedTime = getdate() ]]>, LastModifiedEmployeeID = #EmployeeID#
+            PeopleNum = #PeopleNum#, InputEmployeeID = #EmployeeID#, InputEmployeeNo = #EmployeeNo#, LastModifiedTime = getdate(), LastModifiedEmployeeID = #EmployeeID#
         WHERE OrderID = #OrderID#
+        ]]>
       </update>
 
       <update id="UpdateOrderPrice" parameterClass="Order">
@@ -134,11 +136,13 @@
       </update>
 
       <update id="UpdatePayingOrder" parameterClass="Order">
+        <![CDATA[ 
         UPDATE [Order]
         SET TotalSellPrice = #TotalSellPrice#, ActualSellPrice = #ActualSellPrice#, DiscountPrice = #DiscountPrice#, CutOffPrice = #CutOffPrice#, ServiceFee = #ServiceFee#, PaymentMoney = #PaymentMoney#, NeedChangePay = #NeedChangePay#,
-            <![CDATA[ PayTime = getdate(), LastModifiedTime = getdate() ]]>, PayEmployeeID = #PayEmployeeID#, PayEmployeeNo = #PayEmployeeNo#, LastModifiedEmployeeID = #PayEmployeeID#, [Status] = 1,
+            PayTime = getdate(), LastModifiedTime = getdate(), PayEmployeeID = #PayEmployeeID#, PayEmployeeNo = #PayEmployeeNo#, LastModifiedEmployeeID = #PayEmployeeID#, [Status] = 1,
             MembershipCard = #MembershipCard#, MemberDiscount = #MemberDiscount#, CheckoutDeviceNo = #CheckoutDeviceNo#, TradePayNo = #TradePayNo#
         WHERE OrderID = #OrderID#
+        ]]>
       </update>
 
       <update id="UpdatePaidOrderPrice" parameterClass="Order">
@@ -180,7 +184,7 @@
       </procedure>
 
       <select id="IsExistOrderInTime" parameterClass="System.Collections.Hashtable" resultClass="Int32">
-        SELECT COUNT(1) FROM [Order] <![CDATA[ WHERE PayTime BETWEEN #BeginTime# AND #EndTime# ]]>
+        <![CDATA[ SELECT COUNT(1) FROM [Order] WHERE PayTime BETWEEN #BeginTime# AND #EndTime# ]]>
       </select>
 
       <update id="UpdateOrderStatus" parameterClass="System.Collections.Hashtable">
@@ -190,9 +194,11 @@
       </update>
 
       <update id="UpdateTakeoutOrderStatus" parameterClass="System.Collections.Hashtable">
+        <![CDATA[ 
         UPDATE [Order]
-        SET <![CDATA[ DeliveryTime = GETDATE() ]]>, DeliveryEmployeeNo = #EmployeeNo#
+        SET DeliveryTime = GETDATE(), DeliveryEmployeeNo = #EmployeeNo#
         WHERE OrderID = #OrderID#
+        ]]>
       </update>
 
       <select id="SelectDeliveryOrder" parameterClass="String" resultMap="DeliveryOrderResult">

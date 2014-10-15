@@ -62,12 +62,9 @@ namespace Top4ever.Service
                 {
                     BusinessReport businessReport = _businessReportDao.GetTurnoverByHandover(dailyStatementNo, deviceNo);
                     int workSequence = businessReport.WorkSequence;
-                    IList<OrderDiscountSum> orderDiscountSumList =
-                        _businessReportDao.GetOrderDiscountSumByHandover(dailyStatementNo, workSequence);
-                    IList<OrderPayoffSum> orderPayoffSumList =
-                        _businessReportDao.GetOrderPayoffSumByHandover(dailyStatementNo, workSequence);
-                    IList<ItemsPrice> itemsPriceList = _businessReportDao.GetItemsPriceByHandover(dailyStatementNo,
-                        workSequence);
+                    IList<OrderDiscountSum> orderDiscountSumList = _businessReportDao.GetOrderDiscountSumByHandover(dailyStatementNo, workSequence);
+                    IList<OrderPayoffSum> orderPayoffSumList = _businessReportDao.GetOrderPayoffSumByHandover(dailyStatementNo, workSequence);
+                    IList<ItemsPrice> itemsPriceList = _businessReportDao.GetItemsPriceByHandover(dailyStatementNo, workSequence);
 
                     IList<SalesPriceByDepart> priceByDepartList = new List<SalesPriceByDepart>();
                     if (itemsPriceList.Count > 0)

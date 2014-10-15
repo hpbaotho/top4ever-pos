@@ -28,7 +28,7 @@ namespace Top4ever.Domain
         /// <summary>
         /// 字体大小
         /// </summary>
-        public int FontSize { get; set; }
+        public decimal FontSize { get; set; }
         /// <summary>
         /// 字体类别
         /// </summary>

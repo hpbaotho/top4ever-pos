@@ -42,6 +42,10 @@ namespace Top4ever.Domain
         /// </summary>
         public string DeviceNo { get; set; }
         /// <summary>
+        /// 桌区
+        /// </summary>
+        public Guid RegionID { get; set; }
+        /// <summary>
         /// 备注
         /// </summary>
         public string Remark { get; set; }

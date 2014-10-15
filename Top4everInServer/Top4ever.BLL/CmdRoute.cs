@@ -88,7 +88,7 @@ namespace Top4ever.BLL
                     byteRet = DeletedOrderBLL.DeletePaidWholeOrder(itemBuffer);
                     break;
                 case Command.ID_CHECK_LASTDAILYSTATEMENT:
-                    byteRet = DailyBalanceBLL.CheckLastDailyStatement();
+                    byteRet = DailyBalanceBLL.CheckLastDailyStatement(itemBuffer);
                     break;
                 case Command.ID_UPDATE_ORDERSTATUS:
                     byteRet = OrderBLL.UpdateOrderStatus(itemBuffer);

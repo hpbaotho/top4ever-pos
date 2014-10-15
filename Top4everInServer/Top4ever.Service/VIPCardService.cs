@@ -64,7 +64,6 @@ namespace Top4ever.Service
             catch (Exception exception)
             {
                 card = null;
-                result = 0;
                 LogHelper.GetInstance().Error(string.Format("[GetVIPCard]参数：cardNo_{0}", cardNo), exception);
             }
             finally

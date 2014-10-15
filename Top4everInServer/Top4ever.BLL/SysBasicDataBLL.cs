@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 
 using Top4ever.BLL.Enum;
-using Top4ever.Domain;
 using Top4ever.Domain.Transfer;
 using Top4ever.Service;
 using Newtonsoft.Json;
-using Top4ever.Domain.GoodsRelated;
 
 namespace Top4ever.BLL
 {

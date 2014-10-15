@@ -22,37 +22,40 @@ namespace Top4ever.Persistence.OrderRelated
 
         public bool UpdateOrderDetails(OrderDetails orderDetails)
         {
-            int result = 0;
-            result = ExecuteUpdate("UpdateOrderDetails", orderDetails);
+            int result = ExecuteUpdate("UpdateOrderDetails", orderDetails);
             return result > 0;
         }
 
         public bool UpdateOrderDetailsDiscount(OrderDetails orderDetails)
         {
-            int result = 0;
-            result = ExecuteUpdate("UpdateOrderDetailsDiscount", orderDetails);
+            int result = ExecuteUpdate("UpdateOrderDetailsDiscount", orderDetails);
             return result > 0;
         }
 
-        public IList<OrderDetails> GetOrderDetailsList(Guid orderID)
+        public IList<OrderDetails> GetOrderDetailsList(Guid orderId)
         {
-            return ExecuteQueryForList<OrderDetails>("GetOrderDetailsByOrderID", orderID);
+            return ExecuteQueryForList<OrderDetails>("GetOrderDetailsByOrderID", orderId);
         }
 
-        public IList<OrderDetails> GetDeletedOrderDetailsList(Guid orderID)
+        public IList<OrderDetails> GetDeletedOrderDetailsList(Guid orderId)
         {
-            return ExecuteQueryForList<OrderDetails>("GetDeletedOrderDetails", orderID);
+            return ExecuteQueryForList<OrderDetails>("GetDeletedOrderDetails", orderId);
         }
 
-        public OrderDetails GetOrderDetails(Guid orderDetailsID)
+        public OrderDetails GetOrderDetails(Guid orderDetailsId)
         {
-            return ExecuteQueryForObject("GetOrderDetailsByOrderDetailsID", orderDetailsID) as OrderDetails;
+            return ExecuteQueryForObject("GetOrderDetailsByOrderDetailsID", orderDetailsId) as OrderDetails;
         }
 
-        public Int32 GetSequenceNum(Guid orderID)
+        public IList<OrderDetails> GetOrderDetailsList(IList<Guid> orderDetailsIds)
+        {
+            return ExecuteQueryForList<OrderDetails>("GetOrderDetailsList", orderDetailsIds);
+        }
+
+        public Int32 GetSequenceNum(Guid orderId)
         {
             Int32 result = 1;
-            object objValue = ExecuteQueryForObject("SelectMaxSequenceNum", orderID);
+            object objValue = ExecuteQueryForObject("SelectMaxSequenceNum", orderId);
             if (objValue != null)
             {
                 result = (Int32)objValue + 1;
@@ -62,29 +65,25 @@ namespace Top4ever.Persistence.OrderRelated
 
         public bool DeleteWholeOrderDetails(DeletedOrder deletedOrder)
         {
-            int result = 0;
-            result = ExecuteUpdate("UpdateDeletedOrderDetails", deletedOrder);
+            int result = ExecuteUpdate("UpdateDeletedOrderDetails", deletedOrder);
             return result > 0;
         }
 
         public bool DeleteSingleOrderDetails(DeletedOrderDetails deletedOrderDetails)
         {
-            int result = 0;
-            result = ExecuteUpdate("DeleteSingleOrderDetails", deletedOrderDetails);
+            int result = ExecuteUpdate("DeleteSingleOrderDetails", deletedOrderDetails);
             return result > 0;
         }
 
         public bool LadeOrderDetails(OrderDetails orderDetails)
         {
-            int result = 0;
-            result = ExecuteUpdate("UpdateLadeOrderDetails", orderDetails);
+            int result = ExecuteUpdate("UpdateLadeOrderDetails", orderDetails);
             return result > 0;
         }
 
         public bool SubtractSalesSplitOrder(OrderDetails orderDetails)
         {
-            int result = 0;
-            result = ExecuteUpdate("SubtractSalesSplitOrder", orderDetails);
+            int result = ExecuteUpdate("SubtractSalesSplitOrder", orderDetails);
             return result > 0;
         }
 
@@ -106,12 +105,12 @@ namespace Top4ever.Persistence.OrderRelated
             return ExecuteQueryForList<DeletedItem>("GetDeletedGoodsItem", htParam);
         }
 
-        public decimal GetLastCustomPrice(string dailyStatementNo, Guid goodsID)
+        public decimal GetLastCustomPrice(string dailyStatementNo, Guid goodsId)
         {
             decimal result = 0M;
             OrderDetails orderDetails = new OrderDetails();
             orderDetails.DailyStatementNo = dailyStatementNo;
-            orderDetails.GoodsID = goodsID;
+            orderDetails.GoodsID = goodsId;
             object objValue = ExecuteQueryForObject("GetLastCustomPrice", orderDetails);
             if (objValue != null)
             {

@@ -45,7 +45,7 @@ namespace Top4ever.Service
         public Int32 CreateDailyBalance(DailyBalance dailyBalance, out string unCheckDeviceNo)
         {
             unCheckDeviceNo = string.Empty;
-            int returnValue = 0;    //日结失败
+            int returnValue;    //日结失败
             _daoManager.BeginTransaction();
             try
             {
@@ -102,10 +102,10 @@ namespace Top4ever.Service
             return timeInterval;
         }
 
-        public Int32 CheckLastDailyStatement()
+        public Int32 CheckLastDailyStatement(int breakDays)
         {
-            // 0:操作失败 1:正常 2:未日结 3:时间跨度超过1天，可能服务器时间不对
-            int status = 0;
+            // 0:操作失败 1:正常 2:未日结 3:时间跨度超过breakDays天，可能服务器时间不对
+            int status;
             try
             {
                 _daoManager.OpenConnection();
@@ -120,14 +120,7 @@ namespace Top4ever.Service
                 else
                 {
                     TimeSpan ts = beginTime - endTime;
-                    if (Math.Abs(ts.TotalDays) > 1)
-                    {
-                        status = 3;
-                    }
-                    else
-                    {
-                        status = 1;
-                    }
+                    status = Math.Abs(ts.TotalDays) > breakDays ? 3 : 1;
                 }
             }
             catch (Exception exception)

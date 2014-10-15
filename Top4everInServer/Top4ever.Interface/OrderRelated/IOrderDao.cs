@@ -13,7 +13,7 @@ namespace Top4ever.Interface.OrderRelated
     {
         IList<Order> GetOrderList(string deskName);
 
-        Order GetOrder(Guid orderID);
+        Order GetOrder(Guid orderId);
 
         IList<Order> GetOrderListBySearch(string strWhere, string orderBy, int pageIndex, int pageSize);
 
@@ -41,9 +41,9 @@ namespace Top4ever.Interface.OrderRelated
 
         bool IsExistOrderInTimeInterval(DateTime beginTime, DateTime endTime);
 
-        bool UpdateOrderStatus(Guid orderID, int status);
+        bool UpdateOrderStatus(Guid orderId, int status);
 
-        bool DeliveryTakeoutOrder(Guid orderID, string employeeNo);
+        bool DeliveryTakeoutOrder(Guid orderId, string employeeNo);
 
         IList<DeliveryOrder> GetDeliveryOrderList(string dailyStatementNo);
 

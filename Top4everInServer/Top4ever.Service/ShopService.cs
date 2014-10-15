@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 
 using IBatisNet.DataAccess;
-using Newtonsoft.Json;
 using Top4ever.Domain;
 using Top4ever.Interface;
 using Top4ever.Utils;

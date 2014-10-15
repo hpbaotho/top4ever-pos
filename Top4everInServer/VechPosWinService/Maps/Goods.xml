@@ -4,6 +4,7 @@
     <alias>
       <typeAlias alias="Goods" type="Top4ever.Domain.GoodsRelated.Goods, Top4ever.Domain" />
       <typeAlias alias="GoodsCheckStock" type="Top4ever.Domain.GoodsRelated.GoodsCheckStock, Top4ever.Domain" />
+      <typeAlias alias="GoodsDetailsGroup" type="Top4ever.Domain.GoodsRelated.GoodsDetailsGroup, Top4ever.Domain" />
     </alias>
 
     <resultMaps>
@@ -84,6 +85,12 @@
         SELECT DetailsGroupID
         FROM GoodsDetailsGroup
         WHERE GoodsID = #value#
+      </select>
+
+      <select id="GetDetailsGroupIdsInGoods" resultClass="GoodsDetailsGroup">
+        <![CDATA[
+        SELECT GoodsID, DetailsGroupID FROM GoodsDetailsGroup
+        ]]>
       </select>
 
       <select id="GetGoodsCheckStock" resultMap="GoodsCheckStockResult">
