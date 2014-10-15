@@ -89,14 +89,44 @@ namespace VechsoftPos.TakeawayCall
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
-            CustomerInfo customerInfo = new CustomerInfo();
-            customerInfo.Telephone = this.txtTelephone.Text.Trim();
-            customerInfo.CustomerName = this.txtName.Text.Trim();
-            customerInfo.DeliveryAddress1 = this.txtAddress1.Text.Trim();
-            customerInfo.DeliveryAddress2 = this.txtAddress2.Text.Trim();
-            customerInfo.DeliveryAddress3 = this.txtAddress3.Text.Trim();
-            customerInfo.ActiveIndex = 1;
+            CustomerInfo customerInfo = new CustomerInfo
+            {
+                Telephone = this.txtTelephone.Text.Trim(), 
+                CustomerName = this.txtName.Text.Trim(), 
+                DeliveryAddress1 = this.txtAddress1.Text.Trim(), 
+                DeliveryAddress2 = this.txtAddress2.Text.Trim(), 
+                DeliveryAddress3 = this.txtAddress3.Text.Trim()
+            };
+            if (!string.IsNullOrEmpty(customerInfo.DeliveryAddress3))
+            {
+                customerInfo.ActiveIndex = 3;
+            }
+            if (!string.IsNullOrEmpty(customerInfo.DeliveryAddress2))
+            {
+                customerInfo.ActiveIndex = 2;
+            }
+            if (!string.IsNullOrEmpty(customerInfo.DeliveryAddress1))
+            {
+                customerInfo.ActiveIndex = 1;
+            }
             customerInfo.LastModifiedEmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
+
+            if (string.IsNullOrEmpty(customerInfo.Telephone))
+            {
+                MessageBox.Show("联系电话不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (string.IsNullOrEmpty(customerInfo.CustomerName))
+            {
+                MessageBox.Show("客户名称不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (customerInfo.ActiveIndex <= 0)
+            {
+                MessageBox.Show("客户的地址信息不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
 
             int result = CustomersService.GetInstance().CreateCustomerInfo(customerInfo);
             if (result == 1)

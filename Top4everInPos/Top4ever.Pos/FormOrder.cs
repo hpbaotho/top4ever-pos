@@ -186,7 +186,7 @@ namespace VechsoftPos
                             int height = (this.pnlGroup.Height - BlankSpace * (control.RowsCount + 1)) / control.RowsCount;
                             _groupPageSize = control.ColumnsCount * control.RowsCount - 2;    //扣除向前、向后两个按钮
                             //坐标
-                            int px = BlankSpace, py = BlankSpace, times = 0, pageCount = 0;
+                            int px = BlankSpace, py = BlankSpace, times = 0;
                             for (int i = 0; i < _groupPageSize; i++)
                             {
                                 CrystalButton btnGroup = new CrystalButton();
@@ -200,7 +200,6 @@ namespace VechsoftPos
                                 _btnGroupList.Add(btnGroup);
                                 //计算Button位置
                                 times++;
-                                pageCount++;
                                 px += BlankSpace + width;
                                 if (times == control.ColumnsCount)
                                 {
@@ -243,7 +242,7 @@ namespace VechsoftPos
                             int height = (this.pnlItem.Height - BlankSpace * (control.RowsCount + 1)) / control.RowsCount;
                             _itemPageSize = control.ColumnsCount * control.RowsCount - 2;    //扣除向前、向后两个按钮
                             //坐标
-                            int px = BlankSpace, py = BlankSpace, times = 0, pageCount = 0;
+                            int px = BlankSpace, py = BlankSpace, times = 0;
                             for (int i = 0; i < _itemPageSize; i++)
                             {
                                 CrystalButton btnItem = new CrystalButton();
@@ -257,7 +256,6 @@ namespace VechsoftPos
                                 _btnItemList.Add(btnItem);
                                 //计算Button位置
                                 times++;
-                                pageCount++;
                                 px += BlankSpace + width;
                                 if (times == control.ColumnsCount)
                                 {
@@ -613,9 +611,9 @@ namespace VechsoftPos
             this.pnlItem.SuspendLayout();
             this.SuspendLayout();
 
-            for (int i = 0; i < _btnItemList.Count; i++)
+            foreach (CrystalButton btnItem in _btnItemList)
             {
-                _btnItemList[i].Visible = false;
+                btnItem.Visible = false;
             }
             btnHead.Enabled = false;
             btnHead.BackColor = ConstantValuePool.DisabledColor;
@@ -634,6 +632,7 @@ namespace VechsoftPos
         private void btnGroup_Click(object sender, EventArgs e)
         {
             CrystalButton btnGroup = sender as CrystalButton;
+            if(btnGroup == null) return;
             if (btnGroup.Tag is GoodsGroup)
             {
                 _currentGoodsGroup = btnGroup.Tag as GoodsGroup;
@@ -690,12 +689,13 @@ namespace VechsoftPos
         private void btnItem_Click(object sender, EventArgs e)
         {
             CrystalButton btnItem = sender as CrystalButton;
+            if(btnItem == null) return;
             if (btnItem.Tag is Goods)
             {
                 Goods goods = btnItem.Tag as Goods;
                 decimal goodsDiscount = 0;
                 Discount _discount = null;
-                bool IsContainsSalePrice = false;   //是否包含特价
+                bool isContainsSalePrice = false;   //是否包含特价
 
                 decimal goodsPrice = goods.SellPrice;
                 decimal goodsNum = 1M;
@@ -726,7 +726,7 @@ namespace VechsoftPos
                 {
                     #region 判断是否限时特价
                     //所属组特价
-                    bool IsInGroup = false;
+                    bool isInGroup = false;
                     foreach (GoodsLimitedTimeSale item in ConstantValuePool.GroupLimitedTimeSaleList)
                     {
                         if (item.ItemID == _currentGoodsGroup.GoodsGroupID)
@@ -759,13 +759,13 @@ namespace VechsoftPos
                                 _discount.DiscountRate = 0;
                                 _discount.OffFixPay = goods.SellPrice - item.OffSaleTo;
                             }
-                            IsInGroup = true;
-                            IsContainsSalePrice = true;
+                            isInGroup = true;
+                            isContainsSalePrice = true;
                             break;
                         }
                     }
                     //品项特价
-                    if (!IsInGroup)
+                    if (!isInGroup)
                     {
                         foreach (GoodsLimitedTimeSale item in ConstantValuePool.GoodsLimitedTimeSaleList)
                         {
@@ -799,7 +799,7 @@ namespace VechsoftPos
                                     _discount.DiscountRate = 0;
                                     _discount.OffFixPay = goods.SellPrice - item.OffSaleTo;
                                 }
-                                IsContainsSalePrice = true;
+                                isContainsSalePrice = true;
                                 break;
                             }
                         }
@@ -824,22 +824,9 @@ namespace VechsoftPos
                 dgvGoodsOrder.Rows[index].Cells["ItemUnit"].Value = goods.Unit;
                 
                 #region 判断是否套餐
-                if (!IsContainsSalePrice)
+                if (!isContainsSalePrice)
                 {
-                    bool haveCirculate = false;
-                    IList<GoodsSetMeal> goodsSetMealList = new List<GoodsSetMeal>();
-                    foreach (GoodsSetMeal item in ConstantValuePool.GoodsSetMealList)
-                    {
-                        if (item.ParentGoodsID.Equals(goods.GoodsID))
-                        {
-                            goodsSetMealList.Add(item);
-                            haveCirculate = true;
-                        }
-                        else
-                        {
-                            if (haveCirculate) break;
-                        }
-                    }
+                    IList<GoodsSetMeal> goodsSetMealList = ConstantValuePool.GoodsSetMealList.Where(goodsSetMeal => goodsSetMeal.ParentGoodsID.Equals(goods.GoodsID)).ToList();
                     if (goodsSetMealList.Count > 0)
                     {
                         Dictionary<int, List<GoodsSetMeal>> dicGoodsSetMealByGroup = new Dictionary<int, List<GoodsSetMeal>>();
@@ -856,20 +843,20 @@ namespace VechsoftPos
                                 dicGoodsSetMealByGroup.Add(item.GroupNo, temp);
                             }
                         }
-                        bool IsSingleGoodsSetMeal = false;
+                        bool isSingleGoodsSetMeal = false;
                         foreach (KeyValuePair<int, List<GoodsSetMeal>> item in dicGoodsSetMealByGroup)
                         {
-                            if (item.Value[0].IsRequired == true && (int)item.Value[0].LimitedQty == item.Value.Count)
+                            if (item.Value[0].IsRequired && item.Value[0].LimitedQty == item.Value.Count)
                             {
-                                IsSingleGoodsSetMeal = true;
+                                isSingleGoodsSetMeal = true;
                             }
                             else
                             {
-                                IsSingleGoodsSetMeal = false;
+                                isSingleGoodsSetMeal = false;
                                 break;
                             }
                         }
-                        if (IsSingleGoodsSetMeal)
+                        if (isSingleGoodsSetMeal)
                         {
                             foreach (GoodsSetMeal item in goodsSetMealList)
                             {
@@ -891,7 +878,7 @@ namespace VechsoftPos
                                 dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = item.ItemQty;
                                 dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = "--" + item.GoodsName;
                                 dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = item.SellPrice;
-                                decimal discount = 0;
+                                decimal discount;
                                 if (item.DiscountRate > 0)
                                 {
                                     discount = item.SellPrice * item.ItemQty * item.DiscountRate;
@@ -937,7 +924,7 @@ namespace VechsoftPos
                                             dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = item.ItemQty;
                                             dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = "--" + item.GoodsName;
                                             dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = item.SellPrice;
-                                            decimal discount = 0;
+                                            decimal discount;
                                             if (item.DiscountRate > 0)
                                             {
                                                 discount = item.SellPrice * item.ItemQty * item.DiscountRate;
@@ -1004,62 +991,65 @@ namespace VechsoftPos
                         else
                         {
                             Dictionary<Guid, int> dicGroupLimitNum = objGroupLimitNum as Dictionary<Guid, int>;
-                            if (dicGroupLimitNum.ContainsKey(_currentDetailsGroup.DetailsGroupID))
+                            if (dicGroupLimitNum != null)
                             {
-                                int selectedNum = dicGroupLimitNum[_currentDetailsGroup.DetailsGroupID];
-                                if (selectedNum >= _currentDetailsGroup.LimitedNumbers)
+                                if (dicGroupLimitNum.ContainsKey(_currentDetailsGroup.DetailsGroupID))
                                 {
-                                    MessageBox.Show("超出细项的数量限制！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                    return;
+                                    int selectedNum = dicGroupLimitNum[_currentDetailsGroup.DetailsGroupID];
+                                    if (selectedNum >= _currentDetailsGroup.LimitedNumbers)
+                                    {
+                                        MessageBox.Show("超出细项的数量限制！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                        return;
+                                    }
+                                    else
+                                    {
+                                        selectedNum++;
+                                        dicGroupLimitNum[_currentDetailsGroup.DetailsGroupID] = selectedNum;
+                                        dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Tag = dicGroupLimitNum;
+                                    }
                                 }
                                 else
                                 {
-                                    selectedNum++;
-                                    dicGroupLimitNum[_currentDetailsGroup.DetailsGroupID] = selectedNum;
+                                    dicGroupLimitNum.Add(_currentDetailsGroup.DetailsGroupID, 1);
                                     dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Tag = dicGroupLimitNum;
                                 }
-                            }
-                            else
-                            {
-                                dicGroupLimitNum.Add(_currentDetailsGroup.DetailsGroupID, 1);
-                                dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Tag = dicGroupLimitNum;
                             }
                         }
                     }
                     //数量
                     decimal itemNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
                     DataGridViewRow dgr = dgvGoodsOrder.Rows[0].Clone() as DataGridViewRow;
-                    dgr.Cells[0].Value = details.DetailsID;
-                    dgr.Cells[0].Tag = details;
-                    dgr.Cells[1].Value = itemNum;
-                    dgr.Cells[2].Value = _detailsPrefix + details.DetailsName;
-                    dgr.Cells[3].Value = details.SellPrice;
-                    dgr.Cells[4].Value = 0;
-                    dgr.Cells[5].Value = OrderItemType.Details;
-                    dgr.Cells[6].Value = details.CanDiscount;
-                    int rowIndex = selectIndex + 1;
-                    if (rowIndex == dgvGoodsOrder.Rows.Count)
+                    if (dgr != null)
                     {
-                        dgvGoodsOrder.Rows.Add(dgr);
-                    }
-                    else
-                    {
-                        if (Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                        dgr.Cells[0].Value = details.DetailsID;
+                        dgr.Cells[0].Tag = details;
+                        dgr.Cells[1].Value = itemNum;
+                        dgr.Cells[2].Value = _detailsPrefix + details.DetailsName;
+                        dgr.Cells[3].Value = details.SellPrice;
+                        dgr.Cells[4].Value = 0;
+                        dgr.Cells[5].Value = OrderItemType.Details;
+                        dgr.Cells[6].Value = details.CanDiscount;
+                        int rowIndex = selectIndex + 1;
+                        if (rowIndex == dgvGoodsOrder.Rows.Count)
                         {
-                            for (int i = selectIndex + 1; i < dgvGoodsOrder.RowCount; i++)
+                            dgvGoodsOrder.Rows.Add(dgr);
+                        }
+                        else
+                        {
+                            if (Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value) == (int) OrderItemType.Goods)
                             {
-                                int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[i].Cells["ItemType"].Value);
-                                if (itemType == (int)OrderItemType.Goods)
+                                for (int i = selectIndex + 1; i < dgvGoodsOrder.RowCount; i++)
                                 {
-                                    break;
-                                }
-                                else
-                                {
+                                    int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[i].Cells["ItemType"].Value);
+                                    if (itemType == (int) OrderItemType.Goods)
+                                    {
+                                        break;
+                                    }
                                     rowIndex++;
                                 }
                             }
+                            dgvGoodsOrder.Rows.Insert(rowIndex, dgr);
                         }
-                        dgvGoodsOrder.Rows.Insert(rowIndex, dgr);
                     }
                     //统计
                     BindOrderInfoSum();
@@ -1206,7 +1196,7 @@ namespace VechsoftPos
                     if (itemType == (int)OrderItemType.Goods)
                     {
                         Goods goods = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Goods;
-                        if (goods.DetailsGroupIDList != null && goods.DetailsGroupIDList.Count > 0)
+                        if (goods != null && goods.DetailsGroupIDList != null && goods.DetailsGroupIDList.Count > 0)
                         {
                             _goodsOrDetails = false;    //状态为细项
                             _currentDetailsGroupIdList = goods.DetailsGroupIDList;
@@ -1218,7 +1208,7 @@ namespace VechsoftPos
                     else if (itemType == (int)OrderItemType.Details)
                     {
                         Details details = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Details;
-                        if (details.DetailsGroupIDList != null && details.DetailsGroupIDList.Count > 0)
+                        if (details != null && details.DetailsGroupIDList != null && details.DetailsGroupIDList.Count > 0)
                         {
                             _goodsOrDetails = false;    //状态为细项
                             _currentDetailsGroupIdList = details.DetailsGroupIDList;
@@ -1249,8 +1239,9 @@ namespace VechsoftPos
                 int selectIndex = dgvGoodsOrder.CurrentRow.Index;
                 if (dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value == null)
                 {
-                    decimal quantity = 0;
                     CrystalButton btnNumber = sender as CrystalButton;
+                    if(btnNumber == null) return;
+                    decimal quantity;
                     if (string.IsNullOrEmpty(_goodsNum))
                     {
                         _goodsNum = btnNumber.Text;
@@ -1282,10 +1273,11 @@ namespace VechsoftPos
                     if (itemType == (int)OrderItemType.Goods)
                     {
                         Goods goods = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Goods;
+                        decimal sellPrice = goods == null ? 0 : goods.SellPrice;
                         decimal originalGoodsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
                         decimal originalGoodsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value);
                         dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value = quantity;
-                        dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value = goods.SellPrice * quantity;
+                        dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value = sellPrice * quantity;
                         if (Math.Abs(originalGoodsDiscount) > 0 && originalGoodsNum > 0)
                         {
                             dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value = originalGoodsDiscount / originalGoodsNum * quantity;
@@ -1327,10 +1319,11 @@ namespace VechsoftPos
                     if (itemType == (int)OrderItemType.Details)
                     {
                         Details details = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Details;
+                        decimal sellPrice = details == null ? 0 : details.SellPrice;
                         decimal originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
                         decimal originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value);
                         dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value = quantity;
-                        dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value = details.SellPrice * quantity;
+                        dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value = sellPrice * quantity;
                         if (Math.Abs(originalDetailsDiscount) > 0 && originalDetailsNum > 0)
                         {
                             dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value = originalDetailsDiscount / originalDetailsNum * quantity;
@@ -1344,25 +1337,28 @@ namespace VechsoftPos
 
         private void btnDot_Click(object sender, EventArgs e)
         {
-            int selectIndex = dgvGoodsOrder.CurrentRow.Index;
-            if (dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value == null)
+            if (dgvGoodsOrder.CurrentRow != null)
             {
-                int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value);
-                if (itemType == (int)OrderItemType.Goods || itemType == (int)OrderItemType.Details)
+                int selectIndex = dgvGoodsOrder.CurrentRow.Index;
+                if (dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value == null)
                 {
-                    if (string.IsNullOrEmpty(_goodsNum))
+                    int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value);
+                    if (itemType == (int) OrderItemType.Goods || itemType == (int) OrderItemType.Details)
                     {
-                        _goodsNum = "0.";
-                    }
-                    else
-                    {
-                        if (_goodsNum.IndexOf('.') > 0)
+                        if (string.IsNullOrEmpty(_goodsNum))
                         {
-                            return;
+                            _goodsNum = "0.";
                         }
                         else
                         {
-                            _goodsNum += ".";
+                            if (_goodsNum.IndexOf('.') > 0)
+                            {
+                                return;
+                            }
+                            else
+                            {
+                                _goodsNum += ".";
+                            }
                         }
                     }
                 }
@@ -1376,10 +1372,10 @@ namespace VechsoftPos
                 int selectIndex = dgvGoodsOrder.CurrentRow.Index;
                 if (dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value == null)
                 {
-                    Feature.FormNumericKeypad keyForm = new Feature.FormNumericKeypad();
+                    FormNumericKeypad keyForm = new FormNumericKeypad();
                     keyForm.DisplayText = "请输入品项数量";
                     keyForm.ShowDialog();
-                    decimal quantity = 0;
+                    decimal quantity;
                     if (!string.IsNullOrEmpty(keyForm.KeypadValue) && decimal.TryParse(keyForm.KeypadValue, out quantity))
                     {
 
@@ -1387,10 +1383,11 @@ namespace VechsoftPos
                         if (itemType == (int)OrderItemType.Goods)
                         {
                             Goods goods = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Goods;
+                            decimal sellPrice = goods == null ? 0 : goods.SellPrice;
                             decimal originalGoodsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
                             decimal originalGoodsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value);
                             dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value = quantity;
-                            dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value = goods.SellPrice * quantity;
+                            dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value = sellPrice * quantity;
                             if (Math.Abs(originalGoodsDiscount) > 0 && originalGoodsNum > 0)
                             {
                                 dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value = originalGoodsDiscount / originalGoodsNum * quantity;
@@ -1404,27 +1401,24 @@ namespace VechsoftPos
                                     {
                                         break;
                                     }
-                                    else
+                                    decimal originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value);
+                                    decimal originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value);
+                                    decimal currentQty = originalDetailsNum / originalGoodsNum * quantity;
+                                    dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = currentQty;
+                                    if (Math.Abs(originalDetailsDiscount) > 0 && originalDetailsNum > 0)
                                     {
-                                        decimal originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value);
-                                        decimal originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value);
-                                        decimal currentQty = originalDetailsNum / originalGoodsNum * quantity;
-                                        dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value = currentQty;
-                                        if (Math.Abs(originalDetailsDiscount) > 0 && originalDetailsNum > 0)
-                                        {
-                                            dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = originalDetailsDiscount / originalDetailsNum * currentQty;
-                                        }
-                                        object item = dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag;
-                                        if (item is Goods)
-                                        {
-                                            Goods subGoods = item as Goods;
-                                            dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = subGoods.SellPrice * currentQty;
-                                        }
-                                        if (item is Details)
-                                        {
-                                            Details details = item as Details;
-                                            dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = details.SellPrice * currentQty;
-                                        }
+                                        dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = originalDetailsDiscount / originalDetailsNum * currentQty;
+                                    }
+                                    object item = dgvGoodsOrder.Rows[index].Cells["ItemID"].Tag;
+                                    if (item is Goods)
+                                    {
+                                        Goods subGoods = item as Goods;
+                                        dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = subGoods.SellPrice * currentQty;
+                                    }
+                                    if (item is Details)
+                                    {
+                                        Details details = item as Details;
+                                        dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value = details.SellPrice * currentQty;
                                     }
                                 }
                             }
@@ -1432,10 +1426,11 @@ namespace VechsoftPos
                         if (itemType == (int)OrderItemType.Details)
                         {
                             Details details = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Details;
+                            decimal sellPrice = details == null ? 0 : details.SellPrice;
                             decimal originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
                             decimal originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value);
                             dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value = quantity;
-                            dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value = details.SellPrice * quantity;
+                            dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value = sellPrice * quantity;
                             if (Math.Abs(originalDetailsDiscount) > 0 && originalDetailsNum > 0)
                             {
                                 dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value = originalDetailsDiscount / originalDetailsNum * quantity;
@@ -1466,7 +1461,7 @@ namespace VechsoftPos
                         MessageBox.Show("套餐项不能单独删除！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
                     }
-                    Guid orderDetailsID = new Guid(dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value.ToString());
+                    Guid orderDetailsId = new Guid(dgvGoodsOrder.Rows[selectIndex].Cells["OrderDetailsID"].Value.ToString());
                     decimal goodsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
                     string goodsName = dgvGoodsOrder.Rows[selectIndex].Cells["GoodsName"].Value.ToString();
                     decimal goodsPrice = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsPrice"].Value);
@@ -1481,10 +1476,7 @@ namespace VechsoftPos
                                 {
                                     break;
                                 }
-                                else
-                                {
-                                    singleItemPriceSum += Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value) / Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value);
-                                }
+                                singleItemPriceSum += Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value) / Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value);
                             }
                             if (singleItemPriceSum > ConstantValuePool.CurrentEmployee.LimitMoney)
                             {
@@ -1529,7 +1521,7 @@ namespace VechsoftPos
                             decimal originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
                             decimal originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsDiscount"].Value);
                             DeletedOrderDetails orderDetails = new DeletedOrderDetails();
-                            orderDetails.OrderDetailsID = orderDetailsID;
+                            orderDetails.OrderDetailsID = orderDetailsId;
                             orderDetails.DeletedQuantity = -form.DelItemNum;
                             orderDetails.RemainQuantity = remainNum;
                             orderDetails.OffPay = Math.Round(-originalDetailsDiscount / originalDetailsNum * remainNum, 4);
@@ -1546,24 +1538,21 @@ namespace VechsoftPos
                                     {
                                         break;
                                     }
-                                    else
-                                    {
-                                        orderDetailsID = new Guid(dgvGoodsOrder.Rows[index].Cells["OrderDetailsID"].Value.ToString());
-                                        originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value);
-                                        originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value);
-                                        decimal delItemNum = originalDetailsNum / goodsNum * form.DelItemNum;
-                                        remainNum = originalDetailsNum - delItemNum;
-                                        dicRemainNum.Add(index, remainNum);
-                                        DeletedOrderDetails item = new DeletedOrderDetails();
-                                        item.OrderDetailsID = orderDetailsID;
-                                        item.DeletedQuantity = -delItemNum;
-                                        item.RemainQuantity = remainNum;
-                                        item.OffPay = Math.Round(-originalDetailsDiscount / originalDetailsNum * remainNum, 4);
-                                        item.AuthorisedManager = ConstantValuePool.CurrentEmployee.EmployeeID;
-                                        item.CancelEmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
-                                        item.CancelReasonName = form.CurrentReason.ReasonName;
-                                        deletedOrderDetailsList.Add(item);
-                                    }
+                                    orderDetailsId = new Guid(dgvGoodsOrder.Rows[index].Cells["OrderDetailsID"].Value.ToString());
+                                    originalDetailsNum = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value);
+                                    originalDetailsDiscount = Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value);
+                                    decimal delItemNum = originalDetailsNum / goodsNum * form.DelItemNum;
+                                    remainNum = originalDetailsNum - delItemNum;
+                                    dicRemainNum.Add(index, remainNum);
+                                    DeletedOrderDetails item = new DeletedOrderDetails();
+                                    item.OrderDetailsID = orderDetailsId;
+                                    item.DeletedQuantity = -delItemNum;
+                                    item.RemainQuantity = remainNum;
+                                    item.OffPay = Math.Round(-originalDetailsDiscount / originalDetailsNum * remainNum, 4);
+                                    item.AuthorisedManager = ConstantValuePool.CurrentEmployee.EmployeeID;
+                                    item.CancelEmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
+                                    item.CancelReasonName = form.CurrentReason.ReasonName;
+                                    deletedOrderDetailsList.Add(item);
                                 }
                             }
                             //计算价格信息
@@ -1625,7 +1614,7 @@ namespace VechsoftPos
                             //主项
                             deletedIndexList.Add(selectIndex);
                             DeletedOrderDetails orderDetails = new DeletedOrderDetails();
-                            orderDetails.OrderDetailsID = orderDetailsID;
+                            orderDetails.OrderDetailsID = orderDetailsId;
                             orderDetails.DeletedQuantity = -Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
                             orderDetails.RemainQuantity = 0;
                             orderDetails.OffPay = 0;
@@ -1642,20 +1631,17 @@ namespace VechsoftPos
                                     {
                                         break;
                                     }
-                                    else
-                                    {
-                                        deletedIndexList.Add(index);
-                                        orderDetailsID = new Guid(dgvGoodsOrder.Rows[index].Cells["OrderDetailsID"].Value.ToString());
-                                        DeletedOrderDetails item = new DeletedOrderDetails();
-                                        item.OrderDetailsID = orderDetailsID;
-                                        item.DeletedQuantity = -Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value);
-                                        item.RemainQuantity = 0;
-                                        item.OffPay = 0;
-                                        item.AuthorisedManager = ConstantValuePool.CurrentEmployee.EmployeeID;
-                                        item.CancelEmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
-                                        item.CancelReasonName = form.CurrentReason.ReasonName;
-                                        deletedOrderDetailsList.Add(item);
-                                    }
+                                    deletedIndexList.Add(index);
+                                    orderDetailsId = new Guid(dgvGoodsOrder.Rows[index].Cells["OrderDetailsID"].Value.ToString());
+                                    DeletedOrderDetails item = new DeletedOrderDetails();
+                                    item.OrderDetailsID = orderDetailsId;
+                                    item.DeletedQuantity = -Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsNum"].Value);
+                                    item.RemainQuantity = 0;
+                                    item.OffPay = 0;
+                                    item.AuthorisedManager = ConstantValuePool.CurrentEmployee.EmployeeID;
+                                    item.CancelEmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
+                                    item.CancelReasonName = form.CurrentReason.ReasonName;
+                                    deletedOrderDetailsList.Add(item);
                                 }
                             }
                             //计算价格信息
@@ -1726,11 +1712,8 @@ namespace VechsoftPos
                                 {
                                     break;
                                 }
-                                else
-                                {
-                                    dgvGoodsOrder.Rows.RemoveAt(i);
-                                    i--;
-                                }
+                                dgvGoodsOrder.Rows.RemoveAt(i);
+                                i--;
                             }
                         }
                     }
@@ -1900,18 +1883,15 @@ namespace VechsoftPos
                                     {
                                         break;
                                     }
+                                    if (discount.DiscountType == (int)DiscountItemType.DiscountRate)
+                                    {
+                                        dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = -Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value) * discount.DiscountRate;
+                                    }
                                     else
                                     {
-                                        if (discount.DiscountType == (int)DiscountItemType.DiscountRate)
-                                        {
-                                            dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = -Convert.ToDecimal(dgvGoodsOrder.Rows[index].Cells["GoodsPrice"].Value) * discount.DiscountRate;
-                                        }
-                                        else
-                                        {
-                                            dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = -discount.OffFixPay;
-                                        }
-                                        dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Tag = discount;
+                                        dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Value = -discount.OffFixPay;
                                     }
+                                    dgvGoodsOrder.Rows[index].Cells["GoodsDiscount"].Tag = discount;
                                 }
                             }
                             //统计
@@ -2076,16 +2056,16 @@ namespace VechsoftPos
 
         private void btnPrintBill_Click(object sender, EventArgs e)
         {
-            bool IsContainsNewItem = false;
+            bool isContainsNewItem = false;
             foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
             {
                 if (dr.Cells["OrderDetailsID"].Value == null)
                 {
-                    IsContainsNewItem = true;
+                    isContainsNewItem = true;
                     break;
                 }
             }
-            if (IsContainsNewItem)
+            if (isContainsNewItem)
             {
                 MessageBox.Show("存在新单，不能印单！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);;
             }
@@ -2108,10 +2088,10 @@ namespace VechsoftPos
                     {
                         GoodsOrder goodsOrder = new GoodsOrder();
                         goodsOrder.GoodsName = dr.Cells["GoodsName"].Value.ToString();
-                        decimal ItemQty = Convert.ToDecimal(dr.Cells["GoodsNum"].Value);
+                        decimal itemQty = Convert.ToDecimal(dr.Cells["GoodsNum"].Value);
                         decimal totalSellPrice = Convert.ToDecimal(dr.Cells["GoodsPrice"].Value);
-                        goodsOrder.GoodsNum = ItemQty.ToString("f1");
-                        goodsOrder.SellPrice = (totalSellPrice / ItemQty).ToString("f2");
+                        goodsOrder.GoodsNum = itemQty.ToString("f1");
+                        goodsOrder.SellPrice = (totalSellPrice / itemQty).ToString("f2");
                         goodsOrder.TotalSellPrice = totalSellPrice.ToString("f2");
                         goodsOrder.TotalDiscount = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value).ToString("f2");
                         goodsOrder.Unit = dr.Cells["ItemUnit"].Value.ToString();
@@ -2202,7 +2182,10 @@ namespace VechsoftPos
                     if ((dgr.Cells["Wait"].Value == null || Convert.ToInt32(dgr.Cells["Wait"].Value) == 0) && itemType == (int)OrderItemType.Goods)
                     {
                         Goods goods = dgr.Cells["ItemID"].Tag as Goods;
-                        dgr.Cells["GoodsName"].Value = "*" + goods.GoodsName;
+                        if (goods != null)
+                        {
+                            dgr.Cells["GoodsName"].Value = "*" + goods.GoodsName;
+                        }
                         dgr.Cells["Wait"].Value = 1;    //挂单
                         //细项
                         for (int index = seletedIndex + 1; index < dgvGoodsOrder.Rows.Count; index++)
@@ -2212,14 +2195,11 @@ namespace VechsoftPos
                             {
                                 break;
                             }
-                            else
-                            {
-                                string itemName = dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value.ToString();
-                                int spIndex = itemName.LastIndexOf('-');
-                                string goodsName = itemName.Substring(spIndex + 1);
-                                dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = itemName.Substring(0, spIndex + 1) + "*" + goodsName;
-                                dgvGoodsOrder.Rows[index].Cells["Wait"].Value = 1;
-                            }
+                            string itemName = dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value.ToString();
+                            int spIndex = itemName.LastIndexOf('-');
+                            string goodsName = itemName.Substring(spIndex + 1);
+                            dgvGoodsOrder.Rows[index].Cells["GoodsName"].Value = itemName.Substring(0, spIndex + 1) + "*" + goodsName;
+                            dgvGoodsOrder.Rows[index].Cells["Wait"].Value = 1;
                         }
                     }
                 }
@@ -2251,13 +2231,10 @@ namespace VechsoftPos
                             {
                                 break;
                             }
-                            else
-                            {
-                                orderDetails = new OrderDetails();
-                                orderDetails.OrderDetailsID = new Guid(dgvGoodsOrder.Rows[index].Cells["OrderDetailsID"].Value.ToString());
-                                orderDetails.Wait = 0;
-                                orderDetailsList.Add(orderDetails);
-                            }
+                            orderDetails = new OrderDetails();
+                            orderDetails.OrderDetailsID = new Guid(dgvGoodsOrder.Rows[index].Cells["OrderDetailsID"].Value.ToString());
+                            orderDetails.Wait = 0;
+                            orderDetailsList.Add(orderDetails);
                         }
                         if (OrderDetailsService.GetInstance().LadeOrderDetails(orderDetailsList))
                         {
@@ -2358,12 +2335,12 @@ namespace VechsoftPos
                 }
                 else
                 {
-                    MessageBox.Show("没有需要提单的品项！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);;
+                    MessageBox.Show("没有需要提单的品项！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
             {
-                MessageBox.Show("有新单，不能整单提单！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);;
+                MessageBox.Show("有新单，不能整单提单！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             this.exTabControl1.SelectedIndex = 0;
         }
@@ -2375,27 +2352,24 @@ namespace VechsoftPos
                 MessageBox.Show("账单未落单，不允许分单！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            else
+            foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
             {
-                foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
+                if (dr.Cells["OrderDetailsID"].Value == null)
                 {
-                    if (dr.Cells["OrderDetailsID"].Value == null)
-                    {
-                        MessageBox.Show("账单中包含未落单品项，不允许分单！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
+                    MessageBox.Show("账单中包含未落单品项，不允许分单！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
-                FormSplitBill form = new FormSplitBill(_salesOrder);
-                form.ShowDialog();
-                if (form.SplitOrderSuccess)
-                {
-                    //重新加载
-                    _salesOrder = SalesOrderService.GetInstance().GetSalesOrder(_salesOrder.order.OrderID);
-                    BindGoodsOrderInfo();   //绑定订单信息
-                    BindOrderInfoSum();
-                }
-                this.exTabControl1.SelectedIndex = 0;
             }
+            FormSplitBill form = new FormSplitBill(_salesOrder);
+            form.ShowDialog();
+            if (form.SplitOrderSuccess)
+            {
+                //重新加载
+                _salesOrder = SalesOrderService.GetInstance().GetSalesOrder(_salesOrder.order.OrderID);
+                BindGoodsOrderInfo();   //绑定订单信息
+                BindOrderInfoSum();
+            }
+            this.exTabControl1.SelectedIndex = 0;
         }
 
         private void btnTasteRemark_Click(object sender, EventArgs e)
@@ -2434,19 +2408,25 @@ namespace VechsoftPos
                     if (!string.IsNullOrEmpty(form.CustomTasteName))
                     {
                         string printSolutionName = string.Empty;
-                        Guid departID = Guid.Empty;
+                        Guid departId = Guid.Empty;
                         int itemType = Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value);
                         if (itemType == (int)OrderItemType.Goods)
                         {
-                            Goods _goods = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Goods;
-                            printSolutionName = _goods.PrintSolutionName;
-                            departID = _goods.DepartID;
+                            Goods goods = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Goods;
+                            if (goods != null)
+                            {
+                                printSolutionName = goods.PrintSolutionName;
+                                departId = goods.DepartID;
+                            }
                         }
                         else if (itemType == (int)OrderItemType.Details)
                         {
-                            Details _details = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Details;
-                            printSolutionName = _details.PrintSolutionName;
-                            departID = _details.DepartID;
+                            Details detail = dgvGoodsOrder.Rows[selectIndex].Cells["ItemID"].Tag as Details;
+                            if (detail != null)
+                            {
+                                printSolutionName = detail.PrintSolutionName;
+                                departId = detail.DepartID;
+                            }
                         }
                         Details details = new Details();
                         details.DetailsID = new Guid("77777777-7777-7777-7777-777777777777");
@@ -2456,41 +2436,41 @@ namespace VechsoftPos
                         details.CanDiscount = false;
                         details.AutoShowDetails = false;
                         details.PrintSolutionName = printSolutionName;
-                        details.DepartID = departID;
+                        details.DepartID = departId;
                         //数量
                         decimal itemNum = Convert.ToDecimal(dgvGoodsOrder.Rows[selectIndex].Cells["GoodsNum"].Value);
                         DataGridViewRow dgr = dgvGoodsOrder.Rows[0].Clone() as DataGridViewRow;
-                        dgr.Cells[0].Value = details.DetailsID;
-                        dgr.Cells[0].Tag = details;
-                        dgr.Cells[1].Value = itemNum;
-                        dgr.Cells[2].Value = form.CustomTasteName;
-                        dgr.Cells[3].Value = details.SellPrice;
-                        dgr.Cells[4].Value = 0;
-                        dgr.Cells[5].Value = OrderItemType.Details;
-                        dgr.Cells[6].Value = details.CanDiscount;
-                        int rowIndex = selectIndex + 1;
-                        if (rowIndex == dgvGoodsOrder.Rows.Count)
+                        if (dgr != null)
                         {
-                            dgvGoodsOrder.Rows.Add(dgr);
-                        }
-                        else
-                        {
-                            if (Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value) == (int)OrderItemType.Goods)
+                            dgr.Cells[0].Value = details.DetailsID;
+                            dgr.Cells[0].Tag = details;
+                            dgr.Cells[1].Value = itemNum;
+                            dgr.Cells[2].Value = form.CustomTasteName;
+                            dgr.Cells[3].Value = details.SellPrice;
+                            dgr.Cells[4].Value = 0;
+                            dgr.Cells[5].Value = OrderItemType.Details;
+                            dgr.Cells[6].Value = details.CanDiscount;
+                            int rowIndex = selectIndex + 1;
+                            if (rowIndex == dgvGoodsOrder.Rows.Count)
                             {
-                                for (int i = selectIndex + 1; i < dgvGoodsOrder.RowCount; i++)
+                                dgvGoodsOrder.Rows.Add(dgr);
+                            }
+                            else
+                            {
+                                if (Convert.ToInt32(dgvGoodsOrder.Rows[selectIndex].Cells["ItemType"].Value) == (int) OrderItemType.Goods)
                                 {
-                                    itemType = Convert.ToInt32(dgvGoodsOrder.Rows[i].Cells["ItemType"].Value);
-                                    if (itemType == (int)OrderItemType.Goods)
+                                    for (int i = selectIndex + 1; i < dgvGoodsOrder.RowCount; i++)
                                     {
-                                        break;
-                                    }
-                                    else
-                                    {
+                                        itemType = Convert.ToInt32(dgvGoodsOrder.Rows[i].Cells["ItemType"].Value);
+                                        if (itemType == (int) OrderItemType.Goods)
+                                        {
+                                            break;
+                                        }
                                         rowIndex++;
                                     }
                                 }
+                                dgvGoodsOrder.Rows.Insert(rowIndex, dgr);
                             }
-                            dgvGoodsOrder.Rows.Insert(rowIndex, dgr);
                         }
                         //统计
                         BindOrderInfoSum();
@@ -2920,7 +2900,7 @@ namespace VechsoftPos
                 }
                 else
                 {
-                    MessageBox.Show("结账提交失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);;
+                    MessageBox.Show("结账提交失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
             }

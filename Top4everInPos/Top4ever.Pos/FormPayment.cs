@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-
+using Top4ever.Domain.Customers;
 using Top4ever.Entity;
 using Top4ever.Domain.OrderRelated;
 using Top4ever.CustomControl;
@@ -72,7 +72,7 @@ namespace VechsoftPos
             this.lbDiscount.Text = "折扣：" + m_Discount.ToString("f2");
             this.lbReceMoney.Text = "应收金额：" + m_ActualPayMoney.ToString("f2");
             this.lbPaidInMoney.Text = "实收金额：0.00";
-            this.lbUnpaidAmount.Text = "未付金额：0.00";
+            this.lbUnpaidAmount.Text = "未付金额：" + m_ActualPayMoney.ToString("f2");
             this.lbNeedChangePay.Text = "找零：0.00";
         }
 
@@ -212,8 +212,18 @@ namespace VechsoftPos
                 }
             }
             CrystalButton btn = sender as CrystalButton;
+            if (btn == null) return;
             btn.BackColor = ConstantValuePool.PressedColor;
             curPayoffWay = btn.Tag as PayoffWay;
+            if (curPayoffWay.PayoffType == (int) PayoffWayMode.MembershipCard)
+            {
+                //屏蔽数字键盘
+                this.pnlNumericPad.Enabled = false;
+            }
+            else
+            {
+                this.pnlNumericPad.Enabled = true;
+            }
             this.txtPayoff.Text = string.Format("{0}(1:{1})", curPayoffWay.PayoffName, curPayoffWay.AsPay.ToString("f2"));
             if (dic.ContainsKey(curPayoffWay.PayoffID.ToString()))
             {
@@ -240,7 +250,7 @@ namespace VechsoftPos
                 }
                 if (curPayoffWay.PayoffType == (int)PayoffWayMode.MembershipCard)
                 {
-                    decimal unPaidPrice = decimal.Parse(lbUnpaidAmount.Text);
+                    decimal unPaidPrice = decimal.Parse(lbUnpaidAmount.Text.Substring(5));
                     if (unPaidPrice > 0)
                     {
                         Membership.FormVIPCardPayment formCardPayment = new Membership.FormVIPCardPayment(unPaidPrice);
@@ -261,7 +271,6 @@ namespace VechsoftPos
                         }
                         this.txtAmount.Text = string.Format("{0} 元", formCardPayment.CardPaidAmount.ToString("f2"));
                         DisplayPayoffWay();
-                        //屏蔽数字键盘
                     }
                 }
             }
@@ -691,6 +700,16 @@ namespace VechsoftPos
                     string paperName = ConstantValuePool.BizSettingConfig.printConfig.PaperName;
                     DriverOrderPrint printer = DriverOrderPrint.GetInstance(printerName, paperName, paperWidth);
                     printer.DoPrintPaidOrder(printData);
+                }
+                //判断单据类型，如果是外带并且是直接出货
+                if (m_SalesOrder.order.EatType == (int)EatWayType.Takeout && ConstantValuePool.BizSettingConfig.DirectShipping)
+                {
+                    CustomerOrder customerOrder = new CustomerOrder
+                    {
+                        OrderID = m_SalesOrder.order.OrderID, 
+                        DeliveryEmployeeNo = string.Empty
+                    };
+                    CustomersService.GetInstance().UpdateTakeoutOrderStatus(customerOrder);
                 }
                 m_IsPaidOrder = true;
                 this.Close();

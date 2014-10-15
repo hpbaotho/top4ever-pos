@@ -10,7 +10,7 @@ namespace Top4ever.Domain
         /// </summary>
         public string DeskName { get; set; }
         /// <summary>
-        /// 状态 0：空闲，1：已占
+        /// 状态 0：空闲，1：已占，2：WP7占用
         /// </summary>
         public int DeskStatus { get; set; }
         /// <summary>

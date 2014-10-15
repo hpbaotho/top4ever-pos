@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 using Top4ever.Domain.OrderRelated;
@@ -23,7 +19,7 @@ namespace VechsoftPos
             decimal paidInMoney = 0M;
             foreach (OrderPayoff item in orderPayoffList)
             {
-                string strPayoffWay = string.Empty;
+                string strPayoffWay;
                 decimal totalPrice = item.Quantity * item.AsPay;
                 if (item.PayoffType == (int)PayoffWayMode.GiftVoucher || item.PayoffType == (int)PayoffWayMode.Coupon)
                 {
