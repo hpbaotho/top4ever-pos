@@ -46,7 +46,7 @@ namespace VechsoftPos
                 ConstantValuePool.CurrentShop = currentShop;
                 //Check for registration
                 int remainDays = 0;
-                if (ProductRegister.CheckProductRegistration(ref remainDays))
+                if(true)    //(ProductRegister.CheckProductRegistration(ref remainDays))
                 {
                     Application.Run(new FormLogin());
                 }

@@ -2015,10 +2015,10 @@ namespace VechsoftPos
                         btnTakeOut.Enabled = true;
                         btnTakeOut.BackColor = btnTakeOut.DisplayColor;
                     }
-                    SalesOrder _salesOrder = SalesOrderService.GetInstance().GetSalesOrder(deliveryOrder.OrderID);
-                    if (_salesOrder != null)
+                    SalesOrder salesOrder = SalesOrderService.GetInstance().GetSalesOrder(deliveryOrder.OrderID);
+                    if (salesOrder != null)
                     {
-                        m_SalesOrder = _salesOrder;
+                        m_SalesOrder = salesOrder;
                         BindGoodsOrderInfo();   //绑定订单信息
                         BindOrderInfoSum();
                         CustomerOrder customerOrder = CustomersService.GetInstance().GetCustomerOrder(m_SalesOrder.order.OrderID);
@@ -2046,13 +2046,18 @@ namespace VechsoftPos
                 }
                 else
                 {
-                    SalesOrder _salesOrder = SalesOrderService.GetInstance().GetSalesOrder(deliveryOrder.OrderID);
-                    if (_salesOrder != null)
+                    SalesOrder salesOrder = SalesOrderService.GetInstance().GetSalesOrder(deliveryOrder.OrderID);
+                    if (salesOrder != null)
                     {
-                        FormTakeGoods form = new FormTakeGoods(_salesOrder);
+                        FormTakeGoods form = new FormTakeGoods(salesOrder);
                         form.ShowDialog();
                         if (form.HasDeliveried)
                         {
+                            IList<DeliveryOrder> deliveryOrderList = OrderService.GetInstance().GetDeliveryOrderList();
+                            if (deliveryOrderList != null)
+                            {
+                                m_DeliveryOrderList = deliveryOrderList;
+                            }
                             btnDelivery.Enabled = false;
                             btnDelivery.BackColor = ConstantValuePool.DisabledColor;
                         }
@@ -2067,14 +2072,14 @@ namespace VechsoftPos
         private Int32 SubmitSalesOrder(string deskName, EatWayType eatType)
         {
             int result = 0;
-            Guid orderID = Guid.Empty;
+            Guid orderId;
             if (m_SalesOrder == null)    //新增的菜单
             {
-                orderID = Guid.NewGuid();
+                orderId = Guid.NewGuid();
             }
             else
             {
-                orderID = m_SalesOrder.order.OrderID;
+                orderId = m_SalesOrder.order.OrderID;
             }
             IList<GoodsCheckStock> temp = new List<GoodsCheckStock>();
             IList<OrderDetails> newOrderDetailsList = new List<OrderDetails>();
@@ -2083,13 +2088,13 @@ namespace VechsoftPos
             {
                 if (dr.Cells["OrderDetailsID"].Value == null)
                 {
-                    Guid orderDetailsID = Guid.NewGuid();
+                    Guid orderDetailsId = Guid.NewGuid();
                     int itemType = Convert.ToInt32(dr.Cells["ItemType"].Value);
                     string goodsName = dr.Cells["GoodsName"].Value.ToString();
                     //填充OrderDetails
                     OrderDetails orderDetails = new OrderDetails();
-                    orderDetails.OrderDetailsID = orderDetailsID;
-                    orderDetails.OrderID = orderID;
+                    orderDetails.OrderDetailsID = orderDetailsId;
+                    orderDetails.OrderID = orderId;
                     orderDetails.DeviceNo = ConstantValuePool.BizSettingConfig.DeviceNo;
                     orderDetails.TotalSellPrice = Convert.ToDecimal(dr.Cells["GoodsPrice"].Value);
                     orderDetails.TotalDiscount = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value);
@@ -2178,8 +2183,8 @@ namespace VechsoftPos
                         {
                             OrderDiscount orderDiscount = new OrderDiscount();
                             orderDiscount.OrderDiscountID = Guid.NewGuid();
-                            orderDiscount.OrderID = orderID;
-                            orderDiscount.OrderDetailsID = orderDetailsID;
+                            orderDiscount.OrderID = orderId;
+                            orderDiscount.OrderDetailsID = orderDetailsId;
                             orderDiscount.DiscountID = discount.DiscountID;
                             orderDiscount.DiscountName = discount.DiscountName;
                             orderDiscount.DiscountType = discount.DiscountType;
@@ -2203,7 +2208,7 @@ namespace VechsoftPos
                         //填充OrderDetails
                         OrderDetails orderDetails = new OrderDetails();
                         orderDetails.OrderDetailsID = orderDetailsID;
-                        orderDetails.OrderID = orderID;
+                        orderDetails.OrderID = orderId;
                         orderDetails.DeviceNo = ConstantValuePool.BizSettingConfig.DeviceNo;
                         orderDetails.ItemQty = Convert.ToDecimal(dr.Cells["GoodsNum"].Value);
                         orderDetails.GoodsName = dr.Cells["GoodsName"].Value.ToString();
@@ -2222,7 +2227,7 @@ namespace VechsoftPos
                         {
                             OrderDiscount orderDiscount = new OrderDiscount();
                             orderDiscount.OrderDiscountID = Guid.NewGuid();
-                            orderDiscount.OrderID = orderID;
+                            orderDiscount.OrderID = orderId;
                             orderDiscount.OrderDetailsID = orderDetailsID;
                             orderDiscount.DiscountID = discount.DiscountID;
                             orderDiscount.DiscountName = discount.DiscountName;
@@ -2271,7 +2276,7 @@ namespace VechsoftPos
             if (m_SalesOrder == null)    //新增的菜单
             {
                 Order order = new Order();
-                order.OrderID = orderID;
+                order.OrderID = orderId;
                 order.TotalSellPrice = m_TotalPrice;
                 order.ActualSellPrice = m_ActualPayMoney;
                 order.DiscountPrice = m_Discount;
@@ -2293,7 +2298,7 @@ namespace VechsoftPos
                 if (_tranSeq > 0)
                 {
                     //重新加载
-                    m_SalesOrder = SalesOrderService.GetInstance().GetSalesOrder(orderID);
+                    m_SalesOrder = SalesOrderService.GetInstance().GetSalesOrder(orderId);
                     BindGoodsOrderInfo();   //绑定订单信息
                     BindOrderInfoSum();
                     result = 1;
@@ -2304,7 +2309,7 @@ namespace VechsoftPos
                 if (newOrderDetailsList.Count > 0)
                 {
                     Order order = new Order();
-                    order.OrderID = orderID;
+                    order.OrderID = orderId;
                     order.TotalSellPrice = m_TotalPrice;
                     order.ActualSellPrice = m_ActualPayMoney;
                     order.DiscountPrice = m_Discount;
@@ -2322,7 +2327,7 @@ namespace VechsoftPos
                     if (SalesOrderService.GetInstance().UpdateSalesOrder(salesOrder) == 1)
                     {
                         //重新加载
-                        m_SalesOrder = SalesOrderService.GetInstance().GetSalesOrder(orderID);
+                        m_SalesOrder = SalesOrderService.GetInstance().GetSalesOrder(orderId);
                         BindGoodsOrderInfo();   //绑定订单信息
                         BindOrderInfoSum();
                         result = 1;
@@ -2339,18 +2344,23 @@ namespace VechsoftPos
                 if (result == 1 || result == 2)
                 {
                     //添加外送信息
-                    CustomerOrder customerOrder = new CustomerOrder();
-                    customerOrder.OrderID = orderID;
-                    customerOrder.Telephone = txtTelephone.Text.Trim();
-                    customerOrder.CustomerName = txtName.Text.Trim();
-                    customerOrder.Address = txtAddress.Text.Trim();
-                    if (CustomersService.GetInstance().CreateOrUpdateCustomerOrder(customerOrder))
+                    CustomerOrder customerOrder = new CustomerOrder
                     {
-                        result = 1;
-                    }
-                    else
+                        OrderID = orderId, 
+                        Telephone = txtTelephone.Text.Trim(), 
+                        CustomerName = txtName.Text.Trim(), 
+                        Address = txtAddress.Text.Trim()
+                    };
+                    if (!string.IsNullOrEmpty(customerOrder.Telephone) && !string.IsNullOrEmpty(customerOrder.CustomerName))
                     {
-                        MessageBox.Show("添加外送信息失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        if (CustomersService.GetInstance().CreateOrUpdateCustomerOrder(customerOrder))
+                        {
+                            result = 1;
+                        }
+                        else
+                        {
+                            MessageBox.Show("添加外送信息失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
             }
@@ -2477,19 +2487,19 @@ namespace VechsoftPos
                     if (m_DeliveryOrderList[j].EatType == (int)EatWayType.Takeout)
                     {
                         btnDeliveryList[i].BackColor = Color.Red;
-                        btnDeliveryList[i].Text = m_DeliveryOrderList[j].TranSequence.ToString() + "-外带";
+                        btnDeliveryList[i].Text = m_DeliveryOrderList[j].TranSequence + "-外带";
                     }
                     if (m_DeliveryOrderList[j].EatType == (int)EatWayType.OutsideOrder)
                     {
                         if (m_DeliveryOrderList[j].DeliveryTime == null)
                         {
                             btnDeliveryList[i].BackColor = Color.Orange;
-                            btnDeliveryList[i].Text = m_DeliveryOrderList[j].TranSequence.ToString() + "-未出货";
+                            btnDeliveryList[i].Text = m_DeliveryOrderList[j].TranSequence + "-未出货";
                         }
                         else
                         {
                             btnDeliveryList[i].BackColor = Color.Olive;
-                            btnDeliveryList[i].Text = m_DeliveryOrderList[j].TranSequence.ToString() + "-已出货";
+                            btnDeliveryList[i].Text = m_DeliveryOrderList[j].TranSequence + "-已出货";
                         }
                     }
                 }
@@ -3576,16 +3586,16 @@ namespace VechsoftPos
             }
             if (!haveDailyClose)
             {
-                bool IsContainsNewItem = false;
+                bool isContainsNewItem = false;
                 foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
                 {
                     if (dr.Cells["OrderDetailsID"].Value == null)
                     {
-                        IsContainsNewItem = true;
+                        isContainsNewItem = true;
                         break;
                     }
                 }
-                if (IsContainsNewItem)
+                if (isContainsNewItem)
                 {
                     MessageBox.Show("上次未日结，不能新增菜单，请先进行日结操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;

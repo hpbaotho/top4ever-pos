@@ -11,6 +11,7 @@ namespace VechsoftPos.Feature
         private string m_DefaultValue = string.Empty;
         private string m_KeypadValue = string.Empty;
         private bool m_IsPassword = false;
+        private TextBox _activeTextBox;
 
         #region Input 
         public string DisplayText
@@ -41,14 +42,15 @@ namespace VechsoftPos.Feature
             InitializeComponent();
         }
 
-        public FormNumericKeypad(bool IsNumeric)
+        public FormNumericKeypad(bool isNumeric)
         {
-            m_IsNaN = !IsNumeric;
+            m_IsNaN = !isNumeric;
             InitializeComponent();
         }
 
         private void FormNumericKeypad_Load(object sender, EventArgs e)
         {
+            _activeTextBox = this.txtNumeric;
             this.lbInput.Text = m_DisplayText;
             if (!string.IsNullOrEmpty(m_DefaultValue))
             {
@@ -68,9 +70,15 @@ namespace VechsoftPos.Feature
         private void btnNumeric_Click(object sender, EventArgs e)
         {
             Button btn = sender as Button;
+            if (btn == null) return;
             if (m_IsNaN)
             {
-                this.txtNumeric.Text += btn.Text;
+                int index = _activeTextBox.SelectionStart;
+                string text = _activeTextBox.Text;
+                text = text.Insert(index, btn.Text);
+                _activeTextBox.Text = text;
+                //光标移动到下一位
+                _activeTextBox.Select(index + 1, 0);
             }
             else
             {
@@ -104,9 +112,10 @@ namespace VechsoftPos.Feature
 
         private void btnBackSpace_Click(object sender, EventArgs e)
         {
-            string text = this.txtNumeric.Text;
-            if (!string.IsNullOrEmpty(text))
+            string inputString = _activeTextBox.Text;
+            if (!string.IsNullOrEmpty(inputString))
             {
+                _activeTextBox.Select();
                 SendKeys.Send("{BACKSPACE}");
             }
         }

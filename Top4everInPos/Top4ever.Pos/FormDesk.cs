@@ -185,7 +185,7 @@ namespace VechsoftPos
                 {
                     if (region.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
                     {
-                        btn.Font = new Font(btnStyle.FontName, btnStyle.FontSize, FontStyle.Regular);
+                        btn.Font = new Font(btnStyle.FontName, (float)btnStyle.FontSize, FontStyle.Regular);
                         btn.ForeColor = ColorConvert.RGB(btnStyle.ForeColor);
                         btn.BackColor = btn.DisplayColor = ColorConvert.RGB(btnStyle.BackColor);
                         break;
@@ -255,27 +255,30 @@ namespace VechsoftPos
                     if (_dicDeskInRegion.ContainsKey(_currentRegionId))
                     {
                         IList<DeskRealTimeInfo> deskInfoList = DeskService.GetInstance().GetDeskRealTimeInfo(_currentRegionId.ToString());
-                        List<CrystalButton> btnDeskList = _dicDeskInRegion[_currentRegionId];
-                        foreach (CrystalButton btnDesk in btnDeskList)
+                        if (deskInfoList != null && deskInfoList.Count > 0)
                         {
-                            BizDesk desk = btnDesk.Tag as BizDesk;
-                            if(desk == null) continue;
-                            bool isContains = false;
-                            foreach (DeskRealTimeInfo deskInfo in deskInfoList)
+                            List<CrystalButton> btnDeskList = _dicDeskInRegion[_currentRegionId];
+                            foreach (CrystalButton btnDesk in btnDeskList)
                             {
-                                if (desk.DeskName.Equals(deskInfo.DeskName, StringComparison.CurrentCultureIgnoreCase))
+                                BizDesk desk = btnDesk.Tag as BizDesk;
+                                if (desk == null) continue;
+                                bool isContains = false;
+                                foreach (DeskRealTimeInfo deskInfo in deskInfoList)
                                 {
-                                    isContains = true;
-                                    //更新状态
-                                    desk.Status = deskInfo.DeskStatus;
-                                    desk.DeviceNo = deskInfo.DeviceNo;
-                                    UpdateDeskButtonInfo(btnDesk, deskInfo);
-                                    break;
+                                    if (desk.DeskName.Equals(deskInfo.DeskName, StringComparison.CurrentCultureIgnoreCase))
+                                    {
+                                        isContains = true;
+                                        //更新状态
+                                        desk.Status = deskInfo.DeskStatus;
+                                        desk.DeviceNo = deskInfo.DeviceNo;
+                                        UpdateDeskButtonInfo(btnDesk, deskInfo);
+                                        break;
+                                    }
                                 }
-                            }
-                            if (!isContains)
-                            {
-                                UpdateDeskButtonInfo(btnDesk, null);
+                                if (!isContains)
+                                {
+                                    UpdateDeskButtonInfo(btnDesk, null);
+                                }
                             }
                         }
                     }

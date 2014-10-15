@@ -190,7 +190,6 @@ namespace VechsoftPos
             catch
             {
                 MessageBox.Show("视频播放出现错误！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
             }
         }
     }
