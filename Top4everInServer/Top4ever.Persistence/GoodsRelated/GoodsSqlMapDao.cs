@@ -24,9 +24,14 @@ namespace Top4ever.Persistence.GoodsRelated
             return ExecuteQueryForList<Goods>("GetGoodsList", goodsIdList);
         }
 
-        public IList<Guid> GetDetailsGroupIDListInGoods(Guid goodsId)
+        public IList<Guid> GetDetailsGroupIDListByGoods(Guid goodsId)
         {
             return ExecuteQueryForList<Guid>("GetDetailsGroupIDListByGoodsID", goodsId);
+        }
+
+        public IList<GoodsDetailsGroup> GetDetailsGroupIdsInGoods()
+        {
+            return ExecuteQueryForList<GoodsDetailsGroup>("GetDetailsGroupIdsInGoods", null);
         }
 
         public IList<GoodsCheckStock> GetGoodsCheckStock()

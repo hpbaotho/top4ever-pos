@@ -79,9 +79,11 @@
     </select>
 
     <select id="GetAllPromotionCronTrigger" resultMap="PromotionCronTriggerResult">
+      <![CDATA[
       SELECT ActivityNo,BeginDate,EndDate,Week,[Day],Hour,Minute
       FROM PromotionCronTrigger
-      WHERE IsVoided = 0
+      WHERE BeginDate <= GetDate() AND EndDate >= GetDate() AND IsVoided = 0
+      ]]>
     </select>
 
     <select id="GetAllPromotionPresent" resultMap="PromotionPresentResult">

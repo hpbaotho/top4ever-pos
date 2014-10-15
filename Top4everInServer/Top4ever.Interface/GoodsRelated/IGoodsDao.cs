@@ -14,7 +14,9 @@ namespace Top4ever.Interface.GoodsRelated
 
         IList<Goods> GetGoodsList(IList<Guid> goodsIdList);
 
-        IList<Guid> GetDetailsGroupIDListInGoods(Guid goodsId);
+        IList<Guid> GetDetailsGroupIDListByGoods(Guid goodsId);
+
+        IList<GoodsDetailsGroup> GetDetailsGroupIdsInGoods();
 
         IList<GoodsCheckStock> GetGoodsCheckStock();
 

@@ -10,8 +10,12 @@ namespace Top4ever.Interface.GoodsRelated
     /// </summary>
     public interface IDetailsDao
     {
-        IList<Details> GetDetailsListInGroup(Guid detailsGroupID);
+        IList<Details> GetDetailsListInGroup(Guid detailsGroupId);
 
-        IList<Guid> GetDetailsGroupIDListInDetails(Guid detailsID);
+        IList<Details> GetAllDetails();
+
+        IList<Guid> GetDetailsGroupIDListInDetails(Guid detailsId);
+
+        IList<DetailsDetailsGroup> GetDetailsGroupIdsInDetails();
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 using Top4ever.Domain.GoodsRelated;
@@ -12,14 +11,24 @@ namespace Top4ever.Persistence.GoodsRelated
     /// </summary>
     public class DetailsSqlMapDao : BaseSqlMapDao, IDetailsDao
     {
-        public IList<Details> GetDetailsListInGroup(Guid detailsGroupID)
+        public IList<Details> GetDetailsListInGroup(Guid detailsGroupId)
         {
-            return ExecuteQueryForList<Details>("GetDetailsListByGroup", detailsGroupID);
+            return ExecuteQueryForList<Details>("GetDetailsListByGroup", detailsGroupId);
         }
 
-        public IList<Guid> GetDetailsGroupIDListInDetails(Guid detailsID)
+        public IList<Details> GetAllDetails()
         {
-            return ExecuteQueryForList<Guid>("GetDetailsGroupIDListByDetailsID", detailsID);
+            return ExecuteQueryForList<Details>("GetAllDetails", null);
+        }
+
+        public IList<Guid> GetDetailsGroupIDListInDetails(Guid detailsId)
+        {
+            return ExecuteQueryForList<Guid>("GetDetailsGroupIDListByDetailsID", detailsId);
+        }
+
+        public IList<DetailsDetailsGroup> GetDetailsGroupIdsInDetails()
+        {
+            return ExecuteQueryForList<DetailsDetailsGroup>("GetDetailsGroupIdsInDetails", null);
         }
     }
 }

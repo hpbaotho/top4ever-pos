@@ -44,44 +44,43 @@ namespace Top4ever.Service
         }
 
         public bool CreateReminderOrder(ReminderOrder reminderOrder)
-        { 
+        {
+            if (reminderOrder == null || reminderOrder.OrderDetailsIDList == null || reminderOrder.OrderDetailsIDList.Count <= 0)
+            {
+                return false;
+            }
             bool returnValue = false;
-            _daoManager.BeginTransaction();
             try
             {
-                Order order = _orderDao.GetOrder(reminderOrder.OrderID);
-                if (order != null)
+                _daoManager.OpenConnection();
+                //添加打印任务
+                SystemConfig systemConfig = _sysConfigDao.GetSystemConfigInfo();
+                if (systemConfig.IncludeKitchenPrint)
                 {
-                    IList<OrderDetails> orderDetailsList = new List<OrderDetails>();
-                    foreach (Guid orderDetailsId in reminderOrder.OrderDetailsIDList)
+                    Order order = _orderDao.GetOrder(reminderOrder.OrderID);
+                    if (order != null)
                     {
-                        OrderDetails orderDetails = _orderDetailsDao.GetOrderDetails(orderDetailsId);
-                        orderDetailsList.Add(orderDetails);
-                    }
-                    SalesOrder salesOrder = new SalesOrder
-                    {
-                        order = order, 
-                        orderDetailsList = orderDetailsList
-                    };
-                    //添加打印任务
-                    SystemConfig systemConfig = _sysConfigDao.GetSystemConfigInfo();
-                    if (systemConfig.IncludeKitchenPrint)
-                    {
+                        SalesOrder salesOrder = new SalesOrder
+                        {
+                            order = order,
+                            orderDetailsList = _orderDetailsDao.GetOrderDetailsList(reminderOrder.OrderDetailsIDList)
+                        };
                         IList<PrintTask> printTaskList = PrintTaskService.GetInstance().GetPrintTaskList(salesOrder, systemConfig.PrintStyle, systemConfig.FollowStyle, systemConfig.PrintType, 3, reminderOrder.ReasonName);
                         foreach (PrintTask printTask in printTaskList)
                         {
                             _printTaskDao.InsertPrintTask(printTask);
                         }
                     }
-                    returnValue = true;
                 }
-                _daoManager.CommitTransaction();
+                returnValue = true;
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 LogHelper.GetInstance().Error(string.Format("[CreateReminderOrder]参数：reminderOrder_{0}", JsonConvert.SerializeObject(reminderOrder)), exception);
-                _daoManager.RollBackTransaction();
-                returnValue = false;
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
             }
             return returnValue;
         }

@@ -11,7 +11,9 @@ namespace Top4ever.Interface
     /// </summary>
     public interface IDeskDao
     {
-        IList<BizDesk> GetAllBizDeskByRegion(Guid regionID);
+        IList<BizDesk> GetAllBizDeskByRegion(Guid regionId);
+
+        IList<BizDesk> GetAllBizDesks();
 
         IList<string> GetAllDeskName();
 
@@ -19,7 +21,7 @@ namespace Top4ever.Interface
 
         bool UpdateBizDeskStatus(BizDesk desk);
 
-        IList<DeskRealTimeInfo> GetDeskRealTimeInfo(Guid regionID);
+        IList<DeskRealTimeInfo> GetDeskRealTimeInfo(Guid regionId);
 
         IList<DeskInfo> GetDeskList();
     }

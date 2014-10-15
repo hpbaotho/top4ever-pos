@@ -15,9 +15,14 @@ namespace Top4ever.Persistence
     {
         #region IDeskDao Members
 
-        public IList<BizDesk> GetAllBizDeskByRegion(Guid regionID)
+        public IList<BizDesk> GetAllBizDeskByRegion(Guid regionId)
         {
-            return ExecuteQueryForList<BizDesk>("GetAllDeskInRegion", regionID);
+            return ExecuteQueryForList<BizDesk>("GetAllDeskInRegion", regionId);
+        }
+
+        public IList<BizDesk> GetAllBizDesks()
+        {
+            return ExecuteQueryForList<BizDesk>("GetAllDesks", null);
         }
 
         public IList<string> GetAllDeskName()
@@ -32,14 +37,13 @@ namespace Top4ever.Persistence
 
         public bool UpdateBizDeskStatus(BizDesk desk)
         {
-            int result = 0;
-            result = ExecuteUpdate("UpdateDeskStatus", desk);
+            int result = ExecuteUpdate("UpdateDeskStatus", desk);
             return result > 0;
         }
 
-        public IList<DeskRealTimeInfo> GetDeskRealTimeInfo(Guid regionID)
+        public IList<DeskRealTimeInfo> GetDeskRealTimeInfo(Guid regionId)
         {
-            return ExecuteQueryForList<DeskRealTimeInfo>("GetDeskInfo", new Hashtable { { "RegionID", regionID } });
+            return ExecuteQueryForList<DeskRealTimeInfo>("GetDeskInfo", new Hashtable { { "RegionID", regionId } });
         }
 
         public IList<DeskInfo> GetDeskList()

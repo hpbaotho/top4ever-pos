@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using IBatisNet.DataAccess;
@@ -72,18 +71,26 @@ namespace Top4ever.Service
 
         public SysBasicData GetSysBasicData()
         {
-            SysBasicData basicData = new SysBasicData();
-            _daoManager.BeginTransaction();
+            SysBasicData basicData = null;
             try
             {
+                _daoManager.OpenConnection();
+                basicData = new SysBasicData();
                 // region
                 IList<BizRegion> regionList = _regionDao.GetAllBizRegion();
                 if (regionList != null && regionList.Count > 0)
                 {
-                    foreach (BizRegion region in regionList)
+                    IList<BizDesk> deskList = _deskDao.GetAllBizDesks();
+                    if (deskList != null && deskList.Count > 0)
                     {
-                        IList<BizDesk> deskList = _deskDao.GetAllBizDeskByRegion(region.RegionID);
-                        region.BizDeskList = deskList;
+                        foreach (BizRegion region in regionList)
+                        {
+                            IList<BizDesk> desks = deskList.Where(desk => desk.RegionID.Equals(region.RegionID)).ToList();
+                            if (desks.Count > 0)
+                            {
+                                region.BizDeskList = desks;
+                            }
+                        }
                     }
                 }
                 // goodsGroup
@@ -95,10 +102,17 @@ namespace Top4ever.Service
                         IList<Goods> goodsList = _goodsDao.GetGoodsListInGroup(item.GoodsGroupID);
                         if (goodsList != null && goodsList.Count > 0)
                         {
-                            foreach (Goods goods in goodsList)
+                            IList<GoodsDetailsGroup> goodsDetailsGroupList = _goodsDao.GetDetailsGroupIdsInGoods();
+                            if (goodsDetailsGroupList != null && goodsDetailsGroupList.Count > 0)
                             {
-                                IList<Guid> detailsGroupIdList = _goodsDao.GetDetailsGroupIDListInGoods(goods.GoodsID);
-                                goods.DetailsGroupIDList = detailsGroupIdList;
+                                foreach (Goods goods in goodsList)
+                                {
+                                    IList<Guid> detailsGroupIds = goodsDetailsGroupList.Where(detail => detail.GoodsID.Equals(goods.GoodsID)).Select(detail => detail.DetailsGroupID).ToList();
+                                    if (detailsGroupIds.Count > 0)
+                                    {
+                                        goods.DetailsGroupIDList = detailsGroupIds;
+                                    }
+                                }
                             }
                         }
                         item.GoodsList = goodsList;
@@ -108,18 +122,29 @@ namespace Top4ever.Service
                 IList<DetailsGroup> detailsGroupList = _detailsGroupDao.GetAllDetailsGroup();
                 if (detailsGroupList != null && detailsGroupList.Count > 0)
                 {
-                    foreach (DetailsGroup item in detailsGroupList)
+                    IList<Details> detailsInfoList = _detailsDao.GetAllDetails();
+                    if (detailsInfoList != null && detailsInfoList.Count > 0)
                     {
-                        IList<Details> detailsList = _detailsDao.GetDetailsListInGroup(item.DetailsGroupID);
-                        if (detailsList != null && detailsList.Count > 0)
+                        foreach (DetailsGroup item in detailsGroupList)
                         {
-                            foreach (Details details in detailsList)
+                            IList<Details> detailsList = detailsInfoList.Where(detail => detail.DetailsGroupID.Equals(item.DetailsGroupID)).ToList();
+                            if (detailsList.Count > 0)
                             {
-                                IList<Guid> detailsGroupIdList = _detailsDao.GetDetailsGroupIDListInDetails(details.DetailsID);
-                                details.DetailsGroupIDList = detailsGroupIdList;
+                                IList<DetailsDetailsGroup> detailsDetailsGroups = _detailsDao.GetDetailsGroupIdsInDetails();
+                                if (detailsDetailsGroups != null && detailsDetailsGroups.Count > 0)
+                                {
+                                    foreach (Details details in detailsList)
+                                    {
+                                        IList<Guid> detailsGroupIdList = detailsDetailsGroups.Where(ddg => ddg.DetailsID.Equals(details.DetailsID)).Select(ddg => ddg.DetailsGroupID).ToList();
+                                        if (detailsGroupIdList.Count > 0)
+                                        {
+                                            details.DetailsGroupIDList = detailsGroupIdList;
+                                        }
+                                    }
+                                }
+                                item.DetailsList = detailsList;
                             }
                         }
-                        item.DetailsList = detailsList;
                     }
                 }
                 // SysBasicData
@@ -142,14 +167,14 @@ namespace Top4ever.Service
                 basicData.TotalLimitedTimeSaleList = _goodsGroupDao.GetAllGoodsLimitedTimeSale();
                 //组合销售
                 basicData.TotalCombinedSaleList = _goodsGroupDao.GetAllGoodsCombinedSale();
-
-                _daoManager.CommitTransaction();
             }
             catch(Exception exception)
             {
                 LogHelper.GetInstance().Error("[GetSysBasicData]", exception);
-                _daoManager.RollBackTransaction();
-                basicData = null;
+            }
+            finally
+            {
+                _daoManager.CloseConnection();
             }
             return basicData;
         }
@@ -197,6 +222,7 @@ namespace Top4ever.Service
                 IList<Goods> goodsList = _goodsDao.GetGoodsListInGroup(goodsGroupId);
                 if (goodsList != null && goodsList.Count > 0)
                 {
+                    IList<GoodsDetailsGroup> goodsDetailsGroupList = _goodsDao.GetDetailsGroupIdsInGoods();
                     goodsInfoList = new List<GoodsInfo>();
                     foreach (Goods item in goodsList)
                     {
@@ -210,9 +236,16 @@ namespace Top4ever.Service
                             SellPrice = item.SellPrice,
                             AutoShowDetails = item.AutoShowDetails,
                             BrevityCode = item.BrevityCode,
-                            PinyinCode = item.PinyinCode,
-                            DetailsGroupIds = _goodsDao.GetDetailsGroupIDListInGoods(item.GoodsID)
+                            PinyinCode = item.PinyinCode
                         };
+                        if (goodsDetailsGroupList != null && goodsDetailsGroupList.Count > 0)
+                        {
+                            IList<Guid> detailsGroupIds = goodsDetailsGroupList.Where(detail => detail.GoodsID.Equals(item.GoodsID)).Select(detail => detail.DetailsGroupID).ToList();
+                            if (detailsGroupIds.Count > 0)
+                            {
+                                goodsInfo.DetailsGroupIds = detailsGroupIds;
+                            }
+                        }
                         goodsInfoList.Add(goodsInfo);
                     }
                 }

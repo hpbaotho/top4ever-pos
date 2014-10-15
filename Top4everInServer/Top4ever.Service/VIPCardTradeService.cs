@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 
 using IBatisNet.DataAccess;
 using Newtonsoft.Json;
@@ -21,8 +19,8 @@ namespace Top4ever.Service
 
         private static readonly VIPCardTradeService _instance = new VIPCardTradeService();
         private readonly IDaoManager _daoManager;
-        private readonly IVIPCardDao _VIPCardDao;
-        private readonly IVIPCardTradeDao _VIPCardTradeDao;
+        private readonly IVIPCardDao _vipCardDao;
+        private readonly IVIPCardTradeDao _vipCardTradeDao;
         private readonly IDailyStatementDao _dailyStatementDao;
 
         #endregion
@@ -32,8 +30,8 @@ namespace Top4ever.Service
         private VIPCardTradeService()
         {
             _daoManager = ServiceConfig.GetInstance().DaoManager;
-            _VIPCardDao = _daoManager.GetDao(typeof(IVIPCardDao)) as IVIPCardDao;
-            _VIPCardTradeDao = _daoManager.GetDao(typeof(IVIPCardTradeDao)) as IVIPCardTradeDao;
+            _vipCardDao = _daoManager.GetDao(typeof(IVIPCardDao)) as IVIPCardDao;
+            _vipCardTradeDao = _daoManager.GetDao(typeof(IVIPCardTradeDao)) as IVIPCardTradeDao;
             _dailyStatementDao = _daoManager.GetDao(typeof(IDailyStatementDao)) as IDailyStatementDao;
         }
 
@@ -53,7 +51,7 @@ namespace Top4ever.Service
             try
             {
                 _daoManager.OpenConnection();
-                card = _VIPCardDao.GetVIPCard(cardNo);
+                card = _vipCardDao.GetVIPCard(cardNo);
             }
             catch (Exception exception)
             {
@@ -76,7 +74,7 @@ namespace Top4ever.Service
                     cardTradeRecord.Integral = card.Integral;
                     cardTradeRecord.DiscountRate = card.DiscountRate;
                 }
-                cardTradeRecord.VIPCardTradeList = _VIPCardTradeDao.GetVIPCardTradeList(cardNo, beginDate, endDate);
+                cardTradeRecord.VIPCardTradeList = _vipCardTradeDao.GetVIPCardTradeList(cardNo, beginDate, endDate);
             }
             return result;
         }
@@ -90,7 +88,7 @@ namespace Top4ever.Service
                 _daoManager.OpenConnection();
                 //日结号
                 string dailyStatementNo = _dailyStatementDao.GetCurrentDailyStatementNo();
-                VIPCardStoredVaule cardStoredVaule = _VIPCardTradeDao.GetVIPCardStoredVaule(cardMoney.CardNo, cardMoney.StoreMoney);
+                VIPCardStoredVaule cardStoredVaule = _vipCardTradeDao.GetVIPCardStoredVaule(cardMoney.CardNo, cardMoney.StoreMoney);
                 decimal giftAmount = 0M;
                 int giftIntegral = 0;
                 if (cardStoredVaule != null)
@@ -117,7 +115,7 @@ namespace Top4ever.Service
                         giftIntegral = Convert.ToInt32(cardMoney.StoreMoney*cardStoredVaule.PresentIntegralRate*multiple);
                     }
                 }
-                result = _VIPCardTradeDao.AddVIPCardStoredValue(cardMoney.CardNo, cardMoney.StoreMoney, giftAmount, giftIntegral, cardMoney.EmployeeNo, cardMoney.DeviceNo, dailyStatementNo, cardMoney.PayoffID, cardMoney.PayoffName, out tradePayNo);
+                result = _vipCardTradeDao.AddVIPCardStoredValue(cardMoney.CardNo, cardMoney.StoreMoney, giftAmount, giftIntegral, cardMoney.EmployeeNo, cardMoney.DeviceNo, dailyStatementNo, cardMoney.PayoffID, cardMoney.PayoffName, out tradePayNo);
             }
             catch (Exception exception)
             {
@@ -139,7 +137,7 @@ namespace Top4ever.Service
                 _daoManager.OpenConnection();
                 //日结号
                 string dailyStatementNo = _dailyStatementDao.GetCurrentDailyStatementNo();
-                result = _VIPCardTradeDao.AddVIPCardPayment(cardPayment.CardNo, cardPayment.PayAmount, cardPayment.PayIntegral, cardPayment.OrderNo, cardPayment.EmployeeNo, cardPayment.DeviceNo, dailyStatementNo, out tradePayNo);
+                result = _vipCardTradeDao.AddVIPCardPayment(cardPayment.CardNo, cardPayment.PayAmount, cardPayment.PayIntegral, cardPayment.OrderNo, cardPayment.EmployeeNo, cardPayment.DeviceNo, dailyStatementNo, out tradePayNo);
             }
             catch (Exception exception)
             {
@@ -158,7 +156,7 @@ namespace Top4ever.Service
             try
             {
                 _daoManager.OpenConnection();
-                result = _VIPCardTradeDao.RefundVIPCardPayment(cardNo, tradePayNo);
+                result = _vipCardTradeDao.RefundVIPCardPayment(cardNo, tradePayNo);
             }
             catch (Exception exception)
             {

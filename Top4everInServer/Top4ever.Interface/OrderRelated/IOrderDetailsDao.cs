@@ -17,13 +17,15 @@ namespace Top4ever.Interface.OrderRelated
 
         bool UpdateOrderDetailsDiscount(OrderDetails orderDetails);
 
-        IList<OrderDetails> GetOrderDetailsList(Guid orderID);
+        IList<OrderDetails> GetOrderDetailsList(Guid orderId);
 
-        IList<OrderDetails> GetDeletedOrderDetailsList(Guid orderID);
+        IList<OrderDetails> GetDeletedOrderDetailsList(Guid orderId);
 
-        OrderDetails GetOrderDetails(Guid orderDetailsID);
+        OrderDetails GetOrderDetails(Guid orderDetailsId);
 
-        Int32 GetSequenceNum(Guid orderID);
+        IList<OrderDetails> GetOrderDetailsList(IList<Guid> orderDetailsIds);
+
+        Int32 GetSequenceNum(Guid orderId);
 
         bool DeleteWholeOrderDetails(DeletedOrder deletedOrder);
 
@@ -37,6 +39,6 @@ namespace Top4ever.Interface.OrderRelated
 
         IList<DeletedItem> GetDeletedGoodsItemList(DateTime beginDate, DateTime endDate, int dateType);
 
-        decimal GetLastCustomPrice(string dailyStatementNo, Guid goodsID);
+        decimal GetLastCustomPrice(string dailyStatementNo, Guid goodsId);
     }
 }

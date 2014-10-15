@@ -82,25 +82,31 @@
       </select>
 
       <select id="GetGoodsCronTriggerList" resultMap="GoodsCronTriggerResult">
+        <![CDATA[
         SELECT ItemID,ItemType,BeginDate,EndDate,Week,[Day],Hour,Minute
         FROM GoodsCronTrigger
-        WHERE IsVoided = 0
+        WHERE BeginDate <= GetDate() AND EndDate >= GetDate() AND IsVoided = 0
+        ]]>
       </select>
 
       <select id="GetGoodsLimitedTimeSaleList" resultMap="GoodsLimitedTimeSaleResult">
+        <![CDATA[ 
         SELECT ItemID,ItemType,BeginDate,EndDate,Week,[Day],Hour,
-            Minute,DiscountType,DiscountRate,OffFixPay,OffSaleTo
+          Minute,DiscountType,DiscountRate,OffFixPay,OffSaleTo
         FROM GoodsLimitedTimeSale
-        WHERE IsVoided = 0
+        WHERE BeginDate <= GetDate() AND EndDate >= GetDate() AND IsVoided = 0
         ORDER BY OrderBy
+        ]]>
       </select>
 
       <select id="GetGoodsCombinedSaleList" resultMap="GoodsCombinedSaleResult">
+        <![CDATA[
         SELECT ItemID,ItemType,BeginDate,EndDate,Week,[Day],Hour,Minute,
-            Quantity,SellPrice,MoreOrLess,LeastDiscountRate,PreferentialInterval,IsMultiple,
-            DiscountType2,DiscountRate2,OffFixPay2,OffSaleTo2,DiscountType3,DiscountRate3,OffFixPay3,OffSaleTo3
+        Quantity,SellPrice,MoreOrLess,LeastDiscountRate,PreferentialInterval,IsMultiple,
+        DiscountType2,DiscountRate2,OffFixPay2,OffSaleTo2,DiscountType3,DiscountRate3,OffFixPay3,OffSaleTo3
         FROM GoodsCombinedSale
-        WHERE IsVoided = 0
+        WHERE BeginDate <= GetDate() AND EndDate >= GetDate() AND IsVoided = 0
+        ]]>
       </select>
 
     </statements>

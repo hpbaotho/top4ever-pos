@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using IBatisNet.DataAccess;
 using Newtonsoft.Json;

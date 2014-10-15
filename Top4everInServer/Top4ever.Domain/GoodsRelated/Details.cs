@@ -56,6 +56,11 @@ namespace Top4ever.Domain.GoodsRelated
         public string PrintSolutionName { get; set; }
 
         /// <summary>
+        /// 所属细项组Id
+        /// </summary>
+        public Guid DetailsGroupID { get; set; }
+
+        /// <summary>
         /// 所属部门
         /// </summary>
         public Guid DepartID { get; set; }

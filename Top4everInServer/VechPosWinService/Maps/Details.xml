@@ -3,6 +3,7 @@
 
     <alias>
       <typeAlias alias="Details" type="Top4ever.Domain.GoodsRelated.Details, Top4ever.Domain" />
+      <typeAlias alias="DetailsDetailsGroup" type="Top4ever.Domain.GoodsRelated.DetailsDetailsGroup, Top4ever.Domain" />
     </alias>
 
     <resultMaps>
@@ -17,10 +18,10 @@
         <result property="BrevityCode" column="BrevityCode"></result>
         <result property="PinyinCode" column="PinyinCode"></result>
         <result property="PrintSolutionName" column="PrintSolutionName"></result>
+        <result property="DetailsGroupID" column="DetailsGroupID"></result>
         <result property="DepartID" column="DepartID"></result>
         <result property="ButtonStyleID" column="ButtonStyleID"></result>
       </resultMap>
-
     </resultMaps>
     <!-- =============================================
         MAPPED STATEMENTS 
@@ -28,25 +29,31 @@
     -->
     <statements>
       <select id="GetDetailsListByGroup" parameterClass="Guid" resultMap="DetailsResult">
-        SELECT DetailsID
-        , DetailsNo
-        , DetailsName
-        , DetailsName_2nd
-        , SellPrice
-        , CanDiscount
-        , AutoShowDetails
-        , BrevityCode
-        , PinyinCode
-        , PrintSolutionName
-        , DepartID
-        , ButtonStyleID
+        SELECT DetailsID, DetailsNo, DetailsName, DetailsName_2nd, SellPrice, CanDiscount, AutoShowDetails, 
+          BrevityCode, PinyinCode, PrintSolutionName, DetailsGroupID, DepartID, ButtonStyleID
         FROM Details
         WHERE DetailsGroupID = #value# AND IsVoided = 0
         ORDER BY OrderBy
       </select>
 
+      <select id="GetAllDetails" resultMap="DetailsResult">
+        <![CDATA[
+        SELECT DetailsID, DetailsNo, DetailsName, DetailsName_2nd, SellPrice, CanDiscount, AutoShowDetails,
+          BrevityCode, PinyinCode, PrintSolutionName, DetailsGroupID, DepartID, ButtonStyleID
+        FROM Details
+        WHERE IsVoided = 0
+        ORDER BY DetailsGroupID, OrderBy
+        ]]>
+      </select>
+
       <select id="GetDetailsGroupIDListByDetailsID" parameterClass="Guid" resultClass="Guid">
         SELECT DetailsGroupID FROM DetailsDetailsGroup WHERE DetailsID = #value#
+      </select>
+
+      <select id="GetDetailsGroupIdsInDetails" resultClass="DetailsDetailsGroup">
+        <![CDATA[
+        SELECT DetailsID, DetailsGroupID FROM DetailsDetailsGroup
+        ]]>
       </select>
         
     </statements>

@@ -160,6 +160,17 @@
         ORDER BY OrderBy
       </select>
 
+      <!--批量获取账单明细信息-->
+      <select id="GetOrderDetailsList" parameterClass="List" resultMap="OrderDetailsResult">
+        SELECT OrderDetailsID, OrderID, DeviceNo, TotalSellPrice, TotalDiscount, ItemQty, OrderBy, ItemType,
+          GoodsID, GoodsNo, GoodsName, Unit, CanDiscount, ItemLevel, SellPrice, Wait, PrintSolutionName, DepartID, InputEmployeeID
+        FROM OrderDetails WHERE OrderDetailsID IN
+        <iterate conjunction="," open="(" close=")">
+          #[]#
+        </iterate>
+        ORDER BY OrderDetailsID, OrderBy
+      </select>
+
       <update id="UpdateLadeOrderDetails" parameterClass="OrderDetails">
         UPDATE OrderDetails
         SET Wait = #Wait#
