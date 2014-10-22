@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO.Ports;
 using System.Text;
 using System.Windows.Forms;
 
@@ -511,6 +512,33 @@ namespace VechsoftPos.Feature
                             string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
                             string paperName = ConstantValuePool.BizSettingConfig.printConfig.PaperName;
                             DriverOrderPrint printer = DriverOrderPrint.GetInstance(printerName, paperName, paperWidth);
+                            printer.DoPrintPaidOrder(printData);
+                        }
+                        if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.COM)
+                        {
+                            string port = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                            if (port.Length > 3)
+                            {
+                                if (port.Substring(0, 3).ToUpper() == "COM")
+                                {
+                                    string portName = port.Substring(0, 4).ToUpper();
+                                    InstructionOrderPrint printer = new InstructionOrderPrint(portName, 9600, Parity.None, 8, StopBits.One, paperWidth);
+                                    printer.DoPrintPaidOrder(printData);
+                                }
+                            }
+                        }
+                        if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.ETHERNET)
+                        {
+                            string ipAddress = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                            InstructionOrderPrint printer = new InstructionOrderPrint(ipAddress, 9100, paperWidth);
+                            printer.DoPrintPaidOrder(printData);
+                        }
+                        if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.USB)
+                        {
+                            string vid = ConstantValuePool.BizSettingConfig.printConfig.VID;
+                            string pid = ConstantValuePool.BizSettingConfig.printConfig.PID;
+                            string endpointId = ConstantValuePool.BizSettingConfig.printConfig.EndpointID;
+                            InstructionOrderPrint printer = new InstructionOrderPrint(vid, pid, endpointId, paperWidth);
                             printer.DoPrintPaidOrder(printData);
                         }
                     }

@@ -100,7 +100,7 @@ namespace VechsoftPos.Feature
             // 
             // btnCancel
             // 
-            this.btnCancel.BackColor = System.Drawing.Color.Red;
+            this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(43)))), ((int)(((byte)(59)))));
             this.btnCancel.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnCancel.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnCancel.Location = new System.Drawing.Point(29, 285);
@@ -113,7 +113,7 @@ namespace VechsoftPos.Feature
             // 
             // btnZero
             // 
-            this.btnZero.BackColor = System.Drawing.Color.Blue;
+            this.btnZero.BackColor = System.Drawing.Color.Black;
             this.btnZero.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnZero.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.btnZero.Location = new System.Drawing.Point(110, 285);
@@ -126,7 +126,7 @@ namespace VechsoftPos.Feature
             // 
             // btnNine
             // 
-            this.btnNine.BackColor = System.Drawing.Color.Blue;
+            this.btnNine.BackColor = System.Drawing.Color.Black;
             this.btnNine.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnNine.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnNine.Location = new System.Drawing.Point(191, 230);
@@ -139,7 +139,7 @@ namespace VechsoftPos.Feature
             // 
             // btnEight
             // 
-            this.btnEight.BackColor = System.Drawing.Color.Blue;
+            this.btnEight.BackColor = System.Drawing.Color.Black;
             this.btnEight.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnEight.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnEight.Location = new System.Drawing.Point(110, 230);
@@ -191,7 +191,7 @@ namespace VechsoftPos.Feature
             // 
             // btnSeven
             // 
-            this.btnSeven.BackColor = System.Drawing.Color.Blue;
+            this.btnSeven.BackColor = System.Drawing.Color.Black;
             this.btnSeven.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnSeven.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnSeven.Location = new System.Drawing.Point(29, 230);
@@ -204,7 +204,7 @@ namespace VechsoftPos.Feature
             // 
             // btnSix
             // 
-            this.btnSix.BackColor = System.Drawing.Color.Blue;
+            this.btnSix.BackColor = System.Drawing.Color.Black;
             this.btnSix.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnSix.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnSix.Location = new System.Drawing.Point(190, 176);
@@ -217,7 +217,7 @@ namespace VechsoftPos.Feature
             // 
             // btnFive
             // 
-            this.btnFive.BackColor = System.Drawing.Color.Blue;
+            this.btnFive.BackColor = System.Drawing.Color.Black;
             this.btnFive.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnFive.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnFive.Location = new System.Drawing.Point(109, 176);
@@ -230,7 +230,7 @@ namespace VechsoftPos.Feature
             // 
             // btnFour
             // 
-            this.btnFour.BackColor = System.Drawing.Color.Blue;
+            this.btnFour.BackColor = System.Drawing.Color.Black;
             this.btnFour.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnFour.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnFour.Location = new System.Drawing.Point(29, 176);
@@ -243,7 +243,7 @@ namespace VechsoftPos.Feature
             // 
             // btnThree
             // 
-            this.btnThree.BackColor = System.Drawing.Color.Blue;
+            this.btnThree.BackColor = System.Drawing.Color.Black;
             this.btnThree.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnThree.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnThree.Location = new System.Drawing.Point(190, 121);
@@ -256,7 +256,7 @@ namespace VechsoftPos.Feature
             // 
             // btnTwo
             // 
-            this.btnTwo.BackColor = System.Drawing.Color.Blue;
+            this.btnTwo.BackColor = System.Drawing.Color.Black;
             this.btnTwo.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnTwo.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnTwo.Location = new System.Drawing.Point(110, 121);
@@ -269,7 +269,7 @@ namespace VechsoftPos.Feature
             // 
             // btnOne
             // 
-            this.btnOne.BackColor = System.Drawing.Color.Blue;
+            this.btnOne.BackColor = System.Drawing.Color.Black;
             this.btnOne.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnOne.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnOne.Location = new System.Drawing.Point(29, 121);
@@ -282,7 +282,7 @@ namespace VechsoftPos.Feature
             // 
             // btnBackSpace
             // 
-            this.btnBackSpace.BackColor = System.Drawing.Color.Black;
+            this.btnBackSpace.BackColor = System.Drawing.Color.OrangeRed;
             this.btnBackSpace.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnBackSpace.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btnBackSpace.Location = new System.Drawing.Point(191, 285);
@@ -293,7 +293,7 @@ namespace VechsoftPos.Feature
             this.btnBackSpace.UseVisualStyleBackColor = false;
             this.btnBackSpace.Click += new System.EventHandler(this.btnBackSpace_Click);
             // 
-            // FrmPunchCard
+            // FormRightsCode
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -323,7 +323,7 @@ namespace VechsoftPos.Feature
             this.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "FrmPunchCard";
+            this.Name = "FormRightsCode";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.FrmPunchCard_Load);

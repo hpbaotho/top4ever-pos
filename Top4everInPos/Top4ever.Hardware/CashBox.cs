@@ -15,9 +15,9 @@ namespace Top4ever.Hardware
             portUtil.Close();
         }
 
-        public static void Open(string VID, string PID)
+        public static void Open(string VID, string PID, string endpointId)
         {
-            PortUtil portUtil = new PortUtil(VID, PID);
+            PortUtil portUtil = new PortUtil(VID, PID, endpointId);
             portUtil.Open();
             //弹钱箱
             byte[] cashDrawer = new byte[] { 0x1B, 0x70, 0x00, 0x30, 0xC0 };

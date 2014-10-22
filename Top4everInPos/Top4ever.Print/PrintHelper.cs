@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.IO.Ports;
 using System.Text;
 
@@ -24,26 +22,26 @@ namespace Top4ever.Print
         private const byte CAN = 0x18;
         private const byte CLR = 0x0C;
 
-        private PortUtil m_PortUtil;
+        private readonly PortUtil _portUtil;
 
         public PrintHelper(string portName, int baudRate, Parity parity, int dataBits, StopBits stopBits)
         {
-            m_PortUtil = new PortUtil(portName, baudRate, parity, dataBits, stopBits); 
+            _portUtil = new PortUtil(portName, baudRate, parity, dataBits, stopBits); 
         }
 
-        public PrintHelper(string usbVID, string usbPID)
+        public PrintHelper(string usbVid, string usbPid, string endpointId)
         {
-            m_PortUtil = new PortUtil(usbVID, usbPID);
+            _portUtil = new PortUtil(usbVid, usbPid, endpointId);
         }
 
         public PrintHelper(string ip, int port)
         {
-            m_PortUtil = new PortUtil(ip, port);
+            _portUtil = new PortUtil(ip, port);
         }
 
         public void Open()
         {
-            m_PortUtil.Open();
+            _portUtil.Open();
         }
 
         /// <summary>
@@ -51,7 +49,7 @@ namespace Top4ever.Print
         /// </summary>
         public void Write(byte[] data)
         {
-            m_PortUtil.Write(data);
+            _portUtil.Write(data);
         }
 
         /// <summary>
@@ -59,7 +57,7 @@ namespace Top4ever.Print
         /// </summary>
         public void Write(string data)
         {
-            m_PortUtil.Write(data);
+            _portUtil.Write(data);
         }
 
         public void Write(string data, TextAlign textAlign, int pagerWidth)
@@ -100,8 +98,6 @@ namespace Top4ever.Print
                             result.Append(" ");
                         }
                         result.Append(data);
-                        break;
-                    default:
                         break;
                 }
                 Write(result.ToString());
@@ -281,20 +277,17 @@ namespace Top4ever.Print
                 }
                 return resultStr;
             }
-            else
-            {
-                return strInput;
-            }
+            return strInput;
         }
 
         public void Close()
         {
-            m_PortUtil.Close();
+            _portUtil.Close();
         }
 
         public void Dispose()
         {
-            m_PortUtil.Dispose();
+            _portUtil.Dispose();
         }
     }
 }

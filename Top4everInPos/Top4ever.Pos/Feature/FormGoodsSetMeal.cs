@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 using Top4ever.CustomControl;
@@ -14,9 +11,9 @@ namespace VechsoftPos.Feature
 {
     public partial class FormGoodsSetMeal : Form
     {
-        private Dictionary<int, List<GoodsSetMeal>> dicGoodsSetMealByGroup;
-        private List<GoodsSetMeal> m_CurrentGoodsSetMealList;
-        private int ItemPageIndex = 0;
+        private readonly Dictionary<int, List<GoodsSetMeal>> _dicGoodsSetMealByGroup;
+        private List<GoodsSetMeal> _currentGoodsSetMealList;
+        private int _itemPageIndex = 0;
 
         private SortedDictionary<int, List<GoodsSetMeal>> _dicResultGoodsSetMeal = new SortedDictionary<int, List<GoodsSetMeal>>();
         public SortedDictionary<int, List<GoodsSetMeal>> DicResultGoodsSetMeal
@@ -27,7 +24,7 @@ namespace VechsoftPos.Feature
 
         public FormGoodsSetMeal(Dictionary<int, List<GoodsSetMeal>> dicGoodsSetMealByGroup)
         {
-            this.dicGoodsSetMealByGroup = dicGoodsSetMealByGroup;
+            this._dicGoodsSetMealByGroup = dicGoodsSetMealByGroup;
             InitializeComponent();
             btnPageUp.DisplayColor = btnPageUp.BackColor;
             btnPageDown.DisplayColor = btnPageDown.BackColor;
@@ -40,19 +37,19 @@ namespace VechsoftPos.Feature
         private void FormGoodsSetMeal_Load(object sender, EventArgs e)
         {
             DisplayGroupButton();
-            foreach (KeyValuePair<int, List<GoodsSetMeal>> item in dicGoodsSetMealByGroup)
+            foreach (KeyValuePair<int, List<GoodsSetMeal>> item in _dicGoodsSetMealByGroup)
             {
-                m_CurrentGoodsSetMealList = item.Value;
+                _currentGoodsSetMealList = item.Value;
                 break;
             }
             DisplayGoodsSetMealButton();
-            if (ItemPageIndex <= 0)
+            if (_itemPageIndex <= 0)
             {
-                ItemPageIndex = 0;
+                _itemPageIndex = 0;
                 btnPageUp.Enabled = false;
                 btnPageUp.BackColor = ConstantValuePool.DisabledColor;
             }
-            if (m_CurrentGoodsSetMealList.Count > 18 * (ItemPageIndex + 1))
+            if (_currentGoodsSetMealList.Count > 18 * (_itemPageIndex + 1))
             {
                 btnPageDown.Enabled = true;
                 btnPageDown.BackColor = btnPageDown.DisplayColor;
@@ -63,10 +60,10 @@ namespace VechsoftPos.Feature
         {
             pnlGroup.Controls.Clear();
             int space = 3;
-            int width = (pnlGroup.Width - (dicGoodsSetMealByGroup.Count - 1) * space) / dicGoodsSetMealByGroup.Count;
+            int width = (pnlGroup.Width - (_dicGoodsSetMealByGroup.Count - 1) * space) / _dicGoodsSetMealByGroup.Count;
             int height = pnlGroup.Height - space;
             int px = 0, py = 0;
-            foreach (KeyValuePair<int, List<GoodsSetMeal>> item in dicGoodsSetMealByGroup)
+            foreach (KeyValuePair<int, List<GoodsSetMeal>> item in _dicGoodsSetMealByGroup)
             {
                 CrystalButton btn = new CrystalButton();
                 btn.Name = "button" + item.Key;
@@ -89,16 +86,16 @@ namespace VechsoftPos.Feature
             List<GoodsSetMeal> temp = btnGroup.Tag as List<GoodsSetMeal>;
             if (temp != null)
             {
-                m_CurrentGoodsSetMealList = temp;
+                _currentGoodsSetMealList = temp;
             }
             DisplayGoodsSetMealButton();
-            if (ItemPageIndex <= 0)
+            if (_itemPageIndex <= 0)
             {
-                ItemPageIndex = 0;
+                _itemPageIndex = 0;
                 btnPageUp.Enabled = false;
                 btnPageUp.BackColor = ConstantValuePool.DisabledColor;
             }
-            if (m_CurrentGoodsSetMealList.Count > 18 * (ItemPageIndex + 1))
+            if (_currentGoodsSetMealList.Count > 18 * (_itemPageIndex + 1))
             {
                 btnPageDown.Enabled = true;
                 btnPageDown.BackColor = btnPageDown.DisplayColor;
@@ -113,20 +110,20 @@ namespace VechsoftPos.Feature
             int height = (pnlItem.Height - 4 * space) / 4;
             int px = 0, py = 0;
             int i = 0;
-            for (int index = ItemPageIndex * 18; index < m_CurrentGoodsSetMealList.Count; index++)
+            for (int index = _itemPageIndex * 18; index < _currentGoodsSetMealList.Count; index++)
             {
                 CrystalButton btn = new CrystalButton();
-                btn.Text = m_CurrentGoodsSetMealList[index].GoodsName;
+                btn.Text = _currentGoodsSetMealList[index].GoodsName;
                 btn.Width = width;
                 btn.Height = height;
                 btn.Location = new Point(px, py);
                 btn.ForeColor = Color.White;
-                btn.BackColor = btn.DisplayColor = Color.SeaGreen;
-                if (IsGoodsSetMealItemInList(m_CurrentGoodsSetMealList[index]))
+                btn.BackColor = btn.DisplayColor = Color.OrangeRed;
+                if (IsGoodsSetMealItemInList(_currentGoodsSetMealList[index]))
                 {
-                    btn.BackColor = Color.Teal;
+                    btn.BackColor = Color.Black;
                 }
-                btn.Tag = m_CurrentGoodsSetMealList[index];
+                btn.Tag = _currentGoodsSetMealList[index];
                 btn.Click += new EventHandler(btnItem_Click);
                 pnlItem.Controls.Add(btn);
                 i++;
@@ -167,7 +164,7 @@ namespace VechsoftPos.Feature
                 }
                 else
                 {
-                    btnItem.BackColor = Color.Teal;
+                    btnItem.BackColor = Color.Black;
                     if (_dicResultGoodsSetMeal.ContainsKey(goodsSetMealItem.GroupNo))
                     {
                         _dicResultGoodsSetMeal[goodsSetMealItem.GroupNo].Add(goodsSetMealItem);
@@ -201,15 +198,15 @@ namespace VechsoftPos.Feature
 
         private void btnPageUp_Click(object sender, EventArgs e)
         {
-            ItemPageIndex--;
+            _itemPageIndex--;
             DisplayGoodsSetMealButton();
-            if (ItemPageIndex <= 0)
+            if (_itemPageIndex <= 0)
             {
-                ItemPageIndex = 0;
+                _itemPageIndex = 0;
                 btnPageUp.Enabled = false;
                 btnPageUp.BackColor = ConstantValuePool.DisabledColor;
             }
-            if (m_CurrentGoodsSetMealList.Count > 18 * (ItemPageIndex + 1))
+            if (_currentGoodsSetMealList.Count > 18 * (_itemPageIndex + 1))
             {
                 btnPageDown.Enabled = true;
                 btnPageDown.BackColor = btnPageDown.DisplayColor;
@@ -218,14 +215,14 @@ namespace VechsoftPos.Feature
 
         private void btnPageDown_Click(object sender, EventArgs e)
         {
-            ItemPageIndex++;
+            _itemPageIndex++;
             DisplayGoodsSetMealButton();
-            if (ItemPageIndex > 0)
+            if (_itemPageIndex > 0)
             {
                 btnPageUp.Enabled = true;
                 btnPageUp.BackColor = btnPageUp.DisplayColor;
             }
-            if (m_CurrentGoodsSetMealList.Count <= 18 * (ItemPageIndex + 1))
+            if (_currentGoodsSetMealList.Count <= 18 * (_itemPageIndex + 1))
             {
                 btnPageDown.Enabled = false;
                 btnPageDown.BackColor = ConstantValuePool.DisabledColor;
@@ -235,7 +232,7 @@ namespace VechsoftPos.Feature
         private void btnConfirm_Click(object sender, EventArgs e)
         {
             //验证是否满足条件
-            foreach (KeyValuePair<int, List<GoodsSetMeal>> item in dicGoodsSetMealByGroup)
+            foreach (KeyValuePair<int, List<GoodsSetMeal>> item in _dicGoodsSetMealByGroup)
             {
                 if (item.Value[0].IsRequired)
                 {

@@ -2056,93 +2056,91 @@ namespace VechsoftPos
 
         private void btnPrintBill_Click(object sender, EventArgs e)
         {
-            bool isContainsNewItem = false;
+            if (dgvGoodsOrder.Rows.Count <= 0)
+            {
+                MessageBox.Show("请先选择菜品！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
             {
                 if (dr.Cells["OrderDetailsID"].Value == null)
                 {
-                    isContainsNewItem = true;
-                    break;
+                    MessageBox.Show("存在新单，不能印单！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
             }
-            if (isContainsNewItem)
+            if (ConstantValuePool.BizSettingConfig.printConfig.Enabled)
             {
-                MessageBox.Show("存在新单，不能印单！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);;
-            }
-            else
-            {
-                if (ConstantValuePool.BizSettingConfig.printConfig.Enabled)
+                //打印
+                PrintData printData = new PrintData();
+                printData.ShopName = ConstantValuePool.CurrentShop.ShopName;
+                printData.DeskName = _currentDeskName;
+                printData.PersonNum = _personNum.ToString();
+                printData.PrintTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+                printData.EmployeeNo = _employeeNo;
+                printData.TranSequence = _salesOrder.order.TranSequence.ToString();
+                printData.ShopAddress = ConstantValuePool.CurrentShop.RunAddress;
+                printData.Telephone = ConstantValuePool.CurrentShop.Telephone;
+                printData.GoodsOrderList = new List<GoodsOrder>();
+                foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
                 {
-                    //打印
-                    PrintData printData = new PrintData();
-                    printData.ShopName = ConstantValuePool.CurrentShop.ShopName;
-                    printData.DeskName = _currentDeskName;
-                    printData.PersonNum = _personNum.ToString();
-                    printData.PrintTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
-                    printData.EmployeeNo = _employeeNo;
-                    printData.TranSequence = _salesOrder.order.TranSequence.ToString();
-                    printData.ShopAddress = ConstantValuePool.CurrentShop.RunAddress;
-                    printData.Telephone = ConstantValuePool.CurrentShop.Telephone;
-                    printData.GoodsOrderList = new List<GoodsOrder>();
-                    foreach (DataGridViewRow dr in dgvGoodsOrder.Rows)
+                    GoodsOrder goodsOrder = new GoodsOrder();
+                    goodsOrder.GoodsName = dr.Cells["GoodsName"].Value.ToString();
+                    decimal itemQty = Convert.ToDecimal(dr.Cells["GoodsNum"].Value);
+                    decimal totalSellPrice = Convert.ToDecimal(dr.Cells["GoodsPrice"].Value);
+                    goodsOrder.GoodsNum = itemQty.ToString("f1");
+                    goodsOrder.SellPrice = (totalSellPrice / itemQty).ToString("f2");
+                    goodsOrder.TotalSellPrice = totalSellPrice.ToString("f2");
+                    goodsOrder.TotalDiscount = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value).ToString("f2");
+                    goodsOrder.Unit = dr.Cells["ItemUnit"].Value.ToString();
+                    printData.GoodsOrderList.Add(goodsOrder);
+                }
+                int copies = ConstantValuePool.BizSettingConfig.printConfig.Copies;
+                string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
+                if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
+                {
+                    string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                    string paperName = ConstantValuePool.BizSettingConfig.printConfig.PaperName;
+                    DriverOrderPrint printer = DriverOrderPrint.GetInstance(printerName, paperName, paperWidth);
+                    for (int i = 0; i < copies; i++)
                     {
-                        GoodsOrder goodsOrder = new GoodsOrder();
-                        goodsOrder.GoodsName = dr.Cells["GoodsName"].Value.ToString();
-                        decimal itemQty = Convert.ToDecimal(dr.Cells["GoodsNum"].Value);
-                        decimal totalSellPrice = Convert.ToDecimal(dr.Cells["GoodsPrice"].Value);
-                        goodsOrder.GoodsNum = itemQty.ToString("f1");
-                        goodsOrder.SellPrice = (totalSellPrice / itemQty).ToString("f2");
-                        goodsOrder.TotalSellPrice = totalSellPrice.ToString("f2");
-                        goodsOrder.TotalDiscount = Convert.ToDecimal(dr.Cells["GoodsDiscount"].Value).ToString("f2");
-                        goodsOrder.Unit = dr.Cells["ItemUnit"].Value.ToString();
-                        printData.GoodsOrderList.Add(goodsOrder);
+                        printer.DoPrintOrder(printData);
                     }
-                    int copies = ConstantValuePool.BizSettingConfig.printConfig.Copies;
-                    string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
-                    if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
+                }
+                if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.COM)
+                {
+                    string port = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                    if (port.Length > 3)
                     {
-                        string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                        string paperName = ConstantValuePool.BizSettingConfig.printConfig.PaperName;
-                        DriverOrderPrint printer = DriverOrderPrint.GetInstance(printerName, paperName, paperWidth);
-                        for (int i = 0; i < copies; i++)
+                        if (port.Substring(0, 3).ToUpper() == "COM")
                         {
-                            printer.DoPrintOrder(printData);
-                        }
-                    }
-                    if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.COM)
-                    {
-                        string port = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                        if (port.Length > 3)
-                        {
-                            if (port.Substring(0, 3).ToUpper() == "COM")
+                            string portName = port.Substring(0, 4).ToUpper();
+                            InstructionOrderPrint printer = new InstructionOrderPrint(portName, 9600, Parity.None, 8, StopBits.One, paperWidth);
+                            for (int i = 0; i < copies; i++)
                             {
-                                string portName = port.Substring(0, 4).ToUpper();
-                                InstructionOrderPrint printer = new InstructionOrderPrint(portName, 9600, Parity.None, 8, StopBits.One, paperWidth);
-                                for (int i = 0; i < copies; i++)
-                                {
-                                    printer.DoPrintOrder(printData);
-                                }
+                                printer.DoPrintOrder(printData);
                             }
                         }
                     }
-                    if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.ETHERNET)
+                }
+                if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.ETHERNET)
+                {
+                    string ipAddress = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                    InstructionOrderPrint printer = new InstructionOrderPrint(ipAddress, 9100, paperWidth);
+                    for (int i = 0; i < copies; i++)
                     {
-                        string ipAddress = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                        InstructionOrderPrint printer = new InstructionOrderPrint(ipAddress, 9100, paperWidth);
-                        for (int i = 0; i < copies; i++)
-                        {
-                            printer.DoPrintOrder(printData);
-                        }
+                        printer.DoPrintOrder(printData);
                     }
-                    if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.USB)
+                }
+                if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.USB)
+                {
+                    string vid = ConstantValuePool.BizSettingConfig.printConfig.VID;
+                    string pid = ConstantValuePool.BizSettingConfig.printConfig.PID;
+                    string endpointId = ConstantValuePool.BizSettingConfig.printConfig.EndpointID;
+                    InstructionOrderPrint printer = new InstructionOrderPrint(vid, pid, endpointId, paperWidth);
+                    for (int i = 0; i < copies; i++)
                     {
-                        string VID = ConstantValuePool.BizSettingConfig.printConfig.VID;
-                        string PID = ConstantValuePool.BizSettingConfig.printConfig.PID;
-                        InstructionOrderPrint printer = new InstructionOrderPrint(VID, PID, paperWidth);
-                        for (int i = 0; i < copies; i++)
-                        {
-                            printer.DoPrintOrder(printData);
-                        }
+                        printer.DoPrintOrder(printData);
                     }
                 }
             }
@@ -3021,7 +3019,8 @@ namespace VechsoftPos
                     {
                         string vid = ConstantValuePool.BizSettingConfig.printConfig.VID;
                         string pid = ConstantValuePool.BizSettingConfig.printConfig.PID;
-                        InstructionOrderPrint printer = new InstructionOrderPrint(vid, pid, paperWidth);
+                        string endpointId = ConstantValuePool.BizSettingConfig.printConfig.EndpointID;
+                        InstructionOrderPrint printer = new InstructionOrderPrint(vid, pid, endpointId, paperWidth);
                         for (int i = 0; i < copies; i++)
                         {
                             printer.DoPrintOrder(printData);

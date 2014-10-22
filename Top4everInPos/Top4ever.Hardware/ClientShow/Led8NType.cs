@@ -13,9 +13,9 @@ namespace Top4ever.Hardware.ClientShow
             m_PortUtil = new PortUtil(portName, baudRate, parity, dataBits, stopBits); 
         }
 
-        public Led8NType(string usbVID, string usbPID)
+        public Led8NType(string usbVID, string usbPID, string endpointId)
         {
-            m_PortUtil = new PortUtil(usbVID, usbPID);
+            m_PortUtil = new PortUtil(usbVID, usbPID, endpointId);
         }
 
         /// <summary>

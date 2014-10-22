@@ -117,6 +117,7 @@ namespace VechsoftPos
                     rbUsbPort.Checked = true;
                     txtPrinterVID.Text = ConstantValuePool.BizSettingConfig.printConfig.VID;
                     txtPrinterPID.Text = ConstantValuePool.BizSettingConfig.printConfig.PID;
+                    txtEndpointId.Text = ConstantValuePool.BizSettingConfig.printConfig.EndpointID;
                 }
                 txtCopies.Text = ConstantValuePool.BizSettingConfig.printConfig.Copies.ToString();
                 cmbPaperWidth.Text = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
@@ -133,6 +134,7 @@ namespace VechsoftPos
                 rbUsbPort.Enabled = false;
                 txtPrinterVID.Enabled = false;
                 txtPrinterPID.Enabled = false;
+                txtEndpointId.Enabled = false;
                 txtCopies.Text = ConstantValuePool.BizSettingConfig.printConfig.Copies.ToString();
                 txtCopies.Enabled = false;
                 cmbPaperWidth.Enabled = false;
@@ -407,11 +409,12 @@ namespace VechsoftPos
             if (rbUsbPort.Checked)
             {
                 printConfig.PrinterPort = PortType.USB;
-                printConfig.VID = txtPrinterVID.Text;
-                printConfig.PID = txtPrinterPID.Text;
+                printConfig.VID = txtPrinterVID.Text.Trim();
+                printConfig.PID = txtPrinterPID.Text.Trim();
+                printConfig.EndpointID = txtEndpointId.Text.Trim();
             }
             printConfig.Copies = int.Parse(txtCopies.Text);
-            printConfig.PaperWidth = cmbPaperWidth.Text;
+            printConfig.PaperWidth = cmbPaperWidth.Text.Trim();
             //钱箱
             CashBoxConfig cashboxConfig = new CashBoxConfig();
             cashboxConfig.Enabled = ckbCashDrawer.Checked;
@@ -596,6 +599,7 @@ namespace VechsoftPos
                 rbUsbPort.Enabled = true;
                 txtPrinterVID.Enabled = true;
                 txtPrinterPID.Enabled = true;
+                txtEndpointId.Enabled = true;
                 txtCopies.Enabled = true;
                 cmbPaperWidth.Enabled = true;
             }
@@ -610,6 +614,7 @@ namespace VechsoftPos
                 rbUsbPort.Enabled = false;
                 txtPrinterVID.Enabled = false;
                 txtPrinterPID.Enabled = false;
+                txtEndpointId.Enabled = false;
                 txtCopies.Enabled = false;
                 cmbPaperWidth.Enabled = false;
             }
@@ -746,6 +751,7 @@ namespace VechsoftPos
                 txtIPAddress.Enabled = false;
                 txtPrinterVID.Enabled = false;
                 txtPrinterPID.Enabled = false;
+                txtEndpointId.Enabled = false;
                 cmbPaperName.Enabled = true;
             }
         }
@@ -757,6 +763,7 @@ namespace VechsoftPos
             txtIPAddress.Enabled = false;
             txtPrinterVID.Enabled = false;
             txtPrinterPID.Enabled = false;
+            txtEndpointId.Enabled = false;
             cmbPaperName.Enabled = false;
         }
 
@@ -767,6 +774,7 @@ namespace VechsoftPos
             txtIPAddress.Enabled = true;
             txtPrinterVID.Enabled = false;
             txtPrinterPID.Enabled = false;
+            txtEndpointId.Enabled = false;
             cmbPaperName.Enabled = false;
         }
 
@@ -777,6 +785,7 @@ namespace VechsoftPos
             txtIPAddress.Enabled = false;
             txtPrinterVID.Enabled = true;
             txtPrinterPID.Enabled = true;
+            txtEndpointId.Enabled = true;
             cmbPaperName.Enabled = false;
         }
 

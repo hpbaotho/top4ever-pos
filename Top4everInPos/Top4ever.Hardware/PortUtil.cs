@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO.Ports;
 using System.Text;
@@ -14,233 +13,268 @@ namespace Top4ever.Hardware
     {
         private enum PortType { COM, USB, EtherNet }
 
-        private PortType m_PortType;
-        private bool m_IsOpen;
+        private readonly PortType _portType;
+        private bool _isOpen;
         /// <summary>
         /// 串口
         /// </summary>
-        private SerialPort m_SerialPort;
+        private readonly SerialPort _serialPort;
         /// <summary>
         /// USB端口
         /// </summary>
-        private UsbDeviceFinder m_UsbFinder;
-        private UsbDevice m_UsbDevice;
-        private UsbEndpointWriter m_Writer;
+        private readonly UsbDeviceFinder _usbFinder;
+        private readonly WriteEndpointID _endpointId;
+        private UsbDevice _usbDevice;
+        private UsbEndpointWriter _usbWriter;
         /// <summary>
         /// 网口
         /// </summary>
-        private IPEndPoint m_IPEndPoint;
-        private Socket m_Socket;
+        private readonly IPEndPoint _ipEndPoint;
+        private Socket _socket;
 
         public PortUtil(string portName, int baudRate, Parity parity, int dataBits, StopBits stopBits)
         {
-            m_SerialPort = new SerialPort(portName, baudRate, parity, dataBits, stopBits);
-            m_PortType = PortType.COM;
+            _serialPort = new SerialPort(portName, baudRate, parity, dataBits, stopBits);
+            _portType = PortType.COM;
         }
 
-        public PortUtil(string usbVID, string usbPID)
+        public PortUtil(string usbVid, string usbPid, string endpointId)
         {
-            Int32 VID = Int32.Parse(usbVID, NumberStyles.HexNumber);
-            Int32 PID = Int32.Parse(usbPID, NumberStyles.HexNumber);
-            m_UsbFinder = new UsbDeviceFinder(VID, PID);
-            m_PortType = PortType.USB;
+            Int32 vid = Int32.Parse(usbVid, NumberStyles.HexNumber);
+            Int32 pid = Int32.Parse(usbPid, NumberStyles.HexNumber);
+            _usbFinder = new UsbDeviceFinder(vid, pid);
+            _endpointId = GetEndpointId(endpointId);
+            _portType = PortType.USB;
         }
 
         public PortUtil(string ip, int port)
         {
             IPAddress ipAddress = IPAddress.Parse(ip);
-            m_IPEndPoint = new IPEndPoint(ipAddress, port);
-            m_PortType = PortType.EtherNet;
+            _ipEndPoint = new IPEndPoint(ipAddress, port);
+            _portType = PortType.EtherNet;
         }
 
         public void Open()
         {
-            if (m_PortType == PortType.COM)
+            if (_portType == PortType.COM)
             {
-                try
-                {
-                    m_SerialPort.Open();
-                    m_IsOpen = true;
-                }
-                catch(Exception ex)
-                {
-                    throw ex;
-                }
+                _serialPort.Open();
+                _isOpen = true;
             }
-            if (m_PortType == PortType.USB)
+            if (_portType == PortType.USB)
             {
-                try
+                // Find and open the usb device.
+                _usbDevice = UsbDevice.OpenUsbDevice(_usbFinder);
+                // If the device is open and ready
+                if (_usbDevice == null) throw new Exception("Device Not Found.");
+
+                // If this is a "whole" usb device (libusb-win32, linux libusb)
+                // it will have an IUsbDevice interface. If not (WinUSB) the 
+                // variable will be null indicating this is an interface of a 
+                // device.
+                IUsbDevice wholeUsbDevice = _usbDevice as IUsbDevice;
+                if (!ReferenceEquals(wholeUsbDevice, null))
                 {
-                    // Find and open the usb device.
-                    m_UsbDevice = UsbDevice.OpenUsbDevice(m_UsbFinder);
-                    // If the device is open and ready
-                    if (m_UsbDevice == null) throw new Exception("Device Not Found.");
+                    // This is a "whole" USB device. Before it can be used, 
+                    // the desired configuration and interface must be selected.
 
-                    // If this is a "whole" usb device (libusb-win32, linux libusb)
-                    // it will have an IUsbDevice interface. If not (WinUSB) the 
-                    // variable will be null indicating this is an interface of a 
-                    // device.
-                    IUsbDevice wholeUsbDevice = m_UsbDevice as IUsbDevice;
-                    if (!ReferenceEquals(wholeUsbDevice, null))
-                    {
-                        // This is a "whole" USB device. Before it can be used, 
-                        // the desired configuration and interface must be selected.
+                    // Select config #1
+                    wholeUsbDevice.SetConfiguration(1);
 
-                        // Select config #1
-                        wholeUsbDevice.SetConfiguration(1);
-
-                        // Claim interface #0.
-                        wholeUsbDevice.ClaimInterface(0);
-                    }
-                    // open write endpoint 1.
-                    m_Writer = m_UsbDevice.OpenEndpointWriter(WriteEndpointID.Ep01);
-                    m_IsOpen = true;
+                    // Claim interface #0.
+                    wholeUsbDevice.ClaimInterface(0);
                 }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+                // open write endpoint 1.
+                _usbWriter = _usbDevice.OpenEndpointWriter(_endpointId);
+                _isOpen = true;
             }
-            if (m_PortType == PortType.EtherNet)
+            if (_portType == PortType.EtherNet)
             {
-                try
-                {
-                    m_Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    m_Socket.Connect(m_IPEndPoint);
-                    m_Socket.SendTimeout = 1000;
-                    m_IsOpen = true;
-                }
-                catch (ArgumentNullException e1)
-                {
-                    throw e1;
-                }
-                catch (SocketException e2)
-                {
-                    throw e2;
-                }
+                _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                _socket.Connect(_ipEndPoint);
+                _socket.SendTimeout = 1000;
+                _isOpen = true;
             }
         }
 
         public bool IsOpen 
         {
-            get { return m_IsOpen; }
+            get { return _isOpen; }
         }
 
-        public void CNWrite(string data)
+        public void CnWrite(string data)
         {
-            byte[] send_data = Encoding.GetEncoding("gb18030").GetBytes(data);
-            Write(send_data);
+            byte[] sendData = Encoding.GetEncoding("gb18030").GetBytes(data);
+            Write(sendData);
         }
 
         public void Write(string data)
         {
-            byte[] send_data = Encoding.Default.GetBytes(data);
-            Write(send_data);
+            byte[] sendData = Encoding.Default.GetBytes(data);
+            Write(sendData);
         }
 
         public void Write(byte[] data)
         {
-            try
+            if (_portType == PortType.COM)
             {
-                if (m_PortType == PortType.COM)
-                {
-                    m_SerialPort.Write(data, 0, data.Length);
-                }
-                if (m_PortType == PortType.USB)
-                {
-                    ErrorCode ec = ErrorCode.None;
-                    int bytesWritten;
-                    ec = m_Writer.Write(data, 2000, out bytesWritten);
-                    if (ec != ErrorCode.None) throw new Exception(UsbDevice.LastErrorString);
-                }
-                if (m_PortType == PortType.EtherNet)
-                {
-                    m_Socket.Send(data, data.Length, 0);
-                }
+                _serialPort.Write(data, 0, data.Length);
             }
-            catch (Exception ex)
+            if (_portType == PortType.USB)
             {
-                throw ex;
+                int bytesWritten;
+                ErrorCode ec = _usbWriter.Write(data, 2000, out bytesWritten);
+                if (ec != ErrorCode.None) throw new Exception(UsbDevice.LastErrorString);
+            }
+            if (_portType == PortType.EtherNet)
+            {
+                _socket.Send(data, data.Length, 0);
             }
         }
 
         public void Close()
         {
-            if (m_PortType == PortType.COM)
+            if (_portType == PortType.COM)
             {
-                if (m_SerialPort != null)
+                if (_serialPort != null)
                 {
-                    if (m_SerialPort.IsOpen)
+                    if (_serialPort.IsOpen)
                     {
-                        m_SerialPort.Close();
+                        _serialPort.Close();
                     }
                 }
             }
-            if (m_PortType == PortType.USB)
+            if (_portType == PortType.USB)
             {
-                if (m_UsbDevice != null)
+                if (_usbDevice != null)
                 {
-                    if (m_UsbDevice.IsOpen)
+                    if (_usbDevice.IsOpen)
                     {
-                        m_UsbDevice.Close();
-                        m_UsbDevice = null;
+                        _usbDevice.Close();
+                        _usbDevice = null;
                     }
                 }
             }
-            if (m_PortType == PortType.EtherNet)
+            if (_portType == PortType.EtherNet)
             {
-                if (m_Socket != null)
+                if (_socket != null)
                 {
-                    m_Socket.Close();
-                    m_Socket = null;
+                    _socket.Close();
+                    _socket = null;
                 }
             }
         }
 
         public void Dispose()
         {
-            if (m_PortType == PortType.COM)
+            if (_portType == PortType.COM)
             {
-                if (m_SerialPort != null)
+                if (_serialPort != null)
                 {
-                    if (m_SerialPort.IsOpen)
+                    if (_serialPort.IsOpen)
                     {
-                        m_SerialPort.Close();
+                        _serialPort.Close();
                     }
                 }
             }
-            if (m_PortType == PortType.USB)
+            if (_portType == PortType.USB)
             {
-                if (m_UsbDevice != null)
+                if (_usbDevice != null)
                 {
-                    if (m_UsbDevice.IsOpen)
+                    if (_usbDevice.IsOpen)
                     {
                         // If this is a "whole" usb device (libusb-win32, linux libusb-1.0)
                         // it exposes an IUsbDevice interface. If not (WinUSB) the 
                         // 'wholeUsbDevice' variable will be null indicating this is 
                         // an interface of a device; it does not require or support 
                         // configuration and interface selection.
-                        IUsbDevice wholeUsbDevice = m_UsbDevice as IUsbDevice;
+                        IUsbDevice wholeUsbDevice = _usbDevice as IUsbDevice;
                         if (!ReferenceEquals(wholeUsbDevice, null))
                         {
                             // Release interface #0.
                             wholeUsbDevice.ReleaseInterface(0);
                         }
-                        m_UsbDevice.Close();
+                        _usbDevice.Close();
                     }
-                    m_UsbDevice = null;
+                    _usbDevice = null;
                     // Free usb resources
                     UsbDevice.Exit();
                 }
             }
-            if (m_PortType == PortType.EtherNet)
+            if (_portType == PortType.EtherNet)
             {
-                if (m_Socket != null)
+                if (_socket != null)
                 {
-                    m_Socket.Close();
-                    m_Socket = null;
+                    _socket.Close();
+                    _socket = null;
                 }
             }
+        }
+
+        private WriteEndpointID GetEndpointId(string endpointId)
+        {
+            WriteEndpointID writeEndpointId;
+            switch (endpointId)
+            {
+                case "1":
+                case "01":
+                    writeEndpointId = WriteEndpointID.Ep01;
+                    break;
+                case "2":
+                case "02":
+                    writeEndpointId = WriteEndpointID.Ep02;
+                    break;
+                case "3":
+                case "03":
+                    writeEndpointId = WriteEndpointID.Ep03;
+                    break;
+                case "4":
+                case "04":
+                    writeEndpointId = WriteEndpointID.Ep04;
+                    break;
+                case "5":
+                case "05":
+                    writeEndpointId = WriteEndpointID.Ep05;
+                    break;
+                case "6":
+                case "06":
+                    writeEndpointId = WriteEndpointID.Ep06;
+                    break;
+                case "7":
+                case "07":
+                    writeEndpointId = WriteEndpointID.Ep07;
+                    break;
+                case "8":
+                case "08":
+                    writeEndpointId = WriteEndpointID.Ep08;
+                    break;
+                case "9":
+                case "09":
+                    writeEndpointId = WriteEndpointID.Ep09;
+                    break;
+                case "10":
+                    writeEndpointId = WriteEndpointID.Ep10;
+                    break;
+                case "11":
+                    writeEndpointId = WriteEndpointID.Ep11;
+                    break;
+                case "12":
+                    writeEndpointId = WriteEndpointID.Ep12;
+                    break;
+                case "13":
+                    writeEndpointId = WriteEndpointID.Ep13;
+                    break;
+                case "14":
+                    writeEndpointId = WriteEndpointID.Ep14;
+                    break;
+                case "15":
+                    writeEndpointId = WriteEndpointID.Ep15;
+                    break;
+                default:
+                    writeEndpointId = WriteEndpointID.Ep02;
+                    break;
+            }
+            return writeEndpointId;
         }
     }
 }
