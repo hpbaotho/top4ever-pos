@@ -336,15 +336,15 @@ namespace Top4ever.Print
                             RectangleF drawRect = new RectangleF(px, PY, itemWidth, itemHeight);
                             StringFormat sf = new StringFormat();
                             sf.LineAlignment = StringAlignment.Center;
-                            if (item.Align == "Left")
+                            if (item.Align.Equals("Left", StringComparison.InvariantCultureIgnoreCase))
                             {
                                 sf.Alignment = StringAlignment.Near;
                             }
-                            else if (item.Align == "Center")
+                            else if (item.Align.Equals("Center", StringComparison.InvariantCultureIgnoreCase))
                             {
                                 sf.Alignment = StringAlignment.Center;
                             }
-                            else if (item.Align == "Right")
+                            else if (item.Align.Equals("Right", StringComparison.InvariantCultureIgnoreCase))
                             {
                                 sf.Alignment = StringAlignment.Far;
                             }
@@ -425,15 +425,15 @@ namespace Top4ever.Print
                                         RectangleF drawRect = new RectangleF(px, PY, itemWidth, itemHeight);
                                         StringFormat sf = new StringFormat();
                                         sf.LineAlignment = StringAlignment.Center;
-                                        if (columnHead.Align == "Left")
+                                        if (columnHead.Align.Equals("Left", StringComparison.InvariantCultureIgnoreCase))
                                         {
                                             sf.Alignment = StringAlignment.Near;
                                         }
-                                        else if (columnHead.Align == "Center")
+                                        else if (columnHead.Align.Equals("Center", StringComparison.InvariantCultureIgnoreCase))
                                         {
                                             sf.Alignment = StringAlignment.Center;
                                         }
-                                        else if (columnHead.Align == "Right")
+                                        else if (columnHead.Align.Equals("Right", StringComparison.InvariantCultureIgnoreCase))
                                         {
                                             sf.Alignment = StringAlignment.Far;
                                         }
@@ -495,15 +495,15 @@ namespace Top4ever.Print
                                             RectangleF drawRect = new RectangleF(px, PY, itemWidth, itemHeight);
                                             StringFormat sf = new StringFormat();
                                             sf.LineAlignment = StringAlignment.Center;
-                                            if (column.Align == "Left")
+                                            if (column.Align.Equals("Left", StringComparison.InvariantCultureIgnoreCase))
                                             {
                                                 sf.Alignment = StringAlignment.Near;
                                             }
-                                            else if (column.Align == "Center")
+                                            else if (column.Align.Equals("Center", StringComparison.InvariantCultureIgnoreCase))
                                             {
                                                 sf.Alignment = StringAlignment.Center;
                                             }
-                                            else if (column.Align == "Right")
+                                            else if (column.Align.Equals("Right", StringComparison.InvariantCultureIgnoreCase))
                                             {
                                                 sf.Alignment = StringAlignment.Far;
                                             }

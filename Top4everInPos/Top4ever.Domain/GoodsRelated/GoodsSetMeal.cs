@@ -16,7 +16,7 @@ namespace Top4ever.Domain.GoodsRelated
         public int GroupNo { get; set; }
 
         /// <summary>
-        /// 组号
+        /// 组名
         /// </summary>
         public string GroupName { get; set; }
 

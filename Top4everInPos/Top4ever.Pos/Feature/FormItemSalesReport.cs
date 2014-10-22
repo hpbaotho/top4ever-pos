@@ -93,7 +93,8 @@ namespace VechsoftPos.Feature
                 if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
                 {
                     string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                    DriverSinglePrint driverPrint = new DriverSinglePrint(printerName, "SpecimenLabel");
+                    string paperName = ConstantValuePool.BizSettingConfig.printConfig.PaperName;
+                    DriverSinglePrint driverPrint = new DriverSinglePrint(printerName, paperName);
                     driverPrint.DoPrint(printData, new Font("simsun", 9F));
                 }
             }

@@ -93,7 +93,7 @@ namespace Top4ever.Print.Entity
         /// <returns></returns>
         public string GetValue(string fieldName)
         {
-            string result;
+            string result = string.Empty;
             switch (fieldName.ToLower())
             { 
                 case "shopname":
@@ -121,19 +121,34 @@ namespace Top4ever.Print.Entity
                     result = this.Telephone;
                     break;
                 case "receivablemoney":
-                    result = this.ReceivableMoney;
+                    if (!string.IsNullOrEmpty(this.ReceivableMoney))
+                    {
+                        result = this.ReceivableMoney.Length < 7 ? this.ReceivableMoney.PadLeft(7) : this.ReceivableMoney;
+                    }
                     break;
                 case "servicefee":
-                    result = this.ServiceFee;
+                    if (!string.IsNullOrEmpty(this.ServiceFee))
+                    {
+                        result = this.ServiceFee.Length < 7 ? this.ServiceFee.PadLeft(7) : this.ServiceFee;
+                    }
                     break;
                 case "totalamount":
-                    result = this.TotalAmount;
+                    if (!string.IsNullOrEmpty(this.TotalAmount))
+                    {
+                        result = this.TotalAmount.Length < 7 ? this.TotalAmount.PadLeft(7) : this.TotalAmount;
+                    }
                     break;
                 case "paidinmoney":
-                    result = this.PaidInMoney;
+                    if (!string.IsNullOrEmpty(this.PaidInMoney))
+                    {
+                        result = this.PaidInMoney.Length < 7 ? this.PaidInMoney.PadLeft(7) : this.PaidInMoney;
+                    }
                     break;
                 case "needchangepay":
-                    result = this.NeedChangePay;
+                    if (!string.IsNullOrEmpty(this.NeedChangePay))
+                    {
+                        result = this.NeedChangePay.Length < 7 ? this.NeedChangePay.PadLeft(7) : this.NeedChangePay;
+                    }
                     break;
                 case "customerphone":
                     result = this.CustomerPhone;

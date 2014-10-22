@@ -15,13 +15,13 @@ namespace Top4ever.Print
     {
         private readonly PrintHelper _printHelper;
         private String _printLayoutPath;
-        private String _printOrderLayoutPath;
-        private String _printPrePayOrderLayoutPath;
-        private String _deliveryOrderLayoutPath;
-        private String _printPaidOrderLayoutPath;
-
         private PrintData _printData = null;
+
         private static PrintConfig _curPrintConfig = null;
+        private static String _printOrderLayoutPath;
+        private static String _printPrePayOrderLayoutPath;
+        private static String _deliveryOrderLayoutPath;
+        private static String _printPaidOrderLayoutPath;
 
         public InstructionOrderPrint(string portName, int baudRate, Parity parity, int dataBits, StopBits stopBits, string paperType)
         {
@@ -29,9 +29,9 @@ namespace Top4ever.Print
             InitPrintSetting(paperType);
         }
 
-        public InstructionOrderPrint(string usbVID, string usbPID, string paperType)
+        public InstructionOrderPrint(string usbVid, string usbPid, string endpointId, string paperType)
         {
-            _printHelper = new PrintHelper(usbVID, usbPID);
+            _printHelper = new PrintHelper(usbVid, usbPid, endpointId);
             InitPrintSetting(paperType);
         }
 
@@ -100,10 +100,21 @@ namespace Top4ever.Print
             {
                 _printLayoutPath = _printOrderLayoutPath;
                 _printData = printData;
-                _printHelper.Open();
-                _printHelper.SetPrinterInit();
-                DrawPaper();
-                _printHelper.Close();
+                try
+                {
+                    _printHelper.Open();
+                    _printHelper.SetPrinterInit();
+                    DrawPaper();
+                    _printHelper.CutPaper();
+                }
+                catch (Exception exception)
+                {
+                    LogHelper.GetInstance().Error("InstructionOrderPrint.DoPrintOrder error.", exception);
+                }
+                finally
+                {
+                    _printHelper.Close();
+                }
             }
         }
 
@@ -113,10 +124,21 @@ namespace Top4ever.Print
             {
                 _printLayoutPath = _printPrePayOrderLayoutPath;
                 _printData = printData;
-                _printHelper.Open();
-                _printHelper.SetPrinterInit();
-                DrawPaper();
-                _printHelper.Close();
+                try
+                {
+                    _printHelper.Open();
+                    _printHelper.SetPrinterInit();
+                    DrawPaper();
+                    _printHelper.CutPaper();
+                }
+                catch (Exception exception)
+                {
+                    LogHelper.GetInstance().Error("InstructionOrderPrint.DoPrintPrePayOrder error.", exception);
+                }
+                finally
+                {
+                    _printHelper.Close();
+                }
             }
         }
 
@@ -126,10 +148,21 @@ namespace Top4ever.Print
             {
                 _printLayoutPath = _deliveryOrderLayoutPath;
                 _printData = printData;
-                _printHelper.Open();
-                _printHelper.SetPrinterInit();
-                DrawPaper();
-                _printHelper.Close();
+                try
+                {
+                    _printHelper.Open();
+                    _printHelper.SetPrinterInit();
+                    DrawPaper();
+                    _printHelper.CutPaper();
+                }
+                catch (Exception exception)
+                {
+                    LogHelper.GetInstance().Error("InstructionOrderPrint.DoPrintDeliveryOrder error.", exception);
+                }
+                finally
+                {
+                    _printHelper.Close();
+                }
             }
         }
 
@@ -139,10 +172,21 @@ namespace Top4ever.Print
             {
                 _printLayoutPath = _printPaidOrderLayoutPath;
                 _printData = printData;
-                _printHelper.Open();
-                _printHelper.SetPrinterInit();
-                DrawPaper();
-                _printHelper.Close();
+                try
+                {
+                    _printHelper.Open();
+                    _printHelper.SetPrinterInit();
+                    DrawPaper();
+                    _printHelper.CutPaper();
+                }
+                catch (Exception exception)
+                {
+                    LogHelper.GetInstance().Error("InstructionOrderPrint.DoPrintPaidOrder error.", exception);
+                }
+                finally
+                {
+                    _printHelper.Close();
+                }
             }
         }
 
@@ -250,7 +294,7 @@ namespace Top4ever.Print
                             string text = ArrangeLinePosition(line.LineText, startPX, endPX);
                             //打印设置
                             _printHelper.SetFontSize(0, 0);
-                            _printHelper.SetCharSpacing(0);
+                            //_printHelper.SetCharSpacing(0);
                             _printHelper.Write(text);
                             break;
                         }
@@ -275,15 +319,15 @@ namespace Top4ever.Print
                                 width = int.Parse(item.Width.Trim());
                             }
                             TextAlign align;
-                            if (item.Align == "Left")
+                            if (item.Align.Equals("Left", StringComparison.InvariantCultureIgnoreCase))
                             {
                                 align = TextAlign.Left;
                             }
-                            else if (item.Align == "Center")
+                            else if (item.Align.Equals("Center", StringComparison.InvariantCultureIgnoreCase))
                             {
                                 align = TextAlign.Center;
                             }
-                            else if (item.Align == "Right")
+                            else if (item.Align.Equals("Right", StringComparison.InvariantCultureIgnoreCase))
                             {
                                 align = TextAlign.Right;
                             }
@@ -296,7 +340,7 @@ namespace Top4ever.Print
                             int heightTimes = int.Parse(times[1]);
                             //打印设置
                             _printHelper.SetFontSize(widthTimes, heightTimes);
-                            _printHelper.SetCharSpacing(0);
+                            //_printHelper.SetCharSpacing(0);
                             _printHelper.Write(itemName, align, width);
                             break;
                         }
@@ -324,7 +368,7 @@ namespace Top4ever.Print
                 }
                 propertyArrList.Add(propertyList);
             }
-            if (className == "GoodsOrder")
+            if (className.Equals("GoodsOrder", StringComparison.InvariantCultureIgnoreCase))
             {
                 foreach (DataListConfig item in _curPrintConfig.DataListConfigs.DataListConfigList)
                 {
@@ -351,15 +395,15 @@ namespace Top4ever.Print
                                             width = int.Parse(columnHead.Width.Trim());
                                         }
                                         TextAlign align;
-                                        if (columnHead.Align == "Left")
+                                        if (columnHead.Align.Equals("Left", StringComparison.InvariantCultureIgnoreCase))
                                         {
                                             align = TextAlign.Left;
                                         }
-                                        else if (columnHead.Align == "Center")
+                                        else if (columnHead.Align.Equals("Center", StringComparison.InvariantCultureIgnoreCase))
                                         {
                                             align = TextAlign.Center;
                                         }
-                                        else if (columnHead.Align == "Right")
+                                        else if (columnHead.Align.Equals("Right", StringComparison.InvariantCultureIgnoreCase))
                                         {
                                             align = TextAlign.Right;
                                         }
@@ -372,7 +416,7 @@ namespace Top4ever.Print
                                         int heightTimes = int.Parse(times[1]);
                                         //打印设置
                                         _printHelper.SetFontSize(widthTimes, heightTimes);
-                                        _printHelper.SetCharSpacing(0);
+                                        //_printHelper.SetCharSpacing(0);
                                         _printHelper.Write(columnHead.Text, align, width);
                                         break;
                                     }
@@ -404,15 +448,15 @@ namespace Top4ever.Print
                                                 width = int.Parse(column.Width.Trim());
                                             }
                                             TextAlign align;
-                                            if (column.Align == "Left")
+                                            if (column.Align.Equals("Left", StringComparison.InvariantCultureIgnoreCase))
                                             {
                                                 align = TextAlign.Left;
                                             }
-                                            else if (column.Align == "Center")
+                                            else if (column.Align.Equals("Center", StringComparison.InvariantCultureIgnoreCase))
                                             {
                                                 align = TextAlign.Center;
                                             }
-                                            else if (column.Align == "Right")
+                                            else if (column.Align.Equals("Right", StringComparison.InvariantCultureIgnoreCase))
                                             {
                                                 align = TextAlign.Right;
                                             }
@@ -425,7 +469,121 @@ namespace Top4ever.Print
                                             int heightTimes = int.Parse(times[1]);
                                             //打印设置
                                             _printHelper.SetFontSize(widthTimes, heightTimes);
-                                            _printHelper.SetCharSpacing(0);
+                                            //_printHelper.SetCharSpacing(0);
+                                            _printHelper.Write(itemValue, align, width);
+                                            break;
+                                        }
+                                    }
+                                }
+                                _printHelper.PrintAndFeedLines(1);
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            else if (className.Equals("PayingGoodsOrder", StringComparison.InvariantCultureIgnoreCase))
+            {
+                foreach (DataListConfig item in _curPrintConfig.DataListConfigs.DataListConfigList)
+                {
+                    if (item.ClassName == className)
+                    {
+                        //columnHead
+                        foreach (List<string> propertyList in propertyArrList)
+                        {
+                            foreach (string property in propertyList)
+                            {
+                                foreach (PrintColumnHead columnHead in item.PrintColumnHeads.ColumnHeadList)
+                                {
+                                    if (property == columnHead.Name)
+                                    {
+                                        int width = 0;
+                                        if (columnHead.Width.IndexOf('%') > 0)
+                                        {
+                                            string strWidth = columnHead.Width;
+                                            string number = strWidth.Substring(0, strWidth.Length - 1);
+                                            width = Convert.ToInt32(float.Parse(number) / 100f * _curPrintConfig.TotalCharNum);
+                                        }
+                                        else
+                                        {
+                                            width = int.Parse(columnHead.Width.Trim());
+                                        }
+                                        TextAlign align;
+                                        if (columnHead.Align.Equals("Left", StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            align = TextAlign.Left;
+                                        }
+                                        else if (columnHead.Align.Equals("Center", StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            align = TextAlign.Center;
+                                        }
+                                        else if (columnHead.Align.Equals("Right", StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            align = TextAlign.Right;
+                                        }
+                                        else
+                                        {
+                                            align = TextAlign.Left;
+                                        }
+                                        string[] times = columnHead.FontSize.Split(',');
+                                        int widthTimes = int.Parse(times[0]);
+                                        int heightTimes = int.Parse(times[1]);
+                                        //打印设置
+                                        _printHelper.SetFontSize(widthTimes, heightTimes);
+                                        //_printHelper.SetCharSpacing(0);
+                                        _printHelper.Write(columnHead.Text, align, width);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        _printHelper.PrintAndFeedLines(1);
+                        //column
+                        foreach (PayingGoodsOrder payingOrder in _printData.PayingOrderList)
+                        {
+                            foreach (List<string> propertyList in propertyArrList)
+                            {
+                                foreach (string property in propertyList)
+                                {
+                                    string itemValue = payingOrder.GetValue(property);
+                                    foreach (PrintColumn column in item.PrintColumns.PrintColumnList)
+                                    {
+                                        if (property == column.Name)
+                                        {
+                                            int width = 0;
+                                            if (column.Width.IndexOf('%') > 0)
+                                            {
+                                                string strWidth = column.Width;
+                                                string number = strWidth.Substring(0, strWidth.Length - 1);
+                                                width = Convert.ToInt32(float.Parse(number) / 100f * _curPrintConfig.TotalCharNum);
+                                            }
+                                            else
+                                            {
+                                                width = int.Parse(column.Width.Trim());
+                                            }
+                                            TextAlign align;
+                                            if (column.Align.Equals("Left", StringComparison.InvariantCultureIgnoreCase))
+                                            {
+                                                align = TextAlign.Left;
+                                            }
+                                            else if (column.Align.Equals("Center", StringComparison.InvariantCultureIgnoreCase))
+                                            {
+                                                align = TextAlign.Center;
+                                            }
+                                            else if (column.Align.Equals("Right", StringComparison.InvariantCultureIgnoreCase))
+                                            {
+                                                align = TextAlign.Right;
+                                            }
+                                            else
+                                            {
+                                                align = TextAlign.Left;
+                                            }
+                                            string[] times = column.FontSize.Split(',');
+                                            int widthTimes = int.Parse(times[0]);
+                                            int heightTimes = int.Parse(times[1]);
+                                            //打印设置
+                                            _printHelper.SetFontSize(widthTimes, heightTimes);
+                                            //_printHelper.SetCharSpacing(0);
                                             _printHelper.Write(itemValue, align, width);
                                             break;
                                         }

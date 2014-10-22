@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO.Ports;
 using System.Linq;
 using System.Windows.Forms;
 using Top4ever.Domain.Customers;
@@ -701,6 +702,33 @@ namespace VechsoftPos
                     DriverOrderPrint printer = DriverOrderPrint.GetInstance(printerName, paperName, paperWidth);
                     printer.DoPrintPaidOrder(printData);
                 }
+                if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.COM)
+                {
+                    string port = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                    if (port.Length > 3)
+                    {
+                        if (port.Substring(0, 3).ToUpper() == "COM")
+                        {
+                            string portName = port.Substring(0, 4).ToUpper();
+                            InstructionOrderPrint printer = new InstructionOrderPrint(portName, 9600, Parity.None, 8, StopBits.One, paperWidth);
+                            printer.DoPrintPaidOrder(printData);
+                        }
+                    }
+                }
+                if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.ETHERNET)
+                {
+                    string ipAddress = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                    InstructionOrderPrint printer = new InstructionOrderPrint(ipAddress, 9100, paperWidth);
+                    printer.DoPrintPaidOrder(printData);
+                }
+                if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.USB)
+                {
+                    string vid = ConstantValuePool.BizSettingConfig.printConfig.VID;
+                    string pid = ConstantValuePool.BizSettingConfig.printConfig.PID;
+                    string endpointId = ConstantValuePool.BizSettingConfig.printConfig.EndpointID;
+                    InstructionOrderPrint printer = new InstructionOrderPrint(vid, pid, endpointId, paperWidth);
+                    printer.DoPrintPaidOrder(printData);
+                }
                 //判断单据类型，如果是外带并且是直接出货
                 if (m_SalesOrder.order.EatType == (int)EatWayType.Takeout && ConstantValuePool.BizSettingConfig.DirectShipping)
                 {
@@ -717,7 +745,6 @@ namespace VechsoftPos
             else
             {
                 MessageBox.Show("支付账单失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
             }
         }
 

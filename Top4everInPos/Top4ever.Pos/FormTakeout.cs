@@ -1855,23 +1855,19 @@ namespace VechsoftPos
                         printData.DeliveryAddress = this.txtAddress.Text.Trim();
                         printData.Remark = string.Empty;
                         printData.DeliveryEmployeeName = string.Empty;
-                        int copies = ConstantValuePool.BizSettingConfig.printConfig.Copies;
                         string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
                         if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
                         {
                             string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
                             string paperName = ConstantValuePool.BizSettingConfig.printConfig.PaperName;
                             DriverOrderPrint printer = DriverOrderPrint.GetInstance(printerName, paperName, paperWidth);
-                            for (int i = 0; i < copies; i++)
+                            if (m_SalesOrder.order.EatType == (int) EatWayType.Takeout)
                             {
-                                if (m_SalesOrder.order.EatType == (int) EatWayType.Takeout)
-                                {
-                                    printer.DoPrintOrder(printData);
-                                }
-                                else
-                                {
-                                    printer.DoPrintDeliveryOrder(printData);
-                                }
+                                printer.DoPrintOrder(printData);
+                            }
+                            else
+                            {
+                                printer.DoPrintDeliveryOrder(printData);
                             }
                         }
                         if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.COM)
@@ -1883,16 +1879,13 @@ namespace VechsoftPos
                                 {
                                     string portName = port.Substring(0, 4).ToUpper();
                                     InstructionOrderPrint printer = new InstructionOrderPrint(portName, 9600, Parity.None, 8, StopBits.One, paperWidth);
-                                    for (int i = 0; i < copies; i++)
+                                    if (m_SalesOrder.order.EatType == (int) EatWayType.Takeout)
                                     {
-                                        if (m_SalesOrder.order.EatType == (int)EatWayType.Takeout)
-                                        {
-                                            printer.DoPrintOrder(printData);
-                                        }
-                                        else
-                                        {
-                                            printer.DoPrintDeliveryOrder(printData);
-                                        }
+                                        printer.DoPrintOrder(printData);
+                                    }
+                                    else
+                                    {
+                                        printer.DoPrintDeliveryOrder(printData);
                                     }
                                 }
                             }
@@ -1901,33 +1894,28 @@ namespace VechsoftPos
                         {
                             string ipAddress = ConstantValuePool.BizSettingConfig.printConfig.Name;
                             InstructionOrderPrint printer = new InstructionOrderPrint(ipAddress, 9100, paperWidth);
-                            for (int i = 0; i < copies; i++)
+                            if (m_SalesOrder.order.EatType == (int) EatWayType.Takeout)
                             {
-                                if (m_SalesOrder.order.EatType == (int)EatWayType.Takeout)
-                                {
-                                    printer.DoPrintOrder(printData);
-                                }
-                                else
-                                {
-                                    printer.DoPrintDeliveryOrder(printData);
-                                }
+                                printer.DoPrintOrder(printData);
+                            }
+                            else
+                            {
+                                printer.DoPrintDeliveryOrder(printData);
                             }
                         }
                         if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.USB)
                         {
-                            string VID = ConstantValuePool.BizSettingConfig.printConfig.VID;
-                            string PID = ConstantValuePool.BizSettingConfig.printConfig.PID;
-                            InstructionOrderPrint printer = new InstructionOrderPrint(VID, PID, paperWidth);
-                            for (int i = 0; i < copies; i++)
+                            string vid = ConstantValuePool.BizSettingConfig.printConfig.VID;
+                            string pid = ConstantValuePool.BizSettingConfig.printConfig.PID;
+                            string endpointId = ConstantValuePool.BizSettingConfig.printConfig.EndpointID;
+                            InstructionOrderPrint printer = new InstructionOrderPrint(vid, pid, endpointId, paperWidth);
+                            if (m_SalesOrder.order.EatType == (int) EatWayType.Takeout)
                             {
-                                if (m_SalesOrder.order.EatType == (int)EatWayType.Takeout)
-                                {
-                                    printer.DoPrintOrder(printData);
-                                }
-                                else
-                                {
-                                    printer.DoPrintDeliveryOrder(printData);
-                                }
+                                printer.DoPrintOrder(printData);
+                            }
+                            else
+                            {
+                                printer.DoPrintDeliveryOrder(printData);
                             }
                         }
                     }
@@ -2440,9 +2428,10 @@ namespace VechsoftPos
                         }
                         if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.USB)
                         {
-                            string VID = ConstantValuePool.BizSettingConfig.printConfig.VID;
-                            string PID = ConstantValuePool.BizSettingConfig.printConfig.PID;
-                            InstructionOrderPrint printer = new InstructionOrderPrint(VID, PID, paperWidth);
+                            string vid = ConstantValuePool.BizSettingConfig.printConfig.VID;
+                            string pid = ConstantValuePool.BizSettingConfig.printConfig.PID;
+                            string endpointId = ConstantValuePool.BizSettingConfig.printConfig.EndpointID;
+                            InstructionOrderPrint printer = new InstructionOrderPrint(vid, pid, endpointId, paperWidth);
                             for (int i = 0; i < copies; i++)
                             {
                                 printer.DoPrintOrder(printData);

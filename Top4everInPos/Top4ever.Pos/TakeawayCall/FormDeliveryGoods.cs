@@ -166,8 +166,8 @@ namespace VechsoftPos.TakeawayCall
                     }
                     if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.ETHERNET)
                     {
-                        string IPAddress = ConstantValuePool.BizSettingConfig.printConfig.Name;
-                        InstructionOrderPrint printer = new InstructionOrderPrint(IPAddress, 9100, paperWidth);
+                        string ipAddress = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                        InstructionOrderPrint printer = new InstructionOrderPrint(ipAddress, 9100, paperWidth);
                         for (int i = 0; i < copies; i++)
                         {
                             printer.DoPrintDeliveryOrder(_printData);
@@ -175,9 +175,10 @@ namespace VechsoftPos.TakeawayCall
                     }
                     if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.USB)
                     {
-                        string VID = ConstantValuePool.BizSettingConfig.printConfig.VID;
-                        string PID = ConstantValuePool.BizSettingConfig.printConfig.PID;
-                        InstructionOrderPrint printer = new InstructionOrderPrint(VID, PID, paperWidth);
+                        string vid = ConstantValuePool.BizSettingConfig.printConfig.VID;
+                        string pid = ConstantValuePool.BizSettingConfig.printConfig.PID;
+                        string endpointId = ConstantValuePool.BizSettingConfig.printConfig.EndpointID;
+                        InstructionOrderPrint printer = new InstructionOrderPrint(vid, pid, endpointId, paperWidth);
                         for (int i = 0; i < copies; i++)
                         {
                             printer.DoPrintDeliveryOrder(_printData);

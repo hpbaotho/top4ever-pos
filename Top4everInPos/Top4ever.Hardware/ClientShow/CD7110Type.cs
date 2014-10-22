@@ -16,9 +16,9 @@ namespace Top4ever.Hardware.ClientShow
             m_PortUtil = new PortUtil(portName, baudRate, parity, dataBits, stopBits);
         }
 
-        public CD7110Type(string usbVID, string usbPID)
+        public CD7110Type(string usbVID, string usbPID, string endpointId)
         {
-            m_PortUtil = new PortUtil(usbVID, usbPID);
+            m_PortUtil = new PortUtil(usbVID, usbPID, endpointId);
         }
 
         /// <summary>

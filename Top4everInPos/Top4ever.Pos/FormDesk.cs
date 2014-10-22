@@ -281,6 +281,14 @@ namespace VechsoftPos
                                 }
                             }
                         }
+                        else
+                        {
+                            List<CrystalButton> btnDeskList = _dicDeskInRegion[_currentRegionId];
+                            foreach (CrystalButton btnDesk in btnDeskList)
+                            {
+                                UpdateDeskButtonInfo(btnDesk, null);
+                            }
+                        }
                     }
                 }
                 Thread.Sleep(ThreadSleepTime);
