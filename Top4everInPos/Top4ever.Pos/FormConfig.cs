@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing.Printing;
+using System.IO.Ports;
 using System.Windows.Forms;
 
 using Top4ever.Common;
@@ -8,6 +9,7 @@ using Top4ever.Entity;
 using Top4ever.Entity.Config;
 using Top4ever.Entity.Enum;
 using Top4ever.Hardware;
+using Top4ever.Hardware.ClientShow;
 
 namespace VechsoftPos
 {
@@ -18,17 +20,19 @@ namespace VechsoftPos
         public FormConfig()
         {
             InitializeComponent();
+            btnTestCashBox.DisplayColor = btnTestCashBox.BackColor;
+            btnTestClientShow.DisplayColor = btnTestClientShow.BackColor;
             BindClientShowInfo();
             BindPrinterInfo();
             this.cmbPrinter.SelectedIndexChanged += new System.EventHandler(this.cmbPrinter_SelectedIndexChanged);
             //多语言
             InitMultiLanguageCombox();
             //营业方式
-            ListItem item = new ListItem("堂食", Convert.ToString((int)ShopSaleType.DineIn));
+            ListItem item = new ListItem("堂食", Convert.ToString((int) ShopSaleType.DineIn));
             cmbSaleType.Items.Add(item);
-            item = new ListItem("外卖", Convert.ToString((int)ShopSaleType.Takeout));
+            item = new ListItem("外卖", Convert.ToString((int) ShopSaleType.Takeout));
             cmbSaleType.Items.Add(item);
-            item = new ListItem("堂食加外卖", Convert.ToString((int)ShopSaleType.DineInAndTakeout));
+            item = new ListItem("堂食加外卖", Convert.ToString((int) ShopSaleType.DineInAndTakeout));
             cmbSaleType.Items.Add(item);
         }
 
@@ -38,7 +42,7 @@ namespace VechsoftPos
             txtPort.Text = ConstantValuePool.BizSettingConfig.Port.ToString();
             txtDeviceNo.Text = ConstantValuePool.BizSettingConfig.DeviceNo;
             txtFont.Text = ConstantValuePool.BizSettingConfig.FontSize.ToString();
-            cmbSaleType.SelectedIndex = GetIndexByValue(cmbSaleType, Convert.ToString((int)ConstantValuePool.BizSettingConfig.SaleType));
+            cmbSaleType.SelectedIndex = GetIndexByValue(cmbSaleType, Convert.ToString((int) ConstantValuePool.BizSettingConfig.SaleType));
             txtBreakDays.Text = ConstantValuePool.BizSettingConfig.BreakDays.ToString();
             txtLoginImage.Text = ConstantValuePool.BizSettingConfig.LoginImagePath;
             txtDeskImage.Text = ConstantValuePool.BizSettingConfig.DeskImagePath;
@@ -92,6 +96,14 @@ namespace VechsoftPos
             else
             {
                 ckbCarteMode.Checked = false;
+            }
+            if (ConstantValuePool.BizSettingConfig.TakeoutPrint)
+            {
+                ckbTakeoutPrint.Checked = true;
+            }
+            else
+            {
+                ckbTakeoutPrint.Checked = false;
             }
             if (ConstantValuePool.BizSettingConfig.printConfig.Enabled)
             {
@@ -147,6 +159,7 @@ namespace VechsoftPos
                     rbUsbCashDrawer.Checked = true;
                     txtCashVID.Text = ConstantValuePool.BizSettingConfig.cashBoxConfig.VID;
                     txtCashPID.Text = ConstantValuePool.BizSettingConfig.cashBoxConfig.PID;
+                    txtCashEndpoint.Text = ConstantValuePool.BizSettingConfig.cashBoxConfig.EndpointID;
                 }
                 else
                 {
@@ -156,11 +169,14 @@ namespace VechsoftPos
             }
             else
             {
+                btnTestCashBox.Enabled = false;
+                btnTestCashBox.BackColor = ConstantValuePool.DisabledColor;
                 rbCashDrawer.Enabled = false;
                 cmbCashDrawerPort.Enabled = false;
                 rbUsbCashDrawer.Enabled = false;
                 txtCashVID.Enabled = false;
                 txtCashPID.Enabled = false;
+                txtCashEndpoint.Enabled = false;
             }
             if (ConstantValuePool.BizSettingConfig.telCallConfig.Enabled)
             {
@@ -181,6 +197,7 @@ namespace VechsoftPos
                     rbUsbClientShow.Checked = true;
                     txtClientVID.Text = ConstantValuePool.BizSettingConfig.clientShowConfig.VID;
                     txtClientPID.Text = ConstantValuePool.BizSettingConfig.clientShowConfig.PID;
+                    txtClientEndpoint.Text = ConstantValuePool.BizSettingConfig.clientShowConfig.EndpointID;
                 }
                 else
                 {
@@ -192,17 +209,20 @@ namespace VechsoftPos
             }
             else
             {
+                btnTestClientShow.Enabled = false;
+                btnTestClientShow.BackColor = ConstantValuePool.DisabledColor;
                 ckbClientShow.Checked = false;
                 rbClientShow.Enabled = false;
                 cmbClientShowPort.Enabled = false;
                 rbUsbClientShow.Enabled = false;
                 txtClientVID.Enabled = false;
                 txtClientPID.Enabled = false;
+                txtClientEndpoint.Enabled = false;
                 cmbClientShowModel.Enabled = false;
             }
-            foreach(BizControl control in ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls)
+            foreach (BizControl control in ConstantValuePool.BizSettingConfig.bizUIConfig.BizControls)
             {
-                if(control.Name == "Group")
+                if (control.Name == "Group")
                 {
                     txtGoodsGroupRows.Text = control.RowsCount.ToString();
                     txtGoodsGroupRows.Enabled = false;
@@ -262,13 +282,13 @@ namespace VechsoftPos
                     cmbLanguge1st.SelectedIndexChanged -= new System.EventHandler(cmbLanguge1st_SelectedIndexChanged);
                     cmbLanguge2nd.SelectedIndexChanged -= new System.EventHandler(cmbLanguge2nd_SelectedIndexChanged);
                     _listItem.Clear();
-                    _listItem.Add(new ListItem("简体", Convert.ToString((int)LanguageType.SIMPLIFIED)));
-                    _listItem.Add(new ListItem("繁体", Convert.ToString((int)LanguageType.TRADITIONAL)));
-                    _listItem.Add(new ListItem("英文", Convert.ToString((int)LanguageType.ENGLISH)));
+                    _listItem.Add(new ListItem("简体", Convert.ToString((int) LanguageType.SIMPLIFIED)));
+                    _listItem.Add(new ListItem("繁体", Convert.ToString((int) LanguageType.TRADITIONAL)));
+                    _listItem.Add(new ListItem("英文", Convert.ToString((int) LanguageType.ENGLISH)));
                     BindFirstLanguage();
-                    cmbLanguge1st.SelectedIndex = GetIndexByValue(cmbLanguge1st, Convert.ToString((int)ConstantValuePool.BizSettingConfig.Languge1st));
+                    cmbLanguge1st.SelectedIndex = GetIndexByValue(cmbLanguge1st, Convert.ToString((int) ConstantValuePool.BizSettingConfig.Languge1st));
                     BindSecondLanguage();
-                    cmbLanguge2nd.SelectedIndex = GetIndexByValue(cmbLanguge2nd, Convert.ToString((int)ConstantValuePool.BizSettingConfig.Languge2nd));
+                    cmbLanguge2nd.SelectedIndex = GetIndexByValue(cmbLanguge2nd, Convert.ToString((int) ConstantValuePool.BizSettingConfig.Languge2nd));
                     cmbLanguge1st.SelectedIndexChanged += new System.EventHandler(cmbLanguge1st_SelectedIndexChanged);
                     cmbLanguge2nd.SelectedIndexChanged += new System.EventHandler(cmbLanguge2nd_SelectedIndexChanged);
                     break;
@@ -276,13 +296,13 @@ namespace VechsoftPos
                     cmbLanguge1st.SelectedIndexChanged -= new System.EventHandler(cmbLanguge1st_SelectedIndexChanged);
                     cmbLanguge2nd.SelectedIndexChanged -= new System.EventHandler(cmbLanguge2nd_SelectedIndexChanged);
                     _listItem.Clear();
-                    _listItem.Add(new ListItem("簡體", Convert.ToString((int)LanguageType.SIMPLIFIED)));
-                    _listItem.Add(new ListItem("繁體", Convert.ToString((int)LanguageType.TRADITIONAL)));
-                    _listItem.Add(new ListItem("英文", Convert.ToString((int)LanguageType.ENGLISH)));
+                    _listItem.Add(new ListItem("簡體", Convert.ToString((int) LanguageType.SIMPLIFIED)));
+                    _listItem.Add(new ListItem("繁體", Convert.ToString((int) LanguageType.TRADITIONAL)));
+                    _listItem.Add(new ListItem("英文", Convert.ToString((int) LanguageType.ENGLISH)));
                     BindFirstLanguage();
-                    cmbLanguge1st.SelectedIndex = GetIndexByValue(cmbLanguge1st, Convert.ToString((int)ConstantValuePool.BizSettingConfig.Languge1st));
+                    cmbLanguge1st.SelectedIndex = GetIndexByValue(cmbLanguge1st, Convert.ToString((int) ConstantValuePool.BizSettingConfig.Languge1st));
                     BindSecondLanguage();
-                    cmbLanguge2nd.SelectedIndex = GetIndexByValue(cmbLanguge2nd, Convert.ToString((int)ConstantValuePool.BizSettingConfig.Languge2nd));
+                    cmbLanguge2nd.SelectedIndex = GetIndexByValue(cmbLanguge2nd, Convert.ToString((int) ConstantValuePool.BizSettingConfig.Languge2nd));
                     cmbLanguge1st.SelectedIndexChanged += new System.EventHandler(cmbLanguge1st_SelectedIndexChanged);
                     cmbLanguge2nd.SelectedIndexChanged += new System.EventHandler(cmbLanguge2nd_SelectedIndexChanged);
                     break;
@@ -290,13 +310,13 @@ namespace VechsoftPos
                     cmbLanguge1st.SelectedIndexChanged -= new System.EventHandler(cmbLanguge1st_SelectedIndexChanged);
                     cmbLanguge2nd.SelectedIndexChanged -= new System.EventHandler(cmbLanguge2nd_SelectedIndexChanged);
                     _listItem.Clear();
-                    _listItem.Add(new ListItem("Chinese-Simplified", Convert.ToString((int)LanguageType.SIMPLIFIED)));
-                    _listItem.Add(new ListItem("Chinese-Traditional", Convert.ToString((int)LanguageType.TRADITIONAL)));
-                    _listItem.Add(new ListItem("English", Convert.ToString((int)LanguageType.ENGLISH)));
+                    _listItem.Add(new ListItem("Chinese-Simplified", Convert.ToString((int) LanguageType.SIMPLIFIED)));
+                    _listItem.Add(new ListItem("Chinese-Traditional", Convert.ToString((int) LanguageType.TRADITIONAL)));
+                    _listItem.Add(new ListItem("English", Convert.ToString((int) LanguageType.ENGLISH)));
                     BindFirstLanguage();
-                    cmbLanguge1st.SelectedIndex = GetIndexByValue(cmbLanguge1st, Convert.ToString((int)ConstantValuePool.BizSettingConfig.Languge1st));
+                    cmbLanguge1st.SelectedIndex = GetIndexByValue(cmbLanguge1st, Convert.ToString((int) ConstantValuePool.BizSettingConfig.Languge1st));
                     BindSecondLanguage();
-                    cmbLanguge2nd.SelectedIndex = GetIndexByValue(cmbLanguge2nd, Convert.ToString((int)ConstantValuePool.BizSettingConfig.Languge2nd));
+                    cmbLanguge2nd.SelectedIndex = GetIndexByValue(cmbLanguge2nd, Convert.ToString((int) ConstantValuePool.BizSettingConfig.Languge2nd));
                     cmbLanguge1st.SelectedIndexChanged += new System.EventHandler(cmbLanguge1st_SelectedIndexChanged);
                     cmbLanguge2nd.SelectedIndexChanged += new System.EventHandler(cmbLanguge2nd_SelectedIndexChanged);
                     break;
@@ -317,7 +337,7 @@ namespace VechsoftPos
             cmbLanguge2nd.Items.Clear();
             foreach (ListItem item in _listItem)
             {
-                if (int.Parse(item.Value) != (int)ConstantValuePool.BizSettingConfig.Languge1st)
+                if (int.Parse(item.Value) != (int) ConstantValuePool.BizSettingConfig.Languge1st)
                 {
                     cmbLanguge2nd.Items.Add(item);
                 }
@@ -327,7 +347,7 @@ namespace VechsoftPos
         private void cmbLanguge1st_SelectedIndexChanged(object sender, EventArgs e)
         {
             ListItem item = cmbLanguge1st.SelectedItem as ListItem;
-            ConstantValuePool.BizSettingConfig.Languge1st = (LanguageType)int.Parse(item.Value);
+            ConstantValuePool.BizSettingConfig.Languge1st = (LanguageType) int.Parse(item.Value);
             BindSecondLanguage();
             cmbLanguge2nd.SelectedIndex = 0;
 
@@ -337,7 +357,7 @@ namespace VechsoftPos
         private void cmbLanguge2nd_SelectedIndexChanged(object sender, EventArgs e)
         {
             ListItem item = cmbLanguge2nd.SelectedItem as ListItem;
-            ConstantValuePool.BizSettingConfig.Languge2nd = (LanguageType)int.Parse(item.Value);
+            ConstantValuePool.BizSettingConfig.Languge2nd = (LanguageType) int.Parse(item.Value);
         }
 
         private int GetIndexByValue(ComboBox cb, string value)
@@ -345,7 +365,7 @@ namespace VechsoftPos
             int index = 0, selectedIndex = -1;
             foreach (object obj in cb.Items)
             {
-                if (((ListItem)obj).Value == value)
+                if (((ListItem) obj).Value == value)
                 {
                     selectedIndex = index;
                     break;
@@ -369,22 +389,22 @@ namespace VechsoftPos
             List<BizControl> bizControls = new List<BizControl>();
             BizControl control = new BizControl
             {
-                Name = "Group", 
-                RowsCount = int.Parse(txtGoodsGroupRows.Text), 
+                Name = "Group",
+                RowsCount = int.Parse(txtGoodsGroupRows.Text),
                 ColumnsCount = int.Parse(txtGoodsGroupColumns.Text)
             };
             bizControls.Add(control);
             control = new BizControl
             {
-                Name = "Item", 
-                RowsCount = int.Parse(txtGoodsRows.Text), 
+                Name = "Item",
+                RowsCount = int.Parse(txtGoodsRows.Text),
                 ColumnsCount = int.Parse(txtGoodsColumns.Text)
             };
             bizControls.Add(control);
             control = new BizControl
             {
-                Name = "Payoff", 
-                RowsCount = int.Parse(txtPayoffWayRows.Text), 
+                Name = "Payoff",
+                RowsCount = int.Parse(txtPayoffWayRows.Text),
                 ColumnsCount = int.Parse(txtPayoffWayColumns.Text)
             };
             bizControls.Add(control);
@@ -395,16 +415,36 @@ namespace VechsoftPos
                 printConfig.PrinterPort = PortType.DRIVER;
                 printConfig.Name = cmbPrinter.Text;
                 printConfig.PaperName = cmbPaperName.Text;
+                if (string.IsNullOrEmpty(printConfig.Name))
+                {
+                    MessageBox.Show("打印机名称不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (string.IsNullOrEmpty(printConfig.PaperName))
+                {
+                    MessageBox.Show("纸张名称不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
             if (rbPrinterPort.Checked)
             {
                 printConfig.PrinterPort = PortType.COM;
                 printConfig.Name = cmbPrinterPort.Text;
+                if (string.IsNullOrEmpty(printConfig.Name))
+                {
+                    MessageBox.Show("端口号不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
             if (rbNetPrinter.Checked)
             {
                 printConfig.PrinterPort = PortType.ETHERNET;
                 printConfig.Name = txtIPAddress.Text;
+                if (string.IsNullOrEmpty(printConfig.Name))
+                {
+                    MessageBox.Show("IP地址不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
             if (rbUsbPort.Checked)
             {
@@ -412,8 +452,25 @@ namespace VechsoftPos
                 printConfig.VID = txtPrinterVID.Text.Trim();
                 printConfig.PID = txtPrinterPID.Text.Trim();
                 printConfig.EndpointID = txtEndpointId.Text.Trim();
+                if (string.IsNullOrEmpty(printConfig.VID))
+                {
+                    MessageBox.Show("VID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (string.IsNullOrEmpty(printConfig.PID))
+                {
+                    MessageBox.Show("PID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (string.IsNullOrEmpty(printConfig.EndpointID))
+                {
+                    MessageBox.Show("EndpointID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
-            printConfig.Copies = int.Parse(txtCopies.Text);
+            int copies;
+            int.TryParse(txtCopies.Text.Trim(), out copies);
+            printConfig.Copies = copies > 0 ? copies : 1;
             printConfig.PaperWidth = cmbPaperWidth.Text.Trim();
             //钱箱
             CashBoxConfig cashboxConfig = new CashBoxConfig();
@@ -422,12 +479,33 @@ namespace VechsoftPos
             {
                 cashboxConfig.IsUsbPort = false;
                 cashboxConfig.Port = cmbCashDrawerPort.Text;
+                if (string.IsNullOrEmpty(cashboxConfig.Port))
+                {
+                    MessageBox.Show("端口号不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
             if (rbUsbCashDrawer.Checked)
             {
                 cashboxConfig.IsUsbPort = true;
-                cashboxConfig.VID = txtCashVID.Text;
-                cashboxConfig.PID = txtCashPID.Text;
+                cashboxConfig.VID = txtCashVID.Text.Trim();
+                cashboxConfig.PID = txtCashPID.Text.Trim();
+                cashboxConfig.EndpointID = txtCashEndpoint.Text.Trim();
+                if (string.IsNullOrEmpty(cashboxConfig.VID))
+                {
+                    MessageBox.Show("VID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (string.IsNullOrEmpty(cashboxConfig.PID))
+                {
+                    MessageBox.Show("PID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (string.IsNullOrEmpty(cashboxConfig.EndpointID))
+                {
+                    MessageBox.Show("EndpointID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
             //来电宝
             TelCallConfig telCallConfig = new TelCallConfig {Enabled = ckbTelCall.Checked};
@@ -474,12 +552,33 @@ namespace VechsoftPos
             {
                 clientShowConfig.IsUsbPort = false;
                 clientShowConfig.Port = cmbClientShowPort.Text;
+                if (string.IsNullOrEmpty(clientShowConfig.Port))
+                {
+                    MessageBox.Show("端口号不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
             if (rbUsbClientShow.Checked)
             {
                 clientShowConfig.IsUsbPort = true;
-                clientShowConfig.VID = txtClientVID.Text;
-                clientShowConfig.PID = txtClientPID.Text;
+                clientShowConfig.VID = txtClientVID.Text.Trim();
+                clientShowConfig.PID = txtClientPID.Text.Trim();
+                clientShowConfig.EndpointID = txtClientEndpoint.Text.Trim();
+                if (string.IsNullOrEmpty(clientShowConfig.VID))
+                {
+                    MessageBox.Show("VID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (string.IsNullOrEmpty(clientShowConfig.PID))
+                {
+                    MessageBox.Show("PID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (string.IsNullOrEmpty(clientShowConfig.EndpointID))
+                {
+                    MessageBox.Show("EndpointID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
             string clientShowModel = cmbClientShowModel.Text;
             ListItem item = cmbClientShowType.SelectedItem as ListItem;
@@ -509,11 +608,11 @@ namespace VechsoftPos
             //多语言
             ListItem item1 = cmbLanguge1st.SelectedItem as ListItem;
             ListItem item2 = cmbLanguge2nd.SelectedItem as ListItem;
-            appConfig.Languge1st = (LanguageType)int.Parse(item1.Value);
-            appConfig.Languge2nd = (LanguageType)int.Parse(item2.Value);
+            appConfig.Languge1st = (LanguageType) int.Parse(item1.Value);
+            appConfig.Languge2nd = (LanguageType) int.Parse(item2.Value);
             appConfig.FontSize = float.Parse(txtFont.Text);
             ListItem itemType = cmbSaleType.SelectedItem as ListItem;
-            appConfig.SaleType = (ShopSaleType)int.Parse(itemType.Value);
+            appConfig.SaleType = (ShopSaleType) int.Parse(itemType.Value);
             appConfig.BreakDays = int.Parse(txtBreakDays.Text);
             appConfig.LoginImagePath = txtLoginImage.Text.Trim();
             appConfig.DeskImagePath = txtDeskImage.Text.Trim();
@@ -526,7 +625,8 @@ namespace VechsoftPos
             appConfig.ShowSoldOutQty = ckbSoldOutQty.Checked;
             appConfig.DirectShipping = ckbDirectShipping.Checked;
             appConfig.CarteMode = ckbCarteMode.Checked;
-            appConfig.bizUIConfig = new BizUIConfig { BizControls = bizControls };
+            appConfig.TakeoutPrint = ckbTakeoutPrint.Checked;
+            appConfig.bizUIConfig = new BizUIConfig {BizControls = bizControls};
             appConfig.printConfig = printConfig;
             appConfig.cashBoxConfig = cashboxConfig;
             appConfig.telCallConfig = telCallConfig;
@@ -624,19 +724,25 @@ namespace VechsoftPos
         {
             if (ckbCashDrawer.Checked)
             {
+                btnTestCashBox.Enabled = true;
+                btnTestCashBox.BackColor = btnTestCashBox.DisplayColor;
                 rbCashDrawer.Enabled = true;
                 cmbCashDrawerPort.Enabled = true;
                 rbUsbCashDrawer.Enabled = true;
                 txtCashVID.Enabled = true;
                 txtCashPID.Enabled = true;
+                txtCashEndpoint.Enabled = true;
             }
             else
             {
+                btnTestCashBox.Enabled = false;
+                btnTestCashBox.BackColor = ConstantValuePool.DisabledColor;
                 rbCashDrawer.Enabled = false;
                 cmbCashDrawerPort.Enabled = false;
                 rbUsbCashDrawer.Enabled = false;
                 txtCashVID.Enabled = false;
                 txtCashPID.Enabled = false;
+                txtCashEndpoint.Enabled = false;
             }
         }
 
@@ -656,20 +762,26 @@ namespace VechsoftPos
         {
             if (ckbClientShow.Checked)
             {
+                btnTestClientShow.Enabled = true;
+                btnTestClientShow.BackColor = btnTestClientShow.DisplayColor;
                 rbClientShow.Enabled = true;
                 cmbClientShowPort.Enabled = true;
                 rbUsbClientShow.Enabled = true;
                 txtClientVID.Enabled = true;
                 txtClientPID.Enabled = true;
+                txtClientEndpoint.Enabled = true;
                 cmbClientShowModel.Enabled = true;
             }
             else
             {
+                btnTestClientShow.Enabled = false;
+                btnTestClientShow.BackColor = ConstantValuePool.DisabledColor;
                 rbClientShow.Enabled = false;
                 cmbClientShowPort.Enabled = false;
                 rbUsbClientShow.Enabled = false;
                 txtClientVID.Enabled = false;
                 txtClientPID.Enabled = false;
+                txtClientEndpoint.Enabled = false;
                 cmbClientShowModel.Enabled = false;
             }
         }
@@ -677,8 +789,8 @@ namespace VechsoftPos
         private void btnLoadLogin_Click(object sender, EventArgs e)
         {
             OpenFileDialog fileDialog1 = new OpenFileDialog();
-            fileDialog1.InitialDirectory = Application.StartupPath;//初始目录
-            fileDialog1.Filter = "picture（*.jpg;*.bmp;*.gif）|*.jpg;*.bmp;*.gif|All files (*.*)|*.*";//文件的类型
+            fileDialog1.InitialDirectory = Application.StartupPath; //初始目录
+            fileDialog1.Filter = "picture（*.jpg;*.bmp;*.gif）|*.jpg;*.bmp;*.gif|All files (*.*)|*.*"; //文件的类型
             fileDialog1.FilterIndex = 1;
             fileDialog1.RestoreDirectory = true;
             if (fileDialog1.ShowDialog() == DialogResult.OK)
@@ -690,8 +802,8 @@ namespace VechsoftPos
         private void btnLoadDesk_Click(object sender, EventArgs e)
         {
             OpenFileDialog fileDialog1 = new OpenFileDialog();
-            fileDialog1.InitialDirectory = Application.StartupPath;//初始目录
-            fileDialog1.Filter = "picture（*.jpg;*.bmp;*.gif）|*.jpg;*.bmp;*.gif|All files (*.*)|*.*";//文件的类型
+            fileDialog1.InitialDirectory = Application.StartupPath; //初始目录
+            fileDialog1.Filter = "picture（*.jpg;*.bmp;*.gif）|*.jpg;*.bmp;*.gif|All files (*.*)|*.*"; //文件的类型
             fileDialog1.FilterIndex = 1;
             fileDialog1.RestoreDirectory = true;
             if (fileDialog1.ShowDialog() == DialogResult.OK)
@@ -714,8 +826,8 @@ namespace VechsoftPos
         {
             string strPath = txtImagePath.Text;
             OpenFileDialog fileDialog1 = new OpenFileDialog();
-            fileDialog1.InitialDirectory = strPath;//初始目录
-            fileDialog1.Filter = "picture（*.jpg;*.bmp;*.gif）|*.jpg;*.bmp;*.gif|All files (*.*)|*.*";//文件的类型
+            fileDialog1.InitialDirectory = strPath; //初始目录
+            fileDialog1.Filter = "picture（*.jpg;*.bmp;*.gif）|*.jpg;*.bmp;*.gif|All files (*.*)|*.*"; //文件的类型
             fileDialog1.FilterIndex = 1;
             fileDialog1.RestoreDirectory = true;
             if (fileDialog1.ShowDialog() == DialogResult.OK)
@@ -794,6 +906,7 @@ namespace VechsoftPos
             cmbCashDrawerPort.Enabled = true;
             txtCashVID.Enabled = false;
             txtCashPID.Enabled = false;
+            txtCashEndpoint.Enabled = false;
         }
 
         private void rbUsbCashDrawer_CheckedChanged(object sender, EventArgs e)
@@ -801,6 +914,7 @@ namespace VechsoftPos
             cmbCashDrawerPort.Enabled = false;
             txtCashVID.Enabled = true;
             txtCashPID.Enabled = true;
+            txtCashEndpoint.Enabled = true;
         }
 
         private void rbClientShow_CheckedChanged(object sender, EventArgs e)
@@ -808,6 +922,7 @@ namespace VechsoftPos
             cmbClientShowPort.Enabled = true;
             txtClientVID.Enabled = false;
             txtClientPID.Enabled = false;
+            txtClientEndpoint.Enabled = false;
         }
 
         private void rbUsbClientShow_CheckedChanged(object sender, EventArgs e)
@@ -815,6 +930,7 @@ namespace VechsoftPos
             cmbClientShowPort.Enabled = false;
             txtClientVID.Enabled = true;
             txtClientPID.Enabled = true;
+            txtClientEndpoint.Enabled = true;
         }
 
         private void cmbPrinter_SelectedIndexChanged(object sender, EventArgs e)
@@ -831,6 +947,207 @@ namespace VechsoftPos
             foreach (PaperSize ps in printDocument.PrinterSettings.PaperSizes)
             {
                 cmbPaperName.Items.Add(ps.PaperName);
+            }
+        }
+
+        private void btnTestCashBox_Click(object sender, EventArgs e)
+        {
+            if (!ckbCashDrawer.Checked || (!rbCashDrawer.Checked && !rbUsbCashDrawer.Checked))
+            {
+                MessageBox.Show("请先对钱箱进行设置！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            try
+            {
+                if (rbCashDrawer.Checked)
+                {
+                    string port = cmbCashDrawerPort.Text;
+                    if (string.IsNullOrEmpty(port))
+                    {
+                        MessageBox.Show("端口号不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    if (port.IndexOf("COM", StringComparison.OrdinalIgnoreCase) >= 0 && port.Length > 3)
+                    {
+                        if (port.Substring(0, 3).ToUpper() == "COM")
+                        {
+                            string portName = port.Substring(0, 4).ToUpper();
+                            CashBox.Open(portName, 9600, Parity.None, 8, StopBits.One);
+                        }
+                    }
+                    else if (port.IndexOf("LPT", StringComparison.OrdinalIgnoreCase) >= 0 && port.Length > 3)
+                    {
+                        if (port.Substring(0, 3).ToUpper() == "LPT")
+                        {
+                            string lptName = port.Substring(0, 4).ToUpper();
+                            CashBox.Open(lptName);
+                        }
+                    }
+                }
+                if (rbUsbCashDrawer.Checked)
+                {
+                    string vid = txtCashVID.Text.Trim();
+                    string pid = txtCashPID.Text.Trim();
+                    string endpointId = txtCashEndpoint.Text.Trim();
+                    if (string.IsNullOrEmpty(vid))
+                    {
+                        MessageBox.Show("VID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    if (string.IsNullOrEmpty(pid))
+                    {
+                        MessageBox.Show("PID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    if (string.IsNullOrEmpty(endpointId))
+                    {
+                        MessageBox.Show("EndpointID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    CashBox.Open(vid, pid, endpointId);
+                }
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show("硬件打开失败，错误信息：" + exception, "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnTestClientShow_Click(object sender, EventArgs e)
+        {
+            if (!ckbClientShow.Checked || (!rbClientShow.Checked && !rbUsbClientShow.Checked))
+            {
+                MessageBox.Show("请先对客显进行设置！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            ListItem item = cmbClientShowType.SelectedItem as ListItem;
+            if (item == null) return;
+
+            string clientShowModel = cmbClientShowModel.Text;
+            string clientShowType = item.Value;
+            if (clientShowType.Equals("SingleLine", StringComparison.OrdinalIgnoreCase))
+            {
+                if (clientShowModel.Equals("VFD220E", StringComparison.OrdinalIgnoreCase))
+                {
+                    MessageBox.Show(string.Format("抱歉，程序暂时不支持'{0}'型号的{1}客显！", clientShowModel, "单排"));
+                    return;
+                }
+            }
+            else if (clientShowType.Equals("DualLine", StringComparison.OrdinalIgnoreCase))
+            {
+                if (clientShowModel.Equals("CD7110Type", StringComparison.OrdinalIgnoreCase) || clientShowModel.Equals("Led8N", StringComparison.OrdinalIgnoreCase))
+                {
+                    MessageBox.Show(string.Format("抱歉，程序暂时不支持'{0}'型号的{1}客显！", clientShowModel, "双排"));
+                    return;
+                }
+            }
+            try
+            {
+                if (rbClientShow.Checked)
+                {
+                    string port = cmbClientShowPort.Text;
+                    if (string.IsNullOrEmpty(port))
+                    {
+                        MessageBox.Show("端口号不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    if (port.IndexOf("COM", StringComparison.OrdinalIgnoreCase) >= 0 && port.Length > 3)
+                    {
+                        if (port.Substring(0, 3).ToUpper() == "COM")
+                        {
+                            string portName = port.Substring(0, 4).ToUpper();
+                            //显示
+                            if (clientShowType.Equals("SingleLine", StringComparison.OrdinalIgnoreCase))
+                            {
+                                if (clientShowModel.Equals("CD7110", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    CD7110Type cd7110Type = new CD7110Type(portName, 9600, Parity.None, 8, StopBits.One);
+                                    cd7110Type.ShowReceipt("100.00");
+                                }
+                                else if (clientShowModel.Equals("Led8N", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    Led8NType led8NType = new Led8NType(portName, 9600, Parity.None, 8, StopBits.One);
+                                    led8NType.ShowReceipt("100.00");
+                                }
+                                else if (clientShowModel.Equals("Senor", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    SenorSingleType senorSingleType = new SenorSingleType(portName, 9600, Parity.None, 8, StopBits.One);
+                                    senorSingleType.ShowReceipt("100.00");
+                                }
+                            }
+                            else if (clientShowType.Equals("DualLine", StringComparison.OrdinalIgnoreCase))
+                            {
+                                if (clientShowModel.Equals("Senor", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    SenorDualType senorDualType = new SenorDualType(portName, 9600, Parity.None, 8, StopBits.One);
+                                    senorDualType.ShowUnitAndTotalPrice("88.00", "188.00");
+                                }
+                                else if (clientShowModel.Equals("VFD220E", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    VFD220EType vfd220EType = new VFD220EType(portName, 9600, Parity.None, 8, StopBits.One);
+                                    vfd220EType.ShowUnitAndTotalPrice("88.00", "188.00");
+                                }
+                            }
+                        }
+                    }
+                }
+                if (rbUsbClientShow.Checked)
+                {
+                    string vid = txtClientVID.Text.Trim();
+                    string pid = txtClientPID.Text.Trim();
+                    string endpointId = txtClientEndpoint.Text.Trim();
+                    if (string.IsNullOrEmpty(vid))
+                    {
+                        MessageBox.Show("VID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    if (string.IsNullOrEmpty(pid))
+                    {
+                        MessageBox.Show("PID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    if (string.IsNullOrEmpty(endpointId))
+                    {
+                        MessageBox.Show("EndpointID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    //显示
+                    if (clientShowType.Equals("SingleLine", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (clientShowModel.Equals("CD7110", StringComparison.OrdinalIgnoreCase))
+                        {
+                            CD7110Type cd7110Type = new CD7110Type(vid, pid, endpointId);
+                            cd7110Type.ShowReceipt("100.00");
+                        }
+                        else if (clientShowModel.Equals("Led8N", StringComparison.OrdinalIgnoreCase))
+                        {
+                            Led8NType led8NType = new Led8NType(vid, pid, endpointId);
+                            led8NType.ShowReceipt("100.00");
+                        }
+                        else if (clientShowModel.Equals("Senor", StringComparison.OrdinalIgnoreCase))
+                        {
+                            SenorSingleType senorSingleType = new SenorSingleType(vid, pid, endpointId);
+                            senorSingleType.ShowReceipt("100.00");
+                        }
+                    }
+                    else if (clientShowType.Equals("DualLine", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (clientShowModel.Equals("Senor", StringComparison.OrdinalIgnoreCase))
+                        {
+                            SenorDualType senorDualType = new SenorDualType(vid, pid, endpointId);
+                            senorDualType.ShowUnitAndTotalPrice("88.00", "188.00");
+                        }
+                        else if (clientShowModel.Equals("VFD220E", StringComparison.OrdinalIgnoreCase))
+                        {
+                            VFD220EType vfd220EType = new VFD220EType(vid, pid, endpointId);
+                            vfd220EType.ShowUnitAndTotalPrice("88.00", "188.00");
+                        }
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show("硬件打开失败，错误信息：" + exception, "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

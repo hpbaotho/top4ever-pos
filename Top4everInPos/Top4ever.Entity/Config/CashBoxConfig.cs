@@ -21,5 +21,8 @@ namespace Top4ever.Entity.Config
 
         [XmlElement("PID")]
         public string PID { get; set; }
+
+        [XmlElement("EndpointID")]
+        public string EndpointID { get; set; }
     }
 }

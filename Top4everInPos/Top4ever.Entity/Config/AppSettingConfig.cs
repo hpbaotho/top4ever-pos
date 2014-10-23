@@ -109,6 +109,11 @@ namespace Top4ever.Entity.Config
         /// </summary>
         [XmlElement("CarteMode")]
         public bool CarteMode { get; set; }
+        /// <summary>
+        /// 外带打印小票
+        /// </summary>
+        [XmlElement("TakeoutPrint")]
+        public bool TakeoutPrint { get; set; }
 
         [XmlElement("BizUIConfig")]
         public BizUIConfig bizUIConfig { get; set; }
