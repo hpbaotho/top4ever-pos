@@ -2356,7 +2356,7 @@ namespace VechsoftPos
             {
                 if (result == 1)
                 {
-                    if (ConstantValuePool.BizSettingConfig.printConfig.Enabled)
+                    if (ConstantValuePool.BizSettingConfig.TakeoutPrint && ConstantValuePool.BizSettingConfig.printConfig.Enabled)
                     {
                         //¥Ú”°
                         PrintData printData = new PrintData();

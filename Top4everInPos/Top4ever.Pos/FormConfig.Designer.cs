@@ -145,6 +145,13 @@
             this.label18 = new System.Windows.Forms.Label();
             this.btnCancel = new Top4ever.CustomControl.CrystalButton();
             this.btnSave = new Top4ever.CustomControl.CrystalButton();
+            this.txtCashEndpoint = new System.Windows.Forms.TextBox();
+            this.label37 = new System.Windows.Forms.Label();
+            this.txtClientEndpoint = new System.Windows.Forms.TextBox();
+            this.label38 = new System.Windows.Forms.Label();
+            this.btnTestCashBox = new Top4ever.CustomControl.CrystalButton();
+            this.btnTestClientShow = new Top4ever.CustomControl.CrystalButton();
+            this.ckbTakeoutPrint = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -574,6 +581,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.ckbTakeoutPrint);
             this.groupBox3.Controls.Add(this.ckbSoldOutQty);
             this.groupBox3.Controls.Add(this.ckbBriefCode);
             this.groupBox3.Controls.Add(this.ckbTakeAwayCash);
@@ -591,7 +599,7 @@
             // 
             this.ckbSoldOutQty.AutoSize = true;
             this.ckbSoldOutQty.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.ckbSoldOutQty.Location = new System.Drawing.Point(127, 73);
+            this.ckbSoldOutQty.Location = new System.Drawing.Point(137, 73);
             this.ckbSoldOutQty.Name = "ckbSoldOutQty";
             this.ckbSoldOutQty.Size = new System.Drawing.Size(106, 23);
             this.ckbSoldOutQty.TabIndex = 5;
@@ -602,7 +610,7 @@
             // 
             this.ckbBriefCode.AutoSize = true;
             this.ckbBriefCode.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.ckbBriefCode.Location = new System.Drawing.Point(127, 34);
+            this.ckbBriefCode.Location = new System.Drawing.Point(137, 34);
             this.ckbBriefCode.Name = "ckbBriefCode";
             this.ckbBriefCode.Size = new System.Drawing.Size(106, 23);
             this.ckbBriefCode.TabIndex = 2;
@@ -613,7 +621,7 @@
             // 
             this.ckbTakeAwayCash.AutoSize = true;
             this.ckbTakeAwayCash.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.ckbTakeAwayCash.Location = new System.Drawing.Point(40, 73);
+            this.ckbTakeAwayCash.Location = new System.Drawing.Point(265, 73);
             this.ckbTakeAwayCash.Name = "ckbTakeAwayCash";
             this.ckbTakeAwayCash.Size = new System.Drawing.Size(67, 23);
             this.ckbTakeAwayCash.TabIndex = 1;
@@ -624,7 +632,7 @@
             // 
             this.ckbCarteMode.AutoSize = true;
             this.ckbCarteMode.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.ckbCarteMode.Location = new System.Drawing.Point(255, 73);
+            this.ckbCarteMode.Location = new System.Drawing.Point(40, 34);
             this.ckbCarteMode.Name = "ckbCarteMode";
             this.ckbCarteMode.Size = new System.Drawing.Size(80, 23);
             this.ckbCarteMode.TabIndex = 0;
@@ -635,7 +643,7 @@
             // 
             this.ckbDirectShipping.AutoSize = true;
             this.ckbDirectShipping.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.ckbDirectShipping.Location = new System.Drawing.Point(255, 34);
+            this.ckbDirectShipping.Location = new System.Drawing.Point(40, 73);
             this.ckbDirectShipping.Name = "ckbDirectShipping";
             this.ckbDirectShipping.Size = new System.Drawing.Size(80, 23);
             this.ckbDirectShipping.TabIndex = 0;
@@ -646,7 +654,7 @@
             // 
             this.ckbPettyCash.AutoSize = true;
             this.ckbPettyCash.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.ckbPettyCash.Location = new System.Drawing.Point(40, 34);
+            this.ckbPettyCash.Location = new System.Drawing.Point(265, 34);
             this.ckbPettyCash.Name = "ckbPettyCash";
             this.ckbPettyCash.Size = new System.Drawing.Size(67, 23);
             this.ckbPettyCash.TabIndex = 0;
@@ -706,52 +714,52 @@
             // 
             // txtEndpointId
             // 
-            this.txtEndpointId.Location = new System.Drawing.Point(451, 266);
+            this.txtEndpointId.Location = new System.Drawing.Point(404, 265);
             this.txtEndpointId.Name = "txtEndpointId";
-            this.txtEndpointId.Size = new System.Drawing.Size(37, 25);
+            this.txtEndpointId.Size = new System.Drawing.Size(45, 25);
             this.txtEndpointId.TabIndex = 0;
             // 
             // txtPrinterPID
             // 
-            this.txtPrinterPID.Location = new System.Drawing.Point(279, 266);
+            this.txtPrinterPID.Location = new System.Drawing.Point(249, 265);
             this.txtPrinterPID.Name = "txtPrinterPID";
-            this.txtPrinterPID.Size = new System.Drawing.Size(72, 25);
+            this.txtPrinterPID.Size = new System.Drawing.Size(52, 25);
             this.txtPrinterPID.TabIndex = 0;
             // 
             // label36
             // 
             this.label36.AutoSize = true;
-            this.label36.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label36.Location = new System.Drawing.Point(369, 269);
+            this.label36.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label36.Location = new System.Drawing.Point(329, 269);
             this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(77, 19);
+            this.label36.Size = new System.Drawing.Size(72, 17);
             this.label36.TabIndex = 0;
             this.label36.Text = "Endpoint：";
             // 
             // txtPrinterVID
             // 
-            this.txtPrinterVID.Location = new System.Drawing.Point(136, 266);
+            this.txtPrinterVID.Location = new System.Drawing.Point(136, 265);
             this.txtPrinterVID.Name = "txtPrinterVID";
-            this.txtPrinterVID.Size = new System.Drawing.Size(72, 25);
+            this.txtPrinterVID.Size = new System.Drawing.Size(52, 25);
             this.txtPrinterVID.TabIndex = 0;
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label9.Location = new System.Drawing.Point(229, 269);
+            this.label9.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label9.Location = new System.Drawing.Point(205, 269);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(44, 19);
+            this.label9.Size = new System.Drawing.Size(40, 17);
             this.label9.TabIndex = 0;
             this.label9.Text = "PID：";
             // 
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label25.Location = new System.Drawing.Point(87, 269);
+            this.label25.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label25.Location = new System.Drawing.Point(90, 269);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(45, 19);
+            this.label25.Size = new System.Drawing.Size(41, 17);
             this.label25.TabIndex = 0;
             this.label25.Text = "VID：";
             // 
@@ -820,6 +828,7 @@
             this.txtCopies.Name = "txtCopies";
             this.txtCopies.Size = new System.Drawing.Size(72, 25);
             this.txtCopies.TabIndex = 0;
+            this.txtCopies.Text = "1";
             // 
             // cmbPaperWidth
             // 
@@ -940,6 +949,9 @@
             // 
             // groupBox8
             // 
+            this.groupBox8.Controls.Add(this.btnTestClientShow);
+            this.groupBox8.Controls.Add(this.txtClientEndpoint);
+            this.groupBox8.Controls.Add(this.label38);
             this.groupBox8.Controls.Add(this.txtClientPID);
             this.groupBox8.Controls.Add(this.txtClientVID);
             this.groupBox8.Controls.Add(this.label6);
@@ -953,44 +965,44 @@
             this.groupBox8.Controls.Add(this.ckbClientShow);
             this.groupBox8.Controls.Add(this.cmbClientShowPort);
             this.groupBox8.Controls.Add(this.label24);
-            this.groupBox8.Location = new System.Drawing.Point(7, 162);
+            this.groupBox8.Location = new System.Drawing.Point(7, 180);
             this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(518, 187);
+            this.groupBox8.Size = new System.Drawing.Size(518, 208);
             this.groupBox8.TabIndex = 5;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "客显设置";
             // 
             // txtClientPID
             // 
-            this.txtClientPID.Location = new System.Drawing.Point(430, 97);
+            this.txtClientPID.Location = new System.Drawing.Point(289, 116);
             this.txtClientPID.Name = "txtClientPID";
-            this.txtClientPID.Size = new System.Drawing.Size(72, 25);
+            this.txtClientPID.Size = new System.Drawing.Size(52, 25);
             this.txtClientPID.TabIndex = 0;
             // 
             // txtClientVID
             // 
-            this.txtClientVID.Location = new System.Drawing.Point(295, 97);
+            this.txtClientVID.Location = new System.Drawing.Point(178, 116);
             this.txtClientVID.Name = "txtClientVID";
-            this.txtClientVID.Size = new System.Drawing.Size(72, 25);
+            this.txtClientVID.Size = new System.Drawing.Size(52, 25);
             this.txtClientVID.TabIndex = 0;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label6.Location = new System.Drawing.Point(383, 100);
+            this.label6.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label6.Location = new System.Drawing.Point(245, 121);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(44, 19);
+            this.label6.Size = new System.Drawing.Size(40, 17);
             this.label6.TabIndex = 0;
             this.label6.Text = "PID：";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label7.Location = new System.Drawing.Point(246, 100);
+            this.label7.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label7.Location = new System.Drawing.Point(133, 121);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(45, 19);
+            this.label7.Size = new System.Drawing.Size(41, 17);
             this.label7.TabIndex = 0;
             this.label7.Text = "VID：";
             // 
@@ -998,7 +1010,7 @@
             // 
             this.rbUsbClientShow.AutoSize = true;
             this.rbUsbClientShow.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.rbUsbClientShow.Location = new System.Drawing.Point(251, 62);
+            this.rbUsbClientShow.Location = new System.Drawing.Point(38, 117);
             this.rbUsbClientShow.Name = "rbUsbClientShow";
             this.rbUsbClientShow.Size = new System.Drawing.Size(79, 23);
             this.rbUsbClientShow.TabIndex = 0;
@@ -1011,7 +1023,7 @@
             // 
             this.rbClientShow.AutoSize = true;
             this.rbClientShow.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.rbClientShow.Location = new System.Drawing.Point(57, 62);
+            this.rbClientShow.Location = new System.Drawing.Point(38, 71);
             this.rbClientShow.Name = "rbClientShow";
             this.rbClientShow.Size = new System.Drawing.Size(86, 23);
             this.rbClientShow.TabIndex = 0;
@@ -1024,7 +1036,7 @@
             // 
             this.label32.AutoSize = true;
             this.label32.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label32.Location = new System.Drawing.Point(254, 142);
+            this.label32.Location = new System.Drawing.Point(292, 166);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(48, 19);
             this.label32.TabIndex = 0;
@@ -1034,7 +1046,7 @@
             // 
             this.label27.AutoSize = true;
             this.label27.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label27.Location = new System.Drawing.Point(21, 142);
+            this.label27.Location = new System.Drawing.Point(34, 166);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(74, 19);
             this.label27.TabIndex = 0;
@@ -1045,7 +1057,7 @@
             this.cmbClientShowType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbClientShowType.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.cmbClientShowType.FormattingEnabled = true;
-            this.cmbClientShowType.Location = new System.Drawing.Point(308, 139);
+            this.cmbClientShowType.Location = new System.Drawing.Point(348, 163);
             this.cmbClientShowType.Name = "cmbClientShowType";
             this.cmbClientShowType.Size = new System.Drawing.Size(87, 25);
             this.cmbClientShowType.TabIndex = 0;
@@ -1055,7 +1067,7 @@
             this.cmbClientShowModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbClientShowModel.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.cmbClientShowModel.FormattingEnabled = true;
-            this.cmbClientShowModel.Location = new System.Drawing.Point(104, 139);
+            this.cmbClientShowModel.Location = new System.Drawing.Point(117, 163);
             this.cmbClientShowModel.Name = "cmbClientShowModel";
             this.cmbClientShowModel.Size = new System.Drawing.Size(126, 25);
             this.cmbClientShowModel.TabIndex = 0;
@@ -1077,7 +1089,7 @@
             this.cmbClientShowPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbClientShowPort.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.cmbClientShowPort.FormattingEnabled = true;
-            this.cmbClientShowPort.Location = new System.Drawing.Point(104, 97);
+            this.cmbClientShowPort.Location = new System.Drawing.Point(187, 70);
             this.cmbClientShowPort.Name = "cmbClientShowPort";
             this.cmbClientShowPort.Size = new System.Drawing.Size(84, 25);
             this.cmbClientShowPort.TabIndex = 0;
@@ -1086,7 +1098,7 @@
             // 
             this.label24.AutoSize = true;
             this.label24.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label24.Location = new System.Drawing.Point(47, 100);
+            this.label24.Location = new System.Drawing.Point(132, 73);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(48, 19);
             this.label24.TabIndex = 1;
@@ -1094,6 +1106,9 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.btnTestCashBox);
+            this.groupBox7.Controls.Add(this.txtCashEndpoint);
+            this.groupBox7.Controls.Add(this.label37);
             this.groupBox7.Controls.Add(this.cmbTelCallModel);
             this.groupBox7.Controls.Add(this.ckbTelCall);
             this.groupBox7.Controls.Add(this.ckbCashDrawer);
@@ -1107,7 +1122,7 @@
             this.groupBox7.Controls.Add(this.label23);
             this.groupBox7.Location = new System.Drawing.Point(7, 10);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(518, 146);
+            this.groupBox7.Size = new System.Drawing.Size(518, 164);
             this.groupBox7.TabIndex = 4;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "钱箱/来电宝设置";
@@ -1120,7 +1135,7 @@
             this.cmbTelCallModel.Items.AddRange(new object[] {
             "纽曼NM-LD-U新版",
             "纽曼NM-LD-U"});
-            this.cmbTelCallModel.Location = new System.Drawing.Point(380, 29);
+            this.cmbTelCallModel.Location = new System.Drawing.Point(380, 25);
             this.cmbTelCallModel.Name = "cmbTelCallModel";
             this.cmbTelCallModel.Size = new System.Drawing.Size(121, 27);
             this.cmbTelCallModel.TabIndex = 2;
@@ -1130,7 +1145,7 @@
             this.ckbTelCall.AutoSize = true;
             this.ckbTelCall.Font = new System.Drawing.Font("微软雅黑", 9.75F);
             this.ckbTelCall.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.ckbTelCall.Location = new System.Drawing.Point(311, 31);
+            this.ckbTelCall.Location = new System.Drawing.Point(309, 27);
             this.ckbTelCall.Name = "ckbTelCall";
             this.ckbTelCall.Size = new System.Drawing.Size(67, 23);
             this.ckbTelCall.TabIndex = 2;
@@ -1152,23 +1167,23 @@
             // 
             // txtCashPID
             // 
-            this.txtCashPID.Location = new System.Drawing.Point(429, 99);
+            this.txtCashPID.Location = new System.Drawing.Point(289, 116);
             this.txtCashPID.Name = "txtCashPID";
-            this.txtCashPID.Size = new System.Drawing.Size(72, 25);
+            this.txtCashPID.Size = new System.Drawing.Size(52, 25);
             this.txtCashPID.TabIndex = 0;
             // 
             // txtCashVID
             // 
-            this.txtCashVID.Location = new System.Drawing.Point(295, 99);
+            this.txtCashVID.Location = new System.Drawing.Point(178, 116);
             this.txtCashVID.Name = "txtCashVID";
-            this.txtCashVID.Size = new System.Drawing.Size(72, 25);
+            this.txtCashVID.Size = new System.Drawing.Size(52, 25);
             this.txtCashVID.TabIndex = 0;
             // 
             // rbUsbCashDrawer
             // 
             this.rbUsbCashDrawer.AutoSize = true;
             this.rbUsbCashDrawer.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.rbUsbCashDrawer.Location = new System.Drawing.Point(251, 64);
+            this.rbUsbCashDrawer.Location = new System.Drawing.Point(38, 116);
             this.rbUsbCashDrawer.Name = "rbUsbCashDrawer";
             this.rbUsbCashDrawer.Size = new System.Drawing.Size(79, 23);
             this.rbUsbCashDrawer.TabIndex = 0;
@@ -1181,7 +1196,7 @@
             // 
             this.rbCashDrawer.AutoSize = true;
             this.rbCashDrawer.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.rbCashDrawer.Location = new System.Drawing.Point(57, 64);
+            this.rbCashDrawer.Location = new System.Drawing.Point(38, 73);
             this.rbCashDrawer.Name = "rbCashDrawer";
             this.rbCashDrawer.Size = new System.Drawing.Size(72, 23);
             this.rbCashDrawer.TabIndex = 0;
@@ -1193,20 +1208,20 @@
             // label28
             // 
             this.label28.AutoSize = true;
-            this.label28.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label28.Location = new System.Drawing.Point(383, 102);
+            this.label28.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label28.Location = new System.Drawing.Point(245, 120);
             this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(44, 19);
+            this.label28.Size = new System.Drawing.Size(40, 17);
             this.label28.TabIndex = 0;
             this.label28.Text = "PID：";
             // 
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label26.Location = new System.Drawing.Point(248, 102);
+            this.label26.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label26.Location = new System.Drawing.Point(133, 120);
             this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(45, 19);
+            this.label26.Size = new System.Drawing.Size(41, 17);
             this.label26.TabIndex = 0;
             this.label26.Text = "VID：";
             // 
@@ -1215,7 +1230,7 @@
             this.cmbCashDrawerPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbCashDrawerPort.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.cmbCashDrawerPort.FormattingEnabled = true;
-            this.cmbCashDrawerPort.Location = new System.Drawing.Point(104, 99);
+            this.cmbCashDrawerPort.Location = new System.Drawing.Point(187, 72);
             this.cmbCashDrawerPort.Name = "cmbCashDrawerPort";
             this.cmbCashDrawerPort.Size = new System.Drawing.Size(84, 25);
             this.cmbCashDrawerPort.TabIndex = 0;
@@ -1224,7 +1239,7 @@
             // 
             this.label23.AutoSize = true;
             this.label23.Font = new System.Drawing.Font("微软雅黑", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label23.Location = new System.Drawing.Point(54, 102);
+            this.label23.Location = new System.Drawing.Point(132, 74);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(48, 19);
             this.label23.TabIndex = 1;
@@ -1445,6 +1460,77 @@
             this.btnSave.UseVisualStyleBackColor = false;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
+            // txtCashEndpoint
+            // 
+            this.txtCashEndpoint.Location = new System.Drawing.Point(437, 116);
+            this.txtCashEndpoint.Name = "txtCashEndpoint";
+            this.txtCashEndpoint.Size = new System.Drawing.Size(45, 25);
+            this.txtCashEndpoint.TabIndex = 4;
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label37.Location = new System.Drawing.Point(361, 120);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(72, 17);
+            this.label37.TabIndex = 3;
+            this.label37.Text = "Endpoint：";
+            // 
+            // txtClientEndpoint
+            // 
+            this.txtClientEndpoint.Location = new System.Drawing.Point(437, 116);
+            this.txtClientEndpoint.Name = "txtClientEndpoint";
+            this.txtClientEndpoint.Size = new System.Drawing.Size(45, 25);
+            this.txtClientEndpoint.TabIndex = 6;
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label38.Location = new System.Drawing.Point(361, 121);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(72, 17);
+            this.label38.TabIndex = 5;
+            this.label38.Text = "Endpoint：";
+            // 
+            // btnTestCashBox
+            // 
+            this.btnTestCashBox.BackColor = System.Drawing.Color.DarkSlateGray;
+            this.btnTestCashBox.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnTestCashBox.ForeColor = System.Drawing.Color.White;
+            this.btnTestCashBox.Location = new System.Drawing.Point(136, 27);
+            this.btnTestCashBox.Name = "btnTestCashBox";
+            this.btnTestCashBox.Size = new System.Drawing.Size(75, 28);
+            this.btnTestCashBox.TabIndex = 5;
+            this.btnTestCashBox.Text = "测试钱箱";
+            this.btnTestCashBox.UseVisualStyleBackColor = false;
+            this.btnTestCashBox.Click += new System.EventHandler(this.btnTestCashBox_Click);
+            // 
+            // btnTestClientShow
+            // 
+            this.btnTestClientShow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.btnTestClientShow.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnTestClientShow.ForeColor = System.Drawing.Color.White;
+            this.btnTestClientShow.Location = new System.Drawing.Point(136, 25);
+            this.btnTestClientShow.Name = "btnTestClientShow";
+            this.btnTestClientShow.Size = new System.Drawing.Size(75, 28);
+            this.btnTestClientShow.TabIndex = 5;
+            this.btnTestClientShow.Text = "测试客显";
+            this.btnTestClientShow.UseVisualStyleBackColor = false;
+            this.btnTestClientShow.Click += new System.EventHandler(this.btnTestClientShow_Click);
+            // 
+            // ckbTakeoutPrint
+            // 
+            this.ckbTakeoutPrint.AutoSize = true;
+            this.ckbTakeoutPrint.Font = new System.Drawing.Font("微软雅黑", 9.75F);
+            this.ckbTakeoutPrint.Location = new System.Drawing.Point(358, 34);
+            this.ckbTakeoutPrint.Name = "ckbTakeoutPrint";
+            this.ckbTakeoutPrint.Size = new System.Drawing.Size(106, 23);
+            this.ckbTakeoutPrint.TabIndex = 5;
+            this.ckbTakeoutPrint.Text = "外带打印小票";
+            this.ckbTakeoutPrint.UseVisualStyleBackColor = true;
+            // 
             // FormConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
@@ -1611,5 +1697,12 @@
         private System.Windows.Forms.ComboBox cmbPaperName;
         private System.Windows.Forms.TextBox txtEndpointId;
         private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.TextBox txtCashEndpoint;
+        private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.TextBox txtClientEndpoint;
+        private System.Windows.Forms.Label label38;
+        private Top4ever.CustomControl.CrystalButton btnTestClientShow;
+        private Top4ever.CustomControl.CrystalButton btnTestCashBox;
+        private System.Windows.Forms.CheckBox ckbTakeoutPrint;
     }
 }
