@@ -38,9 +38,9 @@ namespace VechsoftPos.Membership
                 keyForm.ShowDialog();
                 _inputPassword = keyForm.KeypadValue;
                 string cardNo = txtVIPCardNo.Text.Trim();
-                VIPCard card = new VIPCard();
+                VIPCard card;
                 int result = VIPCardService.GetInstance().SearchVIPCard(cardNo, _inputPassword, out card);
-                if (result == 1)
+                if (card != null && result == 1)
                 {
                     if (card.Status == 0)
                     {
@@ -48,9 +48,9 @@ namespace VechsoftPos.Membership
                         return;
                     }
                     txtName.Text = card.Name;
-                    txtBalance.Text = card.Balance.ToString("f");
+                    txtBalance.Text = card.Balance.ToString("f2");
                     txtIntegral.Text = card.Integral.ToString();
-                    txtDiscount.Text = Convert.ToString((1M - card.DiscountRate) * 10M) + "折";
+                    txtDiscount.Text = ((1M - card.DiscountRate) * 10M).ToString("f2") + "折";
                     txtTelephone.Text = card.Telephone;
                     txtAddress.Text = card.Address;
                     if (card.Status == 1)
@@ -79,17 +79,35 @@ namespace VechsoftPos.Membership
                 }
                 else if (result == 2)
                 {
+                    txtVIPCardNo.Text = string.Empty;
+                    txtName.Text = string.Empty;
+                    txtBalance.Text = string.Empty;
+                    txtIntegral.Text = string.Empty;
+                    txtDiscount.Text = string.Empty;
+                    txtTelephone.Text = string.Empty;
+                    txtAddress.Text = string.Empty;
+                    txtCardStatus.Text = string.Empty;
+                    txtOpenCardTime.Text = string.Empty;
+                    txtLastConsumeTime.Text = string.Empty;
                     btnModifyPassword.Enabled = false;
                     btnModifyPassword.BackColor = ConstantValuePool.DisabledColor;
                     MessageBox.Show("您输入的会员卡号或者密码错误！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
                 }
                 else
                 {
+                    txtVIPCardNo.Text = string.Empty;
+                    txtName.Text = string.Empty;
+                    txtBalance.Text = string.Empty;
+                    txtIntegral.Text = string.Empty;
+                    txtDiscount.Text = string.Empty;
+                    txtTelephone.Text = string.Empty;
+                    txtAddress.Text = string.Empty;
+                    txtCardStatus.Text = string.Empty;
+                    txtOpenCardTime.Text = string.Empty;
+                    txtLastConsumeTime.Text = string.Empty;
                     btnModifyPassword.Enabled = false;
                     btnModifyPassword.BackColor = ConstantValuePool.DisabledColor;
                     MessageBox.Show("服务器出现错误，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
                 }
             }
         }

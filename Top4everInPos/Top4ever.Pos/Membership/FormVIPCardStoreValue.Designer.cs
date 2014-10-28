@@ -80,6 +80,8 @@
             this.txtCardNo.Name = "txtCardNo";
             this.txtCardNo.Size = new System.Drawing.Size(181, 29);
             this.txtCardNo.TabIndex = 0;
+            this.txtCardNo.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtCardNo_KeyDown);
+            this.txtCardNo.MouseDown += new System.Windows.Forms.MouseEventHandler(this.txtCardNo_MouseDown);
             // 
             // txtStoreAmout
             // 
@@ -88,6 +90,7 @@
             this.txtStoreAmout.Name = "txtStoreAmout";
             this.txtStoreAmout.Size = new System.Drawing.Size(181, 29);
             this.txtStoreAmout.TabIndex = 1;
+            this.txtStoreAmout.MouseDown += new System.Windows.Forms.MouseEventHandler(this.txtStoreAmout_MouseDown);
             // 
             // label1
             // 

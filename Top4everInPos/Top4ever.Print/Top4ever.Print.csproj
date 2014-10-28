@@ -59,6 +59,7 @@
     <Compile Include="Entity\KitchenPrintData.cs" />
     <Compile Include="Entity\PayingGoodsOrder.cs" />
     <Compile Include="Entity\PrintData.cs" />
+    <Compile Include="Entity\PrintMemberCard.cs" />
     <Compile Include="Entity\PrintTaskType.cs" />
     <Compile Include="InstructionOrderPrint.cs" />
     <Compile Include="InstructionOrderPrintSetting.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="InstructionPrintConfig\PrintLineCollection.cs" />
     <Compile Include="PrintHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DriverCardPrint.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Top4ever.Common\Top4ever.Common.csproj">

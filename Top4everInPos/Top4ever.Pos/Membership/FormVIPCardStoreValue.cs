@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 using Top4ever.ClientService;
 using Top4ever.Common;
 using Top4ever.CustomControl;
+using Top4ever.Domain.MembershipCard;
 using Top4ever.Domain.OrderRelated;
 using Top4ever.Entity;
 using Top4ever.Domain;
 using Top4ever.Domain.Transfer;
+using Top4ever.Entity.Enum;
+using Top4ever.Print;
+using Top4ever.Print.Entity;
 
 namespace VechsoftPos.Membership
 {
@@ -20,6 +21,8 @@ namespace VechsoftPos.Membership
     {
         private PayoffWay _curPayoffWay;
         private CrystalButton _curButton;
+        private string _cardPassword;
+        private TextBox m_ActiveTextBox;
 
         public FormVIPCardStoreValue()
         {
@@ -28,6 +31,7 @@ namespace VechsoftPos.Membership
 
         private void FormVIPCardStoreValue_Load(object sender, EventArgs e)
         {
+            m_ActiveTextBox = this.txtCardNo;
             BindPayoffWay();
         }
 
@@ -95,39 +99,41 @@ namespace VechsoftPos.Membership
         private void btnNumeric_Click(object sender, EventArgs e)
         {
             Button btn = sender as Button;
-            if (this.txtStoreAmout.Text.Trim() == ".")
+            if (btn == null) return;
+            if (m_ActiveTextBox.Text.Trim() == ".")
             {
-                this.txtStoreAmout.Text = btn.Text;
+                m_ActiveTextBox.Text = btn.Text;
             }
-            else if (this.txtStoreAmout.Text.Trim() == "0" && btn.Text == ".")
+            else if (m_ActiveTextBox.Text.Trim() == "0" && btn.Text == ".")
             {
-                this.txtStoreAmout.Text += btn.Text;
+                m_ActiveTextBox.Text += btn.Text;
             }
-            else if (this.txtStoreAmout.Text.Trim() == "0" && btn.Text != ".")
+            else if (m_ActiveTextBox.Text.Trim() == "0" && btn.Text != ".")
             {
-                this.txtStoreAmout.Text = btn.Text;
+                m_ActiveTextBox.Text = btn.Text;
             }
             else
             {
-                if (this.txtStoreAmout.Text.IndexOf('.') > 0 && btn.Text == ".")
+                if (m_ActiveTextBox.Text.IndexOf('.') > 0 && btn.Text == ".")
                 {
                     //do nothing
                 }
                 else
                 {
-                    this.txtStoreAmout.Text += btn.Text;
+                    m_ActiveTextBox.Text += btn.Text;
                 }
             }
-            this.txtStoreAmout.Focus();
-            this.txtStoreAmout.Select(this.txtStoreAmout.Text.Length, 0);//光标移动到文本的末尾
+            m_ActiveTextBox.Focus();
+            m_ActiveTextBox.Select(m_ActiveTextBox.Text.Length, 0);//光标移动到文本的末尾
         }
 
         private void btnBackSpace_Click(object sender, EventArgs e)
         {
-            string text = this.txtStoreAmout.Text;
-            if (text.Length > 0)
+            string inputString = m_ActiveTextBox.Text;
+            if (!string.IsNullOrEmpty(inputString))
             {
-                this.txtStoreAmout.Text = text.Substring(0, text.Length - 1);
+                m_ActiveTextBox.Select();
+                SendKeys.Send("{BACKSPACE}");
             }
         }
 
@@ -171,35 +177,86 @@ namespace VechsoftPos.Membership
                 MessageBox.Show("请输入您的会员卡号！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            if (string.IsNullOrEmpty(_cardPassword))
+            {
+                MessageBox.Show("请重新输入您的会员卡号！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             if (string.IsNullOrEmpty(txtStoreAmout.Text.Trim()))
             {
                 MessageBox.Show("请输入充值金额！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            decimal storeAmout = 0;
-            if (!decimal.TryParse(txtStoreAmout.Text.Trim(), out storeAmout))
+            decimal storeAmount;
+            if (!decimal.TryParse(txtStoreAmout.Text.Trim(), out storeAmount))
             {
                 MessageBox.Show("请输入正确的充值金额格式！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (_curPayoffWay == null)
             {
-                MessageBox.Show("请输入充值付款方式！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("请选择充值付款方式！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            VIPCardAddMoney cardAddMoney = new VIPCardAddMoney();
-            cardAddMoney.CardNo = cardNo;
-            cardAddMoney.StoreMoney = storeAmout;
-            cardAddMoney.EmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
-            cardAddMoney.DeviceNo = ConstantValuePool.BizSettingConfig.DeviceNo;
-            cardAddMoney.PayoffID = _curPayoffWay.PayoffID;
-            cardAddMoney.PayoffName = _curPayoffWay.PayoffName;
-            string tradePayNo = string.Empty;
+            VIPCard card;
+            int resultCode = VIPCardService.GetInstance().SearchVIPCard(cardNo, _cardPassword, out card);
+            if (card == null || resultCode != 1)
+            {
+                txtCardNo.Text = string.Empty;
+                MessageBox.Show("您输入的会员卡号或者密码错误！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            VIPCardAddMoney cardAddMoney = new VIPCardAddMoney
+            {
+                CardNo = cardNo, 
+                CardPassword = _cardPassword, 
+                StoreMoney = storeAmount, 
+                EmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo, 
+                DeviceNo = ConstantValuePool.BizSettingConfig.DeviceNo, 
+                PayoffID = _curPayoffWay.PayoffID, 
+                PayoffName = _curPayoffWay.PayoffName
+            };
+            string tradePayNo;
             int result = VIPCardTradeService.GetInstance().AddVIPCardStoredValue(cardAddMoney, out tradePayNo);
             if (result == 1)
             {
-                MessageBox.Show("会员充值成功！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close();
+                VIPCard card2;
+                int resultCode2 = VIPCardService.GetInstance().SearchVIPCard(cardNo, _cardPassword, out card2);
+                if (card2 != null && resultCode2 == 1)
+                {
+                    PrintMemberCard printCard = new PrintMemberCard
+                    {
+                        MemberVoucher = "会员充值凭单",
+                        CardNo = cardNo,
+                        ShopName = ConstantValuePool.CurrentShop.ShopName,
+                        TradeType = "充值",
+                        TranSequence = tradePayNo,
+                        TradeTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
+                        PreTradeAmount = card.Balance.ToString("f2"),
+                        PostTradeAmount = card2.Balance.ToString("f2"),
+                        Payment = _curPayoffWay.PayoffName,
+                        StoreValue = storeAmount.ToString("f2"),
+                        GivenAmount = (card2.Balance - card.Balance - storeAmount).ToString("f2"),
+                        PresentExp = (card2.Integral - card.Integral).ToString(),
+                        AvailablePoints = card2.Integral.ToString(),
+                        Operator = ConstantValuePool.CurrentEmployee.EmployeeNo,
+                        Remark = string.Empty
+                    };
+                    int copies = ConstantValuePool.BizSettingConfig.printConfig.OrderCopies;
+                    string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
+                    if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
+                    {
+                        string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                        string paperName = ConstantValuePool.BizSettingConfig.printConfig.PaperName;
+                        DriverCardPrint printer = DriverCardPrint.GetInstance(printerName, paperName, paperWidth);
+                        for (int i = 0; i < copies; i++)
+                        {
+                            printer.DoPrintCardStore(printCard);
+                        }
+                    }
+                    MessageBox.Show("会员充值成功！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Close();
+                }
             }
             else if (result == 2)
             {
@@ -225,6 +282,11 @@ namespace VechsoftPos.Membership
             {
                 MessageBox.Show("该卡所属会员组没有储值功能！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            else if (result == 99)
+            {
+                txtCardNo.Text = string.Empty;
+                MessageBox.Show("会员卡号或者密码错误！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             else
             {
                 MessageBox.Show("服务器出现错误，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -234,6 +296,31 @@ namespace VechsoftPos.Membership
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void txtCardNo_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyValue == 13)
+            {
+                Feature.FormNumericKeypad keyForm = new Feature.FormNumericKeypad(false);
+                keyForm.DisplayText = "请输入密码";
+                keyForm.IsPassword = true;
+                keyForm.ShowDialog();
+                if (!string.IsNullOrEmpty(keyForm.KeypadValue))
+                {
+                    _cardPassword = keyForm.KeypadValue;
+                }
+            }
+        }
+
+        private void txtCardNo_MouseDown(object sender, MouseEventArgs e)
+        {
+            m_ActiveTextBox = this.ActiveControl as TextBox;
+        }
+
+        private void txtStoreAmout_MouseDown(object sender, MouseEventArgs e)
+        {
+            m_ActiveTextBox = this.ActiveControl as TextBox;
         }
     }
 }

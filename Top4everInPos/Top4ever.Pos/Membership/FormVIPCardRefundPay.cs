@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Top4ever.ClientService;
 using Top4ever.LocalService;
@@ -50,10 +45,9 @@ namespace VechsoftPos.Membership
             bool hasChecked = false;
             foreach (DataGridViewRow row in this.dataGirdViewExt1.Rows)
             {
-                bool IsCheck = Convert.ToBoolean(row.Cells["colCheck"].Value);
-                if (IsCheck)
+                hasChecked = Convert.ToBoolean(row.Cells["colCheck"].Value);
+                if (hasChecked)
                 {
-                    hasChecked = true;
                     break;
                 }
             }
@@ -66,22 +60,33 @@ namespace VechsoftPos.Membership
             CardRefundPayService refundPayService = new CardRefundPayService();
             foreach (DataGridViewRow row in this.dataGirdViewExt1.Rows)
             {
-                bool IsCheck = Convert.ToBoolean(row.Cells["colCheck"].Value);
-                if (IsCheck)
+                bool isCheck = Convert.ToBoolean(row.Cells["colCheck"].Value);
+                if (isCheck)
                 {
                     string cardNo = row.Cells["colCardNo"].Value.ToString();
                     string tradePayNo = row.Cells["colTradePayNo"].Value.ToString();
-                    int returnValue = VIPCardTradeService.GetInstance().RefundVIPCardPayment(cardNo, tradePayNo);
+                    string cardPassword;
+                    //获取卡密码
+                    Feature.FormNumericKeypad keyForm = new Feature.FormNumericKeypad(false);
+                    keyForm.DisplayText = string.Format("请输入卡号'{0}'的密码", cardNo);
+                    keyForm.IsPassword = true;
+                    keyForm.ShowDialog();
+                    if (!string.IsNullOrEmpty(keyForm.KeypadValue))
+                    {
+                        cardPassword = keyForm.KeypadValue;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                    int returnValue = VIPCardTradeService.GetInstance().RefundVipCardPayment(cardNo, cardPassword, tradePayNo);
                     if (returnValue == 0)
                     {
                         result = false;
                         break;
                     }
-                    else
-                    {
-                        int storeValueId = int.Parse(row.Cells["colStoreValueID"].Value.ToString());
-                        refundPayService.UpdateFixedPayInfo(storeValueId, true);
-                    }
+                    int storeValueId = int.Parse(row.Cells["colStoreValueID"].Value.ToString());
+                    refundPayService.UpdateFixedPayInfo(storeValueId, true);
                 }
             }
             if (result)

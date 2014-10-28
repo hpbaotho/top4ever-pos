@@ -132,6 +132,7 @@ namespace VechsoftPos
                     txtEndpointId.Text = ConstantValuePool.BizSettingConfig.printConfig.EndpointID;
                 }
                 txtCopies.Text = ConstantValuePool.BizSettingConfig.printConfig.Copies.ToString();
+                txtOrderCopies.Text = ConstantValuePool.BizSettingConfig.printConfig.OrderCopies.ToString();
                 cmbPaperWidth.Text = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
             }
             else
@@ -148,7 +149,9 @@ namespace VechsoftPos
                 txtPrinterPID.Enabled = false;
                 txtEndpointId.Enabled = false;
                 txtCopies.Text = ConstantValuePool.BizSettingConfig.printConfig.Copies.ToString();
+                txtOrderCopies.Text = ConstantValuePool.BizSettingConfig.printConfig.OrderCopies.ToString();
                 txtCopies.Enabled = false;
+                txtOrderCopies.Enabled = false;
                 cmbPaperWidth.Enabled = false;
             }
             if (ConstantValuePool.BizSettingConfig.cashBoxConfig.Enabled)
@@ -377,134 +380,135 @@ namespace VechsoftPos
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (ckbPrinter.Checked && rbDriverPrinter.Checked)
-            {
-                if (string.IsNullOrEmpty(cmbPaperName.Text))
-                {
-                    MessageBox.Show("打印机纸张名称不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-            }
             //布局
             List<BizControl> bizControls = new List<BizControl>();
             BizControl control = new BizControl
             {
                 Name = "Group",
-                RowsCount = int.Parse(txtGoodsGroupRows.Text),
-                ColumnsCount = int.Parse(txtGoodsGroupColumns.Text)
+                RowsCount = int.Parse(txtGoodsGroupRows.Text.Trim()),
+                ColumnsCount = int.Parse(txtGoodsGroupColumns.Text.Trim())
             };
             bizControls.Add(control);
             control = new BizControl
             {
                 Name = "Item",
-                RowsCount = int.Parse(txtGoodsRows.Text),
-                ColumnsCount = int.Parse(txtGoodsColumns.Text)
+                RowsCount = int.Parse(txtGoodsRows.Text.Trim()),
+                ColumnsCount = int.Parse(txtGoodsColumns.Text.Trim())
             };
             bizControls.Add(control);
             control = new BizControl
             {
                 Name = "Payoff",
-                RowsCount = int.Parse(txtPayoffWayRows.Text),
-                ColumnsCount = int.Parse(txtPayoffWayColumns.Text)
+                RowsCount = int.Parse(txtPayoffWayRows.Text.Trim()),
+                ColumnsCount = int.Parse(txtPayoffWayColumns.Text.Trim())
             };
             bizControls.Add(control);
             //打印
             PrintConfig printConfig = new PrintConfig {Enabled = ckbPrinter.Checked};
-            if (rbDriverPrinter.Checked)
+            if (ckbPrinter.Checked)
             {
-                printConfig.PrinterPort = PortType.DRIVER;
-                printConfig.Name = cmbPrinter.Text;
-                printConfig.PaperName = cmbPaperName.Text;
-                if (string.IsNullOrEmpty(printConfig.Name))
+                if (rbDriverPrinter.Checked)
                 {
-                    MessageBox.Show("打印机名称不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    printConfig.PrinterPort = PortType.DRIVER;
+                    printConfig.Name = cmbPrinter.Text;
+                    printConfig.PaperName = cmbPaperName.Text;
+                    if (string.IsNullOrEmpty(printConfig.Name))
+                    {
+                        MessageBox.Show("打印机名称不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    if (string.IsNullOrEmpty(printConfig.PaperName))
+                    {
+                        MessageBox.Show("纸张名称不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                 }
-                if (string.IsNullOrEmpty(printConfig.PaperName))
+                if (rbPrinterPort.Checked)
                 {
-                    MessageBox.Show("纸张名称不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    printConfig.PrinterPort = PortType.COM;
+                    printConfig.Name = cmbPrinterPort.Text;
+                    if (string.IsNullOrEmpty(printConfig.Name))
+                    {
+                        MessageBox.Show("端口号不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                 }
+                if (rbNetPrinter.Checked)
+                {
+                    printConfig.PrinterPort = PortType.ETHERNET;
+                    printConfig.Name = txtIPAddress.Text;
+                    if (string.IsNullOrEmpty(printConfig.Name))
+                    {
+                        MessageBox.Show("IP地址不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+                if (rbUsbPort.Checked)
+                {
+                    printConfig.PrinterPort = PortType.USB;
+                    printConfig.VID = txtPrinterVID.Text.Trim();
+                    printConfig.PID = txtPrinterPID.Text.Trim();
+                    printConfig.EndpointID = txtEndpointId.Text.Trim();
+                    if (string.IsNullOrEmpty(printConfig.VID))
+                    {
+                        MessageBox.Show("VID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    if (string.IsNullOrEmpty(printConfig.PID))
+                    {
+                        MessageBox.Show("PID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    if (string.IsNullOrEmpty(printConfig.EndpointID))
+                    {
+                        MessageBox.Show("EndpointID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+                int copies;
+                int.TryParse(txtCopies.Text.Trim(), out copies);
+                printConfig.Copies = copies > 0 ? copies : 1;
+                int orderCopies;
+                int.TryParse(txtOrderCopies.Text.Trim(), out orderCopies);
+                printConfig.OrderCopies = orderCopies > 0 ? orderCopies : 1;
+                printConfig.PaperWidth = cmbPaperWidth.Text.Trim();
             }
-            if (rbPrinterPort.Checked)
-            {
-                printConfig.PrinterPort = PortType.COM;
-                printConfig.Name = cmbPrinterPort.Text;
-                if (string.IsNullOrEmpty(printConfig.Name))
-                {
-                    MessageBox.Show("端口号不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-            }
-            if (rbNetPrinter.Checked)
-            {
-                printConfig.PrinterPort = PortType.ETHERNET;
-                printConfig.Name = txtIPAddress.Text;
-                if (string.IsNullOrEmpty(printConfig.Name))
-                {
-                    MessageBox.Show("IP地址不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-            }
-            if (rbUsbPort.Checked)
-            {
-                printConfig.PrinterPort = PortType.USB;
-                printConfig.VID = txtPrinterVID.Text.Trim();
-                printConfig.PID = txtPrinterPID.Text.Trim();
-                printConfig.EndpointID = txtEndpointId.Text.Trim();
-                if (string.IsNullOrEmpty(printConfig.VID))
-                {
-                    MessageBox.Show("VID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                if (string.IsNullOrEmpty(printConfig.PID))
-                {
-                    MessageBox.Show("PID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                if (string.IsNullOrEmpty(printConfig.EndpointID))
-                {
-                    MessageBox.Show("EndpointID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-            }
-            int copies;
-            int.TryParse(txtCopies.Text.Trim(), out copies);
-            printConfig.Copies = copies > 0 ? copies : 1;
-            printConfig.PaperWidth = cmbPaperWidth.Text.Trim();
             //钱箱
             CashBoxConfig cashboxConfig = new CashBoxConfig();
             cashboxConfig.Enabled = ckbCashDrawer.Checked;
-            if (rbCashDrawer.Checked)
+            if (ckbCashDrawer.Checked)
             {
-                cashboxConfig.IsUsbPort = false;
-                cashboxConfig.Port = cmbCashDrawerPort.Text;
-                if (string.IsNullOrEmpty(cashboxConfig.Port))
+                if (rbCashDrawer.Checked)
                 {
-                    MessageBox.Show("端口号不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    cashboxConfig.IsUsbPort = false;
+                    cashboxConfig.Port = cmbCashDrawerPort.Text;
+                    if (string.IsNullOrEmpty(cashboxConfig.Port))
+                    {
+                        MessageBox.Show("端口号不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                 }
-            }
-            if (rbUsbCashDrawer.Checked)
-            {
-                cashboxConfig.IsUsbPort = true;
-                cashboxConfig.VID = txtCashVID.Text.Trim();
-                cashboxConfig.PID = txtCashPID.Text.Trim();
-                cashboxConfig.EndpointID = txtCashEndpoint.Text.Trim();
-                if (string.IsNullOrEmpty(cashboxConfig.VID))
+                if (rbUsbCashDrawer.Checked)
                 {
-                    MessageBox.Show("VID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                if (string.IsNullOrEmpty(cashboxConfig.PID))
-                {
-                    MessageBox.Show("PID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                if (string.IsNullOrEmpty(cashboxConfig.EndpointID))
-                {
-                    MessageBox.Show("EndpointID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    cashboxConfig.IsUsbPort = true;
+                    cashboxConfig.VID = txtCashVID.Text.Trim();
+                    cashboxConfig.PID = txtCashPID.Text.Trim();
+                    cashboxConfig.EndpointID = txtCashEndpoint.Text.Trim();
+                    if (string.IsNullOrEmpty(cashboxConfig.VID))
+                    {
+                        MessageBox.Show("VID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    if (string.IsNullOrEmpty(cashboxConfig.PID))
+                    {
+                        MessageBox.Show("PID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    if (string.IsNullOrEmpty(cashboxConfig.EndpointID))
+                    {
+                        MessageBox.Show("EndpointID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                 }
             }
             //来电宝
@@ -548,58 +552,61 @@ namespace VechsoftPos
             }
             //客显
             ClientShowConfig clientShowConfig = new ClientShowConfig {Enabled = ckbClientShow.Checked};
-            if (rbClientShow.Checked)
+            if (ckbClientShow.Checked)
             {
-                clientShowConfig.IsUsbPort = false;
-                clientShowConfig.Port = cmbClientShowPort.Text;
-                if (string.IsNullOrEmpty(clientShowConfig.Port))
+                if (rbClientShow.Checked)
                 {
-                    MessageBox.Show("端口号不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    clientShowConfig.IsUsbPort = false;
+                    clientShowConfig.Port = cmbClientShowPort.Text;
+                    if (string.IsNullOrEmpty(clientShowConfig.Port))
+                    {
+                        MessageBox.Show("端口号不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                 }
+                if (rbUsbClientShow.Checked)
+                {
+                    clientShowConfig.IsUsbPort = true;
+                    clientShowConfig.VID = txtClientVID.Text.Trim();
+                    clientShowConfig.PID = txtClientPID.Text.Trim();
+                    clientShowConfig.EndpointID = txtClientEndpoint.Text.Trim();
+                    if (string.IsNullOrEmpty(clientShowConfig.VID))
+                    {
+                        MessageBox.Show("VID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    if (string.IsNullOrEmpty(clientShowConfig.PID))
+                    {
+                        MessageBox.Show("PID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    if (string.IsNullOrEmpty(clientShowConfig.EndpointID))
+                    {
+                        MessageBox.Show("EndpointID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+                string clientShowModel = cmbClientShowModel.Text;
+                ListItem item = cmbClientShowType.SelectedItem as ListItem;
+                if (item.Value == "SingleLine")
+                {
+                    if (clientShowModel == "VFD220E")
+                    {
+                        MessageBox.Show(string.Format("抱歉，程序暂时不支持'{0}'型号的{1}客显！", clientShowModel, "单排"));
+                        return;
+                    }
+                }
+                if (item.Value == "DualLine")
+                {
+                    if (clientShowModel == "CD7110Type" || clientShowModel == "Led8N")
+                    {
+                        MessageBox.Show(string.Format("抱歉，程序暂时不支持'{0}'型号的{1}客显！", clientShowModel, "双排"));
+                        return;
+                    }
+                }
+                clientShowConfig.ClientShowModel = clientShowModel;
+                clientShowConfig.ClientShowType = item.Value;
             }
-            if (rbUsbClientShow.Checked)
-            {
-                clientShowConfig.IsUsbPort = true;
-                clientShowConfig.VID = txtClientVID.Text.Trim();
-                clientShowConfig.PID = txtClientPID.Text.Trim();
-                clientShowConfig.EndpointID = txtClientEndpoint.Text.Trim();
-                if (string.IsNullOrEmpty(clientShowConfig.VID))
-                {
-                    MessageBox.Show("VID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                if (string.IsNullOrEmpty(clientShowConfig.PID))
-                {
-                    MessageBox.Show("PID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                if (string.IsNullOrEmpty(clientShowConfig.EndpointID))
-                {
-                    MessageBox.Show("EndpointID不能为空！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-            }
-            string clientShowModel = cmbClientShowModel.Text;
-            ListItem item = cmbClientShowType.SelectedItem as ListItem;
-            if (item.Value == "SingleLine")
-            {
-                if (clientShowModel == "VFD220E")
-                {
-                    MessageBox.Show(string.Format("抱歉，程序暂时不支持'{0}'型号的{1}客显！", clientShowModel, "单排"));
-                    return;
-                }
-            }
-            if (item.Value == "DualLine")
-            {
-                if (clientShowModel == "CD7110Type" || clientShowModel == "Led8N")
-                {
-                    MessageBox.Show(string.Format("抱歉，程序暂时不支持'{0}'型号的{1}客显！", clientShowModel, "双排"));
-                    return;
-                }
-            }
-            clientShowConfig.ClientShowModel = clientShowModel;
-            clientShowConfig.ClientShowType = item.Value;
             //组装
             AppSettingConfig appConfig = new AppSettingConfig();
             appConfig.IPAddress = txtIP.Text;
@@ -701,6 +708,7 @@ namespace VechsoftPos
                 txtPrinterPID.Enabled = true;
                 txtEndpointId.Enabled = true;
                 txtCopies.Enabled = true;
+                txtOrderCopies.Enabled = true;
                 cmbPaperWidth.Enabled = true;
             }
             else
@@ -716,6 +724,7 @@ namespace VechsoftPos
                 txtPrinterPID.Enabled = false;
                 txtEndpointId.Enabled = false;
                 txtCopies.Enabled = false;
+                txtOrderCopies.Enabled = false;
                 cmbPaperWidth.Enabled = false;
             }
         }
@@ -771,6 +780,7 @@ namespace VechsoftPos
                 txtClientPID.Enabled = true;
                 txtClientEndpoint.Enabled = true;
                 cmbClientShowModel.Enabled = true;
+                cmbClientShowType.Enabled = true;
             }
             else
             {
@@ -783,6 +793,7 @@ namespace VechsoftPos
                 txtClientPID.Enabled = false;
                 txtClientEndpoint.Enabled = false;
                 cmbClientShowModel.Enabled = false;
+                cmbClientShowType.Enabled = false;
             }
         }
 
@@ -1009,7 +1020,7 @@ namespace VechsoftPos
             }
             catch (Exception exception)
             {
-                MessageBox.Show("硬件打开失败，错误信息：" + exception, "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("钱箱测试打开失败，错误信息：" + exception, "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -1147,7 +1158,7 @@ namespace VechsoftPos
             }
             catch (Exception exception)
             {
-                MessageBox.Show("硬件打开失败，错误信息：" + exception, "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("客显测试打开失败，错误信息：" + exception, "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

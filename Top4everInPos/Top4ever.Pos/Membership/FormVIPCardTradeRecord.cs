@@ -19,6 +19,12 @@ namespace VechsoftPos.Membership
             InitializeComponent();
         }
 
+        private void FormVIPCardTradeRecord_Load(object sender, EventArgs e)
+        {
+            dtBeginDate.Value = DateTime.Today.AddMonths(-1);
+            dtEndDate.Value = DateTime.Today;
+        }
+
         private void btnSearch_Click(object sender, EventArgs e)
         {
             string cardNo = txtCardNo.Text.Trim();

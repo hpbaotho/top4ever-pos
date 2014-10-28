@@ -398,6 +398,13 @@ namespace VechsoftPos
                         {
                             btn.Text = goods.GoodsName;
                         }
+                        if (ConstantValuePool.BizSettingConfig.ShowBrevityCode)
+                        {
+                            if (!string.IsNullOrEmpty(goods.BrevityCode))
+                            {
+                                btn.Text += string.Format("\r\n [ {0} ]", goods.BrevityCode);
+                            }
+                        }
                         btn.Tag = goods;
                         btn.Enabled = IsItemButtonEnabled(goods.GoodsID, ItemsType.Goods);
                         foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
@@ -562,6 +569,13 @@ namespace VechsoftPos
                         else
                         {
                             btn.Text = details.DetailsName;
+                        }
+                        if (ConstantValuePool.BizSettingConfig.ShowBrevityCode)
+                        {
+                            if (!string.IsNullOrEmpty(details.BrevityCode))
+                            {
+                                btn.Text += string.Format("\r\n [ {0} ]", details.BrevityCode);
+                            }
                         }
                         btn.Tag = details;
                         foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
@@ -2670,6 +2684,16 @@ namespace VechsoftPos
             }
         }
 
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            ShowSearchGoods();
+        }
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            ShowSearchGoods();
+        }
+
         #region private method
 
         private bool SubmitSalesOrder()
@@ -3048,6 +3072,87 @@ namespace VechsoftPos
                 foreach (Control c in this.pnlSearch.Controls)
                 {
                     SetControlSize(c, widthRate, heightRate);
+                }
+            }
+        }
+
+        private void ShowSearchGoods()
+        {
+            string singleCode = this.txtSearch.Text.Trim();
+            if (singleCode.Length >= 2)
+            {
+                List<Goods> goodsList = new List<Goods>();
+                foreach (GoodsGroup goodsGroup in ConstantValuePool.GoodsGroupList)
+                {
+                    foreach (Goods goods in goodsGroup.GoodsList)
+                    {
+                        if (!string.IsNullOrEmpty(goods.BrevityCode) && goods.BrevityCode.IndexOf(singleCode, StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            goodsList.Add(goods);
+                        }
+                        else if (!string.IsNullOrEmpty(goods.PinyinCode) && goods.PinyinCode.IndexOf(singleCode, StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            goodsList.Add(goods);
+                        }
+                    }
+                }
+                //少于一页的数量才显示
+                if (goodsList.Count <= _itemPageSize)
+                {
+                    //禁止引发Layout事件
+                    this.pnlItem.SuspendLayout();
+                    this.SuspendLayout();
+
+                    int unDisplayNum = _itemPageSize - goodsList.Count;
+                    //隐藏没有内容的按钮
+                    for (int i = _btnItemList.Count - unDisplayNum; i < _btnItemList.Count; i++)
+                    {
+                        _btnItemList[i].Visible = false;
+                    }
+                    //显示有内容的按钮
+                    for (int i = 0; i < goodsList.Count; i++)
+                    {
+                        Goods goods = goodsList[i];
+                        CrystalButton btn = _btnItemList[i];
+                        btn.Visible = true;
+                        if (_showSilverCode)
+                        {
+                            btn.Text = goods.GoodsName + "\r\n ￥" + goods.SellPrice.ToString("f2");
+                        }
+                        else
+                        {
+                            btn.Text = goods.GoodsName;
+                        }
+                        if (ConstantValuePool.BizSettingConfig.ShowBrevityCode)
+                        {
+                            if (!string.IsNullOrEmpty(goods.BrevityCode))
+                            {
+                                btn.Text += string.Format("\r\n [ {0} ]", goods.BrevityCode);
+                            }
+                        }
+                        btn.Tag = goods;
+                        btn.Enabled = IsItemButtonEnabled(goods.GoodsID, ItemsType.Goods);
+                        foreach (ButtonStyle btnStyle in ConstantValuePool.ButtonStyleList)
+                        {
+                            if (goods.ButtonStyleID.Equals(btnStyle.ButtonStyleID))
+                            {
+                                float emSize = (float)btnStyle.FontSize;
+                                FontStyle style = FontStyle.Regular;
+                                btn.Font = new Font(btnStyle.FontName, emSize, style);
+                                btn.ForeColor = ColorConvert.RGB(btnStyle.ForeColor);
+                                btn.BackColor = btn.DisplayColor = ColorConvert.RGB(btnStyle.BackColor);
+                                break;
+                            }
+                        }
+                    }
+                    btnHead.Enabled = false;
+                    btnHead.BackColor = ConstantValuePool.DisabledColor;
+                    btnBack.Enabled = false;
+                    btnBack.BackColor = ConstantValuePool.DisabledColor;
+
+                    this.pnlItem.ResumeLayout(false);
+                    this.pnlItem.PerformLayout();
+                    this.ResumeLayout(false);
                 }
             }
         }

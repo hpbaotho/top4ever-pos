@@ -441,16 +441,16 @@ namespace VechsoftPos.Feature
                         FormVIPCardRefundPay refundPayForm = new FormVIPCardRefundPay(cardRefundPayList);
                         refundPayForm.ShowDialog();
                     }
-                    Guid handoverRecordID = Guid.NewGuid();
+                    Guid handoverRecordId = Guid.NewGuid();
                     HandoverRecord handoverRecord = new HandoverRecord();
-                    handoverRecord.HandoverRecordID = handoverRecordID;
+                    handoverRecord.HandoverRecordID = handoverRecordId;
                     handoverRecord.DeviceNo = ConstantValuePool.BizSettingConfig.DeviceNo;
                     handoverRecord.EmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
                     IList<HandoverTurnover> handoverTurnoverList = new List<HandoverTurnover>();
                     foreach (OrderPayoffSum item in bizReport.orderPayoffSumList)
                     {
                         HandoverTurnover handoverTurnover = new HandoverTurnover();
-                        handoverTurnover.HandoverRecordID = handoverRecordID;
+                        handoverTurnover.HandoverRecordID = handoverRecordId;
                         handoverTurnover.PayoffID = item.PayoffID;
                         handoverTurnover.SalesTurnover = item.PayoffMoney;
                         handoverTurnoverList.Add(handoverTurnover);
@@ -508,7 +508,7 @@ namespace VechsoftPos.Feature
                         DailyBalance dailyBalance = new DailyBalance();
                         dailyBalance.dailyStatement = dailyStatement;
                         dailyBalance.dailyTurnover = dailyTurnover;
-                        string unCheckDeviceNo = string.Empty;  //未结账的设备号
+                        string unCheckDeviceNo;  //未结账的设备号
                         int result = DailyBalanceService.GetInstance().CreateDailyBalance(dailyBalance, out unCheckDeviceNo);
                         if (result == 1)
                         {

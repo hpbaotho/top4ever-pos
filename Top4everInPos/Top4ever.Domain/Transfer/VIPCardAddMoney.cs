@@ -9,6 +9,10 @@ namespace Top4ever.Domain.Transfer
         /// </summary>
         public string CardNo { get; set; }
         /// <summary>
+        /// 密码
+        /// </summary>
+        public string CardPassword { get; set; }
+        /// <summary>
         /// 储值金额
         /// </summary>
         public decimal StoreMoney { get; set; }
