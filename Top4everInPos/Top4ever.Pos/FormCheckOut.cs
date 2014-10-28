@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO.Ports;
-using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 using Top4ever.ClientService;
 using Top4ever.Common;
 using Top4ever.CustomControl;
 using Top4ever.Domain;
-using Top4ever.Domain.GoodsRelated;
+using Top4ever.Domain.MembershipCard;
 using Top4ever.Domain.OrderRelated;
 using Top4ever.Domain.Transfer;
 using Top4ever.Entity;
 using Top4ever.Entity.Enum;
+using Top4ever.Hardware;
 using VechsoftPos.Feature;
 using Top4ever.Print;
 using Top4ever.Print.Entity;
@@ -334,19 +333,27 @@ namespace VechsoftPos
         {
             foreach (CrystalButton button in payoffButtonList)
             {
-                PayoffWay temp = button.Tag as PayoffWay;
-                if (dic.ContainsKey(temp.PayoffID.ToString()))
+                PayoffWay payoffWay = button.Tag as PayoffWay;
+                if (payoffWay != null)
                 {
-                    button.BackColor = ConstantValuePool.PressedColor;
-                }
-                else
-                {
-                    button.BackColor = button.DisplayColor;
+                    button.BackColor = dic.ContainsKey(payoffWay.PayoffID.ToString()) ? ConstantValuePool.PressedColor : button.DisplayColor;
                 }
             }
             CrystalButton btn = sender as CrystalButton;
-            btn.BackColor = ConstantValuePool.PressedColor;
+            if (btn == null) return;
             curPayoffWay = btn.Tag as PayoffWay;
+            if (curPayoffWay == null) return;
+            btn.BackColor = ConstantValuePool.PressedColor;
+
+            if (curPayoffWay.PayoffType == (int)PayoffWayMode.MembershipCard)
+            {
+                //屏蔽数字键盘
+                this.pnlNumericPad.Enabled = false;
+            }
+            else
+            {
+                this.pnlNumericPad.Enabled = true;
+            }
             this.txtPayoff.Text = curPayoffWay.PayoffName + "(1:" + curPayoffWay.AsPay.ToString("f2") + ")";
             if (dic.ContainsKey(curPayoffWay.PayoffID.ToString()))
             {
@@ -388,7 +395,10 @@ namespace VechsoftPos
                             orderPayoff.PayoffType = curPayoffWay.PayoffType;
                             orderPayoff.AsPay = curPayoffWay.AsPay;
                             orderPayoff.Quantity = formCardPayment.CardPaidAmount / curPayoffWay.AsPay;
-                            orderPayoff.CardNo = formCardPayment.CardNo;
+                            if (!string.IsNullOrEmpty(formCardPayment.CardNo))
+                            {
+                                orderPayoff.CardNo = formCardPayment.CardNo + "#" + formCardPayment.CardPassword;
+                            }
                             orderPayoff.EmployeeID = ConstantValuePool.CurrentEmployee.EmployeeID;
                             dic.Add(curPayoffWay.PayoffID.ToString(), orderPayoff);
                         }
@@ -752,7 +762,7 @@ namespace VechsoftPos
             if (receMoney + m_ServiceFee < paidInMoney)
             {
                 decimal cash = 0, noCash = 0;
-                List<OrderPayoff> tempPayoffList = new List<OrderPayoff>();
+                List<OrderPayoff> noCashPayoff = new List<OrderPayoff>();
                 foreach (KeyValuePair<string, OrderPayoff> item in dic)
                 {
                     if (item.Value.PayoffType == (int)PayoffWayMode.Cash)
@@ -762,24 +772,11 @@ namespace VechsoftPos
                     else
                     {
                         noCash += item.Value.AsPay * item.Value.Quantity;
+                        noCashPayoff.Add(item.Value);
                     }
-                    tempPayoffList.Add(item.Value);
                 }
                 if (noCash > receMoney + m_ServiceFee)
                 {
-                    List<OrderPayoff> cashPayoff = new List<OrderPayoff>();
-                    List<OrderPayoff> noCashPayoff = new List<OrderPayoff>();
-                    for (int index = 0; index < tempPayoffList.Count; index++)
-                    {
-                        if (tempPayoffList[index].PayoffType == (int)PayoffWayMode.Cash)
-                        {
-                            cashPayoff.Add(tempPayoffList[index]);
-                        }
-                        else
-                        {
-                            noCashPayoff.Add(tempPayoffList[index]);
-                        }
-                    }
                     //非现金支付方式按单位价值从高到低排序
                     OrderPayoff[] noCashPayoffArr = noCashPayoff.ToArray();
                     for (int j = 0; j < noCashPayoffArr.Length; j++)
@@ -796,15 +793,15 @@ namespace VechsoftPos
                     }
                     if (noCash - noCashPayoffArr[noCashPayoffArr.Length - 1].AsPay < receMoney + m_ServiceFee)
                     {
-                        if (cashPayoff.Count > 0)
+                        if (cash > 0)
                         {
-                            MessageBox.Show("现金支付方式多余！");
+                            MessageBox.Show("现金支付方式多余！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
                     }
                     else
                     {
-                        MessageBox.Show("非现金支付方式金额过多，请重新支付！");
+                        MessageBox.Show("非现金支付方式金额过多，请重新支付！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                 }
@@ -852,56 +849,99 @@ namespace VechsoftPos
                     }
                 }
             }
-            
             //计算支付的金额并填充OrderPayoff
-            bool IsContainsVIPCard = false;
+            bool isContainsCash = false;
+            bool isContainsVipCard = false;
             decimal paymentMoney = 0;
             List<OrderPayoff> orderPayoffList = new List<OrderPayoff>();
             foreach (KeyValuePair<string, OrderPayoff> item in dic)
             {
                 if (item.Value.Quantity > 0)
                 {
+                    if (item.Value.PayoffType == (int)PayoffWayMode.Cash)
+                    {
+                        isContainsCash = true;
+                    }
                     if (item.Value.PayoffType == (int)PayoffWayMode.MembershipCard)
-                        IsContainsVIPCard = true;
+                    {
+                        isContainsVipCard = true;
+                    }
                     OrderPayoff orderPayoff = item.Value;
                     paymentMoney += orderPayoff.AsPay * orderPayoff.Quantity;
                     orderPayoffList.Add(orderPayoff);
                 }
             }
-            bool result = false;
-            if (IsContainsVIPCard)
+            if (isContainsCash)
             {
-                Dictionary<string, VIPCardPayment> dicCardPayment = new Dictionary<string, VIPCardPayment>();
-                Dictionary<string, string> dicCardTradePayNo = new Dictionary<string, string>();
-                if (IsVIPCardPaySuccess(ref dicCardPayment, ref dicCardTradePayNo))
+                //支付方式中包含现金，需要打开钱箱
+                OpenCashBox();
+            }
+            bool paySuccess = false;
+            if (isContainsVipCard)
+            {
+                Dictionary<string, VIPCardPayment> dicCardPayment;
+                Dictionary<string, string> dicCardTradePayNo;
+                if (IsVipCardPaySuccess(out dicCardPayment, out dicCardTradePayNo))
                 {
+                    //组合交易流水号，因为需要支持多张会员卡
                     string strTradePayNo = string.Empty;
                     foreach (KeyValuePair<string, string> item in dicCardTradePayNo)
                     {
                         strTradePayNo += "," + item.Value;
                     }
                     strTradePayNo = strTradePayNo.Substring(1);
-                    result = PayForOrder(orderPayoffList, paymentMoney, needChangePay, strTradePayNo);
-                    if (!result)
+                    //将支付方式中的卡号密码去掉
+                    foreach (var orderPayoff in orderPayoffList)
+                    {
+                        if (orderPayoff.PayoffType == (int)PayoffWayMode.MembershipCard)
+                        {
+                            if (!string.IsNullOrEmpty(orderPayoff.CardNo))
+                            {
+                                orderPayoff.CardNo = orderPayoff.CardNo.Split('#')[0];
+                            }
+                        }
+                    }
+                    // 支付服务尝试三次
+                    int times = 0;
+                    while (times < 3 && !paySuccess)
+                    {
+                        paySuccess = PayForOrder(orderPayoffList, paymentMoney, needChangePay, strTradePayNo);
+                        times++;
+                        Thread.Sleep(500);
+                    }
+                    if (!paySuccess)
                     { 
                         //取消会员卡支付
                         foreach (KeyValuePair<string, VIPCardPayment> item in dicCardPayment)
                         {
+                            string cardNo = item.Value.CardNo;
                             //将支付成功的会员卡取消支付
-                            int returnValue = VIPCardTradeService.GetInstance().RefundVIPCardPayment(item.Value.CardNo, dicCardTradePayNo[item.Value.CardNo]);
-                            if (returnValue == 0)
+                            int returnValue = VIPCardTradeService.GetInstance().RefundVipCardPayment(cardNo, item.Value.CardPassword, dicCardTradePayNo[cardNo]);
+                            if (returnValue == 1) continue;
+                            if (returnValue == 2)
                             {
-                                string cardNo = item.Value.CardNo;
-                                CardRefundPay cardRefundPay = new CardRefundPay();
-                                cardRefundPay.CardNo = cardNo;
-                                cardRefundPay.ShopID = ConstantValuePool.CurrentShop.ShopID.ToString();
-                                cardRefundPay.TradePayNo = dicCardTradePayNo[cardNo];
-                                cardRefundPay.PayAmount = item.Value.PayAmount;
-                                cardRefundPay.EmployeeNo = item.Value.EmployeeNo;
-                                cardRefundPay.DeviceNo = item.Value.DeviceNo;
-                                CardRefundPayService refundPayService = new CardRefundPayService();
-                                refundPayService.AddRefundPayInfo(cardRefundPay);
+                                MessageBox.Show(string.Format("交易流水号'{0}'不存在或者已作废", dicCardTradePayNo[cardNo]), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
+                            else if (returnValue == 99)
+                            {
+                                MessageBox.Show(string.Format("'{0}'的会员卡号或者密码错误！", cardNo), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                            else
+                            {
+                                MessageBox.Show("服务器出现错误，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                            //保存到本地Sqlite
+                            CardRefundPay cardRefundPay = new CardRefundPay
+                            {
+                                CardNo = cardNo, 
+                                ShopID = ConstantValuePool.CurrentShop.ShopID.ToString(), 
+                                TradePayNo = dicCardTradePayNo[cardNo], 
+                                PayAmount = item.Value.PayAmount, 
+                                EmployeeNo = item.Value.EmployeeNo, 
+                                DeviceNo = item.Value.DeviceNo
+                            };
+                            CardRefundPayService refundPayService = new CardRefundPayService();
+                            refundPayService.AddRefundPayInfo(cardRefundPay);
                         }
                     }
                 }
@@ -913,9 +953,9 @@ namespace VechsoftPos
             }
             else
             {
-                result = PayForOrder(orderPayoffList, paymentMoney, needChangePay, string.Empty);
+                paySuccess = PayForOrder(orderPayoffList, paymentMoney, needChangePay, string.Empty);
             }
-            if (result)
+            if (paySuccess)
             {
                 //打印小票
                 PrintData printData = new PrintData();
@@ -1015,8 +1055,7 @@ namespace VechsoftPos
             }
             else
             {
-                MessageBox.Show("支付账单失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                MessageBox.Show("账单支付失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -1395,81 +1434,133 @@ namespace VechsoftPos
             }
         }
 
-        private bool IsVIPCardPaySuccess(ref Dictionary<string, VIPCardPayment> dicCardPayment, ref Dictionary<string, string> dicCardTradePayNo)
+        private bool IsVipCardPaySuccess(out Dictionary<string, VIPCardPayment> dicCardPayment, out Dictionary<string, string> dicCardTradePayNo)
         {
-            bool IsSuccess = false;
+            bool isSuccess = false;
             //key: cardNo
             dicCardPayment = new Dictionary<string, VIPCardPayment>();
             dicCardTradePayNo = new Dictionary<string, string>();
             foreach (KeyValuePair<string, OrderPayoff> item in dic)
             {
-                if (item.Value.Quantity > 0)
+                if (item.Value.Quantity > 0 && item.Value.PayoffType == (int) PayoffWayMode.MembershipCard)
                 {
+                    if (string.IsNullOrEmpty(item.Value.CardNo)) continue;
+                    string[] cardArr = item.Value.CardNo.Split('#');
                     //会员卡支付
-                    if (item.Value.PayoffType == (int)PayoffWayMode.MembershipCard)
+                    string cardNo = cardArr[0];
+                    string cardPassword = cardArr[1];
+                    decimal payAmount = item.Value.AsPay*item.Value.Quantity - item.Value.NeedChangePay;
+                    const int payIntegral = 0;
+                    VIPCard card;
+                    int resultCode = VIPCardService.GetInstance().SearchVIPCard(cardNo, cardPassword, out card);
+                    if (card == null || resultCode != 1)
                     {
-                        VIPCardPayment cardPayment = new VIPCardPayment();
-                        cardPayment.CardNo = item.Value.CardNo;
-                        cardPayment.PayAmount = item.Value.AsPay * item.Value.Quantity - item.Value.NeedChangePay;
-                        cardPayment.PayIntegral = 0;
-                        cardPayment.OrderNo = m_SalesOrder.order.OrderNo;
-                        cardPayment.EmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
-                        cardPayment.DeviceNo = ConstantValuePool.BizSettingConfig.DeviceNo;
-                        string tradePayNo = string.Empty;
-                        int result = VIPCardTradeService.GetInstance().AddVIPCardPayment(cardPayment, out tradePayNo);
-                        if (result == 1)
+                        continue;
+                    }
+                    VIPCardPayment cardPayment = new VIPCardPayment
+                    {
+                        CardNo = cardNo,
+                        CardPassword = cardPassword,
+                        PayAmount = payAmount,
+                        PayIntegral = payIntegral,
+                        OrderNo = m_SalesOrder.order.OrderNo,
+                        EmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo,
+                        DeviceNo = ConstantValuePool.BizSettingConfig.DeviceNo
+                    };
+                    string tradePayNo;
+                    int result = VIPCardTradeService.GetInstance().AddVIPCardPayment(cardPayment, out tradePayNo);
+                    if (result == 1)
+                    {
+                        VIPCard card2;
+                        int resultCode2 = VIPCardService.GetInstance().SearchVIPCard(cardNo, cardPassword, out card2);
+                        if (card2 != null && resultCode2 == 1)
                         {
+                            PrintMemberCard printCard = new PrintMemberCard
+                            {
+                                MemberVoucher = "会员消费凭单",
+                                CardNo = cardNo,
+                                ShopName = ConstantValuePool.CurrentShop.ShopName,
+                                TradeType = "消费",
+                                TranSequence = tradePayNo,
+                                TradeTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
+                                PreConsumeAmount = card.Balance.ToString("f2"),
+                                PostConsumeAmount = card2.Balance.ToString("f2"),
+                                ConsumeAmount = payAmount.ToString("f2"),
+                                ConsumePoints = payIntegral.ToString(),
+                                AvailablePoints = card2.Integral.ToString(),
+                                LastConsumeTime = card.LastConsumeTime == null ? string.Empty : ((DateTime)card.LastConsumeTime).ToString("yyyy/MM/dd HH:mm:ss"),
+                                Operator = ConstantValuePool.CurrentEmployee.EmployeeNo,
+                                Remark = string.Empty
+                            };
+                            int copies = ConstantValuePool.BizSettingConfig.printConfig.OrderCopies;
+                            string paperWidth = ConstantValuePool.BizSettingConfig.printConfig.PaperWidth;
+                            if (ConstantValuePool.BizSettingConfig.printConfig.PrinterPort == PortType.DRIVER)
+                            {
+                                string printerName = ConstantValuePool.BizSettingConfig.printConfig.Name;
+                                string paperName = ConstantValuePool.BizSettingConfig.printConfig.PaperName;
+                                DriverCardPrint printer = DriverCardPrint.GetInstance(printerName, paperName, paperWidth);
+                                for (int i = 0; i < copies; i++)
+                                {
+                                    printer.DoPrintCardConsume(printCard);
+                                }
+                            }
                             //会员充值成功
                             dicCardPayment.Add(item.Value.CardNo, cardPayment);
                             dicCardTradePayNo.Add(item.Value.CardNo, tradePayNo);
-                            IsSuccess = true;
+                            isSuccess = true;
                         }
-                        else if (result == 2)
-                        {
-                            MessageBox.Show(string.Format("卡号'{0}'不存在，请确认输入的卡号是否正确！", item.Value.CardNo), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            IsSuccess = false;
-                            break;
-                        }
-                        else if (result == 3)
-                        {
-                            MessageBox.Show(string.Format("卡号'{0}'未开通，请先开卡！", item.Value.CardNo), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            IsSuccess = false;
-                            break;
-                        }
-                        else if (result == 4)
-                        {
-                            MessageBox.Show(string.Format("卡号'{0}'已挂失，不能充值！", item.Value.CardNo), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            IsSuccess = false;
-                            break;
-                        }
-                        else if (result == 5)
-                        {
-                            MessageBox.Show(string.Format("卡号'{0}'已锁卡，不能充值！", item.Value.CardNo), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            IsSuccess = false;
-                            break;
-                        }
-                        else if (result == 6)
-                        {
-                            MessageBox.Show(string.Format("卡号'{0}'已作废，不能充值！", item.Value.CardNo), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            IsSuccess = false;
-                            break;
-                        }
-                        else if (result == 7)
-                        {
-                            MessageBox.Show(string.Format("卡号'{0}'所属会员组没有储值功能！", item.Value.CardNo), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            IsSuccess = false;
-                            break;
-                        }
-                        else
-                        {
-                            MessageBox.Show("服务器出现错误，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            IsSuccess = false;
-                            break;
-                        }
+                    }
+                    else if (result == 2)
+                    {
+                        MessageBox.Show(string.Format("卡号'{0}'不存在，请确认输入的卡号是否正确！", item.Value.CardNo), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        isSuccess = false;
+                        break;
+                    }
+                    else if (result == 3)
+                    {
+                        MessageBox.Show(string.Format("卡号'{0}'未开通，请先开卡！", item.Value.CardNo), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        isSuccess = false;
+                        break;
+                    }
+                    else if (result == 4)
+                    {
+                        MessageBox.Show(string.Format("卡号'{0}'已挂失，不能充值！", item.Value.CardNo), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        isSuccess = false;
+                        break;
+                    }
+                    else if (result == 5)
+                    {
+                        MessageBox.Show(string.Format("卡号'{0}'已锁卡，不能充值！", item.Value.CardNo), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        isSuccess = false;
+                        break;
+                    }
+                    else if (result == 6)
+                    {
+                        MessageBox.Show(string.Format("卡号'{0}'已作废，不能充值！", item.Value.CardNo), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        isSuccess = false;
+                        break;
+                    }
+                    else if (result == 7)
+                    {
+                        MessageBox.Show(string.Format("卡号'{0}'所属会员组没有储值功能！", item.Value.CardNo), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        isSuccess = false;
+                        break;
+                    }
+                    else if (result == 99)
+                    {
+                        MessageBox.Show("会员卡号或者密码错误！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        isSuccess = false;
+                        break;
+                    }
+                    else
+                    {
+                        MessageBox.Show("服务器出现错误，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        isSuccess = false;
+                        break;
                     }
                 }
             }
-            if (IsSuccess)
+            if (isSuccess)
             {
                 return true;
             }
@@ -1478,26 +1569,80 @@ namespace VechsoftPos
                 //取消会员卡支付
                 foreach (KeyValuePair<string, VIPCardPayment> item in dicCardPayment)
                 {
+                    string cardNo = item.Value.CardNo;
                     //将支付成功的会员卡取消支付
-                    int returnValue = VIPCardTradeService.GetInstance().RefundVIPCardPayment(item.Value.CardNo, dicCardTradePayNo[item.Value.CardNo]);
-                    if (returnValue == 0)
+                    int returnValue = VIPCardTradeService.GetInstance().RefundVipCardPayment(cardNo, item.Value.CardPassword, dicCardTradePayNo[cardNo]);
+                    if (returnValue == 1) continue;
+                    if (returnValue == 2)
                     {
-                        string cardNo = item.Value.CardNo;
-                        CardRefundPay cardRefundPay = new CardRefundPay
-                        {
-                            CardNo = cardNo, 
-                            ShopID = ConstantValuePool.CurrentShop.ShopID.ToString(), 
-                            TradePayNo = dicCardTradePayNo[cardNo], 
-                            PayAmount = item.Value.PayAmount, 
-                            EmployeeNo = item.Value.EmployeeNo, 
-                            DeviceNo = item.Value.DeviceNo
-                        };
-                        CardRefundPayService refundPayService = new CardRefundPayService();
-                        refundPayService.AddRefundPayInfo(cardRefundPay);
+                        MessageBox.Show(string.Format("交易流水号'{0}'不存在或者已作废", dicCardTradePayNo[cardNo]), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                    else if (returnValue == 99)
+                    {
+                        MessageBox.Show(string.Format("'{0}'的会员卡号或者密码错误！", cardNo), "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        MessageBox.Show("服务器出现错误，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    //保存到本地Sqlite
+                    CardRefundPay cardRefundPay = new CardRefundPay
+                    {
+                        CardNo = cardNo,
+                        ShopID = ConstantValuePool.CurrentShop.ShopID.ToString(),
+                        TradePayNo = dicCardTradePayNo[cardNo],
+                        PayAmount = item.Value.PayAmount,
+                        EmployeeNo = item.Value.EmployeeNo,
+                        DeviceNo = item.Value.DeviceNo
+                    };
+                    CardRefundPayService refundPayService = new CardRefundPayService();
+                    refundPayService.AddRefundPayInfo(cardRefundPay);
                 }
+                dicCardPayment = new Dictionary<string, VIPCardPayment>();
+                dicCardTradePayNo = new Dictionary<string, string>();
             }
             return false;
+        }
+
+        private void OpenCashBox()
+        {
+            if (ConstantValuePool.BizSettingConfig.cashBoxConfig.Enabled)
+            {
+                try
+                {
+                    if (ConstantValuePool.BizSettingConfig.cashBoxConfig.IsUsbPort)
+                    {
+                        string vid = ConstantValuePool.BizSettingConfig.cashBoxConfig.VID;
+                        string pid = ConstantValuePool.BizSettingConfig.cashBoxConfig.PID;
+                        string endpointId = ConstantValuePool.BizSettingConfig.cashBoxConfig.EndpointID;
+                        CashBox.Open(vid, pid, endpointId);
+                    }
+                    else
+                    {
+                        string port = ConstantValuePool.BizSettingConfig.cashBoxConfig.Port;
+                        if (port.IndexOf("COM", StringComparison.OrdinalIgnoreCase) >= 0 && port.Length > 3)
+                        {
+                            if (port.Substring(0, 3).ToUpper() == "COM")
+                            {
+                                string portName = port.Substring(0, 4).ToUpper();
+                                CashBox.Open(portName, 9600, Parity.None, 8, StopBits.One);
+                            }
+                        }
+                        else if (port.IndexOf("LPT", StringComparison.OrdinalIgnoreCase) >= 0 && port.Length > 3)
+                        {
+                            if (port.Substring(0, 3).ToUpper() == "LPT")
+                            {
+                                string lptName = port.Substring(0, 4).ToUpper();
+                                CashBox.Open(lptName);
+                            }
+                        }
+                    }
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show("钱箱打开失败，错误信息：" + exception, "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

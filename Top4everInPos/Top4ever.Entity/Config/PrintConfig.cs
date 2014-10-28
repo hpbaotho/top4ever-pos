@@ -30,6 +30,9 @@ namespace Top4ever.Entity.Config
         [XmlElement("Copies")]
         public int Copies { get; set; }
 
+        [XmlElement("OrderCopies")]
+        public int OrderCopies { get; set; }
+
         [XmlElement("PaperName")]
         public string PaperName { get; set; }
 

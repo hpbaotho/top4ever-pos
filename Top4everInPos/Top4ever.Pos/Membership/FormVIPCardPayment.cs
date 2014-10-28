@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 using Top4ever.ClientService;
@@ -14,24 +9,30 @@ namespace VechsoftPos.Membership
 {
     public partial class FormVIPCardPayment : Form
     {
-        private VIPCard m_Card = null;
-        private decimal m_UnPaidPrice = 0M;
+        private VIPCard _card;
+        private readonly decimal _unPaidPrice;
 
-        private decimal m_CardPaidAmount = 0M;
+        private decimal _cardPaidAmount;
         public decimal CardPaidAmount
         {
-            get { return m_CardPaidAmount; }
+            get { return _cardPaidAmount; }
         }
 
-        private string m_CardNo = string.Empty;
+        private string _cardNo = string.Empty;
         public string CardNo
         {
-            get { return m_CardNo; }
+            get { return _cardNo; }
+        }
+
+        private string _cardPassword = string.Empty;
+        public string CardPassword
+        {
+            get { return _cardPassword; }
         }
 
         public FormVIPCardPayment(decimal unPaidPrice)
         {
-            m_UnPaidPrice = unPaidPrice;
+            _unPaidPrice = unPaidPrice;
             InitializeComponent();
         }
 
@@ -40,14 +41,14 @@ namespace VechsoftPos.Membership
             btnConsume.DisplayColor = btnConsume.BackColor;
             btnConsume.Enabled = false;
             btnConsume.BackColor = ConstantValuePool.DisabledColor;
-            this.txtConsumAmount.Text = m_UnPaidPrice.ToString("f2");
+            this.txtConsumAmount.Text = _unPaidPrice.ToString("f2");
         }
 
         private void txtVIPCardNo_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyValue == 13)
             {
-                m_Card = null;
+                _card = null;
                 Feature.FormNumericKeypad keyForm = new Feature.FormNumericKeypad(false);
                 keyForm.DisplayText = "请输入密码";
                 keyForm.IsPassword = true;
@@ -55,19 +56,20 @@ namespace VechsoftPos.Membership
                 if (!string.IsNullOrEmpty(keyForm.KeypadValue))
                 {
                     string cardNo = txtVIPCardNo.Text.Trim();
-                    VIPCard card = new VIPCard();
-                    int result = VIPCardService.GetInstance().SearchVIPCard(cardNo, keyForm.KeypadValue, out card);
-                    if (result == 1)
+                    string cardPassword = keyForm.KeypadValue;
+                    VIPCard card;
+                    int result = VIPCardService.GetInstance().SearchVIPCard(cardNo, cardPassword, out card);
+                    if (card != null && result == 1)
                     {
                         if (card.Status == 0)
                         {
-                            MessageBox.Show("该卡号未开卡，请先开卡！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("该卡未开通，请先开卡！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
                         txtName.Text = card.Name;
-                        txtBalance.Text = card.Balance.ToString("f");
+                        txtBalance.Text = card.Balance.ToString("f2");
                         txtIntegral.Text = card.Integral.ToString();
-                        txtDiscount.Text = Convert.ToString((1M - card.DiscountRate) * 10M) + "折";
+                        txtDiscount.Text = ((1M - card.DiscountRate) * 10M).ToString("f2") + "折";
                         txtTelephone.Text = card.Telephone;
                         txtAddress.Text = card.Address;
                         if (card.Status == 1)
@@ -91,7 +93,9 @@ namespace VechsoftPos.Membership
                         {
                             txtLastConsumeTime.Text = Convert.ToDateTime(card.LastConsumeTime).ToString("yyyy-MM-dd HH:mm:ss");
                         }
-                        m_Card = card;
+                        _cardNo = cardNo;
+                        _cardPassword = cardPassword;
+                        _card = card;
                         if (card.Balance == 0M)
                         {
                             btnConsume.Enabled = false;
@@ -105,13 +109,31 @@ namespace VechsoftPos.Membership
                     }
                     else if (result == 2)
                     {
+                        txtVIPCardNo.Text = string.Empty;
+                        txtName.Text = string.Empty;
+                        txtBalance.Text = string.Empty;
+                        txtIntegral.Text = string.Empty;
+                        txtDiscount.Text = string.Empty;
+                        txtTelephone.Text = string.Empty;
+                        txtAddress.Text = string.Empty;
+                        txtCardStatus.Text = string.Empty;
+                        txtOpenCardTime.Text = string.Empty;
+                        txtLastConsumeTime.Text = string.Empty;
                         MessageBox.Show("您输入的会员卡号或者密码错误！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
                     }
                     else
                     {
+                        txtVIPCardNo.Text = string.Empty;
+                        txtName.Text = string.Empty;
+                        txtBalance.Text = string.Empty;
+                        txtIntegral.Text = string.Empty;
+                        txtDiscount.Text = string.Empty;
+                        txtTelephone.Text = string.Empty;
+                        txtAddress.Text = string.Empty;
+                        txtCardStatus.Text = string.Empty;
+                        txtOpenCardTime.Text = string.Empty;
+                        txtLastConsumeTime.Text = string.Empty;
                         MessageBox.Show("服务器出现错误，请重新操作！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
                     }
                 }
             }
@@ -119,34 +141,35 @@ namespace VechsoftPos.Membership
 
         private void btnConsume_Click(object sender, EventArgs e)
         {
-            if (m_Card == null || string.IsNullOrEmpty(m_Card.CardNo))
+            if (_card == null || string.IsNullOrEmpty(_card.CardNo))
             {
                 MessageBox.Show("请重新输入您的会员卡号！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (m_Card.Balance < m_UnPaidPrice)
+            if (_card.Balance < _unPaidPrice)
             {
                 if (DialogResult.Yes == MessageBox.Show("卡内余额不足，是否继续使用余额支付？", "信息提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                 {
-                    m_CardPaidAmount = m_Card.Balance;
-                    m_CardNo = m_Card.CardNo;
+                    _cardPaidAmount = _card.Balance;
+                    _cardNo = _card.CardNo;
                 }
                 else
                 {
-                    m_CardPaidAmount = 0M;
+                    _cardPaidAmount = 0M;
+                    _cardNo = string.Empty;
                 }
             }
             else
             {
-                m_CardPaidAmount = m_UnPaidPrice;
-                m_CardNo = m_Card.CardNo;
+                _cardPaidAmount = _unPaidPrice;
+                _cardNo = _card.CardNo;
             }
             this.Close();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            m_CardPaidAmount = 0M;
+            _cardPaidAmount = 0M;
             this.Close();
         }
     }

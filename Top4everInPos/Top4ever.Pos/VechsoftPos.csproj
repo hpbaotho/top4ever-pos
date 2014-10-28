@@ -545,6 +545,8 @@
     <None Include="PrintConfig\KitchenPrint_80.ini" />
     <None Include="PrintConfig\KitchenPrint_58.ini" />
     <None Include="PrintConfig\KitchenPrintSetting.config" />
+    <None Include="PrintConfig\PrintCardConsume_80.ini" />
+    <None Include="PrintConfig\PrintCardStore_80.ini" />
     <None Include="PrintConfig\PrintOrder_80.ini" />
     <None Include="PrintConfig\PrintOrderSetting.config">
       <SubType>Designer</SubType>
@@ -560,6 +562,13 @@
     <None Include="PrintConfig\PrintPrePayOrder_76.ini" />
     <None Include="PrintConfig\KitchenPrint_76.ini" />
     <None Include="PrintConfig\DeskChangePrint_76.ini" />
+    <None Include="PrintConfig\PrintCardSetting.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="PrintConfig\PrintCardConsume_76.ini" />
+    <None Include="PrintConfig\PrintCardConsume_58.ini" />
+    <None Include="PrintConfig\PrintCardStore_76.ini" />
+    <None Include="PrintConfig\PrintCardStore_58.ini" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

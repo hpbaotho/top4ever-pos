@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO.Ports;
-using System.Text;
 using System.Windows.Forms;
 
 using Top4ever.ClientService;
@@ -22,10 +19,10 @@ namespace VechsoftPos.Feature
         /// <summary>
         /// 1:输入台号 2:输入流水号
         /// </summary>
-        private int m_SeachType = 0;
-        private int m_PageIndex = 0;
-        private int m_PageSize = 25;
-        private SalesOrder m_SalesOrder = null;
+        private int _seachType;
+        private int _pageIndex;
+        private int _pageSize = 25;
+        private SalesOrder _salesOrder;
 
         public FormBillManagement()
         {
@@ -63,7 +60,7 @@ namespace VechsoftPos.Feature
             keyForm.ShowDialog();
             if (!string.IsNullOrEmpty(keyForm.KeypadValue))
             {
-                m_SeachType = 1;
+                _seachType = 1;
                 this.txtSearchValue.Text = keyForm.KeypadValue;
             }
         }
@@ -75,21 +72,21 @@ namespace VechsoftPos.Feature
             keyForm.ShowDialog();
             if (!string.IsNullOrEmpty(keyForm.KeypadValue))
             {
-                m_SeachType = 2;
+                _seachType = 2;
                 this.txtSearchValue.Text = keyForm.KeypadValue;
             }
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            m_PageIndex = 0;
+            _pageIndex = 0;
             SearchSalesOrder();
         }
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            m_PageIndex = 0;
-            m_SeachType = 0;
+            _pageIndex = 0;
+            _seachType = 0;
             this.txtSearchValue.Text = string.Empty;
             this.lbOrderNo.Text = string.Empty;
             this.lbBillType.Text = string.Empty;
@@ -113,18 +110,18 @@ namespace VechsoftPos.Feature
         private void SearchSalesOrder()
         {
             string strWhere = string.Empty;
-            if (m_SeachType == 1)
+            if (_seachType == 1)
             {
                 strWhere = " DeskName = '" + this.txtSearchValue.Text + "'";
             }
-            if (m_SeachType == 2)
+            if (_seachType == 2)
             {
-                string currentDate = DateTime.Now.ToString("yyyy-MM-dd");
                 strWhere = " TranSequence = " + this.txtSearchValue.Text;
-                strWhere += " AND (PayTime >= '" + currentDate + "' AND PayTime < DATEADD(DAY,1,'" + currentDate + "') )";
+                //string currentDate = DateTime.Now.ToString("yyyy-MM-dd");
+                //strWhere += " AND (PayTime >= '" + currentDate + "' AND PayTime < DATEADD(DAY,1,'" + currentDate + "') )";
             }
-            IList<Order> orderList = OrderService.GetInstance().GetOrderListBySearch(strWhere, string.Empty, m_PageIndex, m_PageSize);
-            if (m_PageIndex > 0)
+            IList<Order> orderList = OrderService.GetInstance().GetOrderListBySearch(strWhere, string.Empty, _pageIndex, _pageSize);
+            if (_pageIndex > 0)
             {
                 this.btnPageUp.Enabled = true;
                 this.btnPageUp.BackColor = this.btnPageUp.DisplayColor;
@@ -134,7 +131,7 @@ namespace VechsoftPos.Feature
                 this.btnPageUp.Enabled = false;
                 this.btnPageUp.BackColor = ConstantValuePool.DisabledColor;
             }
-            if (orderList == null || orderList.Count < m_PageSize)
+            if (orderList == null || orderList.Count < _pageSize)
             {
                 this.btnPageDown.Enabled = false;
                 this.btnPageDown.BackColor = ConstantValuePool.DisabledColor;
@@ -146,12 +143,12 @@ namespace VechsoftPos.Feature
             }
             if (orderList != null && orderList.Count > 0)
             {
-                this.lbPage.Text = string.Format("第 {0} 页", m_PageIndex + 1);
-                int startIndex = m_PageIndex * m_PageSize + 1;
-                int endIndex = (m_PageIndex + 1) * m_PageSize;
-                if (orderList.Count < endIndex)
+                this.lbPage.Text = string.Format("第 {0} 页", _pageIndex + 1);
+                int startIndex = _pageIndex * _pageSize + 1;
+                int endIndex = (_pageIndex + 1) * _pageSize;
+                if (orderList.Count < _pageSize)
                 {
-                    endIndex = orderList.Count;
+                    endIndex = endIndex - (_pageSize - orderList.Count);
                 }
                 this.lbBillIndex.Text = startIndex + "/" + endIndex;
                 BindDataGridView1(orderList);
@@ -226,7 +223,7 @@ namespace VechsoftPos.Feature
                 //默认加载第一行数据
                 Guid orderID = new Guid(dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value.ToString());
                 SalesOrder salesOrder = SalesOrderService.GetInstance().GetSalesOrderByBillSearch(orderID);
-                m_SalesOrder = salesOrder;
+                _salesOrder = salesOrder;
                 //更新账单信息
                 this.lbOrderNo.Text = salesOrder.order.OrderNo;
                 this.lbDeskName.Text = salesOrder.order.DeskName;
@@ -370,21 +367,6 @@ namespace VechsoftPos.Feature
             }
         }
 
-        private string FillWithZero(string inputData, int dataLength)
-        {
-            inputData = inputData.Trim();
-            int length = inputData.Length;
-            if (length < dataLength)
-            {
-                int count = dataLength - length;
-                for (int i = 0; i < count; i++)
-                {
-                    inputData = "0" + inputData;
-                }
-            }
-            return inputData;
-        }
-
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
         {
             if (dataGridView1.CurrentRow != null)
@@ -392,11 +374,11 @@ namespace VechsoftPos.Feature
                 int selectedIndex = dataGridView1.CurrentRow.Index;
                 if (dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value != null)
                 {
-                    Guid orderID = new Guid(dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value.ToString());
-                    SalesOrder salesOrder = SalesOrderService.GetInstance().GetSalesOrderByBillSearch(orderID);
+                    Guid orderId = new Guid(dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value.ToString());
+                    SalesOrder salesOrder = SalesOrderService.GetInstance().GetSalesOrderByBillSearch(orderId);
                     if (salesOrder != null)
                     {
-                        m_SalesOrder = salesOrder;
+                        _salesOrder = salesOrder;
                         //更新账单信息
                         Order order = salesOrder.order;
                         this.lbOrderNo.Text = order.OrderNo;
@@ -441,7 +423,7 @@ namespace VechsoftPos.Feature
                 }
                 else
                 {
-                    m_SalesOrder = null;
+                    _salesOrder = null;
                     this.lbOrderNo.Text = string.Empty;
                     this.lbBillType.Text = string.Empty;
                     this.lbDeskName.Text = string.Empty;
@@ -457,14 +439,14 @@ namespace VechsoftPos.Feature
 
         private void btnPrint_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.CurrentRow != null && m_SalesOrder != null && m_SalesOrder.order != null)
+            if (dataGridView1.CurrentRow != null && _salesOrder != null && _salesOrder.order != null)
             {
-                if (m_SalesOrder.order.Status == 1)
+                if (_salesOrder.order.Status == 1)
                 {
                     int selectedIndex = dataGridView1.CurrentRow.Index;
                     if (dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value != null)
                     {
-                        Order order = m_SalesOrder.order;
+                        Order order = _salesOrder.order;
                         //打印小票
                         PrintData printData = new PrintData();
                         printData.ShopName = ConstantValuePool.CurrentShop.ShopName;
@@ -481,7 +463,7 @@ namespace VechsoftPos.Feature
                         printData.NeedChangePay = order.NeedChangePay.ToString("f2");
                         printData.GoodsOrderList = new List<GoodsOrder>();
                         printData.PayingOrderList = new List<PayingGoodsOrder>();
-                        foreach (OrderDetails item in m_SalesOrder.orderDetailsList)
+                        foreach (OrderDetails item in _salesOrder.orderDetailsList)
                         {
                             string strLevelFlag = string.Empty;
                             int levelCount = item.ItemLevel * 2;
@@ -498,7 +480,7 @@ namespace VechsoftPos.Feature
                             goodsOrder.Unit = item.Unit;
                             printData.GoodsOrderList.Add(goodsOrder);
                         }
-                        foreach (OrderPayoff orderPayoff in m_SalesOrder.orderPayoffList)
+                        foreach (OrderPayoff orderPayoff in _salesOrder.orderPayoffList)
                         {
                             PayingGoodsOrder payingOrder = new PayingGoodsOrder();
                             payingOrder.PayoffName = orderPayoff.PayoffName;
@@ -553,21 +535,21 @@ namespace VechsoftPos.Feature
 
         private void btnPageDown_Click(object sender, EventArgs e)
         {
-            m_PageIndex++;
+            _pageIndex++;
             SearchSalesOrder();
         }
 
         private void btnPageUp_Click(object sender, EventArgs e)
         {
-            m_PageIndex--;
+            _pageIndex--;
             SearchSalesOrder();
         }
 
         private void btnWholeDelete_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.CurrentRow != null && m_SalesOrder != null && m_SalesOrder.order != null)
+            if (dataGridView1.CurrentRow != null && _salesOrder != null && _salesOrder.order != null)
             {
-                if (m_SalesOrder.order.Status == 1)
+                if (_salesOrder.order.Status == 1)
                 {
                     int selectedIndex = dataGridView1.CurrentRow.Index;
                     if (dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value != null)
@@ -601,7 +583,7 @@ namespace VechsoftPos.Feature
                         {
                             //删除订单
                             DeletedOrder deletedOrder = new DeletedOrder();
-                            deletedOrder.OrderID = m_SalesOrder.order.OrderID;
+                            deletedOrder.OrderID = _salesOrder.order.OrderID;
                             deletedOrder.AuthorisedManager = ConstantValuePool.CurrentEmployee.EmployeeID;
                             deletedOrder.CancelEmployeeNo = ConstantValuePool.CurrentEmployee.EmployeeNo;
                             deletedOrder.CancelReasonName = form.CurrentReason.ReasonName;
@@ -609,17 +591,12 @@ namespace VechsoftPos.Feature
                             if (DeletedOrderService.GetInstance().DeletePaidWholeOrder(deletedOrder))
                             {
                                 dataGridView1.Rows[selectedIndex].Cells["BillType"].Value = "已删除";
-                                m_SalesOrder.order.Status = 2;
+                                _salesOrder.order.Status = 2;
                             }
                             else
                             {
                                 MessageBox.Show("删除账单失败！", "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                return;
                             }
-                        }
-                        else
-                        {
-                            return;
                         }
                     }
                 }
@@ -628,18 +605,18 @@ namespace VechsoftPos.Feature
 
         private void btnSingleDelete_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.CurrentRow != null && m_SalesOrder != null && m_SalesOrder.order != null)
+            if (dataGridView1.CurrentRow != null && _salesOrder != null && _salesOrder.order != null)
             {
-                if (m_SalesOrder.order.Status == 1)
+                if (_salesOrder.order.Status == 1)
                 {
                     int selectedIndex = dataGridView1.CurrentRow.Index;
-                    FormBackGoods form = new FormBackGoods(m_SalesOrder);
+                    FormBackGoods form = new FormBackGoods(_salesOrder);
                     form.ShowDialog();
                     if (form.IsChanged)
                     {
-                        Guid orderID = new Guid(dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value.ToString());
-                        SalesOrder salesOrder = SalesOrderService.GetInstance().GetSalesOrderByBillSearch(orderID);
-                        m_SalesOrder = salesOrder;
+                        Guid orderId = new Guid(dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value.ToString());
+                        SalesOrder salesOrder = SalesOrderService.GetInstance().GetSalesOrderByBillSearch(orderId);
+                        _salesOrder = salesOrder;
                         //更新账单信息
                         dataGridView1.Rows[selectedIndex].Cells["TotalSellPrice"].Value = salesOrder.order.TotalSellPrice.ToString("f2");
                         dataGridView1.Rows[selectedIndex].Cells["ActualSellPrice"].Value = salesOrder.order.ActualSellPrice.ToString("f2");
@@ -658,18 +635,18 @@ namespace VechsoftPos.Feature
 
         private void btnBillModify_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.CurrentRow != null && m_SalesOrder != null && m_SalesOrder.order != null)
+            if (dataGridView1.CurrentRow != null && _salesOrder != null && _salesOrder.order != null)
             {
-                if (m_SalesOrder.order.Status == 1)
+                if (_salesOrder.order.Status == 1)
                 {
                     int selectedIndex = dataGridView1.CurrentRow.Index;
-                    FormModifyOrder form = new FormModifyOrder(m_SalesOrder);
+                    FormModifyOrder form = new FormModifyOrder(_salesOrder);
                     form.ShowDialog();
                     if (form.IsChanged)
                     {
-                        Guid orderID = new Guid(dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value.ToString());
-                        SalesOrder salesOrder = SalesOrderService.GetInstance().GetSalesOrderByBillSearch(orderID);
-                        m_SalesOrder = salesOrder;
+                        Guid orderId = new Guid(dataGridView1.Rows[selectedIndex].Cells["OrderID"].Value.ToString());
+                        SalesOrder salesOrder = SalesOrderService.GetInstance().GetSalesOrderByBillSearch(orderId);
+                        _salesOrder = salesOrder;
                         //更新账单信息
                         dataGridView1.Rows[selectedIndex].Cells["TotalSellPrice"].Value = salesOrder.order.TotalSellPrice.ToString("f2");
                         dataGridView1.Rows[selectedIndex].Cells["ActualSellPrice"].Value = salesOrder.order.ActualSellPrice.ToString("f2");
@@ -689,12 +666,12 @@ namespace VechsoftPos.Feature
         #region 重算坐标
         private void ResizeStyle()
         {
-            Rectangle ScreenArea = Screen.GetWorkingArea(this);
-            if (ScreenArea.Width > 1280)
+            Rectangle screenArea = Screen.GetWorkingArea(this);
+            if (screenArea.Width > 1280)
             {
-                decimal widthRate = Convert.ToDecimal(ScreenArea.Width) / 1024;
-                decimal heightRate = Convert.ToDecimal(ScreenArea.Height) / 771;
-                SetBounds(0, 0, ScreenArea.Width, ScreenArea.Height);
+                decimal widthRate = Convert.ToDecimal(screenArea.Width) / 1024;
+                decimal heightRate = Convert.ToDecimal(screenArea.Height) / 771;
+                SetBounds(0, 0, screenArea.Width, screenArea.Height);
 
                 foreach (Control c in this.Controls)
                 {

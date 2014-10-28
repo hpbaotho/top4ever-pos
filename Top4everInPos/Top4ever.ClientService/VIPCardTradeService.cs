@@ -122,9 +122,9 @@ namespace Top4ever.ClientService
             return result;
         }
 
-        public Int32 RefundVIPCardPayment(string cardNo, string tradePayNo)
+        public Int32 RefundVipCardPayment(string cardNo, string cardPassword, string tradePayNo)
         {
-            int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.CARD_NO + ParamFieldLength.TRADEPAYNO;
+            const int cByte = ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.CARD_NO + ParamFieldLength.CARD_PASSWORD + ParamFieldLength.TRADEPAYNO;
             byte[] sendByte = new byte[cByte];
             int byteOffset = 0;
             Array.Copy(BitConverter.GetBytes((int)Command.ID_REFUNDPAYMENT), sendByte, BasicTypeLength.INT32);
@@ -137,6 +137,10 @@ namespace Top4ever.ClientService
             tempByte = Encoding.UTF8.GetBytes(cardNo);
             Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
             byteOffset += ParamFieldLength.CARD_NO;
+            //cardPassword
+            tempByte = Encoding.UTF8.GetBytes(cardPassword);
+            Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
+            byteOffset += ParamFieldLength.CARD_PASSWORD;
             //tradePayNo
             tempByte = Encoding.UTF8.GetBytes(tradePayNo);
             Array.Copy(tempByte, 0, sendByte, byteOffset, tempByte.Length);
