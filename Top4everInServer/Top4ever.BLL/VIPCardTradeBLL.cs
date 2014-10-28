@@ -42,8 +42,18 @@ namespace Top4ever.BLL
             VIPCardAddMoney cardAddMoney = JsonConvert.DeserializeObject<VIPCardAddMoney>(strReceive);
 
             string tradePayNo = string.Empty;
-            int result = VIPCardTradeService.GetInstance().AddVIPCardStoredValue(cardAddMoney, out tradePayNo);
-            
+            int result;
+            //验证卡身份
+            VIPCard card;
+            int resultCode = VIPCardService.GetInstance().GetVIPCard(cardAddMoney.CardNo, cardAddMoney.CardPassword, out card);
+            if (resultCode == 1 && card != null)
+            {
+                result = VIPCardTradeService.GetInstance().AddVIPCardStoredValue(cardAddMoney, out tradePayNo);
+            }
+            else
+            {
+                result = 99;    //会员卡号或者密码错误
+            }
             byte[] buffer = Encoding.UTF8.GetBytes(tradePayNo);
             int transCount = ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32 + ParamFieldLength.TRADEPAYNO;
             objRet = new byte[transCount];
@@ -62,8 +72,18 @@ namespace Top4ever.BLL
             VIPCardPayment cardPayment = JsonConvert.DeserializeObject<VIPCardPayment>(strReceive);
 
             string tradePayNo = string.Empty;
-            int result = VIPCardTradeService.GetInstance().AddVIPCardPayment(cardPayment, out tradePayNo);
-
+            int result;
+            //验证卡身份
+            VIPCard card;
+            int resultCode = VIPCardService.GetInstance().GetVIPCard(cardPayment.CardNo, cardPayment.CardPassword, out card);
+            if (resultCode == 1 && card != null)
+            {
+                result = VIPCardTradeService.GetInstance().AddVIPCardPayment(cardPayment, out tradePayNo);
+            }
+            else
+            {
+                result = 99;    //会员卡号或者密码错误
+            }
             byte[] buffer = Encoding.UTF8.GetBytes(tradePayNo);
             int transCount = ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32 + ParamFieldLength.TRADEPAYNO;
             objRet = new byte[transCount];
@@ -79,10 +99,22 @@ namespace Top4ever.BLL
         {
             byte[] objRet = null;
             string cardNo = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD, ParamFieldLength.CARD_NO).Trim('\0');
-            string tradePayNo = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.CARD_NO, ParamFieldLength.TRADEPAYNO).Trim('\0');
+            string cardPassword = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.CARD_NO, ParamFieldLength.CARD_PASSWORD).Trim('\0');
+            string tradePayNo = Encoding.UTF8.GetString(itemBuffer, ParamFieldLength.PACKAGE_HEAD + ParamFieldLength.CARD_NO + ParamFieldLength.CARD_PASSWORD, ParamFieldLength.TRADEPAYNO).Trim('\0');
 
-            int result = VIPCardTradeService.GetInstance().RefundVIPCardPayment(cardNo, tradePayNo);
-            //返回
+            int result;
+            //验证卡身份
+            VIPCard card;
+            int resultCode = VIPCardService.GetInstance().GetVIPCard(cardNo, cardPassword, out card);
+            if (resultCode == 1 && card != null)
+            {
+                result = VIPCardTradeService.GetInstance().RefundVIPCardPayment(cardNo, tradePayNo);
+            }
+            else
+            {
+                result = 99;    //会员卡号或者密码错误
+            }
+            //返回对象
             objRet = new byte[ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32];
             Array.Copy(BitConverter.GetBytes((int)RET_VALUE.SUCCEEDED), 0, objRet, 0, BasicTypeLength.INT32);
             Array.Copy(BitConverter.GetBytes(ParamFieldLength.PACKAGE_HEAD + BasicTypeLength.INT32), 0, objRet, BasicTypeLength.INT32, BasicTypeLength.INT32);
